@@ -8,6 +8,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bean" />
         <module name="common" />
+        <module name="config" />
+        <module name="eureka" />
         <module name="MerchantService" />
         <module name="OrderService" />
         <module name="PayService" />
@@ -17,6 +19,8 @@
     <bytecodeTargetLevel>
       <module name="bean" target="1.6" />
       <module name="common" target="1.6" />
+      <module name="config" target="1.6" />
+      <module name="eureka" target="1.6" />
       <module name="MerchantService" target="1.6" />
       <module name="MicroCommunity" target="1.6" />
       <module name="OrderService" target="1.6" />

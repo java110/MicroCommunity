@@ -1,5 +1,11 @@
 微小区平台
 
+技术架构：
+
+Java + spring cloud + mybatis + mysql + activemq + redis
+
+
+
 1.0 小区商家 1
 美食
 外卖

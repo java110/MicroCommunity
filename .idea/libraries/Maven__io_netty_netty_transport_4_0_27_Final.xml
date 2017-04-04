@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.netty:netty-transport:4.0.27.Final">
+    <CLASSES>
+      <root url="jar://$M2_REPO$/io/netty/netty-transport/4.0.27.Final/netty-transport-4.0.27.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$M2_REPO$/io/netty/netty-transport/4.0.27.Final/netty-transport-4.0.27.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$M2_REPO$/io/netty/netty-transport/4.0.27.Final/netty-transport-4.0.27.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
