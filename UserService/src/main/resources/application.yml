@@ -1,0 +1,15 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: user-service    # 项目名称尽量用小写
+logging:
+  level:
+    root: INFO
+    com.java110.user: ERROR
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/  # 指定注册中心的地址, http://discovery:8762/eureka/
+  instance:
+    preferIpAddress: true

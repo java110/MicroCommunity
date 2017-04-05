@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
 /**
@@ -17,7 +18,8 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-public class AppSpringBootApplication extends SpringBootServletInitializer {
+@EnableDiscoveryClient
+public class AppSpringBootApplication {
 
     public static void main(String[] args) throws Exception{
         SpringApplication.run(AppSpringBootApplication.class, args);

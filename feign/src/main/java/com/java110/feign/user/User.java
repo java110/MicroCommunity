@@ -1,4 +1,4 @@
-package com.java110.user;
+package com.java110.feign.user;
 
 /**
  * 用户实体

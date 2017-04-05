@@ -17,6 +17,8 @@
         <module>PayService</module>
         <module>eureka</module>
         <module>config</module>
+        <module>Wechat</module>
+        <module>feign</module>
     </modules>
 
     <parent>
@@ -64,6 +66,11 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>bean</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>feign</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
