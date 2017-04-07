@@ -1,4 +1,4 @@
-package com.java110.bean;
+package com.java110.entity;
 
 /**
  * Hello world!

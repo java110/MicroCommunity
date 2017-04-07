@@ -10,13 +10,13 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>bean</module>
+        <module>config</module>
         <module>common</module>
         <module>UserService</module>
         <module>MerchantService</module>
         <module>OrderService</module>
         <module>PayService</module>
         <module>eureka</module>
-        <module>config</module>
         <module>Wechat</module>
         <module>feign</module>
         <module>core</module>
@@ -317,7 +317,7 @@
             <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
-
+<!--
     <build>
         <plugins>
             <plugin>
@@ -326,5 +326,5 @@
             </plugin>
         </plugins>
     </build>
-
+-->
 </project>

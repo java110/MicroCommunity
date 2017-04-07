@@ -2,8 +2,8 @@ package com.java110.common.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.bean.protocol.SvcCont;
-import  com.java110.bean.protocol.TcpCont;
+import com.java110.entity.protocol.SvcCont;
+import  com.java110.entity.protocol.TcpCont;
 import org.springframework.util.StringUtils;
 
 import java.text.DateFormat;

@@ -1,4 +1,4 @@
-package com.java110.bean.test;
+package com.java110.entity.test;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -19,7 +19,7 @@
 
     <dependencies>
 
-        <!--bean 实体引入，为了在任何地方都可以用实体信息 -->
+        <!--entity 实体引入，为了在任何地方都可以用实体信息 -->
 
         <dependency>
             <groupId>com.java110</groupId>

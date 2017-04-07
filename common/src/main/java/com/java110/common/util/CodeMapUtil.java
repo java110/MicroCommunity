@@ -9,7 +9,7 @@
 package com.java110.common.util;
 
 import com.java110.common.log.LoggerEngine;
-import com.java110.bean.mapping.CodeMapping;
+import com.java110.entity.mapping.CodeMapping;
 import com.java110.common.namespace.NameSpaceHandler;
 
 import java.util.List;

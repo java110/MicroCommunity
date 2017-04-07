@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: config
+Implementation-Version: 1.0-SNAPSHOT
+Archiver-Version: Plexus Archiver
+Built-By: wuxw
+Implementation-Vendor-Id: com.java110
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_121
+Implementation-URL: http://maven.apache.org
+Implementation-Vendor: Pivotal Software, Inc.
+

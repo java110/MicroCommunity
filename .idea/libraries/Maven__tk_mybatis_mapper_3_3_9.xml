@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: tk.mybatis:mapper:3.3.9">
     <CLASSES>
-      <root url="jar://$M2_REPO$/tk/mybatis/mapper/3.3.9/mapper-3.3.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/tk/mybatis/mapper/3.3.9/mapper-3.3.9.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$M2_REPO$/tk/mybatis/mapper/3.3.9/mapper-3.3.9-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/tk/mybatis/mapper/3.3.9/mapper-3.3.9-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$M2_REPO$/tk/mybatis/mapper/3.3.9/mapper-3.3.9-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/tk/mybatis/mapper/3.3.9/mapper-3.3.9-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
