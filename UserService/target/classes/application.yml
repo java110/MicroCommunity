@@ -5,9 +5,9 @@ spring:
     name: user-service    # 项目名称尽量用小写
   datasource:
     name: test
-    url: jdbc:mysql://192.168.16.137:3306/test
-    username: root
-    password: 123456
+    url: jdbc:mysql://135.192.86.200:3306/flow_app
+    username: flow
+    password: flow#1223
     #使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -25,6 +25,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
 logging:
+  file: ./logs/UserService.log
   level:
     root: INFO
     com.java110.user: ERROR

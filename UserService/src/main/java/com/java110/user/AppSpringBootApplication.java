@@ -1,4 +1,4 @@
-package com.java110.entity;
+package com.java110.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
