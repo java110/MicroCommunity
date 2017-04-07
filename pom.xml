@@ -19,6 +19,8 @@
         <module>config</module>
         <module>Wechat</module>
         <module>feign</module>
+        <module>core</module>
+        <module>service</module>
     </modules>
 
     <parent>
@@ -37,6 +39,31 @@
         <microcommunity.version>1.0-SNAPSHOT</microcommunity.version>
         <dubbo.version>2.5.4-SNAPSHOT</dubbo.version>
         <logback.vaersion>1.1.3</logback.vaersion>
+
+        <apache.common.lang3.version>3.4</apache.common.lang3.version>
+        <mybatis.version>3.4.1</mybatis.version>
+        <linkage.version>0.0.1-SNAPSHOT</linkage.version>
+        <dubbo.version>2.5.3</dubbo.version>
+        <zookeeper.version>3.4.5</zookeeper.version>
+        <zkclient.version>0.3</zkclient.version>
+        <log4j.version>1.2.17</log4j.version>
+        <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
+        <druid.version>1.0.18</druid.version>
+        <mybatis-spring.version>1.3.1</mybatis-spring.version>
+        <mysql.version>5.1.39</mysql.version>
+        <commons-pool2.version>2.2</commons-pool2.version>
+        <commons-collections.version>3.2.1</commons-collections.version>
+        <commons-fileupload.version>1.3.1</commons-fileupload.version>
+        <commons-codec.version>1.6</commons-codec.version>
+        <commons-logging.version>1.1.1</commons-logging.version>
+        <commons-lang.version>2.5</commons-lang.version>
+        <commons-beanutils.version>1.8.0</commons-beanutils.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <logback.version>1.1.2</logback.version>
+        <activemq.version>5.7.0</activemq.version>
+        <xbean.version>3.18</xbean.version>
+        <axis.version>1.4</axis.version>
+        <httpclient.verion>3.1</httpclient.verion>
     </properties>
 
     <dependencyManagement>
@@ -58,6 +85,19 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>1.1.1</version>
             </dependency>
+
+            <!--mapper-->
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring-boot-starter</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+            <!--pagehelper-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>1.1.0</version>
+            </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>common</artifactId>
@@ -68,12 +108,23 @@
                 <artifactId>bean</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>core</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>feign</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>service</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
 
             <!-- logback 日志组件支持  -->
 
@@ -103,6 +154,108 @@
                 <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
                 <version>0.9.5.2</version>
+            </dependency>
+
+
+
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-core</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-pool</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>xbean-spring</artifactId>
+                <version>${xbean.version}</version>
+            </dependency>
+
+
+            <!-- apache commons 包 主要使用一些工具类 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.common.lang3.version}</version>
+            </dependency>
+
+            <!-- mybatis 依赖包 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
+            <!-- 阿里 数据源相关jar  -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${httpclient.verion}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.axis2/axis2 -->
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis</artifactId>
+                <version>${axis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis-jaxrpc</artifactId>
+                <version>${axis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis-saaj</artifactId>
+                <version>${axis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>wsdl4j</groupId>
+                <artifactId>wsdl4j</artifactId>
+                <version>${axis.version}</version>
             </dependency>
 
 
@@ -158,6 +311,10 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
 
