@@ -1,0 +1,92 @@
+-- cust table bo_cust
+
+create table bo_cust(
+
+    boId varchar(20) not null,
+
+    custId  varchar(20) not null,
+
+     name  varchar(50) not null,
+
+     email  varchar(20) not null,
+
+     cellphone  varchar(11) not null,
+
+     realName  varchar(20) not null,
+
+     sex  varchar(10) not null,
+
+     password  varchar(20) not null,
+
+     lanId  varchar(10) not null,
+
+     custAdress  varchar(500) not null,
+
+     custType  varchar(10) not null,
+
+     openId  varchar(30) not null,
+
+    state varchar(10) not null,
+
+    create_dt date default now()
+
+);
+-- table bo_cust_attr 
+create table bo_cust_attr(
+
+    boId  varchar(20) not null,
+
+    custId  varchar(20) not null,
+
+    itemSpecCd  varchar(50) not null,
+
+    value  varchar(200) not null,
+
+    state  varchar(10) not null,
+
+    create_dt date default now()
+
+);
+
+create table cust(
+        custId  varchar(20) not null,
+    
+        name  varchar(50) not null,
+    
+        email  varchar(20) not null,
+    
+        cellphone  varchar(11) not null,
+    
+        realName  varchar(20) not null,
+    
+        sex  varchar(10) not null,
+    
+        password  varchar(20) not null,
+    
+        lanId  varchar(10) not null,
+    
+        custAdress  varchar(500) not null,
+    
+        custType  varchar(10) not null,
+    
+        openId  varchar(30) not null,
+    
+        status_cd varchar(10) default '0',
+
+        create_dt date default now()
+);
+
+create table cust_attr(
+
+        custId  varchar(20) not null,
+
+        itemSpecCd  varchar(50) not null,
+
+        value  varchar(200) not null,
+
+        status_cd  varchar(10) not null,
+
+        create_dt date default now()
+
+);
+

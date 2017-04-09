@@ -25,7 +25,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
 logging:
-  file: ./logs/UserService.log
+  file: ./UserService/logs/UserService.log
   level:
     root: INFO
     com.java110.user: ERROR

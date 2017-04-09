@@ -12,7 +12,7 @@ public class CustAttr {
 
     private String value;
 
-    private String state;
+    private String status_cd;
 
     public String getCustId() {
         return custId;
@@ -38,11 +38,11 @@ public class CustAttr {
         this.value = value;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus_cd() {
+        return status_cd;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus_cd(String status_cd) {
+        this.status_cd = status_cd;
     }
 }

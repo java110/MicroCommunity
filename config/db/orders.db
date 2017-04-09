@@ -1,0 +1,34 @@
+-- cust table order_list
+
+create table order_list(
+
+    olId varchar(20) not null,
+
+    channelId  varchar(20) not null,
+
+     name  varchar(50) not null,
+
+     email  varchar(20) not null,
+
+     cellphone  varchar(11) not null,
+
+     realName  varchar(20) not null,
+
+     sex  varchar(10) not null,
+
+     password  varchar(20) not null,
+
+     lanId  varchar(10) not null,
+
+     custAdress  varchar(500) not null,
+
+     custType  varchar(10) not null,
+
+     openId  varchar(30) not null,
+
+    state varchar(10) not null,
+
+    create_dt date default now()
+
+);
+

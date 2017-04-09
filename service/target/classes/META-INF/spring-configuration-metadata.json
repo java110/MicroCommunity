@@ -1,0 +1,10 @@
+{
+  "groups": [{
+    "name": "spring.datasource",
+    "type": "javax.sql.DataSource",
+    "sourceType": "com.java110.service.MyBatisConfig",
+    "sourceMethod": "dataSource()"
+  }],
+  "properties": [],
+  "hints": []
+}

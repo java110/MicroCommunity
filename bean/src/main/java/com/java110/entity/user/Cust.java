@@ -28,7 +28,7 @@ public class Cust {
 
     private String openId;
 
-    private String state;
+    private String status_cd;
 
 
     public String getCustId() {
@@ -119,11 +119,11 @@ public class Cust {
         this.openId = openId;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus_cd() {
+        return status_cd;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus_cd(String status_cd) {
+        this.status_cd = status_cd;
     }
 }
