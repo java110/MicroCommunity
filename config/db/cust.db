@@ -1,92 +1,94 @@
 -- cust table bo_cust
-
+-- 客户信息表（变更历史表）
 create table bo_cust(
 
-    boId varchar(20) not null,
+    boId varchar(20) not null  COMMENT '业务ID 对应 busi_order的boId',
 
-    custId  varchar(20) not null,
+    custId  varchar(20) not null COMMENT '客户ID',
 
-     name  varchar(50) not null,
+     name  varchar(50) not null COMMENT '客户名称',
 
-     email  varchar(20) not null,
+     email  varchar(20) not null COMMENT '客户邮箱',
 
-     cellphone  varchar(11) not null,
+     cellphone  varchar(11) COMMENT '客户电话',
 
-     realName  varchar(20) not null,
+     realName  varchar(20) COMMENT '客户正式名称' ,
 
-     sex  varchar(10) not null,
+     sex  varchar(10)  COMMENT '客户性别 1 男，0 女',
 
-     password  varchar(20) not null,
+     password  varchar(20) not null COMMENT '客户密码，默认md5加密',
 
-     lanId  varchar(10) not null,
+     lanId  varchar(10) COMMENT '用户区域，统计用',
 
-     custAdress  varchar(500) not null,
+     custAdress  varchar(500) COMMENT '客户地址',
 
-     custType  varchar(10) not null,
+     custType  varchar(10) default '1' COMMENT '客户类型，1 普通客户 2 管理员 3 超级管理 4 微信用户 5 支付宝用户 6 github用户 7 sina 用户 8 QQ 用户',
 
-     openId  varchar(30) not null,
+     openId  varchar(30) COMMENT '第三方开放ID 如微信openId',
 
-    state varchar(10) not null,
+    state varchar(10) not null COMMENT '新建客户 ADD ，删除客户DEL',
 
-    create_dt date default now()
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 
 );
--- table bo_cust_attr 
+-- table bo_cust_attr
+-- 客户属性 （变更历史表）
 create table bo_cust_attr(
 
-    boId  varchar(20) not null,
+    boId  varchar(20) not null COMMENT '业务ID 对应 busi_order的boId',,
 
-    custId  varchar(20) not null,
+    custId  varchar(20) not null COMMENT '客户ID',
 
-    itemSpecCd  varchar(50) not null,
+    attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
 
-    value  varchar(200) not null,
+    value  varchar(200) not null COMMENT '属性编码对应值',
 
-    state  varchar(10) not null,
+    state  varchar(10) not null COMMENT '新建客户属性 ADD ，删除客户属性DEL',
 
-    create_dt date default now()
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 
 );
 
 create table cust(
-        custId  varchar(20) not null,
-    
-        name  varchar(50) not null,
-    
-        email  varchar(20) not null,
-    
-        cellphone  varchar(11) not null,
-    
-        realName  varchar(20) not null,
-    
-        sex  varchar(10) not null,
-    
-        password  varchar(20) not null,
-    
-        lanId  varchar(10) not null,
-    
-        custAdress  varchar(500) not null,
-    
-        custType  varchar(10) not null,
-    
-        openId  varchar(30) not null,
-    
-        status_cd varchar(10) default '0',
+        custId  varchar(20) not null COMMENT '客户ID',
 
-        create_dt date default now()
+         name  varchar(50) not null COMMENT '客户名称',
+
+         email  varchar(20) not null COMMENT '客户邮箱',
+
+         cellphone  varchar(11) COMMENT '客户电话',
+
+         realName  varchar(20) COMMENT '客户正式名称' ,
+
+         sex  varchar(10)  COMMENT '客户性别 1 男，0 女',
+
+         password  varchar(20) not null COMMENT '客户密码，默认md5加密',
+
+         lanId  varchar(10) COMMENT '用户区域，统计用',
+
+         custAdress  varchar(500) COMMENT '客户地址',
+
+         custType  varchar(10) default '1' COMMENT '客户类型，1 普通客户 2 管理员 3 超级管理 4 微信用户 5 支付宝用户 6 github用户 7 sina 用户 8 QQ 用户',
+
+         openId  varchar(30) COMMENT '第三方开放ID 如微信openId',
+    
+        status_cd varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+
+        create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
 create table cust_attr(
 
-        custId  varchar(20) not null,
 
-        itemSpecCd  varchar(50) not null,
+        custId  varchar(20) not null COMMENT '客户ID',
 
-        value  varchar(200) not null,
+        attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
 
-        status_cd  varchar(10) not null,
+        value  varchar(200) not null COMMENT '属性编码对应值',
 
-        create_dt date default now()
+        status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+
+        create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 
 );
 

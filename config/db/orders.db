@@ -1,34 +1,89 @@
--- cust table order_list
-
+-- table order_list
+-- 购物车
 create table order_list(
 
-    olId varchar(20) not null,
+    olId varchar(20) not null comment '购物车ID',
 
-    channelId  varchar(20) not null,
+    channelId  varchar(20) not null comment '渠道ID，对应渠道表channel',
 
-     name  varchar(50) not null,
+    custId  varchar(20) not null comment '客户ID，对应客户表cust',
 
-     email  varchar(20) not null,
+    olTypeCD  varchar(10) not null comment '购物车类型，网站 1 微信 2 APP 3 对应 order_list_type',
 
-     cellphone  varchar(11) not null,
+     extSystemId  varchar(20) not null comment '对应外部系统 关联ID，方便维护',
 
-     realName  varchar(20) not null,
+     status_cd varchar(10) default '0' COMMENT '数据状态 对应 status',
 
-     sex  varchar(10) not null,
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 
-     password  varchar(20) not null,
+    remark varchar(200) comment '备注'
+);
+-- 订单项
+create table busi_order(
+    boId varchar(20) not null comment '业务动作ID',
+    olId varchar(20) not null comment '购物车ID',
+    actionTypeCd varchar(10) not null comment '购物车动作，对应表action_type',
+    status_cd varchar(10) default '0' COMMENT '数据状态 对应 status',
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    start_dt timestamp NOT NULL COMMENT '开始时间',
+    end_dt timestamp NOT NULL COMMENT '结束时间',
+    remark varchar(200) comment '备注'
+);
 
-     lanId  varchar(10) not null,
+--购物车属性表
+create table order_list_attr(
 
-     custAdress  varchar(500) not null,
+        olId  varchar(20) not null COMMENT '客户ID',
 
-     custType  varchar(10) not null,
+        attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
 
-     openId  varchar(30) not null,
+        value  varchar(200) not null COMMENT '属性编码对应值',
 
-    state varchar(10) not null,
+        create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 
-    create_dt date default now()
+);
 
+--购物车属性表
+create table busi_order_attr(
+
+        boId  varchar(20) not null COMMENT '订单项ID',
+
+        attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
+
+        value  varchar(200) not null COMMENT '属性编码对应值',
+
+        create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+
+);
+
+-- 动作类型表
+create table action_type(
+    id int not null,
+    actionTypeCd varchar(10) not null comment '业务动作编码',
+    name varchar(200) not null comment '业务动作名称',
+    describe varchar(500) not null comment '业务动作描述',
+    serviceCd varchar(10) not null comment '业务动作隶属于那个服务,U1 客户服务，M2 账户服务',
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+
+-- 数据状态字典表
+create table status(
+    id int not null,
+    status_cd varchar(20),
+    name varchar(200) not null comment '状态名称',
+    describe varchar(500) not null comment '状态描述',
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 属性字典表
+
+create table attr(
+    id int not null,
+    domain varchar(20) not null comment '属性域，CUST 客户域 ORDER_LIST 购物车域 BUSI_ORDER 订单项域'
+    attrCd varchar(20) not null comment '属性编码',
+     name varchar(200) not null comment '属性名称',
+     describe varchar(500) not null comment '属性描述',
+     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 

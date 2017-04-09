@@ -10,7 +10,7 @@ public class BoCustAttr {
 
     private String custId;
 
-    private String itemSpecCd;
+    private String attrCd;
 
     private String value;
 
@@ -32,14 +32,6 @@ public class BoCustAttr {
         this.custId = custId;
     }
 
-    public String getItemSpecCd() {
-        return itemSpecCd;
-    }
-
-    public void setItemSpecCd(String itemSpecCd) {
-        this.itemSpecCd = itemSpecCd;
-    }
-
     public String getValue() {
         return value;
     }
@@ -54,5 +46,13 @@ public class BoCustAttr {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getAttrCd() {
+        return attrCd;
+    }
+
+    public void setAttrCd(String attrCd) {
+        this.attrCd = attrCd;
     }
 }

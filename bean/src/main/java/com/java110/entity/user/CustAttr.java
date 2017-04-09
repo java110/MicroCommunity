@@ -8,7 +8,7 @@ public class CustAttr {
 
     private String custId;
 
-    private String itemSpecCd;
+    private String attrCd;
 
     private String value;
 
@@ -22,13 +22,6 @@ public class CustAttr {
         this.custId = custId;
     }
 
-    public String getItemSpecCd() {
-        return itemSpecCd;
-    }
-
-    public void setItemSpecCd(String itemSpecCd) {
-        this.itemSpecCd = itemSpecCd;
-    }
 
     public String getValue() {
         return value;
@@ -44,5 +37,13 @@ public class CustAttr {
 
     public void setStatus_cd(String status_cd) {
         this.status_cd = status_cd;
+    }
+
+    public String getAttrCd() {
+        return attrCd;
+    }
+
+    public void setAttrCd(String attrCd) {
+        this.attrCd = attrCd;
     }
 }
