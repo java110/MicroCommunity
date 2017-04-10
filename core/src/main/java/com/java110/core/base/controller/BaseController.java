@@ -4,6 +4,7 @@ package com.java110.core.base.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
 
+import com.java110.core.base.AppBase;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,6 @@ import java.util.Map;
  * 或公用逻辑处理
  * Created by wuxw on 2017/2/23.
  */
-public class BaseController extends LoggerEngine {
+public class BaseController extends AppBase {
 
 }

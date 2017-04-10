@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="UserServiceImpl">
+<mapper namespace="userServiceImpl">
 
-    <!--根据用户Id查询用户角色  -->
+    <!--根据用户Id查询用户角色
     <select id="findRolesByUserId" resultType="SysRole">
         SELECT
         r.*
@@ -15,5 +15,5 @@
         AND ur.roleId = r.roleId
         AND ur.status_cd = '1'
     </select>
-
+-->
 </mapper>

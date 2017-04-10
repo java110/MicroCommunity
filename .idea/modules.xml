@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BaseService/BaseService.iml" filepath="$PROJECT_DIR$/BaseService/BaseService.iml" />
       <module fileurl="file://$PROJECT_DIR$/MerchantService/MerchantService.iml" filepath="$PROJECT_DIR$/MerchantService/MerchantService.iml" />
       <module fileurl="file://$PROJECT_DIR$/MicroCommunity.iml" filepath="$PROJECT_DIR$/MicroCommunity.iml" />
       <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />

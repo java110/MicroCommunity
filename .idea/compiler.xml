@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="BaseService" />
         <module name="bean" />
         <module name="common" />
         <module name="config" />
@@ -21,6 +22,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="BaseService" target="1.6" />
       <module name="bean" target="1.6" />
       <module name="common" target="1.6" />
       <module name="config" target="1.6" />

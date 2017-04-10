@@ -1,5 +1,5 @@
-/home/wuxw/project/idea/MicroCommunity/MicroCommunity/feign/src/main/java/com/java110/feign/user/IUserService.java
-/home/wuxw/project/idea/MicroCommunity/MicroCommunity/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java
-/home/wuxw/project/idea/MicroCommunity/MicroCommunity/feign/src/main/java/com/java110/feign/test/HystrixClientFallback.java
-/home/wuxw/project/idea/MicroCommunity/MicroCommunity/feign/src/main/java/com/java110/feign/App.java
-/home/wuxw/project/idea/MicroCommunity/MicroCommunity/feign/src/main/java/com/java110/feign/test/TestFeignHystrixClient.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\test\TestFeignHystrixClient.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\user\UserServiceFallback.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\user\IUserService.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\App.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\test\HystrixClientFallback.java

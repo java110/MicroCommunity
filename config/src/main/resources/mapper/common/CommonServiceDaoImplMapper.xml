@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="commonServiceDaoImpl">
+
+    <!--查询所有有效的映射数据-->
+    <select id="getCodeMappingAll" resultType="com.java110.entity.mapping.CodeMapping">
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+		]]>
+    </select>
+
+    <!--根据域查询对应的映射关系-->
+    <select id="getCodeMappingByDomain" parameterType="com.java110.entity.mapping.CodeMapping"
+            resultType="com.java110.entity.mapping.CodeMapping"
+    >
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+            and cm.domain=#{domain}
+        ]]>
+    </select>
+
+    <!--根据HCode查询映射关系-->
+    <select id="getCodeMappingByHCode" parameterType="com.java110.entity.mapping.CodeMapping"
+            resultType="com.java110.entity.mapping.CodeMapping"
+    >
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+            and cm.h_code=#{h_code}
+
+        ]]>
+    </select>
+
+    <!--根据PCode查询映射关系-->
+    <select id="getCodeMappingByPCode" parameterType="com.java110.entity.mapping.CodeMapping"
+            resultType="com.java110.entity.mapping.CodeMapping"
+    >
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+            and cm.p_code=#{p_code}
+        ]]>
+    </select>
+
+    <!--根据PCode查询映射关系-->
+    <select id="getCodeMappingByDomainAndHCode" parameterType="com.java110.entity.mapping.CodeMapping"
+            resultType="com.java110.entity.mapping.CodeMapping"
+    >
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+            and cm.h_code=#{p_code}
+            and cm.domain=#{domain}
+        ]]>
+    </select>
+
+    <!--根据PCode查询映射关系-->
+    <select id="getCodeMappingByDomainAndPCode" parameterType="com.java110.entity.mapping.CodeMapping"
+            resultType="com.java110.entity.mapping.CodeMapping"
+    >
+        <![CDATA[
+            SELECT
+              cm.id,
+              cm.name,
+              cm.domain,
+              cm.h_code,
+              cm.p_code,
+              cm.description,
+              cm.create_dt
+            FROM
+              code_mapping cm
+            WHERE cm.status_cd = '0'
+            and cm.p_code=#{p_code}
+            and cm.domain=#{domain}
+        ]]>
+    </select>
+
+</mapper>

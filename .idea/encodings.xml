@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BaseService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/MerchantService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OrderService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PayService" charset="UTF-8" />

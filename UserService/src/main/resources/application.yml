@@ -5,7 +5,7 @@ spring:
     name: user-service    # 项目名称尽量用小写
   datasource:
     name: test
-    url: jdbc:mysql://135.192.86.200:3306/flow_app
+    url: jdbc:mysql://135.192.86.200:31057/flow_app
     username: flow
     password: flow#1223
     #使用druid数据源

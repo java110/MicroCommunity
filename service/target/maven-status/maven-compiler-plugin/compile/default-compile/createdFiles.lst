@@ -1,3 +1,4 @@
-com/java110/service/MyBatisConfig.class
-com/java110/App.class
-com/java110/service/MyBatisMapperScannerConfig.class
+com\java110\App.class
+com\java110\service\MyBatisMapperScannerConfig.class
+META-INF\spring-configuration-metadata.json
+com\java110\service\MyBatisConfig.class

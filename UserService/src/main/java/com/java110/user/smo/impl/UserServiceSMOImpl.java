@@ -3,9 +3,16 @@ package com.java110.user.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.ProtocolUtil;
+import com.java110.entity.user.BoCust;
+import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.user.smo.IUserServiceSMO;
 import com.java110.core.base.smo.BaseServiceSMO;
+import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 用户服务信息管理业务信息实现
@@ -13,6 +20,9 @@ import org.springframework.stereotype.Service;
  */
 @Service("userServiceSMOImpl")
 public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSMO {
+
+    @Autowired
+    IPrimaryKeyService iPrimaryKeyService;
 
     //新增用户
     private final static String USER_ACTION_ADD = "ADD";
@@ -65,8 +75,18 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
     public String soUserService(String userInfoJson) {
         LoggerEngine.debug("用户服务操作客户入参：" + userInfoJson);
         String resultUserInfo = null;
+        JSONObject reqUserJSON = null;
         try {
+            reqUserJSON = this.simpleValidateJSON(userInfoJson);
             //1.0规则校验，报文是否合法
+
+            if(reqUserJSON.containsKey("boCust")){
+
+            }
+
+            if(reqUserJSON.containsKey("boCustAttr")){
+
+            }
 
             //2.0
         } catch (Exception e) {
@@ -75,5 +95,67 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
             return resultUserInfo;
         }
+    }
+
+    /**
+     * {
+     *     boCust:[{},{}]
+     * }
+     * 客户信心处理
+     * @param boCusts
+     * @return
+     * @throws Exception
+     */
+    public String soBoCust(String boCusts) throws Exception{
+        // 将 jsonArray 转为list<BoCust> 对象
+        JSONObject jsonObject = JSONObject.parseObject(boCusts);
+
+        List<BoCust> boCustList = JSONObject.parseArray(jsonObject.getJSONArray("boCust").toJSONString(), BoCust.class);
+
+        //保存数据
+
+        for(BoCust boCust : boCustList){
+            int custId = NumberUtils.toInt(boCust.getBoId(),-1);
+            //如果客户ID小于0 ，则自己生成客户ID,这个只有在有 主键生成服务时使用，否则为了防止出错，需要前段调用时需要生成custId
+            if(custId < 0 ){
+                JSONObject data = new JSONObject();
+                data.put("type","CUST_ID");
+                //{"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}
+                String custIdJSONStr = iPrimaryKeyService.queryPrimaryKey(data.toJSONString());
+                JSONObject custIdJSONTmp = JSONObject.parseObject(custIdJSONStr);
+                if(custIdJSONTmp.containsKey("RESULT_CODE")
+                        && ProtocolUtil.RETURN_MSG_SUCCESS.equals(custIdJSONTmp.getString("RESULT_CODE"))
+                        && custIdJSONTmp.containsKey("RESULT_INFO")){
+                    //从接口生成custId
+                    custId = NumberUtils.toInt(custIdJSONTmp.getJSONObject("RESULT_INFO").getString("CUST_ID"),-1);
+                }
+            }
+
+            boCust.setCustId(custId+"");
+        }
+        return "";
+    }
+
+    /**
+     * 客户信息属性处理
+     * 协议：
+     *{
+     *     boCustAttr:[{},{}]
+     * }
+     * @param boCustAttrs
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String soBoCustAttr(String boCustAttrs) throws Exception {
+        return null;
+    }
+
+    public IPrimaryKeyService getiPrimaryKeyService() {
+        return iPrimaryKeyService;
+    }
+
+    public void setiPrimaryKeyService(IPrimaryKeyService iPrimaryKeyService) {
+        this.iPrimaryKeyService = iPrimaryKeyService;
     }
 }

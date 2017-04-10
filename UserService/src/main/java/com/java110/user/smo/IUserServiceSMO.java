@@ -20,4 +20,28 @@ public interface IUserServiceSMO {
      * @return
      */
     public String soUserService(String userInfoJson);
+
+    /**
+     * 客户信息处理
+     * 协议：
+     *{
+     *     boCust:[{},{}]
+     * }
+     * @param boCusts
+     * @return
+     * @throws Exception
+     */
+    public String soBoCust(String boCusts) throws Exception;
+
+    /**
+     * 客户信息属性处理
+     * 协议：
+     *{
+     *     boCustAttr:[{},{}]
+     * }
+     * @param boCustAttrs
+     * @return
+     * @throws Exception
+     */
+    public String soBoCustAttr(String boCustAttrs) throws Exception;
 }

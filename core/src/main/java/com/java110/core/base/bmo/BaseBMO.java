@@ -1,6 +1,7 @@
 package com.java110.core.base.bmo;
 
 import com.java110.common.log.LoggerEngine;
+import com.java110.core.base.AppBase;
 
 /**
  * 业务类基类
@@ -8,7 +9,7 @@ import com.java110.common.log.LoggerEngine;
  * 公用代码实现
  * Created by wuxw on 2017/3/16.
  */
-public class BaseBMO extends LoggerEngine {
+public class BaseBMO extends AppBase {
 
     /**
      * 根据User_id 查询用户信息

@@ -21,6 +21,7 @@
         <module>feign</module>
         <module>core</module>
         <module>service</module>
+        <module>BaseService</module>
     </modules>
 
     <parent>
