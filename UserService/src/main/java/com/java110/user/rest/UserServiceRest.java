@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.controller.BaseController;
+import com.java110.entity.user.Cust;
+import com.java110.feign.user.IUserService;
 import com.java110.user.smo.IUserServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by wuxw on 2017/4/5.
  */
 @RestController
-public class UserServiceRest extends BaseController {
+public class UserServiceRest extends BaseController implements IUserService {
 
     @Autowired
     IUserServiceSMO iUserServiceSMO;
@@ -24,12 +26,30 @@ public class UserServiceRest extends BaseController {
     /**
      * 通过User对象中数据查询用户信息
      * 如,用户ID，名称
-     * @param userJson
+     * @param data
      * @return
      */
     @RequestMapping("/userService/queryUserInfo")
-    public String queryUserInfo(@RequestParam("userJson") String userJson){
-        return null;
+    public String queryUserInfo(@RequestParam("data") String data){
+        LoggerEngine.debug("queryUserInfo入参：" + data);
+
+
+        String resultUserInfo = null;
+
+        JSONObject reqUserJSON = null;
+        try {
+            reqUserJSON = this.simpleValidateJSON(data);
+            Cust oldCust = new Cust();
+            oldCust.setCustId(reqUserJSON.getString("custId"));
+            resultUserInfo = iUserServiceSMO.queryCust(oldCust);
+
+        } catch (Exception e) {
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+        } finally {
+            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
     }
 
 
@@ -55,26 +75,11 @@ public class UserServiceRest extends BaseController {
             reqUserJSON = this.simpleValidateJSON(data);
             //1.0规则校验，报文是否合法
 
-            // 客户信息处理
-            if(reqUserJSON.containsKey("boCust")){
-                JSONArray boCusts = reqUserJSON.getJSONArray("boCust");
-                JSONObject boCustObj = new JSONObject();
-                boCustObj.put("boCust",boCusts);
-                iUserServiceSMO.soBoCust(boCustObj.toJSONString());
-            }
 
-            //客户属性信息处理
-            if(reqUserJSON.containsKey("boCustAttr")){
+            //2.0 受理客户信息
+            resultUserInfo = iUserServiceSMO.soUserService(reqUserJSON);
 
-                JSONArray boCustAttrs = reqUserJSON.getJSONArray("boCustAttr");
-                JSONObject boCustAttrObj = new JSONObject();
-                boCustAttrObj.put("boCustAttr",boCustAttrs);
-                iUserServiceSMO.soBoCustAttr(boCustAttrObj.toJSONString());
-            }
 
-            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"受理成功",null);
-
-            //2.0
         } catch (Exception e) {
             LoggerEngine.error("服务处理出现异常：", e);
             resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
@@ -107,7 +112,7 @@ public class UserServiceRest extends BaseController {
             resultUserInfo = iUserServiceSMO.soBoCust(data);
         }catch (Exception e){
             LoggerEngine.error("服务处理出现异常：", e);
-            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常:"+e,null);
         } finally {
             LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
             return resultUserInfo;

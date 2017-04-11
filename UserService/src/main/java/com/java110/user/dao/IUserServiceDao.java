@@ -56,6 +56,22 @@ public interface IUserServiceDao {
     public int saveDataToCustAttr(CustAttr custAttr) throws RuntimeException;
 
     /**
+     * 删除用户基本信息（实例数据）
+     * @param cust
+     * @return
+     * @throws RuntimeException
+     */
+    public int deleteDataToCust(Cust cust) throws RuntimeException;
+
+    /**
+     *  删除用户属性（实例数据）
+     * @param custAttr
+     * @return
+     * @throws RuntimeException
+     */
+    public int deleteDataToCustAttr(CustAttr custAttr) throws RuntimeException;
+
+    /**
      * 同事保存用户基本信息和属性
      * @param custInfo
      * @return

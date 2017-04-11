@@ -152,4 +152,26 @@ public class BoCust {
     public void setState(String state) {
         this.state = state;
     }
+
+    /**
+     * 转为实例数据
+     * @return
+     */
+    public Cust convert(){
+
+        Cust cust = new Cust();
+        cust.setCustId(this.getCustId());
+        cust.setName(this.getName());
+        cust.setCellphone(this.getCellphone());
+        cust.setCustAdress(this.getCustAdress());
+        cust.setCustType(this.getCustType());
+        cust.setEmail(this.getEmail());
+        cust.setLanId(this.getLanId());
+        cust.setOpenId(this.getOpenId());
+        cust.setRealName(this.getRealName());
+        cust.setSex(this.getSex());
+        cust.setPassword(this.getPassword());
+
+        return cust;
+    }
 }

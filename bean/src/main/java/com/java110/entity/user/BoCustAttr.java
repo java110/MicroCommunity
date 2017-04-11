@@ -55,4 +55,17 @@ public class BoCustAttr {
     public void setAttrCd(String attrCd) {
         this.attrCd = attrCd;
     }
+
+    /**
+     * 将过程数据转为实例数据
+     * @return
+     */
+    public CustAttr convert(){
+        CustAttr custAttr = new CustAttr();
+
+        custAttr.setCustId(this.getCustId());
+        custAttr.setAttrCd(this.getAttrCd());
+        custAttr.setValue(this.getValue());
+        return custAttr;
+    }
 }

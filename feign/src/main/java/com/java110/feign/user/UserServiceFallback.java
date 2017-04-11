@@ -1,5 +1,6 @@
 package com.java110.feign.user;
 
+import com.java110.common.util.ProtocolUtil;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -9,11 +10,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserServiceFallback implements IUserService{
     /**
      * 查询用户信息失败
-     * @param userJson
+     * @param data
      * @return
      */
     @Override
-    public String queryUserInfo(@RequestParam("userJson") String userJson) {
-        return null;
+    public String queryUserInfo(@RequestParam("data") String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String soUserService(@RequestParam("data") String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String soBoCust(@RequestParam("data") String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String soBoCustAttr(@RequestParam("data") String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
 }

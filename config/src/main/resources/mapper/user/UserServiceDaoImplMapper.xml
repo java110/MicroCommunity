@@ -73,11 +73,11 @@
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->
-    <insert id="deleteDataToCust" parameterType="com.java110.entity.user.CustAttr">
+    <update id="deleteDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
         <![CDATA[
            delete * from cust_attr ct where ct.custId = #{custId} and ct.attrCd = #{attrCd}
         ]]>
-    </insert>
+    </update>
     <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
     <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
         <![CDATA[

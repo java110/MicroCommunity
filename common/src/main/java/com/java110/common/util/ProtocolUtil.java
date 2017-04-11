@@ -2,6 +2,7 @@ package com.java110.common.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.log.LoggerEngine;
 import com.java110.entity.protocol.SvcCont;
 import  com.java110.entity.protocol.TcpCont;
 import org.springframework.util.StringUtils;
@@ -331,5 +332,31 @@ public class ProtocolUtil {
         data.put("RESULT_MSG", resultMsg);
         data.put("RESULT_INFO", resultInfo);
         return data.toString();
+    }
+
+    /**
+     * 校验返回报文
+     * 如果为true 成功
+     * false 失败
+     * @param returnJsonParam
+     * @return
+     */
+    public static boolean validateReturnJson(String returnJsonParam,JSONObject paramJson){
+        try{
+             paramJson = JSONObject.parseObject(returnJsonParam);
+
+            if(paramJson == null || !paramJson.containsKey("RESULT_CODE")){
+                return false;
+            }
+
+            if(ProtocolUtil.RETURN_MSG_SUCCESS.equals(paramJson.getString("RESULT_CODE"))){
+                return true;
+            }
+
+        }catch (Exception e){
+            LoggerEngine.error("返回报文必须为json格式，当前格式错误 " + returnJsonParam);
+            return false;
+        }
+        return false;
     }
 }

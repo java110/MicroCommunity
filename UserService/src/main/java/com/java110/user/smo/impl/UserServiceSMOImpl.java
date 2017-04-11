@@ -6,13 +6,16 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
+import com.java110.entity.user.Cust;
 import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.user.smo.IUserServiceSMO;
 import com.java110.core.base.smo.BaseServiceSMO;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +24,7 @@ import java.util.List;
  * Created by wuxw on 2017/4/5.
  */
 @Service("userServiceSMOImpl")
+@Transactional
 public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSMO {
 
     @Autowired
@@ -44,7 +48,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      * @param userInfoJson 入参为用户信息json传
      * @return
      */
-    public String saveUser(String userInfoJson) {
+    public String saveUser(String userInfoJson) throws Exception{
 
         JSONObject reqUserJSON = null;
         try {
@@ -67,7 +71,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             //返回异常信息
             return e.getMessage();
         }
-        return soUserService(reqUserJSON.toJSONString());
+        return soUserService(reqUserJSON);
     }
 
 
@@ -77,29 +81,48 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      * @param userInfoJson
      * @return
      */
-    public String soUserService(String userInfoJson) {
+    public String soUserService(JSONObject userInfoJson) throws Exception{
         LoggerEngine.debug("用户服务操作客户入参：" + userInfoJson);
-        String resultUserInfo = null;
-        JSONObject reqUserJSON = null;
-        try {
-            reqUserJSON = this.simpleValidateJSON(userInfoJson);
-            //1.0规则校验，报文是否合法
+        JSONObject paramJson = new JSONObject();
 
-            if(reqUserJSON.containsKey("boCust")){
+        JSONObject resultInfo = null;
 
-            }
-
-            if(reqUserJSON.containsKey("boCustAttr")){
-
-            }
-
-            //2.0
-        } catch (Exception e) {
-            LoggerEngine.error("服务处理出现异常：", e);
-        } finally {
-            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
-            return resultUserInfo;
+        if (userInfoJson == null){
+            throw new IllegalArgumentException("soUserService 入参 为空"+userInfoJson);
         }
+         // 客户信息处理
+            if(userInfoJson.containsKey("boCust")){
+                JSONArray boCusts = userInfoJson.getJSONArray("boCust");
+                JSONObject boCustObj = new JSONObject();
+                boCustObj.put("boCust",boCusts);
+                String returnSaveBoCust = this.soBoCust(boCustObj.toJSONString());
+
+                if(!ProtocolUtil.validateReturnJson(returnSaveBoCust,paramJson)){
+
+                    throw new RuntimeException("保存 bo_cust 失败："+boCustObj+(paramJson != null
+                            && paramJson.containsKey("RESULT_MSG")?paramJson.getString("RESULT_MSG"):"未知异常"));
+                }
+
+                resultInfo = paramJson.getJSONObject("RESULT_INFO");
+            }
+
+            //客户属性信息处理
+            if(userInfoJson.containsKey("boCustAttr")){
+
+                JSONArray boCustAttrs = userInfoJson.getJSONArray("boCustAttr");
+                JSONObject boCustAttrObj = new JSONObject();
+                boCustAttrObj.put("boCustAttr",boCustAttrs);
+                String returnSaveBoCustAttr = soBoCustAttr(boCustAttrObj.toJSONString());
+
+                if(!ProtocolUtil.validateReturnJson(returnSaveBoCustAttr,paramJson)){
+
+                    throw new RuntimeException("保存 bo_cust 失败："+boCustAttrObj+(paramJson != null
+                            && paramJson.containsKey("RESULT_MSG")?paramJson.getString("RESULT_MSG"):"未知异常"));
+                }
+            }
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",resultInfo);
+
     }
 
     /**
@@ -107,13 +130,20 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      *     boCust:[{},{}]
      * }
      * 客户信心处理
+     *
+     *
      * @param boCusts
-     * @return
+     * @return 成功 会带上处理客户的客户ID
+     * {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'custId':'7000123,718881991}}
      * @throws Exception
      */
     public String soBoCust(String boCusts) throws Exception{
         // 将 jsonArray 转为list<BoCust> 对象
         JSONObject jsonObject = JSONObject.parseObject(boCusts);
+
+        JSONObject resultInfo = new JSONObject();
+
+        String custIds = "";
 
         List<BoCust> boCustList = JSONObject.parseArray(jsonObject.getJSONArray("boCust").toJSONString(), BoCust.class);
 
@@ -141,12 +171,39 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             //保存数据至 bo_cust 表中
             int saveBoCustFlag = iUserServiceDao.saveDataToBoCust(boCust);
 
-            if(saveBoCustFlag > 0){
-                //建档 处理
+            if(saveBoCustFlag < 1){ // 如果没有保存成功，抛出异常，有事物 回退事物
+                throw new RuntimeException("保存过程[bo_cust]数据失败,印象记录数为"+saveBoCustFlag+"，boCust : "+boCust);
+            }
+            //建档 处理 实例数据
+            int saveCustFlag = 0;
+            if("ADD".equals(boCust.getState())){
+                saveCustFlag  = iUserServiceDao.saveDataToCust(boCust.convert());
+            }else if("DEL".equals(boCust.getState())){
+                saveCustFlag = iUserServiceDao.deleteDataToCust(boCust.convert());
+            }else if("KIP".equals(boCust.getState())){
+                //按理这里到不了，KIP表示实例数据不变，所以这里默认写成1 认为是成功
+                saveCustFlag = 1;
+            }else{
+                //这里单独抛出异常，不走下面统一异常抛出，是为了说明更具体点
+                throw new RuntimeException("入参错误boCust 的 state 目前只支持 [ADD,DEL,KIP] , boCust : " +boCust);
             }
 
+
+            if(saveCustFlag < 1){
+                throw new RuntimeException("保存实例[cust]数据失败，影响记录数为"+saveCustFlag+", cust : "+boCust.convert());
+            }
+
+            custIds +=","+custId;
         }
-        return "";
+
+        //去除第一个逗号
+        if (custIds.length()>0){
+            custIds = custIds.substring(1);
+        }
+
+        resultInfo.put("custId",custIds);
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",resultInfo);
     }
 
     /**
@@ -177,13 +234,54 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         for(BoCustAttr boCustAttr : boCustAttrList) {
 
             //保存数据至 bo_cust_attr 表中
-            int saveBoCustFlag = iUserServiceDao.saveDataToBoCustAttr(boCustAttr);
+            int saveBoCustAttrFlag = iUserServiceDao.saveDataToBoCustAttr(boCustAttr);
 
-            if (saveBoCustFlag > 0) {
-                //建档 处理
+            if(saveBoCustAttrFlag < 1){ // 如果没有保存成功，抛出异常，有事物 回退事物
+                throw new RuntimeException("保存过程[bo_cust_attr]数据失败,印象记录数为"+saveBoCustAttrFlag+"，boCustAttr : "+boCustAttr);
+            }
+
+            //建档 处理 实例数据
+            int saveCustAttrFlag = 0;
+            if("ADD".equals(boCustAttr.getState())){
+                saveCustAttrFlag  = iUserServiceDao.saveDataToCustAttr(boCustAttr.convert());
+            }else if("DEL".equals(boCustAttr.getState())){
+                saveCustAttrFlag = iUserServiceDao.deleteDataToCustAttr(boCustAttr.convert());
+            }else if("KIP".equals(boCustAttr.getState())){
+                //按理这里到不了，KIP表示实例数据不变，所以这里默认写成1 认为是成功
+                saveCustAttrFlag = 1;
+            }else{
+                //这里单独抛出异常，不走下面统一异常抛出，是为了说明更具体点
+                throw new RuntimeException("入参错误boCustAttr 的 state 目前只支持 [ADD,DEL,KIP] , boCust : " +boCustAttr);
+            }
+
+            if(saveCustAttrFlag < 1){
+                throw new RuntimeException("保存实例[cust_attr]数据失败，影响记录数为"+saveCustAttrFlag+", cust : "+boCustAttr.convert());
             }
         }
-            return "";
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",null);
+    }
+
+
+    /**
+     * 查询客户信息
+     * 包括 基本信息cust 和 属性信息 custAttr
+     * @param cust
+     * @return
+     * @throws Exception
+     */
+    public String queryCust(Cust cust) throws Exception{
+        LoggerEngine.debug("客户信息查询入参：" + cust);
+        if(cust == null || StringUtils.isBlank(cust.getCustId()) ){
+            throw new IllegalArgumentException("客户信息查询入参为空，custId 为空 "+cust);
+        }
+        Cust newCust = iUserServiceDao.queryDataToCust(cust);
+
+        if(newCust == null){
+            return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"未找到用户信息",null);
+        }
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(newCust)));
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

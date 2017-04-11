@@ -127,6 +127,48 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     }
 
     /**
+     * 删除用户基本信息（实例数据）
+     * @param cust
+     * @return
+     * @throws RuntimeException
+     */
+    public int deleteDataToCust(Cust cust) throws RuntimeException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据入参 : " + cust);
+        //为了保险起见，再测检测reqList 是否有值
+        if(cust == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据出错 : " + cust);
+            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
+        }
+        int saveFlag = 0;
+
+        saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToCust",cust);
+        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据出参 :saveFlag " + saveFlag);
+
+        return saveFlag;
+    }
+
+    /**
+     *  删除用户属性（实例数据）
+     * @param custAttr
+     * @return
+     * @throws RuntimeException
+     */
+    public int deleteDataToCustAttr(CustAttr custAttr) throws RuntimeException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据入参 : " + custAttr);
+        //为了保险起见，再测检测reqList 是否有值
+        if(custAttr == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据出错 : " + custAttr);
+            throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
+        }
+        int saveFlag = 0;
+
+        saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToCustAttr",custAttr);
+        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据出参 :saveFlag " + saveFlag);
+
+        return saveFlag;
+    }
+
+    /**
      * 同时保存客户基本信息和客户属性
      * 入参为：
      *
