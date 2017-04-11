@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.entity.user.BoCust;
+import com.java110.entity.user.BoCustAttr;
 import com.java110.feign.base.IPrimaryKeyService;
+import com.java110.user.dao.IUserServiceDao;
 import com.java110.user.smo.IUserServiceSMO;
 import com.java110.core.base.smo.BaseServiceSMO;
 import org.apache.commons.lang.math.NumberUtils;
@@ -23,6 +25,9 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
     @Autowired
     IPrimaryKeyService iPrimaryKeyService;
+
+    @Autowired
+    IUserServiceDao iUserServiceDao;
 
     //新增用户
     private final static String USER_ACTION_ADD = "ADD";
@@ -120,7 +125,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             if(custId < 0 ){
                 JSONObject data = new JSONObject();
                 data.put("type","CUST_ID");
-                //{"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}
+                //要求接口返回 {"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}
                 String custIdJSONStr = iPrimaryKeyService.queryPrimaryKey(data.toJSONString());
                 JSONObject custIdJSONTmp = JSONObject.parseObject(custIdJSONStr);
                 if(custIdJSONTmp.containsKey("RESULT_CODE")
@@ -132,11 +137,22 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             }
 
             boCust.setCustId(custId+"");
+
+            //保存数据至 bo_cust 表中
+            int saveBoCustFlag = iUserServiceDao.saveDataToBoCust(boCust);
+
+            if(saveBoCustFlag > 0){
+                //建档 处理
+            }
+
         }
         return "";
     }
 
     /**
+     * 注意在调用这个接口时，相应的客户信息必须存在
+     *
+     *
      * 客户信息属性处理
      * 协议：
      *{
@@ -148,7 +164,26 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      */
     @Override
     public String soBoCustAttr(String boCustAttrs) throws Exception {
-        return null;
+
+        //这里可以加入基本客户信息是否存在的校验，暂时没有必要实现
+
+        // 将 jsonArray 转为list<BoCust> 对象
+        JSONObject jsonObject = JSONObject.parseObject(boCustAttrs);
+
+        List<BoCustAttr> boCustAttrList = JSONObject.parseArray(jsonObject.getJSONArray("boCustAttr").toJSONString(), BoCustAttr.class);
+
+        //保存数据
+
+        for(BoCustAttr boCustAttr : boCustAttrList) {
+
+            //保存数据至 bo_cust_attr 表中
+            int saveBoCustFlag = iUserServiceDao.saveDataToBoCustAttr(boCustAttr);
+
+            if (saveBoCustFlag > 0) {
+                //建档 处理
+            }
+        }
+            return "";
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {
@@ -157,5 +192,13 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
     public void setiPrimaryKeyService(IPrimaryKeyService iPrimaryKeyService) {
         this.iPrimaryKeyService = iPrimaryKeyService;
+    }
+
+    public IUserServiceDao getiUserServiceDao() {
+        return iUserServiceDao;
+    }
+
+    public void setiUserServiceDao(IUserServiceDao iUserServiceDao) {
+        this.iUserServiceDao = iUserServiceDao;
     }
 }

@@ -1,6 +1,10 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.entity.user.BoCust;
+import com.java110.entity.user.BoCustAttr;
+import com.java110.entity.user.Cust;
+import com.java110.entity.user.CustAttr;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.constant.CommonConstant;
@@ -31,74 +35,101 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 保存用户基本信息
      * 功能只用与保存用户处理
-     * @param userInfo 用户基本信息
+     * @param boCust 用户基本信息
      * @return
      */
     @Override
-    public String saveDataToBoCust(String userInfo) {
+    public int saveDataToBoCust(BoCust boCust) throws RuntimeException{
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据入参 : " + userInfo);
-        Map<String,Object> userMap = null;
-        String returnInfo = null;
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据入参 : " + boCust);
+        int saveFlag = 0;
         try {
-            userMap = this.simpleValidateJSONReturnMap(userInfo);
 
-            int saveFlag = sqlSessionTemplate.insert("UserServiceDAOImpl.saveDataToBoCust",userMap);
+            saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoCust",boCust);
 
-            if(saveFlag > 0){
-                returnInfo = ProtocolUtil.createResultMsg(ResponseConstant.RESULT_CODE_SUCCESS,"成功",null);
-            }else{
-                returnInfo = ProtocolUtil.createResultMsg(ResponseConstant.RESULT_CODE_ERROR,"失败",null);
-            }
         }catch(RuntimeException e){
             LoggerEngine.error("----【UserServiceDAOImpl.saveDataToBoCust】保存数据异常 : " ,e);
-            return e.getMessage();
+            return saveFlag;
+        }finally {
+            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据出参 : saveFlag:" + saveFlag);
+            return saveFlag;
         }
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据出参 : " + returnInfo);
-        return returnInfo;
+
     }
 
     /**
      * 保存用户属性（过程表）
-     * 批量保存传入参数必须一个JSONArray to string
+     *
      * @param boCustAttr 用户属性
      * @return
      * @throws RuntimeException
      */
     @Override
-    public String saveDataToBoCustAttr(String boCustAttr) throws RuntimeException {
+    public int saveDataToBoCustAttr(BoCustAttr boCustAttr) throws RuntimeException {
 
         LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据入参 : " + boCustAttr);
-        List<Map> reqList = null;
-        String returnInfo = null;
-        try{
-            reqList = this.simpleValidateJSONArrayReturnList(boCustAttr);
-        }catch (RuntimeException e){
-            return e.getMessage();
-        }
         //为了保险起见，再测检测reqList 是否有值
-        if(reqList == null || reqList.size() == 0){
-            returnInfo = ProtocolUtil.createResultMsg(ResponseConstant.RESULT_CODE_PARAM_ERROR,"入参错误",null);
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出错 : " + returnInfo);
-            return returnInfo;
+        if(boCustAttr == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出错 : " + boCustAttr);
+            return 0;
         }
-        Map boCustAttrMap = null;
         int saveFlag = 0;
-        for(int attrIndex = 0 ; attrIndex < reqList.size();attrIndex++){
-            boCustAttrMap = reqList.get(attrIndex);
-            saveFlag = sqlSessionTemplate.insert("UserServiceDAOImpl.saveDataToBoCustAttr",boCustAttrMap);
-            if(saveFlag < 1){ //只要一个保存失败，抛异常回退
-                LoggerEngine.error("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据异常 : " + boCustAttrMap.toString());
-                throw new RuntimeException(CommonConstant.SAVE_DATA_ERROR+"保存数据失败："+boCustAttrMap.toString());
-            }
+
+        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoCustAttr",boCustAttr);
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出参 :saveFlag " + saveFlag);
+
+        return saveFlag;
+
+    }
+
+    /**
+     * 保存实例数据 客户信息至Cust表中
+     * @param cust
+     * @return
+     * @throws RuntimeException
+     */
+    @Override
+    public int saveDataToCust(Cust cust) throws RuntimeException {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据入参 : " + cust);
+        //为了保险起见，再测检测reqList 是否有值
+        if(cust == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出错 : " + cust);
+            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
         }
-        returnInfo = ProtocolUtil.createResultMsg(ResponseConstant.RESULT_CODE_SUCCESS,"成功",null);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出参 : " + returnInfo);
-        return returnInfo;
+        int saveFlag = 0;
+
+        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToCust",cust);
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
+
+        return saveFlag;
+    }
+
+    /**
+     * 保存实例数据 客户属性信息至CustAttr表中
+     * @param custAttr
+     * @return
+     * @throws RuntimeException
+     */
+    @Override
+    public int saveDataToCustAttr(CustAttr custAttr) throws RuntimeException {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据入参 : " + custAttr);
+        //为了保险起见，再测检测reqList 是否有值
+        if(custAttr == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出错 : " + custAttr);
+            throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
+        }
+        int saveFlag = 0;
+
+        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToCustAttr",custAttr);
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
+
+        return saveFlag;
     }
 
     /**
      * 同时保存客户基本信息和客户属性
+     * 入参为：
+     *
      * @param boCustInfo 用户信息
      * @return
      * @throws RuntimeException
@@ -107,31 +138,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public String saveDataToBoCustAndBoCustAttr(String boCustInfo) throws RuntimeException {
 
         LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAndBoCustAttr】保存数据入参"+boCustInfo);
-        JSONObject reqJson = null ;
-        String returnInfo = null;
-        //报文校验是否符合要求
-        try{
-            reqJson = this.simpleValidateJSON(boCustInfo);
-        }catch (RuntimeException e){
-            return e.getMessage();
-        }
-        //保存用户基本信息
-        if(reqJson!= null && reqJson.containsKey("boCust")){
-            String boCustJSON = reqJson.getJSONObject("boCust").toJSONString();
-            returnInfo = this.saveDataToBoCust(boCustJSON);
-            //解析返回内容
-        }
 
-        return null;
-    }
-
-    @Override
-    public String saveDataToCust(String cust) throws RuntimeException {
-        return null;
-    }
-
-    @Override
-    public String saveDataToCustAttr(String custAttr) throws RuntimeException {
         return null;
     }
 
@@ -155,13 +162,30 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
         return null;
     }
 
+    /**
+     * 根据客户ID查询客户信息，包括基本信息和属性信息
+     * @param cust
+     * @return
+     * @throws RuntimeException
+     */
     @Override
-    public String queryDataToCust(String cust) throws RuntimeException {
-        return null;
+    public Cust queryDataToCust(Cust cust) throws RuntimeException {
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据入参 : " + cust);
+        //为了保险起见，再测检测reqList 是否有值
+        if(cust == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出错 : " + cust);
+            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
+        }
+
+        Cust newCust  = sqlSessionTemplate.selectOne("userServiceDAOImpl.queryDataToCust",cust);
+
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出参 :newCust " + newCust);
+
+        return newCust;
     }
 
     @Override
-    public String queryDataToCustAttr(String custAttr) throws RuntimeException {
+    public List<CustAttr> queryDataToCustAttr(CustAttr custAttr) throws RuntimeException {
         return null;
     }
 

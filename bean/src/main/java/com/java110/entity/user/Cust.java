@@ -1,5 +1,7 @@
 package com.java110.entity.user;
 
+import java.util.Set;
+
 /**
  * 客户信息实体
  * Created by wuxw on 2016/12/27.
@@ -29,6 +31,8 @@ public class Cust {
     private String openId;
 
     private String status_cd;
+
+    private Set<CustAttr> custAttrs;
 
 
     public String getCustId() {
@@ -125,5 +129,13 @@ public class Cust {
 
     public void setStatus_cd(String status_cd) {
         this.status_cd = status_cd;
+    }
+
+    public Set<CustAttr> getCustAttrs() {
+        return custAttrs;
+    }
+
+    public void setCustAttrs(Set<CustAttr> custAttrs) {
+        this.custAttrs = custAttrs;
     }
 }

@@ -1,5 +1,12 @@
 package com.java110.user.dao;
 
+import com.java110.entity.user.BoCust;
+import com.java110.entity.user.BoCustAttr;
+import com.java110.entity.user.Cust;
+import com.java110.entity.user.CustAttr;
+
+import java.util.List;
+
 /**
  * 用户组件内部之间使用，没有给外围系统提供服务能力
  * 用户服务接口类，要求全部以字符串传输，方便微服务化
@@ -14,7 +21,7 @@ public interface IUserServiceDao {
      * @param boCust 用户基本信息
      * @return
      */
-    public String saveDataToBoCust(String boCust) throws RuntimeException;
+    public int saveDataToBoCust(BoCust boCust) throws RuntimeException;
 
     /**
      * 保存用户属性(过程表)
@@ -22,7 +29,7 @@ public interface IUserServiceDao {
      * @return
      * @throws RuntimeException
      */
-    public String saveDataToBoCustAttr(String boCustAttr) throws RuntimeException;
+    public int saveDataToBoCustAttr(BoCustAttr boCustAttr) throws RuntimeException ;
 
     /**
      *  同事保存用户基本信息和属性(过程表)
@@ -38,7 +45,7 @@ public interface IUserServiceDao {
      * @return
      * @throws RuntimeException
      */
-    public String saveDataToCust(String cust) throws RuntimeException;
+    public int saveDataToCust(Cust cust) throws RuntimeException;
 
     /**
      *  保存用户属性
@@ -46,7 +53,7 @@ public interface IUserServiceDao {
      * @return
      * @throws RuntimeException
      */
-    public String saveDataToCustAttr(String custAttr) throws RuntimeException;
+    public int saveDataToCustAttr(CustAttr custAttr) throws RuntimeException;
 
     /**
      * 同事保存用户基本信息和属性
@@ -83,14 +90,15 @@ public interface IUserServiceDao {
 
 
 
-
     /**
      * 查询用户基本信息（一般没用，就算有用）
      * @param cust
      * @return
      * @throws RuntimeException
      */
-    public String queryDataToCust(String cust) throws RuntimeException;
+    public Cust queryDataToCust(Cust cust) throws RuntimeException ;
+
+
 
     /**
      *  查询用户属性
@@ -98,7 +106,7 @@ public interface IUserServiceDao {
      * @return
      * @throws RuntimeException
      */
-    public String queryDataToCustAttr(String custAttr) throws RuntimeException;
+    public List<CustAttr> queryDataToCustAttr(CustAttr custAttr) throws RuntimeException;
 
     /**
      * 查询保存用户基本信息和属性
