@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -147,9 +148,12 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
         List<BoCust> boCustList = JSONObject.parseArray(jsonObject.getJSONArray("boCust").toJSONString(), BoCust.class);
 
+        Collections.sort(boCustList);
         //保存数据
 
         for(BoCust boCust : boCustList){
+//        for(int boCustIndex = 0 ; boCustIndex < boCustList.size();boCustIndex++){
+//            BoCust boCust = boCustList.get(boCustIndex);
             int custId = NumberUtils.toInt(boCust.getBoId(),-1);
             //如果客户ID小于0 ，则自己生成客户ID,这个只有在有 主键生成服务时使用，否则为了防止出错，需要前段调用时需要生成custId
             if(custId < 0 ){
@@ -177,6 +181,27 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             //建档 处理 实例数据
             int saveCustFlag = 0;
             if("ADD".equals(boCust.getState())){
+               /* List<BoCust> boCustsTmp = boCustList;
+                //在增加之间首先要判断是否有相应删的动作
+//                for(BoCust boCustTmp : boCustsTmp){
+                for(int boCustTmpIndex = boCustIndex+1;boCustTmpIndex < boCustsTmp.size();boCustTmpIndex++){
+                    BoCust boCustTmp = boCustsTmp.get(boCustTmpIndex);
+                    if(StringUtils.isNotBlank(boCust.getCustId())
+                            && boCust.getCustId().equals(boCustTmp.getCustId())
+                            &&"DEL".equals(boCustTmp.getState())){
+                        //先调用删除客户信息
+                        saveCustFlag = iUserServiceDao.deleteDataToCust(boCust.convert());
+
+                        if(saveCustFlag < 1){
+                            throw new RuntimeException("删除实例[cust]数据失败，影响记录数为"+saveCustFlag+", cust : "+boCust.convert());
+                        }
+
+                        //则把已经删除过的从list中删除，以防重复删除
+                        boCustList.remove(boCustTmp);
+
+                    }
+                }*/
+
                 saveCustFlag  = iUserServiceDao.saveDataToCust(boCust.convert());
             }else if("DEL".equals(boCust.getState())){
                 saveCustFlag = iUserServiceDao.deleteDataToCust(boCust.convert());
@@ -229,6 +254,8 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
         List<BoCustAttr> boCustAttrList = JSONObject.parseArray(jsonObject.getJSONArray("boCustAttr").toJSONString(), BoCustAttr.class);
 
+        //先拍个序 先处理DEL 再处理ADD
+        Collections.sort(boCustAttrList);
         //保存数据
 
         for(BoCustAttr boCustAttr : boCustAttrList) {

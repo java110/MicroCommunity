@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/UserService/src/test/java/com/java110/user/BoCustCompareTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/IUserServiceDao.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/IUserServiceDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/impl/UserServiceDaoImpl.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/impl/UserServiceDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/src/main/resources/mapper/user/UserServiceDaoImplMapper.xml" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/user/UserServiceDaoImplMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -44,40 +37,67 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="UserServiceSMOImpl.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UserServiceSMOImpl.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="280" column="94" lean-forward="true" selection-start-line="280" selection-start-column="12" selection-end-line="280" selection-end-column="94" />
+            <state relative-caret-position="181">
+              <caret line="260" column="53" lean-forward="true" selection-start-line="260" selection-start-column="53" selection-end-line="260" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10466#10467#0" expanded="true" />
-                <element signature="e#10504#10505#0" expanded="true" />
-                <element signature="e#10575#10576#0" expanded="true" />
-                <element signature="e#10629#10630#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProtocolUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java">
+      <file leaf-file-name="BoCustAttr.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="332" column="29" lean-forward="false" selection-start-line="332" selection-start-column="18" selection-end-line="332" selection-end-column="29" />
+            <state relative-caret-position="334">
+              <caret line="73" column="44" lean-forward="false" selection-start-line="73" selection-start-column="44" selection-end-line="73" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IUserServiceSMO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
+      <file leaf-file-name="BoCust.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
-              <caret line="58" column="56" lean-forward="true" selection-start-line="51" selection-start-column="4" selection-end-line="58" selection-end-column="56" />
+            <state relative-caret-position="402">
+              <caret line="189" column="17" lean-forward="false" selection-start-line="185" selection-start-column="8" selection-end-line="189" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BoCustCompareTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UserService/src/test/java/com/java110/user/BoCustCompareTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="368">
+              <caret line="63" column="34" lean-forward="true" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#894#902#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AppTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UserService/src/test/java/com/java110/user/AppTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="91">
+              <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Collections.java" pinned="false" current-in-tab="false">
+        <entry file="jar://F:/software/Java/jdk1.8.0_121/src.zip!/java/util/Collections.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="593" column="48" lean-forward="false" selection-start-line="593" selection-start-column="38" selection-end-line="593" selection-end-column="48" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -87,7 +107,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
               <caret line="20" column="69" lean-forward="false" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#4415#4416#0" expanded="false" />
+                <element signature="e#4453#4454#0" expanded="false" />
+                <element signature="e#4524#4525#0" expanded="false" />
+                <element signature="e#4578#4579#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,21 +121,21 @@
       <file leaf-file-name="IUserService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
+            <state relative-caret-position="1037">
               <caret line="66" column="67" lean-forward="false" selection-start-line="66" selection-start-column="67" selection-end-line="66" selection-end-column="67" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserServiceFallback.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserServiceFallback.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -117,20 +143,8 @@
       <file leaf-file-name="IUserServiceDao.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/IUserServiceDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
+            <state relative-caret-position="1853">
               <caret line="114" column="31" lean-forward="false" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserServiceDaoImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/impl/UserServiceDaoImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="213" column="16" lean-forward="false" selection-start-line="213" selection-start-column="16" selection-end-line="213" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -177,7 +191,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/service/src/main/java/com/java110/service/DataSourceConfiguration.java" />
         <option value="$PROJECT_DIR$/config/src/main/resources/db/db.properties" />
         <option value="$PROJECT_DIR$/service/src/main/java/com/java110/service/MyBatisMapperScannerConfig.java" />
         <option value="$PROJECT_DIR$/config/db/order_list.db" />
@@ -217,17 +230,18 @@
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/rest/PrimaryKeyServiceRest.java" />
         <option value="$PROJECT_DIR$/config/src/main/resources/mapper/user/UserServiceMapper.xml" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/Cust.java" />
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java" />
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java" />
         <option value="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/IUserServiceDao.java" />
         <option value="$PROJECT_DIR$/config/src/main/resources/mapper/user/UserServiceDaoImplMapper.xml" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/impl/UserServiceDaoImpl.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" />
-        <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" />
+        <option value="$PROJECT_DIR$/UserService/src/test/java/com/java110/user/BoCustCompareTest.java" />
+        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java" />
+        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java" />
+        <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
       </list>
     </option>
   </component>
@@ -269,6 +283,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -281,11 +296,72 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UserService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UserService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MicroCommunity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UserService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -294,7 +370,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="js.eslint.eslintPackage" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SAOP/idea/flowstation" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -315,7 +391,7 @@
       <recent name="E:\project\MicroCommunity\BaseService\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.AppSpringBootApplication (1)">
+  <component name="RunManager" selected="JUnit.BoCustCompareTest.testBoCustCompare">
     <configuration default="false" name="AppSpringBootApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -366,6 +442,32 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="BaseService" />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="BoCustCompareTest.testBoCustCompare" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.java110.user.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="UserService" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.java110.user" />
+      <option name="MAIN_CLASS_NAME" value="com.java110.user.BoCustCompareTest" />
+      <option name="METHOD_NAME" value="testBoCustCompare" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -631,19 +733,21 @@
       <envs />
       <method />
     </configuration>
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ConfigServerEurekaApplication" />
       <item index="1" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication" />
       <item index="2" class="java.lang.String" itemvalue="Application.AppSpringBootApplication" />
       <item index="3" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
       <item index="4" class="java.lang.String" itemvalue="Application.AppSpringBootApplication (1)" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.BoCustCompareTest.testBoCustCompare" />
     </list>
     <recent_temporary>
-      <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Application.AppSpringBootApplication (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
-        <item index="2" class="java.lang.String" itemvalue="Application.AppSpringBootApplication" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.BoCustCompareTest.testBoCustCompare" />
+        <item index="1" class="java.lang.String" itemvalue="Application.AppSpringBootApplication (1)" />
+        <item index="2" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
         <item index="3" class="java.lang.String" itemvalue="Application.AppSpringBootApplication" />
+        <item index="4" class="java.lang.String" itemvalue="Application.AppSpringBootApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -679,7 +783,8 @@
       <workItem from="1491740642463" duration="7013000" />
       <workItem from="1491786141578" duration="4448000" />
       <workItem from="1491829047177" duration="14075000" />
-      <workItem from="1491872314728" duration="14030000" />
+      <workItem from="1491872314728" duration="14384000" />
+      <workItem from="1491899841741" duration="4852000" />
     </task>
     <task id="LOCAL-00001" summary="change fastjson dependenciy">
       <created>1491576589634</created>
@@ -691,15 +796,39 @@
     <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 11m 33s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 13m 01s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 14m 12s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 14m 40s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 16m 01s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 19m 14s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BoCustCompareTest_testBoCustCompare - 2017.04.11 at 18h 21m 46s.xml">
+      <configuration name="BoCustCompareTest.testBoCustCompare" configurationId="JUnit" />
+    </history-entry>
+  </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132109000" />
+    <option name="totallyTimeSpent" value="137315000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37140697" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -708,13 +837,12 @@
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6262295" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2987897" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21558245" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7688525" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -773,33 +901,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/BaseService/src/main/resources/banner.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="68" lean-forward="true" selection-start-line="16" selection-start-column="68" selection-end-line="16" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/AppSpringBootApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="24" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/ICommonServiceDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="26" lean-forward="false" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/base/dao/BaseServiceDao.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="22" column="50" lean-forward="false" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -814,9 +919,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-510">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#4059#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -842,7 +944,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -858,7 +959,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="507">
           <caret line="55" column="12" lean-forward="false" selection-start-line="55" selection-start-column="12" selection-end-line="55" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -866,9 +966,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="16" lean-forward="false" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -962,7 +1059,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="59" column="78" lean-forward="false" selection-start-line="59" selection-start-column="78" selection-end-line="59" selection-end-column="78" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -977,7 +1073,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="106" column="3" lean-forward="false" selection-start-line="106" selection-start-column="3" selection-end-line="106" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -999,7 +1094,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="9" lean-forward="true" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1007,9 +1101,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1017,9 +1108,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="60" lean-forward="false" selection-start-line="10" selection-start-column="60" selection-end-line="10" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1027,10 +1115,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="402">
           <caret line="36" column="37" lean-forward="false" selection-start-line="36" selection-start-column="15" selection-end-line="36" selection-end-column="37" />
-          <folding>
-            <element signature="e#932#933#0" expanded="false" />
-            <element signature="e#993#994#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1038,7 +1122,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="27" column="21" lean-forward="false" selection-start-line="24" selection-start-column="7" selection-end-line="27" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1046,7 +1129,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="385">
           <caret line="60" column="21" lean-forward="false" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1054,9 +1136,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-496">
           <caret line="18" column="87" lean-forward="false" selection-start-line="18" selection-start-column="87" selection-end-line="18" selection-end-column="87" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1073,27 +1152,11 @@
         <state relative-caret-position="272">
           <caret line="34" column="35" lean-forward="false" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="35" />
           <folding>
-            <element signature="e#2312#2313#0" expanded="true" />
-            <element signature="e#2344#2345#0" expanded="true" />
-            <element signature="e#2401#2402#0" expanded="true" />
-            <element signature="e#2443#2444#0" expanded="true" />
+            <element signature="e#2312#2313#0" expanded="false" />
+            <element signature="e#2344#2345#0" expanded="false" />
+            <element signature="e#2401#2402#0" expanded="false" />
+            <element signature="e#2443#2444#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="159" column="23" lean-forward="false" selection-start-line="159" selection-start-column="16" selection-end-line="159" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="67" column="41" lean-forward="false" selection-start-line="67" selection-start-column="41" selection-end-line="67" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1101,13 +1164,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
           <caret line="75" column="36" lean-forward="false" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
+        <state relative-caret-position="5389">
           <caret line="332" column="29" lean-forward="false" selection-start-line="332" selection-start-column="18" selection-end-line="332" selection-end-column="29" />
           <folding />
         </state>
@@ -1115,43 +1177,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/impl/UserServiceDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
+        <state relative-caret-position="3366">
           <caret line="213" column="16" lean-forward="false" selection-start-line="213" selection-start-column="16" selection-end-line="213" selection-end-column="16" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="58" column="56" lean-forward="true" selection-start-line="51" selection-start-column="4" selection-end-line="58" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="280" column="94" lean-forward="true" selection-start-line="280" selection-start-column="12" selection-end-line="280" selection-end-column="94" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#10466#10467#0" expanded="true" />
-            <element signature="e#10504#10505#0" expanded="true" />
-            <element signature="e#10575#10576#0" expanded="true" />
-            <element signature="e#10629#10630#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="969">
+          <caret line="58" column="56" lean-forward="false" selection-start-line="51" selection-start-column="4" selection-end-line="58" selection-end-column="56" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/dao/IUserServiceDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
+        <state relative-caret-position="1853">
           <caret line="114" column="31" lean-forward="false" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1159,22 +1205,81 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="20" column="69" lean-forward="false" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#4415#4416#0" expanded="false" />
+            <element signature="e#4453#4454#0" expanded="false" />
+            <element signature="e#4524#4525#0" expanded="false" />
+            <element signature="e#4578#4579#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
+        <state relative-caret-position="1037">
           <caret line="66" column="67" lean-forward="false" selection-start-line="66" selection-start-column="67" selection-end-line="66" selection-end-column="67" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+        <state relative-caret-position="170">
+          <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/software/Java/jdk1.8.0_121/src.zip!/java/util/Collections.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="593" column="48" lean-forward="false" selection-start-line="593" selection-start-column="38" selection-end-line="593" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/test/java/com/java110/user/AppTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="14" column="6" lean-forward="true" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/test/java/com/java110/user/BoCustCompareTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="63" column="34" lean-forward="true" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#894#902#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCust.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="189" column="17" lean-forward="false" selection-start-line="185" selection-start-column="8" selection-end-line="189" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="73" column="44" lean-forward="false" selection-start-line="73" selection-start-column="44" selection-end-line="73" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="260" column="53" lean-forward="true" selection-start-line="260" selection-start-column="53" selection-end-line="260" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

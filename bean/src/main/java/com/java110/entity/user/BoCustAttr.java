@@ -4,7 +4,7 @@ package com.java110.entity.user;
  * 客户属性表（过程表）
  * Created by wuxw on 2016/12/27.
  */
-public class BoCustAttr {
+public class BoCustAttr implements Comparable{
 
     private String boId;
 
@@ -67,5 +67,14 @@ public class BoCustAttr {
         custAttr.setAttrCd(this.getAttrCd());
         custAttr.setValue(this.getValue());
         return custAttr;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        BoCustAttr otherBoCust = (BoCustAttr)o;
+        if("DEL".equals(this.getState()) && "ADD".equals(otherBoCust.getState())) {
+            return -1;
+        }
+        return 0;
     }
 }
