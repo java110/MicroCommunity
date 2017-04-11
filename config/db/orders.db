@@ -8,7 +8,7 @@ create table order_list(
 
     custId  varchar(20) not null comment '客户ID，对应客户表cust',
 
-    olTypeCD  varchar(10) not null comment '购物车类型，网站 1 微信 2 APP 3 对应 order_list_type',
+    olTypeCd  varchar(10) not null comment '购物车类型，网站 1 微信 2 APP 3 对应 order_list_type',
 
      extSystemId  varchar(20) not null comment '对应外部系统 关联ID，方便维护',
 

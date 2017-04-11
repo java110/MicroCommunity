@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户服务信息管理业务信息实现
@@ -88,6 +90,9 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
         JSONObject resultInfo = null;
 
+        //存放生成的custId 主键为 custId-1 71000010100
+        Map custIdKey = new HashMap();
+
         if (userInfoJson == null){
             throw new IllegalArgumentException("soUserService 入参 为空"+userInfoJson);
         }
@@ -96,7 +101,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
                 JSONArray boCusts = userInfoJson.getJSONArray("boCust");
                 JSONObject boCustObj = new JSONObject();
                 boCustObj.put("boCust",boCusts);
-                String returnSaveBoCust = this.soBoCust(boCustObj.toJSONString());
+                String returnSaveBoCust = this.soBoCust(boCustObj.toJSONString(),custIdKey);
 
                 if(!ProtocolUtil.validateReturnJson(returnSaveBoCust,paramJson)){
 
@@ -111,6 +116,13 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             if(userInfoJson.containsKey("boCustAttr")){
 
                 JSONArray boCustAttrs = userInfoJson.getJSONArray("boCustAttr");
+                //首先对custId 进行处理
+                if(custIdKey != null && custIdKey.size() > 0 ){
+                    for(int boCustAttrIndex = 0 ; boCustAttrIndex < boCustAttrs.size();boCustAttrIndex++){
+                       JSONObject boCustAttr = boCustAttrs.getJSONObject(boCustAttrIndex);
+                       boCustAttr.put("custId",custIdKey.get("custId"+boCustAttr.getString("custId")));
+                    }
+                }
                 JSONObject boCustAttrObj = new JSONObject();
                 boCustAttrObj.put("boCustAttr",boCustAttrs);
                 String returnSaveBoCustAttr = soBoCustAttr(boCustAttrObj.toJSONString());
@@ -139,6 +151,25 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      * @throws Exception
      */
     public String soBoCust(String boCusts) throws Exception{
+        return soBoCust(boCusts,null);
+    }
+
+    /**
+     * 将生成的custId 封装在map中返回
+     * ...
+     * custIdKey.put("custId-1","710020404040");
+     *
+     * ...
+     *
+     * key 为 custId 加原前的值
+     *
+     * custIdKey 如果为空不做处理
+     * @param boCusts 客户信息
+     * @param custIdKey custIdKeymap
+     * @return
+     * @throws Exception
+     */
+    public String soBoCust(String boCusts,Map custIdKey) throws Exception{
         // 将 jsonArray 转为list<BoCust> 对象
         JSONObject jsonObject = JSONObject.parseObject(boCusts);
 
@@ -154,10 +185,10 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         for(BoCust boCust : boCustList){
 //        for(int boCustIndex = 0 ; boCustIndex < boCustList.size();boCustIndex++){
 //            BoCust boCust = boCustList.get(boCustIndex);
-            int custId = NumberUtils.toInt(boCust.getBoId(),-1);
+            String custId = boCust.getBoId();
             //如果客户ID小于0 ，则自己生成客户ID,这个只有在有 主键生成服务时使用，否则为了防止出错，需要前段调用时需要生成custId
-            if(custId < 0 ){
-                JSONObject data = new JSONObject();
+            if(StringUtils.isBlank(custId) || custId.startsWith("-") ){
+                /*JSONObject data = new JSONObject();
                 data.put("type","CUST_ID");
                 //要求接口返回 {"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}
                 String custIdJSONStr = iPrimaryKeyService.queryPrimaryKey(data.toJSONString());
@@ -167,10 +198,17 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
                         && custIdJSONTmp.containsKey("RESULT_INFO")){
                     //从接口生成custId
                     custId = NumberUtils.toInt(custIdJSONTmp.getJSONObject("RESULT_INFO").getString("CUST_ID"),-1);
+                }*/
+
+                custId = this.queryPrimaryKey(iPrimaryKeyService,"CUST_ID");
+
+                //将 新生成的custId保存至 map中 custId-1 custId-2 主键方式存入
+                if(custIdKey != null){
+                    custIdKey.put("custId"+boCust.getCustId(),custId);
                 }
             }
 
-            boCust.setCustId(custId+"");
+            boCust.setCustId(custId);
 
             //保存数据至 bo_cust 表中
             int saveBoCustFlag = iUserServiceDao.saveDataToBoCust(boCust);
@@ -219,6 +257,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             }
 
             custIds +=","+custId;
+
         }
 
         //去除第一个逗号

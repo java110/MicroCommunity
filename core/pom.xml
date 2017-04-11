@@ -22,6 +22,11 @@
             <groupId>com.java110</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>feign</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
