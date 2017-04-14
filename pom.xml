@@ -43,10 +43,6 @@
 
         <apache.common.lang3.version>3.4</apache.common.lang3.version>
         <mybatis.version>3.4.1</mybatis.version>
-        <linkage.version>0.0.1-SNAPSHOT</linkage.version>
-        <dubbo.version>2.5.3</dubbo.version>
-        <zookeeper.version>3.4.5</zookeeper.version>
-        <zkclient.version>0.3</zkclient.version>
         <log4j.version>1.2.17</log4j.version>
         <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
         <druid.version>1.0.18</druid.version>
@@ -79,7 +75,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.1.39</version>
+                <version>1.2.28</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -124,6 +120,11 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>service</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>config</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 

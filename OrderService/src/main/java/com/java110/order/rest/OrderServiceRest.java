@@ -101,7 +101,7 @@ public class OrderServiceRest extends BaseController {
      }
      ]
      },
-     "busiOrder": {
+     "busiObj": {
      "name": "新建客户",
      "actionTypeCd": "C1",
      "actionClassCd": "1",

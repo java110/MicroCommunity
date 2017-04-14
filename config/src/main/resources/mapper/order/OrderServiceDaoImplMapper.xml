@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderServiceDaoImpl">
+
+    <!--保存数据至过程表 bo_cust 中 -->
+    <insert id="saveDataToBoOrderList" parameterType="com.java110.entity.order.OrderList">
+        <![CDATA[
+            insert into order_list(olId,channelId,custId,olTypeCd,extSystemId,remark)
+            values(#{olId},#{channelId},#{custId},#{olTypeCd},#{extSystemId},#{remark})
+        ]]>
+    </insert>
+    <!-- 保存数据至过程表bo_cust_attr 中-->
+    <insert id="saveDataToOrderListAttr" parameterType="com.java110.entity.order.OrderListAttr">
+        <![CDATA[
+            insert into order_list_attr(olId,attrCd,value)
+            values(#{boId},#{attrCd},#{value})
+        ]]>
+    </insert>
+    <!-- 保存 实例客户信息 cust -->
+    <insert id="saveDataToBusiOrder" parameterType="com.java110.entity.order.BusiOrder">
+        <![CDATA[
+            insert into busi_order(boId,olId,actionTypeCd,status_cd,start_dt,end_dt,remark)
+            values(#{boId},#{olId},#{actionTypeCd},#{status_cd},#{start_dt},#{end_dt,#{remark})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 cust -->
+    <insert id="saveDataToBusiOrderAttr" parameterType="com.java110.entity.order.BusiOrderAttr">
+        <![CDATA[
+            insert into busi_order_attr(boId,attrCd,value)
+            values(#{boId},#{attrCd},#{value})
+        ]]>
+    </insert>
+
+</mapper>

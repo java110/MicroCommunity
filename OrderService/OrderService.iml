@@ -13,7 +13,7 @@
     <orderEntry type="module" module-name="service" />
     <orderEntry type="module" module-name="common" />
     <orderEntry type="module" module-name="bean" />
-    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.1.39" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.28" level="project" />
     <orderEntry type="library" name="Maven: org.apache.axis:axis:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.axis:axis-jaxrpc:1.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.axis:axis-saaj:1.4" level="project" />
@@ -132,6 +132,7 @@
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
     <orderEntry type="module" module-name="feign" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.39" level="project" />
+    <orderEntry type="module" module-name="config" scope="PROVIDED" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.4.0.RELEASE" level="project" />

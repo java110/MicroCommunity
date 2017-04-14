@@ -18,7 +18,7 @@ public class OrderList {
     private String custId;
 
     //购物车类型，网站 1 微信 2 APP 3 对应 order_list_type
-    private String olTypeCD;
+    private String olTypeCd;
 
     // 外部系统ID
     private String extSystemId;
@@ -55,12 +55,12 @@ public class OrderList {
         this.custId = custId;
     }
 
-    public String getOlTypeCD() {
-        return olTypeCD;
+    public String getOlTypeCd() {
+        return olTypeCd;
     }
 
-    public void setOlTypeCD(String olTypeCD) {
-        this.olTypeCD = olTypeCD;
+    public void setOlTypeCd(String olTypeCd) {
+        this.olTypeCd = olTypeCd;
     }
 
     public String getExtSystemId() {

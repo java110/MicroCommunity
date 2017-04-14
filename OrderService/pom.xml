@@ -23,6 +23,12 @@
             <groupId>com.java110</groupId>
             <artifactId>service</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>config</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
