@@ -153,13 +153,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             //根据busiOrder 的  actionTypeCd 注册那个服务去处理
             String actionTypeCd = busiOrderObj.getActionTypeCd();
 
-            String orderDispathListener = eventProperties.getOrderDispatchListener();
 
-            if(StringUtils.isBlank(orderDispathListener)){
-                throw new RuntimeException("订单调度引擎没有配置，请在event.properties 文件中配置");
-            }
-
-            String[] dispathListeners = orderDispathListener.split("\\.");
 
         }
 

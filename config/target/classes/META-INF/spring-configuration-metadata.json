@@ -1,0 +1,14 @@
+{
+  "groups": [{
+    "name": "java110.event.properties",
+    "type": "com.java110.config.properties.EventProperties",
+    "sourceType": "com.java110.config.properties.EventProperties"
+  }],
+  "properties": [{
+    "name": "java110.event.properties.order-dispatch-listener",
+    "type": "java.lang.String",
+    "description": "订单调度 侦听",
+    "sourceType": "com.java110.config.properties.EventProperties"
+  }],
+  "hints": []
+}
