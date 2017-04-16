@@ -15,6 +15,8 @@ public class BusiOrderAttr {
     private String attrCd;
     //属性编码对应值
     private String value;
+    //名称
+    private String name;
 
     //创建时间
     private Date create_dt;

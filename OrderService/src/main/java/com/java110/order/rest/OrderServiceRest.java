@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.controller.BaseController;
+import com.java110.entity.order.OrderList;
 import com.java110.order.smo.IOrderServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,22 +28,99 @@ public class OrderServiceRest extends BaseController {
 
     /**
      * 查询订单信息
+     * 接口协议：
+     * 请求报文
+     * {'olId':'71234567','extSystemId':'','custId':'','channelId':''}
+     *
+     * 可以根据 购物车ID 或者 外部系统ID 或者 custId 或者 channelId
+     *
+     * 返回报文:
+     * {
+     "RESULT_CODE": "0000",
+     "RESULT_MSG": "成功",
+     "RESULT_INFO": {
+     "orderLists": [
+     {
+     "channelId": "700212896",
+     "remarks": "",
+     "olId": "123456",
+     "custId": "701008023904",
+     "statusCd": "S",
+     "reqTime": "20170411163709",
+     "extSystemId": "310013698777",
+     "olTypeCd": "15",
+     "orderListAttrs": [
+     {
+     "olId": "123456",
+     "attrCd": "712345",
+     "value": "XXX",
+     "name": "系统来源"
+     }
+     ],
+     "busiOrders": [
+     {
+     "boId": "123456",
+     "olId": "123456",
+     "actionTypeCd": "C1",
+     "status_cd": "0",
+     "create_dt": "2017-04-16 22:58:03",
+     "start_dt": "2017-04-16 22:58:03",
+     "end_dt": "2017-04-16 22:58:03",
+     "remark": "",
+     "busiOrders": [
+     {
+     "boId": "123456",
+     "attrCd": "712345",
+     "value": "XXX",
+     "name": "系统来源"
+     }
+     ]
+     }
+     ]
+     }
+     ]
+     }
+     }
+     *
      * @param orderInfo
      * @return
      */
+    @RequestMapping("/orderService/queryOrder")
     public String queryOrder(@RequestParam("orderInfo") String orderInfo) {
 
-        try {
+        LoggerEngine.debug("soOrderService入参：" + orderInfo);
+        String resultUserInfo = null;
+
+        JSONObject reqOrderJSON = null;
+
+        try{
+
+            reqOrderJSON = this.simpleValidateJSON(orderInfo);
+
+            //校验 购物车ID 或者 外部系统ID 或者 custId 或者 channelId 中的一个是
+            Assert.notNull(reqOrderJSON);
+
+            if(!reqOrderJSON.containsKey("olId") && !reqOrderJSON.containsKey("extSystemId")
+                    && !reqOrderJSON.containsKey("custId") && !reqOrderJSON.containsKey("channelId")){
+                throw new IllegalArgumentException("此接口只支持用olId，extSystemId，custId，channelId 来查询订单，当前请求报文为："+orderInfo);
+            }
+            //转化为 对象
+            OrderList orderListTmp = JSONObject.toJavaObject(reqOrderJSON, OrderList.class);
+
+            resultUserInfo = iOrderServiceSMO.queryOrderInfo(orderListTmp);
 
         }catch (Exception e){
-
+            LoggerEngine.error("查询失败，orderInfo = "+orderInfo,e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"查询失败，orderInfo = "+orderInfo+"失败原因："+e,null);
         }finally {
-            return "";
+            return resultUserInfo;
         }
     }
 
     /**
      * 订单统一处理接口
+     *
+     * orderListInfo 中字段 asyn 如果为 A 表示 异步处理订单，其他表同步处理订单
      * 接口协议
      * {
      "orderList": {
@@ -130,7 +209,8 @@ public class OrderServiceRest extends BaseController {
      "statusCd": "S",
      "reqTime": "20170411163709",
      "extSystemId": "310013698777",
-     "olTypeCd": "15"
+     "olTypeCd": "15",
+     "asyn":"A"
      }
      }
      }

@@ -1,6 +1,7 @@
 package com.java110.entity.order;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  *
@@ -32,6 +33,8 @@ public class BusiOrder {
 
     //备注
     private String remark;
+
+    private Set<BusiOrder> busiOrders;
 
     public String getBoId() {
         return boId;
@@ -95,5 +98,14 @@ public class BusiOrder {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+
+    public Set<BusiOrder> getBusiOrders() {
+        return busiOrders;
+    }
+
+    public void setBusiOrders(Set<BusiOrder> busiOrders) {
+        this.busiOrders = busiOrders;
     }
 }

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 事件发布侦听
@@ -22,6 +24,9 @@ public class AppEventPublishing extends LoggerEngine{
 
 
     private static Executor taskExecutor;
+
+    //默认 线程数 100
+    private final static int DEFAULT_THREAD_NUM = 100;
 
     /**
      * 保存侦听实例信息，一般启动时加载
@@ -110,13 +115,23 @@ public class AppEventPublishing extends LoggerEngine{
         return targetEvent;
     }
 
+
     /**
      * 发布事件
      * @param actionTypeCd
      * @param data
      */
     public static void multicastEvent(String actionTypeCd,String data) throws  Exception{
-        multicastEvent(actionTypeCd,null,data);
+        multicastEvent(actionTypeCd,null,data,null);
+    }
+
+    /**
+     * 发布事件
+     * @param actionTypeCd
+     * @param data
+     */
+    public static void multicastEvent(String actionTypeCd,String data,String asyn) throws  Exception{
+        multicastEvent(actionTypeCd,null,data,asyn);
     }
 
     /**
@@ -125,7 +140,7 @@ public class AppEventPublishing extends LoggerEngine{
      * @param orderInfo 这个订单信息，以便于 侦听那边需要用
      * @param data 对应信息，侦听，一般需要处理这个就可以
      */
-    public static void multicastEvent(String actionTypeCd,String orderInfo,String data) throws  Exception{
+    public static void multicastEvent(String actionTypeCd,String orderInfo,String data,String asyn) throws  Exception{
         Class<AppEvent> appEvent = getEvent(actionTypeCd);
 
         Class[] parameterTypes={Object.class,String.class};
@@ -133,7 +148,7 @@ public class AppEventPublishing extends LoggerEngine{
         Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
         Object[] parameters={orderInfo,data};
         AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
-        multicastEvent(targetAppEvent);
+        multicastEvent(targetAppEvent,asyn);
 
     }
 
@@ -141,17 +156,21 @@ public class AppEventPublishing extends LoggerEngine{
     /**
      * 发布事件
      * @param event
+     * @param asyn A 表示异步处理
      */
-    public static void multicastEvent(final AppEvent event) {
+    public static void multicastEvent(final AppEvent event,String asyn) {
         for (final AppListener<?> listener : getListeners(event.getClass().getName())) {
-            Executor executor = getTaskExecutor();
-            if (executor != null) {
+
+            if("A".equals(asyn)){ //异步处理
+
+                Executor executor = getTaskExecutor();
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
                         invokeListener(listener, event);
                     }
                 });
+
             }
             else {
                 invokeListener(listener, event);
@@ -162,7 +181,10 @@ public class AppEventPublishing extends LoggerEngine{
     /**
      * Return the current task executor for this multicaster.
      */
-    protected static Executor getTaskExecutor() {
+    protected static synchronized Executor getTaskExecutor() {
+        if(taskExecutor == null) {
+            taskExecutor = Executors.newFixedThreadPool(DEFAULT_THREAD_NUM);
+        }
         return taskExecutor;
     }
 

@@ -77,4 +77,29 @@ public class OrderServiceDaoImpl extends BaseServiceDao implements IOrderService
         LoggerEngine.debug("----【OrderServiceDaoImpl.saveDataToBusiOrderAttr】保存数据出参 : saveFlag:" + saveFlag);
         return saveFlag;
     }
+
+    /**
+     * 查询订单信息(order_list order_list_attr)
+     * @param orderList
+     * @return
+     * @throws RuntimeException
+     */
+    @Override
+    public List<OrderList> queryOrderListAndAttr(OrderList orderList) throws RuntimeException {
+
+        LoggerEngine.debug("----【OrderServiceDaoImpl.queryOrderListAndAttr】保存数据入参 : " + orderList);
+        return sqlSessionTemplate.selectList("orderServiceDaoImpl.queryOrderListAndAttr",orderList);
+    }
+
+    /**
+     * 查询订单信息(busi_order busi_order_attr)
+     * @param busiOrder
+     * @return
+     * @throws RuntimeException
+     */
+    @Override
+    public List<BusiOrder> queryBusiOrderAndAttr(BusiOrder busiOrder) throws RuntimeException {
+        LoggerEngine.debug("----【OrderServiceDaoImpl.queryBusiOrderAndAttr】保存数据入参 : " + busiOrder);
+        return sqlSessionTemplate.selectList("orderServiceDaoImpl.queryBusiOrderAndAttr",busiOrder);
+    }
 }

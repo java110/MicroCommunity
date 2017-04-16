@@ -54,6 +54,24 @@ public interface IOrderServiceDao {
     public int saveDataToBusiOrderAttr(BusiOrderAttr busiOrderAttr) throws RuntimeException;
 
 
+    /**
+     * 查询订单信息(order_list order_list_attr)
+     * @param orderList
+     * @return
+     * @throws RuntimeException
+     */
+    public List<OrderList> queryOrderListAndAttr(OrderList orderList) throws RuntimeException;
+
+
+    /**
+     * 查询订单信息(busi_order busi_order_attr)
+     * @param busiOrder
+     * @return
+     * @throws RuntimeException
+     */
+    public List<BusiOrder> queryBusiOrderAndAttr(BusiOrder busiOrder) throws RuntimeException;
+
+
 
 
 }

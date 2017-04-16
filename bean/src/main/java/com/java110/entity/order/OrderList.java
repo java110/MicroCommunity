@@ -1,6 +1,7 @@
 package com.java110.entity.order;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 购物车信息表
@@ -29,6 +30,9 @@ public class OrderList {
     private Date create_dt;
 
     private String status_cd;
+
+
+    private Set<OrderListAttr> orderListAttrs;
 
 
     public String getOlId() {
@@ -93,5 +97,13 @@ public class OrderList {
 
     public void setStatus_cd(String status_cd) {
         this.status_cd = status_cd;
+    }
+
+    public Set<OrderListAttr> getOrderListAttrs() {
+        return orderListAttrs;
+    }
+
+    public void setOrderListAttrs(Set<OrderListAttr> orderListAttrs) {
+        this.orderListAttrs = orderListAttrs;
     }
 }

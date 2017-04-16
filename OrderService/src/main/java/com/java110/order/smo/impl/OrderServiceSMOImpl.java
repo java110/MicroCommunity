@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,41 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
     EventProperties eventProperties;
 
     /**
+     * 根据购物车ID 或者 外部系统ID 或者 custId 或者 channelId 查询订单信息
+     * @param orderList
+     * @return
+     */
+    @Override
+    public String queryOrderInfo(OrderList orderList) throws Exception{
+
+
+        List<OrderList> orderLists = iOrderServiceDao.queryOrderListAndAttr(orderList);
+        //
+        JSONArray orderListsArray = new JSONArray();
+        for (OrderList orderListTmp : orderLists){
+            //
+            BusiOrder busiOrderTmp = new BusiOrder();
+            busiOrderTmp.setBoId(orderListTmp.getOlId());
+
+            List<BusiOrder> busiOrders = iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
+
+            JSONObject orderListJSON = JSONObject.parseObject(JSONObject.toJSONString(orderListTmp));
+
+            orderListJSON.put("busiOrders",JSONObject.parseArray(JSONObject.toJSONString(busiOrders)));
+
+            orderListsArray.add(orderListJSON);
+        }
+
+        JSONObject orderListTmpO = new JSONObject();
+        orderListTmpO.put("orderLists",orderListsArray);
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"查询成功",orderListTmpO);
+    }
+
+    /**
      * 订单调度
+     *
+     * orderListInfo 中字段 asyn 如果为 A 表示 异步处理订单，其他表同步处理订单
      * @param orderInfo 订单信息
      * @return 订单处理接口
      * @throws Exception
@@ -156,7 +191,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
             try {
                 //发布事件
-                AppEventPublishing.multicastEvent(actionTypeCd,orderInfo.toJSONString(), data.toJSONString());
+                AppEventPublishing.multicastEvent(actionTypeCd,orderInfo.toJSONString(), data.toJSONString(),orderListTmp.getString("asyn"));
             }catch (Exception e){
                 //这里补偿事物
                 throw e;
