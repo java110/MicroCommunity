@@ -6,6 +6,7 @@ import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.controller.BaseController;
 import com.java110.order.smo.IOrderServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -136,6 +137,7 @@ public class OrderServiceRest extends BaseController {
      * @param orderInfo
      * @return
      */
+    @RequestMapping("/orderService/soOrderService")
     public String soOrderService(@RequestParam("orderInfo") String orderInfo){
 
         LoggerEngine.debug("soOrderService入参：" + orderInfo);

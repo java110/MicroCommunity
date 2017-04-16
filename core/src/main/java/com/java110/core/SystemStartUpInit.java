@@ -1,8 +1,10 @@
 package com.java110.core;
 
 import com.java110.core.event.AppCustEvent;
+import com.java110.core.event.AppEvent;
 import com.java110.core.event.AppEventPublishing;
 import com.java110.core.event.AppListener;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -10,6 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 
+import javax.naming.ConfigurationException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -35,6 +38,11 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
      */
     private final static String DISPATCH_LISTER = "java110.event.properties.orderDispatchListener";
 
+    /**
+     * 订单调度事件
+     */
+    private final static String DISPATCH_EVENT = "java110.event.properties.orderDispatchEvent";
+
 
 
     /**
@@ -47,7 +55,13 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
 
         //加载配置文件，注册订单处理侦听
         try {
-            this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
+            Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
+            registerListener(properties);
+
+            //注册事件
+            registerEvent(properties);
+
+
         }
         catch (Exception ex) {
             throw new IllegalStateException("Unable to load configuration files", ex);
@@ -62,8 +76,16 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
      * @param filename
      * @param
      */
-    private void load(String location,String filename) throws Exception{
+    private Properties load(String location,String filename) throws Exception{
         Properties properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource(location+filename));
+        return properties;
+    }
+
+    /**
+     * 注册侦听
+     * @param properties
+     */
+    private void registerListener(Properties properties) throws Exception{
 
         String[] listeners = properties.getProperty(DISPATCH_LISTER).split("\\,");
 
@@ -75,6 +97,33 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
             //注册侦听
             AppEventPublishing.addListenner(appListener);
         }
+    }
+
+    /**
+     * 注册事件
+     * @param properties
+     * @throws Exception
+     */
+    private void registerEvent(Properties properties) throws Exception{
+        String[] events = properties.getProperty(DISPATCH_EVENT).split("\\,");
+
+        for (String event : events){
+
+            if(StringUtils.isBlank(event) || !event.contains("::")){
+                throw new ConfigurationException("配置错误，["+DISPATCH_EVENT+"= "+events+"] 当前 [event = "+event+"],不存在 :: ,配置格式为 A::B");
+            }
+
+            String[] tmpEvent = event.split("::");
+
+            if(tmpEvent.length > 2){
+                throw new ConfigurationException("配置错误，["+DISPATCH_EVENT+"= "+events+"] 当前 [event = "+event+"],只能有一个 :: ,配置格式为 A::B");
+            }
+
+            Class clazz = Class.forName(tmpEvent[1]);
+
+            AppEventPublishing.addEvent(tmpEvent[0],clazz);
+        }
+
     }
 
 

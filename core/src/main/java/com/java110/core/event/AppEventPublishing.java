@@ -4,6 +4,7 @@ import com.java110.common.log.LoggerEngine;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,9 +29,17 @@ public class AppEventPublishing extends LoggerEngine{
     private final static List<AppListener<?>> listeners = new ArrayList<AppListener<?>>();
 
     /**
+     * 保存事件实例信息，一般启动时加载
+     */
+    private final static Map<String,Class<AppEvent>> events = new HashMap<String,Class<AppEvent>>();
+
+    /**
      * 根据 事件类型查询侦听
      */
     private final static Map<String,List<AppListener<?>>> cacheListenersMap = new HashMap<String, List<AppListener<?>>>();
+
+
+
 
 
     /**
@@ -82,9 +91,50 @@ public class AppEventPublishing extends LoggerEngine{
         return appListeners;
     }
 
+    /**
+     * 注册事件
+     */
+    public static void addEvent(String actionTypeCd ,Class<AppEvent> event) {
+        events.put(actionTypeCd,event);
+    }
 
-    public static void multicastEvent(String actionTypeCd,String data){
-        multicastEvent(new AppCustEvent("",data));
+    /**
+     * 获取事件
+     * @param actionTypeCd
+     * @return
+     * @throws Exception
+     */
+    public static Class<AppEvent> getEvent(String actionTypeCd) throws Exception{
+        Class<AppEvent> targetEvent = events.get(actionTypeCd);
+        Assert.notNull(targetEvent,"未注册该事件[actionTypeCd = "+actionTypeCd+"]，系统目前不支持!");
+        return targetEvent;
+    }
+
+    /**
+     * 发布事件
+     * @param actionTypeCd
+     * @param data
+     */
+    public static void multicastEvent(String actionTypeCd,String data) throws  Exception{
+        multicastEvent(actionTypeCd,null,data);
+    }
+
+    /**
+     * 发布事件
+     * @param actionTypeCd
+     * @param orderInfo 这个订单信息，以便于 侦听那边需要用
+     * @param data 对应信息，侦听，一般需要处理这个就可以
+     */
+    public static void multicastEvent(String actionTypeCd,String orderInfo,String data) throws  Exception{
+        Class<AppEvent> appEvent = getEvent(actionTypeCd);
+
+        Class[] parameterTypes={Object.class,String.class};
+
+        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+        Object[] parameters={orderInfo,data};
+        AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
+        multicastEvent(targetAppEvent);
+
     }
 
 

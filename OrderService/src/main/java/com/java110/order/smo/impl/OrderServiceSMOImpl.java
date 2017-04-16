@@ -6,6 +6,7 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.config.properties.EventProperties;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.event.AppEventPublishing;
 import com.java110.entity.order.BusiOrder;
 import com.java110.entity.order.BusiOrderAttr;
 import com.java110.entity.order.OrderList;
@@ -153,14 +154,18 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             //根据busiOrder 的  actionTypeCd 注册那个服务去处理
             String actionTypeCd = busiOrderObj.getActionTypeCd();
 
+            try {
+                //发布事件
+                AppEventPublishing.multicastEvent(actionTypeCd,orderInfo.toJSONString(), data.toJSONString());
+            }catch (Exception e){
+                //这里补偿事物
+                throw e;
+            }
 
 
         }
 
-
-
-
-        return null;
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

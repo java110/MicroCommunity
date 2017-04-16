@@ -147,7 +147,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      *
      * @param boCusts
      * @return 成功 会带上处理客户的客户ID
-     * {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'custId':'7000123,718881991}}
+     * {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'custId':'7000123,718881991'}}
      * @throws Exception
      */
     public String soBoCust(String boCusts) throws Exception{
