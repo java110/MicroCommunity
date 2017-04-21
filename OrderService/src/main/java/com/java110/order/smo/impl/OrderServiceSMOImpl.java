@@ -203,6 +203,60 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
     }
 
+    /**
+     * 作废订单
+     * 根据业务动作作废
+     * 请求协议：
+     * {
+     *     "orderList":{
+     *     "transactionId": "1000000200201704113137002690",
+             "channelId": "700212896",
+             "remarks": "",
+             "custId": "701008023904",
+             "statusCd": "S",
+             "reqTime": "20170411163709",
+             "extSystemId": "310013698777",
+             "olTypeCd": "15",
+     *        "oldOlId":"123456789",
+     *        "asyn":"S"
+     *     },
+     *     "busiOrder":[{
+     *         "actionTypeCd":"ALL"
+     *     }]
+     * }
+     *
+     * ，
+     *
+     * 根据 订单项ID作废
+     *
+     * {
+     *     "orderList":{
+     *         "transactionId": "1000000200201704113137002690",
+     "channelId": "700212896",
+     "remarks": "",
+     "custId": "701008023904",
+     "statusCd": "S",
+     "reqTime": "20170411163709",
+     "extSystemId": "310013698777",
+     "olTypeCd": "15",
+     "asyn":"A"
+     *     },
+     *     "busiOrder":[{
+     *          "oldBoId":"123456789"
+     *     },
+     *     {
+     *          "oldBoId":"123456799"
+     *     }]
+     * }
+     * @param orderInfo
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String deleteOrder(JSONObject orderInfo) throws Exception {
+        return null;
+    }
+
     public IPrimaryKeyService getiPrimaryKeyService() {
         return iPrimaryKeyService;
     }

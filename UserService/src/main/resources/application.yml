@@ -24,6 +24,10 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+  activemq:
+    in-memory: true
+    pool:
+      enabled: false
 logging:
   file: ./UserService/logs/UserService.log
   level:

@@ -1,0 +1,5 @@
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    in-memory: true
+    enabled: false

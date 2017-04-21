@@ -245,6 +245,136 @@ public class OrderServiceRest extends BaseController {
 
     }
 
+    /**
+     * 作废订单时，order_list busi_order 和bo_开头数据不影响，只是作废实例数据，如作废客户信息，只作废 cust 和cust_attr 表中的数据
+     * 作废订单依然会创建order_list 和busi_order 数据
+     * 作废指定动作的信息
+     * 请求协议：
+     * {
+     *     "orderList":{
+     *     "transactionId": "1000000200201704113137002690",
+             "channelId": "700212896",
+             "remarks": "",
+             "custId": "701008023904",
+             "statusCd": "S",
+             "reqTime": "20170411163709",
+             "extSystemId": "310013698777",
+             "olTypeCd": "15",
+     *        "oldOlId":"123456789",
+     *        "asyn":"S"
+     *     },
+     *     "busiOrder":[{
+     *         "actionTypeCd":"ALL"
+     *     }]
+     * }
+     *
+     * 说明
+     * oldOlId 购物车ID，对应表order_list
+     * asyn 处理方式，S 同步 A 异步
+     *
+     * 注意这里busiOrder 的{} 只能有一个，有多个，只能会处理第一个
+     *
+     * actionTypeCd All标识 作废所有订单订单  C2 作废客户信息，。。。
+     *
+     * transactionId 交易流水
+     *
+     * channelId 渠道ID，对应channel表，可以自定义一个
+     *
+     * remarks 备注，不能超过200个，如果超过200个会截取200个字
+     *
+     * custId 操作者ID，可能客户本身，很有很可能商家，或管理员
+     *
+     * statusCd S表示这个购物车有效，
+     *
+     * reqTime 请求时间
+     *
+     * extSystemId 外部系统关联ID
+     *
+     * olTypeCd 购物车类型，如 微信创建的购物车 1 APP创建的2 PC网站创建 3
+     *
+     * asyn 处理方式，S 同步 A 异步
+     *
+     * 作废指定订单项的信息
+     * 请求协议：
+     * {
+     *     "orderList":{
+     *         "transactionId": "1000000200201704113137002690",
+                 "channelId": "700212896",
+                 "remarks": "",
+                 "custId": "701008023904",
+                 "statusCd": "S",
+                 "reqTime": "20170411163709",
+                 "extSystemId": "310013698777",
+                 "olTypeCd": "15",
+                 "asyn":"A"
+     *     },
+     *     "busiOrder":[{
+     *          "oldBoId":"123456789"
+     *     },
+     *     {
+     *          "oldBoId":"123456799"
+     *     }]
+     * }
+     * oldBoId 为作废单个 要作废的订单项 对应busi_order 的 boId
+     *
+     * transactionId 交易流水
+     *
+     * channelId 渠道ID，对应channel表，可以自定义一个
+     *
+     * remarks 备注，不能超过200个，如果超过200个会截取200个字
+     *
+     * custId 操作者ID，可能客户本身，很有很可能商家，或管理员
+     *
+     * statusCd S表示这个购物车有效，
+     *
+     * reqTime 请求时间
+     *
+     * extSystemId 外部系统关联ID
+     *
+     * olTypeCd 购物车类型，如 微信创建的购物车 1 APP创建的2 PC网站创建 3
+     *
+     * asyn 处理方式，S 同步 A 异步
+     *
+     *
+     * 统一返回协议：
+     * {
+     "RESULT_CODE": "0000",
+     "RESULT_MSG": "成功",
+     "RESULT_INFO": {"oldOrder":"1234567","oldBoId":"7000123,718881991"}
+     }
+     * RESULT_CODE 0000 成功，1999 失败， 失败原因为 RESULT_MSG
+     *
+     * RESULT_INFO 成功时返回作废 的购物车 olId 和 boId
+     * @param orderInfo
+     * @return
+     */
+    @RequestMapping("/orderService/deleteOrderInfo")
+    public String deleteOrderInfo(@RequestParam("orderInfo") String orderInfo){
+
+        LoggerEngine.debug("deleteOrderInfo入参：" + orderInfo);
+        String resultUserInfo = null;
+
+        JSONObject reqOrderJSON = null;
+
+        try{
+
+            reqOrderJSON = this.simpleValidateJSON(orderInfo);
+
+            if(reqOrderJSON == null || !reqOrderJSON.containsKey("orderList")){
+                throw new IllegalArgumentException("请求参数为空 reqOrderJSON ："+reqOrderJSON);
+            }
+
+            resultUserInfo = iOrderServiceSMO.orderDispatch(reqOrderJSON.getJSONObject("orderList"));
+
+        }catch (Exception e){
+            LoggerEngine.error("订单受理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"订单受理出现异常，"+e,null);
+        }finally {
+            return resultUserInfo;
+        }
+
+    }
+
 
     public IOrderServiceSMO getiOrderServiceSMO() {
         return iOrderServiceSMO;

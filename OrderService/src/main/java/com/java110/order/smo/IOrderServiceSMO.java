@@ -29,5 +29,56 @@ public interface IOrderServiceSMO {
      */
     public String orderDispatch(JSONObject orderInfo) throws Exception;
 
+    /**
+     * 作废订单
+     * 根据业务动作作废
+     * 请求协议：
+     * {
+     *     "orderList":{
+     *     "transactionId": "1000000200201704113137002690",
+     "channelId": "700212896",
+     "remarks": "",
+     "custId": "701008023904",
+     "statusCd": "S",
+     "reqTime": "20170411163709",
+     "extSystemId": "310013698777",
+     "olTypeCd": "15",
+     *        "oldOlId":"123456789",
+     *        "asyn":"S"
+     *     },
+     *     "busiOrder":[{
+     *         "actionTypeCd":"ALL"
+     *     }]
+     * }
+     *
+     * ，
+     *
+     * 根据 订单项ID作废
+     *
+     * {
+     *     "orderList":{
+     *         "transactionId": "1000000200201704113137002690",
+     "channelId": "700212896",
+     "remarks": "",
+     "custId": "701008023904",
+     "statusCd": "S",
+     "reqTime": "20170411163709",
+     "extSystemId": "310013698777",
+     "olTypeCd": "15",
+     "asyn":"A"
+     *     },
+     *     "busiOrder":[{
+     *          "oldBoId":"123456789"
+     *     },
+     *     {
+     *          "oldBoId":"123456799"
+     *     }]
+     * }
+     * @param orderInfo
+     * @return
+     * @throws Exception
+     */
+    public String deleteOrder(JSONObject orderInfo) throws Exception;
+
 
 }
