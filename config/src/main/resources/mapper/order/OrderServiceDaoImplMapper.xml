@@ -99,6 +99,11 @@
         <if test="boId != null and boId != ''">
             and bo.boId = #{boId}
         </if>
+        <if test="actionTypeCd !=null and actionTypeCd != ''">
+
+            and bo.actionTypeCd in (#{actionTypeCd})
+
+        </if>
     </select>
 
 </mapper>

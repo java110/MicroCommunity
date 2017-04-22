@@ -364,7 +364,8 @@ public class OrderServiceRest extends BaseController {
                 throw new IllegalArgumentException("请求参数为空 reqOrderJSON ："+reqOrderJSON);
             }
 
-            resultUserInfo = iOrderServiceSMO.orderDispatch(reqOrderJSON.getJSONObject("orderList"));
+            // 删除订单对应实例数据
+            resultUserInfo = iOrderServiceSMO.deleteOrder(reqOrderJSON.getJSONObject("orderList"));
 
         }catch (Exception e){
             LoggerEngine.error("订单受理出现异常：", e);

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
+import com.java110.common.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -254,7 +254,72 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
      */
     @Override
     public String deleteOrder(JSONObject orderInfo) throws Exception {
+        //1.0 购物车信息校验处理,走订单受理必须要有购物车信息和订单项信息
+        if(!orderInfo.containsKey("orderList") || !orderInfo.containsKey("busiOrder")){
+            throw  new IllegalArgumentException("请求报文中没有购物车相关信息[orderList]或订单项相关信息[busiOrder],请检查报文："+orderInfo);
+        }
+
+        JSONObject orderListTmp = orderInfo.getJSONObject("orderList");
+        OrderList orderList = JSONObject.parseObject(orderListTmp.toJSONString(),OrderList.class);
+
+        String olId = orderList.getOlId();
+        //生成olId
+        if(StringUtils.isBlank(olId) || olId.startsWith("-") ){
+            olId = this.queryPrimaryKey(iPrimaryKeyService,"OL_ID");
+            orderList.setOlId(olId);
+        }
+
+        //这里保存购物车
+
+        int saveOrderListFlag = iOrderServiceDao.saveDataToBoOrderList(orderList);
+        if (saveOrderListFlag < 1){
+            throw  new RuntimeException("作废订单时保存购物车信息失败"+orderListTmp);
+        }
+
+        JSONArray busiOrderTmps = orderInfo.getJSONArray("busiOrder");
+
+        /**
+         * 根据actionTypeCd 作废
+         */
+        Assert.isNull(busiOrderTmps,"入参错误，没有busiOrder 节点，或没有子节点");
+
+        if(!busiOrderTmps.getJSONObject(0).containsKey("oldBoId")){
+           String actionTypeCds = busiOrderTmps.getJSONObject(0).getString("actionTypeCd");
+            deleteOrderByActionTypeCd(orderListTmp.getString("oldOlId"),actionTypeCds.split(","));
+            return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
+        }
+
+
+
         return null;
+    }
+
+    /**
+     * 根据 订单动作 作废
+     * @param oldOlId 作废的购物车
+     * @param actionTypeCd busi_order action_type_cd 类型来作废订单
+     * @throws Exception
+     */
+    private void deleteOrderByActionTypeCd(String oldOlId,String ...actionTypeCd) throws Exception{
+        //根据oldOdId actionTypeCd 获取订单项
+        BusiOrder busiOrderTmp = new BusiOrder();
+        busiOrderTmp.setOlId(oldOlId);
+        String actionTypeCds= "";
+        // 'C1','A1','M1',
+        for(String ac : actionTypeCd){
+            actionTypeCds += ("'"+ac+"',");
+        }
+
+        // 'C1','A1','M1'
+        actionTypeCds = actionTypeCds.endsWith(",")?actionTypeCds.substring(0,actionTypeCds.length()-1):actionTypeCds;
+
+        busiOrderTmp.setActionTypeCd(actionTypeCds);
+
+        List<BusiOrder> busiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
+
+        if(busiOrders == null || busiOrders.size() == 0){
+            throw new IllegalArgumentException("没有找到需要作废的订单，[oldOdId="+oldOlId+",actionTypeCd = "+actionTypeCd+"]");
+        }
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {
