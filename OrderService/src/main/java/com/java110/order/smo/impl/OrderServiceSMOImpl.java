@@ -6,6 +6,7 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.config.properties.EventProperties;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.context.AppContext;
 import com.java110.core.event.AppEventPublishing;
 import com.java110.entity.order.BusiOrder;
 import com.java110.entity.order.BusiOrderAttr;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.java110.common.util.Assert;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -127,11 +130,17 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         //获取 订单项
         JSONArray busiOrderTmps = orderInfo.getJSONArray("busiOrder");
 
+        //存放busiOrder 的data节点
+
+        Map<String,JSONArray> datasTmp = new HashMap<String, JSONArray>();
+
         for(int busiOrderTmpsIndex = 0 ; busiOrderTmpsIndex < busiOrderTmps.size() ; busiOrderTmpsIndex++){
             JSONObject busiOrderJson = busiOrderTmps.getJSONObject(busiOrderTmpsIndex);
-            if (!busiOrderJson.containsKey("busiObj")){
+            /*if (!busiOrderJson.containsKey("busiObj")){
                 throw new IllegalArgumentException("请求报文中busiOrder 节点中没有对应的 busiObj 节点，请检查"+busiOrderJson);
-            }
+            }*/
+
+            Assert.isNull(busiOrderJson,"busiObj","请求报文中busiOrder 节点中没有对应的 busiObj 节点，请检查"+busiOrderJson);
 
             BusiOrder busiOrderObj = JSONObject.parseObject(busiOrderJson.getJSONObject("busiObj").toJSONString(),BusiOrder.class);
 
@@ -165,9 +174,11 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
                 }
             }
             //修改data节点下的boId，一般是没有这个值，所以直接新加就行了，不许判断是否已-开头
-            if (!busiOrderJson.containsKey("data")){
+           /* if (!busiOrderJson.containsKey("data")){
                 throw new IllegalArgumentException("请求报文中busiOrder 节点中没有对应的 data 节点，请检查"+busiOrderJson);
-            }
+            }*/
+
+            Assert.isNull(busiOrderJson,"data","请求报文中busiOrder 节点中没有对应的 data 节点，请检查"+busiOrderJson);
 
             //处理data 节点
             JSONObject data = busiOrderJson.getJSONObject("data");
@@ -189,16 +200,34 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             //根据busiOrder 的  actionTypeCd 注册那个服务去处理
             String actionTypeCd = busiOrderObj.getActionTypeCd();
 
+            JSONArray dataJsonTmp = null;
+            if(!datasTmp.containsKey(actionTypeCd)){
+                dataJsonTmp = new JSONArray();
+            }else{
+                dataJsonTmp = datasTmp.get(actionTypeCd);
+            }
+            data.put("actionTypeCd",actionTypeCd);
+            dataJsonTmp.add(data);
+
+            datasTmp.put(actionTypeCd,dataJsonTmp);
+
+            /*
             try {
                 //发布事件
                 AppEventPublishing.multicastEvent(actionTypeCd,orderInfo.toJSONString(), data.toJSONString(),orderListTmp.getString("asyn"));
             }catch (Exception e){
                 //这里补偿事物
                 throw e;
-            }
-
+            }*/
 
         }
+
+        //创建上下文对象
+        AppContext context = createApplicationContext();
+
+        prepareContext(context, datasTmp);
+
+        AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
     }
@@ -317,9 +346,18 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
         List<BusiOrder> busiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
 
-        if(busiOrders == null || busiOrders.size() == 0){
-            throw new IllegalArgumentException("没有找到需要作废的订单，[oldOdId="+oldOlId+",actionTypeCd = "+actionTypeCd+"]");
-        }
+        Assert.isNull(busiOrders,"没有找到需要作废的订单，[oldOdId="+oldOlId+",actionTypeCd = "+actionTypeCd+"]");
+
+
+    }
+
+    private void prepareContext(AppContext context,Map<String,JSONArray> datasTmp){
+        Assert.isNull(context,"创建上下对象失败");
+
+        //这里将整个订单的data 信息存入 上下文对象中，以防后期使用无法获取
+
+        context.coverData(datasTmp);
+
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

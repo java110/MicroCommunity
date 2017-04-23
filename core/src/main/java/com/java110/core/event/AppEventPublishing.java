@@ -1,19 +1,17 @@
 package com.java110.core.event;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.common.log.LoggerEngine;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.util.Assert;
+import com.java110.common.util.Assert;
+import com.java110.core.context.AppContext;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 事件发布侦听
@@ -66,6 +64,7 @@ public class AppEventPublishing extends LoggerEngine{
     /**
      * 根据是否实现了某个接口，返回侦听
      * @param interfaceClassName
+     * @since 1.7
      * @return
      */
     public static List<AppListener<?>> getListeners(String interfaceClassName){
@@ -149,6 +148,32 @@ public class AppEventPublishing extends LoggerEngine{
         Object[] parameters={orderInfo,data};
         AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
         multicastEvent(targetAppEvent,asyn);
+
+    }
+
+    /**
+     * 一次发布同一个动作的 订单数据，避免多次调用子服务，印象性能
+     * @param context 上下文对象
+     * @param data 封装了 data节点 的数据
+     * @throws Exception
+     */
+    public static void multicastEvent(AppContext context, Map<String,JSONArray> data, String asyn) throws Exception{
+        Assert.hasSize(data,"订单调度时，没有可处理的数据，data="+data);
+
+       Set<String> keys =  data.keySet();
+
+       for(String key : keys){
+           Class<AppEvent> appEvent = getEvent(key);
+
+           Class[] parameterTypes={Object.class,AppContext.class,JSONArray.class};
+
+           Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+           Object[] parameters={null,context,data.get(key)};
+           AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
+
+           multicastEvent(targetAppEvent,asyn);
+       }
+
 
     }
 

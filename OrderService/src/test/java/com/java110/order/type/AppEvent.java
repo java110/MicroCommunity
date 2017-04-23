@@ -1,5 +1,7 @@
 package com.java110.order.type;
 
+import com.java110.core.context.AppContext;
+
 import java.util.EventObject;
 
 /**
@@ -13,7 +15,7 @@ public class AppEvent extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public AppEvent(Object source) {
+    public AppEvent(AppContext source) {
         super(source);
     }
 }

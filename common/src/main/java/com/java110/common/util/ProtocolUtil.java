@@ -51,6 +51,12 @@ public class ProtocolUtil {
 
     public static final String SERVICE_CODE_ADD_OFFER = "FS_007"; //销售品订购
 
+    public static final String RESULT_CODE = "RESULT_CODE"; //接口返回 编码key
+
+    public static final String RESULT_MSG = "RESULT_MSG"; // 接口返回 描述key
+
+    public static final String RESULT_INFO = "RESULT_INFO"; //接口返回 信息 key
+
 
     private static JSONObject tcpContJson = null;
 
@@ -328,9 +334,9 @@ public class ProtocolUtil {
      */
     public static String createResultMsg(String resultCode, String resultMsg, JSONObject resultInfo) {
         JSONObject data = new JSONObject();
-        data.put("RESULT_CODE", resultCode);
-        data.put("RESULT_MSG", resultMsg);
-        data.put("RESULT_INFO", resultInfo);
+        data.put(RESULT_CODE, resultCode);
+        data.put(RESULT_MSG, resultMsg);
+        data.put(RESULT_INFO, resultInfo);
         return data.toString();
     }
 
@@ -345,11 +351,11 @@ public class ProtocolUtil {
         try{
              paramJson = JSONObject.parseObject(returnJsonParam);
 
-            if(paramJson == null || !paramJson.containsKey("RESULT_CODE")){
+            if(paramJson == null || !paramJson.containsKey(RESULT_CODE)){
                 return false;
             }
 
-            if(ProtocolUtil.RETURN_MSG_SUCCESS.equals(paramJson.getString("RESULT_CODE"))){
+            if(ProtocolUtil.RETURN_MSG_SUCCESS.equals(paramJson.getString(RESULT_CODE))){
                 return true;
             }
 

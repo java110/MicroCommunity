@@ -3,6 +3,7 @@ package com.java110.user.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
@@ -80,7 +81,11 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
     /**
      * 所有服务处理类
+     * {
      *
+     *     'boCust':[{}],
+     *     'boCustAttr':[{}]
+     * }
      * @param userInfoJson
      * @return
      */
@@ -136,6 +141,56 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",resultInfo);
 
+    }
+
+    /**
+     *
+     * 请求报文为：
+     *
+     * {
+     "data": [
+     {
+     "actionTypeCd": "C1",
+     "boCust": [{},{}],
+     "boCustAttr": [{ }, {}]
+     },
+     {
+     "actionTypeCd": "C1",
+     "boCust": [{},{}],
+     "boCustAttr": [{ }, {}]
+     }
+     ]
+     }
+     * @param userInfoJson
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String soUserServiceForOrderService(JSONObject userInfoJson) throws Exception {
+
+        Assert.isNull(userInfoJson,"data","请求报文缺少 data 节点，请检查");
+
+        JSONArray custInfos = userInfoJson.getJSONArray("data");
+
+        Assert.isNull(custInfos,"请求报文中data节点，没有子节点，data子节点应该为JSONArray,custInfos="+custInfos);
+
+        JSONArray resultInfos = new JSONArray();
+        for(int custInfoIndex = 0 ;custInfoIndex < custInfos.size();custInfoIndex ++){
+            JSONObject custInfoJson = custInfos.getJSONObject(custInfoIndex);
+            String soUserServiceResult = this.soUserService(custInfoJson);
+            JSONObject resultInfo = new JSONObject();
+
+            if(!ProtocolUtil.validateReturnJson(soUserServiceResult,resultInfo)){
+                throw new RuntimeException("客户信息受理失败，原因为："+resultInfo.getString(ProtocolUtil.RESULT_MSG));
+            }
+
+            resultInfos.add(resultInfo.getJSONObject(ProtocolUtil.RESULT_INFO));
+        }
+        JSONObject custInfoJ = new JSONObject();
+
+        custInfoJ.put("data",resultInfos);
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",custInfoJ);
     }
 
     /**

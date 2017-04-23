@@ -1,5 +1,7 @@
 package com.java110.core.event;
 
+import com.java110.core.context.AppContext;
+
 /**
  *
  * 支付事件
@@ -7,19 +9,14 @@ package com.java110.core.event;
  */
 public class AppPayEvent extends AppEvent {
 
-    private String payInfo;
     /**
      * Constructs a prototypical Event.
      *
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public AppPayEvent(Object source,String payInfo) {
-        super(source);
-        this.payInfo= payInfo;
+    public AppPayEvent(Object source, AppContext context) {
+        super(source,context);
     }
 
-    public String getPayInfo() {
-        return payInfo;
-    }
 }

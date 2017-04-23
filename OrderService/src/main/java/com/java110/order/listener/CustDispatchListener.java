@@ -1,7 +1,9 @@
 package com.java110.order.listener;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.util.ProtocolUtil;
+import com.java110.core.context.AppContext;
 import com.java110.core.event.AppCustEvent;
 import com.java110.core.event.AppListener;
 import com.java110.core.event.Ordered;
@@ -9,6 +11,8 @@ import com.java110.feign.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 /**
  * 客户信息调度
@@ -26,12 +30,20 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
 
         //这里写 客户信息处理逻辑
 
-        String custInfo = event.getCustInfo();
+        AppContext context = event.getContext();
+
+        JSONArray dataCustInfos = event.getCustData();
+
+        JSONObject custInfoJson = new JSONObject();
+        custInfoJson.put("data",dataCustInfos.toJSONString());
+
+        String custInfo = custInfoJson.toJSONString();
+
 
         Assert.hasLength(custInfo,"没有需要处理的信息[custInfo="+custInfo+"]");
 
         //调用用户服务处理
-        String returnUser = iUserService.soUserService(custInfo);
+        String returnUser = iUserService.soUserServiceForOrderService(custInfo);
 
         JSONObject returnUserTmp = JSONObject.parseObject(returnUser);
 

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.AppBase;
+import com.java110.core.context.AppContext;
 import com.java110.feign.base.IPrimaryKeyService;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -47,6 +48,15 @@ public class BaseServiceSMO extends AppBase {
         }
 
         return targetId;
+    }
+
+
+    /**
+     * 创建上下文对象
+     * @return
+     */
+    protected AppContext createApplicationContext(){
+        return AppContext.newInstance();
     }
 
 

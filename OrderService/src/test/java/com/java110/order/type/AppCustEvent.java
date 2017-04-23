@@ -1,5 +1,6 @@
 package com.java110.order.type;
 
+import com.java110.core.context.AppContext;
 import com.java110.core.event.AppEvent;
 
 /**
@@ -8,19 +9,14 @@ import com.java110.core.event.AppEvent;
  */
 public class AppCustEvent extends AppEvent {
 
-    private String custInfo;
     /**
      * Constructs a prototypical Event.
      *
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public AppCustEvent(Object source,String custInfo) {
-        super(source);
-        this.custInfo = custInfo;
+    public AppCustEvent(Object source, AppContext context) {
+        super(source,context);
     }
 
-    public String getCustInfo() {
-        return custInfo;
-    }
 }

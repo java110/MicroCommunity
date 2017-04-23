@@ -25,6 +25,13 @@ public interface IUserServiceSMO {
     public String soUserService(JSONObject userInfoJson) throws Exception;
 
     /**
+     * 所有服务类（增删改查用户）
+     * @param userInfoJson
+     * @return
+     */
+    public String soUserServiceForOrderService(JSONObject userInfoJson) throws Exception;
+
+    /**
      * 客户信息处理
      * 协议：
      *{

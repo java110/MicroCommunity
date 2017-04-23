@@ -41,6 +41,82 @@ public interface IUserService {
 
 
     /**
+     * 这个接口专门用于订单服务受理用，入参为 JSONArray
+     *
+     * 支持 多个 客户信息 受理
+     *
+     * 请求协议：
+     *
+     * {
+     "data": [
+     {
+     "actionTypeCd": "C1",
+     "boCust": [
+     {
+     "custId": "-1",
+     "name": "S",
+     "email": "-52",
+     "cellphone": "17797173942",
+     "realName": "wuxw",
+     "sex": "1",
+     "password": "123456",
+     "lanId": "863010",
+     "custAdress": "青海省西宁市城中区格兰小镇",
+     "custType": "1",
+     "openId": "",
+     "state": "ADD"
+     },
+     {
+     "custId": "123",
+     "name": "S",
+     "email": "-52",
+     "cellphone": "17797173942",
+     "realName": "wuxw",
+     "sex": "1",
+     "password": "123456",
+     "lanId": "863010",
+     "custAdress": "青海省西宁市城中区格兰小镇",
+     "custType": "1",
+     "openId": "",
+     "state": "DEL"
+     }
+     ],
+     "boCustAttr": [
+     {
+     "custId": "123",
+     "prodId": "-1",
+     "attrCd": "123344",
+     "value": "1",
+     "state": "ADD"
+     },
+     {
+     "custId": "123",
+     "prodId": "-1",
+     "attrCd": "123345",
+     "value": "1",
+     "state": "DEL"
+     }
+     ]
+     }
+     ]
+     }
+
+     *
+     * 返回协议：
+     *
+     * {
+     'RESULT_CODE': '0000',
+     'RESULT_MSG': '成功',
+     'RESULT_INFO': {}
+     }
+     * @param data
+     * @return
+     */
+    @RequestMapping("/userService/soUserServiceForOrderService")
+    public String soUserServiceForOrderService(@RequestParam("data") String data);
+
+
+    /**
      * 客户信息处理
      * 协议：
      *{
