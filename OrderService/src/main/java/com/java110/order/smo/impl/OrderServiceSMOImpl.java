@@ -2,6 +2,8 @@ package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.ActionTypeConstant;
+import com.java110.common.constant.AttrCdConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.config.properties.EventProperties;
@@ -335,7 +337,47 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             throw new IllegalArgumentException("当前系统只支持busiOrder 节点下第一个节点包含 actionTypeCd节点和 oldOlId节点的报文："+orderInfo);
         }
 
+        //数据分装
+        Map<String,JSONArray> datasTmp = new HashMap<String, JSONArray>();
         //添加数据至 busi_order,这里生成新的boId 将需要作废的boId信息写入值busi_order_attr 中单独注册一个属性信息
+
+        for(Map<String,String> needDeleteBoIdMap : needDeleteBoIds){
+            BusiOrder busiOrder = new BusiOrder();
+
+            String newBoId = this.queryPrimaryKey(iPrimaryKeyService,"BO_ID");
+
+            busiOrder.setOlId(olId);
+            //重新生成 boId
+            busiOrder.setBoId(newBoId);
+            //设置撤单，作废订单动作
+            busiOrder.setActionTypeCd(ActionTypeConstant.ACTION_TYPE_CANCEL_ORDER);
+
+            busiOrder.setRemark("撤单，作废订单处理，作废订单为"+needDeleteBoIdMap.get("boId"));
+
+            //这里保存订单项 busiOrder
+            int saveBusiOrderFlag = iOrderServiceDao.saveDataToBusiOrder(busiOrder);
+            if(saveBusiOrderFlag < 1){
+                throw new RuntimeException("撤单，作废订单失败，保存订单项信息失败"+JSONObject.toJSONString(busiOrder));
+            }
+
+            //将需要作废的订单boId 写入值 busi_order_attr 中 属性为： 10000001
+
+            BusiOrderAttr busiOrderAttr = new BusiOrderAttr();
+            busiOrderAttr.setBoId(newBoId);
+            busiOrderAttr.setAttrCd(AttrCdConstant.BUSI_ORDER_ATTR_10000001);
+            busiOrderAttr.setValue(needDeleteBoIdMap.get("boId"));
+
+            saveBusiOrderFlag =  iOrderServiceDao.saveDataToBusiOrderAttr(busiOrderAttr);
+            if(saveBusiOrderFlag < 1){
+                throw new RuntimeException("撤单，作废订单失败,保存订单项信息属性失败"+JSONObject.toJSONString(busiOrderAttr));
+            }
+
+
+
+        }
+
+        //这里补充 order_list_attr中 编码为 10000002 的数据，要作废 订单购物车信息，真正作废单子是以 busi_order_attr 中的boId 为主
+
 
 
 
@@ -395,6 +437,49 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
         context.coverData(datasTmp);
 
+    }
+
+
+    /**
+     *
+     * oldBoIdMap.put("actionTypeCd","");
+     *
+     *  oldBoIdMap.put("boId",busiOrderTmps.getJSONObject(busiOrderIndex).getString("oldBoId"));
+     *  oldBoIdMap.put("olId","");
+     * @param needDeleteBoIdMap
+     *
+     */
+    private void processDeleteOrderByActionTypeCd(Map<String,String> needDeleteBoIdMap,Map<String,JSONArray> datasTmp){
+
+        Assert.isNull(datasTmp,"processDeleteOrderByActionTypeCd 方法的参数 datasTmp 为空，");
+
+        // 如果这两个中有一个为空，则从库中查询
+        if(StringUtils.isBlank(needDeleteBoIdMap.get("olId")) || StringUtils.isBlank(needDeleteBoIdMap.get("actionTypeCd"))){
+            BusiOrder busiOrderTmp = new BusiOrder();
+            busiOrderTmp.setBoId(needDeleteBoIdMap.get("boId"));
+            //这里只有一条其他，则抛出异常
+            List<BusiOrder> oldBusiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
+
+            if(oldBusiOrders == null || oldBusiOrders.size() != 1){
+                throw new IllegalArgumentException("当前[boId="+needDeleteBoIdMap.get("boId")+"] 数据在busi_order表中不存在，请处理，很有可能是入参错误");
+            }
+
+            //回写数据
+
+            needDeleteBoIdMap.put("olId",oldBusiOrders.get(0).getOlId());
+            needDeleteBoIdMap.put("actionTypeCd",oldBusiOrders.get(0).getActionTypeCd());
+        }
+
+        String actionTypeCd = needDeleteBoIdMap.get("actionTypeCd");
+
+        JSONArray dataJsonTmp = null;
+        if(!datasTmp.containsKey(actionTypeCd)){
+            dataJsonTmp = new JSONArray();
+        }else{
+            dataJsonTmp = datasTmp.get(actionTypeCd);
+        }
+        dataJsonTmp.add(JSONObject.parseObject(JSONObject.toJSONString(needDeleteBoIdMap)));
+        datasTmp.put(actionTypeCd,dataJsonTmp);
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {
