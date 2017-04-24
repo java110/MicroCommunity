@@ -58,32 +58,58 @@ create table busi_order_attr(
 
 -- 动作类型表
 create table action_type(
-    id int not null,
+    id int not null AUTO_INCREMENT,
     actionTypeCd varchar(10) not null comment '业务动作编码',
     name varchar(200) not null comment '业务动作名称',
     describe varchar(500) not null comment '业务动作描述',
-    serviceCd varchar(10) not null comment '业务动作隶属于那个服务,U1 客户服务，M2 账户服务',
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    primary key (id)
 );
+
+insert into action_type(actionTypeCd,name,describe) values('C1','添加客户信息','添加客户信息');
+insert into action_type(actionTypeCd,name,describe) values('C2','修改客户信息','修改客户信息');
+insert into action_type(actionTypeCd,name,describe) values('C3','删除客户信息','删除客户信息');
+insert into action_type(actionTypeCd,name,describe) values('A1','添加账户信息','添加账户信息');
+insert into action_type(actionTypeCd,name,describe) values('A2','修改账户信息','修改账户信息');
+insert into action_type(actionTypeCd,name,describe) values('A3','删除账户信息','删除账户信息');
+insert into action_type(actionTypeCd,name,describe) values('M1','增加商户信息','增加商户信息');
+insert into action_type(actionTypeCd,name,describe) values('M2','编辑商户信息','编辑商户信息');
+insert into action_type(actionTypeCd,name,describe) values('M3','删除商户信息','删除商户信息');
+insert into action_type(actionTypeCd,name,describe) values('D','撤单','撤单');
+
 
 
 -- 数据状态字典表
 create table status(
-    id int not null,
+    id int not null  AUTO_INCREMENT,
+    domain varchar(20) not null comment '属性域，CUST 客户域 ORDER_LIST 购物车域 BUSI_ORDER 订单项域'
     status_cd varchar(20),
     name varchar(200) not null comment '状态名称',
     describe varchar(500) not null comment '状态描述',
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    primary key (id)
 );
+
+insert into status(domain,status_cd,name,describe) values('DOMAIN.ORDER_LIST','S','保存数据成功','保存数据成功');
+insert into status(domain,status_cd,name,describe) values('DOMAIN.ORDER_LIST','0','有效的','有效的');
+insert into status(domain,status_cd,name,describe) values('DOMAIN.ORDER_LIST','1','无效的','无效的');
+
+insert into status(domain,status_cd,name,describe) values('DOMAIN.BUSI_ORDER','S','保存数据成功','保存数据成功');
+insert into status(domain,status_cd,name,describe) values('DOMAIN.BUSI_ORDER','0','有效的','有效的');
+insert into status(domain,status_cd,name,describe) values('DOMAIN.BUSI_ORDER','1','无效的','无效的');
 
 -- 属性字典表
 
 create table attr(
-    id int not null,
+    id int not null  AUTO_INCREMENT ,
     domain varchar(20) not null comment '属性域，CUST 客户域 ORDER_LIST 购物车域 BUSI_ORDER 订单项域'
     attrCd varchar(20) not null comment '属性编码',
      name varchar(200) not null comment '属性名称',
      describe varchar(500) not null comment '属性描述',
-     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     primary key (id)
 );
 
+
+insert into attr(domain,attrCd,name,describe) values('DOMAIN.ORDER_LIST','10000002','作废购物车olId','作废购物车olId');
+insert into attr(domain,attrCd,name,describe) values('DOMAIN.BUSI_ORDER','10000001','作废订单项boId','作废订单项boId');

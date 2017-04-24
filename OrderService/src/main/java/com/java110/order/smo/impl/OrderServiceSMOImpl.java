@@ -226,10 +226,13 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         AppContext context = createApplicationContext();
 
         prepareContext(context, datasTmp);
-
-        //发布事件
-        AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
-
+        try {
+            //发布事件
+            AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
+        }catch (Exception e){
+            //这里补偿事物
+            throw e;
+        }
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
     }
 
@@ -313,11 +316,27 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
          */
         Assert.isNull(busiOrderTmps,"入参错误，没有busiOrder 节点，或没有子节点");
 
-        if(!busiOrderTmps.getJSONObject(0).containsKey("oldBoId")){
+        List<Map<String,String>> needDeleteBoIds = new ArrayList<Map<String,String>>();
+
+        if(busiOrderTmps.getJSONObject(0).containsKey("actionTypeCd")){
            String actionTypeCds = busiOrderTmps.getJSONObject(0).getString("actionTypeCd");
-            deleteOrderByActionTypeCd(orderListTmp.getString("oldOlId"),actionTypeCds.split(","));
-            return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
+            getNeeddeleteOrderByActionTypeCd(orderListTmp.getString("oldOlId"),needDeleteBoIds,actionTypeCds.split(","));
+            //return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
+        }else if(busiOrderTmps.getJSONObject(0).containsKey("oldBoId")){
+            Map<String,String> oldBoIdMap = null;
+            for(int busiOrderIndex = 0; busiOrderIndex< busiOrderTmps.size();busiOrderIndex++){
+                oldBoIdMap = new HashMap<String, String>();
+                oldBoIdMap.put("actionTypeCd","");
+                oldBoIdMap.put("boId",busiOrderTmps.getJSONObject(busiOrderIndex).getString("oldBoId"));
+                oldBoIdMap.put("olId","");
+                needDeleteBoIds.add(oldBoIdMap);
+            }
+        }else {
+            throw new IllegalArgumentException("当前系统只支持busiOrder 节点下第一个节点包含 actionTypeCd节点和 oldOlId节点的报文："+orderInfo);
         }
+
+        //添加数据至 busi_order,这里生成新的boId 将需要作废的boId信息写入值busi_order_attr 中单独注册一个属性信息
+
 
 
 
@@ -330,7 +349,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
      * @param actionTypeCd busi_order action_type_cd 类型来作废订单
      * @throws Exception
      */
-    private void deleteOrderByActionTypeCd(String oldOlId,String ...actionTypeCd) throws Exception{
+    private void getNeeddeleteOrderByActionTypeCd(String oldOlId,List<Map<String,String>> needDeleteBoIds,String ...actionTypeCd) throws Exception{
         //根据oldOdId actionTypeCd 获取订单项
         BusiOrder busiOrderTmp = new BusiOrder();
         busiOrderTmp.setOlId(oldOlId);
@@ -343,13 +362,30 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         // 'C1','A1','M1'
         actionTypeCds = actionTypeCds.endsWith(",")?actionTypeCds.substring(0,actionTypeCds.length()-1):actionTypeCds;
 
+        //如果为 ALL 作废整个订单数据，这里直接传为空 根据olId 处理
+        if("ALL".equals(actionTypeCds)){
+
+            actionTypeCds = "";
+        }
+
         busiOrderTmp.setActionTypeCd(actionTypeCds);
 
-        List<BusiOrder> busiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
+        /**
+         * 已经生成的订单项信息
+         */
+        List<BusiOrder> oldBusiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
 
-        Assert.isNull(busiOrders,"没有找到需要作废的订单，[oldOdId="+oldOlId+",actionTypeCd = "+actionTypeCd+"]");
+        Assert.isNull(oldBusiOrders,"没有找到需要作废的订单，[oldOdId="+oldOlId+",actionTypeCd = "+actionTypeCd+"]");
 
-
+        //作废老订单信息
+        Map<String,String> oldBoIdMap = null;
+        for(BusiOrder oldBusiOrder : oldBusiOrders){
+            oldBoIdMap = new HashMap<String, String>();
+            oldBoIdMap.put("actionTypeCd",oldBusiOrder.getActionTypeCd());
+            oldBoIdMap.put("boId",oldBusiOrder.getBoId());
+            oldBoIdMap.put("olId",oldBusiOrder.getOlId());
+            needDeleteBoIds.add(oldBoIdMap);
+        }
     }
 
     private void prepareContext(AppContext context,Map<String,JSONArray> datasTmp){
