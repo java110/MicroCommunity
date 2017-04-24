@@ -227,6 +227,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
         prepareContext(context, datasTmp);
 
+        //发布事件
         AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));

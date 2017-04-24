@@ -2,6 +2,7 @@ package com.java110.user.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -86,6 +88,10 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      *     'boCust':[{}],
      *     'boCustAttr':[{}]
      * }
+     *
+     * 返回报文：
+     *
+     * {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'custId':'7000123,718881991'}}
      * @param userInfoJson
      * @return
      */
@@ -161,6 +167,10 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      }
      ]
      }
+
+     返回报文 ：
+
+     { 'RESULT_CODE': '0000', 'RESULT_MSG': '成功', 'RESULT_INFO': {'cust':[{'oldCustId':'-1','custId':'12345678'},{'oldCustId':'-2','custId':'12345678'}]} }
      * @param userInfoJson
      * @return
      * @throws Exception
@@ -174,7 +184,8 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
 
         Assert.isNull(custInfos,"请求报文中data节点，没有子节点，data子节点应该为JSONArray,custInfos="+custInfos);
 
-        JSONArray resultInfos = new JSONArray();
+        JSONObject custInfoJ = new JSONObject();
+        JSONArray resultCustIdArray = new JSONArray();
         for(int custInfoIndex = 0 ;custInfoIndex < custInfos.size();custInfoIndex ++){
             JSONObject custInfoJson = custInfos.getJSONObject(custInfoIndex);
             String soUserServiceResult = this.soUserService(custInfoJson);
@@ -183,12 +194,34 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
             if(!ProtocolUtil.validateReturnJson(soUserServiceResult,resultInfo)){
                 throw new RuntimeException("客户信息受理失败，原因为："+resultInfo.getString(ProtocolUtil.RESULT_MSG));
             }
+            if(resultInfo.getJSONObject(ProtocolUtil.RESULT_INFO) != null
+                    && resultInfo.getJSONObject(ProtocolUtil.RESULT_INFO).containsKey("custId")) {
 
-            resultInfos.add(resultInfo.getJSONObject(ProtocolUtil.RESULT_INFO));
+                String custIds = custInfoJ.getString("custId");
+//                custIds += "," + resultInfo.getJSONObject(ProtocolUtil.RESULT_INFO).getString("custId");
+
+//                custIds = custIds.startsWith(",") && custIds.length()>1 ? custIds.substring(1,custIds.length()):custIds;
+                //custInfoJ.put("custId", custIds);
+                JSONArray boCusts = custInfoJson.getJSONArray("boCust");
+
+                Object custIdObj = JSONPath.eval(custInfoJson,"$.boCust[custId < '0'][0].custId");
+                if(StringUtils.isNotBlank(custIds) && !ObjectUtils.isEmpty(custIdObj)) {
+
+                    String[] allNewCustIds = custIds.split(",");
+                    JSONObject newCustIdJson = null;
+                    for (String custId : allNewCustIds) {
+                        newCustIdJson = new JSONObject();
+                        newCustIdJson.put("oldCustId",custIdObj);
+                        newCustIdJson.put("custId",custId);
+                        resultCustIdArray.add(newCustIdJson);
+                    }
+
+                }
+            }
+
         }
-        JSONObject custInfoJ = new JSONObject();
 
-        custInfoJ.put("data",resultInfos);
+        custInfoJ.put("cust",resultCustIdArray);
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",custInfoJ);
     }

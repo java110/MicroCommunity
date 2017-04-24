@@ -2,26 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/Java110CommonCopyRight.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/jsonpath/CustIdTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java" afterPath="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java" afterPath="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/type/AppCustEvent.java" afterPath="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/type/AppCustEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/type/AppEvent.java" afterPath="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/type/AppEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" afterPath="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/Assert.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/Assert.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/src/main/resources/config/event.properties" afterPath="$PROJECT_DIR$/config/src/main/resources/config/event.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/base/smo/BaseServiceSMO.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/base/smo/BaseServiceSMO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppCustEvent.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppCustEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEvent.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppMerchantEvent.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppMerchantEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppPayEvent.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppPayEvent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -55,98 +41,40 @@
       <file leaf-file-name="OrderServiceSMOImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3128">
-              <caret line="209" column="30" lean-forward="true" selection-start-line="209" selection-start-column="30" selection-end-line="209" selection-end-column="30" />
-              <folding>
-                <element signature="e#4605#4624#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProtocolUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="357" column="85" lean-forward="false" selection-start-line="357" selection-start-column="85" selection-end-line="357" selection-end-column="85" />
+            <state relative-caret-position="847">
+              <caret line="323" column="20" lean-forward="true" selection-start-line="323" selection-start-column="20" selection-end-line="323" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppEventPublishing.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="170" column="56" lean-forward="true" selection-start-line="170" selection-start-column="56" selection-end-line="170" selection-end-column="56" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#5429#5612#0" expanded="true" />
-                <element signature="e#5611#5612#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppCustEvent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppCustEvent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="20" column="66" lean-forward="false" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#847#848#0" expanded="true" />
-                <element signature="e#878#879#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IUserService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-895">
-              <caret line="51" column="5" lean-forward="true" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserServiceRest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="177" column="63" lean-forward="false" selection-start-line="177" selection-start-column="63" selection-end-line="177" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IUserServiceSMO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserServiceSMOImpl.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserServiceSMOImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="189" column="8" lean-forward="false" selection-start-line="189" selection-start-column="8" selection-end-line="189" selection-end-column="8" />
+            <state relative-caret-position="204">
+              <caret line="207" column="85" lean-forward="false" selection-start-line="207" selection-start-column="55" selection-end-line="207" selection-end-column="85" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppBase.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/base/AppBase.java">
+      <file leaf-file-name="CustDispatchListener.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+            <state relative-caret-position="130">
+              <caret line="64" column="52" lean-forward="false" selection-start-line="64" selection-start-column="52" selection-end-line="64" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AppContext.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-391">
+              <caret line="35" column="36" lean-forward="true" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -198,8 +126,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/OrderService/pom.xml" />
-        <option value="$PROJECT_DIR$/config/src/main/java/com/java110/config/properties/EventProperties.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/Java110Event.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/Java110Listener.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/Ordered.java" />
@@ -242,13 +168,15 @@
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java" />
         <option value="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/Assert.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppCustEvent.java" />
-        <option value="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java" />
-        <option value="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" />
         <option value="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/ProtocolUtil.java" />
+        <option value="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
+        <option value="$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/jsonpath/CustIdTest.java" />
+        <option value="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java" />
       </list>
     </option>
   </component>
@@ -343,7 +271,6 @@
     <panes>
       <pane id="Scratches" />
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -387,48 +314,8 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="OrderService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="OrderService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -458,7 +345,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -470,7 +357,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="smo" />
+              <option name="myItemId" value="jsonpath" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -489,65 +376,12 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="order" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="smo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="impl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="OrderService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="order" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="listener" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -579,7 +413,7 @@
       <recent name="E:\project\MicroCommunity\config\src\main\resources\mapper" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CommonTest.testSubString">
+  <component name="RunManager" selected="JUnit.CustIdTest.testCustId">
     <configuration default="false" name="AppSpringBootApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -589,26 +423,6 @@
       </extension>
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.java110.user.AppSpringBootApplication" />
       <module name="UserService" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="AppEventPublishing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.java110.core.event.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.java110.core.event.AppEventPublishing" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="core" />
       <envs />
       <method />
     </configuration>
@@ -663,6 +477,32 @@
       <option name="PACKAGE_NAME" value="com.java110.order.type" />
       <option name="MAIN_CLASS_NAME" value="com.java110.order.type.CommonTest" />
       <option name="METHOD_NAME" value="testSubString" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="CustIdTest.testCustId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.java110.order.jsonpath.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="OrderService" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.java110.order.jsonpath" />
+      <option name="MAIN_CLASS_NAME" value="com.java110.order.jsonpath.CustIdTest" />
+      <option name="METHOD_NAME" value="testCustId" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -943,18 +783,18 @@
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ConfigServerEurekaApplication" />
       <item index="1" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication" />
       <item index="2" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
-      <item index="3" class="java.lang.String" itemvalue="Application.AppEventPublishing" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TypeTest.testType" />
-      <item index="5" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (2)" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.CommonTest.testSubString" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TypeTest.testType" />
+      <item index="4" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (2)" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.CommonTest.testSubString" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.CustIdTest.testCustId" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.CommonTest.testSubString" />
-        <item index="1" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (2)" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TypeTest.testType" />
-        <item index="3" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
-        <item index="4" class="java.lang.String" itemvalue="Application.AppEventPublishing" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.CustIdTest.testCustId" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.CommonTest.testSubString" />
+        <item index="2" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (2)" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TypeTest.testType" />
+        <item index="4" class="java.lang.String" itemvalue="Spring Boot.AppSpringBootApplication (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -1017,7 +857,8 @@
       <workItem from="1492815107933" duration="3780000" />
       <workItem from="1492867295880" duration="9001000" />
       <workItem from="1492937288686" duration="4367000" />
-      <workItem from="1492949070139" duration="5816000" />
+      <workItem from="1492949070139" duration="9099000" />
+      <workItem from="1492996563145" duration="4810000" />
     </task>
     <task id="LOCAL-00001" summary="change fastjson dependenciy">
       <created>1491576589634</created>
@@ -1030,39 +871,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="CommonTest_testSubString - 2017.04.22 at 15h 22m 02s.xml">
-      <configuration name="CommonTest.testSubString" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="CustIdTest_testCustId - 2017.04.12 at 00h 18m 18s.xml">
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 18m 54s.xml">
       <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CustIdTest_testCustId - 2017.04.12 at 00h 25m 08s.xml">
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 19m 19s.xml">
       <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CustIdTest_testCustId - 2017.04.12 at 00h 25m 21s.xml">
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 19m 33s.xml">
       <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 20m 16s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 20m 07s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 21m 53s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 20m 49s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 39m 55s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 20m 59s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 42m 21s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 21m 37s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 47m 32s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 21m 52s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeTest_testType - 2017.04.14 at 23h 50m 21s.xml">
-      <configuration name="TypeTest.testType" configurationId="JUnit" />
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 22m 41s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="CustIdTest_testCustId - 2017.04.24 at 10h 29m 57s.xml">
+      <configuration name="CustIdTest.testCustId" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="292272000" />
+    <option name="totallyTimeSpent" value="300365000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1070,28 +911,28 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37821484" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29836065" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.62356794" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6229508" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18381241" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25189108" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30983606" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29836065" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32817337" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30983606" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1151,41 +992,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$M2_REPO$/org/springframework/spring-beans/4.3.2.RELEASE/spring-beans-4.3.2.RELEASE-sources.jar!/org/springframework/beans/factory/support/BeanDefinitionRegistryPostProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="42" column="9" lean-forward="false" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$M2_REPO$/org/springframework/spring-context/4.3.2.RELEASE/spring-context-4.3.2.RELEASE-sources.jar!/org/springframework/context/annotation/ConfigurationClassPostProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1156">
-          <caret line="331" column="13" lean-forward="true" selection-start-line="331" selection-start-column="13" selection-end-line="331" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$M2_REPO$/org/springframework/boot/spring-boot/1.4.0.RELEASE/spring-boot-1.4.0.RELEASE-sources.jar!/org/springframework/boot/context/ConfigurationWarningsApplicationContextInitializer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="59" column="43" lean-forward="false" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$M2_REPO$/org/springframework/boot/spring-boot/1.4.0.RELEASE/spring-boot-1.4.0.RELEASE-sources.jar!/META-INF/spring.factories">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="83" lean-forward="false" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$M2_REPO$/org/springframework/boot/spring-boot/1.4.0.RELEASE/spring-boot-1.4.0.RELEASE-sources.jar!/org/springframework/boot/BeanDefinitionLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="120" column="40" lean-forward="true" selection-start-line="120" selection-start-column="36" selection-end-line="120" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$M2_REPO$/org/springframework/spring-jms/4.3.2.RELEASE/spring-jms-4.3.2.RELEASE-sources.jar!/org/springframework/jms/core/JmsTemplate.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -1338,13 +1144,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/AppTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1378,11 +1177,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="28" lean-forward="false" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#465#466#0" expanded="false" />
-            <element signature="e#502#503#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1397,13 +1191,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="26" column="16" lean-forward="false" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#588#589#0" expanded="false" />
-            <element signature="e#618#619#0" expanded="false" />
-            <element signature="e#668#669#0" expanded="false" />
-            <element signature="e#706#707#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1418,19 +1205,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="346">
           <caret line="55" column="22" lean-forward="false" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="64" column="25" lean-forward="false" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1305#1306#0" expanded="false" />
-            <element signature="e#1339#1340#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1452,26 +1226,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$M2_REPO$/com/alibaba/fastjson/1.2.28/fastjson-1.2.28-sources.jar!/com/alibaba/fastjson/JSONArray.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="170" column="56" lean-forward="true" selection-start-line="170" selection-start-column="56" selection-end-line="170" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5429#5612#0" expanded="true" />
-            <element signature="e#5611#5612#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-895">
@@ -1484,7 +1238,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1492,27 +1245,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3128">
-          <caret line="209" column="30" lean-forward="true" selection-start-line="209" selection-start-column="30" selection-end-line="209" selection-end-column="30" />
-          <folding>
-            <element signature="e#4605#4624#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="37" column="62" lean-forward="false" selection-start-line="37" selection-start-column="62" selection-end-line="37" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1520,27 +1252,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
           <caret line="20" column="66" lean-forward="false" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#847#848#0" expanded="true" />
-            <element signature="e#878#879#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="177" column="63" lean-forward="false" selection-start-line="177" selection-start-column="63" selection-end-line="177" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="31" column="18" lean-forward="false" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1552,11 +1263,121 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/event/AppEventPublishing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="159" column="23" lean-forward="false" selection-start-line="159" selection-start-column="23" selection-end-line="159" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1944">
+          <caret line="79" column="21" lean-forward="true" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$M2_REPO$/com/alibaba/fastjson/1.2.28/fastjson-1.2.28-sources.jar!/com/alibaba/fastjson/JSONArray.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1241">
+          <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="847">
+          <caret line="323" column="20" lean-forward="true" selection-start-line="323" selection-start-column="20" selection-end-line="323" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="27" column="89" lean-forward="false" selection-start-line="27" selection-start-column="89" selection-end-line="27" selection-end-column="89" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/AppTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="28" column="5" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="28" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$M2_REPO$/com/alibaba/fastjson/1.2.28/fastjson-1.2.28-sources.jar!/com/alibaba/fastjson/JSONPath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4097">
+          <caret line="342" column="25" lean-forward="false" selection-start-line="342" selection-start-column="25" selection-end-line="342" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="24" column="18" lean-forward="false" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$M2_REPO$/commons-lang/commons-lang/2.6/commons-lang-2.6-sources.jar!/org/apache/commons/lang/ObjectUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="189" column="8" lean-forward="false" selection-start-line="189" selection-start-column="8" selection-end-line="189" selection-end-column="8" />
+        <state relative-caret-position="204">
+          <caret line="207" column="85" lean-forward="false" selection-start-line="207" selection-start-column="55" selection-end-line="207" selection-end-column="85" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/test/java/com/java110/user/CustIdTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-23">
+          <caret line="20" column="6" lean-forward="true" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OrderService/src/test/java/com/java110/order/jsonpath/CustIdTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-391">
+          <caret line="35" column="36" lean-forward="true" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/listener/CustDispatchListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="64" column="52" lean-forward="false" selection-start-line="64" selection-start-column="52" selection-end-line="64" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
