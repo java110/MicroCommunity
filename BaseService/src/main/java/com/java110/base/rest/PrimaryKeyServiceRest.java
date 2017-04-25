@@ -26,11 +26,12 @@ public class PrimaryKeyServiceRest extends BaseController implements IPrimaryKey
      * 协议 :
      * {'type':'CUST'}
      * 返回：
-     *
+     * <p>
      * 成功
      * {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'CUST':'710170410001'}}
      * 失败
      * {'RESULT_CODE':'1999','RESULT_MSG':'失败原因','RESULT_INFO':{}}
+     *
      * @param data
      * @return
      */
@@ -40,26 +41,26 @@ public class PrimaryKeyServiceRest extends BaseController implements IPrimaryKey
         JSONObject requestJson = null;
 
         String responseParam = "";
-        try{
+        try {
             requestJson = this.simpleValidateJSON(data);
 
-            if(requestJson == null || !requestJson.containsKey("type")){
-                throw new IllegalArgumentException("查询主键入参data["+data+"]出错");
+            if (requestJson == null || !requestJson.containsKey("type")) {
+                throw new IllegalArgumentException("查询主键入参data[" + data + "]出错");
             }
 
-            requestJson.put("name",requestJson.getString("type"));
+            requestJson.put("name", requestJson.getString("type"));
             JSONObject returnPrimaryKey = iPrimaryKeyServiceSMO.queryPrimaryKey(requestJson);
             String targetId = returnPrimaryKey.getString("targetId");
 
             returnPrimaryKey.clear();
 
-            returnPrimaryKey.put(requestJson.getString("type"),targetId);
+            returnPrimaryKey.put(requestJson.getString("type"), targetId);
 
-            responseParam = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",returnPrimaryKey);
-        }catch (Exception e){
-            LoggerEngine.error("查询主键失败,请求参数为【"+data+"】 ",e);
-            responseParam =  ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"查询主键失败："+e,null);
-        }finally {
+            responseParam = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS, "成功", returnPrimaryKey);
+        } catch (Exception e) {
+            LoggerEngine.error("查询主键失败,请求参数为【" + data + "】 ", e);
+            responseParam = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR, "查询主键失败：" + e, null);
+        } finally {
             return responseParam;
         }
     }

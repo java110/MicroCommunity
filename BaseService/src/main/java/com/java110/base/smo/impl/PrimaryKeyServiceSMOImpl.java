@@ -32,14 +32,14 @@ public class PrimaryKeyServiceSMOImpl extends BaseServiceSMO implements IPrimary
      * @return
      */
     public JSONObject queryPrimaryKey(JSONObject primaryKeyInfo) throws Exception {
-        Map paramIn = JSONObject.toJavaObject(primaryKeyInfo,Map.class);
+        Map paramIn = JSONObject.toJavaObject(primaryKeyInfo, Map.class);
         Map primaryKey = iPrimaryKeyServiceDao.queryPrimaryKey(paramIn);
         JSONObject returnPrimaryKey = new JSONObject();
         if (primaryKey != null && primaryKey.containsKey("targetId")) {
             returnPrimaryKey.put("targetId", primaryKey.get("targetId"));
-        }else{
+        } else {
             //如果没定义相应name的键序列，直接返回-1 表示 自己系统需要自己生成
-            returnPrimaryKey.put("targetId","-1");
+            returnPrimaryKey.put("targetId", "-1");
         }
         return returnPrimaryKey;
     }

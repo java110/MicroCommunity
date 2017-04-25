@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ActionTypeConstant;
 import com.java110.common.constant.AttrCdConstant;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.config.properties.EventProperties;
@@ -24,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.java110.common.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 订单服务业务逻辑处理实现类
@@ -372,17 +370,45 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
                 throw new RuntimeException("撤单，作废订单失败,保存订单项信息属性失败"+JSONObject.toJSONString(busiOrderAttr));
             }
 
-
+            //封装数据
+            processDeleteOrderByActionTypeCd(needDeleteBoIdMap,datasTmp);
 
         }
 
         //这里补充 order_list_attr中 编码为 10000002 的数据，要作废 订单购物车信息，真正作废单子是以 busi_order_attr 中的boId 为主
+        Assert.hasSize(datasTmp,"当前没有可作废的订单，请核实");
+        //由于撤单，作废订单我们只支持一个购物车操作
+        Set keys = datasTmp.keySet();
+        Object key =  keys.toArray()[0];
+        Assert.isNull(datasTmp.get(key).getJSONObject(0),"olId","数据错误，需要作废的订单的第一个节点为空，或不包含olId节点，请核查"+datasTmp);
+        String oldOlId = datasTmp.get(key).getJSONObject(0).getString("olId");
+
+
+        OrderListAttr orderListAttr = new OrderListAttr();
+        orderListAttr.setOlId(olId);
+        orderListAttr.setAttrCd(AttrCdConstant.ORDER_LIST_ATTR_10000002);
+        orderListAttr.setValue(oldOlId);
+        saveOrderListFlag = iOrderServiceDao.saveDataToOrderListAttr(orderListAttr);
+        if(saveOrderListFlag < 1){
+            throw new RuntimeException("保存购物车属性信息失败"+JSONObject.toJSONString(orderListAttr));
+        }
 
 
 
 
+        //创建上下文对象
+        AppContext context = createApplicationContext();
 
-        return null;
+        prepareContext(context, datasTmp);
+        try {
+            //发布事件
+            AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
+        }catch (Exception e){
+            //这里补偿事物
+            throw e;
+        }
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
+
     }
 
     /**
@@ -467,7 +493,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             //回写数据
 
             needDeleteBoIdMap.put("olId",oldBusiOrders.get(0).getOlId());
-            needDeleteBoIdMap.put("actionTypeCd",oldBusiOrders.get(0).getActionTypeCd());
+            needDeleteBoIdMap.put("actionTypeCd",oldBusiOrders.get(0).getActionTypeCd()+ CommonConstant.SUFFIX_DELETE_ORDER);
         }
 
         String actionTypeCd = needDeleteBoIdMap.get("actionTypeCd");

@@ -3,7 +3,6 @@ package com.java110.base.smo;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- *
  * 用户信息管理，服务
  * Created by wuxw on 2017/4/5.
  */
@@ -15,5 +14,5 @@ public interface IPrimaryKeyServiceSMO {
      * @param primaryKeyInfo name信息封装
      * @return
      */
-    public JSONObject queryPrimaryKey(JSONObject primaryKeyInfo) throws Exception ;
+    public JSONObject queryPrimaryKey(JSONObject primaryKeyInfo) throws Exception;
 }

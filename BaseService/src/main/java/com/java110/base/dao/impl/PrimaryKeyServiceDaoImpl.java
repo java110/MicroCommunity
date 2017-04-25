@@ -27,9 +27,9 @@ import java.util.Map;
 public class PrimaryKeyServiceDaoImpl extends BaseServiceDao implements IPrimaryKeyServiceDao {
 
 
-
     /**
      * 根据主键name查询主键生成ID
+     *
      * @param primaryKey 主键name信息
      * @return
      */
@@ -37,6 +37,6 @@ public class PrimaryKeyServiceDaoImpl extends BaseServiceDao implements IPrimary
     public Map queryPrimaryKey(Map primaryKey) {
 
         LoggerEngine.debug("----【PrimaryKeyServiceDaoImpl.queryPrimaryKey】入参 : " + primaryKey);
-        return sqlSessionTemplate.selectOne("primaryKeyServiceDaoImpl.queryPrimaryKey",primaryKey);
+        return sqlSessionTemplate.selectOne("primaryKeyServiceDaoImpl.queryPrimaryKey", primaryKey);
     }
 }

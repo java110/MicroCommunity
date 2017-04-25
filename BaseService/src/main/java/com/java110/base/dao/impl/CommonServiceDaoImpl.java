@@ -37,46 +37,50 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
 
     @Override
     public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomain",codeMapping);
+        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomain", codeMapping);
     }
 
     /**
      * 根据HCode查询映射关系
+     *
      * @param codeMapping
      * @return
      */
     @Override
     public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByHCode",codeMapping);
+        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByHCode", codeMapping);
     }
 
     /**
      * 根据PCode查询映射关系
+     *
      * @param codeMapping
      * @return
      */
     @Override
     public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByPCode",codeMapping);
+        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByPCode", codeMapping);
     }
 
     /**
      * 根据domain 和 hcode 查询映射关系
+     *
      * @param codeMapping
      * @return
      */
     @Override
     public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndHCode",codeMapping);
+        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndHCode", codeMapping);
     }
 
     /**
      * 根据domain 和 pcode 查询映射关系
+     *
      * @param codeMapping
      * @return
      */
     @Override
     public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndPCode",codeMapping);
+        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndPCode", codeMapping);
     }
 }

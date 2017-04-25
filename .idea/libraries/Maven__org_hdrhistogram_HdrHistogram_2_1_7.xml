@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: org.hdrhistogram:HdrHistogram:2.1.7">
     <CLASSES>
-      <root url="jar://$M2_REPO$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$M2_REPO$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$M2_REPO$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hdrhistogram/HdrHistogram/2.1.7/HdrHistogram-2.1.7-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -8,4 +8,19 @@ public class CommonConstant {
 
     public final static String SAVE_DATA_ERROR = "101";
 
+    /**
+     * 撤单后缀，为了选用不同的事件去处理
+     */
+    public final static String SUFFIX_DELETE_ORDER = "D";
+
+    /**
+     * 同步方式处理
+     */
+    public final static String PROCESS_ORDER_SYNCHRONOUS = "S";
+
+    /**
+     * 异步方式处理
+     */
+    public final static String PROCESS_ORDER_ASYNCHRONOUS = "A";
+
 }

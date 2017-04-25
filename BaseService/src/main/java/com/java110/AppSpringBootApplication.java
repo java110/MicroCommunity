@@ -2,7 +2,6 @@ package com.java110;
 
 /**
  * Hello world!
- *
  */
 
 import org.springframework.boot.SpringApplication;
@@ -18,11 +17,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages="com.java110.service,com.java110.base")
+@SpringBootApplication(scanBasePackages = "com.java110.service,com.java110.base")
 @EnableDiscoveryClient
 public class AppSpringBootApplication {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         SpringApplication.run(AppSpringBootApplication.class, args);
     }
 }

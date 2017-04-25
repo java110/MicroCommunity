@@ -16,12 +16,14 @@ public interface ICommonServiceDao {
 
     /**
      * 查询所有有效的映射数据
+     *
      * @return
      */
     public List<CodeMapping> getCodeMappingAll();
 
     /**
      * 根据域查询对应的映射关系
+     *
      * @param codeMapping
      * @return
      */
@@ -29,6 +31,7 @@ public interface ICommonServiceDao {
 
     /**
      * 根据HCode查询映射关系
+     *
      * @param codeMapping
      * @return
      */
@@ -37,6 +40,7 @@ public interface ICommonServiceDao {
 
     /**
      * 根据PCode查询映射关系
+     *
      * @param codeMapping
      * @return
      */
@@ -44,6 +48,7 @@ public interface ICommonServiceDao {
 
     /**
      * 根据domain 和 hcode 查询映射关系
+     *
      * @param codeMapping
      * @return
      */
@@ -51,6 +56,7 @@ public interface ICommonServiceDao {
 
     /**
      * 根据domain 和 pcode 查询映射关系
+     *
      * @param codeMapping
      * @return
      */
