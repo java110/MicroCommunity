@@ -40,7 +40,7 @@ Java + spring cloud + mybatis + mysql + activemq + redis
 
 这里以wechat 服务 order 服务 user服务 为例说明
 
-(https://github.com/java110/MicroCommunity/blob/master/OrderService/orderDispatch.png)
+![image](https://github.com/java110/MicroCommunity/blob/master/OrderService/orderDispatch.png)
 
 
 1>、受理过程 调用方发起订单受理，订单服务根据订单中每个（busiOrder节点下的actionTypeCd）业务动作，将订单信息预处理后转发相应模块受理数据。
