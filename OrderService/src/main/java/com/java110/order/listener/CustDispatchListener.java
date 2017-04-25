@@ -46,7 +46,7 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
 
         Assert.hasLength(custInfo,"没有需要处理的信息[custInfo="+custInfo+"]");
 
-        //调用用户服务处理,正常返回 {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'custId':'7000123,718881991'}}
+        //调用用户服务处理,正常返回 {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{'cust':[{'oldCustId':'-1','custId':'12345678'},{'oldCustId':'-2','custId':'12345678'}]} }}
         String returnUser = iUserService.soUserServiceForOrderService(custInfo);
 
         JSONObject returnUserTmp = JSONObject.parseObject(returnUser);
