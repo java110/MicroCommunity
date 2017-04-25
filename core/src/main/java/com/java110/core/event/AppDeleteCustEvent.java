@@ -9,17 +9,16 @@ import com.java110.core.context.AppContext;
  */
 public class AppDeleteCustEvent extends AppEvent {
 
-    JSONArray custData = null;
 
     /**
      * 初始化客户事件
      * @param source
-     * @param context
-     * @param custData
+     * @param context 上下文对象
+     * @param data 分装的数据
      */
-    public AppDeleteCustEvent(Object source,AppContext context,JSONArray custData){
+    public AppDeleteCustEvent(Object source,AppContext context,JSONArray data){
         super(source,context);
-        this.custData = custData;
+        this.setData(data);
     }
 
 
@@ -34,7 +33,4 @@ public class AppDeleteCustEvent extends AppEvent {
         super(source, context);
     }
 
-    public JSONArray getCustData() {
-        return custData;
-    }
 }

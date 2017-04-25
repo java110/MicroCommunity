@@ -4,6 +4,7 @@ import com.java110.core.event.AppCustEvent;
 import com.java110.core.event.AppEvent;
 import com.java110.core.event.AppEventPublishing;
 import com.java110.core.event.AppListener;
+import com.java110.core.factory.AppFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -91,7 +92,10 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
 
         for(String listener : listeners){
 
-            AppListener<?> appListener = (AppListener<?>)Class.forName(listener).newInstance();
+            //这里不能直接反射，这样 IXXXService 无法注入，所以直接从spring 中获取已经注入的
+            //AppListener<?> appListener = (AppListener<?>)Class.forName(listener).newInstance();
+
+            AppListener<?> appListener = (AppListener<?>)AppFactory.getBean(Class.forName(listener));
 
             //将 listener 放入 AppEventPublishing 中方便后期操作
             //注册侦听

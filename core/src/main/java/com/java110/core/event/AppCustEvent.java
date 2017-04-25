@@ -10,17 +10,15 @@ import com.java110.core.context.AppContext;
  */
 public class AppCustEvent extends AppEvent {
 
-    JSONArray custData = null;
-
     /**
      * 初始化客户事件
      * @param source
      * @param context
-     * @param custData
+     * @param data
      */
-    public AppCustEvent(Object source,AppContext context,JSONArray custData){
+    public AppCustEvent(Object source,AppContext context,JSONArray data){
         super(source,context);
-        this.custData = custData;
+        this.setData(data);
     }
 
     /**
@@ -33,7 +31,4 @@ public class AppCustEvent extends AppEvent {
         this(source, context,null);
     }
 
-    public JSONArray getCustData() {
-        return custData;
-    }
 }

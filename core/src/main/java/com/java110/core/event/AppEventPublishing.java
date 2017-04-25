@@ -1,6 +1,7 @@
 package com.java110.core.event;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.context.AppContext;
@@ -186,7 +187,7 @@ public class AppEventPublishing extends LoggerEngine{
     public static void multicastEvent(final AppEvent event,String asyn) {
         for (final AppListener<?> listener : getListeners(event.getClass().getName())) {
 
-            if("A".equals(asyn)){ //异步处理
+            if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 
                 Executor executor = getTaskExecutor();
                 executor.execute(new Runnable() {

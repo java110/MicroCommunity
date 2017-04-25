@@ -40,7 +40,7 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
 
        // AppContext context = event.getContext();
 
-        JSONArray dataCustInfos = event.getCustData();
+        JSONArray dataCustInfos = event.getData();
 
         JSONObject custInfoJson = new JSONObject();
         custInfoJson.put("data",dataCustInfos.toJSONString());
