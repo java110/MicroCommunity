@@ -82,31 +82,25 @@ Java + spring cloud + mybatis + mysql + activemq + redis
 }
 
 
-3、作废订单消息消费者（目前是activemq）
+3、补偿事物（目前是activemq）
 
-请求报文 这里data下为所有要作废的订单boId 和需要恢复的订单oldBoId
+请求报文 这里data下为所有要作废的订单boId 
 
 { 
     'data':
 [
     
     {
-        'olId': '123456',
         'boId': '222222',
-        'actionTypeCd': 'C1',
-        'oldBoId':'11111'
+        'actionTypeCd': 'C1'
     },
     {
-        'olId': '123456',
         'boId': '222222',
-        'actionTypeCd': 'M1',
-        'oldBoId':'11111'
+        'actionTypeCd': 'M1'
     },
     {
-        'olId': '123456',
         'boId': '222222',
-        'actionTypeCd': 'C1',
-         'oldBoId':'11111'
+        'actionTypeCd': 'C1'
     }
 ]
 }

@@ -17,6 +17,7 @@ import com.java110.entity.order.OrderList;
 import com.java110.entity.order.OrderListAttr;
 import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.order.dao.IOrderServiceDao;
+import com.java110.order.mq.DeleteOrderInfoProducer;
 import com.java110.order.smo.IOrderServiceSMO;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +44,9 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
     @Autowired
     EventProperties eventProperties;
+
+    @Autowired
+    DeleteOrderInfoProducer deleteOrderInfoProducer;
 
     /**
      * 根据购物车ID 或者 外部系统ID 或者 custId 或者 channelId 查询订单信息
@@ -230,7 +234,8 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             //发布事件
             AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
         }catch (Exception e){
-            //这里补偿事物
+            //这里补偿事物,这里发布广播
+            compensateTransactional(datasTmp);
             throw e;
         }
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
@@ -405,6 +410,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
         }catch (Exception e){
             //这里补偿事物
+            compensateTransactional(datasTmp);
             throw e;
         }
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
@@ -506,6 +512,55 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         }
         dataJsonTmp.add(JSONObject.parseObject(JSONObject.toJSONString(needDeleteBoIdMap)));
         datasTmp.put(actionTypeCd,dataJsonTmp);
+
+        deleteOrderInfoProducer.send(datasTmp.toString());
+    }
+
+
+    /**
+     * 补偿事物，这里不用手工作废 购物车信息，事物会自动回退掉，这里这需要手工给其他的系统发布事物回退
+     *
+     * { 'data': [
+
+     {
+     'boId': '222222',
+     'actionTypeCd': 'C1',
+     'oldBoId':'11111'
+     },
+     {
+     'boId': '222222',
+     'actionTypeCd': 'M1',
+     'oldBoId':'11111'
+     },
+     {
+     'boId': '222222',
+     'actionTypeCd': 'C1',
+     'oldBoId':'11111'
+     }
+     ]
+     }
+     * @param datasTmp {C1={'data':[{}]}}
+     */
+    private void compensateTransactional(Map<String,JSONArray> datasTmp){
+
+        Set<String> keys = datasTmp.keySet();
+
+        JSONArray compensateDatas = new JSONArray();
+
+        JSONObject compensateBoId = null;
+        for(String key : keys){
+            JSONArray datas = datasTmp.get(key);
+
+            for(int dataIndex = 0 ; dataIndex <datas.size() ; dataIndex++){
+                compensateBoId.put("boId",datas.getJSONObject(dataIndex).getString("boId"));
+                compensateBoId.put("actionTypeCd",key);
+                compensateDatas.add(compensateBoId);
+            }
+        }
+
+        JSONObject compensateData = new JSONObject();
+
+        compensateData.put("data",compensateDatas);
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

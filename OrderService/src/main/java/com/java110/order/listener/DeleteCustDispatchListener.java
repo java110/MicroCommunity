@@ -38,29 +38,18 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
 
         //这里写 客户信息处理逻辑
 
-       // AppContext context = event.getContext();
+        // AppContext context = event.getContext();
 
         JSONArray dataCustInfos = event.getData();
 
         JSONObject custInfoJson = new JSONObject();
-        custInfoJson.put("data",dataCustInfos.toJSONString());
+        custInfoJson.put("data", dataCustInfos.toJSONString());
 
         String custInfo = custInfoJson.toJSONString();
 
 
-        Assert.hasLength(custInfo,"没有需要处理的信息[custInfo="+custInfo+"]");
-
-        /**
-         * 同步处理
-         */
-        if(CommonConstant.PROCESS_ORDER_SYNCHRONOUS.equals(orderProperties.getDeleteOrderAsyn())){
-            processSynchronous(custInfo);
-        }else{
-            //异步消息队里处理
-            processAsynchronous(custInfo);
-        }
-
-
+        Assert.hasLength(custInfo, "没有需要处理的信息[custInfo=" + custInfo + "]");
+        processSynchronous(custInfo);
     }
 
     /**
@@ -80,14 +69,6 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
             throw new IllegalArgumentException("客户受理失败，失败原因：" + (returnUserTmp.containsKey(ProtocolUtil.RESULT_MSG)
                     ?"未知原因":returnUserTmp.getString(ProtocolUtil.RESULT_MSG)) + "请求报文："+returnUser);
         }
-    }
-
-    /**
-     * 异步方式处理，主要是通过消息队列处理，缺点是对结果无法预知
-     * @param custInfo
-     */
-    private void processAsynchronous(String custInfo){
-
     }
 
     @Override

@@ -1,0 +1,16 @@
+@startuml
+title <b><u>Spring 启动过程
+autonumber 1 "[0.0]"
+SpringApplication --> SpringApplication: 调用run(source,args) \nsource为启动类class，\nargs 为main方法的参数
+Bob <--> Alice: Authentication Response
+newpage
+Bob --[#red]> wuxw: java方法调用
+note left: <i><s><w><size:22>爱情买卖
+wuxw -->
+ note left of Alice #aqua
+       This is displayed
+       left of Alice.
+  end note
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml

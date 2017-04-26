@@ -1,0 +1,164 @@
+@startuml
+
+class AnnotationConfigEmbeddedWebApplicationContext extends EmbeddedWebApplicationContext{
+
+
+    public AnnotationConfigEmbeddedWebApplicationContext();
+
+    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory);
+
+    public final void scan(String... basePackages) ;
+
+    public void setScopeMetadataResolver(ScopeMetadataResolver scopeMetadataResolver);
+
+}
+
+class EmbeddedWebApplicationContext extends GenericWebApplicationContext{
+
+    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory);
+
+    public final void refresh();
+
+    protected void onRefresh();
+
+    protected void finishRefresh();
+
+    private void createEmbeddedServletContainer();
+
+    protected EmbeddedServletContainerFactory getEmbeddedServletContainerFactory();
+}
+
+class GenericWebApplicationContext extends GenericApplicationContext implements ConfigurableWebApplicationContext, ThemeSource{
+
+    public void setServletContext(ServletContext servletContext);
+
+    public ServletContext getServletContext();
+
+    protected ConfigurableEnvironment createEnvironment();
+
+    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory);
+
+    protected Resource getResourceByPath(String path);
+
+    protected void onRefresh();
+
+    public String[] getConfigLocations();
+}
+
+class GenericApplicationContext extends AbstractApplicationContext implements BeanDefinitionRegistry{
+
+    public Resource getResource(String location);
+
+    public final ConfigurableListableBeanFactory getBeanFactory();
+}
+
+class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext, DisposableBean{
+
+    public void publishEvent(ApplicationEvent event);
+
+    public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor postProcessor);
+
+    public void addApplicationListener(ApplicationListener<?> listener);
+
+    public void refresh() ;
+}
+
+class DefaultResourceLoader implements ResourceLoader{
+    public Resource getResource(String location) ;
+
+    protected Resource getResourceByPath(String path);
+}
+
+
+
+
+interface ConfigurableWebApplicationContext extends ConfigurableApplicationContext,WebApplicationContext{
+    void setServletContext(ServletContext servletContext);
+    void setServletConfig(ServletConfig servletConfig);
+    void setConfigLocation(String configLocation);
+    String[] getConfigLocations();
+}
+
+interface ApplicationContext extends HierarchicalBeanFactory,MessageSource,ApplicationEventPublisher,ResourcePatternResolver{
+
+	String getId();
+
+	String getApplicationName();
+
+	String getDisplayName();
+
+	long getStartupDate();
+
+	ApplicationContext getParent();
+
+	AutowireCapableBeanFactory getAutowireCapableBeanFactory() throws IllegalStateException;
+}
+
+interface ConfigurableApplicationContext{
+
+}
+
+interface Lifecycle{
+
+}
+
+interface Closeable{
+     public void close() throws IOException;
+}
+
+interface EnvironmentCapable{
+     Environment getEnvironment();
+}
+
+interface ListableBeanFactory extends BeanFactory{
+    String[] getBeanNamesForType(ResolvableType type);
+}
+
+interface BeanFactory{
+
+    Object getBean(String name) throws BeansException;
+
+    <T> T getBean(String name, Class<T> requiredType) throws BeansException;
+    <T> T getBean(Class<T> requiredType) throws BeansException;
+}
+
+interface HierarchicalBeanFactory extends BeanFactory{
+
+    BeanFactory getParentBeanFactory();
+}
+
+interface MessageSource{
+    String getMessage(String code, Object[] args, String defaultMessage, Locale locale);
+}
+
+interface ApplicationEventPublisher{
+    void publishEvent(ApplicationEvent event);
+}
+
+interface ResourcePatternResolver extends ResourceLoader{
+    Resource[] getResources(String locationPattern) throws IOException;
+
+}
+
+interface ResourceLoader{
+
+    Resource getResource(String location);
+    ClassLoader getClassLoader();
+
+}
+
+ApplicationContext <|-- ConfigurableApplicationContext : 继承关系
+
+Lifecycle <|-- ConfigurableApplicationContext : 继承关系
+
+Closeable <|-- ConfigurableApplicationContext : 继承关系
+
+EnvironmentCapable <|-- ApplicationContext:继承关系
+
+ListableBeanFactory <|-- ApplicationContext:继承关系
+
+
+
+
+
+@enduml
