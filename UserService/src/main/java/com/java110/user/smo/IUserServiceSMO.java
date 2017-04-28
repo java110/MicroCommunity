@@ -1,5 +1,6 @@
 package com.java110.user.smo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.user.Cust;
 
@@ -54,6 +55,15 @@ public interface IUserServiceSMO {
      * @throws Exception
      */
     public String soBoCustAttr(String boCustAttrs) throws Exception;
+
+    /**
+     * 作废客户信息
+     * [{},{},{}]
+     * @param datas
+     * @return
+     * @throws Exception
+     */
+    public String soDeleteCustInfo(JSONArray datas) throws Exception;
 
 
     /**

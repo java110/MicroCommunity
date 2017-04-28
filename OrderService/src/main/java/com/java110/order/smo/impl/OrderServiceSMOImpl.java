@@ -561,6 +561,8 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         JSONObject compensateData = new JSONObject();
 
         compensateData.put("data",compensateDatas);
+
+        deleteOrderInfoProducer.send(datasTmp.toString());
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

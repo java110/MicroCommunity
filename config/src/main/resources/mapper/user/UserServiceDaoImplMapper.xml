@@ -89,4 +89,27 @@
         ]]>
     </select>
 
+    <!-- 查询客户过程数据 -->
+    <select id="queryBoCust" parameterType="com.java110.entity.user.BoCust" resultType="com.java110.entity.user.BoCust">
+        select bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId
+        from bo_cust bc where 1=1
+        <if test="boId != null and boId != ''">
+            and bc.boId = #{boId}
+        </if>
+        <if test="custId != null and custId != ''">
+            and bc.custId = #{custId}
+        </if>
+        and bc.state in ('ADD','DEL')
+    </select>
+    <!-- 查询客户属性过程表-->
+    <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr" resultType="com.java110.entity.user.BoCustAttr">
+        select * from bo_cust_attr bca where 1=1
+        <if test="boId !=null and boId != ''">
+            and bca.boId = #{boId}
+        </if>
+        <if test="custId != null and custId != ''">
+            and bca.custId = #{custId}
+        </if>
+    </select>
+
 </mapper>

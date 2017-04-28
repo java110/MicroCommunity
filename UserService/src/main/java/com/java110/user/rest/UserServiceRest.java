@@ -247,6 +247,55 @@ public class UserServiceRest extends BaseController implements IUserService {
     }
 
 
+    /**
+     * 作废订单，根据boId作废订单
+     *
+     * 接口协议：
+     *
+     * { 'data': [
+
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     },
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     },
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     }
+     ] }
+     * @param data
+     * @return
+     */
+    @RequestMapping("/userService/soDeleteCustService")
+    public String soDeleteCustService(@RequestParam("data") String data){
+
+        LoggerEngine.debug("作废订单入参："+data);
+
+        String resultUserInfo = null;
+
+        JSONObject reqParam = null;
+
+        try{
+            reqParam = this.simpleValidateJSON(data);
+            //resultUserInfo = iUserServiceSMO.soBoCustAttr(data);
+
+        }catch (Exception e){
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e+data,null);
+        }finally {
+            LoggerEngine.debug("作废订单出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
+    }
+
+
     public IUserServiceSMO getiUserServiceSMO() {
         return iUserServiceSMO;
     }
