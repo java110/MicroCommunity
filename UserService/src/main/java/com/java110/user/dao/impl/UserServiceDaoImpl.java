@@ -1,6 +1,7 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.util.Assert;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
 import com.java110.entity.user.Cust;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 用户服务 与数据库交互
@@ -234,5 +236,39 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     @Override
     public String queryDataToCustAndCustAttr(String custInfo) throws RuntimeException {
         return null;
+    }
+
+    /**
+     *
+     * 查询 客户基本信息（过程表bo_cust）
+     *
+     * @param boCust
+     * @return
+     * @throws Exception
+     */
+    public List<BoCust> queryBoCust(BoCust boCust) throws Exception{
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBoCustAttr】:"+boCust);
+
+        Assert.isNull(boCust,"查询bo_cust 入参为空");
+
+        return sqlSessionTemplate.selectList("userServiceDAOImpl.queryBoCust",boCust);
+    }
+
+    /**
+     *
+     * 查询 客户属性信息（过程表 bo_cust_attr）
+     *
+     * @param boCustAttr
+     * @return
+     * @throws Exception
+     */
+    public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception{
+
+        LoggerEngine.debug("【userServiceDAOImpl.queryBoCustAttr】:"+boCustAttr);
+
+        Assert.isNull(boCustAttr,"查询bo_cust_attr 入参为空");
+
+        return sqlSessionTemplate.selectList("userServiceDAOImpl.queryBoCustAttr",boCustAttr);
+
     }
 }

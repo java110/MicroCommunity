@@ -55,6 +55,19 @@ public class Assert extends org.springframework.util.Assert{
     }
 
     /**
+     * 判断是否只有一条记录数据
+     * @param targetList
+     * @param message
+     */
+    public static void isOne(List<?> targetList,String message){
+        Assert.isNull(targetList,message);
+
+        if(targetList.size() != 1){
+            throw new IllegalArgumentException(message) ;
+        }
+    }
+
+    /**
      * 校验map 中是否有值
      * @param targetMap
      * @param message

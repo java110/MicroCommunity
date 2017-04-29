@@ -3,3 +3,5 @@ spring:
     broker-url: tcp://localhost:61616
     in-memory: true
     enabled: false
+  jms:
+    pub-sub-domain: true

@@ -1,5 +1,7 @@
 package com.java110.entity.user;
 
+import java.util.Date;
+
 /**
  * 客户信息（过程）
  * 主要用于新建客户，更新客户，删除客户时，保存到以bo开头的过程表 实体
@@ -48,6 +50,8 @@ public class BoCust implements Comparable {
     private String openId;
 
     private String state;
+
+    private Date create_dt;
 
     public String getBoId() {
         return boId;
@@ -151,6 +155,14 @@ public class BoCust implements Comparable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Date getCreate_dt() {
+        return create_dt;
+    }
+
+    public void setCreate_dt(Date create_dt) {
+        this.create_dt = create_dt;
     }
 
     /**

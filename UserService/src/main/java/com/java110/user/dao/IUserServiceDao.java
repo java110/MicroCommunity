@@ -1,5 +1,7 @@
 package com.java110.user.dao;
 
+import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.Assert;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
 import com.java110.entity.user.Cust;
@@ -131,6 +133,26 @@ public interface IUserServiceDao {
      * @throws RuntimeException
      */
     public String queryDataToCustAndCustAttr(String custInfo) throws RuntimeException;
+
+    /**
+     *
+     * 查询 客户基本信息（过程表bo_cust）
+     *
+     * @param boCust
+     * @return
+     * @throws Exception
+     */
+    public List<BoCust> queryBoCust(BoCust boCust) throws Exception;
+
+    /**
+     *
+     * 查询 客户属性信息（过程表 bo_cust_attr）
+     *
+     * @param boCustAttr
+     * @return
+     * @throws Exception
+     */
+    public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception;
 
 
 }

@@ -4,52 +4,6 @@
     "type": "com.java110.order.mq.MqConfig",
     "sourceType": "com.java110.order.mq.MqConfig"
   }],
-  "properties": [
-    {
-      "name": "mq.queue.name.broker-url",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.delete-order-queue-name",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.delete-order-topic-name",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.max-connection",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.mq-connection-factory",
-      "type": "javax.jms.ConnectionFactory",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.password",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.pooled-connection-factory",
-      "type": "org.apache.activemq.pool.PooledConnectionFactory",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.user-queue-name",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    },
-    {
-      "name": "mq.queue.name.username",
-      "type": "java.lang.String",
-      "sourceType": "com.java110.order.mq.MqConfig"
-    }
-  ],
+  "properties": [],
   "hints": []
 }

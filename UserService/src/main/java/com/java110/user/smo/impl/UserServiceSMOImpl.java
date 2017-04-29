@@ -9,6 +9,7 @@ import com.java110.common.util.ProtocolUtil;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
 import com.java110.entity.user.Cust;
+import com.java110.entity.user.CustAttr;
 import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.user.smo.IUserServiceSMO;
@@ -20,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户服务信息管理业务信息实现
@@ -398,7 +396,15 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         Assert.isNull(datas,"传入的data节点下没有任何内容");
 
         for(int boIdIndex = 0 ; boIdIndex < datas.size(); boIdIndex++){
+            JSONObject data = datas.getJSONObject(boIdIndex);
 
+            Assert.isNull(data,"boId","当前节点中没有包含boId节点格式错误"+data);
+
+            // 复原Cust
+            doDeleteBoCust(data);
+
+            // 复原CustAttr
+            doDeleteBoCustAttr(data);
 
         }
 
@@ -486,8 +492,133 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
      * @throws Exception
      */
     public void doDeleteBoCust(JSONObject data) throws Exception{
-        //根据boId 查询bo_cust 表，是否有数据，没数据直接返回
 
+
+        Cust deleteCust = null;
+        //根据boId 查询bo_cust 表，是否有数据，没数据直接返回
+        BoCust boCust = new BoCust();
+
+        boCust.setBoId(data.getString("boId"));
+
+       List<BoCust> boCusts =  iUserServiceDao.queryBoCust(boCust);
+
+       //Assert.isOne(boCusts,"在表bo_cust中未找到boId 为["+data.getString("boId")+"]的数据 或有多条数据，请检查");
+        if(boCusts == null || boCusts.size() < 1){
+            LoggerEngine.error("当前没有查到数为 "+data+"请检查数据");
+            return;
+        }
+       //在过程表中补一条作废的数据，然后根据boId的动作对实例数据进行处理
+
+        boCust.setCustId(boCusts.get(0).getCustId());
+        boCust.setBoId("");
+        //查询出所有custId 一样的数据
+        List<BoCust> boCustAll =  iUserServiceDao.queryBoCust(boCust);
+
+        Assert.isNull(boCustAll,"当前没有查到custId 为 "+boCusts.get(0).getCustId()+"请检查数据");
+
+        boCust = boCusts.get(0);
+
+        BoCust newBoCust = new BoCust();
+        newBoCust.setBoId(data.getString("newBoId"));
+        newBoCust.setCustId(boCust.getCustId());
+        newBoCust.setState("DEL");
+        int saveBoCustFlag = iUserServiceDao.saveDataToBoCust(newBoCust);
+
+        if(saveBoCustFlag < 1){
+            throw new RuntimeException("向bo_cust表中保存数据失败，boCust="+JSONObject.toJSONString(newBoCust));
+        }
+
+        //首先删除实例数据
+        deleteCust = new Cust();
+        deleteCust.setCustId(boCust.getCustId());
+        if(iUserServiceDao.deleteDataToCust(deleteCust) < 1){
+            throw new RuntimeException("删除cust实例数据失败"+JSONObject.toJSONString(deleteCust));
+        }
+        //如果有多条数据，则恢复 前一条数据信息，这边存在bug 如果上一条的数据没有分装以前数据的情况下会有问题，
+        // 所以我们的原则是再更新或删除数据时一定要在过程表中保存完整是实例数据信息
+        if(boCustAll.size() > 1){
+            Cust oldCust = boCustAll.get(1).convert();
+            if(iUserServiceDao.saveDataToCust(oldCust)<1 ){
+                throw new RuntimeException("cust 表恢复老数据信息失败，cust 为："+JSONObject.toJSONString(oldCust));
+            }
+        }
+    }
+
+    /**
+     * 删除 bo_cust_attr
+     * @param data
+     * @throws Exception
+     */
+    public void doDeleteBoCustAttr(JSONObject data) throws Exception{
+
+        BoCustAttr boCustAttrTmp = new BoCustAttr();
+
+        boCustAttrTmp.setBoId(data.getString("boId"));
+
+        List<BoCustAttr> boCustAttrs = iUserServiceDao.queryBoCustAttr(boCustAttrTmp);
+
+        if(boCustAttrs == null || boCustAttrs.size() < 1){
+            LoggerEngine.error("当前没有查到数为 "+data+"请检查数据");
+            return;
+        }
+
+        boCustAttrTmp.setBoId("");
+        boCustAttrTmp.setCustId(boCustAttrs.get(0).getCustId());
+
+        List<BoCustAttr> boCustAttrsTmps = iUserServiceDao.queryBoCustAttr(boCustAttrTmp);
+
+        Assert.isNull(boCustAttrsTmps,"当前没有查到custId 为 "+boCustAttrs.get(0).getCustId()+"请检查数据");
+
+        //获取上一次所有的属性
+
+        List<BoCustAttr> preBoCustAttrTmps = getPreBoCustAttrs(boCustAttrsTmps);
+
+        //保存过程表
+        for(BoCustAttr boCustAttr : boCustAttrs){
+            boCustAttr.setBoId("newBoId");
+            boCustAttr.setState("DEL");
+            if(iUserServiceDao.saveDataToBoCustAttr(boCustAttr) < 1){
+                throw new RuntimeException("保存数据失败，保存数据为boCustAttr = "+ JSONObject.toJSONString(boCustAttr));
+            }
+        }
+
+        //删除实例数据 这里思路是，删除实例数据中数据，将上一次ADD数据重新写一遍
+        CustAttr custAttrTmp = new CustAttr();
+        custAttrTmp.setCustId(boCustAttrs.get(0).getCustId());
+        if(iUserServiceDao.deleteDataToCustAttr(custAttrTmp) < 1){
+            throw new RuntimeException("删除CustAttr 实例数据失败,数据为："+JSONObject.toJSONString(custAttrTmp));
+        }
+
+        for(BoCustAttr boCustAttr : preBoCustAttrTmps){
+            if("ADD".equals(boCustAttr.getState())){
+                if(iUserServiceDao.deleteDataToCustAttr(boCustAttr.convert()) < 1){
+                    throw new  RuntimeException("复原原始数据失败，数据为：" + JSONObject.toJSONString(boCustAttr));
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 获取上上一次的操作
+     * @param boCustAttrs
+     * @return
+     */
+    private List<BoCustAttr> getPreBoCustAttrs(List<BoCustAttr> boCustAttrs){
+
+        String firstBoId = boCustAttrs.get(0).getBoId();
+        String preBoId = "";
+        List<BoCustAttr> preBoCustAttrs = new ArrayList<BoCustAttr>();
+        for(BoCustAttr boCustAttr : boCustAttrs){
+            if(!firstBoId.equals(boCustAttr.getBoId())){
+                if(!preBoId.equals(boCustAttr.getBoId()) && !"".equals(preBoId)){
+                    break;
+                }
+                preBoId = boCustAttr.getBoId();
+                preBoCustAttrs.add(boCustAttr);
+            }
+        }
+        return preBoCustAttrs;
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

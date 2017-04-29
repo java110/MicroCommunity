@@ -74,9 +74,13 @@
     </insert>
     <!-- 删除实例客户信息 cust -->
     <update id="deleteDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
-        <![CDATA[
-           delete * from cust_attr ct where ct.custId = #{custId} and ct.attrCd = #{attrCd}
-        ]]>
+           delete * from cust_attr ct where 1=1
+           <if test="custId != null and custId != ''">
+               and ct.custId = #{custId}
+           </if>
+            <if test="attrCd != null and attrCd != ''">
+                and ct.attrCd = #{attrCd}
+            </if>
     </update>
     <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
     <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
@@ -91,7 +95,7 @@
 
     <!-- 查询客户过程数据 -->
     <select id="queryBoCust" parameterType="com.java110.entity.user.BoCust" resultType="com.java110.entity.user.BoCust">
-        select bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId
+        select bc.boId,bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId,bc.create_dt
         from bo_cust bc where 1=1
         <if test="boId != null and boId != ''">
             and bc.boId = #{boId}
@@ -100,15 +104,21 @@
             and bc.custId = #{custId}
         </if>
         and bc.state in ('ADD','DEL')
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
     </select>
     <!-- 查询客户属性过程表-->
     <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr" resultType="com.java110.entity.user.BoCustAttr">
-        select * from bo_cust_attr bca where 1=1
+        select bca.boId,bca.custId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_cust_attr bca where 1=1
         <if test="boId !=null and boId != ''">
             and bca.boId = #{boId}
         </if>
         <if test="custId != null and custId != ''">
             and bca.custId = #{custId}
+        </if>
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
         </if>
     </select>
 

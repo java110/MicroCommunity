@@ -369,6 +369,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             busiOrderAttr.setBoId(newBoId);
             busiOrderAttr.setAttrCd(AttrCdConstant.BUSI_ORDER_ATTR_10000001);
             busiOrderAttr.setValue(needDeleteBoIdMap.get("boId"));
+            needDeleteBoIdMap.put("newBoId",newBoId);
 
             saveBusiOrderFlag =  iOrderServiceDao.saveDataToBusiOrderAttr(busiOrderAttr);
             if(saveBusiOrderFlag < 1){
@@ -486,10 +487,10 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         Assert.isNull(datasTmp,"processDeleteOrderByActionTypeCd 方法的参数 datasTmp 为空，");
 
         // 如果这两个中有一个为空，则从库中查询
-        if(StringUtils.isBlank(needDeleteBoIdMap.get("olId")) || StringUtils.isBlank(needDeleteBoIdMap.get("actionTypeCd"))){
+        if(StringUtils.isBlank(needDeleteBoIdMap.get("newBoId")) || StringUtils.isBlank(needDeleteBoIdMap.get("actionTypeCd"))){
             BusiOrder busiOrderTmp = new BusiOrder();
             busiOrderTmp.setBoId(needDeleteBoIdMap.get("boId"));
-            //这里只有一条其他，则抛出异常
+            //这里只有一条其他，否则抛出异常
             List<BusiOrder> oldBusiOrders =  iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
 
             if(oldBusiOrders == null || oldBusiOrders.size() != 1){
@@ -513,7 +514,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         dataJsonTmp.add(JSONObject.parseObject(JSONObject.toJSONString(needDeleteBoIdMap)));
         datasTmp.put(actionTypeCd,dataJsonTmp);
 
-        deleteOrderInfoProducer.send(datasTmp.toString());
+        //deleteOrderInfoProducer.send(datasTmp.toString());
     }
 
 

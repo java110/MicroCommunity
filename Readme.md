@@ -64,17 +64,20 @@ Java + spring cloud + mybatis + mysql + activemq + redis
 [
     
     {
-        'olId': '123456',
+        'olId':'123456',
+        'newBoId': '123456',
         'boId': '222222',
         'actionTypeCd': 'C1'
     },
     {
-        'olId': '123456',
+    'olId':'123456',
+        'newBoId': '123456',
         'boId': '222222',
         'actionTypeCd': 'C1'
     },
     {
-        'olId': '123456',
+    'olId':'123456',
+        'newBoId': '123456',
         'boId': '222222',
         'actionTypeCd': 'C1'
     }

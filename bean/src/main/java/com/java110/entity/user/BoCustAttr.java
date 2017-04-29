@@ -1,5 +1,7 @@
 package com.java110.entity.user;
 
+import java.util.Date;
+
 /**
  * 客户属性表（过程表）
  * Created by wuxw on 2016/12/27.
@@ -15,6 +17,8 @@ public class BoCustAttr implements Comparable{
     private String value;
 
     private String state;
+
+    private Date create_dt;
 
     public String getBoId() {
         return boId;
@@ -54,6 +58,14 @@ public class BoCustAttr implements Comparable{
 
     public void setAttrCd(String attrCd) {
         this.attrCd = attrCd;
+    }
+
+    public Date getCreate_dt() {
+        return create_dt;
+    }
+
+    public void setCreate_dt(Date create_dt) {
+        this.create_dt = create_dt;
     }
 
     /**
