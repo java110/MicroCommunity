@@ -1,5 +1,7 @@
 E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\test\TestFeignHystrixClient.java
 E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\user\UserServiceFallback.java
 E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\user\IUserService.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\base\PrimaryKeyServiceFallback.java
+E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\base\IPrimaryKeyService.java
 E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\App.java
 E:\project\MicroCommunity\feign\src\main\java\com\java110\feign\test\HystrixClientFallback.java

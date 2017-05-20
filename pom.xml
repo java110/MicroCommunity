@@ -13,7 +13,6 @@
         <module>config</module>
         <module>common</module>
         <module>UserService</module>
-        <module>MerchantService</module>
         <module>OrderService</module>
         <module>PayService</module>
         <module>eureka</module>
@@ -22,6 +21,7 @@
         <module>core</module>
         <module>service</module>
         <module>BaseService</module>
+        <module>MerchantService</module>
     </modules>
 
     <parent>

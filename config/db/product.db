@@ -92,3 +92,6 @@ create table product_type(
     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     primary key (id)
 );
+
+insert into product_type(productTypeCd,name,describe) values('1','食品','食品');
+insert into product_type(productTypeCd,name,describe) values('2','酒类饮料','酒类饮料');

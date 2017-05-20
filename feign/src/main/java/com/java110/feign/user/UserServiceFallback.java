@@ -37,4 +37,9 @@ public class UserServiceFallback implements IUserService{
     public String soBoCustAttr(@RequestParam("data") String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
+
+    @Override
+    public String soDeleteCustService(@RequestParam("data") String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
 }

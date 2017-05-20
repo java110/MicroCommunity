@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.java110.common.AppTest" time="0" tests="1" errors="0" skipped="0" failures="0">
+<testsuite name="com.java110.common.AppTest" time="0.002" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="F:\software\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,7 +28,7 @@
     <property name="os.name" value="Windows 10"/>
     <property name="classworlds.conf" value="F:\software\apache-maven-3.3.3\bin\..\bin\m2.conf"/>
     <property name="sun.jnu.encoding" value="GBK"/>
-    <property name="java.library.path" value="F:\software\Java\jdk1.8.0_121\bin;D:\WINDOWS\Sun\Java\bin;D:\WINDOWS\system32;D:\WINDOWS;D:\ProgramData\Oracle\Java\javapath;D:\WINDOWS\system32;D:\WINDOWS;D:\WINDOWS\System32\Wbem;D:\WINDOWS\System32\WindowsPowerShell\v1.0\;F:\software\apache-maven-3.3.3\bin;F:\software\apache-maven-2.2.1\bin;F:\software\Git\cmd;."/>
+    <property name="java.library.path" value="F:\software\Java\jdk1.8.0_121\bin;D:\WINDOWS\Sun\Java\bin;D:\WINDOWS\system32;D:\WINDOWS;F:\software\Java\jdk1.8.0_121\bin;D:\WINDOWS\system32;D:\WINDOWS;D:\WINDOWS\System32\Wbem;D:\WINDOWS\System32\WindowsPowerShell\v1.0\;F:\software\apache-maven-3.3.3\bin;F:\software\apache-maven-2.2.1\bin;F:\software\Git\cmd;F:\software\Graphviz2.38\bin;F:\software\Go\bin;F:\software\Oracle\odac_client;F:\software\Oracle\odac_client\bin;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -43,7 +43,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="F:\software\Java\jdk1.8.0_121\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean package"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="zh"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,5 +62,5 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="testApp" classname="com.java110.common.AppTest" time="0"/>
+  <testcase name="testApp" classname="com.java110.common.AppTest" time="0.002"/>
 </testsuite>

@@ -21,5 +21,6 @@ public class DomainContant {
     public final static String ATTR_DOMAIN_CUST="DOMAIN.CUST";//客户域
     public final static String ATTR_DOMAIN_ACCOUNT="DOMAIN.ACCOUNT";//账户域
 
+
     /************************************ITEM_DOMAIN END****************************************/
 }
