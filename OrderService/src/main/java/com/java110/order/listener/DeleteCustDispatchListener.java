@@ -58,7 +58,7 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
      */
     private void processSynchronous(String custInfo){
         //调用用户服务处理,正常返回 {'RESULT_CODE':'0000','RESULT_MSG':'成功','RESULT_INFO':{}}
-        String returnUser = iUserService.soUserServiceForOrderService(custInfo);
+        String returnUser = iUserService.soDeleteCustService(custInfo);
 
         JSONObject returnUserTmp = JSONObject.parseObject(returnUser);
 

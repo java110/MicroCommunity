@@ -1,0 +1,55 @@
+-- merchant 过程表（bo_merchant），属性表
+create table bo_merchant(
+     boId varchar(20) not null  COMMENT '业务ID 对应 busi_order的boId',
+     merchantId varchar(20) not null comment '商户ID',
+     logoImg varchar(30) not null comment '商户logo图片名称',
+     name varchar(50) not null comment '商户名称',
+     address varchar(200) not null comment '商户地址',
+     type varchar(10) not null comment '商户类别，1 个人商户 2 企业商户 3 政府媒体',
+     start_dt timestamp NOT NULL COMMENT '开始时间',
+     end_dt timestamp NOT NULL COMMENT '结束时间',
+     state varchar(10) not null COMMENT '新建客户 ADD ，删除客户DEL',
+     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- merchant_attr 过程表（bo_merchant_attr）,属性表
+create table bo_merchant_attr(
+    boId varchar(20) not null comment '业务ID 对应的busi_order的boId',
+
+    merchantId  varchar(20) not null COMMENT '商户ID',
+
+    attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
+
+    value  varchar(200) not null COMMENT '属性编码对应值',
+
+    state  varchar(10) not null COMMENT '新建商户属性 ADD ，删除商户属性DEL',
+
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 商户 表 merchant
+create table merchant(
+    merchantId varchar(20) not null comment '商户ID',
+    logoImg varchar(30) not null comment '商户logo图片名称',
+    name varchar(50) not null comment '商户名称',
+    address varchar(200) not null comment '商户地址',
+    type varchar(10) not null comment '商户类别，1 个人商户 2 企业商户 3 政府媒体',
+    start_dt timestamp NOT NULL COMMENT '开始时间',
+    end_dt timestamp NOT NULL COMMENT '结束时间',
+    status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 商户属性表 merchant_attr
+create table merchant_attr(
+    merchantId  varchar(20) not null COMMENT '商户ID',
+
+    attrCd  varchar(50) not null COMMENT '属性编码，对应 Attr 表',
+
+    value  varchar(200) not null COMMENT '属性编码对应值',
+
+    status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+

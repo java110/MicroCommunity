@@ -3,6 +3,7 @@ package com.java110.user.rest;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.user.Cust;
@@ -284,7 +285,10 @@ public class UserServiceRest extends BaseController implements IUserService {
 
         try{
             reqParam = this.simpleValidateJSON(data);
-            //resultUserInfo = iUserServiceSMO.soBoCustAttr(data);
+
+            Assert.isNull(reqParam,"data","传入报文错误，没有包含data节点"+reqParam);
+
+            resultUserInfo = iUserServiceSMO.soDeleteCustInfo(reqParam.getJSONArray("data"));
 
         }catch (Exception e){
             LoggerEngine.error("服务处理出现异常：", e);

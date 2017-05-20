@@ -142,4 +142,34 @@ public interface IUserService {
     @RequestMapping("/userService/soBoCustAttr")
     public String soBoCustAttr(@RequestParam("data") String data) ;
 
+
+    /**
+     * 作废订单，根据boId作废订单
+     *
+     * 接口协议：
+     *
+     * { 'data': [
+
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     },
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     },
+     {
+     'olId': '123456',
+     'boId': '222222',
+     'actionTypeCd': 'C1'
+     }
+     ] }
+     * @param data
+     * @return
+     */
+    @RequestMapping("/userService/soDeleteCustService")
+    public String soDeleteCustService(@RequestParam("data") String data);
+
 }
