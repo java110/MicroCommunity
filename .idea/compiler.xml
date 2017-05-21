@@ -17,6 +17,7 @@
         <module name="MerchantService1" />
         <module name="OrderService" />
         <module name="PayService" />
+        <module name="RuleService" />
         <module name="service" />
         <module name="UserService" />
         <module name="Wechat" />
@@ -35,6 +36,7 @@
       <module name="MicroCommunity" target="1.6" />
       <module name="OrderService" target="1.6" />
       <module name="PayService" target="1.6" />
+      <module name="RuleService" target="1.6" />
       <module name="service" target="1.6" />
       <module name="UserService" target="1.6" />
       <module name="Wechat" target="1.6" />

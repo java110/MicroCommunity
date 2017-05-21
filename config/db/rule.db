@@ -1,0 +1,74 @@
+-- 规则组
+
+create table rule_group
+(
+  groupId                varchar(100) not null comment '分组编码',
+  groupName              varchar(200) not null comment '分组名称',
+  order_seq              int not null comment '整体排序号，用来确定报文分析时场景匹配的优先级',
+  key_identify_logic_str varchar(1000) not null comment '集团报文中的关键信息片断，用于报文分析时定位当前转换场景，片断相互间可以存在逻辑运算，如与（||）、括号（{}）等，用来表示在判断报文中是否包含这些关键片断时的逻辑与顺序',
+  status_cd                 varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
+  create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 规则组与规则关系
+
+create table group_rule_relation(
+    groupId  varchar(100) not null comment '分组编码',
+    rule_id   varchar(100) not null comment '规则ID',
+    status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+
+-- 规则表
+
+create table rule
+(
+  rule_id   varchar(20) not null comment '规则ID',
+  rule_code varchar(20) not null comment '规则编码',
+  rule_name varchar(100) not null comment '规则名称',
+  rule_desc varchar(2000) not null comment '规则描述',
+  status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
+  create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 规则入口表
+create table rule_entrance
+(
+
+  rule_id           VARCHAR(20) not null comment '规则ID',
+  rule_level        varchar(2) not null comment '规则级别，1 限制性 2 提示性',
+  rule_condition    varchar(200) not null comment '校验条件 jpath 语句，如果有值则走这个规则，没有值则不走这个规则，如果所有业务都走，写*号',
+  rule_type         varchar(2) not null comment '规则实现方式，1 反射调用java 方法实现，2 通过 rule_cond_cfg 配置逻辑实现 3 调用存储过程实现，存储过程入参可以在rule_cond_cfg 表中配置'
+  rule_url          varchar(200) not null comment '对应于 rule_type 方式 1 时，写类路径加方法 如com.java110.rule.ARule#AMethod, 方式2 时，写成Common 方式 3 时写 过程名称'
+  status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
+  create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+-- 规则判断表
+
+-- Create table
+create table rule_cond_cfg
+(
+  rule_id                varchar(30) not null comment '规则ID',
+  rule_node              varchar(30) not null comment '规则节点',
+  data_from_flag         varchar(30) not null comment '规则节点取值方式 1从JSON中获取(jpath) 2从DB_SQL中取值、3从DEFULT_VALUE中取值、4从NODE_EXISTED中取值、5从堆栈中获取',
+  db_sql                 varchar(3000) comment 'SQL语句',
+  defult_value           varchar(30) comment '默认值',
+  node_existed           varchar(1000) comment '复用已存在规则节点',
+  proc_param_flag        varchar(2) comment '标示此规则节点是否是存储过程入参',
+  is_reverse             varchar(2) comment '规则校验是否取反',
+  is_log                 varchar(2) comment '规则是否记录日志',
+  error_code             varchar(30) comment '规则编码',
+  error_msg              varchar(3000) comment '规则提示信息',
+  remark                 varchar(3000) comment '描述',
+  seq                    int comment '顺序ID',
+  data_stack_flag_prefix varchar(50) comment '堆栈中标识的前缀，用于报文中不同类型的业务对象出现关键节点值有重复情况时的区分，这个是多个循环间参数交互共享的主要方式',
+  jpath              varchar(1000) comment 'JSON的jpath路径，必须写绝对路径',
+  status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
+  create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+
+
+
