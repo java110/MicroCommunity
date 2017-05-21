@@ -36,7 +36,7 @@ create table rule
 create table rule_entrance
 (
 
-  rule_id           VARCHAR(20) not null comment '规则ID',
+  rule_id           varchar(20) not null comment '规则ID',
   rule_level        varchar(2) not null comment '规则级别，1 限制性 2 提示性',
   rule_condition    varchar(200) not null comment '校验条件 jpath 语句，如果有值则走这个规则，没有值则不走这个规则，如果所有业务都走，写*号',
   rule_type         varchar(2) not null comment '规则实现方式，1 反射调用java 方法实现，2 通过 rule_cond_cfg 配置逻辑实现 3 调用存储过程实现，存储过程入参可以在rule_cond_cfg 表中配置'
@@ -68,6 +68,19 @@ create table rule_cond_cfg
   status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
   create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
+
+-- 规则日志表
+
+create table rule_log
+(
+  transactionId varchar(50) comment '交易流水号',
+  rule_id        varchar(20) comment '规则ID',
+  param     varchar(2000) comment '规则运行入参',
+  retval        varchar(2000) comment '规则返回接口',
+  state     varchar(2) comment '规则运行状态 0 表示规则运行成功 1 表示规则运行异常 异常信息error_info 字段',
+  error_info varchar(2000) comment '规则异常信息'
+  create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+)
 
 
 
