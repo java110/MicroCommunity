@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="merchantServiceDAOImpl">
+
+    <resultMap type="com.java110.entity.merchant.Merchant" id="merchantMap">
+        <id column="merchantId" jdbcType="VARCHAR" property="merchantId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="cellphone" jdbcType="VARCHAR" property="cellphone"/>
+        <result column="realName" jdbcType="VARCHAR" property="realName"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="lanId" jdbcType="VARCHAR" property="lanId"/>
+        <result column="merchantAdress" jdbcType="VARCHAR" property="merchantAdress"/>
+        <result column="merchantType" jdbcType="VARCHAR" property="merchantType"/>
+        <result column="openId" jdbcType="VARCHAR" property="openId"/>
+        <!-- 一对多关系 -->
+        <!-- <collection property="stus" resultMap="Student.StudentResult"></collection>  -->
+        <collection property="merchantAttrs" javaType="com.java110.entity.merchant.MerchantAttr">
+            <id property="merchantId" column="merchantId"/>
+            <result property="attrCd" column="attrCd"/>
+            <result property="value" column="value"/>
+        </collection>
+    </resultMap>
+
+    <!--根据用户Id查询用户角色
+    <select id="findRolesByUserId" resultType="SysRole">
+        SELECT
+        r.*
+        FROM
+        t_role r,
+        t_merchant_role ur
+        WHERE ur.uid = #{merchantId}
+        AND ur.roleId = r.roleId
+        AND ur.status_cd = '1'
+    </select>
+-->
+    <!--保存数据至过程表 bo_merchant 中 -->
+    <insert id="saveDataToBoMerchant" parameterType="com.java110.entity.merchant.BoMerchant">
+        <![CDATA[
+            insert into bo_merchant(boId,merchantId,name,email,cellphone,realName,sex,password,lanId,merchantAdress,merchantType,openId,state)
+            values(#{boId},#{merchantId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{merchantAdress},#{merchantType},#{openId},#{state})
+        ]]>
+    </insert>
+    <!-- 保存数据至过程表bo_merchant_attr 中-->
+    <insert id="saveDataToBoMerchantAttr" parameterType="com.java110.entity.merchant.BoMerchantAttr">
+        <![CDATA[
+            insert into bo_merchant_attr(boId,merchantId,attrCd,value,state)
+            values(#{boId},#{merchantId},#{attrCd},#{value},#{state})
+        ]]>
+    </insert>
+    <!-- 保存 实例客户信息 merchant -->
+    <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.Merchant">
+        <![CDATA[
+            insert into merchant(merchantId,name,email,cellphone,realName,sex,password,lanId,merchantAdress,merchantType,openId,status_cd)
+            values(#{merchantId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{merchantAdress},#{merchantType},#{openId},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 merchant -->
+    <insert id="deleteDataToMerchant" parameterType="com.java110.entity.merchant.Merchant">
+        <![CDATA[
+           delete * from merchant c where c.merchantId = #{merchantId}
+        ]]>
+    </insert>
+
+    <!-- 保存 实例客户属性信息 merchant_attr -->
+    <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.MerchantAttr">
+        <![CDATA[
+            insert into merchant_attr(merchantId,attrCd,value,status_cd)
+            values(#{merchantId},#{attrCd},#{value},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 merchant -->
+    <update id="deleteDataToMerchantAttr" parameterType="com.java110.entity.merchant.MerchantAttr">
+           delete * from merchant_attr ct where 1=1
+           <if test="merchantId != null and merchantId != ''">
+               and ct.merchantId = #{merchantId}
+           </if>
+            <if test="attrCd != null and attrCd != ''">
+                and ct.attrCd = #{attrCd}
+            </if>
+    </update>
+    <!--根据客户ID 查询客户信息，其中包括 merchant 和merchantAttr 数据-->
+    <select id="queryDataToMerchant" parameterType="com.java110.entity.merchant.Merchant" resultMap="merchantMap">
+        <![CDATA[
+            select c.merchantId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.merchantAdress,c.merchantType,c.openId,
+            ca.merchantId,ca.attrCd,ca.value
+             from merchant c, merchant_attr ca where c.merchantId= ca.merchantId
+            and c.merchantId = #{merchantId}
+            and c.status_cd = '0'
+        ]]>
+    </select>
+
+    <!-- 查询客户过程数据 -->
+    <select id="queryBoMerchant" parameterType="com.java110.entity.merchant.BoMerchant" resultType="com.java110.entity.merchant.BoMerchant">
+        select bc.boId,bc.merchantId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.merchantAdress,bc.merchantType,bc.openId,bc.create_dt
+        from bo_merchant bc where 1=1
+        <if test="boId != null and boId != ''">
+            and bc.boId = #{boId}
+        </if>
+        <if test="merchantId != null and merchantId != ''">
+            and bc.merchantId = #{merchantId}
+        </if>
+        and bc.state in ('ADD','DEL')
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+    <!-- 查询客户属性过程表-->
+    <select id="queryBoMerchantAttr" parameterType="com.java110.entity.merchant.BoMerchantAttr" resultType="com.java110.entity.merchant.BoMerchantAttr">
+        select bca.boId,bca.merchantId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_merchant_attr bca where 1=1
+        <if test="boId !=null and boId != ''">
+            and bca.boId = #{boId}
+        </if>
+        <if test="merchantId != null and merchantId != ''">
+            and bca.merchantId = #{merchantId}
+        </if>
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+
+</mapper>
