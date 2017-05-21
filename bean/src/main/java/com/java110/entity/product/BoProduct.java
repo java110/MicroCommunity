@@ -1,11 +1,12 @@
 package com.java110.entity.product;
 
+
 import java.util.List;
 
 /**
  * Created by wuxw on 2017/5/20.
  */
-public class BoProduct extends Product {
+public class BoProduct extends Product implements Comparable{
 
     private String boId;
 
@@ -35,5 +36,32 @@ public class BoProduct extends Product {
 
     public void setBoProductAttrs(List<BoProductAttr> boProductAttrs) {
         this.boProductAttrs = boProductAttrs;
+    }
+
+
+    /**
+     * 转为实例数据
+     * @return
+     */
+    public Product convert(){
+
+        Product product = new BoProduct();
+        return product;
+    }
+
+
+    /**
+     * 排序
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+
+        BoProduct otherBoProduct = (BoProduct)o;
+        if("DEL".equals(this.getState()) && "ADD".equals(otherBoProduct.getState())) {
+            return -1;
+        }
+        return 0;
     }
 }

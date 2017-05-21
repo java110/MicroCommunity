@@ -3,10 +3,10 @@ package com.java110.merchant.dao.impl;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.entity.user.BoCust;
-import com.java110.entity.user.BoCustAttr;
-import com.java110.entity.user.Cust;
-import com.java110.entity.user.CustAttr;
+import com.java110.entity.product.BoProduct;
+import com.java110.entity.product.BoProductAttr;
+import com.java110.entity.product.Product;
+import com.java110.entity.product.ProductAttr;
 import com.java110.merchant.dao.IMerchantServiceDao;
 import com.java110.merchant.dao.IProductServiceDao;
 import org.springframework.stereotype.Service;
@@ -32,23 +32,23 @@ public class ProductServiceDaoImpl extends BaseServiceDao implements IProductSer
     /**
      * 保存用户基本信息
      * 功能只用与保存用户处理
-     * @param boCust 用户基本信息
+     * @param boProduct 用户基本信息
      * @return
      */
     @Override
-    public int saveDataToBoCust(BoCust boCust) throws RuntimeException{
+    public int saveDataToBoProduct(BoProduct boProduct) throws RuntimeException{
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据入参 : " + boCust);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProduct】保存数据入参 : " + boProduct);
         int saveFlag = 0;
         try {
 
-            saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoCust",boCust);
+            saveFlag = sqlSessionTemplate.insert("productServiceDAOImpl.saveDataToBoProduct",boProduct);
 
         }catch(RuntimeException e){
-            LoggerEngine.error("----【UserServiceDAOImpl.saveDataToBoCust】保存数据异常 : " ,e);
+            LoggerEngine.error("----【ProductServiceDAOImpl.saveDataToBoProduct】保存数据异常 : " ,e);
             return saveFlag;
         }finally {
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCust】保存数据出参 : saveFlag:" + saveFlag);
+            LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProduct】保存数据出参 : saveFlag:" + saveFlag);
             return saveFlag;
         }
 
@@ -57,110 +57,110 @@ public class ProductServiceDaoImpl extends BaseServiceDao implements IProductSer
     /**
      * 保存用户属性（过程表）
      *
-     * @param boCustAttr 用户属性
+     * @param boProductAttr 用户属性
      * @return
      * @throws RuntimeException
      */
     @Override
-    public int saveDataToBoCustAttr(BoCustAttr boCustAttr) throws RuntimeException {
+    public int saveDataToBoProductAttr(BoProductAttr boProductAttr) throws RuntimeException {
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据入参 : " + boCustAttr);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProductAttr】保存数据入参 : " + boProductAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(boCustAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出错 : " + boCustAttr);
+        if(boProductAttr == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProductAttr】保存数据出错 : " + boProductAttr);
             return 0;
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoCustAttr",boCustAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAttr】保存数据出参 :saveFlag " + saveFlag);
+        saveFlag = sqlSessionTemplate.insert("productServiceDAOImpl.saveDataToBoProductAttr",boProductAttr);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProductAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
 
     }
 
     /**
-     * 保存实例数据 客户信息至Cust表中
-     * @param cust
+     * 保存实例数据 客户信息至Product表中
+     * @param product
      * @return
      * @throws RuntimeException
      */
     @Override
-    public int saveDataToCust(Cust cust) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据入参 : " + cust);
+    public int saveDataToProduct(Product product) throws RuntimeException {
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据入参 : " + product);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出错 : " + cust);
-            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
+        if(product == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据出错 : " + product);
+            throw new IllegalArgumentException("请求参数错误，product : " + product);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToCust",cust);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
+        saveFlag = sqlSessionTemplate.insert("productServiceDAOImpl.saveDataToProduct",product);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
 
     /**
-     * 保存实例数据 客户属性信息至CustAttr表中
-     * @param custAttr
+     * 保存实例数据 客户属性信息至ProductAttr表中
+     * @param productAttr
      * @return
      * @throws RuntimeException
      */
     @Override
-    public int saveDataToCustAttr(CustAttr custAttr) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据入参 : " + custAttr);
+    public int saveDataToProductAttr(ProductAttr productAttr) throws RuntimeException {
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据入参 : " + productAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(custAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出错 : " + custAttr);
-            throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
+        if(productAttr == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据出错 : " + productAttr);
+            throw new IllegalArgumentException("请求参数错误，productAttr : " + productAttr);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToCustAttr",custAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
+        saveFlag = sqlSessionTemplate.insert("productServiceDAOImpl.saveDataToProductAttr",productAttr);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToProduct】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
 
     /**
      * 删除用户基本信息（实例数据）
-     * @param cust
+     * @param product
      * @return
      * @throws RuntimeException
      */
-    public int deleteDataToCust(Cust cust) throws RuntimeException{
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据入参 : " + cust);
+    public int deleteDataToProduct(Product product) throws RuntimeException{
+        LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProduct】保存数据入参 : " + product);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据出错 : " + cust);
-            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
+        if(product == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProduct】保存数据出错 : " + product);
+            throw new IllegalArgumentException("请求参数错误，product : " + product);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToCust",cust);
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCust】保存数据出参 :saveFlag " + saveFlag);
+        saveFlag = sqlSessionTemplate.update("productServiceDAOImpl.deleteDataToProduct",product);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProduct】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
 
     /**
      *  删除用户属性（实例数据）
-     * @param custAttr
+     * @param productAttr
      * @return
      * @throws RuntimeException
      */
-    public int deleteDataToCustAttr(CustAttr custAttr) throws RuntimeException{
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据入参 : " + custAttr);
+    public int deleteDataToProductAttr(ProductAttr productAttr) throws RuntimeException{
+        LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProductAttr】保存数据入参 : " + productAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(custAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据出错 : " + custAttr);
-            throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
+        if(productAttr == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProductAttr】保存数据出错 : " + productAttr);
+            throw new IllegalArgumentException("请求参数错误，productAttr : " + productAttr);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToCustAttr",custAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToCustAttr】保存数据出参 :saveFlag " + saveFlag);
+        saveFlag = sqlSessionTemplate.update("productServiceDAOImpl.deleteDataToProductAttr",productAttr);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.deleteDataToProductAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
@@ -169,101 +169,101 @@ public class ProductServiceDaoImpl extends BaseServiceDao implements IProductSer
      * 同时保存客户基本信息和客户属性
      * 入参为：
      *
-     * @param boCustInfo 用户信息
+     * @param boProductInfo 用户信息
      * @return
      * @throws RuntimeException
      */
     @Override
-    public String saveDataToBoCustAndBoCustAttr(String boCustInfo) throws RuntimeException {
+    public String saveDataToBoProductAndBoProductAttr(String boProductInfo) throws RuntimeException {
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoCustAndBoCustAttr】保存数据入参"+boCustInfo);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.saveDataToBoProductAndBoProductAttr】保存数据入参"+boProductInfo);
 
         return null;
     }
 
     @Override
-    public String saveDataToCustAndCustAttr(String custInfo) throws RuntimeException {
+    public String saveDataToProductAndProductAttr(String productInfo) throws RuntimeException {
         return null;
     }
 
     @Override
-    public String updateDataToCust(String cust) throws RuntimeException {
+    public String updateDataToProduct(String product) throws RuntimeException {
         return null;
     }
 
     @Override
-    public String updateDataToCustAttr(String custAttr) throws RuntimeException {
+    public String updateDataToProductAttr(String productAttr) throws RuntimeException {
         return null;
     }
 
     @Override
-    public String updateDataToCustAndCustAttr(String custInfo) throws RuntimeException {
+    public String updateDataToProductAndProductAttr(String productInfo) throws RuntimeException {
         return null;
     }
 
     /**
      * 根据客户ID查询客户信息，包括基本信息和属性信息
-     * @param cust
+     * @param product
      * @return
      * @throws RuntimeException
      */
     @Override
-    public Cust queryDataToCust(Cust cust) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据入参 : " + cust);
+    public Product queryDataToProduct(Product product) throws RuntimeException {
+        LoggerEngine.debug("----【ProductServiceDAOImpl.queryDataToProduct】保存数据入参 : " + product);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出错 : " + cust);
-            throw new IllegalArgumentException("请求参数错误，cust : " + cust);
+        if(product == null){
+            LoggerEngine.debug("----【ProductServiceDAOImpl.queryDataToProduct】保存数据出错 : " + product);
+            throw new IllegalArgumentException("请求参数错误，product : " + product);
         }
 
-        Cust newCust  = sqlSessionTemplate.selectOne("userServiceDAOImpl.queryDataToCust",cust);
+        Product newProduct  = sqlSessionTemplate.selectOne("productServiceDAOImpl.queryDataToProduct",product);
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出参 :newCust " + newCust);
+        LoggerEngine.debug("----【ProductServiceDAOImpl.queryDataToProduct】保存数据出参 :newProduct " + newProduct);
 
-        return newCust;
+        return newProduct;
     }
 
     @Override
-    public List<CustAttr> queryDataToCustAttr(CustAttr custAttr) throws RuntimeException {
+    public List<ProductAttr> queryDataToProductAttr(ProductAttr productAttr) throws RuntimeException {
         return null;
     }
 
     @Override
-    public String queryDataToCustAndCustAttr(String custInfo) throws RuntimeException {
+    public String queryDataToProductAndProductAttr(String productInfo) throws RuntimeException {
         return null;
     }
 
     /**
      *
-     * 查询 客户基本信息（过程表bo_cust）
+     * 查询 客户基本信息（过程表bo_product）
      *
-     * @param boCust
+     * @param boProduct
      * @return
      * @throws Exception
      */
-    public List<BoCust> queryBoCust(BoCust boCust) throws Exception{
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryBoCustAttr】:"+boCust);
+    public List<BoProduct> queryBoProduct(BoProduct boProduct) throws Exception{
+        LoggerEngine.debug("----【ProductServiceDAOImpl.queryBoProductAttr】:"+boProduct);
 
-        Assert.isNull(boCust,"查询bo_cust 入参为空");
+        Assert.isNull(boProduct,"查询bo_product 入参为空");
 
-        return sqlSessionTemplate.selectList("userServiceDAOImpl.queryBoCust",boCust);
+        return sqlSessionTemplate.selectList("productServiceDAOImpl.queryBoProduct",boProduct);
     }
 
     /**
      *
-     * 查询 客户属性信息（过程表 bo_cust_attr）
+     * 查询 客户属性信息（过程表 bo_product_attr）
      *
-     * @param boCustAttr
+     * @param boProductAttr
      * @return
      * @throws Exception
      */
-    public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception{
+    public List<BoProductAttr> queryBoProductAttr(BoProductAttr boProductAttr) throws Exception{
 
-        LoggerEngine.debug("【userServiceDAOImpl.queryBoCustAttr】:"+boCustAttr);
+        LoggerEngine.debug("【productServiceDAOImpl.queryBoProductAttr】:"+boProductAttr);
 
-        Assert.isNull(boCustAttr,"查询bo_cust_attr 入参为空");
+        Assert.isNull(boProductAttr,"查询bo_product_attr 入参为空");
 
-        return sqlSessionTemplate.selectList("userServiceDAOImpl.queryBoCustAttr",boCustAttr);
+        return sqlSessionTemplate.selectList("productServiceDAOImpl.queryBoProductAttr",boProductAttr);
 
     }
 }

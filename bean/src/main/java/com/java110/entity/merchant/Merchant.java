@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Merchant {
 
-    private String merchatId;
+    private String merchantId;
 
     private String logoImg;
 
@@ -24,7 +24,7 @@ public class Merchant {
 
     private String status_cd;
 
-    private String create_dt;
+    private Date create_dt;
 
     private List<MerchantAttr> merchantAttrs ;
 
@@ -40,7 +40,7 @@ public class Merchant {
         merchant.setCreate_dt(boMerchant.getCreate_dt());
         merchant.setEnd_dt(boMerchant.getEnd_dt());
         merchant.setLogoImg(boMerchant.getLogoImg());
-        merchant.setMerchatId(boMerchant.getMerchatId());
+        merchant.setMerchantId(boMerchant.getMerchantId());
         merchant.setName(boMerchant.getName());
         merchant.setStart_dt(boMerchant.getStart_dt());
 
@@ -48,12 +48,12 @@ public class Merchant {
     }
 
 
-    public String getMerchatId() {
-        return merchatId;
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerchatId(String merchatId) {
-        this.merchatId = merchatId;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getLogoImg() {
@@ -112,11 +112,11 @@ public class Merchant {
         this.status_cd = status_cd;
     }
 
-    public String getCreate_dt() {
+    public Date getCreate_dt() {
         return create_dt;
     }
 
-    public void setCreate_dt(String create_dt) {
+    public void setCreate_dt(Date create_dt) {
         this.create_dt = create_dt;
     }
 

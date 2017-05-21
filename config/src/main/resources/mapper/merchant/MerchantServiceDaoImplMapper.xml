@@ -6,16 +6,14 @@
 
     <resultMap type="com.java110.entity.merchant.Merchant" id="merchantMap">
         <id column="merchantId" jdbcType="VARCHAR" property="merchantId"/>
+        <result column="logoImg" jdbcType="VARCHAR" property="logoImg"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="cellphone" jdbcType="VARCHAR" property="cellphone"/>
-        <result column="realName" jdbcType="VARCHAR" property="realName"/>
-        <result column="sex" jdbcType="VARCHAR" property="sex"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="lanId" jdbcType="VARCHAR" property="lanId"/>
-        <result column="merchantAdress" jdbcType="VARCHAR" property="merchantAdress"/>
-        <result column="merchantType" jdbcType="VARCHAR" property="merchantType"/>
-        <result column="openId" jdbcType="VARCHAR" property="openId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="start_dt" jdbcType="DATE" property="start_dt"/>
+        <result column="end_dt" jdbcType="DATE" property="end_dt"/>
+        <result column="status_cd" jdbcType="VARCHAR" property="status_cd"/>
+        <result column="create_dt" jdbcType="DATE" property="create_dt"/>
         <!-- 一对多关系 -->
         <!-- <collection property="stus" resultMap="Student.StudentResult"></collection>  -->
         <collection property="merchantAttrs" javaType="com.java110.entity.merchant.MerchantAttr">
@@ -40,8 +38,8 @@
     <!--保存数据至过程表 bo_merchant 中 -->
     <insert id="saveDataToBoMerchant" parameterType="com.java110.entity.merchant.BoMerchant">
         <![CDATA[
-            insert into bo_merchant(boId,merchantId,name,email,cellphone,realName,sex,password,lanId,merchantAdress,merchantType,openId,state)
-            values(#{boId},#{merchantId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{merchantAdress},#{merchantType},#{openId},#{state})
+            insert into bo_merchant(boId,merchantId,logoImg,name,address,type,start_dt,end_dt,state)
+            values(#{boId},#{merchantId},#{logoImg},#{name},#{address},#{type},#{start_dt},#{end_dt},#{state})
         ]]>
     </insert>
     <!-- 保存数据至过程表bo_merchant_attr 中-->
@@ -54,8 +52,8 @@
     <!-- 保存 实例客户信息 merchant -->
     <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.Merchant">
         <![CDATA[
-            insert into merchant(merchantId,name,email,cellphone,realName,sex,password,lanId,merchantAdress,merchantType,openId,status_cd)
-            values(#{merchantId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{merchantAdress},#{merchantType},#{openId},#{status_cd})
+            insert into merchant(merchantId,logoImg,name,address,type,start_dt,end_dt,status_cd)
+            values(#{merchantId},#{logoImg},#{name},#{address},#{type},#{start_dt},#{end_dt},#{status_cd})
         ]]>
     </insert>
     <!-- 删除实例客户信息 merchant -->
@@ -85,7 +83,7 @@
     <!--根据客户ID 查询客户信息，其中包括 merchant 和merchantAttr 数据-->
     <select id="queryDataToMerchant" parameterType="com.java110.entity.merchant.Merchant" resultMap="merchantMap">
         <![CDATA[
-            select c.merchantId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.merchantAdress,c.merchantType,c.openId,
+            select c.merchantId,c.logoImg,c.name,c.address,c.type,c.start_dt,c.end_dt,c.status_cd,c.create_dt,
             ca.merchantId,ca.attrCd,ca.value
              from merchant c, merchant_attr ca where c.merchantId= ca.merchantId
             and c.merchantId = #{merchantId}
@@ -95,7 +93,7 @@
 
     <!-- 查询客户过程数据 -->
     <select id="queryBoMerchant" parameterType="com.java110.entity.merchant.BoMerchant" resultType="com.java110.entity.merchant.BoMerchant">
-        select bc.boId,bc.merchantId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.merchantAdress,bc.merchantType,bc.openId,bc.create_dt
+        select bc.boId,bc.merchantId,bc.logoImg,bc.name,bc.address,bc.type,bc.start_dt,bc.end_dt,bc.state,bc.create_dt,
         from bo_merchant bc where 1=1
         <if test="boId != null and boId != ''">
             and bc.boId = #{boId}

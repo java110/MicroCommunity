@@ -8,4 +8,12 @@ import com.java110.entity.DefaultEntity;
  */
 public class ProductAttr extends DefaultAttrEntity {
     private String productId;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 }

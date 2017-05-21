@@ -32,17 +32,17 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
     @Override
     public int saveDataToBoMerchant(BoMerchant boMerchant) throws RuntimeException{
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchant】保存数据入参 : " + boMerchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchant】保存数据入参 : " + boMerchant);
         int saveFlag = 0;
         try {
 
             saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoMerchant",boMerchant);
 
         }catch(RuntimeException e){
-            LoggerEngine.error("----【UserServiceDAOImpl.saveDataToBoMerchant】保存数据异常 : " ,e);
+            LoggerEngine.error("----【MerchantServiceDAOImpl.saveDataToBoMerchant】保存数据异常 : " ,e);
             return saveFlag;
         }finally {
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchant】保存数据出参 : saveFlag:" + saveFlag);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchant】保存数据出参 : saveFlag:" + saveFlag);
             return saveFlag;
         }
 
@@ -58,16 +58,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
     @Override
     public int saveDataToBoMerchantAttr(BoMerchantAttr boMerchantAttr) throws RuntimeException {
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchantAttr】保存数据入参 : " + boMerchantAttr);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchantAttr】保存数据入参 : " + boMerchantAttr);
         //为了保险起见，再测检测reqList 是否有值
         if(boMerchantAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchantAttr】保存数据出错 : " + boMerchantAttr);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchantAttr】保存数据出错 : " + boMerchantAttr);
             return 0;
         }
         int saveFlag = 0;
 
         saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToBoMerchantAttr",boMerchantAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchantAttr】保存数据出参 :saveFlag " + saveFlag);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchantAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
 
@@ -81,16 +81,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      */
     @Override
     public int saveDataToMerchant(Merchant merchant) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据入参 : " + merchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据入参 : " + merchant);
         //为了保险起见，再测检测reqList 是否有值
         if(merchant == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据出错 : " + merchant);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据出错 : " + merchant);
             throw new IllegalArgumentException("请求参数错误，merchant : " + merchant);
         }
         int saveFlag = 0;
 
         saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToMerchant",merchant);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
@@ -103,16 +103,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      */
     @Override
     public int saveDataToMerchantAttr(MerchantAttr merchantAttr) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据入参 : " + merchantAttr);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据入参 : " + merchantAttr);
         //为了保险起见，再测检测reqList 是否有值
         if(merchantAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据出错 : " + merchantAttr);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据出错 : " + merchantAttr);
             throw new IllegalArgumentException("请求参数错误，merchantAttr : " + merchantAttr);
         }
         int saveFlag = 0;
 
         saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveDataToMerchantAttr",merchantAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
@@ -124,16 +124,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      * @throws RuntimeException
      */
     public int deleteDataToMerchant(Merchant merchant) throws RuntimeException{
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchant】保存数据入参 : " + merchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchant】保存数据入参 : " + merchant);
         //为了保险起见，再测检测reqList 是否有值
         if(merchant == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchant】保存数据出错 : " + merchant);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchant】保存数据出错 : " + merchant);
             throw new IllegalArgumentException("请求参数错误，merchant : " + merchant);
         }
         int saveFlag = 0;
 
         saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToMerchant",merchant);
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchant】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
@@ -145,16 +145,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      * @throws RuntimeException
      */
     public int deleteDataToMerchantAttr(MerchantAttr merchantAttr) throws RuntimeException{
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchantAttr】保存数据入参 : " + merchantAttr);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchantAttr】保存数据入参 : " + merchantAttr);
         //为了保险起见，再测检测reqList 是否有值
         if(merchantAttr == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchantAttr】保存数据出错 : " + merchantAttr);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchantAttr】保存数据出错 : " + merchantAttr);
             throw new IllegalArgumentException("请求参数错误，merchantAttr : " + merchantAttr);
         }
         int saveFlag = 0;
 
         saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.deleteDataToMerchantAttr",merchantAttr);
-        LoggerEngine.debug("----【UserServiceDAOImpl.deleteDataToMerchantAttr】保存数据出参 :saveFlag " + saveFlag);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.deleteDataToMerchantAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
@@ -170,7 +170,7 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
     @Override
     public String saveDataToBoMerchantAndBoMerchantAttr(String boMerchantInfo) throws RuntimeException {
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveDataToBoMerchantAndBoMerchantAttr】保存数据入参"+boMerchantInfo);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.saveDataToBoMerchantAndBoMerchantAttr】保存数据入参"+boMerchantInfo);
 
         return null;
     }
@@ -203,16 +203,16 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      */
     @Override
     public Merchant queryDataToMerchant(Merchant merchant) throws RuntimeException {
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToMerchant】保存数据入参 : " + merchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.queryDataToMerchant】保存数据入参 : " + merchant);
         //为了保险起见，再测检测reqList 是否有值
         if(merchant == null){
-            LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToMerchant】保存数据出错 : " + merchant);
+            LoggerEngine.debug("----【MerchantServiceDAOImpl.queryDataToMerchant】保存数据出错 : " + merchant);
             throw new IllegalArgumentException("请求参数错误，merchant : " + merchant);
         }
 
         Merchant newMerchant  = sqlSessionTemplate.selectOne("userServiceDAOImpl.queryDataToMerchant",merchant);
 
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToMerchant】保存数据出参 :newMerchant " + newMerchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.queryDataToMerchant】保存数据出参 :newMerchant " + newMerchant);
 
         return newMerchant;
     }
@@ -236,7 +236,7 @@ public class MerchantServiceDaoImpl extends BaseServiceDao implements IMerchantS
      * @throws Exception
      */
     public List<BoMerchant> queryBoMerchant(BoMerchant boMerchant) throws Exception{
-        LoggerEngine.debug("----【UserServiceDAOImpl.queryBoMerchantAttr】:"+boMerchant);
+        LoggerEngine.debug("----【MerchantServiceDAOImpl.queryBoMerchantAttr】:"+boMerchant);
 
         Assert.isNull(boMerchant,"查询bo_merchant 入参为空");
 

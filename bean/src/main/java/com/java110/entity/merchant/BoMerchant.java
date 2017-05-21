@@ -1,5 +1,6 @@
 package com.java110.entity.merchant;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -7,11 +8,11 @@ import java.util.List;
  * 对应商户 过程表 bo_merchant
  * Created by wuxw on 2017/5/20.
  */
-public class BoMerchant {
+public class BoMerchant implements Comparable{
 
     private String boId;
 
-    private String merchatId;
+    private String merchantId;
 
     private String logoImg;
 
@@ -27,7 +28,7 @@ public class BoMerchant {
 
     private String state;
 
-    private String create_dt;
+    private Date create_dt;
 
     private List<BoMerchantAttr> boMerchantAttrs;
 
@@ -40,12 +41,12 @@ public class BoMerchant {
         this.boId = boId;
     }
 
-    public String getMerchatId() {
-        return merchatId;
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerchatId(String merchatId) {
-        this.merchatId = merchatId;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getLogoImg() {
@@ -104,11 +105,11 @@ public class BoMerchant {
         this.state = state;
     }
 
-    public String getCreate_dt() {
+    public Date getCreate_dt() {
         return create_dt;
     }
 
-    public void setCreate_dt(String create_dt) {
+    public void setCreate_dt(Date create_dt) {
         this.create_dt = create_dt;
     }
 
@@ -119,5 +120,39 @@ public class BoMerchant {
 
     public void setBoMerchantAttrs(List<BoMerchantAttr> boMerchantAttrs) {
         this.boMerchantAttrs = boMerchantAttrs;
+    }
+
+    /**
+     * 转为实例数据
+     * @return
+     */
+    public Merchant convert(){
+
+        Merchant merchant = new Merchant();
+        merchant.setMerchantId(this.getMerchantId());
+        merchant.setName(this.getName());
+        merchant.setAddress(this.getAddress());
+        merchant.setStart_dt(this.getStart_dt());
+        merchant.setLogoImg(this.getLogoImg());
+        merchant.setEnd_dt(this.getEnd_dt());
+      
+
+        return merchant;
+    }
+
+
+    /**
+     * 排序
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+
+        BoMerchant otherBoMerchant = (BoMerchant)o;
+        if("DEL".equals(this.getState()) && "ADD".equals(otherBoMerchant.getState())) {
+            return -1;
+        }
+        return 0;
     }
 }

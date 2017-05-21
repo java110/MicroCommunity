@@ -1,12 +1,13 @@
 package com.java110.entity.merchant;
 
+
 import java.util.Date;
 
 /**
  * 商户属性表 bo_merchant_type
  * Created by wuxw on 2017/5/20.
  */
-public class BoMerchantAttr {
+public class BoMerchantAttr implements Comparable {
 
     private String boId;
 
@@ -67,5 +68,27 @@ public class BoMerchantAttr {
 
     public void setCreate_dt(Date create_dt) {
         this.create_dt = create_dt;
+    }
+
+    /**
+     * 将过程数据转为实例数据
+     * @return
+     */
+    public MerchantAttr convert(){
+        MerchantAttr merchantAttr = new MerchantAttr();
+
+        merchantAttr.setMerchantId(this.getMerchantId());
+        merchantAttr.setAttrCd(this.getAttrCd());
+        merchantAttr.setValue(this.getValue());
+        return merchantAttr;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        BoMerchantAttr otherBoMerchant = (BoMerchantAttr)o;
+        if("DEL".equals(this.getState()) && "ADD".equals(otherBoMerchant.getState())) {
+            return -1;
+        }
+        return 0;
     }
 }
