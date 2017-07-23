@@ -49,7 +49,7 @@ public class RuleCommon extends LoggerEngine{
         java.sql.Timestamp startTime = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 
         String condReturnXml = "";
-        Map<String,Rule> ruleMap = RuleUtil.getRuleMap();
+        Map<String,Rule> ruleMap = ruleDaoImpl.getRuleMap();
         Rule rule = ruleMap.get(ruleId);
 
         Map<String,String> map = new HashMap<String,String>();
@@ -96,7 +96,7 @@ public class RuleCommon extends LoggerEngine{
 
         Map<String,String> returnMap = new HashMap<String,String>();
         dataStackMap = new HashMap<String,String>();
-        Map<String,Rule> ruleMap = RuleUtil.getRuleMap();
+        Map<String,Rule> ruleMap = ruleDaoImpl.getRuleMap();
         List<RuleCondCfg> ruleCondCfgList = ruleMap.get(ruleId).getRuleCondCfgs();
         ruleNodeMap = new HashMap<String,String>();
         ruleDbMap = new HashMap<String, List<Map<String,String>>>();
@@ -432,7 +432,7 @@ public class RuleCommon extends LoggerEngine{
         java.sql.Timestamp startTime = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 
         String condReturnXml = "";
-        Map<String,Rule> ruleMap = RuleUtil.getRuleMap();
+        Map<String,Rule> ruleMap = ruleDaoImpl.getRuleMap();
         Rule rule = ruleMap.get(ruleId);
         if(!StringUtils.isEmpty(rule.getRule_url())){
 

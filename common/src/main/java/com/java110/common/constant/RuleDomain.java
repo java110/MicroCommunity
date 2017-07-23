@@ -57,4 +57,14 @@ public class RuleDomain {
     public static final String PART_STRING_ORIGINAL_VALUE = "ORIGINAL_VALUE"; //表示字符串：ORIGINAL_VALUE，含义是在处理字符串时表示没有被任何改变的“原始值”标识
 
 
+    /**
+     * redis key 开始设置
+     */
+    public final static String REDIS_KEY_RULE_ENTRANCE ="RuleEntrance"; // redis key RuleEntrance
+
+
+    public final static String REDIS_KEY_RULE ="Rule"; // redis key Rule
+
+
+    public final static String REDIS_KEY_RULE_GROUP ="Rule_Group"; // redis key Rule
 }

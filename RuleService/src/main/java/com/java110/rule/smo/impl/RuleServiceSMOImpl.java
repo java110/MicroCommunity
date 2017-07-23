@@ -11,6 +11,7 @@ import com.java110.entity.rule.Rule;
 import com.java110.entity.rule.RuleEntrance;
 import com.java110.entity.rule.TcpContRule;
 import com.java110.rule.common.RuleCommon;
+import com.java110.rule.dao.IRuleDao;
 import com.java110.rule.smo.IRuleServiceSMO;
 import com.java110.rule.thread.RuleCommonThread;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class RuleServiceSMOImpl extends BaseServiceSMO implements IRuleServiceSM
 
     @Autowired
     RuleCommon ruleCommon;
+
+    @Autowired
+    IRuleDao ruleDaoImpl;
 
 
 
@@ -127,12 +131,12 @@ public class RuleServiceSMOImpl extends BaseServiceSMO implements IRuleServiceSM
         String roamFlag = RuleDomain.RULE_COND_RETURN_0000;
             String depPrvncSaopRuleType = CodeMapUtil.getDynamicConstantValue("DEP_PRVNC_RULE_TYPE");
             //获取表 Rule_Entrance 数据
-            Map<String,RuleEntrance> ruleEntranceMap = RuleUtil.getRuleEntranceMap();
+            Map<String,RuleEntrance> ruleEntranceMap = ruleDaoImpl.getRuleEntranceMap();
             int ruleCount = 0;
             this.ruleCommon.init();
 
             //当前分组下的规则编码集合
-            List ruleIdsInCurGroupList = RuleUtil.getRuleIdsInGroupByJson(reqJson.toJSONString());
+            List ruleIdsInCurGroupList = RuleUtil.getRuleIdsInGroupByJson(reqJson.toJSONString(),ruleDaoImpl.getRuleGroupRelaList());
 
             //耗时明细信息集合
             List costTimeMapList = new ArrayList();
@@ -182,7 +186,7 @@ public class RuleServiceSMOImpl extends BaseServiceSMO implements IRuleServiceSM
                     ruleCount ++;
                     ruleList.add(ruleEntrance.getRule_id());
                 }else{//配置1为单线程串行调用模式
-                    Rule rule = RuleUtil.getRuleMap().get(ruleEntrance.getRule_id());
+                    Rule rule = ruleDaoImpl.getRuleMap().get(ruleEntrance.getRule_id());
                     String url = rule.getRule_url();
                     String entranceRetrunXml = "";
                     if(!StringUtils.isEmpty(url)){
@@ -251,5 +255,13 @@ public class RuleServiceSMOImpl extends BaseServiceSMO implements IRuleServiceSM
 
     public void setRuleCommon(RuleCommon ruleCommon) {
         this.ruleCommon = ruleCommon;
+    }
+
+    public IRuleDao getRuleDaoImpl() {
+        return ruleDaoImpl;
+    }
+
+    public void setRuleDaoImpl(IRuleDao ruleDaoImpl) {
+        this.ruleDaoImpl = ruleDaoImpl;
     }
 }

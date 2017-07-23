@@ -6,6 +6,7 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.core.base.AppBase;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,9 @@ import java.util.logging.Logger;
 public class BaseServiceDao extends AppBase {
 
     @Autowired
+   protected JedisPool jedisPool;
+
+    @Autowired
    protected SqlSessionTemplate sqlSessionTemplate;
 
 
@@ -31,6 +35,13 @@ public class BaseServiceDao extends AppBase {
         this.sqlSessionTemplate = sqlSessionTemplate;
     }
 
+    public JedisPool getJedisPool() {
+        return jedisPool;
+    }
+
+    public void setJedisPool(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
+    }
 
     private final static String SERVICE_CASE_JSON_EXCEPTION = "101";//转json异常
 

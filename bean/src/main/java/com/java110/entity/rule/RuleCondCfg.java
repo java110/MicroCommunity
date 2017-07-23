@@ -1,12 +1,13 @@
 package com.java110.entity.rule;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * Created by wuxw on 2017/7/23.
  */
-public class RuleCondCfg {
+public class RuleCondCfg implements Serializable{
 
     private String rule_id;
     private String rule_node;

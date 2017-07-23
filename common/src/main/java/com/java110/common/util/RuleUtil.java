@@ -3,6 +3,11 @@ package com.java110.common.util;
 import com.java110.common.log.LoggerEngine;
 import com.java110.entity.rule.Rule;
 import com.java110.entity.rule.RuleEntrance;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,23 +20,6 @@ import java.util.Map;
  */
 public class RuleUtil extends LoggerEngine{
 
-   public static Map<String,RuleEntrance> getRuleEntranceMap(){
-
-       return null;
-   }
-
-    /**
-     * 获取规则组
-     * @return
-     */
-    public static List getRuleGroupRelaList() {
-        return null;
-    }
-
-
-    public static Map<String, Rule> getRuleMap() {
-        return null;
-    }
 
 
     /**
@@ -39,10 +27,10 @@ public class RuleUtil extends LoggerEngine{
      * @param reqJson
      * @return   如果获取不到则会返回new ArrayList(),不会为null
      */
-    public static List getRuleIdsInGroupByJson(String reqJson)
+    public static List getRuleIdsInGroupByJson(String reqJson,List saopRuleGroupInfoList)
     {
         //获取缓存中规则分组集合
-        List saopRuleGroupInfoList = RuleUtil.getRuleGroupRelaList();
+        //List saopRuleGroupInfoList = RuleUtil.getRuleGroupRelaList();
 
         //当前分组下的规则编码集合
         List ruleIdsInCurGroupList = new ArrayList();
