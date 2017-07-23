@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ruleDaoImpl">
+
+    <parameterMap type="map" id="executeProMap">
+        <parameter property="transactionId" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="paramIn" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="paramOut" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+
+    <!-- 执行sql-->
+    <select id="executeSql"  resultType="java.util.HashMap" >
+        $sql$
+    </select>
+
+    <!-- 执行 存储过程 -->
+    <update id="executeProc" parameterMap="executeProMap" statementType="CALLABLE">
+        {call $procName$(?, ?, ?)}
+    </update>
+ </mapper>

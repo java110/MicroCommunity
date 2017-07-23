@@ -28,6 +28,9 @@ create table rule
   rule_code varchar(20) not null comment '规则编码',
   rule_name varchar(100) not null comment '规则名称',
   rule_desc varchar(2000) not null comment '规则描述',
+  rule_level        varchar(2) not null comment '规则级别，1 限制性 2 提示性',
+  rule_type         varchar(2) not null comment '规则实现方式，1 反射调用java 方法实现，2 通过 rule_cond_cfg 配置逻辑实现 3 调用存储过程实现，存储过程入参可以在rule_cond_cfg 表中配置'
+  rule_url          varchar(200) not null comment '对应于 rule_type 方式 1 时，写类路径加方法 如com.java110.rule.ARule#AMethod, 方式2 时，写成Common 方式 3 时写 过程名称'
   status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
   create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
@@ -35,12 +38,8 @@ create table rule
 -- 规则入口表
 create table rule_entrance
 (
-
   rule_id           varchar(20) not null comment '规则ID',
-  rule_level        varchar(2) not null comment '规则级别，1 限制性 2 提示性',
-  rule_condition    varchar(200) not null comment '校验条件 jpath 语句，如果有值则走这个规则，没有值则不走这个规则，如果所有业务都走，写*号',
-  rule_type         varchar(2) not null comment '规则实现方式，1 反射调用java 方法实现，2 通过 rule_cond_cfg 配置逻辑实现 3 调用存储过程实现，存储过程入参可以在rule_cond_cfg 表中配置'
-  rule_url          varchar(200) not null comment '对应于 rule_type 方式 1 时，写类路径加方法 如com.java110.rule.ARule#AMethod, 方式2 时，写成Common 方式 3 时写 过程名称'
+  rule_condition    varchar(200) not null comment '校验条件 jpath 语句，如果有值则走这个规则，没有值则不走这个规则，如果所有业务都走，不写',
   status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
   create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
@@ -54,7 +53,7 @@ create table rule_cond_cfg
   rule_node              varchar(30) not null comment '规则节点',
   data_from_flag         varchar(30) not null comment '规则节点取值方式 1从JSON中获取(jpath) 2从DB_SQL中取值、3从DEFULT_VALUE中取值、4从NODE_EXISTED中取值、5从堆栈中获取',
   db_sql                 varchar(3000) comment 'SQL语句',
-  defult_value           varchar(30) comment '默认值',
+  default_value           varchar(30) comment '默认值',
   node_existed           varchar(1000) comment '复用已存在规则节点',
   proc_param_flag        varchar(2) comment '标示此规则节点是否是存储过程入参',
   is_reverse             varchar(2) comment '规则校验是否取反',
