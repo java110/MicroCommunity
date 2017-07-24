@@ -1,13 +1,6 @@
 package com.java110.common.util;
 
 import com.java110.common.log.LoggerEngine;
-import com.java110.entity.rule.Rule;
-import com.java110.entity.rule.RuleEntrance;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

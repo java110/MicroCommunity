@@ -30,7 +30,7 @@ create table rule
   rule_desc varchar(2000) not null comment '规则描述',
   rule_level        varchar(2) not null comment '规则级别，1 限制性 2 提示性',
   rule_type         varchar(2) not null comment '规则实现方式，1 反射调用java 方法实现，2 通过 rule_cond_cfg 配置逻辑实现 3 调用存储过程实现，存储过程入参可以在rule_cond_cfg 表中配置'
-  rule_url          varchar(200) not null comment '对应于 rule_type 方式 1 时，写类路径加方法 如com.java110.rule.ARule#AMethod, 方式2 时，写成Common 方式 3 时写 过程名称'
+  rule_url          varchar(200) not null comment '对应于 rule_type 方式 1 时，写类路径加方法 如com.java110.rule.ARule#AMethod, 方式2 时，写成Common 方式 3 时写 过程名称,如果方式 java方法去获取参数 存储过程校验，则java方法名和过程得名称一样'
   status_cd  varchar(2)  not null default '0' comment '状态，0-有效，1-无效',
   create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );

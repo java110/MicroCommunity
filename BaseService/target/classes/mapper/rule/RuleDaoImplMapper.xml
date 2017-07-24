@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ruleDaoImpl">
+
+    <parameterMap type="map" id="executeProMap">
+        <parameter property="transactionId" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="paramIn" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="paramOut" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+
+    <!-- 执行sql-->
+    <select id="executeSql"  resultType="java.util.HashMap" >
+        $sql$
+    </select>
+
+    <!-- 执行 存储过程 -->
+    <update id="executeProc" parameterMap="executeProMap" statementType="CALLABLE">
+        {call $procName$(?, ?, ?)}
+    </update>
+
+    <!-- 查询表 rule_entrance 中数据 -->
+    <select id="getRuleEntranceMap" resultType="com.java110.entity.rule.RuleEntrance">
+        SELECT T.rule_id,
+        T.rule_condition,
+        T.status_cd,
+        T.create_dt
+        FROM rule_entrance T
+        WHERE T.STATUS_CD = '0' ORDER BY T.rule_id
+    </select>
+    <!-- 查询表 rule -->
+    <select id="queryRule" resultType="com.java110.entity.rule.Rule">
+        SELECT T.rule_id, T.rule_code, T.rule_name, T.rule_desc,T.rule_level,T.rule_type,T.rule_url,T.status_cd,T.create_dt
+        FROM rule T
+        WHERE T.status_cd = '0'
+
+    </select>
+    <!--查询表 rule_cond_cfg-->
+    <select id="queryRuleCondCfg" resultType="com.java110.entity.rule.RuleCondCfg">
+        SELECT
+        T.rule_id,
+        T.rule_node,
+        T.data_from_flag,
+        T.db_sql,
+        T.default_value,
+        T.node_existed,
+        T.proc_param_flag,
+        T.is_reverse,
+        T.is_log,
+        T.error_code,
+        T.error_msg,
+        T.remark,
+        T.seq,
+        T.data_stack_flag_prefix,
+        T.jpath,
+        T.status_cd,
+        T.create_dt
+        FROM rule_cond_cfg T
+        WHERE T.rule_id = #{ruleId}
+        AND status_cd = '0'
+        ORDER BY seq
+    </select>
+
+    <!--规则组-->
+    <select id="querySaopRuleGroupMap" resultType="java.util.HashMap">
+        SELECT T.groupId, T.groupName, T.order_seq, T.key_identify_logic_str
+        FROM rule_group T
+        WHERE T.status_cd = '0'
+        ORDER BY T.order_seq
+    </select>
+
+    <!--规则组与规则关系-->
+    <select id="querySaopRuleGroupRelaMap"  resultType="java.util.HashMap">
+        SELECT T.groupId, T.rule_id
+        FROM group_rule_relation T
+        WHERE T.status_cd = '0'
+    </select>
+ </mapper>

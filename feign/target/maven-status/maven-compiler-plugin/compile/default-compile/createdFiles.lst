@@ -1,6 +1,11 @@
+com\java110\feign\user\UserServiceFallback.class
+com\java110\feign\merchant\MerchantServiceFallback.class
+com\java110\feign\merchant\IMerchantService.class
+com\java110\feign\base\PrimaryKeyServiceFallback.class
+com\java110\feign\product\ProductServiceFallback.class
 com\java110\feign\test\TestFeignHystrixClient.class
 com\java110\feign\base\IPrimaryKeyService.class
+com\java110\feign\product\IProductService.class
 com\java110\feign\user\IUserService.class
 com\java110\feign\test\HystrixClientFallback.class
 com\java110\entity\App.class
-com\java110\feign\base\PrimaryKeyServiceFallback.class

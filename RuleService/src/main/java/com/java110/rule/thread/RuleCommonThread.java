@@ -51,7 +51,7 @@ public class RuleCommonThread extends LoggerEngine{
             ruleCompletionService.submit(new Callable<String>(){
                 public String call() throws Exception{
                     try {
-                        Map<String,Rule> ruleMap = RuleUtil.getRuleMap();
+                        Map<String,Rule> ruleMap = ruleCommon.getRuleMap();
                         Rule rule = ruleMap.get(ruleIdStr);
                         String url = rule.getRule_url();
                         String condRtn = "";
@@ -120,7 +120,7 @@ public class RuleCommonThread extends LoggerEngine{
     public void run() {
         Rule rule = null;
         try{
-            Map<String,Rule> ruleMap = RuleUtil.getRuleMap();
+            Map<String,Rule> ruleMap = ruleCommon.getRuleMap();
             rule = ruleMap.get(ruleId);
             String url = rule.getRule_url();
             String condRtn = "";

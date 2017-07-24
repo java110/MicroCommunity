@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userServiceDAOImpl">
+
+    <resultMap type="com.java110.entity.user.Cust" id="custMap">
+        <id column="custId" jdbcType="VARCHAR" property="custId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="cellphone" jdbcType="VARCHAR" property="cellphone"/>
+        <result column="realName" jdbcType="VARCHAR" property="realName"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="lanId" jdbcType="VARCHAR" property="lanId"/>
+        <result column="custAdress" jdbcType="VARCHAR" property="custAdress"/>
+        <result column="custType" jdbcType="VARCHAR" property="custType"/>
+        <result column="openId" jdbcType="VARCHAR" property="openId"/>
+        <!-- 一对多关系 -->
+        <!-- <collection property="stus" resultMap="Student.StudentResult"></collection>  -->
+        <collection property="custAttrs" javaType="com.java110.entity.user.CustAttr">
+            <id property="custId" column="custId"/>
+            <result property="attrCd" column="attrCd"/>
+            <result property="value" column="value"/>
+        </collection>
+    </resultMap>
+
+    <!--根据用户Id查询用户角色
+    <select id="findRolesByUserId" resultType="SysRole">
+        SELECT
+        r.*
+        FROM
+        t_role r,
+        t_user_role ur
+        WHERE ur.uid = #{userId}
+        AND ur.roleId = r.roleId
+        AND ur.status_cd = '1'
+    </select>
+-->
+    <!--保存数据至过程表 bo_cust 中 -->
+    <insert id="saveDataToBoCust" parameterType="com.java110.entity.user.BoCust">
+        <![CDATA[
+            insert into bo_cust(boId,custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,state)
+            values(#{boId},#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{state})
+        ]]>
+    </insert>
+    <!-- 保存数据至过程表bo_cust_attr 中-->
+    <insert id="saveDataToBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr">
+        <![CDATA[
+            insert into bo_cust_attr(boId,custId,attrCd,value,state)
+            values(#{boId},#{custId},#{attrCd},#{value},#{state})
+        ]]>
+    </insert>
+    <!-- 保存 实例客户信息 cust -->
+    <insert id="saveDataToCust" parameterType="com.java110.entity.user.Cust">
+        <![CDATA[
+            insert into cust(custId,name,email,cellphone,realName,sex,password,lanId,custAdress,custType,openId,status_cd)
+            values(#{custId},#{name},#{email},#{cellphone},#{realName},#{sex},#{password},#{lanId},#{custAdress},#{custType},#{openId},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 cust -->
+    <insert id="deleteDataToCust" parameterType="com.java110.entity.user.Cust">
+        <![CDATA[
+           delete * from cust c where c.custId = #{custId}
+        ]]>
+    </insert>
+
+    <!-- 保存 实例客户属性信息 cust_attr -->
+    <insert id="saveDataToCust" parameterType="com.java110.entity.user.CustAttr">
+        <![CDATA[
+            insert into cust_attr(custId,attrCd,value,status_cd)
+            values(#{custId},#{attrCd},#{value},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 cust -->
+    <update id="deleteDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
+           delete * from cust_attr ct where 1=1
+           <if test="custId != null and custId != ''">
+               and ct.custId = #{custId}
+           </if>
+            <if test="attrCd != null and attrCd != ''">
+                and ct.attrCd = #{attrCd}
+            </if>
+    </update>
+    <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
+    <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
+        <![CDATA[
+            select c.custId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.custAdress,c.custType,c.openId,
+            ca.custId,ca.attrCd,ca.value
+             from cust c, cust_attr ca where c.custId= ca.custId
+            and c.custId = #{custId}
+            and c.status_cd = '0'
+        ]]>
+    </select>
+
+    <!-- 查询客户过程数据 -->
+    <select id="queryBoCust" parameterType="com.java110.entity.user.BoCust" resultType="com.java110.entity.user.BoCust">
+        select bc.boId,bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId,bc.create_dt
+        from bo_cust bc where 1=1
+        <if test="boId != null and boId != ''">
+            and bc.boId = #{boId}
+        </if>
+        <if test="custId != null and custId != ''">
+            and bc.custId = #{custId}
+        </if>
+        and bc.state in ('ADD','DEL')
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+    <!-- 查询客户属性过程表-->
+    <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr" resultType="com.java110.entity.user.BoCustAttr">
+        select bca.boId,bca.custId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_cust_attr bca where 1=1
+        <if test="boId !=null and boId != ''">
+            and bca.boId = #{boId}
+        </if>
+        <if test="custId != null and custId != ''">
+            and bca.custId = #{custId}
+        </if>
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+
+</mapper>

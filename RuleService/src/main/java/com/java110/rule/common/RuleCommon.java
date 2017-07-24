@@ -496,6 +496,15 @@ public class RuleCommon extends LoggerEngine{
         return errorMsg;
     }
 
+    /**
+     * 为了多线程时可以用到这里我们中转一下
+     * @return
+     * @throws Exception
+     */
+    public Map<String,Rule> getRuleMap() throws Exception{
+       return ruleDaoImpl.getRuleMap();
+    }
+
     public void saveRuleCommonCondLog(String transactionID,String ruleID,String ruleNodeValue,Map<String,String> returnMap)  throws Exception {
        /* String retCode = returnMap.get("retCode");
         String retMsg = returnMap.get("retMsg");

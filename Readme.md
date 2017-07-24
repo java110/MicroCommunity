@@ -1,5 +1,9 @@
 微小区平台
 
+开发工具：
+
+java1.8 + idea/eclipse + mysql 
+
 技术架构：
 
 Java + spring cloud + mybatis + mysql + activemq + redis
