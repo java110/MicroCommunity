@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="merchantMemberServiceDaoImpl">
+
+
+    <!--根据客户ID 查询客户信息，其中包括 merchant 和merchantAttr 数据-->
+    <select id="queryDataToMerchantMember" parameterType="com.java110.entity.merchant.MerchantMember" resultMap="com.java110.entity.merchant.MerchantMember">
+        <![CDATA[
+            select mm.id,
+             mm.merchantId,
+             mm.memberId,
+             mm.memberType,
+             mm.create_dt,
+             mm.status_cd,
+             mm.start_dt,
+             mm.end_dt,
+             mm.version_dt
+             from merchant_member mm where mm.merchantId = #{merchantId}
+            and mm.status_cd = '0'
+            and start_dt < now()
+            and end_dt > now()
+        ]]>
+    </select>
+
+
+
+</mapper>

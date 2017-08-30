@@ -2,7 +2,10 @@ com\java110\base\dao\IPrimaryKeyServiceDao.class
 com\java110\AppSpringBootApplication.class
 com\java110\base\rest\PrimaryKeyServiceRest.class
 com\java110\base\dao\impl\PrimaryKeyServiceDaoImpl.class
+com\java110\base\smo\impl\CommonServiceSmoImpl.class
 com\java110\base\smo\IPrimaryKeyServiceSMO.class
 com\java110\base\dao\ICommonServiceDao.class
+com\java110\base\smo\ICommonServiceSmo.class
+com\java110\base\rest\CommonServiceRest.class
 com\java110\base\smo\impl\PrimaryKeyServiceSMOImpl.class
 com\java110\base\dao\impl\CommonServiceDaoImpl.class

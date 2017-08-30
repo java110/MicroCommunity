@@ -1,4 +1,5 @@
 com\java110\common\util\ConstantUtil.class
+com\java110\common\constant\ListenerDomain.class
 com\java110\common\constant\MerchantTypeConstant.class
 com\java110\common\util\RuleUtil.class
 com\java110\common\util\CacheUtil.class

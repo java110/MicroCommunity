@@ -18,7 +18,7 @@ public class Product extends DefaultEntity {
 
     private String name;
 
-    private String productTypeCd;
+    private String catalogCd;
 
     private String productDesc;
 
@@ -49,12 +49,12 @@ public class Product extends DefaultEntity {
         this.name = name;
     }
 
-    public String getProductTypeCd() {
-        return productTypeCd;
+    public String getCatalogCd() {
+        return catalogCd;
     }
 
-    public void setProductTypeCd(String productTypeCd) {
-        this.productTypeCd = productTypeCd;
+    public void setCatalogCd(String catalogCd) {
+        this.catalogCd = catalogCd;
     }
 
     public String getProductDesc() {

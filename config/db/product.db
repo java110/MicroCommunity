@@ -10,7 +10,7 @@ create table bo_product(
 
     name varchar(50) not null comment '产品名称',
 
-    productTypeCd varchar(10) not null comment '产品类别，1 食品 2 酒类 具体查看product_type ',
+    catalogCd varchar(10) not null comment '产品类别，1 食品 2 酒类 具体查看product_type ',
 
     productDesc varchar(500) not null comment '产品描述',
 
@@ -39,6 +39,10 @@ create table bo_product_attr(
 
     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 
+    start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+
+    end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间'
+
 );
 
 
@@ -52,7 +56,7 @@ create table product(
 
     name varchar(50) not null comment '产品名称',
 
-    productTypeCd varchar(10) not null comment '产品类别，1 食品 2 酒类 具体查看product_type ',
+    catalogCd varchar(10) not null comment '产品目录 具体查看product_catalog ',
 
     productDesc varchar(500) not null comment '产品描述',
 
@@ -62,7 +66,13 @@ create table product(
 
     status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
 
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+    start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+
+    end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+
+    version_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间'
 );
 -- 产品属性表
 create table product_attr(
@@ -75,7 +85,13 @@ create table product_attr(
 
     status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效，请查看status表',
 
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+     start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+
+     end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+
+     version_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间'
 
 );
 
@@ -83,15 +99,18 @@ create table product_attr(
 
 
 
--- 产品类别
-create table product_type(
+-- 产品目录
+create table product_catalog(
     id int not null AUTO_INCREMENT,
-    productTypeCd varchar(10) not null comment '产品类别编码',
+    catalogCd varchar(10) not null comment '产品类别编码',
     name varchar(200) not null comment '产品类别名称',
     describe varchar(500) not null comment '产品类别描述',
+    parentId int not null default '-1' comment '父目录',
     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
     primary key (id)
 );
 
-insert into product_type(productTypeCd,name,describe) values('1','食品','食品');
-insert into product_type(productTypeCd,name,describe) values('2','酒类饮料','酒类饮料');
+insert into product_type(catalogCd,name,describe) values('1','食品','食品');
+insert into product_type(catalogCd,name,describe) values('2','酒类饮料','酒类饮料');
+

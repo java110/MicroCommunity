@@ -14,6 +14,8 @@ public class DefaultEntity {
 
     private Date end_dt;
 
+    private Date version_dt;
+
     private String status_cd;
 
 
@@ -50,5 +52,11 @@ public class DefaultEntity {
         this.status_cd = status_cd;
     }
 
+    public Date getVersion_dt() {
+        return version_dt;
+    }
 
+    public void setVersion_dt(Date version_dt) {
+        this.version_dt = version_dt;
+    }
 }

@@ -19,7 +19,7 @@ public interface ICommonServiceDao {
      *
      * @return
      */
-    public List<CodeMapping> getCodeMappingAll();
+    public List<CodeMapping> getCodeMappingAll()  throws Exception;
 
     /**
      * 根据域查询对应的映射关系
@@ -27,7 +27,7 @@ public interface ICommonServiceDao {
      * @param codeMapping
      * @return
      */
-    public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping);
+    public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping)  throws Exception;
 
     /**
      * 根据HCode查询映射关系
@@ -35,7 +35,7 @@ public interface ICommonServiceDao {
      * @param codeMapping
      * @return
      */
-    public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping);
+    public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping)  throws Exception;
 
 
     /**
@@ -44,7 +44,7 @@ public interface ICommonServiceDao {
      * @param codeMapping
      * @return
      */
-    public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping);
+    public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping)  throws Exception;
 
     /**
      * 根据domain 和 hcode 查询映射关系
@@ -52,7 +52,7 @@ public interface ICommonServiceDao {
      * @param codeMapping
      * @return
      */
-    public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping);
+    public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping)  throws Exception;
 
     /**
      * 根据domain 和 pcode 查询映射关系
@@ -60,7 +60,7 @@ public interface ICommonServiceDao {
      * @param codeMapping
      * @return
      */
-    public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping);
+    public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping) throws Exception;
 
 
 }

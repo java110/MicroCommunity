@@ -3,10 +3,12 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/BaseService" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CommonService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/MerchantService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OrderService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PayService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RuleService" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SimpleListener" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Wechat" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bean" charset="UTF-8" />

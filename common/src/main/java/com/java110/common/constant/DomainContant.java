@@ -23,4 +23,7 @@ public class DomainContant {
 
 
     /************************************ITEM_DOMAIN END****************************************/
+
+
+    public final static String TASK_DOMAIN = "DOMAIN.TASK";
 }

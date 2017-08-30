@@ -1,5 +1,6 @@
+META-INF\spring-configuration-metadata.json
+com\java110\config\properties\CommonProperties.class
+com\java110\config\properties\CustProperties.class
 com\java110\config\App.class
 com\java110\config\properties\OrderProperties.class
-META-INF\spring-configuration-metadata.json
-com\java110\config\properties\CustProperties.class
 com\java110\config\properties\EventProperties.class

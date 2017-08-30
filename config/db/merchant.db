@@ -24,7 +24,9 @@ create table bo_merchant_attr(
 
     state  varchar(10) not null COMMENT '新建商户属性 ADD ，删除商户属性DEL',
 
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+            start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+            end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+            create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
 -- 商户 表 merchant
@@ -34,9 +36,10 @@ create table merchant(
     name varchar(50) not null comment '商户名称',
     address varchar(200) not null comment '商户地址',
     type varchar(10) not null comment '商户类别，1 个人商户 2 企业商户 3 政府媒体',
-    start_dt timestamp NOT NULL COMMENT '开始时间',
-    end_dt timestamp NOT NULL COMMENT '结束时间',
     status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+        start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+        end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+        version_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
@@ -49,7 +52,34 @@ create table merchant_attr(
     value  varchar(200) not null COMMENT '属性编码对应值',
 
     status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
-
-    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+        start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+        end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+        version_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+        create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
+
+-- 商家和成员的关系
+create table merchant_member(
+    id int not null auto_increment,
+    merchantId varchar(20) not null comment '商户ID',
+    memberId  varchar(20) not null COMMENT '成员ID',
+    memberType varchar(10) not null comment '成员类型 1 产品 2 目录'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd  varchar(10) default '0' COMMENT '数据状态 0 有效 1 失效',
+    start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+    end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+    version_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    primary key (id)
+);
+
+create table bo_merchant_member(
+    boId varchar(20) not null comment '业务ID 对应的busi_order的boId',
+     merchantId  varchar(20) not null COMMENT '商户ID',
+    memberId  varchar(20) not null COMMENT '成员ID',
+    memberType varchar(10) not null comment '成员类型 1 产品 2 目录'
+    create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+    end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+    state  varchar(10) not null COMMENT '新建 ADD ，删除DEL'
+);

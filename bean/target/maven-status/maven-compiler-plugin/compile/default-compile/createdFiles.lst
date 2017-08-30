@@ -3,6 +3,7 @@ com\java110\entity\product\Product.class
 com\java110\entity\protocol\SvcCont.class
 com\java110\entity\DefaultEntity.class
 com\java110\entity\merchant\BoMerchant.class
+com\java110\entity\listener\FtpTaskLog.class
 com\java110\entity\product\BoProduct.class
 com\java110\entity\user\Cust.class
 com\java110\entity\rule\Rule.class
@@ -28,3 +29,4 @@ com\java110\entity\merchant\Merchant.class
 com\java110\entity\merchant\MerchantAttr.class
 com\java110\entity\user\BoCustAttr.class
 com\java110\entity\user\CustAttr.class
+com\java110\entity\listener\FtpTaskLogDetail.class

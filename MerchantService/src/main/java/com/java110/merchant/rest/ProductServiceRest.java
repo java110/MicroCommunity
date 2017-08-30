@@ -76,7 +76,7 @@ public class ProductServiceRest extends BaseController implements IProductServic
             //1.0规则校验，报文是否合法
 
 
-            //2.0 受理客户信息
+            //2.0 受理产品信息
             resultProductInfo = iProductServiceSMO.soProductService(reqProductJSON);
 
 
@@ -84,7 +84,7 @@ public class ProductServiceRest extends BaseController implements IProductServic
             LoggerEngine.error("服务处理出现异常：", e);
             resultProductInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
         } finally {
-            LoggerEngine.debug("用户服务操作客户出参：" + resultProductInfo);
+            LoggerEngine.debug("用户服务操作产品出参：" + resultProductInfo);
             return resultProductInfo;
         }
     }

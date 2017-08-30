@@ -4,13 +4,14 @@ package com.java110.entity.mapping;
 
 import com.java110.entity.protocol.BeanSvcCont;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 映射关系
  * Created by wuxw on 2017/3/1.
  */
-public class CodeMapping extends BeanSvcCont {
+public class CodeMapping extends BeanSvcCont implements Serializable{
 
     public CodeMapping() {
         this.setBeanName(this.getClass().getName());

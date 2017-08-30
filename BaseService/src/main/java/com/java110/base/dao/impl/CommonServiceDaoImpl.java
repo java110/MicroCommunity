@@ -1,10 +1,14 @@
 package com.java110.base.dao.impl;
 
 import com.java110.base.dao.ICommonServiceDao;
+import com.java110.common.constant.RuleDomain;
+import com.java110.common.util.SerializeUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.mapping.CodeMapping;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -24,8 +28,18 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      * @return
      */
     @Override
-    public List<CodeMapping> getCodeMappingAll() {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingAll");
+    @Cacheable(key= "CodeMappingAll")
+    public List<CodeMapping> getCodeMappingAll() throws Exception{
+       Jedis jedis = jedisPool.getResource();
+       List<CodeMapping> codeMappings = null;
+       if(jedis.exists("CodeMappingAll".getBytes())){
+           codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingAll".getBytes()),CodeMapping.class);
+       }else{
+           codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingAll");
+
+           jedis.set("CodeMappingAll".getBytes(),SerializeUtil.serializeList(codeMappings));
+       }
+        return codeMappings;
     }
 
     /**
@@ -36,8 +50,19 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      */
 
     @Override
-    public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomain", codeMapping);
+    @Cacheable(key= "CodeMappingByDomain")
+    public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping)  throws Exception{
+
+        Jedis jedis = jedisPool.getResource();
+        List<CodeMapping> codeMappings = null;
+        if(jedis.exists("CodeMappingByDomain".getBytes())){
+            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomain".getBytes()),CodeMapping.class);
+        }else{
+            codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomain", codeMapping);
+
+            jedis.set("CodeMappingByDomain".getBytes(),SerializeUtil.serializeList(codeMappings));
+        }
+        return codeMappings;
     }
 
     /**
@@ -47,8 +72,19 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      * @return
      */
     @Override
-    public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByHCode", codeMapping);
+    @Cacheable(key= "CodeMappingByHCode")
+    public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping) throws Exception{
+
+        Jedis jedis = jedisPool.getResource();
+        List<CodeMapping> codeMappings = null;
+        if(jedis.exists("CodeMappingByHCode".getBytes())){
+            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByHCode".getBytes()),CodeMapping.class);
+        }else{
+            codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByHCode", codeMapping);
+
+            jedis.set("CodeMappingByHCode".getBytes(),SerializeUtil.serializeList(codeMappings));
+        }
+        return codeMappings;
     }
 
     /**
@@ -58,8 +94,19 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      * @return
      */
     @Override
-    public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByPCode", codeMapping);
+    @Cacheable(key= "CodeMappingByPCode")
+    public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping)  throws Exception{
+
+        Jedis jedis = jedisPool.getResource();
+        List<CodeMapping> codeMappings = null;
+        if(jedis.exists("CodeMappingByPCode".getBytes())){
+            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByPCode".getBytes()),CodeMapping.class);
+        }else{
+            codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByPCode", codeMapping);
+
+            jedis.set("CodeMappingByPCode".getBytes(),SerializeUtil.serializeList(codeMappings));
+        }
+        return codeMappings;
     }
 
     /**
@@ -69,8 +116,19 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      * @return
      */
     @Override
-    public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndHCode", codeMapping);
+    @Cacheable(key= "CodeMappingByDomainAndHCode")
+    public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping)  throws Exception{
+
+        Jedis jedis = jedisPool.getResource();
+        List<CodeMapping> codeMappings = null;
+        if(jedis.exists("CodeMappingByDomainAndHCode".getBytes())){
+            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomainAndHCode".getBytes()),CodeMapping.class);
+        }else{
+            codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndHCode", codeMapping);
+
+            jedis.set("CodeMappingByDomainAndHCode".getBytes(),SerializeUtil.serializeList(codeMappings));
+        }
+        return codeMappings;
     }
 
     /**
@@ -80,7 +138,18 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
      * @return
      */
     @Override
-    public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping) {
-        return sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndPCode", codeMapping);
+    @Cacheable(key= "CodeMappingByDomainAndPCode")
+    public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping)  throws Exception{
+
+        Jedis jedis = jedisPool.getResource();
+        List<CodeMapping> codeMappings = null;
+        if(jedis.exists("CodeMappingByDomainAndPCode".getBytes())){
+            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomainAndPCode".getBytes()),CodeMapping.class);
+        }else{
+            codeMappings = sqlSessionTemplate.selectList("commonServiceDaoImpl.getCodeMappingByDomainAndPCode", codeMapping);
+
+            jedis.set("CodeMappingByDomainAndPCode".getBytes(),SerializeUtil.serializeList(codeMappings));
+        }
+        return codeMappings;
     }
 }

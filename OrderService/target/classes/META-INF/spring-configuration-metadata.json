@@ -1,6 +1,11 @@
 {
   "groups": [
     {
+      "name": "java110.common",
+      "type": "com.java110.config.properties.CommonProperties",
+      "sourceType": "com.java110.config.properties.CommonProperties"
+    },
+    {
       "name": "java110.event.properties",
       "type": "com.java110.config.properties.EventProperties",
       "sourceType": "com.java110.config.properties.EventProperties"
