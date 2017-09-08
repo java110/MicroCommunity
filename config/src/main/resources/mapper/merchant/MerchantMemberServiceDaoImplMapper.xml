@@ -24,6 +24,23 @@
         ]]>
     </select>
 
+    <!--  保存过程数据 add by wuxw 2017-09-08 21:48 -->
+    <insert id="saveDataToBoMerchantMember" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        insert into bo_merchant_member(boId,merchantId,memberId,versionId,memberType,state,start_dt,end_dt)
+        values(#boId#,#merchantId#,#memberId#,#versionId#,#memberType#,#state#,#start_dt#,#end_dt#)
+    </insert>
+
+    <!-- 保存实例数据 add by wuxw 2017-09-08 21:58 -->
+    <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        insert into merchant_member(merchantId,memberId,versionId,memberType,status_cd,start_dt,end_dt,version_dt)
+        values(#merchantId#,#memberId#,#versionId#,#memberType#,'0',#start_dt#,#end_dt#,now())
+    </insert>
+    <!-- 删除实例数据 add by wuxw 2017-09-08 22:02 -->
+    <update id="deleteDataToMerchant" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        update merchant_member mm set mm.status_cd = '1',mm.versionId = #versionId#,mm.version_dt = now() where mm.memberId = #memberId#
+        and mm.merchantId = #merchantId#
+    </update>
+
 
 
 </mapper>

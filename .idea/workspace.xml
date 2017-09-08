@@ -2,181 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/fonts/glyphicons-halflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/fonts/glyphicons-halflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/fonts/glyphicons-halflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/fonts/glyphicons-halflings-regular.woff2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_beanutils_commons_beanutils_1_8_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_digester_commons_digester_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_validator_commons_validator_1_3_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_quartz_scheduler_quartz_1_8_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_session_spring_session_1_2_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_session_spring_session_data_redis_1_0_1_RELEASE.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/rest/CommonServiceRest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/ICommonServiceSmo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/impl/CommonServiceSmoImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/SimpleListener.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/AppSpringBootApplication.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/bmo/IListenerBmo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/bmo/impl/ListenerBmoImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/dao/IListenerServiceDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/dao/impl/ListenerServiceDaoImpl.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/rest/ListenerRest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/task/FTPClientTemplate.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/task/ListenerJob.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/css/bootstrap-theme.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/css/bootstrap-theme.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/css/bootstrap.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/css/listener.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/fonts/glyphicons-halflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/app.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/bootstrap-paginator.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/bootstrap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/jquery.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/listener.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/js/npm.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/page/listener.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SimpleListener/src/main/resources/test.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/listener/FtpTaskLog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/listener/FtpTaskLogDetail.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantMember.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/constant/ListenerDomain.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/src/main/java/com/java110/config/properties/CommonProperties.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/src/main/resources/common/common.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/listener/ListenerServiceDaoImplMapper.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/base/CommonServiceFallback.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/base/ICommonService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_redis_1_4_0_RELEASE.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/BaseService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/BaseService/target/BaseService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/classes/com/java110/base/dao/ICommonServiceDao.class" afterPath="$PROJECT_DIR$/BaseService/target/classes/com/java110/base/dao/ICommonServiceDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/classes/com/java110/base/dao/impl/CommonServiceDaoImpl.class" afterPath="$PROJECT_DIR$/BaseService/target/classes/com/java110/base/dao/impl/CommonServiceDaoImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/target/MerchantService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/MerchantService/target/MerchantService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/OrderService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/OrderService/target/OrderService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PayService/target/PayService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/PayService/target/PayService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RuleService/target/RuleService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/RuleService/target/RuleService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/UserService-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/UserService/target/UserService-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wechat/target/Wechat-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/Wechat/target/Wechat-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/bean-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/bean/target/bean-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/classes/com/java110/entity/mapping/CodeMapping.class" afterPath="$PROJECT_DIR$/bean/target/classes/com/java110/entity/mapping/CodeMapping.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/classes/com/java110/common/constant/DomainContant.class" afterPath="$PROJECT_DIR$/common/target/classes/com/java110/common/constant/DomainContant.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/classes/com/java110/common/util/DateUtil.class" afterPath="$PROJECT_DIR$/common/target/classes/com/java110/common/util/DateUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/classes/com/java110/common/util/StringUtil.class" afterPath="$PROJECT_DIR$/common/target/classes/com/java110/common/util/StringUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/common-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/common/target/common-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/config-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/config/target/config-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/target/core-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/core/target/core-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eureka/target/eureka-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/eureka/target/eureka-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/target/feign-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/feign/target/feign-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/target/service-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/service/target/service-1.0-SNAPSHOT.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoEntity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/BaseService.iml" afterPath="$PROJECT_DIR$/BaseService/BaseService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/ICommonServiceDao.java" afterPath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/ICommonServiceDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/impl/CommonServiceDaoImpl.java" afterPath="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/impl/CommonServiceDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/classes/META-INF/maven/com.java110/config/pom.properties" afterPath="$PROJECT_DIR$/BaseService/target/classes/META-INF/maven/com.java110/config/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/classes/META-INF/spring-configuration-metadata.json" afterPath="$PROJECT_DIR$/BaseService/target/classes/META-INF/spring-configuration-metadata.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/BaseService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/BaseService/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/BaseService/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/surefire-reports/TEST-com.java110.AppTest.xml" afterPath="$PROJECT_DIR$/BaseService/target/surefire-reports/TEST-com.java110.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaseService/target/surefire-reports/com.java110.AppTest.txt" afterPath="$PROJECT_DIR$/BaseService/target/surefire-reports/com.java110.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/MerchantService.iml" afterPath="$PROJECT_DIR$/MerchantService/MerchantService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/MerchantService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/target/surefire-reports/TEST-com.java110.AppTest.xml" afterPath="$PROJECT_DIR$/MerchantService/target/surefire-reports/TEST-com.java110.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/target/surefire-reports/com.java110.AppTest.txt" afterPath="$PROJECT_DIR$/MerchantService/target/surefire-reports/com.java110.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/target/surefire-reports/com.java110.merchant.BeanTest.txt" afterPath="$PROJECT_DIR$/MerchantService/target/surefire-reports/com.java110.merchant.BeanTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/OrderService.iml" afterPath="$PROJECT_DIR$/OrderService/OrderService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/classes/META-INF/maven/com.java110/config/pom.properties" afterPath="$PROJECT_DIR$/OrderService/target/classes/META-INF/maven/com.java110/config/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/classes/META-INF/spring-configuration-metadata.json" afterPath="$PROJECT_DIR$/OrderService/target/classes/META-INF/spring-configuration-metadata.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/OrderService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.AppTest.xml" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.executor.ExecutorTest.xml" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.executor.ExecutorTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.jsonpath.CustIdTest.xml" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.jsonpath.CustIdTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.type.TypeTest.xml" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/TEST-com.java110.order.type.TypeTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.AppTest.txt" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.executor.ExecutorTest.txt" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.executor.ExecutorTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.jsonpath.CustIdTest.txt" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.jsonpath.CustIdTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.type.CommonTest.txt" afterPath="$PROJECT_DIR$/OrderService/target/surefire-reports/com.java110.order.type.CommonTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PayService/PayService.iml" afterPath="$PROJECT_DIR$/PayService/PayService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PayService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/PayService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PayService/target/surefire-reports/com.java110.pay.AppTest.txt" afterPath="$PROJECT_DIR$/PayService/target/surefire-reports/com.java110.pay.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RuleService/RuleService.iml" afterPath="$PROJECT_DIR$/RuleService/RuleService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RuleService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/RuleService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RuleService/target/surefire-reports/com.java110.AppTest.txt" afterPath="$PROJECT_DIR$/RuleService/target/surefire-reports/com.java110.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/UserService.iml" afterPath="$PROJECT_DIR$/UserService/UserService.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/classes/META-INF/maven/com.java110/config/pom.properties" afterPath="$PROJECT_DIR$/UserService/target/classes/META-INF/maven/com.java110/config/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/classes/META-INF/spring-configuration-metadata.json" afterPath="$PROJECT_DIR$/UserService/target/classes/META-INF/spring-configuration-metadata.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/UserService/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/surefire-reports/TEST-com.java110.user.AppTest.xml" afterPath="$PROJECT_DIR$/UserService/target/surefire-reports/TEST-com.java110.user.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/surefire-reports/com.java110.user.AppTest.txt" afterPath="$PROJECT_DIR$/UserService/target/surefire-reports/com.java110.user.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UserService/target/surefire-reports/com.java110.user.BoCustCompareTest.txt" afterPath="$PROJECT_DIR$/UserService/target/surefire-reports/com.java110.user.BoCustCompareTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wechat/Wechat.iml" afterPath="$PROJECT_DIR$/Wechat/Wechat.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wechat/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/Wechat/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wechat/target/surefire-reports/TEST-com.java110.wechat.AppTest.xml" afterPath="$PROJECT_DIR$/Wechat/target/surefire-reports/TEST-com.java110.wechat.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Wechat/target/surefire-reports/com.java110.wechat.AppTest.txt" afterPath="$PROJECT_DIR$/Wechat/target/surefire-reports/com.java110.wechat.AppTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/mapping/CodeMapping.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/mapping/CodeMapping.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/Merchant.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/Merchant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantAttr.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantAttr.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/product/Product.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/product/Product.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/bean/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/bean/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/bean/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/surefire-reports/TEST-com.java110.entity.AppTest.xml" afterPath="$PROJECT_DIR$/bean/target/surefire-reports/TEST-com.java110.entity.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/target/surefire-reports/com.java110.entity.AppTest.txt" afterPath="$PROJECT_DIR$/bean/target/surefire-reports/com.java110.entity.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/common.iml" afterPath="$PROJECT_DIR$/common/common.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/pom.xml" afterPath="$PROJECT_DIR$/common/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/constant/DomainContant.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/constant/DomainContant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/DateUtil.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/DateUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/StringUtil.java" afterPath="$PROJECT_DIR$/common/src/main/java/com/java110/common/util/StringUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/common/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/common/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/common/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/target/surefire-reports/com.java110.common.AppTest.txt" afterPath="$PROJECT_DIR$/common/target/surefire-reports/com.java110.common.AppTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/db/merchant.db" afterPath="$PROJECT_DIR$/config/db/merchant.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/db/product.db" afterPath="$PROJECT_DIR$/config/db/product.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/src/main/resources/mapper/product/ProductServiceDaoImplMapper.xml" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/product/ProductServiceDaoImplMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/classes/META-INF/spring-configuration-metadata.json" afterPath="$PROJECT_DIR$/config/target/classes/META-INF/spring-configuration-metadata.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/config/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/config/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/config/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/target/surefire-reports/TEST-com.java110.config.AppTest.xml" afterPath="$PROJECT_DIR$/config/target/surefire-reports/TEST-com.java110.config.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/core.iml" afterPath="$PROJECT_DIR$/core/core.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/pom.xml" afterPath="$PROJECT_DIR$/core/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/core/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/target/surefire-reports/TEST-com.java110.AppTest.xml" afterPath="$PROJECT_DIR$/core/target/surefire-reports/TEST-com.java110.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/target/surefire-reports/com.java110.AppTest.txt" afterPath="$PROJECT_DIR$/core/target/surefire-reports/com.java110.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eureka/eureka.iml" afterPath="$PROJECT_DIR$/eureka/eureka.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eureka/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/eureka/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eureka/target/surefire-reports/TEST-com.java110.eureka.AppTest.xml" afterPath="$PROJECT_DIR$/eureka/target/surefire-reports/TEST-com.java110.eureka.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eureka/target/surefire-reports/com.java110.eureka.AppTest.txt" afterPath="$PROJECT_DIR$/eureka/target/surefire-reports/com.java110.eureka.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/feign.iml" afterPath="$PROJECT_DIR$/feign/feign.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/feign/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/feign/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/feign/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/target/surefire-reports/com.java110.feign.AppTest.txt" afterPath="$PROJECT_DIR$/feign/target/surefire-reports/com.java110.feign.AppTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/service.iml" afterPath="$PROJECT_DIR$/service/service.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/service/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/target/surefire-reports/TEST-com.java110.AppTest.xml" afterPath="$PROJECT_DIR$/service/target/surefire-reports/TEST-com.java110.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/service/target/surefire-reports/com.java110.AppTest.txt" afterPath="$PROJECT_DIR$/service/target/surefire-reports/com.java110.AppTest.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_net_commons_net_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_net_commons_net_3_3.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_support_4_3_2_RELEASE.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_support_4_2_7_RELEASE.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -211,21 +49,92 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MerchantMemberServiceDaoImplMapper.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MerchantMemberServiceRest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="210" column="67" lean-forward="true" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IMerchantMemberServiceSMO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="182">
+              <caret line="100" column="18" lean-forward="false" selection-start-line="100" selection-start-column="18" selection-end-line="100" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceDaoImplMapper.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="26" lean-forward="false" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+            <state relative-caret-position="362">
+              <caret line="37" column="44" lean-forward="false" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="merchant.db" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/db/merchant.db">
+      <file leaf-file-name="IMerchantMemberServiceDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="71" column="14" lean-forward="false" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="14" />
+            <state relative-caret-position="308">
+              <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="42" selection-end-column="96" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceSMOImpl.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="256" column="120" lean-forward="false" selection-start-line="256" selection-start-column="120" selection-end-line="256" selection-end-column="120" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BoMerchantMember.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="87">
+              <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultEntity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="29" />
+              <folding>
+                <element signature="e#352#353#0" expanded="true" />
+                <element signature="e#384#385#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="orders.db" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/db/orders.db">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="20" lean-forward="false" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -246,16 +155,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>用户</find>
-      <find>BoCust</find>
-      <find>saveDataToMerchant</find>
-      <find>User</find>
-      <find>address</find>
-      <find>logoImg</find>
-      <find>Cust</find>
-      <find>user</find>
-      <find>cust</find>
-      <find>Merchant</find>
       <find>merchant</find>
       <find>dataStackMap</find>
       <find>ruleNodeMap</find>
@@ -276,6 +175,16 @@
       <find>insertFileData2Table</find>
       <find>listenerServiceDaoImpl</find>
       <find>PersistJobDataAfterExecution</find>
+      <find>用户服务</find>
+      <find>merchantService</find>
+      <find>客户</find>
+      <find>return null;</find>
+      <find>iMerchantServiceDao</find>
+      <find>MerchantMember</find>
+      <find>boMerchant</find>
+      <find>用户</find>
+      <find>MerchantService</find>
+      <find>BoMerchant</find>
     </findStrings>
     <replaceStrings>
       <replace>microcommunity.version</replace>
@@ -299,6 +208,13 @@
       <replace>resultType</replace>
       <replace>resultMsg</replace>
       <replace>ListenerJob</replace>
+      <replace>merchantMemberService</replace>
+      <replace>return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,&quot;调用服务超时&quot;,null);</replace>
+      <replace>iMerchantMemberServiceDao</replace>
+      <replace>boMerchantMember</replace>
+      <replace>商户成员</replace>
+      <replace>MerchantMemberService</replace>
+      <replace>BoMerchantMember</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -312,8 +228,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/config/src/main/java/com/java110/config/properties/CommonProperties.java" />
-        <option value="$PROJECT_DIR$/config/src/main/resources/common/common.properties" />
         <option value="$PROJECT_DIR$/CommonService/pom.xml" />
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/ICommonServiceSMO.java" />
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/impl/CommonServiceSMOImpl.java" />
@@ -349,20 +263,22 @@
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/product/Product.java" />
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantAttr.java" />
         <option value="$PROJECT_DIR$/config/db/product.db" />
-        <option value="$PROJECT_DIR$/config/db/merchant.db" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/Merchant.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantMember.java" />
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
-        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
+        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" />
+        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
+        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoEntity.java" />
+        <option value="$PROJECT_DIR$/config/db/merchant.db" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
-        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
         <option value="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
       </list>
     </option>
   </component>
@@ -384,10 +300,9 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-7" />
     <option name="width" value="1378" />
-    <option name="height" value="744" />
+    <option name="height" value="735" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -444,6 +359,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -466,7 +384,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Wechat" />
+              <option name="myItemId" value="bean" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -480,21 +398,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
+              <option name="myItemId" value="bean" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -512,7 +416,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
+              <option name="myItemId" value="bean" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -528,7 +432,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
+              <option name="myItemId" value="entity" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -542,7 +446,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
+              <option name="myItemId" value="bean" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -558,315 +462,16 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="smo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
+              <option name="myItemId" value="entity" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="smo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="impl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MerchantService" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="impl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapper" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapper" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1376,7 +981,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1378" height="744" extended-state="0" />
+    <frame x="-7" y="0" width="1378" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51966715" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1387,10 +992,9 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37670198" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.83114755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3878887" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38688526" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.284522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21320182" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -1409,6 +1013,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -1438,8 +1043,8 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.83114755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3878887" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.284522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38688526" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21320182" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1492,34 +1097,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/common/src/main/java/com/java110/common/util/DateUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="17" column="68" lean-forward="false" selection-start-line="17" selection-start-column="68" selection-end-line="17" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/task/ListenerJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="73" column="4" lean-forward="false" selection-start-line="73" selection-start-column="4" selection-end-line="79" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/rule/RuleDaoImplMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="10" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/listener/FtpTaskLog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="8" lean-forward="false" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="402">
@@ -1594,7 +1171,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="40" column="20" lean-forward="true" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1602,7 +1178,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="521">
           <caret line="314" column="25" lean-forward="false" selection-start-line="310" selection-start-column="10" selection-end-line="314" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1610,7 +1185,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2550">
           <caret line="158" column="77" lean-forward="false" selection-start-line="158" selection-start-column="77" selection-end-line="158" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1618,10 +1192,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3145">
           <caret line="192" column="100" lean-forward="false" selection-start-line="192" selection-start-column="100" selection-end-line="192" selection-end-column="100" />
-          <folding>
-            <marker date="1501173442124" expanded="false" signature="9471:9476" ph=" { " />
-            <marker date="1501173442124" expanded="false" signature="9494:9497" ph=" }" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1629,7 +1199,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="521">
           <caret line="234" column="39" lean-forward="false" selection-start-line="234" selection-start-column="39" selection-end-line="234" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1637,7 +1206,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2360">
           <caret line="220" column="32" lean-forward="false" selection-start-line="220" selection-start-column="18" selection-end-line="220" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1645,7 +1213,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1653,7 +1220,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1071">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1661,7 +1227,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
           <caret line="627" column="39" lean-forward="false" selection-start-line="627" selection-start-column="39" selection-end-line="627" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1669,7 +1234,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="8" column="50" lean-forward="false" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1677,7 +1241,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="12" column="42" lean-forward="false" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1685,23 +1248,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="40" lean-forward="true" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/db/product.db">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="116" column="0" lean-forward="false" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1709,32 +1255,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="12" column="4" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantMember.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="30" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="15" selection-end-column="30" />
-          <folding>
-            <element signature="e#315#316#0" expanded="true" />
-            <element signature="e#340#341#0" expanded="true" />
-            <element signature="e#374#375#0" expanded="true" />
-            <element signature="e#402#403#0" expanded="true" />
-            <element signature="e#439#440#0" expanded="true" />
-            <element signature="e#472#473#0" expanded="true" />
-            <element signature="e#524#525#0" expanded="true" />
-            <element signature="e#568#569#0" expanded="true" />
-            <element signature="e#603#604#0" expanded="true" />
-            <element signature="e#634#635#0" expanded="true" />
-            <element signature="e#682#683#0" expanded="true" />
-            <element signature="e#722#723#0" expanded="true" />
-            <element signature="e#759#760#0" expanded="true" />
-            <element signature="e#792#793#0" expanded="true" />
-            <element signature="e#844#845#0" expanded="true" />
-            <element signature="e#888#889#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1742,7 +1262,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="23" column="24" lean-forward="false" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1750,7 +1269,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1758,72 +1276,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="29" lean-forward="false" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#480#481#0" expanded="true" />
-            <element signature="e#520#521#0" expanded="true" />
-            <element signature="e#552#553#0" expanded="true" />
-            <element signature="e#589#590#0" expanded="true" />
-            <element signature="e#622#623#0" expanded="true" />
-            <element signature="e#674#675#0" expanded="true" />
-            <element signature="e#718#719#0" expanded="true" />
-            <element signature="e#753#754#0" expanded="true" />
-            <element signature="e#784#785#0" expanded="true" />
-            <element signature="e#832#833#0" expanded="true" />
-            <element signature="e#872#873#0" expanded="true" />
-            <element signature="e#909#910#0" expanded="true" />
-            <element signature="e#942#943#0" expanded="true" />
-            <element signature="e#994#995#0" expanded="true" />
-            <element signature="e#1038#1039#0" expanded="true" />
-            <element signature="e#1071#1072#0" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
-            <element signature="e#1148#1149#0" expanded="true" />
-            <element signature="e#1188#1189#0" expanded="true" />
-            <element signature="e#1219#1220#0" expanded="true" />
-            <element signature="e#1248#1249#0" expanded="true" />
-            <element signature="e#1290#1291#0" expanded="true" />
-            <element signature="e#1326#1327#0" expanded="true" />
-            <element signature="e#1358#1359#0" expanded="true" />
-            <element signature="e#1386#1387#0" expanded="true" />
-            <element signature="e#1428#1429#0" expanded="true" />
-            <element signature="e#1462#1463#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1528#1529#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-            <element signature="e#1618#1619#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="9" column="64" lean-forward="false" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="39" lean-forward="false" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="76" lean-forward="false" selection-start-line="5" selection-start-column="54" selection-end-line="5" selection-end-column="76" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1831,40 +1283,207 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantServiceDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="110" column="4" lean-forward="false" selection-start-line="110" selection-start-column="4" selection-end-line="116" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantServiceDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="21" column="58" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantServiceDaoImplMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="41" column="27" lean-forward="false" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="20" column="74" lean-forward="false" selection-start-line="20" selection-start-column="74" selection-end-line="20" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="12" column="60" lean-forward="false" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="17" column="8" lean-forward="true" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="14" column="65" lean-forward="false" selection-start-line="14" selection-start-column="65" selection-end-line="14" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="89" lean-forward="false" selection-start-line="30" selection-start-column="89" selection-end-line="30" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantServiceSMO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="74" column="7" lean-forward="true" selection-start-line="74" selection-start-column="7" selection-end-line="74" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="30" column="58" lean-forward="false" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#23936#23937#0" expanded="false" />
+            <element signature="e#23977#23978#0" expanded="false" />
+            <element signature="e#24176#24177#0" expanded="false" />
+            <element signature="e#24218#24219#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/src/main/java/com/java110/common/constant/StateConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="26" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/db/product.db">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1230">
+          <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/db/orders.db">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="20" lean-forward="false" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="29" lean-forward="false" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+          <folding>
+            <element signature="e#349#350#0" expanded="true" />
+            <element signature="e#389#390#0" expanded="true" />
+            <element signature="e#421#422#0" expanded="true" />
+            <element signature="e#454#455#0" expanded="true" />
+            <element signature="e#485#486#0" expanded="true" />
+            <element signature="e#531#532#0" expanded="true" />
+            <element signature="e#571#572#0" expanded="true" />
+            <element signature="e#602#603#0" expanded="true" />
+            <element signature="e#631#632#0" expanded="true" />
+            <element signature="e#673#674#0" expanded="true" />
+            <element signature="e#709#710#0" expanded="true" />
+            <element signature="e#741#742#0" expanded="true" />
+            <element signature="e#769#770#0" expanded="true" />
+            <element signature="e#811#812#0" expanded="true" />
+            <element signature="e#845#846#0" expanded="true" />
+            <element signature="e#879#880#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
+            <element signature="e#959#960#0" expanded="true" />
+            <element signature="e#1001#1002#0" expanded="true" />
+            <element signature="e#1037#1038#0" expanded="true" />
+            <element signature="e#1069#1070#0" expanded="true" />
+            <element signature="e#1119#1120#0" expanded="true" />
+            <element signature="e#1161#1162#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="29" />
+          <folding>
+            <element signature="e#352#353#0" expanded="true" />
+            <element signature="e#384#385#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantMember.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="40" lean-forward="true" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/db/merchant.db">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="42" selection-end-column="96" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
+    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="43" column="58" lean-forward="false" selection-start-line="43" selection-start-column="58" selection-end-line="43" selection-end-column="58" />
+        <state relative-caret-position="362">
+          <caret line="37" column="44" lean-forward="false" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantServiceSMO.java">
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="74" column="7" lean-forward="true" selection-start-line="74" selection-start-column="7" selection-end-line="74" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantServiceSMOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="426" column="63" lean-forward="true" selection-start-line="426" selection-start-column="63" selection-end-line="426" selection-end-column="63" />
+        <state relative-caret-position="903">
+          <caret line="107" column="85" lean-forward="false" selection-start-line="107" selection-start-column="85" selection-end-line="107" selection-end-column="85" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="45" column="67" lean-forward="true" selection-start-line="45" selection-start-column="67" selection-end-line="45" selection-end-column="67" />
+        <state relative-caret-position="204">
+          <caret line="210" column="67" lean-forward="true" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1873,8 +1492,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="18" lean-forward="false" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+        <state relative-caret-position="182">
+          <caret line="100" column="18" lean-forward="false" selection-start-line="100" selection-start-column="18" selection-end-line="100" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1883,71 +1502,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="23" column="18" lean-forward="false" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1592#1593#0" expanded="true" />
-            <element signature="e#1640#1641#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantServiceDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="110" column="4" lean-forward="false" selection-start-line="110" selection-start-column="4" selection-end-line="116" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantServiceDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="21" column="58" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="29" column="132" lean-forward="false" selection-start-line="29" selection-start-column="107" selection-end-line="29" selection-end-column="132" />
+        <state relative-caret-position="233">
+          <caret line="256" column="120" lean-forward="false" selection-start-line="256" selection-start-column="120" selection-end-line="256" selection-end-column="120" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantServiceDaoImplMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="41" column="27" lean-forward="false" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/db/merchant.db">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="71" column="14" lean-forward="false" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="26" lean-forward="false" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>

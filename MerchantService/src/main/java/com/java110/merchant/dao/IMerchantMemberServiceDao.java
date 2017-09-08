@@ -1,5 +1,6 @@
 package com.java110.merchant.dao;
 
+import com.java110.entity.merchant.BoMerchantMember;
 import com.java110.entity.merchant.MerchantMember;
 
 /**
@@ -15,4 +16,29 @@ public interface IMerchantMemberServiceDao {
      * @throws RuntimeException
      */
     public MerchantMember queryDataToMerchantMember(MerchantMember merchantMember) throws RuntimeException ;
+
+
+    /**
+     * 保存过程数据
+     * @param boMerchantMember 成员信息
+     * @return
+     * @throws RuntimeException
+     */
+    public long saveDataToBoMerchantMember(BoMerchantMember boMerchantMember) throws RuntimeException;
+
+    /**
+     * 根据过程数据 保存实例数据
+     * @param boMerchantMember
+     * @return
+     * @throws RuntimeException
+     */
+    public long saveDataToMerchant(BoMerchantMember boMerchantMember) throws RuntimeException;
+
+    /**
+     * 根据过程数据失效实例数据
+     * @param boMerchantMember
+     * @return
+     * @throws RuntimeException
+     */
+    public long deleteDataToMerchant(BoMerchantMember boMerchantMember) throws RuntimeException;
 }

@@ -8,6 +8,9 @@ import java.util.Date;
  */
 public class DefaultEntity {
 
+
+    private String versionId;
+
     private Date start_dt;
 
     private Date create_dt;
@@ -19,6 +22,13 @@ public class DefaultEntity {
     private String status_cd;
 
 
+    public String getVersionId() {
+        return versionId;
+    }
+
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
+    }
 
     public Date getStart_dt() {
         return start_dt;
