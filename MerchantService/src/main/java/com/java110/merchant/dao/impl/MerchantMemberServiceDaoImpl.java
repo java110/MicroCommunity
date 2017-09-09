@@ -9,6 +9,8 @@ import com.java110.entity.merchant.MerchantMember;
 import com.java110.merchant.dao.IMerchantMemberServiceDao;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by wuxw on 2017/8/30.
  */
@@ -108,5 +110,30 @@ public class MerchantMemberServiceDaoImpl extends BaseServiceDao implements IMer
         LoggerEngine.debug("----【MerchantMemberServiceDaoImpl.deleteDataToMerchant】删除数据记录数 : " + rownum);
         return rownum;
 
+    }
+
+    /**
+     * 查询过程数据
+     * @param boMerchantMember
+     * @return
+     * @throws RuntimeException
+     */
+    public List<BoMerchantMember> queryBoMerchantMember(BoMerchantMember boMerchantMember) throws RuntimeException{
+
+        //为了保险起见，再测检测reqList 是否有值
+        if(boMerchantMember == null){
+            LoggerEngine.debug("----【MerchantMemberServiceDaoImpl.queryBoMerchantMember】查询数据出错 空" );
+            throw new IllegalArgumentException("请求参数错误，boMerchantMember : 空");
+        }
+
+        LoggerEngine.debug("----【MerchantMemberServiceDaoImpl.queryBoMerchantMember】查询过程数据入参 : "
+                + JSONObject.toJSONString(boMerchantMember));
+
+        List<BoMerchantMember> newBoMerchantMember  = sqlSessionTemplate.selectList("merchantMemberServiceDaoImpl.queryBoMerchantMember",boMerchantMember);
+
+        if(newBoMerchantMember != null){
+            LoggerEngine.debug("----【MerchantMemberServiceDaoImpl.queryBoMerchantMember】查询过程数据出参 : " + JSONObject.toJSONString(newBoMerchantMember));
+        }
+        return newBoMerchantMember;
     }
 }

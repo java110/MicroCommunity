@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoEntity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/db/merchant.db" afterPath="$PROJECT_DIR$/config/db/merchant.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" afterPath="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -52,8 +46,8 @@
       <file leaf-file-name="MerchantMemberServiceRest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="210" column="67" lean-forward="true" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
+            <state relative-caret-position="274">
+              <caret line="177" column="83" lean-forward="true" selection-start-line="177" selection-start-column="83" selection-end-line="177" selection-end-column="83" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,29 +59,7 @@
         <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="182">
-              <caret line="100" column="18" lean-forward="false" selection-start-line="100" selection-start-column="18" selection-end-line="100" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MerchantMemberServiceDaoImplMapper.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="37" column="44" lean-forward="false" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IMerchantMemberServiceDao.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="42" selection-end-column="96" />
+              <caret line="86" column="18" lean-forward="false" selection-start-line="86" selection-start-column="18" selection-end-line="86" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -99,7 +71,7 @@
         <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="233">
-              <caret line="256" column="120" lean-forward="false" selection-start-line="256" selection-start-column="120" selection-end-line="256" selection-end-column="120" />
+              <caret line="175" column="13" lean-forward="false" selection-start-line="175" selection-start-column="13" selection-end-line="175" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -107,11 +79,33 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="IMerchantMemberServiceDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="410">
+              <caret line="53" column="33" lean-forward="false" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceDaoImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="182">
+              <caret line="120" column="34" lean-forward="false" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="BoMerchantMember.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+            <state relative-caret-position="204">
+              <caret line="15" column="30" lean-forward="false" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -120,7 +114,7 @@
       <file leaf-file-name="DefaultEntity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
+            <state relative-caret-position="187">
               <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="29" />
               <folding>
                 <element signature="e#352#353#0" expanded="true" />
@@ -155,7 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>merchant</find>
       <find>dataStackMap</find>
       <find>ruleNodeMap</find>
       <find>SAOP_</find>
@@ -185,6 +178,7 @@
       <find>用户</find>
       <find>MerchantService</find>
       <find>BoMerchant</find>
+      <find>queryDataToMerchantMember</find>
     </findStrings>
     <replaceStrings>
       <replace>microcommunity.version</replace>
@@ -269,15 +263,15 @@
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/MerchantMember.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
-        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
-        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java" />
         <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoEntity.java" />
         <option value="$PROJECT_DIR$/config/db/merchant.db" />
-        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
         <option value="$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
       </list>
     </option>
@@ -371,102 +365,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="entity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MicroCommunity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="entity" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="merchant" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -990,9 +888,9 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5030349" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37670198" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294509" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.83114755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38688526" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38602328" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21320182" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1040,10 +938,10 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294509" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.83114755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295082" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38688526" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38602328" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21320182" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -1097,13 +995,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/common/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="111" column="21" lean-forward="false" selection-start-line="111" selection-start-column="21" selection-end-line="111" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/listener/ListenerServiceDaoImplMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1209,13 +1100,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/base/AppBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1071">
@@ -1300,13 +1184,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantServiceDaoImplMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="41" column="27" lean-forward="false" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1353,13 +1230,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="30" column="58" lean-forward="false" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#23936#23937#0" expanded="false" />
-            <element signature="e#23977#23978#0" expanded="false" />
-            <element signature="e#24176#24177#0" expanded="false" />
-            <element signature="e#24218#24219#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1375,7 +1245,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1230">
           <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1421,7 +1290,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
+        <state relative-caret-position="187">
           <caret line="11" column="4" lean-forward="false" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="29" />
           <folding>
             <element signature="e#352#353#0" expanded="true" />
@@ -1432,8 +1301,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantMember.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        <state relative-caret-position="204">
+          <caret line="15" column="30" lean-forward="false" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -1446,44 +1315,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/db/merchant.db">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/java110/core/base/AppBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+        <state relative-caret-position="190">
+          <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/common/CommonServiceDaoImplMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1409">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantServiceDaoImplMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="22" column="21" lean-forward="true" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/IMerchantMemberServiceDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="42" selection-end-column="96" />
+        <state relative-caret-position="410">
+          <caret line="53" column="33" lean-forward="false" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="37" column="44" lean-forward="false" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
+        <state relative-caret-position="182">
+          <caret line="120" column="34" lean-forward="false" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/dao/impl/MerchantMemberServiceDaoImpl.java">
+    <entry file="file://$PROJECT_DIR$/config/db/merchant.db">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="903">
-          <caret line="107" column="85" lean-forward="false" selection-start-line="107" selection-start-column="85" selection-end-line="107" selection-end-column="85" />
+        <state relative-caret-position="470">
+          <caret line="79" column="15" lean-forward="false" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="15" />
+          <caret line="80" column="15" lean-forward="false" selection-start-line="80" selection-start-column="3" selection-end-line="80" selection-end-column="15" />
+          <caret line="81" column="15" lean-forward="false" selection-start-line="81" selection-start-column="3" selection-end-line="81" selection-end-column="15" />
+          <caret line="82" column="15" lean-forward="false" selection-start-line="82" selection-start-column="3" selection-end-line="82" selection-end-column="15" />
+          <caret line="83" column="15" lean-forward="false" selection-start-line="83" selection-start-column="3" selection-end-line="83" selection-end-column="15" />
+          <caret line="84" column="15" lean-forward="false" selection-start-line="84" selection-start-column="3" selection-end-line="84" selection-end-column="15" />
+          <caret line="85" column="15" lean-forward="false" selection-start-line="85" selection-start-column="3" selection-end-line="85" selection-end-column="15" />
+          <caret line="86" column="15" lean-forward="false" selection-start-line="86" selection-start-column="3" selection-end-line="86" selection-end-column="15" />
+          <caret line="87" column="15" lean-forward="false" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/src/main/resources/mapper/merchant/MerchantMemberServiceDaoImplMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="43" column="16" lean-forward="false" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="210" column="67" lean-forward="true" selection-start-line="210" selection-start-column="67" selection-end-line="210" selection-end-column="67" />
+        <state relative-caret-position="274">
+          <caret line="177" column="83" lean-forward="true" selection-start-line="177" selection-start-column="83" selection-end-line="177" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1493,7 +1394,7 @@
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
-          <caret line="100" column="18" lean-forward="false" selection-start-line="100" selection-start-column="18" selection-end-line="100" selection-end-column="18" />
+          <caret line="86" column="18" lean-forward="false" selection-start-line="86" selection-start-column="18" selection-end-line="86" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1503,7 +1404,7 @@
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
-          <caret line="256" column="120" lean-forward="false" selection-start-line="256" selection-start-column="120" selection-end-line="256" selection-end-column="120" />
+          <caret line="175" column="13" lean-forward="false" selection-start-line="175" selection-start-column="13" selection-end-line="175" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

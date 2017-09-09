@@ -117,6 +117,15 @@ public interface IMerchantMemberServiceSMO {
     public String soBoMerchantMember(String boMerchantMembers,Map merchantIdKey) throws Exception;
 
 
+    /**
+     * 查询需要作废的订单信息
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteData(JSONObject data) throws Exception;
+
+
 
 
 

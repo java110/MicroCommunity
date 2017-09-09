@@ -138,15 +138,13 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
 
         Assert.isNull(mInfoJson,"data","请求报文缺少 data 节点，请检查");
 
-        JSONArray merchantInfos = mInfoJson.getJSONArray("data");
+        JSONObject merchantInfos = mInfoJson.getJSONObject("data");
 
         Assert.isNull(merchantInfos,"请求报文中data节点，没有子节点，data子节点应该为JSONArray,merchantInfos="+merchantInfos);
 
         JSONObject merchantInfoJ = new JSONObject();
         JSONArray resultMerchantIdArray = new JSONArray();
-        for(int merchantInfoIndex = 0 ;merchantInfoIndex < merchantInfos.size();merchantInfoIndex ++){
-            JSONObject merchantInfoJson = merchantInfos.getJSONObject(merchantInfoIndex);
-            String soMerchantMemberServiceResult = this.soMerchantMemberService(merchantInfoJson);
+            String soMerchantMemberServiceResult = this.soMerchantMemberService(merchantInfos);
             JSONObject resultInfo = new JSONObject();
 
             if(!ProtocolUtil.validateReturnJson(soMerchantMemberServiceResult,resultInfo)){
@@ -160,9 +158,9 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
 
 //                merchantIds = merchantIds.startsWith(",") && merchantIds.length()>1 ? merchantIds.substring(1,merchantIds.length()):merchantIds;
                 //merchantInfoJ.put("merchantId", merchantIds);
-                JSONArray boMerchantMembers = merchantInfoJson.getJSONArray("boMerchantMember");
+                JSONArray boMerchantMembers = merchantInfos.getJSONArray("boMerchantMember");
 
-                Object merchantIdObj = JSONPath.eval(merchantInfoJson,"$.boMerchantMember[merchantId < '0'][0].merchantId");
+                Object merchantIdObj = JSONPath.eval(merchantInfos,"$.boMerchantMember[merchantId < '0'][0].merchantId");
                 if(StringUtils.isNotBlank(merchantIds) && !ObjectUtils.isEmpty(merchantIdObj)) {
 
                     String[] allNewMerchantIds = merchantIds.split(",");
@@ -176,9 +174,6 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
 
                 }
             }
-
-        }
-
         merchantInfoJ.put("merchant",resultMerchantIdArray);
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",merchantInfoJ);
@@ -293,6 +288,54 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
         }
     }
 
+
+    /**
+     * 查询需要作废的订单信息
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteData(JSONObject data) throws Exception{
+        //根据versionId 查询是否有实例数据存在，如果存在，返回撤单信息，没有直接返回空
+        MerchantMember merchantMember = new MerchantMember();
+
+        merchantMember.setVersionId(data.getString("ol_id"));
+       MerchantMember newMerchantMember = iMerchantMemberServiceDao.queryDataToMerchantMember(merchantMember);
+        JSONObject returnJson = JSONObject.parseObject("{'data':{}}");
+       if(newMerchantMember == null){
+           return returnJson.toJSONString();
+       }
+
+       //查询过程表数据
+        BoMerchantMember boMerchantMember = new BoMerchantMember();
+       boMerchantMember.setMemberId(newMerchantMember.getMemberId());
+       boMerchantMember.setMerchantId(newMerchantMember.getMerchantId());
+       boMerchantMember.setVersionId(newMerchantMember.getVersionId());
+
+        List<BoMerchantMember> newBoMerchantMembers = iMerchantMemberServiceDao.queryBoMerchantMember(boMerchantMember);
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(newBoMerchantMembers == null || newBoMerchantMembers.size() == 0){
+            return returnJson.toJSONString();
+        }
+        JSONArray boMerchantMemberArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(int boMerchantMemberIndex = 0 ; boMerchantMemberIndex < newBoMerchantMembers.size();boMerchantMemberIndex++) {
+            BoMerchantMember newBoMerchantMember = newBoMerchantMembers.get(boMerchantMemberIndex);
+            if (StateConstant.STATE_DEL.equals(newBoMerchantMember.getState())) {
+                newBoMerchantMember.setBoId("");
+                newBoMerchantMember.setState(StateConstant.STATE_ADD);
+            } else if (StateConstant.STATE_ADD.equals(newBoMerchantMember.getState())) {
+                newBoMerchantMember.setState(StateConstant.STATE_DEL);
+            } else {
+                newBoMerchantMember.setState(StateConstant.STATE_KIP);
+            }
+            boMerchantMemberArray.add(newBoMerchantMember);
+        }
+            returnJson.getJSONObject("data").put("boMerchantMember",JSONObject.toJSONString(boMerchantMemberArray));
+            return returnJson.toJSONString();
+
+    }
 
     public IMerchantMemberServiceDao getiMerchantMemberServiceDao() {
         return iMerchantMemberServiceDao;
