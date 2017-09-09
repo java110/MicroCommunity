@@ -155,4 +155,13 @@ public interface IMerchantMemberService {
     @RequestMapping("/merchantMemberService/soDeleteMerchantMemberService")
     public String soDeleteMerchantMemberService(@RequestParam("data") String data);
 
+
+    /**
+     * 根据ol_id 查询需要作废的数据 这里 ol_id 就是 versionId
+     * @param data {'ol_id':'123456789'}
+     * @return
+     */
+    @RequestMapping("/merchantMemberService/queryNeedDeleteData")
+    public String queryNeedDeleteData(@RequestParam("data") String data);
+
 }
