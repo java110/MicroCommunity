@@ -20,7 +20,7 @@ public class BoMerchant implements Comparable{
 
     private String address;
 
-    private String type;
+    private String type_cd;
 
     private Date start_dt;
 
@@ -73,12 +73,12 @@ public class BoMerchant implements Comparable{
         this.address = address;
     }
 
-    public String getType() {
-        return type;
+    public String getType_cd() {
+        return type_cd;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType_cd(String type_cd) {
+        this.type_cd = type_cd;
     }
 
     public Date getStart_dt() {
