@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -53,8 +53,8 @@
       <file leaf-file-name="MerchantServiceRest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="40" column="30" lean-forward="false" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+            <state relative-caret-position="-17">
+              <caret line="148" column="5" lean-forward="true" selection-start-line="148" selection-start-column="5" selection-end-line="148" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -234,7 +234,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/CommonService/pom.xml" />
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/ICommonServiceSMO.java" />
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/smo/impl/CommonServiceSMOImpl.java" />
         <option value="$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/dao/ICommonServiceDao.java" />
@@ -285,6 +284,7 @@
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" />
       </list>
     </option>
   </component>
@@ -1447,8 +1447,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="40" column="30" lean-forward="false" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
+        <state relative-caret-position="-17">
+          <caret line="148" column="5" lean-forward="true" selection-start-line="148" selection-start-column="5" selection-end-line="148" selection-end-column="5" />
           <folding />
         </state>
       </provider>

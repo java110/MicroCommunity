@@ -97,9 +97,8 @@ public class MerchantServiceRest extends BaseController implements IMerchantServ
      * 请求协议：
      *
      * {
-     "data": [
+     "data":
      {
-     "actionTypeCd": "C1",
      "boMerchant": [
      {
      "merchantId": "-1",
@@ -147,7 +146,7 @@ public class MerchantServiceRest extends BaseController implements IMerchantServ
      }
      ]
      }
-     ]
+
      }
 
      *
