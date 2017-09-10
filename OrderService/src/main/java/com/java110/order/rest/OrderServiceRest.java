@@ -237,6 +237,13 @@ public class OrderServiceRest extends BaseController {
 
         }catch (Exception e){
             LoggerEngine.error("订单受理出现异常：", e);
+            //这里需要作废订单
+            try{
+                iOrderServiceSMO.soDeleteOrder(reqOrderJSON.getJSONObject("orderList"));
+            }catch (Exception e1){
+                LoggerEngine.error("订单受理撤单出现异常：", e);
+                //这里对于撤单失败的，不做处理。后期可以插入到日志中记录撤单失败单子
+            }
             resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"订单受理出现异常，"+e,null);
         }finally {
             return resultUserInfo;

@@ -105,6 +105,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         if(StringUtils.isBlank(olId) || olId.startsWith("-") ){
             olId = this.queryPrimaryKey(iPrimaryKeyService,"OL_ID");
             orderList.setOlId(olId);
+            orderListTmp.put("olId",olId);
         }
 
         //这里保存购物车
@@ -215,29 +216,20 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
             datasTmp.put(actionTypeCd,dataJsonTmp);
 
-            /*
-            try {
-                //发布事件
-                AppEventPublishing.multicastEvent(actionTypeCd,orderInfo.toJSONString(), data.toJSONString(),orderListTmp.getString("asyn"));
-            }catch (Exception e){
-                //这里补偿事物
-                throw e;
-            }*/
-
         }
 
         //创建上下文对象
         AppContext context = createApplicationContext();
 
         prepareContext(context, datasTmp);
-        try {
+       /* try {*/
             //发布事件
             AppEventPublishing.multicastEvent(context,datasTmp,orderListTmp.getString("asyn"));
-        }catch (Exception e){
+       /* }catch (Exception e){
             //这里补偿事物,这里发布广播
             compensateTransactional(datasTmp);
             throw e;
-        }
+        }*/
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
     }
 
@@ -415,6 +407,32 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
             throw e;
         }
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(orderList)));
+
+    }
+
+    /**
+     * 撤单处理 add by wuxw 2017-09-10 22:35
+     * 修改以前逻辑，根据olId 去目标系统查询需要查询撤单订单组装报文
+     * @param orderInfo
+     * @throws Exception
+     */
+    public void soDeleteOrder(JSONObject orderInfo) throws Exception{
+
+        //1.0 购物车信息校验处理,走订单受理必须要有购物车信息和订单项信息
+        if(!orderInfo.containsKey("orderListInfo") || !orderInfo.containsKey("busiOrder")){
+            return;
+        }
+
+        JSONObject orderListTmp = orderInfo.getJSONObject("orderListInfo");
+
+        OrderList orderList = JSONObject.parseObject(orderListTmp.toJSONString(),OrderList.class);
+
+        String olId = orderList.getOlId();
+        //生成olId
+        if(StringUtils.isBlank(olId) || olId.startsWith("-") ){
+           return ;
+        }
+
 
     }
 

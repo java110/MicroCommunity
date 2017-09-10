@@ -82,6 +82,7 @@ public class MerchantServiceRest extends BaseController implements IMerchantServ
 
         } catch (Exception e) {
             LoggerEngine.error("服务处理出现异常：", e);
+
             resultMerchantInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
         } finally {
             LoggerEngine.debug("用户服务操作客户出参：" + resultMerchantInfo);

@@ -81,4 +81,13 @@ public interface IOrderServiceSMO {
     public String deleteOrder(JSONObject orderInfo) throws Exception;
 
 
+    /**
+     * 撤单处理 add by wuxw 2017-09-10 22:35
+     * 修改以前逻辑，根据olId 去目标系统查询需要查询撤单订单组装报文
+     * @param orderInfo
+     * @throws Exception
+     */
+    public void soDeleteOrder(JSONObject orderInfo) throws Exception;
+
+
 }
