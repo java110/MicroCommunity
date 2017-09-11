@@ -18,4 +18,7 @@ public class AppEvent extends EventObject {
     public AppEvent(AppContext source) {
         super(source);
     }
+    public AppEvent(Object obj,AppContext source) {
+        super(source);
+    }
 }

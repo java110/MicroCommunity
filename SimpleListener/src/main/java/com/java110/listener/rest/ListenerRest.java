@@ -10,11 +10,9 @@ import com.java110.listener.bmo.IListenerBmo;
 import com.java110.listener.task.ListenerJob;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.util.ValidatorUtils;
-import org.quartz.CronExpression;
-import org.quartz.CronTrigger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
+import org.quartz.*;
+import org.quartz.impl.JobDetailImpl;
+import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -497,22 +495,23 @@ public class ListenerRest extends BaseController {
 
                 String triggerName = prefixJobName + taskId;
 
-                JobDetail jobDetail = scheduler.getJobDetail(jobName, ListenerJob.JOB_GROUP_NAME);
+
+                JobDetail jobDetail = scheduler.getJobDetail( new JobKey(jobName, ListenerJob.JOB_GROUP_NAME));
                 // 说明这个没有启动，则需要重新启动，如果启动着不做处理
                 if (jobDetail == null) {
                     // 任务名称
                     String taskCfgName = (String) doFtpItem.get("TASKNAME");
 
-                    JobDetail warnJob = new JobDetail(jobName, ListenerJob.JOB_GROUP_NAME, ListenerJob.class);
+                    JobDetail warnJob = new JobDetailImpl(jobName, ListenerJob.JOB_GROUP_NAME, ListenerJob.class);
 
                     warnJob.getJobDataMap().put(ListenerJob.JOB_DATA_CONFIG_NAME, taskCfgName);
 
                     warnJob.getJobDataMap().put(ListenerJob.JOB_DATA_TASK_ID, taskId);
 
-                    CronTrigger warnTrigger = new CronTrigger(triggerName, triggerName, cronExpression);
+                    CronTrigger warnTrigger = new CronTriggerImpl(triggerName, triggerName, cronExpression);
 
                     // 错过执行后，立即执行
-                    warnTrigger.setMisfireInstruction(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+                    //warnTrigger.setMisfireInstruction(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
 
                     scheduler.scheduleJob(warnJob, warnTrigger);
 
@@ -623,7 +622,7 @@ public class ListenerRest extends BaseController {
                 String jobName = prefixJobName + taskId;
 
                 String triggerName = prefixJobName + taskId;
-                scheduler.deleteJob(jobName, ListenerJob.JOB_GROUP_NAME);
+                scheduler.deleteJob(new JobKey(jobName, ListenerJob.JOB_GROUP_NAME));
 
                 // 修改数据状态，将任务数据状态改为运行状态
 

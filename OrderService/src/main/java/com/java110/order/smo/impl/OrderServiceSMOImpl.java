@@ -10,7 +10,7 @@ import com.java110.common.util.ProtocolUtil;
 import com.java110.config.properties.EventProperties;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.AppContext;
-import com.java110.core.event.AppEventPublishing;
+import com.java110.event.AppEventPublishing;
 import com.java110.entity.order.BusiOrder;
 import com.java110.entity.order.BusiOrderAttr;
 import com.java110.entity.order.OrderList;

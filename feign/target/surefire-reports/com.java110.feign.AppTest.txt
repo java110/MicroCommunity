@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.java110.feign.AppTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 sec - in com.java110.feign.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 sec - in com.java110.feign.AppTest

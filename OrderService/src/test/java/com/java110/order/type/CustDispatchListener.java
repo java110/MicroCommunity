@@ -1,8 +1,6 @@
 package com.java110.order.type;
 
-import com.java110.core.event.AppCustEvent;
-import com.java110.core.event.AppListener;
-import com.java110.core.event.Ordered;
+
 
 /**
  * Created by wuxw on 2017/4/14.

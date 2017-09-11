@@ -8,7 +8,7 @@
         <id column="productId" jdbcType="VARCHAR" property="productId"/>
         <result column="productImg" jdbcType="VARCHAR" property="productImg"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="productTypeCd" jdbcType="VARCHAR" property="productTypeCd"/>
+        <result column="catalogCd" jdbcType="VARCHAR" property="catalogCd"/>
         <result column="productDesc" jdbcType="VARCHAR" property="productDesc"/>
         <result column="start_dt" jdbcType="DATE" property="start_dt"/>
         <result column="end_dt" jdbcType="DATE" property="end_dt"/>
@@ -38,8 +38,8 @@
     <!--保存数据至过程表 bo_product 中 -->
     <insert id="saveDataToBoProduct" parameterType="com.java110.entity.product.BoProduct">
         <![CDATA[
-            insert into bo_product(boId,productId,productImg,name,productTypeCd,productDesc,start_dt,end_dt,state)
-            values(#{boId},#{productId},#{productImg},#{name},#{productTypeCd},#{productDesc},#{start_dt},#{end_dt},#{state})
+            insert into bo_product(boId,productId,productImg,name,catalogCd,productDesc,start_dt,end_dt,state)
+            values(#{boId},#{productId},#{productImg},#{name},#{catalogCd},#{productDesc},#{start_dt},#{end_dt},#{state})
         ]]>
     </insert>
     <!-- 保存数据至过程表bo_product_attr 中-->
@@ -52,8 +52,8 @@
     <!-- 保存 实例客户信息 product -->
     <insert id="saveDataToProduct" parameterType="com.java110.entity.product.Product">
         <![CDATA[
-            insert into product(productId,productImg,name,productTypeCd,productDesc,start_dt,end_dt,status_cd)
-            values(#{productId},#{productImg},#{name},#{productTypeCd},#{productDesc},#{start_dt},#{end_dt},#{status_cd})
+            insert into product(productId,productImg,name,catalogCd,productDesc,start_dt,end_dt,status_cd)
+            values(#{productId},#{productImg},#{name},#{catalogCd},#{productDesc},#{start_dt},#{end_dt},#{status_cd})
         ]]>
     </insert>
     <!-- 删除实例客户信息 product -->
@@ -83,7 +83,7 @@
     <!--根据客户ID 查询客户信息，其中包括 product 和productAttr 数据-->
     <select id="queryDataToProduct" parameterType="com.java110.entity.product.Product" resultMap="productMap">
         <![CDATA[
-            select c.productId,c.productImg,c.name,c.productTypeCd,c.productDesc,c.start_dt,c.end_dt,c.status_cd,c.create_dt,
+            select c.productId,c.productImg,c.name,c.catalogCd,c.productDesc,c.start_dt,c.end_dt,c.status_cd,c.create_dt,
             ca.productId,ca.attrCd,ca.value
              from product c, product_attr ca where c.productId= ca.productId
             and c.productId = #{productId}
@@ -93,7 +93,7 @@
 
     <!-- 查询客户过程数据 -->
     <select id="queryBoProduct" parameterType="com.java110.entity.product.BoProduct" resultType="com.java110.entity.product.BoProduct">
-        select bc.boId,bc.productId,bc.productImg,bc.name,bc.productTypeCd,bc.productDesc,bc.start_dt,bc.end_dt,bc.state,bc.create_dt,
+        select bc.boId,bc.productId,bc.productImg,bc.name,bc.catalogCd,bc.productDesc,bc.start_dt,bc.end_dt,bc.state,bc.create_dt,
         from bo_product bc where 1=1
         <if test="boId != null and boId != ''">
             and bc.boId = #{boId}

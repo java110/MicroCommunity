@@ -24,6 +24,7 @@
         <module>MerchantService</module>
         <module>RuleService</module>
         <module>SimpleListener</module>
+        <module>event</module>
     </modules>
 
     <parent>
@@ -112,6 +113,12 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>bean</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>event</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
@@ -304,7 +311,7 @@
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
-                <version>1.8.6</version>
+                <version>2.3.0</version>
             </dependency>
 
 

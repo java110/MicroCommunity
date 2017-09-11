@@ -12,6 +12,7 @@
         <module name="config" />
         <module name="core" />
         <module name="eureka" />
+        <module name="event" />
         <module name="feign" />
         <module name="MerchantService" />
         <module name="MerchantService1" />
@@ -32,6 +33,7 @@
       <module name="config" target="1.6" />
       <module name="core" target="1.6" />
       <module name="eureka" target="1.6" />
+      <module name="event" target="1.6" />
       <module name="feign" target="1.6" />
       <module name="MerchantService" target="1.6" />
       <module name="MerchantService1" target="1.6" />

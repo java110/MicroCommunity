@@ -1,6 +1,6 @@
 package com.java110.order.type;
 
-import com.java110.core.event.AppEvent;
+
 
 import java.util.EventListener;
 

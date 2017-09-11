@@ -6,6 +6,7 @@ com\java110\entity\merchant\BoMerchant.class
 com\java110\entity\listener\FtpTaskLog.class
 com\java110\entity\product\BoProduct.class
 com\java110\entity\user\Cust.class
+com\java110\entity\merchant\BoMerchantMember.class
 com\java110\entity\rule\Rule.class
 com\java110\entity\App.class
 com\java110\entity\merchant\BoMerchantAttr.class
@@ -15,12 +16,14 @@ com\java110\entity\product\BoProductAttr.class
 com\java110\entity\rule\ContractRootRule.class
 com\java110\entity\user\BoCust.class
 com\java110\entity\product\ProductAttr.class
+com\java110\entity\DefaultBoEntity.class
 com\java110\entity\rule\RuleEntrance.class
 com\java110\entity\mapping\CodeMapping.class
 com\java110\entity\rule\RuleCondCfg.class
 com\java110\entity\order\BusiOrderAttr.class
 com\java110\entity\order\BusiOrder.class
 com\java110\entity\order\OrderList.class
+com\java110\entity\merchant\MerchantMember.class
 com\java110\entity\user\BoCustOrder.class
 com\java110\entity\protocol\TcpCont.class
 com\java110\entity\user\CustInst.class

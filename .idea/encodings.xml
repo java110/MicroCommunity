@@ -3,7 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/BaseService" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CommonService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/MerchantService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OrderService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PayService" charset="UTF-8" />
@@ -16,6 +15,7 @@
     <file url="file://$PROJECT_DIR$/config" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/feign" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />

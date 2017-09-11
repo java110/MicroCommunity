@@ -30,7 +30,7 @@ public class ListenerJob extends StatefulMethodInvokingJob {
 
             if(logger.isDebugEnabled()){
                 logger.debug("FTP通用数据文件传接任务：" +
-                        context.getJobDetail().getFullName() + " taskID：" +
+                        context.getJobDetail().getKey() + " taskID：" +
                         context.getJobDetail().getJobDataMap().get(JOB_DATA_TASK_ID) +
                         " ftpfileTaskName：" +
                         context.getJobDetail().getJobDataMap().get(JOB_DATA_CONFIG_NAME), context);

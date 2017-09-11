@@ -1,12 +1,15 @@
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\rule\Rule.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\product\BoProductAttr.java
+E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\DefaultBoEntity.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\user\BoCust.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\protocol\TcpCont.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\merchant\MerchantAttr.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\DefaultEntity.java
+E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\merchant\MerchantMember.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\merchant\BoMerchant.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\user\BoCustOrder.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\listener\FtpTaskLogDetail.java
+E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\merchant\BoMerchantMember.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\rule\TcpContRule.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\product\ProductAttr.java
 E:\project\MicroCommunity\bean\src\main\java\com\java110\entity\protocol\SvcCont.java

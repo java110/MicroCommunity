@@ -26,6 +26,11 @@
 
         <dependency>
             <groupId>com.java110</groupId>
+            <artifactId>event</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
             <artifactId>config</artifactId>
             <scope>provided</scope>
         </dependency>

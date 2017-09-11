@@ -1,7 +1,7 @@
 package com.java110.order.type;
 
 import com.java110.core.context.AppContext;
-import com.java110.core.event.AppEvent;
+
 
 /**
  * 客户事件

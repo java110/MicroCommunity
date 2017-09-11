@@ -30,4 +30,9 @@ public class MerchantMemberServiceFallBack implements IMerchantMemberService {
     public String soDeleteMerchantMemberService(String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
+
+    @Override
+    public String queryNeedDeleteData(String data) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
 }
