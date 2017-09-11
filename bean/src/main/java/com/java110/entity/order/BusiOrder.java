@@ -34,7 +34,7 @@ public class BusiOrder {
     //备注
     private String remark;
 
-    private Set<BusiOrder> busiOrders;
+    private Set<BusiOrderAttr> busiOrderAttrs;
 
     public String getBoId() {
         return boId;
@@ -100,12 +100,11 @@ public class BusiOrder {
         this.remark = remark;
     }
 
-
-    public Set<BusiOrder> getBusiOrders() {
-        return busiOrders;
+    public Set<BusiOrderAttr> getBusiOrderAttrs() {
+        return busiOrderAttrs;
     }
 
-    public void setBusiOrders(Set<BusiOrder> busiOrders) {
-        this.busiOrders = busiOrders;
+    public void setBusiOrderAttrs(Set<BusiOrderAttr> busiOrderAttrs) {
+        this.busiOrderAttrs = busiOrderAttrs;
     }
 }

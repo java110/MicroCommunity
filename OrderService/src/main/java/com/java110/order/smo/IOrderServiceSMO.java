@@ -20,6 +20,9 @@ public interface IOrderServiceSMO {
      */
     public String queryOrderInfo(OrderList orderList)  throws Exception;
 
+
+    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo) throws Exception;
+
     /**
      * 订单调度，
      * 根据订单类型 调用不同服务 处理

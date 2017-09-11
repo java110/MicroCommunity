@@ -50,14 +50,93 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
     /**
      * 根据购物车ID 或者 外部系统ID 或者 custId 或者 channelId 查询订单信息
+     *
+     * 返回报文格式如下：
+     *
+     * {
+
+     "orderList": [{
+
+     "orderListAttrs": [{···}],
+
+     "busiOrder": [
+
+     {
+
+     "data": {
+
+     "boCust": [{···}],
+
+     "boCustAttr": [ {···}]
+
+     },
+
+     "busiObj": {····},
+
+     "busiOrderAttrs": [{···}]
+
+     }
+
+     ],
+
+     "orderListInfo": {···}
+
+     }]
+     }
+
      * @param orderList
      * @return
      */
     @Override
     public String queryOrderInfo(OrderList orderList) throws Exception{
+        return queryOrderInfo(orderList,true);
+    }
+
+    /**
+     * 根据购物车ID 或者 外部系统ID 或者 custId 或者 channelId 查询订单信息
+     *
+     * 返回报文格式如下：
+     *
+     * {
+
+         "orderList": [{
+
+         "orderListAttrs": [{···}],
+
+         "busiOrder": [
+
+             {
+
+                 "data": {
+
+                 "boCust": [{···}],
+
+                 "boCustAttr": [ {···}]
+
+                 },
+
+                 "busiObj": {····},
+
+                 "busiOrderAttrs": [{···}]
+
+             }
+
+         ],
+
+         "orderListInfo": {···}
+
+         }]
+     }
+
+     * @param orderList
+     * @param isQueryDataInfo 是 查询data节点 否不查询data节点
+     * @return
+     */
+    @Override
+    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo) throws Exception{
 
 
-        List<OrderList> orderLists = iOrderServiceDao.queryOrderListAndAttr(orderList);
+        /*List<OrderList> orderLists = iOrderServiceDao.queryOrderListAndAttr(orderList);
         //
         JSONArray orderListsArray = new JSONArray();
         for (OrderList orderListTmp : orderLists){
@@ -75,9 +154,84 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         }
 
         JSONObject orderListTmpO = new JSONObject();
-        orderListTmpO.put("orderLists",orderListsArray);
+        orderListTmpO.put("orderList",orderListsArray);*/
 
-        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"查询成功",orderListTmpO);
+        List<OrderList> orderLists = iOrderServiceDao.queryOrderListAndAttr(orderList);
+        //多个购物车封装
+        JSONArray orderListsArray = new JSONArray();
+
+        JSONObject orderListTmpJson = null;
+
+        for(OrderList orderListTmp : orderLists){
+            orderListTmpJson = new JSONObject();
+            //封装orderListAttrs
+            orderListTmpJson.put("orderListAttrs",JSONArray.parseArray(JSONObject.toJSONString(orderListTmp.getOrderListAttrs())));
+
+            orderListTmpJson.put("orderListInfo",JSONObject.parseObject(JSONObject.toJSONString(orderListTmp)).remove("orderListAttrs"));
+
+
+            BusiOrder busiOrderTmp = new BusiOrder();
+            busiOrderTmp.setBoId(orderListTmp.getOlId());
+
+            List<BusiOrder> busiOrders = iOrderServiceDao.queryBusiOrderAndAttr(busiOrderTmp);
+
+            //封装busiObj
+            JSONArray busiOrderTmpArray = new JSONArray();
+
+            /**
+             * [
+
+             {
+
+             "data": {
+
+             "boCust": [{···}],
+
+             "boCustAttr": [ {···}]
+
+             },
+
+             "busiObj": {····},
+
+             "busiOrderAttrs": [{···}]
+
+             }
+             */
+            JSONObject busiOrderTmpJson = null;
+            for(BusiOrder busiOrderTmp1 : busiOrders){
+                busiOrderTmpJson = new JSONObject();
+
+                //封装busiOrderAttrs
+
+                busiOrderTmpJson.put("busiOrderAttrs",JSONArray.parseArray(JSONObject.toJSONString(busiOrderTmp1.getBusiOrderAttrs())));
+
+
+                //封装busiObj
+
+                busiOrderTmpJson.put("busiObj",JSONObject.parseObject(JSONObject.toJSONString(busiOrderTmp1)).remove("busiOrderAttrs"));
+
+                //封装data 节点
+                if(isQueryDataInfo){
+
+                }
+
+
+                busiOrderTmpArray.add(busiOrderTmpJson);
+            }
+
+
+            //分装busiOrder
+
+            orderListTmpJson.put("busiOrder",busiOrderTmpArray);
+
+        }
+        orderListsArray.add(orderListTmpJson);
+
+        JSONObject orderListJson = new JSONObject();
+        orderListJson.put("orderList",orderListsArray);
+
+
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"查询成功",orderListJson);
     }
 
     /**
@@ -433,7 +587,14 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
            return ;
         }
 
+        // 查询购物车信息，订单项信息
+        String oldOrderInfo = this.queryOrderInfo(orderList,false);
 
+        JSONObject oldOrderInfoJson = ProtocolUtil.getObject(oldOrderInfo,JSONObject.class);
+
+        oldOrderInfoJson.getJSONArray("orderLists");
+        //重新发起撤单订单
+        orderDispatch(null);
     }
 
     /**
