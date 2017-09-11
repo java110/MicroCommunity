@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONPath;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.context.AppContext;
+import com.java110.entity.order.BusiOrder;
 import com.java110.event.cust.AppCustEvent;
 import com.java110.event.AppListener;
 import com.java110.event.order.Ordered;
@@ -26,7 +27,7 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
 
     private final static int order = Ordered.dafultValue+1;
     @Override
-    public void onJava110Event(AppCustEvent event) {
+    public void soDataService(AppCustEvent event) {
 
         //这里写 客户信息处理逻辑
 
@@ -76,7 +77,31 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
             }
         }
 
+    }
 
+    @Override
+    public JSONObject queryDataInfo(AppCustEvent event) {
+
+        AppContext context = event.getContext();
+
+        BusiOrder busiOrder = (BusiOrder) context.getReqObj();
+
+        String dataInfo = iUserService.queryUserInfoByOlId(JSONObject.toJSONString(busiOrder));
+
+        JSONObject dataInfoTmp = JSONObject.parseObject(dataInfo);
+
+        Assert.notNull(dataInfoTmp,"用户服务没有相应，请检查服务是否正常，请求报文："+dataInfoTmp);
+        //受理不成功
+        if(!dataInfoTmp.containsKey(ProtocolUtil.RESULT_CODE)
+                || !ProtocolUtil.RETURN_MSG_SUCCESS.equals(dataInfoTmp.getString(ProtocolUtil.RESULT_CODE))){
+            return JSONObject.parseObject("{'errorInfo':"+dataInfoTmp.getString(ProtocolUtil.RESULT_MSG)+"}");
+        }
+        return dataInfoTmp.getJSONObject(ProtocolUtil.RESULT_INFO);
+    }
+
+    @Override
+    public JSONObject queryNeedDeleteDataInfo(AppCustEvent event) {
+        return null;
     }
 
     @Override

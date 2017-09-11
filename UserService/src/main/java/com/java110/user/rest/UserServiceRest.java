@@ -53,6 +53,16 @@ public class UserServiceRest extends BaseController implements IUserService {
         }
     }
 
+    /**
+     * 根据购物车信息查询
+     * @param busiOrder
+     * @return
+     */
+    @Override
+    public String queryUserInfoByOlId(String busiOrder) {
+        return null;
+    }
+
 
     /**
      * 用户服务信息受理

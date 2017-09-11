@@ -35,6 +35,14 @@ public class AppContext {
      */
     private Map<String,String> keyIdMap = null;
 
+    /**
+     * 返回报文
+     */
+    private JSONObject rspJson;
+
+
+    private Object reqObj;
+
 
 
 
@@ -109,5 +117,19 @@ public class AppContext {
     }
 
 
+    public JSONObject getRspJson() {
+        return rspJson;
+    }
 
+    public void setRspJson(JSONObject rspJson) {
+        this.rspJson = rspJson;
+    }
+
+    public Object getReqObj() {
+        return reqObj;
+    }
+
+    public void setReqObj(Object reqObj) {
+        this.reqObj = reqObj;
+    }
 }

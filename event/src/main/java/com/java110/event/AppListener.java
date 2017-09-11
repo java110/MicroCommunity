@@ -1,5 +1,7 @@
 package com.java110.event;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.EventListener;
 
 /**
@@ -9,9 +11,26 @@ import java.util.EventListener;
 public interface AppListener<E extends AppEvent> extends EventListener {
 
     /**
+     * 受理
      * Handle an application event.
      * @param event the event to respond to
      */
-    void onJava110Event(E event);
+    void soDataService(E event);
+
+
+    /**
+     * 查询订单信息
+     * @param event
+     * @return
+     */
+    JSONObject queryDataInfo(E event);
+
+
+    /**
+     * 查询需要作废的订单信息
+     * @param event
+     * @return
+     */
+    JSONObject queryNeedDeleteDataInfo(E event);
 
 }

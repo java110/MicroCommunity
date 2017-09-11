@@ -29,7 +29,7 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
 
     private final static int order = Ordered.dafultValue+2;
     @Override
-    public void onJava110Event(AppDeleteCustEvent event) {
+    public void soDataService(AppDeleteCustEvent event) {
 
         //这里写 客户信息处理逻辑
 
@@ -45,6 +45,17 @@ public class DeleteCustDispatchListener implements AppListener<AppDeleteCustEven
 
         Assert.hasLength(custInfo, "没有需要处理的信息[custInfo=" + custInfo + "]");
         processSynchronous(custInfo);
+
+    }
+
+    @Override
+    public JSONObject queryDataInfo(AppDeleteCustEvent event) {
+        return null;
+    }
+
+    @Override
+    public JSONObject queryNeedDeleteDataInfo(AppDeleteCustEvent event) {
+        return null;
     }
 
     /**

@@ -27,6 +27,14 @@ public interface IUserService {
 
 
     /**
+     * 根据购物车信息查询
+     * @param busiOrder
+     * @return
+     */
+    public String queryUserInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+
+
+    /**
      * 用户服务信息受理
      * 协议：
      * {

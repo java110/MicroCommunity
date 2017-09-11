@@ -212,7 +212,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
                 //封装data 节点
                 if(isQueryDataInfo){
-
+                    busiOrderTmpJson.put("data",queryDataInfo(busiOrderTmp1));
                 }
 
 
@@ -232,6 +232,22 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"查询成功",orderListJson);
+    }
+
+    /**
+     * 查询data信息
+     * @return
+     */
+    private JSONObject queryDataInfo(BusiOrder busiOrder) throws Exception{
+        //购物车订单类型
+        String actionTypeCd = busiOrder.getActionTypeCd();
+
+        //创建上下文对象
+        AppContext context = createApplicationContext();
+
+        //prepareContext(context, busiOrder);
+        return AppEventPublishing.queryDataInfoEvent(context,busiOrder);
+
     }
 
     /**

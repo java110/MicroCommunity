@@ -19,6 +19,11 @@ public class UserServiceFallback implements IUserService{
     }
 
     @Override
+    public String queryUserInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
     public String soUserService(@RequestParam("data") String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }

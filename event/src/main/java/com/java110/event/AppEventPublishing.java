@@ -1,10 +1,12 @@
 package com.java110.event;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.context.AppContext;
+import com.java110.entity.order.BusiOrder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
@@ -64,7 +66,7 @@ public class AppEventPublishing extends LoggerEngine{
     /**
      * 根据是否实现了某个接口，返回侦听
      * @param interfaceClassName
-     * @since 1.7
+     * @since 1.8
      * @return
      */
     public static List<AppListener<?>> getListeners(String interfaceClassName){
@@ -222,11 +224,47 @@ public class AppEventPublishing extends LoggerEngine{
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected static void invokeListener(AppListener listener, AppEvent event) {
         try {
-            listener.onJava110Event(event);
+            listener.soDataService(event);
         }catch (Exception e){
             LoggerEngine.error("发布侦听失败",e);
             throw new RuntimeException("发布侦听失败,"+listener+ event + e);
         }
+    }
+
+    /**
+     * Invoke the given listener with the given event.
+     * @param listener the ApplicationListener to invoke
+     * @param event the current event to propagate
+     * @since 4.1
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected static JSONObject invokeQueryData(AppListener listener, AppEvent event) {
+           return listener.queryDataInfo(event);
+    }
+
+    /**
+     * 查询数据事件
+     * @param context 上下文
+     * @param busiOrder 订单项
+     * @return
+     */
+    public static JSONObject queryDataInfoEvent(AppContext context, BusiOrder busiOrder) throws Exception{
+
+            Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
+
+            Class[] parameterTypes={Object.class,AppContext.class};
+
+            Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+
+            Object[] parameters={null,context};
+
+            AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
+            JSONObject queryDataJson = new JSONObject();
+            for (AppListener<?> listener : getListeners(targetAppEvent.getClass().getName())) {
+                queryDataJson.putAll(invokeQueryData(listener,targetAppEvent));
+            }
+
+        return queryDataJson;
     }
 
 }
