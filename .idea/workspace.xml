@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dingding_java110.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Readme.md" afterPath="$PROJECT_DIR$/Readme.md" />
     </list>
@@ -83,8 +82,8 @@
         <entry file="file://$PROJECT_DIR$/Readme.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="368">
-                <caret line="138" column="77" lean-forward="false" selection-start-line="138" selection-start-column="77" selection-end-line="138" selection-end-column="77" />
+              <first_editor relative-caret-position="351">
+                <caret line="138" column="81" lean-forward="false" selection-start-line="138" selection-start-column="81" selection-end-line="138" selection-end-column="81" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -1399,8 +1398,8 @@
     <entry file="file://$PROJECT_DIR$/Readme.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="368">
-            <caret line="138" column="77" lean-forward="false" selection-start-line="138" selection-start-column="77" selection-end-line="138" selection-end-column="77" />
+          <first_editor relative-caret-position="351">
+            <caret line="138" column="81" lean-forward="false" selection-start-line="138" selection-start-column="81" selection-end-line="138" selection-end-column="81" />
             <folding />
           </first_editor>
           <second_editor />

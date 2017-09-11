@@ -136,6 +136,6 @@ RESULT_INFO 需要附带信息时，可以添加在这里
 
 加入钉钉java110 工作群随时了解项目进度，和java110开发者零距离沟通
 
-![image](https://github.com/java110/MicroCommunity/blob/test/dingding_java110.png)
+![image](https://github.com/java110/MicroCommunity/blob/test/dingding_java110.jpg)
 
 
