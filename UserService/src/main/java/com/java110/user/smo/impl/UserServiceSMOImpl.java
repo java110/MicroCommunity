@@ -3,9 +3,12 @@ package com.java110.user.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.java110.common.constant.StateConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
+import com.java110.entity.merchant.BoMerchantMember;
+import com.java110.entity.order.BusiOrder;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
 import com.java110.entity.user.Cust;
@@ -434,6 +437,127 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",JSONObject.parseObject(JSONObject.toJSONString(newCust)));
     }
 
+    /**
+     * 根据olID查询客户信息
+     * @param busiOrderStr
+     * @return
+     * @throws Exception
+     */
+    public String queryCustInfoByOlId(String busiOrderStr) throws Exception{
+        return doQueryCustInfoByOlId(busiOrderStr,false);
+    }
+
+    /**
+     * 根据olID查询客户信息 需要作废的发起的报文
+     * @param busiOrderStr
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteCustInfoByOlId(String busiOrderStr) throws Exception{
+        return doQueryCustInfoByOlId(busiOrderStr,true);
+    }
+
+    /**
+     * 查询客户订单信息
+     * @param busiOrderStr 订单项信息
+     * @param isNeedDelete 是否是撤单报文 true 查询撤单报文 false
+     * @return
+     * @throws Exception
+     */
+    private String doQueryCustInfoByOlId(String busiOrderStr,Boolean isNeedDelete) throws Exception{
+        BusiOrder busiOrder = JSONObject.parseObject(busiOrderStr, BusiOrder.class);
+
+        if(busiOrder == null || "".equals(busiOrder.getOlId())){
+            throw new IllegalArgumentException("客户信息查询入参为空，olId 为空 "+busiOrderStr);
+        }
+
+        Cust cust = new Cust();
+        cust.setVersionId(busiOrder.getOlId());
+        //根据版本ID查询实例数据
+        Cust newCust = iUserServiceDao.queryDataToCust(cust);
+        JSONObject returnJson = JSONObject.parseObject("{'data':{}}");
+        if(newCust == null){
+            return returnJson.toJSONString();
+        }
+
+        BoCust boCust = new BoCust();
+
+        boCust.setBoId(busiOrder.getBoId());
+        boCust.setCustId(newCust.getCustId());
+        boCust.setVersionId(busiOrder.getOlId());
+
+        List<BoCust> boCusts =  iUserServiceDao.queryBoCust(boCust);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boCusts == null || boCusts.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boCustArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(int boCustIndex = 0 ; boCustIndex < boCusts.size();boCustIndex++) {
+            BoCust newBoCust = boCusts.get(boCustIndex);
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoCust.getState())) {
+                    newBoCust.setBoId("");
+                    newBoCust.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoCust.getState())) {
+                    newBoCust.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoCust.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boCustArray.add(newBoCust);
+        }
+        returnJson.getJSONObject("data").put("boCust",JSONObject.toJSONString(boCustArray));
+
+
+        //属性处理
+        CustAttr oldCustAttr = new CustAttr();
+        oldCustAttr.setCustId(newCust.getCustId());
+        oldCustAttr.setVersionId(busiOrder.getOlId());
+        List<CustAttr> custAttrs = iUserServiceDao.queryDataToCustAttr(oldCustAttr);
+        if(custAttrs == null || custAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+        /**
+         * 查询客户查询的过程数据
+         */
+        BoCustAttr boCustAttr = new BoCustAttr();
+        boCustAttr.setCustId(newCust.getCustId());
+        boCustAttr.setVersionId(busiOrder.getOlId());
+        List<BoCustAttr> boCustAttrs = iUserServiceDao.queryBoCustAttr(boCustAttr);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boCustAttrs == null || boCustAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boCustAttrArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(BoCustAttr newBoCustAttr : boCustAttrs) {
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoCustAttr.getState())) {
+                    newBoCustAttr.setBoId("");
+                    newBoCustAttr.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoCustAttr.getState())) {
+                    newBoCustAttr.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoCustAttr.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boCustAttrArray.add(newBoCustAttr);
+        }
+
+        returnJson.getJSONObject("data").put("boCustAttr",JSONObject.toJSONString(boCustAttrArray));
+
+        return returnJson.toJSONString();
+
+    }
     /**
      * 处理boCust 节点
      * @throws Exception

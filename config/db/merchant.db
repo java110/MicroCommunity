@@ -92,10 +92,11 @@ create table bo_merchant_member(
      merchantId  varchar(20) not null COMMENT '商户ID',
     memberId  varchar(20) not null COMMENT '成员ID',
     versionId varchar(20) not null comment '过程表更新实例表最新的版本ID，这里可以是购物车ID',
-    memberType varchar(10) not null comment '成员类型 1 产品 2 目录'
     create_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
-    end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
-    state  varchar(10) not null COMMENT '新建 ADD ，删除DEL'
+        start_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+        end_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+        state  varchar(10) not null COMMENT '新建 ADD ，删除DEL',
+    memberType varchar(10) not null comment '成员类型 1 产品 2 目录'
+
 );
 

@@ -1,5 +1,7 @@
 package com.java110.entity.user;
 
+import com.java110.entity.DefaultBoEntity;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  * 主要用于新建客户，更新客户，删除客户时，保存到以bo开头的过程表 实体
  * Created by wuxw on 2016/12/27.
  */
-public class BoCust implements Comparable {
+public class BoCust extends DefaultBoEntity implements Comparable {
 
 
     private final static String CUST_TYPE_GENERAL= "1";// 普通客户
@@ -49,9 +51,7 @@ public class BoCust implements Comparable {
 
     private String openId;
 
-    private String state;
 
-    private Date create_dt;
 
     public String getBoId() {
         return boId;
@@ -149,21 +149,6 @@ public class BoCust implements Comparable {
         this.openId = openId;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Date getCreate_dt() {
-        return create_dt;
-    }
-
-    public void setCreate_dt(Date create_dt) {
-        this.create_dt = create_dt;
-    }
 
     /**
      * 转为实例数据

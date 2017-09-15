@@ -89,7 +89,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
      */
     @Override
     public String queryOrderInfo(OrderList orderList) throws Exception{
-        return queryOrderInfo(orderList,true);
+        return queryOrderInfo(orderList,true,false);
     }
 
     /**
@@ -133,7 +133,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
      * @return
      */
     @Override
-    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo) throws Exception{
+    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo,Boolean isNeedDelete) throws Exception{
 
 
         /*List<OrderList> orderLists = iOrderServiceDao.queryOrderListAndAttr(orderList);
@@ -212,7 +212,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
 
                 //封装data 节点
                 if(isQueryDataInfo){
-                    busiOrderTmpJson.put("data",queryDataInfo(busiOrderTmp1));
+                    busiOrderTmpJson.put("data",queryDataInfo(busiOrderTmp1,isNeedDelete));
                 }
 
 
@@ -238,7 +238,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
      * 查询data信息
      * @return
      */
-    private JSONObject queryDataInfo(BusiOrder busiOrder) throws Exception{
+    private JSONObject queryDataInfo(BusiOrder busiOrder,Boolean isNeedDelete) throws Exception{
         //购物车订单类型
         String actionTypeCd = busiOrder.getActionTypeCd();
 
@@ -246,7 +246,11 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         AppContext context = createApplicationContext();
 
         //prepareContext(context, busiOrder);
-        return AppEventPublishing.queryDataInfoEvent(context,busiOrder);
+        if(isNeedDelete) {
+            return AppEventPublishing.queryDataInfoEvent(context, busiOrder);
+        }else {
+            return AppEventPublishing.queryNeedDeleteDataInfoEvent(context,busiOrder);
+        }
 
     }
 
@@ -604,13 +608,11 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         }
 
         // 查询购物车信息，订单项信息
-        String oldOrderInfo = this.queryOrderInfo(orderList,false);
+        String oldOrderInfo = this.queryOrderInfo(orderList,true,true);
 
-        JSONObject oldOrderInfoJson = ProtocolUtil.getObject(oldOrderInfo,JSONObject.class);
 
-        oldOrderInfoJson.getJSONArray("orderLists");
         //重新发起撤单订单
-        orderDispatch(null);
+        orderDispatch(JSONObject.parseObject(oldOrderInfo));
     }
 
     /**

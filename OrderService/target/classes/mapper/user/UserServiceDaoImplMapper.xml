@@ -84,13 +84,18 @@
     </update>
     <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
     <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
-        <![CDATA[
+
             select c.custId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.custAdress,c.custType,c.openId,
             ca.custId,ca.attrCd,ca.value
              from cust c, cust_attr ca where c.custId= ca.custId
+        <if test="custId != null and custId != ''">
             and c.custId = #{custId}
+        </if>
+        <if test="versionId != null and versionId != ''">
+            and c.versionId = #{versionId}
+        </if>
             and c.status_cd = '0'
-        ]]>
+
     </select>
 
     <!-- 查询客户过程数据 -->
@@ -103,7 +108,10 @@
         <if test="custId != null and custId != ''">
             and bc.custId = #{custId}
         </if>
-        and bc.state in ('ADD','DEL')
+        <if test="versionId != null and versionId != ''">
+            and c.versionId = #{versionId}
+        </if>
+        and bc.state in ('ADD','DEL','KIP')
         <if test="create_dt != null and create_dt != ''">
             order by bc.create_dt desc
         </if>
@@ -117,9 +125,27 @@
         <if test="custId != null and custId != ''">
             and bca.custId = #{custId}
         </if>
-        <if test="create_dt != null and create_dt != ''">
-            order by bc.create_dt desc
+        <if test="versionId != null and versionId != ''">
+            and bca.versionId = #{versionId}
         </if>
+        <if test="create_dt != null and create_dt != ''">
+            order by bca.create_dt desc
+        </if>
+    </select>
+
+    <!-- 查询客户属性信息 -->
+    <select id="queryDataToCustAttr" parameterType="com.java110.entity.user.CustAttr" resultType="com.java110.entity.user.CustAttr">
+        select * from cust_attr ca where 1=1
+        <if test="custId != null and custId != ''">
+            and ca.custId = #{custId}
+        </if>
+        <if test="versionId != null and versionId != ''">
+            and ca.versionId = #{versionId}
+        </if>
+        <if test="attrCd != null and attrCd != ''">
+            and ca.attrCd = #{attrCd}
+        </if>
+        and status_cd = '0'
     </select>
 
 </mapper>

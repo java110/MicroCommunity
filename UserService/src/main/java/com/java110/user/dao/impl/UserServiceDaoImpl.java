@@ -228,9 +228,27 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
         return newCust;
     }
 
+    /**
+     * 查询客户属性信息
+     *
+     * @param custAttr 对象
+     * @return
+     * @throws RuntimeException
+     */
     @Override
     public List<CustAttr> queryDataToCustAttr(CustAttr custAttr) throws RuntimeException {
-        return null;
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCustAttr】保存数据入参 : " + custAttr);
+        //为了保险起见，再测检测reqList 是否有值
+        if(custAttr == null){
+            LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出错 : " + custAttr);
+            throw new IllegalArgumentException("请求参数错误，CustAttr : " + custAttr);
+        }
+
+        List<CustAttr> custAttrs  = sqlSessionTemplate.selectList("userServiceDAOImpl.queryDataToCustAttr",custAttr);
+
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryDataToCust】保存数据出参 :custAttrs " + custAttrs);
+
+        return custAttrs;
     }
 
     @Override

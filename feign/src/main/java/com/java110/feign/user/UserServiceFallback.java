@@ -1,6 +1,7 @@
 package com.java110.feign.user;
 
 import com.java110.common.util.ProtocolUtil;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -19,7 +20,19 @@ public class UserServiceFallback implements IUserService{
     }
 
     @Override
-    public String queryUserInfoByOlId(String busiOrder) {
+    public String queryCustInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @Override
+    public String queryNeedDeleteCustInfoByOlId(String busiOrder){
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
 

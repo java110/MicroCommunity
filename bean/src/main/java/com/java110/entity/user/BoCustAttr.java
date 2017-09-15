@@ -1,32 +1,16 @@
 package com.java110.entity.user;
 
+import com.java110.entity.DefaultBoAttrEntity;
+
 import java.util.Date;
 
 /**
  * 客户属性表（过程表）
  * Created by wuxw on 2016/12/27.
  */
-public class BoCustAttr implements Comparable{
-
-    private String boId;
+public class BoCustAttr extends DefaultBoAttrEntity implements Comparable{
 
     private String custId;
-
-    private String attrCd;
-
-    private String value;
-
-    private String state;
-
-    private Date create_dt;
-
-    public String getBoId() {
-        return boId;
-    }
-
-    public void setBoId(String boId) {
-        this.boId = boId;
-    }
 
     public String getCustId() {
         return custId;
@@ -36,37 +20,6 @@ public class BoCustAttr implements Comparable{
         this.custId = custId;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getAttrCd() {
-        return attrCd;
-    }
-
-    public void setAttrCd(String attrCd) {
-        this.attrCd = attrCd;
-    }
-
-    public Date getCreate_dt() {
-        return create_dt;
-    }
-
-    public void setCreate_dt(Date create_dt) {
-        this.create_dt = create_dt;
-    }
 
     /**
      * 将过程数据转为实例数据

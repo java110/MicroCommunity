@@ -74,4 +74,22 @@ public interface IUserServiceSMO {
      * @throws Exception
      */
     public String queryCust(Cust cust) throws Exception;
+
+    /**
+     * 根据olID查询用户信息
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    public String queryCustInfoByOlId(String busiOrder) throws Exception;
+
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteCustInfoByOlId(String busiOrder) throws Exception;
+
 }

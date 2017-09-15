@@ -55,12 +55,62 @@ public class UserServiceRest extends BaseController implements IUserService {
 
     /**
      * 根据购物车信息查询
+     *
+     * 这里返回data信息
      * @param busiOrder
      * @return
      */
     @Override
-    public String queryUserInfoByOlId(String busiOrder) {
-        return null;
+    @RequestMapping("/userService/queryCustInfoByOlId")
+    public String queryCustInfoByOlId(String busiOrder) {
+
+
+        LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
+
+
+        String resultUserInfo = null;
+
+        try {
+             this.simpleValidateJSON(busiOrder);
+            resultUserInfo = iUserServiceSMO.queryCustInfoByOlId(busiOrder);
+
+        } catch (Exception e) {
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+        } finally {
+            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
+    }
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @Override
+    @RequestMapping("/userService/queryNeedDeleteCustInfoByOlId")
+    public String queryNeedDeleteCustInfoByOlId(String busiOrder) {
+
+
+        LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
+
+
+        String resultUserInfo = null;
+
+        try {
+            this.simpleValidateJSON(busiOrder);
+            resultUserInfo = iUserServiceSMO.queryNeedDeleteCustInfoByOlId(busiOrder);
+
+        } catch (Exception e) {
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+        } finally {
+            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
     }
 
 

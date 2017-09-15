@@ -86,7 +86,7 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
 
         BusiOrder busiOrder = (BusiOrder) context.getReqObj();
 
-        String dataInfo = iUserService.queryUserInfoByOlId(JSONObject.toJSONString(busiOrder));
+        String dataInfo = iUserService.queryCustInfoByOlId(JSONObject.toJSONString(busiOrder));
 
         JSONObject dataInfoTmp = JSONObject.parseObject(dataInfo);
 
@@ -101,7 +101,21 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
 
     @Override
     public JSONObject queryNeedDeleteDataInfo(AppCustEvent event) {
-        return null;
+        AppContext context = event.getContext();
+
+        BusiOrder busiOrder = (BusiOrder) context.getReqObj();
+
+        String dataInfo = iUserService.queryNeedDeleteCustInfoByOlId(JSONObject.toJSONString(busiOrder));
+
+        JSONObject dataInfoTmp = JSONObject.parseObject(dataInfo);
+
+        Assert.notNull(dataInfoTmp,"用户服务没有相应，请检查服务是否正常，请求报文："+dataInfoTmp);
+        //受理不成功
+        if(!dataInfoTmp.containsKey(ProtocolUtil.RESULT_CODE)
+                || !ProtocolUtil.RETURN_MSG_SUCCESS.equals(dataInfoTmp.getString(ProtocolUtil.RESULT_CODE))){
+            return JSONObject.parseObject("{'errorInfo':"+dataInfoTmp.getString(ProtocolUtil.RESULT_MSG)+"}");
+        }
+        return dataInfoTmp.getJSONObject(ProtocolUtil.RESULT_INFO);
     }
 
     @Override

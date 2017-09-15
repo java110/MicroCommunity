@@ -243,6 +243,17 @@ public class AppEventPublishing extends LoggerEngine{
     }
 
     /**
+     * Invoke the given listener with the given event.
+     * @param listener the ApplicationListener to invoke
+     * @param event the current event to propagate
+     * @since 4.1
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected static JSONObject invokeQueryNeedDeleteData(AppListener listener, AppEvent event) {
+        return listener.queryNeedDeleteDataInfo(event);
+    }
+
+    /**
      * 查询数据事件
      * @param context 上下文
      * @param busiOrder 订单项
@@ -250,19 +261,45 @@ public class AppEventPublishing extends LoggerEngine{
      */
     public static JSONObject queryDataInfoEvent(AppContext context, BusiOrder busiOrder) throws Exception{
 
-            Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
+        Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
 
-            Class[] parameterTypes={Object.class,AppContext.class};
+        Class[] parameterTypes={Object.class,AppContext.class};
 
-            Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
 
-            Object[] parameters={null,context};
+        Object[] parameters={null,context};
 
-            AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
-            JSONObject queryDataJson = new JSONObject();
-            for (AppListener<?> listener : getListeners(targetAppEvent.getClass().getName())) {
-                queryDataJson.putAll(invokeQueryData(listener,targetAppEvent));
-            }
+        AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
+        JSONObject queryDataJson = new JSONObject();
+        for (AppListener<?> listener : getListeners(targetAppEvent.getClass().getName())) {
+            queryDataJson.putAll(invokeQueryData(listener,targetAppEvent));
+        }
+
+        return queryDataJson;
+    }
+
+
+    /**
+     * 查询数据事件
+     * @param context 上下文
+     * @param busiOrder 订单项
+     * @return
+     */
+    public static JSONObject queryNeedDeleteDataInfoEvent(AppContext context, BusiOrder busiOrder) throws Exception{
+
+        Class<AppEvent> appEvent = getEvent(busiOrder.getActionTypeCd());
+
+        Class[] parameterTypes={Object.class,AppContext.class};
+
+        Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+
+        Object[] parameters={null,context};
+
+        AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
+        JSONObject queryDataJson = new JSONObject();
+        for (AppListener<?> listener : getListeners(targetAppEvent.getClass().getName())) {
+            queryDataJson.putAll(invokeQueryNeedDeleteData(listener,targetAppEvent));
+        }
 
         return queryDataJson;
     }

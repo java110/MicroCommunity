@@ -21,7 +21,7 @@ public interface IOrderServiceSMO {
     public String queryOrderInfo(OrderList orderList)  throws Exception;
 
 
-    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo) throws Exception;
+    public String queryOrderInfo(OrderList orderList,Boolean isQueryDataInfo,Boolean isNeedDelete) throws Exception;
 
     /**
      * 订单调度，

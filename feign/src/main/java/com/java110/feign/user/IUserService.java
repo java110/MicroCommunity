@@ -31,7 +31,18 @@ public interface IUserService {
      * @param busiOrder
      * @return
      */
-    public String queryUserInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+    @RequestMapping("/userService/queryCustInfoByOlId")
+    public String queryCustInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+
+
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     * @param busiOrder
+     * @return
+     */
+    @RequestMapping("/userService/queryNeedDeleteCustInfoByOlId")
+    public String queryNeedDeleteCustInfoByOlId(@RequestParam("busiOrder") String busiOrder);
 
 
     /**

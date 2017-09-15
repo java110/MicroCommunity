@@ -23,6 +23,7 @@ com\java110\entity\rule\RuleCondCfg.class
 com\java110\entity\order\BusiOrderAttr.class
 com\java110\entity\order\BusiOrder.class
 com\java110\entity\order\OrderList.class
+com\java110\entity\DefaultBoAttrEntity.class
 com\java110\entity\merchant\MerchantMember.class
 com\java110\entity\user\BoCustOrder.class
 com\java110\entity\protocol\TcpCont.class
