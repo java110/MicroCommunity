@@ -136,10 +136,8 @@ public class UserServiceRest extends BaseController implements IUserService {
             reqUserJSON = this.simpleValidateJSON(data);
             //1.0规则校验，报文是否合法
 
-
             //2.0 受理客户信息
             resultUserInfo = iUserServiceSMO.soUserService(reqUserJSON);
-
 
         } catch (Exception e) {
             LoggerEngine.error("服务处理出现异常：", e);
@@ -149,6 +147,7 @@ public class UserServiceRest extends BaseController implements IUserService {
             return resultUserInfo;
         }
     }
+
 
     /**
      * 这个接口专门用于订单服务受理用，入参为 JSONObject

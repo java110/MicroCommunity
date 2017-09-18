@@ -245,7 +245,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         //创建上下文对象
         AppContext context = createApplicationContext();
 
-        //prepareContext(context, busiOrder);
+        context.setReqObj(busiOrder);
         if(isNeedDelete) {
             return AppEventPublishing.queryDataInfoEvent(context, busiOrder);
         }else {

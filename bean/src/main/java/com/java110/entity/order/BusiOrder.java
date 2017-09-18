@@ -34,7 +34,7 @@ public class BusiOrder {
     //备注
     private String remark;
 
-    private Set<BusiOrderAttr> busiOrderAttrs;
+        private Set<BusiOrderAttr> busiOrderAttrs;
 
     public String getBoId() {
         return boId;

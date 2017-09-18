@@ -383,6 +383,35 @@ public class OrderServiceRest extends BaseController {
 
     }
 
+    /**
+     * 公用接口方法，为其他服务提供公用入口
+     *
+     * 相当于实现协议转换 路由功能 还可以加入授权 白黑名单控制 等功能
+     * @return
+     */
+    @RequestMapping("/orderService/common")
+    public String common(@RequestParam("paramIn") String paramIn){
+
+        LoggerEngine.debug("common入参：" + paramIn);
+        String resultUserInfo = null;
+
+        JSONObject reqOrderJSON = null;
+        try{
+
+            reqOrderJSON = this.simpleValidateJSON(paramIn);
+
+            // 删除订单对应实例数据
+           // resultUserInfo = iOrderServiceSMO.deleteOrder(reqOrderJSON.getJSONObject("orderList"));
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"功能正在开发中。。。",null);
+        }catch (Exception e){
+            LoggerEngine.error("订单受理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"处理出现异常，"+e,null);
+        }finally {
+            return resultUserInfo;
+        }
+
+    }
+
 
     public IOrderServiceSMO getiOrderServiceSMO() {
         return iOrderServiceSMO;

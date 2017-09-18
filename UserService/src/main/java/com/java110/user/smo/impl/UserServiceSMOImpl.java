@@ -108,11 +108,12 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         if (userInfoJson == null){
             throw new IllegalArgumentException("soUserService 入参 为空"+userInfoJson);
         }
-         // 客户信息处理 处理boCust节点
-        doProcessBoCust(userInfoJson,paramJson,custIdKey,resultInfo);
 
-        //客户属性信息处理 处理boCustAttr节点
-        doProcessBoCustAttr(userInfoJson,paramJson,custIdKey,resultInfo);
+            // 客户信息处理 处理boCust节点
+            doProcessBoCust(userInfoJson, paramJson, custIdKey, resultInfo);
+
+            //客户属性信息处理 处理boCustAttr节点
+            doProcessBoCustAttr(userInfoJson, paramJson, custIdKey, resultInfo);
 
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_SUCCESS,"成功",resultInfo);
 
