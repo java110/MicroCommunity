@@ -1,4 +1,4 @@
-package com.java110.event;
+package com.java110.event.app;
 
 import com.alibaba.fastjson.JSONArray;
 import com.java110.core.context.AppContext;

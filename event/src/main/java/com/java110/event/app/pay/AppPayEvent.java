@@ -1,13 +1,14 @@
-package com.java110.event.merchant;
+package com.java110.event.app.pay;
 
 import com.java110.core.context.AppContext;
-import com.java110.event.AppEvent;
+import com.java110.event.app.AppEvent;
 
 /**
- * 商户事件
+ *
+ * 支付事件
  * Created by wuxw on 2017/4/14.
  */
-public class AppMerchantEvent extends AppEvent {
+public class AppPayEvent extends AppEvent {
 
     /**
      * Constructs a prototypical Event.
@@ -15,7 +16,8 @@ public class AppMerchantEvent extends AppEvent {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public AppMerchantEvent(Object source, AppContext context) {
+    public AppPayEvent(Object source, AppContext context) {
         super(source,context);
     }
+
 }

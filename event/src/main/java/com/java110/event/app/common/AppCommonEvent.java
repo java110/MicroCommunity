@@ -1,8 +1,8 @@
-package com.java110.event.common;
+package com.java110.event.app.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.java110.core.context.AppContext;
-import com.java110.event.AppEvent;
+import com.java110.event.app.AppEvent;
 
 /**
  * 通用处理事件，有些服务的处理方式是一模一样的

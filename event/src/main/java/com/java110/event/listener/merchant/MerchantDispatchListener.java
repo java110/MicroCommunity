@@ -3,9 +3,9 @@ package com.java110.listener.merchant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.AppContext;
-import com.java110.event.AppListener;
-import com.java110.event.merchant.AppMerchantEvent;
-import com.java110.event.order.Ordered;
+import com.java110.event.app.AppListener;
+import com.java110.event.app.merchant.AppMerchantEvent;
+import com.java110.event.app.order.Ordered;
 
 /**
  * Created by wuxw on 2017/4/14.

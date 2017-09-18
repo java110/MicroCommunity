@@ -1,8 +1,8 @@
-package com.java110.event.cust;
+package com.java110.event.app.cust;
 
 import com.alibaba.fastjson.JSONArray;
 import com.java110.core.context.AppContext;
-import com.java110.event.AppEvent;
+import com.java110.event.app.AppEvent;
 
 /**
  * 客户事件

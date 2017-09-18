@@ -1,4 +1,4 @@
-package com.java110.listener.common;
+package com.java110.event.listener.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,12 +7,14 @@ import com.java110.common.util.ProtocolUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.AppContext;
 import com.java110.entity.order.BusiOrder;
-import com.java110.event.AppListener;
-import com.java110.event.common.AppCommonEvent;
+import com.java110.event.app.AppListener;
+import com.java110.event.app.common.AppCommonEvent;
+import com.java110.event.method.CommonDispatchAfterMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,9 @@ public class CommonDispatchListener implements AppListener<AppCommonEvent> {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private CommonDispatchAfterMethod commonDispatchAfterMethod;
+
 
     /**
      * 数据受理
@@ -66,11 +71,19 @@ public class CommonDispatchListener implements AppListener<AppCommonEvent> {
 
         String service_url = services.get(bo_action_type);
 
-        if(StringUtil.isEmpty(service_url) || !service_url.contains("@@")){
-            throw new IllegalArgumentException("服务配置错误，["+bo_action_type+"]不存在 ,配置格式为 A::B@@C@@D");
+        if(StringUtil.isEmpty(service_url) || !service_url.contains("@@") || !service_url.contains("##")){
+            throw new IllegalArgumentException("服务配置错误，["+bo_action_type+"]不存在 ,配置格式为 A::B##M@@C@@D");
         }
 
-        String returnObj = restTemplate.postForObject(service_url.split("@@")[0],null,String.class,infoJson);
+        String[] service_urls = service_url.split("@@")[0].split("##");
+
+        if(service_urls == null || service_urls.length != 2){
+            throw new IllegalArgumentException("服务配置错误，["+bo_action_type+"]配置错误,配置格式为 A::B##M@@C@@D");
+        }
+        service_url = service_urls[0];
+        String after_method = service_urls[1];
+
+        String returnObj = restTemplate.postForObject(service_url,null,String.class,infoJson);
 
         JSONObject returnObjTmp = JSONObject.parseObject(returnObj);
 
@@ -80,6 +93,22 @@ public class CommonDispatchListener implements AppListener<AppCommonEvent> {
                 || !ProtocolUtil.RETURN_MSG_SUCCESS.equals(returnObjTmp.getString(ProtocolUtil.RESULT_CODE))){
             throw new IllegalArgumentException(service_url+"受理失败，失败原因：" + (returnObjTmp.containsKey(ProtocolUtil.RESULT_MSG)
                     ?"未知原因":returnObjTmp.getString(ProtocolUtil.RESULT_MSG)) + "请求报文："+returnObj);
+        }
+
+        //根据配置查询是否需要 调用方法处理，比如将返回的商户ID 刷新原前报文中 的商户ID的值
+        if(!"0".equals(after_method) && !StringUtil.isEmpty(after_method)){
+
+            try {
+                Class clazz = commonDispatchAfterMethod.getClass();
+
+                Method method = clazz.getDeclaredMethod(after_method,new Class[]{AppContext.class,JSONArray.class,JSONObject.class});
+
+                method.invoke(commonDispatchAfterMethod,context,dataInfos,returnObjTmp.getJSONObject(ProtocolUtil.RESULT_INFO));
+
+            }catch (Exception e){
+                throw new IllegalArgumentException("服务配置错误，["+bo_action_type+"]配置错误,配置格式为 A::B##M@@C@@D，配置的method 在类"+commonDispatchAfterMethod.getClass()
+                        +"中没有找到方法" + after_method);
+            }
         }
     }
 
@@ -143,5 +172,14 @@ public class CommonDispatchListener implements AppListener<AppCommonEvent> {
 
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+
+    public CommonDispatchAfterMethod getCommonDispatchAfterMethod() {
+        return commonDispatchAfterMethod;
+    }
+
+    public void setCommonDispatchAfterMethod(CommonDispatchAfterMethod commonDispatchAfterMethod) {
+        this.commonDispatchAfterMethod = commonDispatchAfterMethod;
     }
 }
