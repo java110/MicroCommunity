@@ -1,9 +1,9 @@
-package com.java110.init;
+package com.java110.event.init;
 
 import com.java110.core.factory.AppFactory;
 import com.java110.event.app.AppEventPublishing;
 import com.java110.event.app.AppListener;
-import com.java110.listener.common.CommonDispatchListener;
+import com.java110.event.listener.common.CommonDispatchListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;

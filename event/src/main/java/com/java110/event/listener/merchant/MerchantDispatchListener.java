@@ -1,4 +1,4 @@
-package com.java110.listener.merchant;
+package com.java110.event.listener.merchant;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

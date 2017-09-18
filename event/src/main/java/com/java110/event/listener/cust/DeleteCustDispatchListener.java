@@ -1,4 +1,4 @@
-package com.java110.listener.cust;
+package com.java110.event.listener.cust;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
