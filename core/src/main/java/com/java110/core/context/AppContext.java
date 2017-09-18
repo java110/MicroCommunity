@@ -25,6 +25,11 @@ public class AppContext {
      */
     public final static String PREFIX_CUSTID = "CUSTID_";
 
+    /**
+     * 订单动作
+     */
+    private String bo_action_type;
+
 
     /**
      * 为了满足 一个单子上有 多个 olId,custId 不同的处理，
@@ -131,5 +136,14 @@ public class AppContext {
 
     public void setReqObj(Object reqObj) {
         this.reqObj = reqObj;
+    }
+
+
+    public String getBo_action_type() {
+        return bo_action_type;
+    }
+
+    public void setBo_action_type(String bo_action_type) {
+        this.bo_action_type = bo_action_type;
     }
 }

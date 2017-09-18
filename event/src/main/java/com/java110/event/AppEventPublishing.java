@@ -170,6 +170,7 @@ public class AppEventPublishing extends LoggerEngine{
            Class[] parameterTypes={Object.class,AppContext.class,JSONArray.class};
 
            Constructor constructor = appEvent.getClass().getConstructor(parameterTypes);
+           context.setBo_action_type(key);
            Object[] parameters={null,context,data.get(key)};
            AppEvent targetAppEvent = (AppEvent)constructor.newInstance(parameters);
 

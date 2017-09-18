@@ -3,6 +3,7 @@ package com.java110.init;
 import com.java110.core.factory.AppFactory;
 import com.java110.event.AppEventPublishing;
 import com.java110.event.AppListener;
+import com.java110.listener.common.CommonDispatchListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -39,6 +40,11 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
      */
     private final static String DISPATCH_EVENT = "java110.event.properties.orderDispatchEvent";
 
+    /**
+     * 服务
+     */
+    private final static String LISTENER_SERVICE = "java110.event.properties.listener.service";
+
 
 
     /**
@@ -58,6 +64,8 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
             registerEvent(properties);
 
 
+            //注册服务
+            registerService(properties);
         }
         catch (Exception ex) {
             throw new IllegalStateException("Unable to load configuration files", ex);
@@ -121,6 +129,32 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
             Class clazz = Class.forName(tmpEvent[1]);
 
             AppEventPublishing.addEvent(tmpEvent[0],clazz);
+        }
+
+    }
+
+
+    /**
+     * 注册服务
+     * @param properties
+     * @throws Exception
+     */
+    private void registerService(Properties properties) throws Exception{
+        String[] services = properties.getProperty(LISTENER_SERVICE).split("\\,");
+
+        for(String service : services){
+            if(StringUtils.isBlank(service) || !service.contains("::")){
+                throw new ConfigurationException("配置错误，["+LISTENER_SERVICE+"= "+services+"] 当前 [event = "+service+"],不存在 :: ,配置格式为 A::B");
+            }
+
+            String[] tmpService = service.split("::");
+
+            if(tmpService.length > 2){
+                throw new ConfigurationException("配置错误，["+LISTENER_SERVICE+"= "+services+"] 当前 [event = "+service+"],只能有一个 :: ,配置格式为 A::B");
+            }
+
+            CommonDispatchListener.addService(tmpService[0],tmpService[1]);
+
         }
 
     }

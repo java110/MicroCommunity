@@ -25,26 +25,24 @@
         <module name="Wechat" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BaseService" target="1.6" />
-      <module name="bean" target="1.6" />
-      <module name="common" target="1.6" />
-      <module name="CommonService" target="1.6" />
-      <module name="config" target="1.6" />
-      <module name="core" target="1.6" />
-      <module name="eureka" target="1.6" />
-      <module name="event" target="1.6" />
-      <module name="feign" target="1.6" />
-      <module name="MerchantService" target="1.6" />
-      <module name="MerchantService1" target="1.6" />
-      <module name="MicroCommunity" target="1.6" />
-      <module name="OrderService" target="1.6" />
-      <module name="PayService" target="1.6" />
-      <module name="RuleService" target="1.6" />
-      <module name="service" target="1.6" />
-      <module name="SimpleListener" target="1.6" />
-      <module name="UserService" target="1.6" />
-      <module name="Wechat" target="1.6" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="BaseService" target="1.8" />
+      <module name="bean" target="1.8" />
+      <module name="common" target="1.8" />
+      <module name="config" target="1.8" />
+      <module name="core" target="1.8" />
+      <module name="eureka" target="1.8" />
+      <module name="event" target="1.8" />
+      <module name="feign" target="1.8" />
+      <module name="MerchantService" target="1.8" />
+      <module name="MicroCommunity" target="1.8" />
+      <module name="OrderService" target="1.8" />
+      <module name="PayService" target="1.8" />
+      <module name="RuleService" target="1.8" />
+      <module name="service" target="1.8" />
+      <module name="SimpleListener" target="1.8" />
+      <module name="UserService" target="1.8" />
+      <module name="Wechat" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

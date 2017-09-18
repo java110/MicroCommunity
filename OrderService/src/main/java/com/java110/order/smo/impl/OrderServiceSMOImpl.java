@@ -395,6 +395,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         //创建上下文对象
         AppContext context = createApplicationContext();
 
+
         prepareContext(context, datasTmp);
        /* try {*/
             //发布事件

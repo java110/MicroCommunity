@@ -62,7 +62,7 @@ public class UserServiceRest extends BaseController implements IUserService {
      */
     @Override
     @RequestMapping("/userService/queryCustInfoByOlId")
-    public String queryCustInfoByOlId(String busiOrder) {
+    public String queryCustInfoByOlId(@RequestParam("busiOrder") String busiOrder) {
 
 
         LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
@@ -92,7 +92,7 @@ public class UserServiceRest extends BaseController implements IUserService {
      */
     @Override
     @RequestMapping("/userService/queryNeedDeleteCustInfoByOlId")
-    public String queryNeedDeleteCustInfoByOlId(String busiOrder) {
+    public String queryNeedDeleteCustInfoByOlId(@RequestParam("busiOrder")  String busiOrder) {
 
 
         LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
