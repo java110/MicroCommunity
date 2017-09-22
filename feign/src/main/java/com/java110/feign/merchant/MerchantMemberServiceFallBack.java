@@ -32,7 +32,12 @@ public class MerchantMemberServiceFallBack implements IMerchantMemberService {
     }
 
     @Override
-    public String queryNeedDeleteData(String data) {
+    public String queryMerchantMemberInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String queryNeedDeleteMerchantMemberInfoByOlId(String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
 }

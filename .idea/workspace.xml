@@ -3,14 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="a191bf23-5de1-438a-810e-95cec23d6b25" name="Default" comment="change fastjson dependenciy">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantServiceSMO.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantServiceSMO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantServiceSMOImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantServiceSMOImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchant.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantAttr.java" afterPath="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchantAttr.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/eureka.log" afterPath="$PROJECT_DIR$/logs/eureka.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IProductServiceSMO.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IProductServiceSMO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/ProductServiceSMOImpl.java" afterPath="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/ProductServiceSMOImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/IProductService.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/IProductService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/ProductServiceFallback.java" afterPath="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/ProductServiceFallback.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -46,51 +48,91 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MerchantServiceRest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java">
+      <file leaf-file-name="ProductServiceRest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="302" column="18" lean-forward="false" selection-start-line="302" selection-start-column="18" selection-end-line="302" selection-end-column="18" />
+            <state relative-caret-position="153">
+              <caret line="20" column="72" lean-forward="false" selection-start-line="20" selection-start-column="72" selection-end-line="20" selection-end-column="72" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IMerchantService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantService.java">
+      <file leaf-file-name="IProductService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/IProductService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="402">
-              <caret line="178" column="97" lean-forward="false" selection-start-line="178" selection-start-column="97" selection-end-line="178" selection-end-column="97" />
+              <caret line="192" column="97" lean-forward="false" selection-start-line="192" selection-start-column="97" selection-end-line="192" selection-end-column="97" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MerchantServiceFallback.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java">
+      <file leaf-file-name="ProductServiceFallback.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/ProductServiceFallback.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="52" column="89" lean-forward="false" selection-start-line="52" selection-start-column="89" selection-end-line="52" selection-end-column="89" />
+            <state relative-caret-position="419">
+              <caret line="53" column="5" lean-forward="false" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IMerchantServiceSMO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantServiceSMO.java">
+      <file leaf-file-name="ProductServiceSMOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/ProductServiceSMOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="32">
+              <caret line="437" column="4" lean-forward="false" selection-start-line="437" selection-start-column="4" selection-end-line="446" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceRest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="20" column="79" lean-forward="false" selection-start-line="20" selection-start-column="79" selection-end-line="20" selection-end-column="79" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IMerchantMemberService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="172" column="103" lean-forward="false" selection-start-line="172" selection-start-column="103" selection-end-line="172" selection-end-column="103" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceFallBack.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="334">
-              <caret line="88" column="7" lean-forward="false" selection-start-line="88" selection-start-column="7" selection-end-line="88" selection-end-column="27" />
+              <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MerchantServiceSMOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantServiceSMOImpl.java">
+      <file leaf-file-name="IMerchantMemberServiceSMO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-495">
-              <caret line="698" column="13" lean-forward="true" selection-start-line="698" selection-start-column="13" selection-end-line="698" selection-end-column="13" />
+            <state relative-caret-position="317">
+              <caret line="133" column="57" lean-forward="false" selection-start-line="133" selection-start-column="57" selection-end-line="133" selection-end-column="57" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MerchantMemberServiceSMOImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="864">
+              <caret line="309" column="57" lean-forward="false" selection-start-line="309" selection-start-column="57" selection-end-line="309" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -99,28 +141,8 @@
       <file leaf-file-name="UserServiceRest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="94" column="33" lean-forward="true" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IUserServiceSMO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="85" column="0" lean-forward="true" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserServiceSMOImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="457" column="8" lean-forward="false" selection-start-line="457" selection-start-column="8" selection-end-line="457" selection-end-column="56" />
+            <state relative-caret-position="119">
+              <caret line="94" column="72" lean-forward="false" selection-start-line="94" selection-start-column="63" selection-end-line="94" selection-end-column="72" />
               <folding />
             </state>
           </provider>
@@ -183,7 +205,6 @@
       <replace>productDesc</replace>
       <replace>productImg</replace>
       <replace>merchant</replace>
-      <replace>Product</replace>
       <replace>product</replace>
       <replace>js</replace>
       <replace>listener</replace>
@@ -203,6 +224,7 @@
       <replace>Cust</replace>
       <replace>parameterType=&quot;java.util.HashMap&quot;</replace>
       <replace>Merchant</replace>
+      <replace>Product</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -216,16 +238,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/DefaultBoAttrEntity.java" />
-        <option value="$PROJECT_DIR$/bean/src/main/java/com/java110/entity/user/BoCustAttr.java" />
-        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/IUserService.java" />
-        <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java" />
-        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/user/UserServiceFallback.java" />
-        <option value="$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/IOrderServiceSMO.java" />
-        <option value="$PROJECT_DIR$/event/src/main/java/com/java110/event/common/AppCommonEvent.java" />
-        <option value="$PROJECT_DIR$/core/src/main/java/com/java110/core/context/AppContext.java" />
-        <option value="$PROJECT_DIR$/event/src/main/java/com/java110/event/AppEventPublishing.java" />
-        <option value="$PROJECT_DIR$/event/src/main/java/com/java110/init/SystemStartUpInit.java" />
         <option value="$PROJECT_DIR$/event/src/main/java/com/java110/listener/cust/CustDispatchListener.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java" />
         <option value="$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java" />
@@ -267,6 +279,16 @@
         <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantServiceRest.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantService.java" />
         <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IProductServiceSMO.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/ProductServiceSMOImpl.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/IProductService.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/ProductServiceFallback.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java" />
+        <option value="$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java" />
+        <option value="$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java" />
       </list>
     </option>
   </component>
@@ -984,7 +1006,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34341908" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -994,9 +1015,9 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37632778" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32786885" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.74590164" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29344264" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29344264" sideWeight="0.4969651" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22012103" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22012103" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -1105,76 +1126,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot/1.4.0.RELEASE/spring-boot-1.4.0.RELEASE-sources.jar!/org/springframework/boot/builder/ParentContextCloserApplicationListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/smo/impl/OrderServiceSMOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="38" column="16" lean-forward="false" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/base/IPrimaryKeyService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="17" lean-forward="false" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BaseService/src/main/java/com/java110/base/rest/PrimaryKeyServiceRest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="34" column="18" lean-forward="true" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/src/main/resources/META-INF/spring.factories">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="1" lean-forward="false" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/event/src/main/java/com/java110/event/init/SystemStartUpInit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="26" column="37" lean-forward="false" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eureka/src/main/resources/application-ha.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eureka/src/main/java/com/java110/eureka/ConfigServerEurekaApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eureka/src/main/resources/application.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OrderService/src/main/java/com/java110/order/AppSpringBootApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="23" column="101" lean-forward="false" selection-start-line="23" selection-start-column="83" selection-end-line="23" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SimpleListener/src/main/java/com/java110/listener/dao/impl/ListenerServiceDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3822">
@@ -1400,14 +1351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="85" column="0" lean-forward="true" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bean/src/main/java/com/java110/entity/merchant/BoMerchant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1421,16 +1364,8 @@
         <state relative-caret-position="68">
           <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="457" column="8" lean-forward="false" selection-start-line="457" selection-start-column="8" selection-end-line="457" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1446,14 +1381,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-495">
           <caret line="698" column="13" lean-forward="true" selection-start-line="698" selection-start-column="13" selection-end-line="698" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="94" column="33" lean-forward="true" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1476,8 +1403,112 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantServiceFallback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
+        <state relative-caret-position="867">
           <caret line="52" column="89" lean-forward="false" selection-start-line="52" selection-start-column="89" selection-end-line="52" selection-end-column="89" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/IUserServiceSMO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="84" column="0" lean-forward="true" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/smo/impl/UserServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="560" column="5" lean-forward="true" selection-start-line="460" selection-start-column="4" selection-end-line="560" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/ProductServiceRest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="20" column="72" lean-forward="false" selection-start-line="20" selection-start-column="72" selection-end-line="20" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/IProductService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="192" column="97" lean-forward="false" selection-start-line="192" selection-start-column="97" selection-end-line="192" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/product/ProductServiceFallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="53" column="5" lean-forward="false" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IProductServiceSMO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="88" column="27" lean-forward="true" selection-start-line="88" selection-start-column="7" selection-end-line="88" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/ProductServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32">
+          <caret line="437" column="4" lean-forward="false" selection-start-line="437" selection-start-column="4" selection-end-line="446" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UserService/src/main/java/com/java110/user/rest/UserServiceRest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="94" column="72" lean-forward="false" selection-start-line="94" selection-start-column="63" selection-end-line="94" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/impl/MerchantMemberServiceSMOImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="864">
+          <caret line="309" column="57" lean-forward="false" selection-start-line="309" selection-start-column="57" selection-end-line="309" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/smo/IMerchantMemberServiceSMO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="133" column="57" lean-forward="false" selection-start-line="133" selection-start-column="57" selection-end-line="133" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MerchantService/src/main/java/com/java110/merchant/rest/MerchantMemberServiceRest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="20" column="79" lean-forward="false" selection-start-line="20" selection-start-column="79" selection-end-line="20" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/IMerchantMemberService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="172" column="103" lean-forward="false" selection-start-line="172" selection-start-column="103" selection-end-line="172" selection-end-column="103" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feign/src/main/java/com/java110/feign/merchant/MerchantMemberServiceFallBack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding />
         </state>
       </provider>

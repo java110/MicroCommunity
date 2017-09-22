@@ -298,6 +298,64 @@ public class ProductServiceRest extends BaseController implements IProductServic
         }
     }
 
+    /**
+     * 根据购物车信息查询
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @RequestMapping("/userService/queryProductInfoByOlId")
+    public String queryProductInfoByOlId(@RequestParam("busiOrder") String busiOrder) {
+
+
+        LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
+
+
+        String resultUserInfo = null;
+
+        try {
+            this.simpleValidateJSON(busiOrder);
+            resultUserInfo = iProductServiceSMO.queryProductInfoByOlId(busiOrder);
+
+        } catch (Exception e) {
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+        } finally {
+            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
+    }
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @RequestMapping("/userService/queryNeedDeleteProductInfoByOlId")
+    public String queryNeedDeleteProductInfoByOlId(@RequestParam("busiOrder")  String busiOrder) {
+
+
+        LoggerEngine.debug("queryUserInfo入参：" + busiOrder);
+
+
+        String resultUserInfo = null;
+
+        try {
+            this.simpleValidateJSON(busiOrder);
+            resultUserInfo = iProductServiceSMO.queryNeedDeleteProductInfoByOlId(busiOrder);
+
+        } catch (Exception e) {
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultUserInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e,null);
+        } finally {
+            LoggerEngine.debug("用户服务操作客户出参：" + resultUserInfo);
+            return resultUserInfo;
+        }
+    }
+
 
     public IProductServiceSMO getiProductServiceSMO() {
         return iProductServiceSMO;

@@ -1,5 +1,7 @@
 package com.java110.feign.product;
 
+import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.ProtocolUtil;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -168,5 +170,26 @@ public interface IProductService {
      */
     @RequestMapping("/productService/soDeleteProductService")
     public String soDeleteProductService(@RequestParam("data") String data);
+
+
+    /**
+     * 根据购物车信息查询
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @RequestMapping("/userService/queryProductInfoByOlId")
+    public String queryProductInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     *
+     * 这里返回data信息
+     * @param busiOrder
+     * @return
+     */
+    @RequestMapping("/userService/queryNeedDeleteProductInfoByOlId")
+    public String queryNeedDeleteProductInfoByOlId(@RequestParam("busiOrder")  String busiOrder);
 
 }

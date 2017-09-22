@@ -269,27 +269,57 @@ public class MerchantMemberServiceRest extends BaseController implements IMercha
         }
     }
 
+
     /**
      * 根据ol_id 查询需要作废的数据 这里 ol_id 就是 versionId
-     * @param data {'ol_id':'123456789'}
+     * @param busiOrder {'ol_id':'123456789'}
      * @return
      */
-    @RequestMapping("/merchantMemberService/queryNeedDeleteData")
-    public String queryNeedDeleteData(@RequestParam("data") String data){
-        LoggerEngine.debug("-----------------[MerchantMemberServiceRest.queryNeedDeleteData]-------------------作废订单查询入参："+data);
+    @RequestMapping("/merchantMemberService/queryNeedDeleteMerchantMemberInfoByOlId")
+    public String queryMerchantMemberInfoByOlId(@RequestParam("busiOrder") String busiOrder){
+        LoggerEngine.debug("-----------------[MerchantMemberServiceRest.queryNeedDeleteMerchantMemberInfoByOlId]-------------------作废订单查询入参："+busiOrder);
 
         String resultMerchantInfo = null;
 
         JSONObject reqParam = null;
 
         try{
-            reqParam = this.simpleValidateJSON(data);
+            reqParam = this.simpleValidateJSON(busiOrder);
 
-            resultMerchantInfo = iMerchantMemberServiceSMO.queryNeedDeleteData(reqParam);
+            resultMerchantInfo = iMerchantMemberServiceSMO.queryMerchantMemberInfoByOlId(busiOrder);
 
         }catch (Exception e){
             LoggerEngine.error("服务处理出现异常：", e);
-            resultMerchantInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e+data,null);
+            resultMerchantInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e+busiOrder,null);
+        }finally {
+            LoggerEngine.debug("作废订单出参：" + resultMerchantInfo);
+            return resultMerchantInfo;
+        }
+
+    }
+
+
+    /**
+     * 根据ol_id 查询需要作废的数据 这里 ol_id 就是 versionId
+     * @param busiOrder {'ol_id':'123456789'}
+     * @return
+     */
+    @RequestMapping("/merchantMemberService/queryNeedDeleteMerchantMemberInfoByOlId")
+    public String queryNeedDeleteMerchantMemberInfoByOlId(@RequestParam("busiOrder") String busiOrder){
+        LoggerEngine.debug("-----------------[MerchantMemberServiceRest.queryNeedDeleteMerchantMemberInfoByOlId]-------------------作废订单查询入参："+busiOrder);
+
+        String resultMerchantInfo = null;
+
+        JSONObject reqParam = null;
+
+        try{
+            reqParam = this.simpleValidateJSON(busiOrder);
+
+            resultMerchantInfo = iMerchantMemberServiceSMO.queryNeedDeleteMerchantMemberInfoByOlId(busiOrder);
+
+        }catch (Exception e){
+            LoggerEngine.error("服务处理出现异常：", e);
+            resultMerchantInfo = ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"服务处理出现异常"+e+busiOrder,null);
         }finally {
             LoggerEngine.debug("作废订单出参：" + resultMerchantInfo);
             return resultMerchantInfo;

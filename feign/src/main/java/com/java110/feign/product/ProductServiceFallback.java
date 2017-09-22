@@ -42,4 +42,14 @@ public class ProductServiceFallback implements IProductService {
     public String soDeleteProductService(@RequestParam("data") String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
+
+    @Override
+    public String queryProductInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String queryNeedDeleteProductInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
 }

@@ -118,12 +118,20 @@ public interface IMerchantMemberServiceSMO {
 
 
     /**
-     * 查询需要作废的订单信息
-     * @param data
+     *根据olID查询用户信息
+     * @param busiOrder
      * @return
      * @throws Exception
      */
-    public String queryNeedDeleteData(JSONObject data) throws Exception;
+    public String queryMerchantMemberInfoByOlId(String busiOrder) throws Exception;
+
+    /**
+     * 查询需要作废的订单信息
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteMerchantMemberInfoByOlId(String busiOrder) throws Exception;
 
 
 

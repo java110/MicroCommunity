@@ -158,10 +158,18 @@ public interface IMerchantMemberService {
 
     /**
      * 根据ol_id 查询需要作废的数据 这里 ol_id 就是 versionId
-     * @param data {'ol_id':'123456789'}
+     * @param busiOrder {'ol_id':'123456789'}
      * @return
      */
-    @RequestMapping("/merchantMemberService/queryNeedDeleteData")
-    public String queryNeedDeleteData(@RequestParam("data") String data);
+    @RequestMapping("/merchantMemberService/queryNeedDeleteMerchantMemberInfoByOlId")
+    public String queryMerchantMemberInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+
+    /**
+     * 根据ol_id 查询需要作废的数据 这里 ol_id 就是 versionId
+     * @param busiOrder {'ol_id':'123456789'}
+     * @return
+     */
+    @RequestMapping("/merchantMemberService/queryNeedDeleteMerchantMemberInfoByOlId")
+    public String queryNeedDeleteMerchantMemberInfoByOlId(@RequestParam("busiOrder") String busiOrder);
 
 }

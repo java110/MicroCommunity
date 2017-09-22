@@ -3,10 +3,12 @@ package com.java110.merchant.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.java110.common.constant.StateConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.entity.order.BusiOrder;
 import com.java110.entity.product.BoProduct;
 import com.java110.entity.product.BoProductAttr;
 import com.java110.entity.product.Product;
@@ -434,6 +436,28 @@ public class ProductServiceSMOImpl extends BaseServiceSMO implements IProductSer
     }
 
     /**
+     *根据olID查询用户信息
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String queryProductInfoByOlId(String busiOrder) throws Exception {
+        return doQueryProductInfoByOlId(busiOrder,false);
+    }
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String queryNeedDeleteProductInfoByOlId(String busiOrder) throws Exception {
+        return doQueryProductInfoByOlId(busiOrder,true);
+    }
+
+    /**
      * 处理boProduct 节点
      * @throws Exception
      */
@@ -618,6 +642,108 @@ public class ProductServiceSMOImpl extends BaseServiceSMO implements IProductSer
             }
         }
         return preBoProductAttrs;
+    }
+
+    /**
+     * 查询客户订单信息
+     * @param busiOrderStr 订单项信息
+     * @param isNeedDelete 是否是撤单报文 true 查询撤单报文 false
+     * @return
+     * @throws Exception
+     */
+    private String doQueryProductInfoByOlId(String busiOrderStr,Boolean isNeedDelete) throws Exception{
+        BusiOrder busiOrder = JSONObject.parseObject(busiOrderStr, BusiOrder.class);
+
+        if(busiOrder == null || "".equals(busiOrder.getOlId())){
+            throw new IllegalArgumentException("产品信息查询入参为空，olId 为空 "+busiOrderStr);
+        }
+
+        Product cust = new Product();
+        cust.setVersionId(busiOrder.getOlId());
+        //根据版本ID查询实例数据
+        Product newProduct = iProductServiceDao.queryDataToProduct(cust);
+        JSONObject returnJson = JSONObject.parseObject("{'data':{}}");
+        if(newProduct == null){
+            return returnJson.toJSONString();
+        }
+
+        BoProduct boProduct = new BoProduct();
+
+        boProduct.setBoId(busiOrder.getBoId());
+        boProduct.setProductId(newProduct.getProductId());
+        boProduct.setVersionId(busiOrder.getOlId());
+
+        List<BoProduct> boProducts =  iProductServiceDao.queryBoProduct(boProduct);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boProducts == null || boProducts.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boProductArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(int boProductIndex = 0 ; boProductIndex < boProducts.size();boProductIndex++) {
+            BoProduct newBoProduct = boProducts.get(boProductIndex);
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoProduct.getState())) {
+                    newBoProduct.setBoId("");
+                    newBoProduct.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoProduct.getState())) {
+                    newBoProduct.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoProduct.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boProductArray.add(newBoProduct);
+        }
+        returnJson.getJSONObject("data").put("boProduct",JSONObject.toJSONString(boProductArray));
+
+
+        //属性处理
+        ProductAttr oldProductAttr = new ProductAttr();
+        oldProductAttr.setProductId(newProduct.getProductId());
+        oldProductAttr.setVersionId(busiOrder.getOlId());
+        List<ProductAttr> custAttrs = iProductServiceDao.queryDataToProductAttr(oldProductAttr);
+        if(custAttrs == null || custAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+        /**
+         * 查询客户查询的过程数据
+         */
+        BoProductAttr boProductAttr = new BoProductAttr();
+        boProductAttr.setProductId(newProduct.getProductId());
+        boProductAttr.setVersionId(busiOrder.getOlId());
+        List<BoProductAttr> boProductAttrs = iProductServiceDao.queryBoProductAttr(boProductAttr);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boProductAttrs == null || boProductAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boProductAttrArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(BoProductAttr newBoProductAttr : boProductAttrs) {
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoProductAttr.getState())) {
+                    newBoProductAttr.setBoId("");
+                    newBoProductAttr.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoProductAttr.getState())) {
+                    newBoProductAttr.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoProductAttr.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boProductAttrArray.add(newBoProductAttr);
+        }
+
+        returnJson.getJSONObject("data").put("boProductAttr",JSONObject.toJSONString(boProductAttrArray));
+
+        return returnJson.toJSONString();
+
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

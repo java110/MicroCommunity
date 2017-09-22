@@ -11,6 +11,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.entity.merchant.BoMerchantMember;
 import com.java110.entity.merchant.Merchant;
 import com.java110.entity.merchant.MerchantMember;
+import com.java110.entity.order.BusiOrder;
 import com.java110.merchant.dao.IMerchantMemberServiceDao;
 import com.java110.merchant.smo.IMerchantMemberServiceSMO;
 import org.apache.commons.lang3.StringUtils;
@@ -290,27 +291,57 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
 
 
     /**
-     * 查询需要作废的订单信息
-     * @param data
+     *根据olID查询用户信息
+     * @param busiOrder
      * @return
      * @throws Exception
      */
-    public String queryNeedDeleteData(JSONObject data) throws Exception{
+    @Override
+    public String queryMerchantMemberInfoByOlId(String busiOrder) throws Exception {
+        return doQueryMerchantMemberInfoByOlId(busiOrder,false);
+    }
+
+    /**
+     * 查询需要作废的订单信息
+     * @param busiOrder
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteMerchantMemberInfoByOlId(String busiOrder) throws Exception{
+        return doQueryMerchantMemberInfoByOlId(busiOrder,true);
+    }
+
+    /**
+     * 查询数据
+     * @param busiOrderStr
+     * @param isNeedDelete
+     * @return
+     */
+    private String doQueryMerchantMemberInfoByOlId(String busiOrderStr,Boolean isNeedDelete){
+
+
+        BusiOrder busiOrder = JSONObject.parseObject(busiOrderStr, BusiOrder.class);
+
+        if(busiOrder == null || "".equals(busiOrder.getOlId())){
+            throw new IllegalArgumentException("产品信息查询入参为空，olId 为空 "+busiOrderStr);
+        }
+
+
         //根据versionId 查询是否有实例数据存在，如果存在，返回撤单信息，没有直接返回空
         MerchantMember merchantMember = new MerchantMember();
 
-        merchantMember.setVersionId(data.getString("ol_id"));
-       MerchantMember newMerchantMember = iMerchantMemberServiceDao.queryDataToMerchantMember(merchantMember);
+        merchantMember.setVersionId(busiOrder.getOlId());
+        MerchantMember newMerchantMember = iMerchantMemberServiceDao.queryDataToMerchantMember(merchantMember);
         JSONObject returnJson = JSONObject.parseObject("{'data':{}}");
-       if(newMerchantMember == null){
-           return returnJson.toJSONString();
-       }
+        if(newMerchantMember == null){
+            return returnJson.toJSONString();
+        }
 
-       //查询过程表数据
+        //查询过程表数据
         BoMerchantMember boMerchantMember = new BoMerchantMember();
-       boMerchantMember.setMemberId(newMerchantMember.getMemberId());
-       boMerchantMember.setMerchantId(newMerchantMember.getMerchantId());
-       boMerchantMember.setVersionId(newMerchantMember.getVersionId());
+        boMerchantMember.setMemberId(newMerchantMember.getMemberId());
+        boMerchantMember.setMerchantId(newMerchantMember.getMerchantId());
+        boMerchantMember.setVersionId(newMerchantMember.getVersionId());
 
         List<BoMerchantMember> newBoMerchantMembers = iMerchantMemberServiceDao.queryBoMerchantMember(boMerchantMember);
 
@@ -322,19 +353,20 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
         //单纯的删除 和单纯 增加
         for(int boMerchantMemberIndex = 0 ; boMerchantMemberIndex < newBoMerchantMembers.size();boMerchantMemberIndex++) {
             BoMerchantMember newBoMerchantMember = newBoMerchantMembers.get(boMerchantMemberIndex);
-            if (StateConstant.STATE_DEL.equals(newBoMerchantMember.getState())) {
-                newBoMerchantMember.setBoId("");
-                newBoMerchantMember.setState(StateConstant.STATE_ADD);
-            } else if (StateConstant.STATE_ADD.equals(newBoMerchantMember.getState())) {
-                newBoMerchantMember.setState(StateConstant.STATE_DEL);
-            } else {
-                newBoMerchantMember.setState(StateConstant.STATE_KIP);
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoMerchantMember.getState())) {
+                    newBoMerchantMember.setBoId("");
+                    newBoMerchantMember.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoMerchantMember.getState())) {
+                    newBoMerchantMember.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoMerchantMember.setState(StateConstant.STATE_KIP);
+                }
             }
             boMerchantMemberArray.add(newBoMerchantMember);
         }
-            returnJson.getJSONObject("data").put("boMerchantMember",JSONObject.toJSONString(boMerchantMemberArray));
-            return returnJson.toJSONString();
-
+        returnJson.getJSONObject("data").put("boMerchantMember",JSONObject.toJSONString(boMerchantMemberArray));
+        return returnJson.toJSONString();
     }
 
     public IMerchantMemberServiceDao getiMerchantMemberServiceDao() {
