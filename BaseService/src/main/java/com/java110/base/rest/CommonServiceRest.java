@@ -43,7 +43,7 @@ public class CommonServiceRest extends BaseController implements ICommonService{
     }
 
     @Override
-    @RequestMapping("/commonService/getCodeMappingByHCode")
+    @RequestMapping("/commonService/getCodeMappingByPCode")
     public List<CodeMapping> getCodeMappingByPCode(@RequestParam("pCode") String pCode)  throws Exception{
         CodeMapping codeMapping = new CodeMapping();
         codeMapping.setP_code(pCode);

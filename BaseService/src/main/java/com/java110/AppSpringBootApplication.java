@@ -17,7 +17,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = "com.java110.service,com.java110.base")
+@SpringBootApplication(scanBasePackages = "com.java110.service,com.java110.base,com.java110.core")
 @EnableDiscoveryClient
 public class AppSpringBootApplication {
 

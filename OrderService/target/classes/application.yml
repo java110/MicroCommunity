@@ -14,3 +14,14 @@ jedis:
       maxWaitMillis: 20000
     host: 127.0.0.1
     port: 3306
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8762
+spring:
+  application:
+    name: order-service
+

@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ListenerServiceDaoImpl">
 
-    <parameterMap type="map" id="TaskFunctionProcParameters">
+    <parameterMap type="java.util.HashMap" id="TaskFunctionProcParameters">
         <parameter property="param" javaType="java.lang.String"
                    jdbcType="VARCHAR" mode="IN" />
         <parameter property="retVal" javaType="java.lang.String"
                    jdbcType="VARCHAR" mode="OUT" />
     </parameterMap>
 
-    <select id="queryFtpItemsCount" parameterType="map"
+    <select id="queryFtpItemsCount" parameterType="java.util.HashMap"
             resultType="Integer">
         SELECT count(1)
         FROM SAOP_FTP_TASK A
@@ -21,7 +21,7 @@
     <!-- 查询文件下载上传列表（配置项）
      where  A1.rn > ((TO_NUMBER(#{curPage}) -1) * TO_NUMBER(#pageSize#)) AND A1.rn <= (TO_NUMBER(#curPage#) * TO_NUMBER(#pageSize#))
      -->
-    <select id="queryFtpItems" parameterType="map" resultType="java.util.HashMap">
+    <select id="queryFtpItems" parameterType="java.util.HashMap" resultType="java.util.HashMap">
         <![CDATA[
 		SELECT rownum as rn,A.TASKID,
 		       A.TASKNAME,
@@ -50,7 +50,7 @@
 	        SELECT seq_cep_taskid.NEXTVAL  AS taskId from dual
 	        ]]>
     </select>
-    <insert id="addFtpItem" parameterType="map">
+    <insert id="addFtpItem" parameterType="java.util.HashMap">
         insert into saop_ftp_task(taskid,
         taskname,
         file_name,
@@ -82,7 +82,7 @@
         )
     </insert>
     <!-- 根据taskId 查询FtpItem 信息 -->
-    <select id="queryFtpItemByTaskId" parameterType="map"
+    <select id="queryFtpItemByTaskId" parameterType="java.util.HashMap"
             resultType="java.util.HashMap">
         SELECT A.TASKID,
         A.TASKNAME,
@@ -106,7 +106,7 @@
         and A.TASKID = #{taskId}
     </select>
     <!-- 根据任务名称搜素 -->
-    <select id="searchFtpItemByTaskName" parameterType="map"
+    <select id="searchFtpItemByTaskName" parameterType="java.util.HashMap"
             resultType="java.util.HashMap">
         <![CDATA[
 		SELECT A.TASKID,
@@ -133,7 +133,7 @@
 	]]>
     </select>
     <!-- 修改ftp配置信息 -->
-    <update id="updateFtpItemByTaskId" parameterType="map">
+    <update id="updateFtpItemByTaskId" parameterType="java.util.HashMap">
         update saop_ftp_task sft
         set update_date = sysdate
         <if test="taskName != null and taskName != ''">,sft.taskname = #{taskName}
@@ -165,7 +165,7 @@
     </update>
 
     <!-- 修改ftp配置信息 -->
-    <update id="updateFtpItemRunState" parameterType="map">
+    <update id="updateFtpItemRunState" parameterType="java.util.HashMap">
         update
         saop_ftp_task sft
         set update_date = sysdate,sft.run_state= #{runState}
@@ -173,7 +173,7 @@
     </update>
 
     <!-- 删除ftp配置信息 -->
-    <update id="deleteFtpItemByTaskId" parameterType="map">
+    <update id="deleteFtpItemByTaskId" parameterType="java.util.HashMap">
         update
         saop_ftp_task sft
         set sft.state = 'R'
@@ -184,7 +184,7 @@
         </foreach>
     </update>
     <!-- 根据taskids 获取将要操作的ftp配置信息 -->
-    <select id="queryFtpItemsByTaskIds" parameterType="map" resultType="java.util.HashMap">
+    <select id="queryFtpItemsByTaskIds" parameterType="java.util.HashMap" resultType="java.util.HashMap">
         SELECT
         A.TASKID,
         A.TASKNAME,
@@ -210,20 +210,20 @@
         </foreach>
     </select>
     <!-- 查询FTPItem的属性信息 -->
-    <select id="queryFtpItemAttrsByTaskId" parameterType="map"
+    <select id="queryFtpItemAttrsByTaskId" parameterType="java.util.HashMap"
             resultType="java.util.HashMap">
         SELECT A.TASKID, A.ITEM_SPEC_ID, A.VALUE
         FROM SAOP_FTP_TASK_ATTR A
         WHERE A.TASKID = #{taskId}
     </select>
     <!-- 保存FTPItem的属性信息 -->
-    <insert id="addFtpItemAttrs" parameterType="map">
+    <insert id="addFtpItemAttrs" parameterType="java.util.HashMap">
         insert into
         SAOP_FTP_TASK_ATTR(taskid,item_spec_id,value)
         values(#{taskId},#{itemSpecId},#{value})
     </insert>
     <!-- 查询没有下载过的文件名 -->
-    <select id="queryFileNamesWithOutFtpLog" parameterType="map"
+    <select id="queryFileNamesWithOutFtpLog" parameterType="java.util.HashMap"
             resultType="java.util.HashMap">
         <![CDATA[
 		SELECT #{fileNames} AS fileNames FROM DUAL
@@ -232,7 +232,7 @@
 		]]>
     </select>
 
-    <insert id="addDownloadFileName" parameterType="map">
+    <insert id="addDownloadFileName" parameterType="java.util.HashMap">
         <selectKey keyProperty="logid" resultType="long">
             <![CDATA[
 	        SELECT seq_cep_taskid.NEXTVAL  AS logid from dual
@@ -253,7 +253,7 @@
     </insert>
 
 
-    <select id="queryItemSpec" parameterType="map" resultType="java.util.HashMap">
+    <select id="queryItemSpec" parameterType="java.util.HashMap" resultType="java.util.HashMap">
         select a.item_spec_cd, a.domain, a.name, a.describe, a.create_date
         from saop_ftp_item_spec a
         where a.status_cd = '0'
@@ -263,14 +263,14 @@
         </if>
     </select>
 
-    <delete id="deleteFtpItemAttrsbyTaskId" parameterType="map">
+    <delete id="deleteFtpItemAttrsbyTaskId" parameterType="java.util.HashMap">
         DELETE
         FROM SAOP_FTP_TASK_ATTR A
         WHERE A.TASKID = #{taskId}
     </delete>
 
     <!-- 执行 存储过程 -->
-    <update id="calltaskfunction" parameterMap="map" statementType="CALLABLE">
+    <update id="calltaskfunction" parameterType="java.util.HashMap" statementType="CALLABLE">
         {call $functionname$()}
     </update>
 
