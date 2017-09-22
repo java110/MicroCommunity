@@ -74,4 +74,22 @@ public interface IMerchantServiceSMO {
      * @throws Exception
      */
     public String queryMerchant(Merchant merchant) throws Exception;
+
+
+    /**
+     * 根据购物车信息查询
+     * @param busiOrder 订单项信息
+     * @return
+     * @throws Exception
+     */
+    public String queryMerchantInfoByOlId(String busiOrder) throws Exception;
+
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     * @param busiOrder 订单项信息
+     * @return
+     * @throws Exception
+     */
+    public String queryNeedDeleteMerchantInfoByOlId(String busiOrder) throws Exception;
 }

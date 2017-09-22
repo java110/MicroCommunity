@@ -42,4 +42,14 @@ public class MerchantServiceFallback implements IMerchantService {
     public String soDeleteMerchantService(@RequestParam("data") String data) {
         return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
     }
+
+    @Override
+    public String queryMerchantInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
+
+    @Override
+    public String queryNeedDeleteMerchantInfoByOlId(String busiOrder) {
+        return ProtocolUtil.createResultMsg(ProtocolUtil.RETURN_MSG_ERROR,"调用服务超时",null);
+    }
 }

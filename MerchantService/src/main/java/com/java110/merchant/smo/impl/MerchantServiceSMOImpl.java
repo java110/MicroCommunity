@@ -3,6 +3,7 @@ package com.java110.merchant.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.java110.common.constant.StateConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
@@ -11,6 +12,7 @@ import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
 import com.java110.entity.merchant.Merchant;
 import com.java110.entity.merchant.MerchantAttr;
+import com.java110.entity.order.BusiOrder;
 import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.merchant.dao.IMerchantServiceDao;
 import com.java110.merchant.smo.IMerchantServiceSMO;
@@ -434,6 +436,28 @@ public class MerchantServiceSMOImpl extends BaseServiceSMO implements IMerchantS
     }
 
     /**
+     * 根据购物车信息查询
+     * @param busiOrder 订单项信息
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String queryMerchantInfoByOlId(String busiOrder) throws Exception {
+        return doQueryMerchantInfoByOlId(busiOrder,false);
+    }
+
+    /**
+     * 根据购物车信息查询 需要作废的发起的报文
+     * @param busiOrder 订单项信息
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String queryNeedDeleteMerchantInfoByOlId(String busiOrder) throws Exception {
+        return doQueryMerchantInfoByOlId(busiOrder,true);
+    }
+
+    /**
      * 处理boMerchant 节点
      * @throws Exception
      */
@@ -618,6 +642,109 @@ public class MerchantServiceSMOImpl extends BaseServiceSMO implements IMerchantS
             }
         }
         return preBoMerchantAttrs;
+    }
+
+
+    /**
+     * 查询客户订单信息
+     * @param busiOrderStr 订单项信息
+     * @param isNeedDelete 是否是撤单报文 true 查询撤单报文 false
+     * @return
+     * @throws Exception
+     */
+    private String doQueryMerchantInfoByOlId(String busiOrderStr,Boolean isNeedDelete) throws Exception{
+        BusiOrder busiOrder = JSONObject.parseObject(busiOrderStr, BusiOrder.class);
+
+        if(busiOrder == null || "".equals(busiOrder.getOlId())){
+            throw new IllegalArgumentException("商户信息查询入参为空，olId 为空 "+busiOrderStr);
+        }
+
+        Merchant merchant = new Merchant();
+        merchant.setVersionId(busiOrder.getOlId());
+        //根据版本ID查询实例数据
+        Merchant newMerchant = iMerchantServiceDao.queryDataToMerchant(merchant);
+        JSONObject returnJson = JSONObject.parseObject("{'data':{}}");
+        if(newMerchant == null){
+            return returnJson.toJSONString();
+        }
+
+        BoMerchant boMerchant = new BoMerchant();
+
+        boMerchant.setBoId(busiOrder.getBoId());
+        boMerchant.setMerchantId(newMerchant.getMerchantId());
+        boMerchant.setVersionId(busiOrder.getOlId());
+
+        List<BoMerchant> boMerchants =  iMerchantServiceDao.queryBoMerchant(boMerchant);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boMerchants == null || boMerchants.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boMerchantArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(int boMerchantIndex = 0 ; boMerchantIndex < boMerchants.size();boMerchantIndex++) {
+            BoMerchant newBoMerchant = boMerchants.get(boMerchantIndex);
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoMerchant.getState())) {
+                    newBoMerchant.setBoId("");
+                    newBoMerchant.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoMerchant.getState())) {
+                    newBoMerchant.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoMerchant.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boMerchantArray.add(newBoMerchant);
+        }
+        returnJson.getJSONObject("data").put("boMerchant",JSONObject.toJSONString(boMerchantArray));
+
+
+        //属性处理
+        MerchantAttr oldMerchantAttr = new MerchantAttr();
+        oldMerchantAttr.setMerchantId(newMerchant.getMerchantId());
+        oldMerchantAttr.setVersionId(busiOrder.getOlId());
+        List<MerchantAttr> custAttrs = iMerchantServiceDao.queryDataToMerchantAttr(oldMerchantAttr);
+        if(custAttrs == null || custAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+        /**
+         * 查询客户查询的过程数据
+         */
+        BoMerchantAttr boMerchantAttr = new BoMerchantAttr();
+        boMerchantAttr.setMerchantId(newMerchant.getMerchantId());
+        boMerchantAttr.setVersionId(busiOrder.getOlId());
+        List<BoMerchantAttr> boMerchantAttrs = iMerchantServiceDao.queryBoMerchantAttr(boMerchantAttr);
+
+
+        //一般情况下没有这种情况存在，除非 人工 改了数据，或没按流程完成数据处理
+        if(boMerchantAttrs == null || boMerchantAttrs.size() == 0){
+            return returnJson.toJSONString();
+        }
+
+
+        JSONArray boMerchantAttrArray = new JSONArray();
+        //单纯的删除 和单纯 增加
+        for(BoMerchantAttr newBoMerchantAttr : boMerchantAttrs) {
+            if(isNeedDelete) {
+                if (StateConstant.STATE_DEL.equals(newBoMerchantAttr.getState())) {
+                    newBoMerchantAttr.setBoId("");
+                    newBoMerchantAttr.setState(StateConstant.STATE_ADD);
+                } else if (StateConstant.STATE_ADD.equals(newBoMerchantAttr.getState())) {
+                    newBoMerchantAttr.setState(StateConstant.STATE_DEL);
+                } else {
+                    newBoMerchantAttr.setState(StateConstant.STATE_KIP);
+                }
+            }
+            boMerchantAttrArray.add(newBoMerchantAttr);
+        }
+
+        returnJson.getJSONObject("data").put("boMerchantAttr",JSONObject.toJSONString(boMerchantAttrArray));
+
+        return returnJson.toJSONString();
+
     }
 
     public IPrimaryKeyService getiPrimaryKeyService() {

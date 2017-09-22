@@ -2307,3 +2307,8 @@ java.io.FileNotFoundException: class path resource [templates/] cannot be resolv
 2017-09-22 17:13:10.128 DEBUG 13520 --- [main] o.s.w.c.s.StandardServletEnvironment     : Adding [server.ports] PropertySource with highest search precedence
 2017-09-22 17:13:10.134  INFO 13520 --- [main] c.j.e.ConfigServerEurekaApplication      : Started ConfigServerEurekaApplication in 31.768 seconds (JVM running for 33.028)
 2017-09-22 17:14:09.873  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2017-09-22 17:15:09.873  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2017-09-22 17:16:09.877  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 3ms
+2017-09-22 17:17:09.878  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 1ms
+2017-09-22 17:18:09.879  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2017-09-22 17:19:09.879  INFO 13520 --- [Eureka-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms

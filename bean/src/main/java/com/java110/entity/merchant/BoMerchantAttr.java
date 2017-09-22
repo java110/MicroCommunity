@@ -1,13 +1,15 @@
 package com.java110.entity.merchant;
 
 
+import com.java110.entity.DefaultBoAttrEntity;
+
 import java.util.Date;
 
 /**
  * 商户属性表 bo_merchant_type
  * Created by wuxw on 2017/5/20.
  */
-public class BoMerchantAttr implements Comparable {
+public class BoMerchantAttr extends DefaultBoAttrEntity implements Comparable {
 
     private String boId;
 

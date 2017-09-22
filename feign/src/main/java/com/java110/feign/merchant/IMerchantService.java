@@ -1,5 +1,7 @@
 package com.java110.feign.merchant;
 
+import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.ProtocolUtil;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -168,5 +170,12 @@ public interface IMerchantService {
      */
     @RequestMapping("/merchantService/soDeleteMerchantService")
     public String soDeleteMerchantService(@RequestParam("data") String data);
+
+
+    @RequestMapping("/merchantService/queryMerchantInfoByOlId")
+    public String queryMerchantInfoByOlId(@RequestParam("busiOrder") String busiOrder);
+
+    @RequestMapping("/merchantService/queryNeedDeleteMerchantInfoByOlId")
+    public String queryNeedDeleteMerchantInfoByOlId(@RequestParam("busiOrder") String busiOrder);
 
 }

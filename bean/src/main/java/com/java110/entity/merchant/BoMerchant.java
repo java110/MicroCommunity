@@ -1,6 +1,8 @@
 package com.java110.entity.merchant;
 
 
+import com.java110.entity.DefaultBoEntity;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * 对应商户 过程表 bo_merchant
  * Created by wuxw on 2017/5/20.
  */
-public class BoMerchant implements Comparable{
+public class BoMerchant extends DefaultBoEntity implements Comparable{
 
     private String boId;
 
