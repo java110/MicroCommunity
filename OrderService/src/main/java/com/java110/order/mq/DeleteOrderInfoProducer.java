@@ -13,7 +13,7 @@ import javax.jms.Topic;
  *
  * Created by wuxw on 2017/4/17.
  */
-@Component
+//@Component
 public class DeleteOrderInfoProducer {
 
     @Autowired

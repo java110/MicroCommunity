@@ -6,10 +6,12 @@ import com.java110.core.context.AppContext;
 import com.java110.event.app.AppListener;
 import com.java110.event.app.merchant.AppMerchantEvent;
 import com.java110.event.app.order.Ordered;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by wuxw on 2017/4/14.
  */
+@Component
 public class MerchantDispatchListener implements AppListener<AppMerchantEvent>,Ordered {
 
     private final static int order = Ordered.dafultValue+1;

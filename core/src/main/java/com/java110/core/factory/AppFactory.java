@@ -4,18 +4,18 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by wuxw on 2017/4/25.
  */
-@Configuration
-public class AppFactory implements ApplicationContextAware {
+
+public class AppFactory {
 
     private static ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public static void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        AppFactory.applicationContext = applicationContext;
     }
 
     public static Object getBean(Class className){

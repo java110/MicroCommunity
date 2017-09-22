@@ -64,7 +64,7 @@
     </insert>
 
     <!-- 保存 实例客户属性信息 merchant_attr -->
-    <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.MerchantAttr">
+    <insert id="saveDataToMerchantAttr" parameterType="com.java110.entity.merchant.MerchantAttr">
         <![CDATA[
             insert into merchant_attr(merchantId,attrCd,value,status_cd)
             values(#{merchantId},#{attrCd},#{value},#{status_cd})

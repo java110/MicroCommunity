@@ -1,9 +1,13 @@
 package com.java110.core.cache;
 
+import com.java110.core.factory.AppFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
@@ -13,7 +17,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * Created by wuxw on 2017/7/23.
  */
 @Configuration
-public class RedisConfiguration extends CachingConfigurerSupport {
+public class RedisConfiguration extends CachingConfigurerSupport  {
 
     @Bean(name= "jedis.pool")
     @Autowired
@@ -33,6 +37,8 @@ public class RedisConfiguration extends CachingConfigurerSupport {
         config.setMaxWaitMillis(maxWaitMillis);
         return config;
     }
+
+
 
 
 }

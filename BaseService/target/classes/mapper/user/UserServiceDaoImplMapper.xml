@@ -66,7 +66,7 @@
     </insert>
 
     <!-- 保存 实例客户属性信息 cust_attr -->
-    <insert id="saveDataToCust" parameterType="com.java110.entity.user.CustAttr">
+    <insert id="saveDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
         <![CDATA[
             insert into cust_attr(custId,attrCd,value,status_cd)
             values(#{custId},#{attrCd},#{value},#{status_cd})

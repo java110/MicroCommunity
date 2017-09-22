@@ -6,7 +6,9 @@ import com.java110.event.app.AppListener;
 import com.java110.event.listener.common.CommonDispatchListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
@@ -17,12 +19,12 @@ import java.util.Properties;
  * 系统启动时加载信息
  * Created by wuxw on 2017/4/14.
  */
-public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEvent> {
+public class SystemStartUpInit /*implements ApplicationListener<ApplicationReadyEvent>*/ {
 
     /**
-     * 默认 事件配置路径
+     * 默认 事件配置路径classpath:/
      */
-    private final String DEFAULT_EVENT_PATH = "classpath:/config/";
+    private final String DEFAULT_EVENT_PATH = "config/";
 
 
     /**
@@ -51,26 +53,50 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
      * 加载配置文件，将侦听初始化
      * @param event
      */
-    @Override
+   // @Override
     public void onApplicationEvent(ApplicationReadyEvent event){
 
 
         //加载配置文件，注册订单处理侦听
         try {
+
+            AppFactory.setApplicationContext(event.getApplicationContext());
+
             Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
+
             registerListener(properties);
 
             //注册事件
             registerEvent(properties);
 
+            //注册服务
+            registerService(properties);
+        }
+        catch (Exception ex) {
+            throw new IllegalStateException("system init error", ex);
+        }
+
+    }
+
+    public void initSystemConfig(ApplicationContext context){
+        //加载配置文件，注册订单处理侦听
+        try {
+
+            AppFactory.setApplicationContext(context);
+
+            Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
+
+            registerListener(properties);
+
+            //注册事件
+            registerEvent(properties);
 
             //注册服务
             registerService(properties);
         }
         catch (Exception ex) {
-            throw new IllegalStateException("Unable to load configuration files", ex);
+            throw new IllegalStateException("system init error", ex);
         }
-
     }
 
 
@@ -98,7 +124,7 @@ public class SystemStartUpInit implements ApplicationListener<ApplicationReadyEv
             //这里不能直接反射，这样 IXXXService 无法注入，所以直接从spring 中获取已经注入的
             //AppListener<?> appListener = (AppListener<?>)Class.forName(listener).newInstance();
 
-            AppListener<?> appListener = (AppListener<?>)AppFactory.getBean(Class.forName(listener));
+            AppListener<?> appListener = (AppListener<?>)AppFactory.getBean(listener);
 
             //将 listener 放入 AppEventPublishing 中方便后期操作
             //注册侦听

@@ -60,7 +60,7 @@
     <insert id="saveDataToBusiOrder" parameterType="com.java110.entity.order.BusiOrder">
         <![CDATA[
             insert into busi_order(boId,olId,actionTypeCd,status_cd,start_dt,end_dt,remark)
-            values(#{boId},#{olId},#{actionTypeCd},#{status_cd},#{start_dt},#{end_dt,#{remark})
+            values(#{boId},#{olId},#{actionTypeCd},#{status_cd},#{start_dt},#{end_dt},#{remark})
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->

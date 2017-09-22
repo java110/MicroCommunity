@@ -37,6 +37,7 @@
     </dependencies>
 
     <build>
+        <finalName>OrderService</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -63,6 +64,13 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.java110.order.AppSpringBootApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

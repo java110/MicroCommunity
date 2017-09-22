@@ -64,7 +64,7 @@
     </insert>
 
     <!-- 保存 实例客户属性信息 product_attr -->
-    <insert id="saveDataToProduct" parameterType="com.java110.entity.product.ProductAttr">
+    <insert id="saveDataToProductAttr" parameterType="com.java110.entity.product.ProductAttr">
         <![CDATA[
             insert into product_attr(productId,attrCd,value,status_cd)
             values(#{productId},#{attrCd},#{value},#{status_cd})
