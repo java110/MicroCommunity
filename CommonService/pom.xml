@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>BaseService</artifactId>
+    <artifactId>CommonService</artifactId>
     <packaging>jar</packaging>
 
-    <name>BaseService</name>
+    <name>CommonService</name>
     <url>http://maven.apache.org</url>
 
     <properties>
