@@ -13,7 +13,7 @@
 
     <name>CenterService</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,6 +22,21 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-event</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-config</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
