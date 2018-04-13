@@ -10,11 +10,12 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/CommonService/pom.xml" />
+        <option value="$PROJECT_DIR$/SimpleListenerService/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/CommonService/pom.xml" />
         <option value="$PROJECT_DIR$/UserSevice/pom.xml" />
       </set>
     </option>

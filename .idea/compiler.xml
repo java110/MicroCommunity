@@ -9,6 +9,7 @@
         <module name="BaseService" />
         <module name="bean" />
         <module name="common" />
+        <module name="CommonService" />
         <module name="config" />
         <module name="core" />
         <module name="eureka" />
@@ -28,7 +29,6 @@
         <module name="RuleService" />
         <module name="service" />
         <module name="SimpleListener" />
-        <module name="SimpleListenerSerivce" />
         <module name="UserService" />
         <module name="Wechat" />
         <module name="WechatService" />
@@ -38,6 +38,7 @@
       <module name="BaseService" target="1.8" />
       <module name="bean" target="1.8" />
       <module name="common" target="1.8" />
+      <module name="CommonService" target="1.6" />
       <module name="config" target="1.8" />
       <module name="core" target="1.8" />
       <module name="eureka" target="1.6" />
