@@ -55,8 +55,14 @@ public class DateUtil {
     }
 
 
-
-
+    /**
+     * 获取当前时间
+     * @return
+     */
+    public static Date getCurrentDate(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTime();
+    }
 
     public static String getFormatTimeString(Date date, String pattern)
     {

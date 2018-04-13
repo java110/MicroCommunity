@@ -2,7 +2,6 @@
   "orders": {
     "TransactionId": "100000000020180409224736000001",
     "ResponseTime": "20180409224736",
-    "Remark":"备注",
     "sign": "这个服务是否要求MD5签名",
     "response": {//这个是centerOrder 返回的状态结果
       "code": "1999",

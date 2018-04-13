@@ -3,6 +3,7 @@ package com.java110.common.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.entity.center.DataFlow;
 
 import java.util.Date;
 
@@ -70,5 +71,18 @@ public class ResponseTemplateUtil {
      */
     public static String createOrderResponseJson(String transactionId, String sign,String code,String message){
         return createCommonResponseJson(transactionId,sign,code,message,null);
+    }
+
+    /**
+     * 组装返回报文
+     * @param dataFlow 数据流
+     * @return
+     */
+    public static String createCommonResponseJson(DataFlow dataFlow){
+        return createCommonResponseJson(dataFlow.getTransactionId(),
+                dataFlow.getResSign(),
+                dataFlow.getCode(),
+                dataFlow.getMessage(),
+                dataFlow.getResBusiness());
     }
 }

@@ -2,4 +2,5 @@
 1、重新调整结构，每个服务必须要有doc（文档），docker和src目录，启用v0.2版
 2、分支管理说明，test为最新代码未测试代码（主要为了防止本地代码遗失），master 为最新测试过代码（待产品化），product 为产品化代码
 3、网友反映OrderService提供的协议过于复杂，则加入CenterService服务简化协议处理服务（文档设计实际已经完成，请查看CenterService/doc/centerService.docx,待开发）
+4、开发HttpApi service 接口未完成，目前完成数据封装到DataFlow对象。
 
