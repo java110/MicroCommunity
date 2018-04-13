@@ -2,23 +2,23 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BaseService/BaseService.iml" filepath="$PROJECT_DIR$/BaseService/BaseService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CommonService/CommonService.iml" filepath="$PROJECT_DIR$/CommonService/CommonService.iml" />
       <module fileurl="file://$PROJECT_DIR$/MerchantService/MerchantService.iml" filepath="$PROJECT_DIR$/MerchantService/MerchantService.iml" />
       <module fileurl="file://$PROJECT_DIR$/MicroCommunity.iml" filepath="$PROJECT_DIR$/MicroCommunity.iml" />
       <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
       <module fileurl="file://$PROJECT_DIR$/PayService/PayService.iml" filepath="$PROJECT_DIR$/PayService/PayService.iml" />
       <module fileurl="file://$PROJECT_DIR$/RuleService/RuleService.iml" filepath="$PROJECT_DIR$/RuleService/RuleService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SimpleListener/SimpleListener.iml" filepath="$PROJECT_DIR$/SimpleListener/SimpleListener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleListenerService/SimpleListener.iml" filepath="$PROJECT_DIR$/SimpleListenerService/SimpleListener.iml" />
       <module fileurl="file://$PROJECT_DIR$/UserService/UserService.iml" filepath="$PROJECT_DIR$/UserService/UserService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Wechat/Wechat.iml" filepath="$PROJECT_DIR$/Wechat/Wechat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bean/bean.iml" filepath="$PROJECT_DIR$/bean/bean.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/config/config.iml" filepath="$PROJECT_DIR$/config/config.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WechatService/Wechat.iml" filepath="$PROJECT_DIR$/WechatService/Wechat.iml" />
       <module fileurl="file://$PROJECT_DIR$/eureka/eureka.iml" filepath="$PROJECT_DIR$/eureka/eureka.iml" />
-      <module fileurl="file://$PROJECT_DIR$/event/event.iml" filepath="$PROJECT_DIR$/event/event.iml" />
-      <module fileurl="file://$PROJECT_DIR$/feign/feign.iml" filepath="$PROJECT_DIR$/feign/feign.iml" />
-      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-bean/java110-bean.iml" filepath="$PROJECT_DIR$/java110-bean/java110-bean.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-common/java110-common.iml" filepath="$PROJECT_DIR$/java110-common/java110-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-config/config.iml" filepath="$PROJECT_DIR$/java110-config/config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-core/core.iml" filepath="$PROJECT_DIR$/java110-core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-event/event.iml" filepath="$PROJECT_DIR$/java110-event/event.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-feign/java110-feign.iml" filepath="$PROJECT_DIR$/java110-feign/java110-feign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java110-service/service.iml" filepath="$PROJECT_DIR$/java110-service/service.iml" />
     </modules>
   </component>
 </project>

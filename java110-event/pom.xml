@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>PayService</artifactId>
+    <artifactId>java110-event</artifactId>
     <packaging>jar</packaging>
 
-    <name>PayService</name>
+    <name>java110-event</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -21,6 +21,30 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-feign</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

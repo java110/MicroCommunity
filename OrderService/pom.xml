@@ -21,17 +21,17 @@
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>java110-service</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>event</artifactId>
+            <artifactId>java110-event</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>config</artifactId>
+            <artifactId>java110-config</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -54,7 +54,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.java110</groupId>
-                                    <artifactId>config</artifactId>
+                                    <artifactId>java110-config</artifactId>
                                     <version>${microcommunity.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

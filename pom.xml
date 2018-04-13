@@ -9,22 +9,22 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>bean</module>
-        <module>config</module>
-        <module>common</module>
+        <module>java110-bean</module>
+        <module>java110-config</module>
+        <module>java110-common</module>
         <module>UserService</module>
         <module>OrderService</module>
         <module>PayService</module>
         <module>eureka</module>
-        <module>Wechat</module>
-        <module>feign</module>
-        <module>core</module>
-        <module>service</module>
-        <module>BaseService</module>
+        <module>WechatService</module>
+        <module>java110-feign</module>
+        <module>java110-core</module>
+        <module>java110-service</module>
+        <module>CommonService</module>
         <module>MerchantService</module>
         <module>RuleService</module>
-        <module>SimpleListener</module>
-        <module>event</module>
+        <module>SimpleListenerService</module>
+        <module>java110-event</module>
     </modules>
 
     <parent>
@@ -107,40 +107,40 @@
             </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>java110-common</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>bean</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>event</artifactId>
+                <artifactId>java110-bean</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>core</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>feign</artifactId>
+                <artifactId>java110-event</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>service</artifactId>
+                <artifactId>java110-core</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>config</artifactId>
+                <artifactId>java110-feign</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-service</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-config</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 

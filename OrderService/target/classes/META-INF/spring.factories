@@ -1,3 +1,0 @@
-# Application Listeners
-#org.springframework.context.ApplicationListener=\
-  com.java110.event.init.SystemStartUpInit

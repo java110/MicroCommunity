@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>UserService</artifactId>
+    <artifactId>BaseService</artifactId>
     <packaging>jar</packaging>
 
-    <name>UserService</name>
+    <name>BaseService</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,14 +18,11 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-service</artifactId>
         </dependency>
-
     </dependencies>
-
 
     <build>
         <plugins>

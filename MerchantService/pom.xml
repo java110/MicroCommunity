@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>java110-service</artifactId>
         </dependency>
 
         <dependency>

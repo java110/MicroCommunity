@@ -2,22 +2,22 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/BaseService" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CommonService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/MerchantService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/OrderService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PayService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RuleService" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/SimpleListener" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SimpleListenerService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserService" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Wechat" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/bean" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/common" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/config" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WechatService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/event" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/feign" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-bean" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-event" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-feign" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java110-service" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

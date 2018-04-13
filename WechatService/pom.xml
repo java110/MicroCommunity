@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>PayService</artifactId>
+    <artifactId>WechatService</artifactId>
     <packaging>jar</packaging>
 
-    <name>PayService</name>
+    <name>WechatService</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -21,6 +21,25 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-feign</artifactId>
+        </dependency>
+        <!-- 整合ribbon -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
     </dependencies>
 </project>

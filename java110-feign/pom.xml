@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>PayService</artifactId>
+    <artifactId>java110-feign</artifactId>
     <packaging>jar</packaging>
 
-    <name>PayService</name>
+    <name>java110-feign</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -21,6 +21,13 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
