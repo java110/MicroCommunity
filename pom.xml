@@ -25,6 +25,7 @@
         <module>RuleService</module>
         <module>SimpleListenerService</module>
         <module>java110-event</module>
+        <module>CenterService</module>
     </modules>
 
     <parent>
