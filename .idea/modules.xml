@@ -9,7 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/PayService/PayService.iml" filepath="$PROJECT_DIR$/PayService/PayService.iml" />
       <module fileurl="file://$PROJECT_DIR$/RuleService/RuleService.iml" filepath="$PROJECT_DIR$/RuleService/RuleService.iml" />
       <module fileurl="file://E:\project\MicroCommunity\SimpleListenerService\SimpleListener.iml" filepath="E:\project\MicroCommunity\SimpleListenerService\SimpleListener.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SimpleListenerService/SimpleListenerSerivce.iml" filepath="$PROJECT_DIR$/SimpleListenerService/SimpleListenerSerivce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleListenerService/SimpleListenerService.iml" filepath="$PROJECT_DIR$/SimpleListenerService/SimpleListenerService.iml" />
       <module fileurl="file://$PROJECT_DIR$/UserService/UserService.iml" filepath="$PROJECT_DIR$/UserService/UserService.iml" />
       <module fileurl="file://E:\project\MicroCommunity\WechatService\Wechat.iml" filepath="E:\project\MicroCommunity\WechatService\Wechat.iml" />
       <module fileurl="file://$PROJECT_DIR$/WechatService/WechatService.iml" filepath="$PROJECT_DIR$/WechatService/WechatService.iml" />
