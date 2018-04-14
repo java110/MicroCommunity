@@ -1,5 +1,7 @@
 package com.java110.center.smo;
 
+import com.java110.common.exception.SMOException;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -14,5 +16,5 @@ public interface ICenterServiceSMO {
      * @param reqJson 请求报文json
      * @return
      */
-    public String service(String reqJson, Map<String,String> headers) ;
+    public String service(String reqJson, Map<String,String> headers) throws SMOException;
 }

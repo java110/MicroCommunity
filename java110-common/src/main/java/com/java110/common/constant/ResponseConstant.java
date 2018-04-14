@@ -31,6 +31,8 @@ public class ResponseConstant {
      */
     public final static String RESULT_CODE_NO_AUTHORITY_ERROR = "1996";
 
+    public final static String RESULT_CODE_RULE_ERROR = "1995";
+
     /**
      * 没有从报文中获取到 请求流水
      */

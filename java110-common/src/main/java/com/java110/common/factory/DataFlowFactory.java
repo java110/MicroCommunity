@@ -29,6 +29,23 @@ public class DataFlowFactory {
      * @param linksCode 环节编码
      * @param linksName 环节名称
      * @param startDate 开始时间
+     * @return
+     */
+    public static DataFlow addCostTime(DataFlow dataFlow, String linksCode, String linksName, Date startDate){
+        if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
+            DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, DateUtil.getCurrentDate());
+            dataFlow.addLinksCostDatas(dataFlowLinksCost);
+        }
+        return dataFlow;
+    }
+
+
+    /**
+     * 添加耗时
+     * @param dataFlow 数据流
+     * @param linksCode 环节编码
+     * @param linksName 环节名称
+     * @param startDate 开始时间
      * @param endDate 结束时间
      * @return
      */
