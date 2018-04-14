@@ -1,14 +1,12 @@
 package com.java110.event.init;
 
-import com.java110.core.factory.AppFactory;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.event.app.AppEventPublishing;
 import com.java110.event.app.AppListener;
 import com.java110.event.listener.common.CommonDispatchListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
@@ -60,7 +58,7 @@ public class SystemStartUpInit /*implements ApplicationListener<ApplicationReady
         //加载配置文件，注册订单处理侦听
         try {
 
-            AppFactory.setApplicationContext(event.getApplicationContext());
+            ApplicationContextFactory.setApplicationContext(event.getApplicationContext());
 
             Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
 
@@ -82,7 +80,7 @@ public class SystemStartUpInit /*implements ApplicationListener<ApplicationReady
         //加载配置文件，注册订单处理侦听
         try {
 
-            AppFactory.setApplicationContext(context);
+            ApplicationContextFactory.setApplicationContext(context);
 
             Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
 
@@ -124,7 +122,7 @@ public class SystemStartUpInit /*implements ApplicationListener<ApplicationReady
             //这里不能直接反射，这样 IXXXService 无法注入，所以直接从spring 中获取已经注入的
             //AppListener<?> appListener = (AppListener<?>)Class.forName(listener).newInstance();
 
-            AppListener<?> appListener = (AppListener<?>)AppFactory.getBean(listener);
+            AppListener<?> appListener = (AppListener<?>) ApplicationContextFactory.getBean(listener);
 
             //将 listener 放入 AppEventPublishing 中方便后期操作
             //注册侦听

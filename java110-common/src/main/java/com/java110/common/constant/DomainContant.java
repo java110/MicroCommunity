@@ -26,4 +26,11 @@ public class DomainContant {
 
 
     public final static String TASK_DOMAIN = "DOMAIN.TASK";
+
+    /**
+     * 公用域
+     */
+    public final static String COMMON_DOMAIN = "DOMAIN.COMMON";
+
+
 }

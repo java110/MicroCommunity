@@ -21,6 +21,8 @@ public class DataFlow {
 
     private String userId;
 
+    private String ip;
+
     private String orderTypeCd;
 
     private String requestTime;
@@ -62,6 +64,8 @@ public class DataFlow {
     private List<DataFlowLinksCost> linksCostDatas = new ArrayList<DataFlowLinksCost>();
 
     private Map<String,String> headers = new HashMap<String,String>();
+
+    private AppRoute appRoute;
 
     public String getoId() {
         return oId;
@@ -255,6 +259,22 @@ public class DataFlow {
         return headers;
     }
 
+    public AppRoute getAppRoute() {
+        return appRoute;
+    }
+
+    public void setAppRoute(AppRoute appRoute) {
+        this.appRoute = appRoute;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     /**
      * 添加各个环节的耗时
      * @param dataFlowLinksCost
@@ -263,7 +283,7 @@ public class DataFlow {
         this.linksCostDatas.add(dataFlowLinksCost);
     }
 
-    public DataFlow builder(String reqInfo, HttpServletRequest request) throws Exception{
+    public DataFlow builder(String reqInfo, Map<String,String> headerAll) throws Exception{
 
         try{
             Business business = null;
@@ -287,11 +307,13 @@ public class DataFlow {
                 }
             }
 
-            //将url参数写到header map中
-            initUrlParam(request);
+            if (headerAll != null){
+                this.headers.putAll(headerAll);
+                this.setRequestURL(headers.get("REQUEST_URL"));
+                this.setIp(headers.get("IP"));
+            }
 
-            //将 header 写到header map中
-            initHeadParam(request);
+
         }catch (Exception e){
             throw e;
         }
@@ -299,89 +321,5 @@ public class DataFlow {
     }
 
 
-    /**
-     * 将url参数写到header map中
-     * @param request
-     */
-    private void initUrlParam(HttpServletRequest request) {
-		/*put real ip address*/
 
-
-
-        Map readOnlyMap = request.getParameterMap();
-
-        StringBuffer queryString = new StringBuffer(request.getRequestURL()!=null?request.getRequestURL():"");
-
-        if (readOnlyMap != null && !readOnlyMap.isEmpty()) {
-            queryString.append("?");
-            Set<String> keys = readOnlyMap.keySet();
-            for (Iterator it = keys.iterator(); it.hasNext();) {
-                String key = (String) it.next();
-                String[] value = (String[]) readOnlyMap.get(key);
-//                String[] value = (String[]) readOnlyMap.get(key);
-                if(value.length>1) {
-                    headers.put(key, value[0]);
-                    for(int j =0 ;j<value.length;j++){
-                        queryString.append(key);
-                        queryString.append("=");
-                        queryString.append(value[j]);
-                        queryString.append("&");
-                    }
-
-                } else {
-                    headers.put(key, value[0]);
-                    queryString.append(key);
-                    queryString.append("=");
-                    queryString.append(value[0]);
-                    queryString.append("&");
-                }
-            }
-        }
-
-		/*put requst url*/
-        if (readOnlyMap != null && !readOnlyMap.isEmpty()){
-            this.setRequestURL(queryString.toString().substring(0, queryString.toString().length() - 1));
-        }else{
-            this.setRequestURL(queryString.toString());
-        }
-
-    }
-
-    private void initHeadParam(HttpServletRequest request) {
-
-        headers.put("IP",getIpAddr(request));
-
-        Enumeration reqHeaderEnum = request.getHeaderNames();
-
-        while( reqHeaderEnum.hasMoreElements() ) {
-            String headerName = (String)reqHeaderEnum.nextElement();
-            headers.put(headerName, request.getHeader(headerName));
-        }
-    }
-
-    /**
-     * 获取IP地址
-     * @param request
-     * @return
-     */
-    private String getIpAddr(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-
-        return ip;
-    }
 }

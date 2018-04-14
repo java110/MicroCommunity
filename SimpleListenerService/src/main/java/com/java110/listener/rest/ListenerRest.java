@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.DomainContant;
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.factory.AppFactory;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.feign.base.ICommonService;
 import com.java110.listener.bmo.IListenerBmo;
 import com.java110.listener.task.ListenerJob;
@@ -475,7 +475,7 @@ public class ListenerRest extends BaseController {
         List<Map> doFtpItems = listenerBmoImpl.queryFtpItemsByTaskIds(info);
 
         // 获取Spring调度器
-        Scheduler scheduler = (Scheduler) AppFactory.getBean("schedulerFactoryBean");
+        Scheduler scheduler = (Scheduler) ApplicationContextFactory.getBean("schedulerFactoryBean");
         int linstenCount = 0;
         int updateTaskStateFailCount = 0;
         try {
@@ -606,7 +606,7 @@ public class ListenerRest extends BaseController {
         List<Map> doFtpItems = listenerBmoImpl.queryFtpItemsByTaskIds(info);
 
         // 获取Spring调度器
-        Scheduler scheduler = (Scheduler) AppFactory.getBean("schedulerFactoryBean");
+        Scheduler scheduler = (Scheduler) ApplicationContextFactory.getBean("schedulerFactoryBean");
 
         int linstenCount = 0;
         int updateTaskStateFailCount = 0;

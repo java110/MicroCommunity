@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 中心http服务 统一服务类
@@ -28,8 +30,32 @@ public class HttpApi extends BaseController {
 
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.POST)
     public String servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
-        return centerServiceSMOImpl.service(orderInfo, request);
+        try {
+            Map<String, String> headers = new HashMap<String, String>();
+            getRequestInfo(request, headers);
+            return centerServiceSMOImpl.service(orderInfo, headers);
+        }catch (Exception e){
+            return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+                    ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e);
+        }
     }
+
+    /**
+     * 获取请求信息
+     * @param request
+     * @param headers
+     * @throws RuntimeException
+     */
+    private void getRequestInfo(HttpServletRequest request,Map headers) throws RuntimeException{
+        try{
+            super.initHeadParam(request,headers);
+            super.initUrlParam(request,headers);
+        }catch (Exception e){
+            logger.error("加载头信息失败",e);
+            throw e;
+        }
+    }
+
 
     public ICenterServiceSMO getCenterServiceSMOImpl() {
         return centerServiceSMOImpl;

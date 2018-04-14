@@ -7,6 +7,8 @@
 package com.java110.common.util;
 
 
+import org.springframework.util.*;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -488,4 +490,12 @@ public class StringUtil {
 		}
 	}
 
+	public static String truncateMessage(String description, int length) {
+		org.springframework.util.Assert.state(length > 0);
+		if ((description != null) && (description.length() > length)) {
+			return description.substring(0, length);
+		}
+
+		return description;
+	}
 }

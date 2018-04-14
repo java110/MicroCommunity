@@ -29,7 +29,7 @@ public class ResponseConstant {
     /**
      * 失败，入参错误，为空或格式错误
      */
-    public final static String RESULT_CODE_PARAM_ERROR = "1001";
+    public final static String RESULT_CODE_NO_AUTHORITY_ERROR = "1996";
 
     /**
      * 没有从报文中获取到 请求流水

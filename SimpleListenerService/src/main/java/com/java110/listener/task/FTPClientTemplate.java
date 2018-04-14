@@ -1,6 +1,5 @@
 package com.java110.listener.task;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;  
 import java.io.FileNotFoundException;  
@@ -18,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import com.java110.common.util.SpringBeanInvoker;
-import com.java110.core.factory.AppFactory;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.entity.listener.FtpTaskLogDetail;
 import com.java110.listener.dao.IListenerServiceDao;
 import org.apache.commons.net.PrintCommandListener;
@@ -1075,7 +1073,7 @@ public class FTPClientTemplate  implements  Callable<Map>{
 
     public IListenerServiceDao getListenerServiceDao() {
         if (this.listenerServiceDaoImpl == null) {
-            this.listenerServiceDaoImpl = ((IListenerServiceDao) AppFactory
+            this.listenerServiceDaoImpl = ((IListenerServiceDao) ApplicationContextFactory
                     .getBean("listenerServiceDaoImpl"));
         }
         return listenerServiceDaoImpl;

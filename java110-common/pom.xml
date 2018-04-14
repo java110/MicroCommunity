@@ -10,7 +10,7 @@
     <artifactId>java110-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>common</name>
+    <name>java110-common</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -24,6 +24,11 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-bean</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-config</artifactId>
         </dependency>
 
         <dependency>
@@ -103,7 +108,6 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

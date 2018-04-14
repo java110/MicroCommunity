@@ -20,12 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>java110-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.java110</groupId>
             <artifactId>java110-feign</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -39,9 +34,11 @@
         </dependency>
 
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-cacheAgent</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

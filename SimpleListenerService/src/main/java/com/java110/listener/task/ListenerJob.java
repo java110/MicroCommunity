@@ -3,7 +3,7 @@ package com.java110.listener.task;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.java110.core.factory.AppFactory;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.listener.dao.IListenerServiceDao;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -48,7 +48,7 @@ public class ListenerJob extends StatefulMethodInvokingJob {
             }
 
             String dealClass = ftpItemConfigInfo.get("DEAL_CLASS").toString();
-            prvncDumpQuartz = (FtpToFileSystemQuartz) AppFactory.getBean(dealClass);
+            prvncDumpQuartz = (FtpToFileSystemQuartz) ApplicationContextFactory.getBean(dealClass);
             prvncDumpQuartz.startFtpTask(ftpItemConfigInfo);
         } catch (Throwable ex) {
             logger.error("执行任务失败：", ex);
@@ -73,7 +73,7 @@ public class ListenerJob extends StatefulMethodInvokingJob {
 
     public IListenerServiceDao getListenerServiceDao() {
         if (this.listenerServiceDaoImpl == null) {
-            this.listenerServiceDaoImpl = ((IListenerServiceDao) AppFactory
+            this.listenerServiceDaoImpl = ((IListenerServiceDao) ApplicationContextFactory
                     .getBean("listenerServiceDaoImpl"));
         }
         return listenerServiceDaoImpl;

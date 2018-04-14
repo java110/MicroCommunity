@@ -1,21 +1,18 @@
-package com.java110.core.factory;
+package com.java110.common.factory;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by wuxw on 2017/4/25.
  */
 
-public class AppFactory {
+public class ApplicationContextFactory {
 
     private static ApplicationContext applicationContext;
 
     public static void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        AppFactory.applicationContext = applicationContext;
+        ApplicationContextFactory.applicationContext = applicationContext;
     }
 
     public static Object getBean(Class className){

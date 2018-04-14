@@ -1,7 +1,5 @@
 package com.java110.listener.task;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import com.java110.common.constant.ListenerDomain;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.core.factory.AppFactory;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.entity.listener.FtpTaskLog;
 import com.java110.entity.listener.FtpTaskLogDetail;
 import com.java110.listener.dao.IListenerServiceDao;
@@ -350,7 +348,7 @@ public abstract class FtpToFileSystemQuartz extends LoggerEngine {
 
 	public IListenerServiceDao getListenerServiceDao() {
 		if (this.listenerServiceDaoImpl == null) {
-			this.listenerServiceDaoImpl = ((IListenerServiceDao) AppFactory
+			this.listenerServiceDaoImpl = ((IListenerServiceDao) ApplicationContextFactory
 					.getBean("listenerServiceDaoImpl"));
 		}
 		return listenerServiceDaoImpl;

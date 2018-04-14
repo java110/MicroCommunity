@@ -1,4 +1,4 @@
-package com.java110.core.cache;
+package com.java110.cache;
 
 import javafx.application.Application;
 import org.junit.Test;

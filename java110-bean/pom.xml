@@ -10,7 +10,7 @@
     <artifactId>java110-bean</artifactId>
     <packaging>jar</packaging>
 
-    <name>bean</name>
+    <name>java110-bean</name>
     <url>http://maven.apache.org</url>
 
     <properties>

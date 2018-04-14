@@ -1,6 +1,7 @@
 package com.java110.center.smo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 中心服务 SMO 业务逻辑接口
@@ -13,5 +14,5 @@ public interface ICenterServiceSMO {
      * @param reqJson 请求报文json
      * @return
      */
-    public String service(String reqJson, HttpServletRequest request) ;
+    public String service(String reqJson, Map<String,String> headers) ;
 }

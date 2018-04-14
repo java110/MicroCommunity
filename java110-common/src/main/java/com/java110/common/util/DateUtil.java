@@ -125,6 +125,21 @@ public class DateUtil {
         return getDateFromString(str, pattern).getTime();
     }
 
+    /**
+     * 校验字符串是否可以格式化为时间
+     * @param str
+     * @param pattern
+     * @return
+     */
+    public static boolean judgeDate(String str,String pattern){
+        try{
+            dateString2Long(str,pattern);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
     public static String longToDateStringDefault(long time)
     {
         return getFormatTimeString(new Date(time), "yyyyMMddHHmmss");

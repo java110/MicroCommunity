@@ -26,6 +26,7 @@
         <module>SimpleListenerService</module>
         <module>java110-event</module>
         <module>CenterService</module>
+        <module>java110-cacheAgent</module>
     </modules>
 
     <parent>
@@ -142,6 +143,12 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>java110-config</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-cacheAgent</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 

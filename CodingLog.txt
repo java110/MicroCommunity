@@ -4,3 +4,6 @@
 3、网友反映OrderService提供的协议过于复杂，则加入CenterService服务简化协议处理服务（文档设计实际已经完成，请查看CenterService/doc/centerService.docx,待开发）
 4、开发HttpApi service 接口未完成，目前完成数据封装到DataFlow对象。
 
+--------------------2018年04月14日-----------------------
+1、httpApi service 请求常规校验
+2、加入Redis 缓存系统

@@ -1,13 +1,9 @@
-package com.java110.core.cache;
+package com.java110.cache;
 
-import com.java110.core.factory.AppFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
@@ -23,7 +19,7 @@ public class CacheConfiguration  {
     */
     @Bean(name = "appEhCacheCacheManager")
     public EhCacheCacheManager ehCacheCacheManager(EhCacheManagerFactoryBean bean){
-        return new EhCacheCacheManager (bean.getObject ());
+        return new EhCacheCacheManager (bean.getObject());
     }
 
     /*
