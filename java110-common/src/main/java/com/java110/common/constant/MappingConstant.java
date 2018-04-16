@@ -26,4 +26,7 @@ public class MappingConstant {
 
     // 不用调用 作废下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
     public  final static String KEY_NO_INVALID_BUSINESS_SYSTEM = "NO_INVALID_BUSINESS_SYSTEM";//
+
+    //需要调用服务生成各个ID
+    public final static String KEY_NEED_INVOKE_GENERATE_ID = "NEED_INVOKE_SERVICE_GENERATE_ID";
 }

@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  * 业务数据
  * Created by wuxw on 2018/4/13.
  */
-public class Business {
+public class Business implements Comparable{
 
     private String bId;
 
@@ -25,6 +25,8 @@ public class Business {
     private String code;
 
     private String message;
+
+    private int seq;
 
 
     public String getbId() {
@@ -91,6 +93,14 @@ public class Business {
         this.message = message;
     }
 
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
     /**
      * 构建成对象
      * @return
@@ -99,14 +109,28 @@ public class Business {
     public Business builder(JSONObject businessObj) throws Exception{
 
         try{
+            this.setbId(businessObj.getString("bId"));
             this.setServiceCode(businessObj.getString("serviceCode"));
             this.setServiceName(businessObj.getString("serviceName"));
             this.setRemark(businessObj.getString("remark"));
             this.setDatas(businessObj.getJSONArray("datas"));
             this.setAttrs(businessObj.getJSONArray("attrs"));
+            if(businessObj.containsKey("response")){
+                this.setCode(businessObj.getJSONObject("response").getString("code"));
+                this.setMessage(businessObj.getJSONObject("response").getString("message"));
+            }
         }catch (Exception e){
             throw e;
         }
         return this;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Business otherBusiness = (Business)o;
+        if(this.getSeq() > otherBusiness.getSeq()) {
+            return -1;
+        }
+        return 0;
     }
 }

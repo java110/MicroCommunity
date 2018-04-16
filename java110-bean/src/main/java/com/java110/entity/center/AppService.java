@@ -20,6 +20,9 @@ public class AppService implements Serializable{
 
     private int seq;
 
+    //消息队里名称 只有异步时有用
+    private String messageQueueName;
+
     private String url;
 
     //只有webservice时才有用
@@ -128,4 +131,14 @@ public class AppService implements Serializable{
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String getMessageQueueName() {
+        return messageQueueName;
+    }
+
+    public void setMessageQueueName(String messageQueueName) {
+        this.messageQueueName = messageQueueName;
+    }
+
+
 }

@@ -17,3 +17,32 @@ spring:
   application:
     name: center-service
 
+#============== kafka ===================
+kafka:
+  consumer:
+    zookeeper:
+      connect: 10.93.21.21:2181
+    services: 10.93.21.21:9092
+    enable:
+      auto:
+        commit: true
+    session:
+      timeout: 6000
+    auto:
+      commit:
+        interval: 100
+      offset:
+        reset: latest
+    topic: test
+    group:
+      id: test
+    concurrency: 10
+  producer:
+    servers: 10.93.21.21:9092
+    retries: 0
+    batch:
+      size: 4096
+    linger: 1
+    buffer:
+      memory: 40960
+

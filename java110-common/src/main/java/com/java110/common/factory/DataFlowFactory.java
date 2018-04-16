@@ -1,17 +1,18 @@
 package com.java110.common.factory;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.DateUtil;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.AppServiceStatus;
-import com.java110.entity.center.DataFlow;
-import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.common.util.SequenceUtil;
+import com.java110.entity.center.*;
 
-import java.util.Date;
-import java.util.List;
+import javax.xml.crypto.Data;
+import java.util.*;
 
 /**
  * 数据流工厂类
@@ -78,6 +79,320 @@ public class DataFlowFactory {
         return null;
     }
 
+    /**
+     * 获取Order信息
+     * @param dataFlow
+     * @return
+     */
+    public static Map getOrder(DataFlow dataFlow){
+        Map order = new HashMap();
+        dataFlow.setoId(SequenceUtil.getOId());
+        order.put("oId",dataFlow.getoId());
+        order.put("appId",dataFlow.getAppId());
+        order.put("extTransactionId",dataFlow.getTransactionId());
+        order.put("userId",dataFlow.getUserId());
+        order.put("requestTime",dataFlow.getRequestTime());
+        order.put("orderTypeCd",dataFlow.getOrderTypeCd());
+        order.put("remark",dataFlow.getRemark());
+        order.put("statusCd",StatusConstant.STATUS_CD_SAVE);
+        return order ;
+    }
+
+
+    /**
+     * 获取订单属性
+     * @param dataFlow
+     * @return
+     */
+    public static List<Map> getOrderAttrs(DataFlow dataFlow){
+        List<Map> orderAttrs = new ArrayList<Map>();
+        JSONObject reqOrders = dataFlow.getReqOrders();
+        if(!reqOrders.containsKey("attrs") && reqOrders.getJSONArray("attrs").size() ==0){
+            return orderAttrs;
+        }
+        JSONArray attrs = reqOrders.getJSONArray("attrs");
+        Map attrMap = null;
+        for(int attrIndex = 0;attrIndex <attrs.size();attrIndex ++ )
+        {
+            attrMap = new HashMap();
+            attrMap.put("oId",dataFlow.getoId());
+            attrMap.put("attrId",SequenceUtil.getAttrId());
+            attrMap.put("specCd",attrs.getJSONObject(attrIndex).getString("specCd"));
+            attrMap.put("value",attrs.getJSONObject(attrIndex).getString("value"));
+            orderAttrs.add(attrMap);
+        }
+        return orderAttrs;
+    }
+
+    /**
+     * 获取订单项
+     * @param dataFlow
+     * @return
+     */
+    public static List<Map> getBusiness(DataFlow dataFlow){
+        List<Map> businesss = new ArrayList<Map>();
+        JSONArray reqBusiness = dataFlow.getReqBusiness();
+        Map busiMap = null;
+        for(int businessIndex = 0 ; businessIndex < reqBusiness.size();businessIndex ++) {
+            JSONObject business = reqBusiness.getJSONObject(businessIndex);
+            if(business == null){
+                continue;
+            }
+            business.put("bId",SequenceUtil.getBId());
+            busiMap = new HashMap();
+            busiMap.put("oId",dataFlow.getoId());
+            busiMap.put("businessTypeCd",getService(dataFlow,business.getString("serviceCode")).getBusinessTypeCd());
+            busiMap.put("remark",business.getString("remark"));
+            busiMap.put("status_cd",StatusConstant.STATUS_CD_SAVE);
+            businesss.add(busiMap);
+        }
+        return businesss;
+    }
+
+    /**
+     * 获取订单属性
+     * @param dataFlow
+     * @return
+     */
+    public static List<Map> getBusinessAttrs(DataFlow dataFlow){
+        List<Map> businessAttrs = new ArrayList<Map>();
+        JSONArray reqBusiness = dataFlow.getReqBusiness();
+        for(int businessIndex = 0 ; businessIndex < reqBusiness.size();businessIndex ++) {
+            JSONObject business = reqBusiness.getJSONObject(businessIndex);
+            if (!business.containsKey("attrs") && business.getJSONArray("attrs").size() == 0) {
+                continue;
+            }
+            JSONArray attrs = business.getJSONArray("attrs");
+            Map attrMap = null;
+            for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+                attrMap = new HashMap();
+                attrMap.put("bId", business.getString("bId"));
+                attrMap.put("attrId", SequenceUtil.getAttrId());
+                attrMap.put("specCd", attrs.getJSONObject(attrIndex).getString("specCd"));
+                attrMap.put("value", attrs.getJSONObject(attrIndex).getString("value"));
+                businessAttrs.add(attrMap);
+            }
+        }
+        return businessAttrs;
+    }
+
+    /**
+     * 获取将要作废的订单
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedInvalidOrder(DataFlow dataFlow){
+        Map order = new HashMap();
+        order.put("oId",dataFlow.getoId());
+       // order.put("finishTime",DateUtil.getCurrentDate());
+        order.put("statusCd",StatusConstant.STATUS_CD_DELETE);
+        return order;
+    }
+
+    /**
+     * 获取将要作废的订单
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedErrorOrder(DataFlow dataFlow){
+        Map order = new HashMap();
+        order.put("oId",dataFlow.getoId());
+        //order.put("finishTime",DateUtil.getCurrentDate());
+        order.put("statusCd",StatusConstant.STATUS_CD_ERROR);
+        return order;
+    }
+
+    public static Map getNeedCompleteBusiness(DataFlow dataFlow){
+        Map business = new HashMap();
+        String bId = "";
+        for(Business busi:dataFlow.getBusinesses()){
+            bId += "'"+busi.getbId()+"',";
+        }
+        business.put("bId",bId.substring(0,bId.length()-1));
+        business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("statusCd",StatusConstant.STATUS_CD_COMPLETE);
+        return business;
+    }
+
+    public static Map getNeedNotifyErrorBusiness(DataFlow dataFlow){
+        Map business = new HashMap();
+        String bId = getMoreBId(dataFlow);
+        business.put("bId",bId.substring(0,bId.length()-1));
+        //business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("statusCd",StatusConstant.STATUS_CD_NOTIFY_ERROR);
+        return business;
+    }
+
+    /**
+     * 获取DataFlow 对象中的所有bId
+     * @param dataFlow
+     * @return
+     */
+    public static String getMoreBId(DataFlow dataFlow){
+        String bId = "";
+        for(Business busi:dataFlow.getBusinesses()){
+            bId += "'"+busi.getbId()+"',";
+        }
+        return bId;
+    }
+
+
+    /**
+     * 获取将要完成的订单
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedCompleteOrder(DataFlow dataFlow){
+        Map order = new HashMap();
+        order.put("oId",dataFlow.getoId());
+        order.put("finishTime",DateUtil.getCurrentDate());
+        order.put("statusCd",StatusConstant.STATUS_CD_COMPLETE);
+        return order;
+    }
+
+    /**
+     * 获取竣工消息的报文（订单完成后通知业务系统）
+     * @param dataFlow
+     * @return
+     */
+    public static JSONObject getNotifyBusinessSuccessJson(DataFlow dataFlow){
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+        JSONArray businesses = notifyMessage.getJSONArray("business");
+
+        JSONObject busi = null;
+        JSONObject response = null;
+        for(Business business :dataFlow.getBusinesses()){
+            busi = new JSONObject();
+            busi.put("bId",business.getbId());
+            busi.put("serviceCode",business.getServiceCode());
+            response = new JSONObject();
+            response.put("code",ResponseConstant.RESULT_CODE_SUCCESS);
+            response.put("message","成功");
+            busi.put("response",response);
+            businesses.add(busi);
+        }
+        return notifyMessage;
+    }
+
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param dataFlow
+     * @return
+     */
+    public static JSONObject getNotifyBusinessErrorJson(DataFlow dataFlow){
+
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+        JSONArray businesses = notifyMessage.getJSONArray("business");
+
+        JSONObject busi = null;
+        JSONObject response = null;
+        for(Business business :dataFlow.getBusinesses()){
+            busi = new JSONObject();
+            busi.put("bId",business.getbId());
+            busi.put("serviceCode",business.getServiceCode());
+            response = new JSONObject();
+            response.put("code",ResponseConstant.RESULT_CODE_INNER_ERROR);
+            response.put("message","失败");
+            busi.put("response",response);
+            businesses.add(busi);
+        }
+        return notifyMessage;
+    }
+
+    public static JSONObject getCompletedBusinessErrorJson(Map business,AppService appService){
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+        JSONArray businesses = notifyMessage.getJSONArray("business");
+
+        JSONObject busi = null;
+        JSONObject response = null;
+        busi = new JSONObject();
+        busi.put("bId",business.get("b_id"));
+        busi.put("serviceCode",appService.getServiceCode());
+        response = new JSONObject();
+        response.put("code",ResponseConstant.RESULT_CODE_INNER_ERROR);
+        response.put("message","失败");
+        busi.put("response",response);
+        businesses.add(busi);
+        return notifyMessage;
+
+    }
+
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param business
+     * @return
+     */
+    public static JSONObject getRequestBusinessJson(Business business){
+
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.REQUEST_BUSINESS_TYPE);
+        JSONArray businesses = notifyMessage.getJSONArray("business");
+
+        JSONObject busi = null;
+        JSONObject response = null;
+            busi = new JSONObject();
+            busi.put("bId",business.getbId());
+            busi.put("serviceCode",business.getServiceCode());
+            busi.put("serviceName",business.getServiceName());
+            busi.put("remark",business.getRemark());
+            busi.put("datas",business.getDatas());
+            businesses.add(busi);
+        return notifyMessage;
+    }
+
+
+    /**
+     * 业务系统交互
+     * @return
+     */
+    private static JSONObject getTransactionBusinessBaseJson(String businessType){
+        JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
+        JSONObject orders = notifyMessage.getJSONObject("orders");
+        orders.put("transactionId",SequenceUtil.getTransactionId());
+        orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());
+        orders.put("businessType",businessType);
+        return notifyMessage;
+    }
+
+    /**
+     * 获取同步处理业务
+     * @param dataFlow
+     * @return
+     */
+    public static List<Business> getSynchronousBusinesses(DataFlow dataFlow){
+        AppService service = null;
+        List<Business> syschronousBusinesses = new ArrayList<Business>();
+        for(Business business :dataFlow.getBusinesses()){
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(service.getInvokeMethod())){
+                business.setSeq(service.getSeq());
+                syschronousBusinesses.add(business);
+            }
+        }
+        if(syschronousBusinesses.size() > 0) {
+            Collections.sort(syschronousBusinesses);
+        }
+
+        return syschronousBusinesses;
+    }
+
+
+    /**
+     * 获取异步处理业务
+     * @param dataFlow
+     * @return
+     */
+    public static List<Business> getAsynchronousBusinesses(DataFlow dataFlow){
+        AppService service = null;
+        List<Business> syschronousBusinesses = new ArrayList<Business>();
+        for(Business business :dataFlow.getBusinesses()){
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(service.getInvokeMethod())){
+                syschronousBusinesses.add(business);
+            }
+        }
+
+        return syschronousBusinesses;
+    }
 
 
 }

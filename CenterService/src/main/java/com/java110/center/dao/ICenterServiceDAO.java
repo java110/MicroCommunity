@@ -27,10 +27,10 @@ public interface ICenterServiceDAO {
 
     /**
      * 保存订单项信息
-     * @param business 订单项信息
+     * @param businesses 订单项信息
      * @return
      */
-    public void saveBusiness(Map business) throws DAOException;
+    public void saveBusiness(List<Map> businesses) throws DAOException;
 
     /**
      * 保存属性信息
@@ -52,4 +52,35 @@ public interface ICenterServiceDAO {
      * @throws DAOException
      */
     public void updateBusiness(Map order) throws DAOException;
+
+    /**
+     * 根据bId 修改业务项信息
+     * @param business
+     * @throws DAOException
+     */
+    public void updateBusinessByBId(Map business) throws DAOException;
+
+    /**
+     * 当所有业务动作是否都是C，将订单信息改为 C
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public void completeOrderByBId(String bId) throws DAOException;
+
+    /**
+     * 根据bId查询订单信息
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public Map getOrderInfoByBId(String bId)throws DAOException;
+
+    /**
+     * 获取同个订单中已经完成的订单项
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException;
 }

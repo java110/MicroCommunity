@@ -57,16 +57,17 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 保存订单项信息
-     * @param business 订单项信息
+     * @param businesses 订单项信息
      */
     @Override
-    public void saveBusiness(Map business) throws DAOException {
+    public void saveBusiness(List<Map> businesses) throws DAOException {
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(business));
-
-        int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness",business);
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"保存订单项信息失败："+ JSONObject.toJSONString(business));
+        LoggerEngine.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(businesses));
+        for(Map business:businesses) {
+            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
+            if (saveFlag < 1) {
+                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(business));
+            }
         }
     }
 
@@ -115,5 +116,59 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"更新订单项信息失败："+ JSONObject.toJSONString(order));
         }
+    }
+
+    /**
+     * 根据bId 修改业务项信息
+     * @param business
+     * @throws DAOException
+     */
+    public void updateBusinessByBId(Map business) throws DAOException{
+        LoggerEngine.debug("----【CenterServiceDAOImpl.updateBusinessByBId】保存数据入参 : " + JSONObject.toJSONString(business));
+
+        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessByBId",business);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"更新订单项信息失败："+ JSONObject.toJSONString(business));
+        }
+    }
+
+    /**
+     * 当所有业务动作是否都是C，将订单信息改为 C
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public void completeOrderByBId(String bId) throws DAOException{
+        LoggerEngine.debug("----【CenterServiceDAOImpl.completeOrderByBId】数据入参 : " + bId);
+
+        int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByBId",bId);
+
+        if(updateFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前业务还没有全完成（C）："+ bId);
+        }
+    }
+
+    /**
+     * 根据bId查询订单信息
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public Map getOrderInfoByBId(String bId)throws DAOException{
+        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderInfoByBId",bId);
+        if(orders !=null){
+            return orders.get(0);
+        }
+        return null;
+    }
+    /**
+     * 获取同个订单中已经完成的订单项
+     * @param bId
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException{
+        LoggerEngine.debug("----【CenterServiceDAOImpl.getCommonOrderCompledBusinessByBId】数据入参 : " + bId);
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getCommonOrderCompledBusinessByBId",bId);
     }
 }

@@ -1,29 +1,24 @@
 package com.java110.center.smo.impl;
 
 import com.java110.center.dao.ICenterServiceDAO;
-import com.java110.common.cache.AppRouteCache;
 import com.java110.center.smo.ICenterServiceSMO;
+import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.*;
 import com.java110.common.factory.DataFlowFactory;
+import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.ResponseTemplateUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.entity.center.AppRoute;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlow;
-import com.java110.entity.rule.RuleEntrance;
+import com.java110.entity.center.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 中心服务处理类
@@ -34,7 +29,7 @@ import java.util.Map;
 public class CenterServiceSMOImpl implements ICenterServiceSMO {
 
     @Autowired
-    ICenterServiceDAO orderServiceDaoImpl;
+    ICenterServiceDAO centerServiceDaoImpl;
 
     @Override
     public String service(String reqJson, Map<String, String> headers) throws SMOException{
@@ -60,11 +55,14 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
                 //7.0 作废订单和业务项
                 invalidOrderAndBusiness(dataFlow);
                 //8.0 广播作废业务系统订单信息
-                invalidBusinessSystem(dataFlow);
+                //想法:这里可以直接不广播，只有在业务返回时才广播,
+                // 疑问：在这里部分消息发出去了，如果在receiveBusinessSystemNotifyMessage这个方法中依然没有收到，我们认为是下游系统也是失败了不用处理，
+                //目前看逻辑也是对的
+                //invalidBusinessSystem(dataFlow);
             } catch (Exception e1) {
                 LoggerEngine.error("作废订单失败", e);
-                //9.0 记录作废失败的单子，人工处理。
-                saveInvalidBusinessError(dataFlow);
+                //9.0 将订单状态改为失败，人工处理。
+                updateOrderAndBusinessError(dataFlow);
             } finally {
                 return ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                         ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
@@ -116,7 +114,7 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
         if (appRoute == null) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "initConfigData", "加载配置耗时", startDate);
-            throw new RuntimeException("当前没有获取到AppId对应的信息");
+            throw new InitConfigDataException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前没有获取到AppId对应的信息");
         }
         dataFlow.setAppRoute(appRoute);
         //添加耗时
@@ -242,11 +240,18 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             return ;
         }
 
-        //1.0 保存 orders信息
 
+        //1.0 保存 orders信息
+        centerServiceDaoImpl.saveOrder(DataFlowFactory.getOrder(dataFlow));
+
+
+        centerServiceDaoImpl.saveOrderAttrs(DataFlowFactory.getOrderAttrs(dataFlow));
 
         //2.0 保存 business信息
 
+        centerServiceDaoImpl.saveBusiness(DataFlowFactory.getBusiness(dataFlow));
+
+        centerServiceDaoImpl.saveBusinessAttrs(DataFlowFactory.getBusinessAttrs(dataFlow));
 
         DataFlowFactory.addCostTime(dataFlow, "saveOrdersAndBusiness", "保存订单和业务项耗时", startDate);
     }
@@ -266,8 +271,19 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             return ;
         }
 
+        //6.1 先处理同步方式的服务，每一同步后发布事件广播
+
+        doSynchronousBusinesses(dataFlow);
+
+
+        //6.2 处理异步服务
+        doAsynchronousBusinesses(dataFlow);
+
+
         DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
     }
+
+
 
     /**
      * 7.0 作废订单和业务项
@@ -283,7 +299,211 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             return ;
         }
 
+        //作废 订单
+        centerServiceDaoImpl.updateOrder(DataFlowFactory.getNeedInvalidOrder(dataFlow));
+
+        //作废订单项
+        centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedInvalidOrder(dataFlow));
+
+
         DataFlowFactory.addCostTime(dataFlow, "invalidOrderAndBusiness", "作废订单和业务项耗时", startDate);
+    }
+
+
+    /**
+     * 8.0 广播作废已经完成业务系统订单信息
+     *
+     * @param dataFlow
+     */
+    private void invalidCompletedBusinessSystem(DataFlow dataFlow) throws Exception{
+        // 根据 c_business 表中的字段business_type_cd 找到对应的消息队列名称
+        List<Map> completedBusinesses = centerServiceDaoImpl.getCommonOrderCompledBusinessByBId(dataFlow.getBusinesses().get(0).getbId());
+        for(AppServiceStatus serviceStatus :dataFlow.getAppRoute().getAppServices()){
+            for(Map completedBusiness : completedBusinesses){
+                if(completedBusiness.get("business_type_cd").equals(serviceStatus.getAppService().getBusinessTypeCd())){
+                    KafkaFactory.sendKafkaMessage(serviceStatus.getAppService().getMessageQueueName(),"",
+                            DataFlowFactory.getCompletedBusinessErrorJson(completedBusiness,serviceStatus.getAppService()));
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 9.0 将订单状态改为失败，人工处理。
+     *
+     * @param dataFlow
+     */
+    private void updateOrderAndBusinessError(DataFlow dataFlow) {
+
+        Date startDate = DateUtil.getCurrentDate();
+
+        //作废 订单
+        centerServiceDaoImpl.updateOrder(DataFlowFactory.getNeedErrorOrder(dataFlow));
+
+        //作废订单项
+        centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedErrorOrder(dataFlow));
+
+
+        DataFlowFactory.addCostTime(dataFlow, "updateOrderAndBusinessError", "订单状态改为失败耗时", startDate);
+
+    }
+
+
+    /**
+     * 接受业务系统通知消息
+     * @param receiveJson 接受报文
+     * @throws SMOException
+     */
+    @Override
+    public void receiveBusinessSystemNotifyMessage(String receiveJson) throws SMOException{
+        DataFlow dataFlow = null;
+        try {
+            //1.0 创建数据流
+            dataFlow = DataFlowFactory.newInstance().builder(receiveJson, null);
+            //如果订单都没有保存，则再不要处理
+            if(MappingCache.getValue(MappingConstant.KEY_NO_SAVE_ORDER) != null
+                    &&MappingCache.getValue(MappingConstant.KEY_NO_SAVE_ORDER).contains(dataFlow.getOrderTypeCd())){
+                //不保存订单信息
+                return ;
+            }
+
+            //2.0加载数据，没有找到appId 及配置信息 则抛出InitConfigDataException
+            reloadOrderInfoAndConfigData(dataFlow);
+
+            //3.0 判断是否成功,失败会抛出BusinessStatusException异常
+            judgeBusinessStatus(dataFlow);
+
+            //4.0 修改业务为成功,如果发现业务项已经是作废或失败状态（D或E）则抛出BusinessException异常
+            completeBusiness(dataFlow);
+            //5.0当所有业务动作是否都是C，将订单信息改为 C 并且发布竣工消息，这里在广播之前确认
+            completeOrderAndNotifyBusinessSystem(dataFlow);
+
+        }catch (BusinessStatusException e){
+            try {
+                //6.0 作废订单和所有业务项
+                invalidOrderAndBusiness(dataFlow);
+                //7.0 广播作废业务系统订单信息
+                //想法，这里只广播已经完成的订单项
+                invalidCompletedBusinessSystem(dataFlow);
+            } catch (Exception e1) {
+                LoggerEngine.error("作废订单失败", e1);
+                //8.0 将订单状态改为失败，人工处理。
+                updateOrderAndBusinessError(dataFlow);
+            }
+        }catch (BusinessException e) {
+            //9.0说明这个订单已经失败了，再不需要
+            //想法，这里广播当前失败业务
+            try {
+                notifyBusinessSystemErrorMessage(dataFlow);
+            }catch (Exception e1){
+                //这里记录日志
+            }
+        }catch (InitConfigDataException e){ //这种一般不会出现，除非人工改了数据
+            LoggerEngine.error("加载配置数据出错", e);
+            try {
+                //6.0 作废订单和所有业务项
+                invalidOrderAndBusiness(dataFlow);
+                //7.0 广播作废业务系统订单信息
+                //想法，这里只广播已经完成的订单项
+                invalidCompletedBusinessSystem(dataFlow);
+            } catch (Exception e1) {
+                LoggerEngine.error("作废订单失败", e1);
+                //8.0 将订单状态改为失败，人工处理。
+                updateOrderAndBusinessError(dataFlow);
+            }
+
+        }catch (Exception e){
+            LoggerEngine.error("作废订单失败", e);
+            //10.0 成功的情况下通知下游系统失败将状态改为NE，人工处理。
+            updateBusinessNotifyError(dataFlow);
+        }
+    }
+
+
+    /**
+     * 2.0重新加载订单信息到dataFlow 中
+     *
+     * @param dataFlow
+     */
+    private void reloadOrderInfoAndConfigData(DataFlow dataFlow) {
+
+        Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getBusinesses().get(0).getbId());
+        dataFlow.setoId(order.get("o_id").toString());
+        //重新加载配置
+        initConfigData(dataFlow);
+    }
+
+    /**
+     * 9.0 成功的情况下通知下游系统失败将状态改为NE，人工处理。
+     *
+     * @param dataFlow
+     */
+    private void updateBusinessNotifyError(DataFlow dataFlow) {
+
+        Date startDate = DateUtil.getCurrentDate();
+            //完成订单项
+        centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedNotifyErrorBusiness(dataFlow));
+
+        DataFlowFactory.addCostTime(dataFlow, "updateBusinessNotifyError", "订单状态改为失败耗时", startDate);
+
+    }
+
+    /**
+     * 判断是否都成功了
+     * @param dataFlow
+     */
+    private void judgeBusinessStatus(DataFlow dataFlow) throws BusinessStatusException{
+
+        List<Business> businesses = dataFlow.getBusinesses();
+
+        for(Business business: businesses){
+            if(!ResponseConstant.RESULT_CODE_SUCCESS.equals(business.getCode())){
+                throw new BusinessStatusException(business.getCode(),"业务bId= "+business.getbId() + " 处理失败，需要作废订单");
+            }
+        }
+
+    }
+
+    /**
+     * 3.0 修改业务为成功,如果发现业务项已经是作废或失败状态（D或E）则抛出BusinessException异常
+     *
+     * @param dataFlow
+     */
+    private void completeBusiness(DataFlow dataFlow) throws BusinessException{
+        try {
+            //完成订单项
+            centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedCompleteBusiness(dataFlow));
+
+        }catch (DAOException e){
+            throw new BusinessException(e.getResult(),e);
+        }
+    }
+
+    /**
+     * //4.0当所有业务动作是否都是C，将订单信息改为 C 并且发布竣工消息，这里在广播之前确认
+     * @param dataFlow
+     */
+    private void completeOrderAndNotifyBusinessSystem(DataFlow dataFlow) throws Exception{
+        try {
+            centerServiceDaoImpl.completeOrderByBId(DataFlowFactory.getMoreBId(dataFlow));
+            //通知成功消息
+            notifyBusinessSystemSuccessMessage(dataFlow);
+        }catch (DAOException e){
+            //这里什么都不做，说明订单没有完成
+        }
+    }
+
+    /**
+     * 通知 订单已经完成，后端需要完成数据
+     * @param dataFlow
+     */
+    private void notifyBusinessSystemSuccessMessage(DataFlow dataFlow) throws Exception{
+
+        //拼装报文通知业务系统
+        KafkaFactory.sendKafkaMessage(
+                DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",DataFlowFactory.getNotifyBusinessSuccessJson(dataFlow).toJSONString());
+
     }
 
     /**
@@ -291,40 +511,44 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
      *
      * @param dataFlow
      */
-    private void invalidBusinessSystem(DataFlow dataFlow) {
-        Date startDate = DateUtil.getCurrentDate();
-        if(MappingCache.getValue(MappingConstant.KEY_NO_INVALID_BUSINESS_SYSTEM) != null
-                &&MappingCache.getValue(MappingConstant.KEY_NO_INVALID_BUSINESS_SYSTEM).contains(dataFlow.getOrderTypeCd())){
-            //不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
-            DataFlowFactory.addCostTime(dataFlow, "invalidBusinessSystem", "作废业务耗时", startDate);
-            return ;
-        }
+    private void notifyBusinessSystemErrorMessage(DataFlow dataFlow) throws Exception{
 
-
-        DataFlowFactory.addCostTime(dataFlow, "invalidBusinessSystem", "作废业务耗时", startDate);
+        //拼装报文通知业务系统
+        KafkaFactory.sendKafkaMessage(
+                DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",DataFlowFactory.getNotifyBusinessErrorJson(dataFlow).toJSONString());
     }
 
     /**
-     * 9.0 记录作废失败的单子，人工处理。
-     *
+     * 处理同步业务
      * @param dataFlow
      */
-    private void saveInvalidBusinessError(DataFlow dataFlow) {
-
-        Date startDate = DateUtil.getCurrentDate();
-
-
-
-        DataFlowFactory.addCostTime(dataFlow, "saveInvalidBusinessError", "保存作废业务失败耗时", startDate);
-
+    private void doSynchronousBusinesses(DataFlow dataFlow) {
+        List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
+        //6.2处理同步服务
     }
 
-
-    public ICenterServiceDAO getOrderServiceDaoImpl() {
-        return orderServiceDaoImpl;
+    /**
+     * 处理异步业务
+     * @param
+     */
+    private void doAsynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
+        //6.3 处理异步，按消息队里处理
+        List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
+        try {
+            for (Business business : asynchronousBusinesses) {
+                KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, business.getServiceCode()).getMessageQueueName(), "",
+                        DataFlowFactory.getRequestBusinessJson(business).toJSONString());
+            }
+        }catch (Exception e){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,e.getMessage());
+        }
     }
 
-    public void setOrderServiceDaoImpl(ICenterServiceDAO orderServiceDaoImpl) {
-        this.orderServiceDaoImpl = orderServiceDaoImpl;
+    public ICenterServiceDAO getCenterServiceDaoImpl() {
+        return centerServiceDaoImpl;
+    }
+
+    public void setCenterServiceDaoImpl(ICenterServiceDAO centerServiceDaoImpl) {
+        this.centerServiceDaoImpl = centerServiceDaoImpl;
     }
 }

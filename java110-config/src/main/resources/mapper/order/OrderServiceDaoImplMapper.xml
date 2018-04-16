@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="orderServiceDaoImpl">
+<mapper namespace="centerServiceDaoImpl">
 
     <!--order_list order_list_attr  返回结果封装-->
     <resultMap type="com.java110.entity.order.OrderList" id="orderListMap">

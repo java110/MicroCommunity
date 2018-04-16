@@ -1,8 +1,13 @@
 package com.java110.common.util;
 
+import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.MappingConstant;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,9 +21,23 @@ public class SequenceUtil {
     private static final Lock LOCK = new ReentrantLock();
     private static short lastCount = 1;
     private static int count = 0;
-    private static DateFormat dateFormatDay = new SimpleDateFormat("yyyyMMdd");
-    private static DateFormat dateFormatMinute = new SimpleDateFormat("yyyyMMddhhmmss");
     private static final String first = "10";
+
+    /**
+     *
+     * 只有在不调用服务生成ID时有用
+     */
+    private static Map prefixMap = null;
+    static {
+        prefixMap = new HashMap();
+        //10+yyyymmdd+八位序列
+        prefixMap.put("oId","10");
+        //（20+yyyymmdd+八位序列）
+        prefixMap.put("bId","20");
+        //（11+yyyymmdd+八位序列）
+        prefixMap.put("attrId","11");
+        prefixMap.put("transactionId","1000001");
+    }
 
     private static String PLATFORM_CODE = "0001";
 
@@ -49,26 +68,32 @@ public class SequenceUtil {
 
         //从内存中获取平台随机码
 
-        return first + PLATFORM_CODE + dateFormatDay.format(new Date()) + nextId();
+        return prefixMap.get("transactionId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId();
     }
 
-    /**
-     * 创建能力平台交互 流水
-     * SVC90005
-     *
-     * 90001 20170314094355 10000018
-     * @return
-     */
-    public static String getSVC90005TransactionId(){
-        return "90001"+ dateFormatMinute.format(new Date()) +"99" + nextId();
+    public static String getOId(){
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("oId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+        }
+        //调用服务
+        return null;
     }
 
-    /**
-     * 6004050001201703141105137879
-     * dateFormatMinute
-     * @return
-     */
-    public static String getInvokeSAOPTransactionId(){
-        return "6004050001"+dateFormatMinute.format(new Date())+nextId("%04d");
+    public static String getBId(){
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("bId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+        }
+        //调用服务
+        return null;
     }
+
+    public static String getAttrId(){
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("attrId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+        }
+        //调用服务
+        return null;
+    }
+
+
 }
