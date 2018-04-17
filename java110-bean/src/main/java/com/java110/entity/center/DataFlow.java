@@ -3,7 +3,6 @@ package com.java110.entity.center;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -11,6 +10,9 @@ import java.util.*;
  * Created by wuxw on 2018/4/13.
  */
 public class DataFlow {
+
+
+    private String dataFlowId;
 
     private String oId;
 
@@ -53,15 +55,15 @@ public class DataFlow {
     //请求完成时间
     private Date endDate;
 
-    private String reqJson;
+    private JSONObject reqJson;
 
-    private String resJson;
+    private JSONObject resJson;
 
     private List<Business> businesses;
 
     private String requestURL;
 
-    private List<DataFlowLinksCost> linksCostDatas = new ArrayList<DataFlowLinksCost>();
+    private List<DataFlowLinksCost> linksCostDates = new ArrayList<DataFlowLinksCost>();
 
     private Map<String,String> headers = new HashMap<String,String>();
 
@@ -84,7 +86,13 @@ public class DataFlow {
         return businesses;
     }
 
+    public String getDataFlowId() {
+        return dataFlowId;
+    }
 
+    public void setDataFlowId(String dataFlowId) {
+        this.dataFlowId = dataFlowId;
+    }
 
     public void setBusinesses(List<Business> businesses) {
         this.businesses = businesses;
@@ -236,21 +244,7 @@ public class DataFlow {
         this.endDate = endDate;
     }
 
-    public String getReqJson() {
-        return reqJson;
-    }
 
-    public void setReqJson(String reqJson) {
-        this.reqJson = reqJson;
-    }
-
-    public String getResJson() {
-        return resJson;
-    }
-
-    public void setResJson(String resJson) {
-        this.resJson = resJson;
-    }
 
     public String getRequestURL() {
         return requestURL;
@@ -297,12 +291,32 @@ public class DataFlow {
         this.responseBusinessJson = responseBusinessJson;
     }
 
+    public JSONObject getReqJson() {
+        return reqJson;
+    }
+
+    public void setReqJson(JSONObject reqJson) {
+        this.reqJson = reqJson;
+    }
+
+    public JSONObject getResJson() {
+        return resJson;
+    }
+
+    public void setResJson(JSONObject resJson) {
+        this.resJson = resJson;
+    }
+
+    public List<DataFlowLinksCost> getLinksCostDates() {
+        return linksCostDates;
+    }
+
     /**
      * 添加各个环节的耗时
      * @param dataFlowLinksCost
      */
-    public void addLinksCostDatas(DataFlowLinksCost dataFlowLinksCost){
-        this.linksCostDatas.add(dataFlowLinksCost);
+    public void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost){
+        this.linksCostDates.add(dataFlowLinksCost);
     }
 
     public DataFlow builder(String reqInfo, Map<String,String> headerAll) throws Exception{
@@ -312,6 +326,8 @@ public class DataFlow {
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
             JSONObject orderObj = reqInfoObj.getJSONObject("orders");
             JSONArray businessArray = reqInfoObj.getJSONArray("business");
+            this.setReqJson(reqInfoObj);
+            this.setDataFlowId(orderObj.containsKey("dataFlowId")?orderObj.getString("dataFlowId"):"-1");
             this.setAppId(orderObj.getString("appId"));
             this.setAppId(orderObj.getString("transactionId"));
             this.setUserId(orderObj.getString("userId"));

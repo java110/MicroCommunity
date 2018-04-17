@@ -18,7 +18,7 @@ public class MappingConstant {
     //不用调用规则校验的配置
     public  final static String KEY_NO_NEED_RULE_VALDATE_ORDER = "NO_NEED_RULE_VALDATE_ORDER";//Q
 
-    //不用报错订单也订单项信息的配置
+    //不用保存订单也订单项信息的配置
     public  final static String KEY_NO_SAVE_ORDER = "NO_SAVE_ORDER";//Q
 
     // 不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
@@ -29,4 +29,5 @@ public class MappingConstant {
 
     //需要调用服务生成各个ID
     public final static String KEY_NEED_INVOKE_GENERATE_ID = "NEED_INVOKE_SERVICE_GENERATE_ID";
+
 }

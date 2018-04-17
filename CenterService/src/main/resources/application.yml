@@ -22,7 +22,7 @@ kafka:
   consumer:
     zookeeper:
       connect: 10.93.21.21:2181
-    services: 10.93.21.21:9092
+    servers: 10.93.21.21:9092
     enable:
       auto:
         commit: true
@@ -35,8 +35,9 @@ kafka:
         reset: latest
     topic: test
     group:
-      id: test
+      id: notifyBusinessStatus
     concurrency: 10
+
   producer:
     servers: 10.93.21.21:9092
     retries: 0

@@ -26,4 +26,7 @@ public class CommonConstant {
     public final static String ORDER_INVOKE_METHOD_SYNCHRONOUS = "S"; //同步
     public final static String ORDER_INVOKE_METHOD_ASYNCHRONOUS = "A"; //同步
 
+
+    public final static String INVOKE_BUSINESS_MODEL_LOCAL = "LOCAL_SERVICE"; //调用本地
+
 }

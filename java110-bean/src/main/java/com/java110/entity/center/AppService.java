@@ -12,8 +12,6 @@ public class AppService implements Serializable{
 
     private String serviceCode;
 
-    private String invokeMethod;
-
     private String businessTypeCd;
 
     private String name;
@@ -52,13 +50,6 @@ public class AppService implements Serializable{
         this.serviceCode = serviceCode;
     }
 
-    public String getInvokeMethod() {
-        return invokeMethod;
-    }
-
-    public void setInvokeMethod(String invokeMethod) {
-        this.invokeMethod = invokeMethod;
-    }
 
     public String getBusinessTypeCd() {
         return businessTypeCd;

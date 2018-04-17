@@ -6,6 +6,8 @@ import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.KafkaConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.*;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.print.DocFlavor;
 import java.util.*;
 
 /**
@@ -28,7 +31,7 @@ import java.util.*;
  */
 @Service("centerServiceSMOImpl")
 @Transactional
-public class CenterServiceSMOImpl implements ICenterServiceSMO {
+public class CenterServiceSMOImpl extends LoggerEngine implements ICenterServiceSMO {
 
     @Autowired
     ICenterServiceDAO centerServiceDaoImpl;
@@ -40,6 +43,8 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
     public String service(String reqJson, Map<String, String> headers) throws SMOException{
 
         DataFlow dataFlow = null;
+
+        JSONObject responseJson = null;
 
         try {
             //1.0 创建数据流
@@ -55,6 +60,8 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             //6.0 调用下游系统
             invokeBusinessSystem(dataFlow);
 
+            responseJson = ResponseTemplateUtil.createCommonResponseJson(dataFlow);
+
         } catch (BusinessException e) {
             try {
                 //7.0 作废订单和业务项
@@ -69,39 +76,41 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
                 //9.0 将订单状态改为失败，人工处理。
                 updateOrderAndBusinessError(dataFlow);
             } finally {
-                return ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+                responseJson = ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                         ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
             }
 
         } catch (OrdersException e) {
-            return ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                     ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
         } catch (RuleException e) {
-            return ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                     ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
         } catch (NoAuthorityException e) {
-            return ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                     ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
         } catch (Exception e) {
-            return ResponseTemplateUtil.createOrderResponseJson(dataFlow == null
+            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow == null
                             ? ResponseConstant.NO_TRANSACTION_ID
                             : dataFlow.getTransactionId(),
                     ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_INNER_ERROR, "内部异常了：" + e.getMessage() + e.getLocalizedMessage());
         } finally {
             //这里记录日志
             Date endDate = DateUtil.getCurrentDate();
-            if (dataFlow == null) { //说明异常了,不能记录耗时
 
-                return null;
-            }
             dataFlow.setEndDate(endDate);
-
-            //添加耗时
+            dataFlow.setResJson(responseJson);
+                    //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
 
             //这里保存耗时，以及日志
+            saveLogMessage(dataFlow.getReqJson(),dataFlow.getResJson());
 
-            return ResponseTemplateUtil.createCommonResponseJson(dataFlow);
+            //保存耗时
+            saveCostTimeLogMessage(dataFlow);
+
+            return responseJson.toJSONString();
+
         }
 
     }
@@ -122,6 +131,11 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             throw new InitConfigDataException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前没有获取到AppId对应的信息");
         }
         dataFlow.setAppRoute(appRoute);
+        //
+        if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
+            dataFlow.setDataFlowId(SequenceUtil.getDataFlowId());
+        }
+
         //添加耗时
         DataFlowFactory.addCostTime(dataFlow, "initConfigData", "加载配置耗时", startDate);
     }
@@ -327,7 +341,8 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             for(Map completedBusiness : completedBusinesses){
                 if(completedBusiness.get("business_type_cd").equals(serviceStatus.getAppService().getBusinessTypeCd())){
                     KafkaFactory.sendKafkaMessage(serviceStatus.getAppService().getMessageQueueName(),"",
-                            DataFlowFactory.getCompletedBusinessErrorJson(completedBusiness,serviceStatus.getAppService()));
+                            DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,serviceStatus.getAppService()));
+                    saveLogMessage(DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,serviceStatus.getAppService()),null);
                 }
             }
         }
@@ -362,6 +377,7 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
      */
     @Override
     public void receiveBusinessSystemNotifyMessage(String receiveJson) throws SMOException{
+        Date startDate = DateUtil.getCurrentDate();
         DataFlow dataFlow = null;
         try {
             //1.0 创建数据流
@@ -422,6 +438,9 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             LoggerEngine.error("作废订单失败", e);
             //10.0 成功的情况下通知下游系统失败将状态改为NE，人工处理。
             updateBusinessNotifyError(dataFlow);
+        }finally{
+            DataFlowFactory.addCostTime(dataFlow, "receiveBusinessSystemNotifyMessage", "接受业务系统通知消息耗时", startDate);
+            saveLogMessage(dataFlow.getReqJson(),null);
         }
     }
 
@@ -435,6 +454,10 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
 
         Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getBusinesses().get(0).getbId());
         dataFlow.setoId(order.get("o_id").toString());
+
+        if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
+            throw new InitConfigDataException(ResponseConstant.RESULT_CODE_ERROR,"请求报文中没有包含 dataFlowId 节点");
+        }
         //重新加载配置
         initConfigData(dataFlow);
     }
@@ -497,6 +520,8 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
         }catch (DAOException e){
             //这里什么都不做，说明订单没有完成
         }
+
+
     }
 
     /**
@@ -509,6 +534,7 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
         KafkaFactory.sendKafkaMessage(
                 DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",DataFlowFactory.getNotifyBusinessSuccessJson(dataFlow).toJSONString());
 
+        saveLogMessage(DataFlowFactory.getNotifyBusinessSuccessJson(dataFlow),null);
     }
 
     /**
@@ -520,7 +546,9 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
 
         //拼装报文通知业务系统
         KafkaFactory.sendKafkaMessage(
-                DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",DataFlowFactory.getNotifyBusinessErrorJson(dataFlow).toJSONString());
+                DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",
+                DataFlowFactory.getNotifyBusinessErrorJson(dataFlow).toJSONString());
+        saveLogMessage(DataFlowFactory.getNotifyBusinessErrorJson(dataFlow),null);
     }
 
     /**
@@ -528,6 +556,8 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
      * @param dataFlow
      */
     private void doSynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
+        Date startDate = DateUtil.getCurrentDate();
+        Date businessStartDate = null;
         List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
         AppService service = null;
         JSONObject requestBusinessJson = null;
@@ -535,15 +565,19 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
         String responseMessage = "";
         //6.2处理同步服务
         for(Business business : synchronousBusinesses) {
+            businessStartDate = DateUtil.getCurrentDate();
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
-            requestBusinessJson = DataFlowFactory.getRequestBusinessJson(business);
+            requestBusinessJson = DataFlowFactory.getRequestBusinessJson(dataFlow,business);
             dataFlow.setRequestBusinessJson(requestBusinessJson);
 
-            if(service.getInvokeMethod() == null || "".equals(service.getInvokeMethod())) {//post方式
+            if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
                 //http://user-service/test/sayHello
                 responseMessage = restTemplate.postForObject(service.getUrl(),dataFlow.getRequestBusinessJson().toJSONString(),String.class);
+            }else if(CommonConstant.INVOKE_BUSINESS_MODEL_LOCAL.equals(service.getMethod())){
+                //调用本地服务
+                responseMessage = "";
             }else{//webservice方式
-                responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getInvokeMethod(),
+                responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
                         new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
                         service.getTimeOut());
             }
@@ -556,35 +590,84 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
             DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
 
             responseBusinesses.add(dataFlow.getResponseBusinessJson().getJSONArray("business"));
+
+            DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
+            saveLogMessage(dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
         }
 
-        dataFlow.setRequestBusinessJson(JSONObject.parseObject(dataFlow.getReqJson()));
+        dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
 
-        dataFlow.setResponseBusinessJson(JSONObject.parseObject(ResponseTemplateUtil.createCommonResponseJson(dataFlow.getTransactionId(),
-                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses)));
-    }
+        dataFlow.setResponseBusinessJson(ResponseTemplateUtil.createCommonResponseJson(dataFlow.getTransactionId(),
+                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses));
+
+        DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "同步调用业务系统总耗时", startDate);
+}
 
     /**
      * 处理异步业务
      * @param
      */
     private void doAsynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
+        Date startDate = DateUtil.getCurrentDate();
         //6.3 处理异步，按消息队里处理
         List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
 
         try {
             for (Business business : asynchronousBusinesses) {
                 KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, business.getServiceCode()).getMessageQueueName(), "",
-                        DataFlowFactory.getRequestBusinessJson(business).toJSONString());
+                        DataFlowFactory.getRequestBusinessJson(dataFlow,business).toJSONString());
             }
         }catch (Exception e){
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,e.getMessage());
         }
 
-        dataFlow.setRequestBusinessJson(JSONObject.parseObject(dataFlow.getReqJson()));
+        dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
 
-        dataFlow.setResponseBusinessJson(JSONObject.parseObject(ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
-                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功")));
+        dataFlow.setResponseBusinessJson(ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功"));
+        DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "异步调用业务系统总耗时", startDate);
+        saveLogMessage(dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
+    }
+
+
+    /**
+     * 保存日志信息
+     * @param requestJson
+     */
+    private void saveLogMessage(JSONObject requestJson,JSONObject responseJson){
+
+        try{
+            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))){
+                JSONObject log = new JSONObject();
+                log.put("request",requestJson);
+                log.put("response",responseJson);
+                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_LOG_NAME,"",log.toJSONString());
+            }
+        }catch (Exception e){
+            logger.error("报错日志出错了，",e);
+        }
+    }
+
+    /**
+     * 保存耗时信息
+     * @param dataFlow
+     */
+    private void saveCostTimeLogMessage(DataFlow dataFlow){
+        try{
+            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))){
+                List<DataFlowLinksCost> dataFlowLinksCosts = dataFlow.getLinksCostDates();
+                JSONObject costDate = new JSONObject();
+                JSONArray costDates = new JSONArray();
+                for(DataFlowLinksCost dataFlowLinksCost : dataFlowLinksCosts){
+                    costDates.add(JSONObject.parseObject(JSONObject.toJSONString(dataFlowLinksCost)).put("dataFlowId",dataFlow.getDataFlowId()));
+                }
+                costDate.put("costDates",costDates);
+
+                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_COST_TIME_LOG_NAME,"",costDate.toJSONString());
+            }
+        }catch (Exception e){
+            logger.error("报错日志出错了，",e);
+        }
     }
 
     public ICenterServiceDAO getCenterServiceDaoImpl() {

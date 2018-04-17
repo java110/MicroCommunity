@@ -1,7 +1,9 @@
 package com.java110.center.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.BusinessException;
 import com.java110.common.util.ResponseTemplateUtil;
 import com.java110.core.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class HttpApi extends BaseController {
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
         return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求");
+                ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
 
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.POST)
@@ -33,10 +35,22 @@ public class HttpApi extends BaseController {
         try {
             Map<String, String> headers = new HashMap<String, String>();
             getRequestInfo(request, headers);
+            //预校验
+            preValiateOrderInfo(orderInfo);
             return centerServiceSMOImpl.service(orderInfo, headers);
         }catch (Exception e){
             return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                    ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e);
+                    ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+        }
+    }
+
+    /**
+     * 这里预校验，请求报文中不能有 dataFlowId
+     * @param orderInfo
+     */
+    private void preValiateOrderInfo(String orderInfo) {
+        if(JSONObject.parseObject(orderInfo).getJSONObject("orders").containsKey("dataFlowId")){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_ERROR,"报文中不能存在dataFlowId节点");
         }
     }
 

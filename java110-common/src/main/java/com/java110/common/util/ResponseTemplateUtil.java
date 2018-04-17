@@ -41,7 +41,7 @@ public class ResponseTemplateUtil {
      * @param business 业务信息
      * @return
      */
-    public static String createCommonResponseJson(String transactionId,
+    public static JSONObject createCommonResponseJson(String transactionId,
                                                   String sign,
                                                   String code,
                                                   String message,
@@ -58,7 +58,7 @@ public class ResponseTemplateUtil {
         if (business != null && business.size() > 0){
             responseInfo.put("business",business);
         }
-        return responseInfo.toJSONString();
+        return responseInfo;
     }
 
     /**
@@ -69,7 +69,7 @@ public class ResponseTemplateUtil {
      * @param message
      * @return
      */
-    public static String createOrderResponseJson(String transactionId, String sign,String code,String message){
+    public static JSONObject createOrderResponseJson(String transactionId, String sign,String code,String message){
         return createCommonResponseJson(transactionId,sign,code,message,null);
     }
 
@@ -78,7 +78,7 @@ public class ResponseTemplateUtil {
      * @param dataFlow 数据流
      * @return
      */
-    public static String createCommonResponseJson(DataFlow dataFlow){
-        return dataFlow.getResponseBusinessJson().toJSONString();
+    public static JSONObject createCommonResponseJson(DataFlow dataFlow){
+        return dataFlow.getResponseBusinessJson();
     }
 }

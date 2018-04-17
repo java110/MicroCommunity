@@ -37,6 +37,7 @@ public class SequenceUtil {
         //（11+yyyymmdd+八位序列）
         prefixMap.put("attrId","11");
         prefixMap.put("transactionId","1000001");
+        prefixMap.put("dataFlowId","2000");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -95,5 +96,12 @@ public class SequenceUtil {
         return null;
     }
 
+    public static String getDataFlowId(){
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("dataFlowId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+        }
 
+        return null;
+
+    }
 }

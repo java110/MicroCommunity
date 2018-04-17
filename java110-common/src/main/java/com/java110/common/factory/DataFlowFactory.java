@@ -8,11 +8,9 @@ import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.ResponseTemplateUtil;
 import com.java110.common.util.SequenceUtil;
 import com.java110.entity.center.*;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
@@ -36,7 +34,7 @@ public class DataFlowFactory {
     public static DataFlow addCostTime(DataFlow dataFlow, String linksCode, String linksName, Date startDate){
         if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, DateUtil.getCurrentDate());
-            dataFlow.addLinksCostDatas(dataFlowLinksCost);
+            dataFlow.addLinksCostDates(dataFlowLinksCost);
         }
         return dataFlow;
     }
@@ -54,7 +52,7 @@ public class DataFlowFactory {
     public static DataFlow addCostTime(DataFlow dataFlow, String linksCode, String linksName, Date startDate, Date endDate){
         if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, endDate);
-            dataFlow.addLinksCostDatas(dataFlowLinksCost);
+            dataFlow.addLinksCostDates(dataFlowLinksCost);
         }
         return dataFlow;
     }
@@ -257,7 +255,7 @@ public class DataFlowFactory {
      * @return
      */
     public static JSONObject getNotifyBusinessSuccessJson(DataFlow dataFlow){
-        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.NOTIFY_BUSINESS_TYPE);
         JSONArray businesses = notifyMessage.getJSONArray("business");
 
         JSONObject busi = null;
@@ -282,7 +280,7 @@ public class DataFlowFactory {
      */
     public static JSONObject getNotifyBusinessErrorJson(DataFlow dataFlow){
 
-        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.NOTIFY_BUSINESS_TYPE);
         JSONArray businesses = notifyMessage.getJSONArray("business");
 
         JSONObject busi = null;
@@ -301,8 +299,8 @@ public class DataFlowFactory {
     }
 
 
-    public static JSONObject getCompletedBusinessErrorJson(Map business,AppService appService){
-        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
+    public static JSONObject getCompletedBusinessErrorJson(DataFlow dataFlow,Map business,AppService appService){
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.NOTIFY_BUSINESS_TYPE);
         JSONArray businesses = notifyMessage.getJSONArray("business");
 
         JSONObject busi = null;
@@ -324,9 +322,9 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(Business business){
+    public static JSONObject getRequestBusinessJson(DataFlow dataFlow,Business business){
 
-        JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.REQUEST_BUSINESS_TYPE);
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE);
         JSONArray businesses = notifyMessage.getJSONArray("business");
 
         JSONObject busi = null;
@@ -345,10 +343,11 @@ public class DataFlowFactory {
      * 业务系统交互
      * @return
      */
-    private static JSONObject getTransactionBusinessBaseJson(String businessType){
+    private static JSONObject getTransactionBusinessBaseJson(DataFlow dataFlow,String businessType){
         JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         JSONObject orders = notifyMessage.getJSONObject("orders");
         orders.put("transactionId",SequenceUtil.getTransactionId());
+        orders.put("dataFlowId",dataFlow.getDataFlowId());
         orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());
         orders.put("businessType",businessType);
         return notifyMessage;
@@ -364,7 +363,7 @@ public class DataFlowFactory {
         List<Business> syschronousBusinesses = new ArrayList<Business>();
         for(Business business :dataFlow.getBusinesses()){
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
-            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(service.getInvokeMethod())){
+            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(service.getInvokeModel())){
                 business.setSeq(service.getSeq());
                 syschronousBusinesses.add(business);
             }
@@ -387,7 +386,7 @@ public class DataFlowFactory {
         List<Business> syschronousBusinesses = new ArrayList<Business>();
         for(Business business :dataFlow.getBusinesses()){
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
-            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(service.getInvokeMethod())){
+            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(service.getInvokeModel())){
                 syschronousBusinesses.add(business);
             }
         }
