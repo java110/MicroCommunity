@@ -594,4 +594,12 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
     public void setCenterServiceDaoImpl(ICenterServiceDAO centerServiceDaoImpl) {
         this.centerServiceDaoImpl = centerServiceDaoImpl;
     }
+
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 }
