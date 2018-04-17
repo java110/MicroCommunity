@@ -7,6 +7,8 @@ package com.java110.common.util;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.BusinessException;
 import com.java110.common.log.LoggerEngine;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -52,7 +54,7 @@ public class WebServiceAxisClient extends LoggerEngine {
      * @return
      * @throws Exception
      */
-    public static Object callWebService(String url, String function, Object[] obj,Integer timeOut) throws Exception{
+    public static Object callWebService(String url, String function, Object[] obj,Integer timeOut) throws BusinessException {
         Object retObj = null;
         try {
             logger.debug("-----------开始调用Web Service-----------");
@@ -73,7 +75,7 @@ public class WebServiceAxisClient extends LoggerEngine {
             logger.error("-----------调用Web Service异常,原因:{}", e);
             e.printStackTrace();
             retObj = e.getMessage();
-            throw new Exception("WebServiceAxisClient.callWebService throws Exception : " + e.getMessage(), e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"WebServiceAxisClient.callWebService throws Exception : " + e.getMessage());
         }
         return retObj;
     }

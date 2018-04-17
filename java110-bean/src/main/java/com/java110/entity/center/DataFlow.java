@@ -66,6 +66,11 @@ public class DataFlow {
     private Map<String,String> headers = new HashMap<String,String>();
 
     private AppRoute appRoute;
+    //请求业务系统报文
+    private JSONObject requestBusinessJson;
+
+    //业务系统返回报文
+    private JSONObject responseBusinessJson;
 
     public String getoId() {
         return oId;
@@ -273,6 +278,23 @@ public class DataFlow {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+
+    public JSONObject getRequestBusinessJson() {
+        return requestBusinessJson;
+    }
+
+    public void setRequestBusinessJson(JSONObject requestBusinessJson) {
+        this.requestBusinessJson = requestBusinessJson;
+    }
+
+    public JSONObject getResponseBusinessJson() {
+        return responseBusinessJson;
+    }
+
+    public void setResponseBusinessJson(JSONObject responseBusinessJson) {
+        this.responseBusinessJson = responseBusinessJson;
     }
 
     /**

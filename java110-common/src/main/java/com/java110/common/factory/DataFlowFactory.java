@@ -8,6 +8,7 @@ import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.DateUtil;
+import com.java110.common.util.ResponseTemplateUtil;
 import com.java110.common.util.SequenceUtil;
 import com.java110.entity.center.*;
 
@@ -299,6 +300,7 @@ public class DataFlowFactory {
         return notifyMessage;
     }
 
+
     public static JSONObject getCompletedBusinessErrorJson(Map business,AppService appService){
         JSONObject notifyMessage = getTransactionBusinessBaseJson(StatusConstant.NOTIFY_BUSINESS_TYPE);
         JSONArray businesses = notifyMessage.getJSONArray("business");
@@ -328,7 +330,6 @@ public class DataFlowFactory {
         JSONArray businesses = notifyMessage.getJSONArray("business");
 
         JSONObject busi = null;
-        JSONObject response = null;
             busi = new JSONObject();
             busi.put("bId",business.getbId());
             busi.put("serviceCode",business.getServiceCode());

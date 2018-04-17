@@ -79,10 +79,6 @@ public class ResponseTemplateUtil {
      * @return
      */
     public static String createCommonResponseJson(DataFlow dataFlow){
-        return createCommonResponseJson(dataFlow.getTransactionId(),
-                dataFlow.getResSign(),
-                dataFlow.getCode(),
-                dataFlow.getMessage(),
-                dataFlow.getResBusiness());
+        return dataFlow.getResponseBusinessJson().toJSONString();
     }
 }

@@ -80,4 +80,18 @@ public class Assert extends org.springframework.util.Assert{
         }
 
     }
+
+    /**
+     * 校验是否为JSON
+     * @param msg
+     * @return
+     */
+    public static Boolean isJsonObject(String msg) {
+        try{
+            JSONObject.parseObject(msg);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 }

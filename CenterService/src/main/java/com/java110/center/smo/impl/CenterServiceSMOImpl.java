@@ -1,5 +1,7 @@
 package com.java110.center.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.cache.AppRouteCache;
@@ -10,13 +12,13 @@ import com.java110.common.exception.*;
 import com.java110.common.factory.DataFlowFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
-import com.java110.common.util.DateUtil;
-import com.java110.common.util.ResponseTemplateUtil;
-import com.java110.common.util.StringUtil;
+import com.java110.common.util.*;
 import com.java110.entity.center.*;
+import com.java110.event.center.DataFlowEventPublishing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -30,6 +32,9 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
 
     @Autowired
     ICenterServiceDAO centerServiceDaoImpl;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public String service(String reqJson, Map<String, String> headers) throws SMOException{
@@ -522,9 +527,41 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
      * 处理同步业务
      * @param dataFlow
      */
-    private void doSynchronousBusinesses(DataFlow dataFlow) {
+    private void doSynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
         List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
+        AppService service = null;
+        JSONObject requestBusinessJson = null;
+        JSONArray responseBusinesses = new JSONArray();
+        String responseMessage = "";
         //6.2处理同步服务
+        for(Business business : synchronousBusinesses) {
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            requestBusinessJson = DataFlowFactory.getRequestBusinessJson(business);
+            dataFlow.setRequestBusinessJson(requestBusinessJson);
+
+            if(service.getInvokeMethod() == null || "".equals(service.getInvokeMethod())) {//post方式
+                //http://user-service/test/sayHello
+                responseMessage = restTemplate.postForObject(service.getUrl(),dataFlow.getRequestBusinessJson().toJSONString(),String.class);
+            }else{//webservice方式
+                responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getInvokeMethod(),
+                        new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
+                        service.getTimeOut());
+            }
+
+            if(StringUtil.isNullOrNone(responseMessage) || !Assert.isJsonObject(responseMessage)){
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"下游系统返回格式不正确，请按协议规范处理");
+            }
+            dataFlow.setResponseBusinessJson(JSONObject.parseObject(responseMessage));
+            //发布事件
+            DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
+
+            responseBusinesses.add(dataFlow.getResponseBusinessJson().getJSONArray("business"));
+        }
+
+        dataFlow.setRequestBusinessJson(JSONObject.parseObject(dataFlow.getReqJson()));
+
+        dataFlow.setResponseBusinessJson(JSONObject.parseObject(ResponseTemplateUtil.createCommonResponseJson(dataFlow.getTransactionId(),
+                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses)));
     }
 
     /**
@@ -534,6 +571,7 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
     private void doAsynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
         //6.3 处理异步，按消息队里处理
         List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
+
         try {
             for (Business business : asynchronousBusinesses) {
                 KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, business.getServiceCode()).getMessageQueueName(), "",
@@ -542,6 +580,11 @@ public class CenterServiceSMOImpl implements ICenterServiceSMO {
         }catch (Exception e){
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,e.getMessage());
         }
+
+        dataFlow.setRequestBusinessJson(JSONObject.parseObject(dataFlow.getReqJson()));
+
+        dataFlow.setResponseBusinessJson(JSONObject.parseObject(ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+                ResponseConstant.NO_NEED_SIGN, ResponseConstant.RESULT_CODE_SUCCESS, "成功")));
     }
 
     public ICenterServiceDAO getCenterServiceDaoImpl() {

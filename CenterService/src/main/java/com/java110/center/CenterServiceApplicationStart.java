@@ -1,5 +1,6 @@
 package com.java110.center;
 
+import com.java110.event.center.init.CenterServiceStartInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -18,13 +19,13 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.order","com.java110.core","com.java110.event"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
-public class CenterServiceApplication {
+public class CenterServiceApplicationStart {
 
     public static void main(String[] args) throws Exception{
-        ApplicationContext context = SpringApplication.run(CenterServiceApplication.class, args);
+        ApplicationContext context = SpringApplication.run(CenterServiceApplicationStart.class, args);
 
-        /*SystemStartUpInit systemStartUpInit = new SystemStartUpInit();
+        CenterServiceStartInit centerServiceStartInit = new CenterServiceStartInit();
 
-        systemStartUpInit.initSystemConfig(context);*/
+        centerServiceStartInit.initSystemConfig(context);
     }
 }
