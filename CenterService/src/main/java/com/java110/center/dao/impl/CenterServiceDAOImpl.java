@@ -6,6 +6,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.DAOException;
 import com.java110.common.log.LoggerEngine;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.entity.mapping.Mapping;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,4 +172,21 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         LoggerEngine.debug("----【CenterServiceDAOImpl.getCommonOrderCompledBusinessByBId】数据入参 : " + bId);
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.getCommonOrderCompledBusinessByBId",bId);
     }
+
+    @Override
+    public List<Map> getAppRouteAndServiceInfoAll() {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getAppInfoAll");
+    }
+
+
+    /**
+     * 查询映射表
+     * @return
+     */
+    @Override
+    public List<Mapping> getMappingInfoAll() {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getMappingInfoAll");
+    }
+
+
 }

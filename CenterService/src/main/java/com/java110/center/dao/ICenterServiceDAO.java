@@ -1,6 +1,7 @@
 package com.java110.center.dao;
 
 import com.java110.common.exception.DAOException;
+import com.java110.entity.mapping.Mapping;
 
 import java.util.List;
 import java.util.Map;
@@ -83,4 +84,17 @@ public interface ICenterServiceDAO {
      * @throws DAOException
      */
     public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException;
+
+    /**
+     * 查询所有组件
+     * @return
+     */
+    public List<Map> getAppRouteAndServiceInfoAll();
+
+    /**
+     * 查询映射表
+     * @return
+     */
+    public List<Mapping> getMappingInfoAll();
+
 }

@@ -67,7 +67,9 @@ public class DataFlow {
 
     private Map<String,String> headers = new HashMap<String,String>();
 
-    private AppRoute appRoute;
+    /*private AppRoute appRoute;*/
+
+    private List<AppRoute> appRoutes = new ArrayList<AppRoute>();
     //请求业务系统报文
     private JSONObject requestBusinessJson;
 
@@ -258,12 +260,20 @@ public class DataFlow {
         return headers;
     }
 
-    public AppRoute getAppRoute() {
+    /*public AppRoute getAppRoute() {
         return appRoute;
     }
 
     public void setAppRoute(AppRoute appRoute) {
         this.appRoute = appRoute;
+    }*/
+
+    public List<AppRoute> getAppRoutes() {
+        return appRoutes;
+    }
+
+    public void addAppRoutes(AppRoute appRoute) {
+        this.appRoutes.add(appRoute);
     }
 
     public String getIp() {

@@ -60,7 +60,7 @@ public class MappingCache extends BaseCache {
      * @param mappings
      */
     public static void setValue(List<Mapping> mappings){
-        getJedis().set((mappings.get(0).getDomain()+mappings.get(0).getKey()).getBytes(),SerializeUtil.serializeList(mappings));
+        getJedis().set((mappings.get(0).getDomain()).getBytes(),SerializeUtil.serializeList(mappings));
     }
 
 

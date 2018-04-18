@@ -1,161 +1,182 @@
---c_orders
+-- c_orders
 
-create table c_orders(
-    o_id varchar(18) not null COMMENT '订单ID',
-    app_id varchar(10) not null comment '应用ID',
-    ext_transaction_id varchar(30) not null comment '外部交易流水',
-    user_id varchar(12) not null comment '用户ID',
-    request_time varchar(16) not null comment '外部系统请求时间',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    order_type_cd varchar(4) not null comment '订单类型，参考c_order_type表',
-    finish_time timestamp comment '订单完成时间',
-    remark varchar(200) comment '备注',
-    status_cd varchar(2) not null comment '数据状态，详细参考c_status表'
+CREATE TABLE c_orders(
+    o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
+    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    ext_transaction_id VARCHAR(30) NOT NULL COMMENT '外部交易流水',
+    user_id VARCHAR(12) NOT NULL COMMENT '用户ID',
+    request_time VARCHAR(16) NOT NULL COMMENT '外部系统请求时间',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
+    finish_time DATE COMMENT '订单完成时间',
+    remark VARCHAR(200) COMMENT '备注',
+    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表'
 );
 
---c_orders_attrs
+-- c_orders_attrs
 
-create table c_orders_attrs(
-    o_id varchar(18) not null COMMENT '订单ID',
-    attr_id varchar(18) not null comment '属性id',
-    spec_cd varchar(12) not null comment '规格id,参考spec表',
-    value varchar(50) not null comment '属性值'
+CREATE TABLE c_orders_attrs(
+    o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(18) NOT NULL COMMENT '属性id',
+    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
+    VALUE VARCHAR(50) NOT NULL COMMENT '属性值'
 );
 
 -- c_business
 
-create table c_business(
-    b_id varchar(18) not null comment '业务Id',
-    o_id varchar(18) not null COMMENT '订单ID',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    business_type_cd varchar(4) not null comment '业务项类型，参考c_business_type表',
-    finish_time timestamp comment '完成时间',
-    remark varchar(200) comment '备注',
-    status_cd varchar(2) not null comment '数据状态，详细参考c_status表'
+CREATE TABLE c_business(
+    b_id VARCHAR(18) NOT NULL COMMENT '业务Id',
+    o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
+    finish_time DATE COMMENT '完成时间',
+    remark VARCHAR(200) COMMENT '备注',
+    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表'
 );
 
 --c_orders_attrs
 
-create table c_business_attrs(
-    b_id varchar(18) not null COMMENT '订单ID',
-    attr_id varchar(18) not null comment '属性id',
-    spec_cd varchar(12) not null comment '规格id,参考spec表',
-    value varchar(50) not null comment '属性值'
+CREATE TABLE c_business_attrs(
+    b_id VARCHAR(18) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(18) NOT NULL COMMENT '属性id',
+    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
+    VALUE VARCHAR(50) NOT NULL COMMENT '属性值'
 );
 
---c_status
+-- c_status
 
-create table c_status(
-    id int not null auto_increment comment 'id',
-    status_cd varchar(4) not null comment '状态',
-    name varchar(50) not null comment '名称',
-    description varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+CREATE TABLE c_status(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    status_cd VARCHAR(4) NOT NULL COMMENT '状态',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
-insert into c_status(status_cd,name,description) values('1','无效的，不在用的','无效的，不在用的');
-insert into c_status(status_cd,name,description) values('0','有效的，在用的','有效的，在用的');
-insert into c_status(status_cd,name,description) values('S','保存成功','保存成功');
-insert into c_status(status_cd,name,description) values('D','作废订单','作废订单');
-insert into c_status(status_cd,name,description) values('E','错误订单','错误订单');
-insert into c_status(status_cd,name,description) values('NE','通知错误订单','通知错误订单');
-insert into c_status(status_cd,name,description) values('C','错误订单','错误订单');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('1','无效的，不在用的','无效的，不在用的');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('0','有效的，在用的','有效的，在用的');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('S','保存成功','保存成功');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('D','作废订单','作废订单');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('E','错误订单','错误订单');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('NE','通知错误订单','通知错误订单');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('C','错误订单','错误订单');
 
 --c_order_type
 
-create table c_order_type(
-    id int not null auto_increment comment 'id',
-    order_type_cd varchar(4) not null comment '订单类型',
-    name varchar(50) not null comment '名称',
-    description varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+CREATE TABLE c_order_type(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
---c_business_type
 
-create table c_order_type(
-    id int not null auto_increment comment 'id',
-    order_type_cd varchar(4) not null comment '业务项类型',
-    name varchar(50) not null comment '名称',
-    description varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+-- c_business_type
+
+CREATE TABLE c_business_type(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
---c_business_type
+-- spec
 
-create table spec(
-    id int not null auto_increment comment 'id',
-    spec_cd varchar(4) not null comment '业务项类型规格编码，从x00020001开始每次加一就可以(约定，x=10表示c_orders_attrs 中属性，x=11表示c_business_attrs 中的属性)',
-    name varchar(50) not null comment '名称',
-    description varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+CREATE TABLE spec(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    spec_cd VARCHAR(4) NOT NULL COMMENT '业务项类型规格编码，从x00020001开始每次加一就可以(约定，x=10表示c_orders_attrs 中属性，x=11表示c_business_attrs 中的属性)',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
 -- c_route
 
-create table c_route(
-    id int not null auto_increment comment 'id',
-    app_id varchar(10) not null comment '应用ID',
-    service_id int not null comment '下游接口配置ID',
-    order_type_cd varchar(4) not null comment '订单类型，参考c_order_type表',
-    invoke_limit_times int comment '接口调用一分钟调用次数',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd varchar(2) not null comment '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
+CREATE TABLE c_route(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    service_id INT NOT NULL COMMENT '下游接口配置ID',
+    order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
+    invoke_limit_times INT COMMENT '接口调用一分钟调用次数',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
 );
+
+
 
 -- c_service
 
-create table c_service(
-    service_id int not null auto_increment comment 'id',
-    service_code varchar(50) not null comment '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
-    invoke_model varchar(1) not null comment '1-同步方式 2-异步方式',
-    business_type_cd varchar(4) not null comment '业务项类型，参考c_business_type表',
-    name varchar(50) not null comment '服务名称',
-    seq int not null comment '顺序 只有同步方式下根据seq从小到大调用接口',
-    messageQueueName varchar(50) comment '消息队里名称 只有异步时有用',
-    url varchar(200) comment '目标地址',
-    method varchar(50) comment '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
-    timeout int not null DEFAULT 60 comment '超时时间',
-    retry_count int not null DEFAULT 3 comment '重试次数',
-    provide_app_id varchar(10) not null comment '应用ID',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd varchar(2) not null comment '数据状态，详细参考c_status表，0在用，1失效'
+CREATE TABLE c_service(
+    service_id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    service_code VARCHAR(50) NOT NULL COMMENT '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
+    invoke_model VARCHAR(1) NOT NULL COMMENT '1-同步方式 2-异步方式',
+    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
+    `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
+    seq INT NOT NULL COMMENT '顺序 只有同步方式下根据seq从小到大调用接口',
+    messageQueueName VARCHAR(50) COMMENT '消息队里名称 只有异步时有用',
+    url VARCHAR(200) COMMENT '目标地址',
+    method VARCHAR(50) COMMENT '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
+    timeout INT NOT NULL DEFAULT 60 COMMENT '超时时间',
+    retry_count INT NOT NULL DEFAULT 3 COMMENT '重试次数',
+    provide_app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
+
+
 
 -- c_mapping
 
-create table c_mapping(
-    id int not null auto_increment comment 'id',
-    domain varchar(50) not null comment '域',
-    name varchar(50) not null comment '名称',
-    key varchar(100) not null comment 'key',
-    value varchar(100) not null comment 'value',
-    remark varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd varchar(2) not null default '0' comment '数据状态，详细参考c_status表，0在用，1失效'
+CREATE TABLE c_mapping(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    domain VARCHAR(50) NOT NULL COMMENT '域',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    `key` VARCHAR(100) NOT NULL COMMENT 'key',
+    `value` VARCHAR(100) NOT NULL COMMENT 'value',
+    remark VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
 
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','日志开关','LOG_ON_OFF','ON','日志开关')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','耗时开关','COST_TIME_ON_OFF','ON','耗时开关')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','规则开关','RULE_ON_OFF','OFF','规则开关')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','不调规则服务的订单类型','NO_NEED_RULE_VALDATE_ORDER','Q','不调规则服务的订单类型')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','不保存订单信息','NO_SAVE_ORDER','Q','不保存订单信息')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','不用调用 下游系统的配置','NO_INVOKE_BUSINESS_SYSTEM','Q','不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','不用调用 作废下游系统的配置','NO_INVALID_BUSINESS_SYSTEM','Q','不用调用 作废下游系统的配置 (一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)')
-insert c_mapping(domain,name,key,value,remark) values('DOMAIN.COMMON','需要调用服务生成各个ID','NEED_INVOKE_SERVICE_GENERATE_ID','OFF','需要调用服务生成各个ID')
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','日志开关','LOG_ON_OFF','ON','日志开关');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','耗时开关','COST_TIME_ON_OFF','ON','耗时开关');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','规则开关','RULE_ON_OFF','OFF','规则开关');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不调规则服务的订单类型','NO_NEED_RULE_VALDATE_ORDER','Q','不调规则服务的订单类型');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不保存订单信息','NO_SAVE_ORDER','Q','不保存订单信息');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不用调用 下游系统的配置','NO_INVOKE_BUSINESS_SYSTEM','Q','不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不用调用 作废下游系统的配置','NO_INVALID_BUSINESS_SYSTEM','Q','不用调用 作废下游系统的配置 (一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','需要调用服务生成各个ID','NEED_INVOKE_SERVICE_GENERATE_ID','OFF','需要调用服务生成各个ID');
 
 -- c_app
-create table c_app(
-    id int not null auto_increment comment 'id',
-    app_id varchar(10) not null comment '应用ID',
-    name varchar(50) not null comment '名称 对应系统名称',
-    security_code varchar(64) not null comment '签名码 sign签名时用',
-    while_list_ip varchar(200) comment '白名单ip 多个之间用;隔开',
-    black_list_ip varchar(200) comment '黑名单ip 多个之间用;隔开',
-    remark varchar(200) comment '描述',
-    create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd varchar(2) not null comment '数据状态，详细参考c_status表，0在用，1失效'
+CREATE TABLE c_app(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称 对应系统名称',
+    security_code VARCHAR(64) NOT NULL COMMENT '签名码 sign签名时用',
+    while_list_ip VARCHAR(200) COMMENT '白名单ip 多个之间用;隔开',
+    black_list_ip VARCHAR(200) COMMENT '黑名单ip 多个之间用;隔开',
+    remark VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
+
+-- 测试用
+
+insert into c_order_type(order_type_cd,`name`,description) values('Q','查询单','查询单');
+
+insert into c_app(app_id,`name`,security_code,remark,status_cd)
+values('8000418001','内部测试应用','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89KMC','记得删除','0');
+
+insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
+'8000418001','1','Q','0'
+);
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.userInfo','1','Q','用户信息查询',1,'http://...','8000418001','0');
+
+
 
 
 

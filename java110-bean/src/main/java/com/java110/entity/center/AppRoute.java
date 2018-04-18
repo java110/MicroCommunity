@@ -3,6 +3,7 @@ package com.java110.entity.center;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -31,7 +32,8 @@ public class AppRoute implements Serializable{
     private List<String> backListIp = new ArrayList<String>();
 
     //服务
-    private List<AppServiceStatus> appServices = new ArrayList<AppServiceStatus>();
+    //private List<AppServiceStatus> appServices = new ArrayList<AppServiceStatus>();
+    private AppService appService;
 
     private String remark;
 
@@ -95,12 +97,20 @@ public class AppRoute implements Serializable{
         this.backListIp.add(backIp);
     }
 
-    public List<AppServiceStatus> getAppServices() {
+    /*public List<AppServiceStatus> getAppServices() {
         return appServices;
     }
 
     public void addAppServices(AppServiceStatus appServiceStatus) {
         this.appServices.add(appServiceStatus);
+    }*/
+
+    public AppService getAppService() {
+        return appService;
+    }
+
+    public void setAppService(AppService appService) {
+        this.appService = appService;
     }
 
     public String getRemark() {
@@ -123,12 +133,32 @@ public class AppRoute implements Serializable{
      * 构建数据
      * @return
      */
-    public AppRoute builder(){
+    public AppRoute builder(Map appInfo){
+        String []listIps = null;
+        this.setAppId(appInfo.get("app_id").toString());
+        this.setLimitTimes(appInfo.get("invoke_limit_times") == null ? -1 : Integer.parseInt(appInfo.get("invoke_limit_times").toString()));
+        this.setName(appInfo.get("name").toString());
+        this.setOrderTypeCd(appInfo.get("order_type_cd").toString());
+        this.setSecurityCode(appInfo.get("security_code").toString());
+        if(appInfo.get("while_list_ip") != null && !"".equals(appInfo.get("while_list_ip"))){
+            listIps = appInfo.get("while_list_ip").toString().split(";");
+            for(String whileIp : listIps )
+                this.addWhileListIp(whileIp);
+        }
+        if(appInfo.get("black_list_ip") != null && !"".equals(appInfo.get("black_list_ip"))){
+            listIps = appInfo.get("black_list_ip").toString().split(";");
+            for(String backIp : listIps )
+                this.addBackListIp(backIp);
+        }
+        this.setAppService(AppService.newInstance().builder(appInfo));
         return this;
     }
 
 
 
+    public static AppRoute newInstance(){
+        return new AppRoute();
+    }
 
 
 }

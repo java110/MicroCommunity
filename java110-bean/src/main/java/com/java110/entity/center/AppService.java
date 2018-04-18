@@ -1,6 +1,7 @@
 package com.java110.entity.center;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 提供服务
@@ -129,6 +130,25 @@ public class AppService implements Serializable{
 
     public void setMessageQueueName(String messageQueueName) {
         this.messageQueueName = messageQueueName;
+    }
+
+    public AppService builder(Map serviceInfo){
+        this.setBusinessTypeCd(serviceInfo.get("business_type_cd").toString());
+        this.setInvokeModel(serviceInfo.get("invoke_model").toString());
+        this.setMessageQueueName(serviceInfo.get("messageQueueName") == null ? null :serviceInfo.get("messageQueueName").toString());
+        this.setMethod(serviceInfo.get("method")==null ? null:serviceInfo.get("method").toString());
+        this.setName(serviceInfo.get("name").toString());
+        this.setRetryCount(Integer.parseInt(serviceInfo.get("retry_count").toString()));
+        this.setSeq(Integer.parseInt(serviceInfo.get("seq").toString()));
+        this.setServiceCode(serviceInfo.get("service_code").toString());
+        this.setTimeOut(Integer.parseInt(serviceInfo.get("timeout").toString()));
+        this.setUrl(serviceInfo.get("url") == null ? null : serviceInfo.get("url").toString());
+        this.setServiceId(Integer.parseInt(serviceInfo.get("service_id").toString()));
+        return this;
+    }
+
+    public static AppService newInstance(){
+        return new AppService();
     }
 
 

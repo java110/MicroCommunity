@@ -22,8 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import javax.print.DocFlavor;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 中心服务处理类
@@ -123,14 +124,16 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private void initConfigData(DataFlow dataFlow) {
         Date startDate = DateUtil.getCurrentDate();
         //查询配置信息，并将配置信息封装到 dataFlow 对象中
-        AppRoute appRoute = AppRouteCache.getAppRoute(dataFlow.getAppId());
+        List<AppRoute> appRoutes = AppRouteCache.getAppRoute(dataFlow.getAppId());
 
-        if (appRoute == null) {
+        if (appRoutes == null) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "initConfigData", "加载配置耗时", startDate);
             throw new InitConfigDataException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前没有获取到AppId对应的信息");
         }
-        dataFlow.setAppRoute(appRoute);
+        for(AppRoute appRoute: appRoutes) {
+            dataFlow.addAppRoutes(appRoute);
+        }
         //
         if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
             dataFlow.setDataFlowId(SequenceUtil.getDataFlowId());
@@ -149,7 +152,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private void judgeAuthority(DataFlow dataFlow) throws NoAuthorityException {
         Date startDate = DateUtil.getCurrentDate();
 
-        if (StringUtil.isNullOrNone(dataFlow.getAppId()) || dataFlow.getAppRoute() == null) {
+        if (StringUtil.isNullOrNone(dataFlow.getAppId()) || dataFlow.getAppRoutes().size() == 0 ) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "appId 为空或不正确");
@@ -195,7 +198,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }
 
         //检验白名单
-        List<String> whileListIp = dataFlow.getAppRoute().getWhileListIp();
+        List<String> whileListIp = dataFlow.getAppRoutes().get(0).getWhileListIp();
         if (whileListIp != null && !whileListIp.contains(dataFlow.getIp())) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
@@ -203,7 +206,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }
 
         //检查黑名单
-        List<String> backListIp = dataFlow.getAppRoute().getBackListIp();
+        List<String> backListIp = dataFlow.getAppRoutes().get(0).getBackListIp();
         if (backListIp != null && backListIp.contains(dataFlow.getIp())) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
@@ -337,12 +340,12 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private void invalidCompletedBusinessSystem(DataFlow dataFlow) throws Exception{
         // 根据 c_business 表中的字段business_type_cd 找到对应的消息队列名称
         List<Map> completedBusinesses = centerServiceDaoImpl.getCommonOrderCompledBusinessByBId(dataFlow.getBusinesses().get(0).getbId());
-        for(AppServiceStatus serviceStatus :dataFlow.getAppRoute().getAppServices()){
+        for(AppRoute appRoute :dataFlow.getAppRoutes()){
             for(Map completedBusiness : completedBusinesses){
-                if(completedBusiness.get("business_type_cd").equals(serviceStatus.getAppService().getBusinessTypeCd())){
-                    KafkaFactory.sendKafkaMessage(serviceStatus.getAppService().getMessageQueueName(),"",
-                            DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,serviceStatus.getAppService()));
-                    saveLogMessage(DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,serviceStatus.getAppService()),null);
+                if(completedBusiness.get("business_type_cd").equals(appRoute.getAppService().getBusinessTypeCd())){
+                    KafkaFactory.sendKafkaMessage(appRoute.getAppService().getMessageQueueName(),"",
+                            DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,appRoute.getAppService()));
+                    saveLogMessage(DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,appRoute.getAppService()),null);
                 }
             }
         }

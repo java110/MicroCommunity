@@ -23,6 +23,7 @@ public class DataFlowFactory {
         return new DataFlow(DateUtil.getCurrentDate(), ResponseConstant.RESULT_CODE_SUCCESS);
     }
 
+
     /**
      * 添加耗时
      * @param dataFlow 数据流
@@ -64,15 +65,15 @@ public class DataFlowFactory {
      * @return
      */
     public static AppService getService(DataFlow dataFlow, String serviceCode){
-        if (dataFlow.getAppRoute() == null){
+        if (dataFlow.getAppRoutes().size() == 0){
             throw new RuntimeException("当前没有获取到AppId对应的信息");
         }
 
-        List<AppServiceStatus> serviceStatuses = dataFlow.getAppRoute().getAppServices();
-        for(AppServiceStatus serviceStatus : serviceStatuses) {
-            if (StatusConstant.STATUS_CD_VALID.equals(serviceStatus.getStatusCd())
-                    &&serviceStatus.getAppService().getServiceCode().equals(serviceCode)){
-                return serviceStatus.getAppService();
+        List<AppRoute> appRoutes = dataFlow.getAppRoutes();
+        for(AppRoute appRoute : appRoutes) {
+            if (StatusConstant.STATUS_CD_VALID.equals(appRoute.getStatusCd())
+                    &&appRoute.getAppService().getServiceCode().equals(serviceCode)){
+                return appRoute.getAppService();
             }
         }
         return null;
