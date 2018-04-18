@@ -4,8 +4,8 @@ jedis:
       maxTotal: 100
       maxIdle: 20
       maxWaitMillis: 20000
-    host: 127.0.0.1
-    port: 3306
+    host: 192.168.31.199
+    port: 6379
 
 eureka:
   client:
@@ -16,13 +16,23 @@ server:
 spring:
   application:
     name: center-service
+  redis:
+    database: 0
+    host: 192.168.31.199
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+      timeout: 0
 
 #============== kafka ===================
 kafka:
   consumer:
     zookeeper:
-      connect: 10.93.21.21:2181
-    servers: 10.93.21.21:9092
+      connect: 192.168.31.199:2181
+    servers: 192.168.31.199:9092
     enable:
       auto:
         commit: true
@@ -39,11 +49,10 @@ kafka:
     concurrency: 10
 
   producer:
-    servers: 10.93.21.21:9092
+    servers: 192.168.31.199:9092
     retries: 0
     batch:
       size: 4096
     linger: 1
     buffer:
       memory: 40960
-

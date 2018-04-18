@@ -21,7 +21,8 @@ import java.util.logging.Logger;
 public class BaseServiceDao extends AppBase {
 
     @Autowired
-   protected JedisPool jedisPool;
+    protected JedisPool jedisPool;
+
 
     @Autowired
    protected SqlSessionTemplate sqlSessionTemplate;
@@ -33,14 +34,6 @@ public class BaseServiceDao extends AppBase {
 
     public void setSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         this.sqlSessionTemplate = sqlSessionTemplate;
-    }
-
-    public JedisPool getJedisPool() {
-        return jedisPool;
-    }
-
-    public void setJedisPool(JedisPool jedisPool) {
-        this.jedisPool = jedisPool;
     }
 
     private final static String SERVICE_CASE_JSON_EXCEPTION = "101";//转json异常
@@ -105,5 +98,13 @@ public class BaseServiceDao extends AppBase {
             LoggerEngine.debug("报文简单校验simpleValidateJSON结束，出参为：" , reqMap);
         }
         return reqMap;
+    }
+
+    public JedisPool getJedisPool() {
+        return jedisPool;
+    }
+
+    public void setJedisPool(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
     }
 }

@@ -31,6 +31,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingAll")
     public List<CodeMapping> getCodeMappingAll() throws Exception{
        Jedis jedis = jedisPool.getResource();
+
        List<CodeMapping> codeMappings = null;
        if(jedis.exists("CodeMappingAll".getBytes())){
            codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingAll".getBytes()),CodeMapping.class);

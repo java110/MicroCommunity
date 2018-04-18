@@ -11,7 +11,7 @@ import redis.clients.jedis.JedisPool;
 public class BaseCache {
 
     protected static Jedis getJedis(){
-        JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedis.pool");
+        JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedisPool");
         return jedisPool.getResource();
     }
 

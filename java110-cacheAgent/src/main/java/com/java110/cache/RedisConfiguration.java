@@ -15,7 +15,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class RedisConfiguration extends CachingConfigurerSupport  {
 
-    @Bean(name= "jedis.pool")
+    @Bean(name= "jedisPool")
     @Autowired
     public JedisPool jedisPool(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                @Value("${jedis.pool.host}")String host,

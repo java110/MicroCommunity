@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.order","com.java110.core","com.java110.event.center"})
+@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.center","com.java110.core","com.java110.event.center","com.java110.cache"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 public class CenterServiceApplicationStart {
