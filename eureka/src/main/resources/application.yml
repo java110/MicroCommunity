@@ -12,7 +12,7 @@ eureka:
 
 
 logging:
-  file: ./logs/eureka.log
+  file: logs/eureka.log
   level:
     org:
       springframework:

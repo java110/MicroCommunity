@@ -339,7 +339,7 @@ public class DataFlow {
             this.setReqJson(reqInfoObj);
             this.setDataFlowId(orderObj.containsKey("dataFlowId")?orderObj.getString("dataFlowId"):"-1");
             this.setAppId(orderObj.getString("appId"));
-            this.setAppId(orderObj.getString("transactionId"));
+            this.setTransactionId(orderObj.getString("transactionId"));
             this.setUserId(orderObj.getString("userId"));
             this.setOrderTypeCd(orderObj.getString("orderTypeCd"));
             this.setRemark(orderObj.getString("remark"));

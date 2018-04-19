@@ -143,7 +143,8 @@ public class DataFlowFactory {
             busiMap.put("oId",dataFlow.getoId());
             busiMap.put("businessTypeCd",getService(dataFlow,business.getString("serviceCode")).getBusinessTypeCd());
             busiMap.put("remark",business.getString("remark"));
-            busiMap.put("status_cd",StatusConstant.STATUS_CD_SAVE);
+            busiMap.put("statusCd",StatusConstant.STATUS_CD_SAVE);
+            busiMap.put("bId",business.getString("bId"));
             businesss.add(busiMap);
         }
         return businesss;

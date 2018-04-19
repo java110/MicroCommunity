@@ -170,7 +170,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "userId 不能为空");
         }
 
-        if (StringUtil.isNullOrNone(dataFlow.getRequestTime()) || DateUtil.judgeDate(dataFlow.getRequestTime(), DateUtil.DATE_FORMATE_STRING_DEFAULT)) {
+        if (StringUtil.isNullOrNone(dataFlow.getRequestTime()) || !DateUtil.judgeDate(dataFlow.getRequestTime(), DateUtil.DATE_FORMATE_STRING_DEFAULT)) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "requestTime 格式不对，遵循yyyyMMddHHmmss格式");
@@ -199,7 +199,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         //检验白名单
         List<String> whileListIp = dataFlow.getAppRoutes().get(0).getWhileListIp();
-        if (whileListIp != null && !whileListIp.contains(dataFlow.getIp())) {
+        if (whileListIp != null && whileListIp.size() > 0 && !whileListIp.contains(dataFlow.getIp())) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "当前IP被限制不能访问服务");
@@ -207,7 +207,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         //检查黑名单
         List<String> backListIp = dataFlow.getAppRoutes().get(0).getBackListIp();
-        if (backListIp != null && backListIp.contains(dataFlow.getIp())) {
+        if (backListIp != null && backListIp.size() > 0&& backListIp.contains(dataFlow.getIp())) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "当前IP被限制不能访问服务");

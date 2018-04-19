@@ -144,6 +144,7 @@ public class AppService implements Serializable{
         this.setTimeOut(Integer.parseInt(serviceInfo.get("timeout").toString()));
         this.setUrl(serviceInfo.get("url") == null ? null : serviceInfo.get("url").toString());
         this.setServiceId(Integer.parseInt(serviceInfo.get("service_id").toString()));
+        this.setStatusCd("0");
         return this;
     }
 

@@ -175,7 +175,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     @Override
     public List<Map> getAppRouteAndServiceInfoAll() {
-        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getAppInfoAll");
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getAppRouteAndServiceInfoAll");
     }
 
 

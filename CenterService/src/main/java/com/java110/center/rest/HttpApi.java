@@ -39,6 +39,7 @@ public class HttpApi extends BaseController {
             preValiateOrderInfo(orderInfo);
             return centerServiceSMOImpl.service(orderInfo, headers);
         }catch (Exception e){
+            logger.error("请求订单异常",e);
             return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
                     ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
         }

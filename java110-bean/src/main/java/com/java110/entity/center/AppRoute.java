@@ -150,6 +150,7 @@ public class AppRoute implements Serializable{
             for(String backIp : listIps )
                 this.addBackListIp(backIp);
         }
+        this.setStatusCd("0");
         this.setAppService(AppService.newInstance().builder(appInfo));
         return this;
     }

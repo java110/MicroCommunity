@@ -35,7 +35,17 @@ public class MappingCache extends BaseCache {
      * @return
      */
     public static String getValue(String key){
-        return getJedis().get(DomainContant.COMMON_DOMAIN+key);
+        Mapping mapping = getMapping(key);
+        return mapping == null ? "":mapping.getValue();
+    }
+
+    public static Mapping getMapping(String key){
+        Object obj = SerializeUtil.unserialize(getJedis().get((DomainContant.COMMON_DOMAIN+key).getBytes()));
+        if(obj instanceof Mapping){
+            return (Mapping) obj;
+        }
+
+        return null;
     }
 
     /**
