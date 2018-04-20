@@ -116,7 +116,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      */
     public static Class<DataFlowEvent> getEvent(String serviceCode) throws BusinessException{
         Class<DataFlowEvent> targetEvent = events.get(serviceCode);
-        Assert.notNull(targetEvent,"改服务未注册该事件[serviceCode = "+serviceCode+"]，系统目前不支持!");
+        //Assert.notNull(targetEvent,"改服务未注册该事件[serviceCode = "+serviceCode+"]，系统目前不支持!");
         return targetEvent;
     }
 
@@ -138,6 +138,10 @@ public class DataFlowEventPublishing extends LoggerEngine {
     public static void multicastEvent(String serviceCode,DataFlow dataFlow,String asyn) throws  BusinessException{
         try {
             Class<DataFlowEvent> dataFlowEventClass = getEvent(serviceCode);
+
+            if(dataFlowEventClass == null){
+                return ;
+            }
 
             Class[] parameterTypes = {Object.class, DataFlow.class};
 

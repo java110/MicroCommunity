@@ -69,6 +69,8 @@ kafka:
     concurrency: 10
 
   producer:
+    zookeeper:
+      connect: 192.168.31.199:2181
     servers: 192.168.31.199:9092
     retries: 0
     batch:

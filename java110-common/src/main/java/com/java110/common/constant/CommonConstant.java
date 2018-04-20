@@ -29,4 +29,7 @@ public class CommonConstant {
 
     public final static String INVOKE_BUSINESS_MODEL_LOCAL = "LOCAL_SERVICE"; //调用本地
 
+    public final static String QUERY_MODEL_SQL = "1";
+    public final static String QUERY_MODEL_PROC = "2";
+
 }

@@ -17,6 +17,7 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
 import com.java110.entity.center.*;
 import com.java110.event.center.DataFlowEventPublishing;
+import com.java110.service.smo.IQueryServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private IQueryServiceSMO queryServiceSMOImpl;
 
     @Override
     public String service(String reqJson, Map<String, String> headers) throws SMOException{
@@ -91,6 +95,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
                     ResponseConstant.NO_NEED_SIGN, e.getResult().getCode(), e.getMessage());
         } catch (Exception e) {
+            logger.error("内部异常了：",e);
             responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow == null
                             ? ResponseConstant.NO_TRANSACTION_ID
                             : dataFlow.getTransactionId(),
@@ -562,6 +567,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         Date startDate = DateUtil.getCurrentDate();
         Date businessStartDate = null;
         List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
+
+        if(synchronousBusinesses == null || synchronousBusinesses.size() == 0){
+            return ;
+        }
         AppService service = null;
         JSONObject requestBusinessJson = null;
         JSONArray responseBusinesses = new JSONArray();
@@ -576,9 +585,6 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
                 //http://user-service/test/sayHello
                 responseMessage = restTemplate.postForObject(service.getUrl(),dataFlow.getRequestBusinessJson().toJSONString(),String.class);
-            }else if(CommonConstant.INVOKE_BUSINESS_MODEL_LOCAL.equals(service.getMethod())){
-                //调用本地服务
-                responseMessage = "";
             }else{//webservice方式
                 responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
                         new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
@@ -592,7 +598,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             //发布事件
             DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
 
-            responseBusinesses.add(dataFlow.getResponseBusinessJson().getJSONArray("business"));
+            responseBusinesses.add(dataFlow.getResponseBusinessJson());
 
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
@@ -614,6 +620,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         Date startDate = DateUtil.getCurrentDate();
         //6.3 处理异步，按消息队里处理
         List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
+
+        if(asynchronousBusinesses == null || asynchronousBusinesses.size() == 0){
+            return ;
+        }
 
         try {
             for (Business business : asynchronousBusinesses) {
@@ -687,5 +697,13 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    public IQueryServiceSMO getQueryServiceSMOImpl() {
+        return queryServiceSMOImpl;
+    }
+
+    public void setQueryServiceSMOImpl(IQueryServiceSMO queryServiceSMOImpl) {
+        this.queryServiceSMOImpl = queryServiceSMOImpl;
     }
 }

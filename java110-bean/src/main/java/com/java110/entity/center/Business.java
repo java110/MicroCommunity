@@ -18,7 +18,7 @@ public class Business implements Comparable{
 
     private String remark;
 
-    private JSONArray datas;
+    private JSONObject datas;
 
     private JSONArray attrs;
     //返回 编码
@@ -61,11 +61,11 @@ public class Business implements Comparable{
         this.remark = remark;
     }
 
-    public JSONArray getDatas() {
+    public JSONObject getDatas() {
         return datas;
     }
 
-    public void setDatas(JSONArray datas) {
+    public void setDatas(JSONObject datas) {
         this.datas = datas;
     }
 
@@ -113,7 +113,7 @@ public class Business implements Comparable{
             this.setServiceCode(businessObj.getString("serviceCode"));
             this.setServiceName(businessObj.getString("serviceName"));
             this.setRemark(businessObj.getString("remark"));
-            this.setDatas(businessObj.getJSONArray("datas"));
+            this.setDatas(businessObj.getJSONObject("datas"));
             this.setAttrs(businessObj.getJSONArray("attrs"));
             if(businessObj.containsKey("response")){
                 this.setCode(businessObj.getJSONObject("response").getString("code"));

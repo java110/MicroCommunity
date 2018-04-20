@@ -34,6 +34,11 @@ public class ResponseConstant {
     public final static String RESULT_CODE_RULE_ERROR = "1995";
 
     /**
+     * 参数不正确
+     */
+    public final static String RESULT_PARAM_ERROR = "1994";
+
+    /**
      * 没有从报文中获取到 请求流水
      */
     public final static String NO_TRANSACTION_ID = "-1";

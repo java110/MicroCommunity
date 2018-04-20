@@ -81,4 +81,35 @@ public class ResponseTemplateUtil {
     public static JSONObject createCommonResponseJson(DataFlow dataFlow){
         return dataFlow.getResponseBusinessJson();
     }
+
+    /**
+     * 业务系统返回报文模板
+     * @param code
+     * @param message
+     * @param
+     * @return
+     */
+    public static JSONObject createBusinessResponseJson(String code, String message){
+        return   createBusinessResponseJson(code, message,null);
+    }
+    /**
+     * 业务系统返回报文模板
+     * @param code
+     * @param message
+     * @param info
+     * @return
+     */
+    public static JSONObject createBusinessResponseJson(String code, String message, JSONObject info){
+        JSONObject responseMessage = JSONObject.parseObject("{\"response\":{}}");
+
+        JSONObject response = responseMessage.getJSONObject("response");
+
+        response.put("code",code);
+        response.put("message",message);
+        if(info != null) {
+            responseMessage.putAll(info);
+        }
+
+        return responseMessage;
+    }
 }

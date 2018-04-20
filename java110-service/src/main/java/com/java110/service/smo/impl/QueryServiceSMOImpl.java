@@ -1,0 +1,198 @@
+package com.java110.service.smo.impl;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.java110.common.cache.ServiceSqlCache;
+import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.BusinessException;
+import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.Assert;
+import com.java110.common.util.ResponseTemplateUtil;
+import com.java110.entity.service.DataQuery;
+import com.java110.entity.service.ServiceSql;
+import com.java110.service.dao.IQueryServiceDAO;
+import com.java110.service.smo.IQueryServiceSMO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+/**
+ * Created by wuxw on 2018/4/19.
+ */
+@Service("queryServiceSMOImpl")
+@Transactional
+public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSMO {
+
+    @Autowired
+    private IQueryServiceDAO queryServiceDAOImpl;
+
+    @Override
+    public void commonQueryService(DataQuery dataQuery) throws BusinessException {
+        //查询缓存查询 对应处理的ServiceSql
+        try {
+            ServiceSql currentServiceSql = ServiceSqlCache.getServiceSql(dataQuery.getServiceCode());
+            if (currentServiceSql == null) {
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"未提供该服务 serviceCode = " + dataQuery.getServiceCode());
+            }
+            if ("".equals(currentServiceSql.getQueryModel())) {
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"配置服务 serviceCode = " + dataQuery.getServiceCode() + " 错误，未配置QueryModel,请联系管理员");
+            }
+            dataQuery.setServiceSql(currentServiceSql);
+            if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
+                doExecuteSql(dataQuery);
+                return;
+            }
+            doExecuteProc(dataQuery);
+        }catch (BusinessException e){
+            logger.error("公用查询异常：",e);
+            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
+                    e.getMessage()));
+        }
+
+    }
+
+    /**
+     * {"PARAM:"{
+     "param1": "$.a.#A#Object",
+     "param2": "$.a.b.A#B#Array",
+     "param3": "$.a.b.c.A.B#C#Array"
+     },"TEMPLATE":"{}"
+     }
+     * 执行sql
+     * @param dataQuery
+     */
+    private void doExecuteSql(DataQuery dataQuery) throws BusinessException{
+
+        JSONObject templateObj = JSONObject.parseObject(dataQuery.getServiceSql().getTemplate());
+        JSONObject templateParams = templateObj.getJSONObject("PARAM");
+        JSONObject business = JSONObject.parseObject(templateObj.getString("TEMPLATE"));
+        String template = "";
+        String[] values = null;
+        JSONObject currentJsonObj = null;
+        JSONArray currentJsonArr = null;
+        for(String key:templateParams.keySet()){
+            template = templateParams.getString(key);
+            if(!template.startsWith("$.")){
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须以$.开头");
+            }
+            values = template.split("#");
+
+            if(values == null || values.length != 3){
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须有两个#号");
+            }
+            Object o = JSONPath.eval(business,values[0]);
+            dataQuery.setTemplateKey(key);
+            if(o instanceof JSONObject){
+                currentJsonObj = (JSONObject)o;
+                doJsonObject(currentJsonObj,dataQuery,values);
+            }else if(o instanceof JSONArray){
+                currentJsonArr = (JSONArray) o;
+                doJsonArray(currentJsonArr,dataQuery,values);
+            }else{
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 值 和 TEMPLATE 配置不一致");
+            }
+        }
+
+        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+                "成功",business));
+    }
+
+    /**
+     * 处理 jsonObject
+     * @param obj
+     * @param dataQuery
+     * @param values
+     */
+    private void doJsonObject(JSONObject obj,DataQuery dataQuery,String[] values){
+        try {
+            JSONObject params = dataQuery.getRequestParams();
+            JSONObject sqlObj = JSONObject.parseObject(dataQuery.getServiceSql().getSql());
+
+            String currentSql = sqlObj.getString(dataQuery.getTemplateKey());
+            String[] sqls = currentSql.split("#");
+            String currentSqlNew = "";
+            for (int sqlIndex = 0; sqlIndex < sqls.length; sqlIndex++) {
+                if (sqlIndex % 2 == 0) {
+                    currentSqlNew += sqls[sqlIndex];
+                    continue;
+                }
+                if (sqls[sqlIndex].startsWith("PARENT_")) {
+                    for (String key : obj.keySet()) {
+                        if (sqls[sqlIndex].substring("PARENT_".length()).equals(key)) {
+                            currentSqlNew += obj.get(key) instanceof Integer
+                                    ? obj.getInteger(key) : "'" + obj.getString(key) + "'";
+                            continue;
+                        }
+                    }
+                } else {
+                    currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
+                }
+            }
+
+            List<Map> results = queryServiceDAOImpl.executeSql(currentSqlNew);
+
+            if (results == null || results.size() == 0) {
+                obj.put(values[1], new JSONObject());
+                return;
+            }
+            if (values[2].equals("Object")) {
+                obj.put(values[1], JSONObject.parseObject(JSONObject.toJSONString(results.get(0))));
+            } else if (values[2].equals("Array")) {
+                obj.put(values[1], JSONArray.parseArray(JSONArray.toJSONString(results)));
+            }
+        }catch (Exception e){
+            logger.error("数据交互异常：",e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"数据交互异常。。。");
+        }
+    }
+
+    /**
+     * 处理JSONArray
+     * @param objs
+     * @param dataQuery
+     * @param values
+     */
+    private void doJsonArray(JSONArray objs,DataQuery dataQuery,String[] values){
+
+        for (int objIndex = 0 ; objIndex < objs.size();objIndex ++){
+            doJsonObject(objs.getJSONObject(objIndex),dataQuery,values);
+        }
+
+    }
+
+    /**
+     * 执行存储
+     * @param dataQuery
+     */
+    private void doExecuteProc(DataQuery dataQuery){
+        Map info = new TreeMap();
+        info.put("procName",dataQuery.getServiceSql().getProc());
+        JSONObject params = dataQuery.getRequestParams();
+        info.putAll(params);
+
+        String jsonStr = queryServiceDAOImpl.executeProc(info);
+
+        if(!Assert.isJsonObject(jsonStr)){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"存储过程 procName = " + dataQuery.getServiceSql().getProc() + " 返回结果不是Json格式");
+        }
+
+        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+                "成功",JSONObject.parseObject(jsonStr)));
+    }
+
+
+    public IQueryServiceDAO getQueryServiceDAOImpl() {
+        return queryServiceDAOImpl;
+    }
+
+    public void setQueryServiceDAOImpl(IQueryServiceDAO queryServiceDAOImpl) {
+        this.queryServiceDAOImpl = queryServiceDAOImpl;
+    }
+}

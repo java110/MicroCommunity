@@ -11,12 +11,11 @@
     "serviceCode": "querycustinfo",
     "serviceName": "查询客户",
     "remark": "备注",
-    "datas": [{
+    "datas": {
+      "params": {
+        //这个做查询时的参数
+      }
     //这里是具体业务
-    }],
-    "attrs": [{
-    "specCd": "配置的字段id",
-    "value": "具体值"
-    }]
+    }
   }]
 }

@@ -4,8 +4,11 @@ import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
+import com.java110.common.cache.ServiceSqlCache;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
+import com.java110.entity.service.ServiceSql;
+import com.java110.service.dao.IQueryServiceDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     @Autowired
     ICenterServiceDAO centerServiceDAOImpl;
 
+    @Autowired
+    IQueryServiceDAO queryServiceDAOImpl;
+
     @Override
     public void flush() {
 
@@ -32,6 +38,23 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
         //2.0 分装 Mapping
         flushMapping();
+
+        //3.0 分装 ServiceSql
+        flushServiceSql();
+    }
+
+    /**
+     * 3.0 分装 ServiceSql
+     */
+    private void flushServiceSql() {
+        List<ServiceSql> serviceSqls = queryServiceDAOImpl.qureyServiceSqlAll();
+
+        if(serviceSqls == null || serviceSqls.size() == 0){
+            return;
+        }
+        for(ServiceSql serviceSql: serviceSqls){
+            ServiceSqlCache.setServiceSql(serviceSql);
+        }
     }
 
     /**
@@ -94,5 +117,13 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     public void setCenterServiceDAOImpl(ICenterServiceDAO centerServiceDAOImpl) {
         this.centerServiceDAOImpl = centerServiceDAOImpl;
+    }
+
+    public IQueryServiceDAO getQueryServiceDAOImpl() {
+        return queryServiceDAOImpl;
+    }
+
+    public void setQueryServiceDAOImpl(IQueryServiceDAO queryServiceDAOImpl) {
+        this.queryServiceDAOImpl = queryServiceDAOImpl;
     }
 }
