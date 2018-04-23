@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="merchantMemberServiceDaoImpl">
+
+
+    <!--根据客户ID 查询客户信息，其中包括 merchant 和merchantAttr 数据-->
+    <select id="queryDataToMerchantMember" parameterType="com.java110.entity.merchant.MerchantMember" resultType="com.java110.entity.merchant.MerchantMember">
+
+            select mm.id,
+             mm.merchantId,
+             mm.memberId,
+             mm.memberType,
+             mm.create_dt,
+             mm.status_cd,
+             mm.start_dt,
+             mm.end_dt,
+             mm.versionId,
+             mm.version_dt
+             from merchant_member mm
+            where mm.status_cd = '0'
+            <if test="merchantId != null and merchantId != ''">
+                and mm.merchantId = #{merchantId}
+            </if>
+            <if test="versionId != null and versionId != ''">
+                and mm.versionId = #{versionId}
+            </if>
+        <![CDATA[
+            and start_dt < now()
+            and end_dt > now()
+        ]]>
+    </select>
+
+    <select id="queryBoMerchantMember" parameterType="com.java110.entity.merchant.BoMerchantMember" resultType="com.java110.entity.merchant.BoMerchantMember">
+        select  mm.boId,
+        mm.merchantId,
+        mm.memberId,
+        mm.versionId,
+        mm.memberType,
+        mm.create_dt,
+        mm.start_dt,
+        mm.end_dt,
+        mm.state
+        from bo_merchant_member mm
+        where 1=1
+        <if test="merchantId != null and merchantId != ''">
+            and mm.merchantId = #{merchantId}
+        </if>
+        <if test="versionId != null and versionId != ''">
+            and mm.versionId = #{versionId}
+        </if>
+        <if test="memberId != null and memberId != ''">
+            and mm.memberId = #{memberId}
+        </if>
+    </select>
+
+    <!--  保存过程数据 add by wuxw 2017-09-08 21:48 -->
+    <insert id="saveDataToBoMerchantMember" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        insert into bo_merchant_member(boId,merchantId,memberId,versionId,memberType,state,start_dt,end_dt)
+        values(#boId#,#merchantId#,#memberId#,#versionId#,#memberType#,#state#,#start_dt#,#end_dt#)
+    </insert>
+
+    <!-- 保存实例数据 add by wuxw 2017-09-08 21:58 -->
+    <insert id="saveDataToMerchant" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        insert into merchant_member(merchantId,memberId,versionId,memberType,status_cd,start_dt,end_dt,version_dt)
+        values(#merchantId#,#memberId#,#versionId#,#memberType#,'0',#start_dt#,#end_dt#,now())
+    </insert>
+    <!-- 删除实例数据 add by wuxw 2017-09-08 22:02 -->
+    <update id="deleteDataToMerchant" parameterType="com.java110.entity.merchant.BoMerchantMember">
+        update merchant_member mm set mm.status_cd = '1',mm.versionId = #versionId#,mm.version_dt = now() where mm.memberId = #memberId#
+        and mm.merchantId = #merchantId#
+    </update>
+
+
+
+</mapper>

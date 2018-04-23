@@ -36,14 +36,12 @@ public class ResponseTemplateUtil {
     /**
      * 创建 通用返回结果模板
      * @param transactionId 交易流水
-     * @param sign 签名
      * @param code 错误
      * @param message 错误信息
      * @param business 业务信息
      * @return
      */
     public static JSONObject createCommonResponseJson(String transactionId,
-                                                  String sign,
                                                   String code,
                                                   String message,
                                                   JSONArray business){
@@ -52,11 +50,6 @@ public class ResponseTemplateUtil {
         JSONObject orderInfo = responseInfo.getJSONObject("orders");
         orderInfo.put("transactionId",transactionId);
         orderInfo.put("responseTime",DateUtil.getDefaultFormateTimeString(new Date()));
-        if(StringUtil.isNullOrNone(sign)) {
-            orderInfo.put("sign", AuthenticationFactory.md5(transactionId, orderInfo.getString("responseTime"), business != null && business.size() > 0 ? business.toJSONString() : ""));
-        }else {
-            orderInfo.put("sign",sign);
-        }
         JSONObject orderResponseInfo = orderInfo.getJSONObject("response");
         orderResponseInfo.put("code",code);
         orderResponseInfo.put("message",message);
@@ -69,13 +62,12 @@ public class ResponseTemplateUtil {
     /**
      * 返回模板 只有Order信息
      * @param transactionId
-     * @param sign
      * @param code
      * @param message
      * @return
      */
-    public static JSONObject createOrderResponseJson(String transactionId, String sign,String code,String message){
-        return createCommonResponseJson(transactionId,sign,code,message,null);
+    public static JSONObject createOrderResponseJson(String transactionId,String code,String message){
+        return createCommonResponseJson(transactionId,code,message,null);
     }
 
     /**
@@ -84,11 +76,7 @@ public class ResponseTemplateUtil {
      * @return
      */
     public static JSONObject createCommonResponseJson(DataFlow dataFlow){
-        JSONObject responseJson = dataFlow.getResponseBusinessJson();
-        JSONObject orders = responseJson.getJSONObject("orders");
-        JSONArray business = responseJson.getJSONArray("business");
-        orders.put("sign",AuthenticationFactory.md5(orders.getString("transactionId"),orders.getString("responseTime"),business.toJSONString()));
-        return responseJson;
+        return dataFlow.getResponseBusinessJson();
     }
 
     /**

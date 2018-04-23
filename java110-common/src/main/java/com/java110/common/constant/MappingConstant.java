@@ -11,6 +11,15 @@ public class MappingConstant {
 
     public  final static String KEY_LOG_ON_OFF = "LOG_ON_OFF";
     public  final static String KEY_COST_TIME_ON_OFF = "COST_TIME_ON_OFF";
+
+    //私钥
+    public final static String KEY_PRIVATE_STRING = "PRIVATE_STRING";
+
+    //公钥
+    public final static String KEY_PUBLIC_STRING = "PUBLIC_STRING";
+    //解密 KEY_SIZE
+    public final static String KEY_DEFAULT_DECRYPT_KEY_SIZE = "DEFAULT_DECRYPT_KEY_SIZE";
+
     public  final static String KEY_RULE_ON_OFF = "RULE_ON_OFF";
     public  final static String VALUE_ON = "ON";
     public  final static String VALUE_OFF = "OFF";
@@ -29,5 +38,10 @@ public class MappingConstant {
 
     //需要调用服务生成各个ID
     public final static String KEY_NEED_INVOKE_GENERATE_ID = "NEED_INVOKE_SERVICE_GENERATE_ID";
+
+    //默认掩码
+    public final static String KEY_DEFAULT_SECURITY_CODE = "DEFAULT_SECURITY_CODE";
+
+
 
 }

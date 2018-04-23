@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productServiceDAOImpl">
+
+    <resultMap type="com.java110.entity.product.Product" id="productMap">
+        <id column="productId" jdbcType="VARCHAR" property="productId"/>
+        <result column="productImg" jdbcType="VARCHAR" property="productImg"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="catalogCd" jdbcType="VARCHAR" property="catalogCd"/>
+        <result column="productDesc" jdbcType="VARCHAR" property="productDesc"/>
+        <result column="start_dt" jdbcType="DATE" property="start_dt"/>
+        <result column="end_dt" jdbcType="DATE" property="end_dt"/>
+        <result column="status_cd" jdbcType="VARCHAR" property="status_cd"/>
+        <result column="create_dt" jdbcType="DATE" property="create_dt"/>
+        <!-- 一对多关系 -->
+        <!-- <collection property="stus" resultMap="Student.StudentResult"></collection>  -->
+        <collection property="productAttrs" javaType="com.java110.entity.product.ProductAttr">
+            <id property="productId" column="productId"/>
+            <result property="attrCd" column="attrCd"/>
+            <result property="value" column="value"/>
+        </collection>
+    </resultMap>
+
+    <!--根据用户Id查询用户角色
+    <select id="findRolesByUserId" resultType="SysRole">
+        SELECT
+        r.*
+        FROM
+        t_role r,
+        t_product_role ur
+        WHERE ur.uid = #{productId}
+        AND ur.roleId = r.roleId
+        AND ur.status_cd = '1'
+    </select>
+-->
+    <!--保存数据至过程表 bo_product 中 -->
+    <insert id="saveDataToBoProduct" parameterType="com.java110.entity.product.BoProduct">
+        <![CDATA[
+            insert into bo_product(boId,productId,productImg,name,catalogCd,productDesc,start_dt,end_dt,state)
+            values(#{boId},#{productId},#{productImg},#{name},#{catalogCd},#{productDesc},#{start_dt},#{end_dt},#{state})
+        ]]>
+    </insert>
+    <!-- 保存数据至过程表bo_product_attr 中-->
+    <insert id="saveDataToBoProductAttr" parameterType="com.java110.entity.product.BoProductAttr">
+        <![CDATA[
+            insert into bo_product_attr(boId,productId,attrCd,value,state)
+            values(#{boId},#{productId},#{attrCd},#{value},#{state})
+        ]]>
+    </insert>
+    <!-- 保存 实例客户信息 product -->
+    <insert id="saveDataToProduct" parameterType="com.java110.entity.product.Product">
+        <![CDATA[
+            insert into product(productId,productImg,name,catalogCd,productDesc,start_dt,end_dt,status_cd)
+            values(#{productId},#{productImg},#{name},#{catalogCd},#{productDesc},#{start_dt},#{end_dt},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 product -->
+    <insert id="deleteDataToProduct" parameterType="com.java110.entity.product.Product">
+        <![CDATA[
+           delete * from product c where c.productId = #{productId}
+        ]]>
+    </insert>
+
+    <!-- 保存 实例客户属性信息 product_attr -->
+    <insert id="saveDataToProductAttr" parameterType="com.java110.entity.product.ProductAttr">
+        <![CDATA[
+            insert into product_attr(productId,attrCd,value,status_cd)
+            values(#{productId},#{attrCd},#{value},#{status_cd})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 product -->
+    <update id="deleteDataToProductAttr" parameterType="com.java110.entity.product.ProductAttr">
+           delete * from product_attr ct where 1=1
+           <if test="productId != null and productId != ''">
+               and ct.productId = #{productId}
+           </if>
+            <if test="attrCd != null and attrCd != ''">
+                and ct.attrCd = #{attrCd}
+            </if>
+    </update>
+    <!--根据客户ID 查询客户信息，其中包括 product 和productAttr 数据-->
+    <select id="queryDataToProduct" parameterType="com.java110.entity.product.Product" resultMap="productMap">
+        <![CDATA[
+            select c.productId,c.productImg,c.name,c.catalogCd,c.productDesc,c.start_dt,c.end_dt,c.status_cd,c.create_dt,
+            ca.productId,ca.attrCd,ca.value
+             from product c, product_attr ca where c.productId= ca.productId
+            and c.productId = #{productId}
+            and c.status_cd = '0'
+        ]]>
+    </select>
+
+    <!-- 查询客户过程数据 -->
+    <select id="queryBoProduct" parameterType="com.java110.entity.product.BoProduct" resultType="com.java110.entity.product.BoProduct">
+        select bc.boId,bc.productId,bc.productImg,bc.name,bc.catalogCd,bc.productDesc,bc.start_dt,bc.end_dt,bc.state,bc.create_dt,
+        from bo_product bc where 1=1
+        <if test="boId != null and boId != ''">
+            and bc.boId = #{boId}
+        </if>
+        <if test="productId != null and productId != ''">
+            and bc.productId = #{productId}
+        </if>
+        and bc.state in ('ADD','DEL')
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+    <!-- 查询客户属性过程表-->
+    <select id="queryBoProductAttr" parameterType="com.java110.entity.product.BoProductAttr" resultType="com.java110.entity.product.BoProductAttr">
+        select bca.boId,bca.productId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_product_attr bca where 1=1
+        <if test="boId !=null and boId != ''">
+            and bca.boId = #{boId}
+        </if>
+        <if test="productId != null and productId != ''">
+            and bca.productId = #{productId}
+        </if>
+        <if test="create_dt != null and create_dt != ''">
+            order by bc.create_dt desc
+        </if>
+    </select>
+
+</mapper>

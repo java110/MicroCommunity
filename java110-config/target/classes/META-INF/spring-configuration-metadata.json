@@ -1,0 +1,33 @@
+{
+  "groups": [
+    {
+      "name": "java110.common",
+      "type": "com.java110.config.properties.CommonProperties",
+      "sourceType": "com.java110.config.properties.CommonProperties"
+    },
+    {
+      "name": "java110.event.properties",
+      "type": "com.java110.config.properties.EventProperties",
+      "sourceType": "com.java110.config.properties.EventProperties"
+    },
+    {
+      "name": "java110.order",
+      "type": "com.java110.config.properties.OrderProperties",
+      "sourceType": "com.java110.config.properties.OrderProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "java110.event.properties.order-dispatch-listener",
+      "type": "java.lang.String",
+      "description": "订单调度 侦听",
+      "sourceType": "com.java110.config.properties.EventProperties"
+    },
+    {
+      "name": "java110.order.delete-order-asyn",
+      "type": "java.lang.String",
+      "sourceType": "com.java110.config.properties.OrderProperties"
+    }
+  ],
+  "hints": []
+}

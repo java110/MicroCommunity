@@ -32,4 +32,11 @@ public class CommonConstant {
     public final static String QUERY_MODEL_SQL = "1";
     public final static String QUERY_MODEL_PROC = "2";
 
+    /**
+     * 加密 开关
+     */
+    public final static String ENCRYPT_ON_OFF = "ENCRYPT";
+
+    public final static String ENCRYPT_KEY_SIZE = "ENCRYPT_KEY_SIZE";
+
 }

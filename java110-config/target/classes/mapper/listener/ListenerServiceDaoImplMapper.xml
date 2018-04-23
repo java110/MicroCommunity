@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ListenerServiceDaoImpl">
+
+    <parameterMap type="java.util.HashMap" id="TaskFunctionProcParameters">
+        <parameter property="param" javaType="java.lang.String"
+                   jdbcType="VARCHAR" mode="IN" />
+        <parameter property="retVal" javaType="java.lang.String"
+                   jdbcType="VARCHAR" mode="OUT" />
+    </parameterMap>
+
+    <select id="queryFtpItemsCount" parameterType="java.util.HashMap"
+            resultType="Integer">
+        SELECT count(1)
+        FROM SAOP_FTP_TASK A
+        WHERE A.STATE = 'A'
+    </select>
+
+    <!-- 查询文件下载上传列表（配置项）
+     where  A1.rn > ((TO_NUMBER(#{curPage}) -1) * TO_NUMBER(#pageSize#)) AND A1.rn <= (TO_NUMBER(#curPage#) * TO_NUMBER(#pageSize#))
+     -->
+    <select id="queryFtpItems" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        <![CDATA[
+		SELECT rownum as rn,A.TASKID,
+		       A.TASKNAME,
+		       A.FILE_NAME,
+		       A.U_OR_D,
+		       A.RUN_STATE,
+		       A.RUN_FLAG,
+		       A.TNUM,
+		       A.TASKCRON,
+		       A.ERRPHONE,
+		       A.FILESEQ,
+		       A.UPNULL,
+		       A.PREFLAG,
+		       A.PREFUNCTION,
+		       A.AFTERFLAG,
+		       A.AFTERFUNCTION,
+		       A.DEAL_CLASS,
+		       A.CREATE_DATE
+		  FROM SAOP_FTP_TASK A
+		 WHERE A.STATE = 'A'
+         limit 0,100
+	]]>
+    </select>
+    <select id="newCreateTaskId" resultType="long">
+        <![CDATA[
+	        SELECT seq_cep_taskid.NEXTVAL  AS taskId from dual
+	        ]]>
+    </select>
+    <insert id="addFtpItem" parameterType="java.util.HashMap">
+        insert into saop_ftp_task(taskid,
+        taskname,
+        file_name,
+        u_or_d,
+        tnum,
+        taskcron,
+        errphone,
+        fileseq,
+        upnull,
+        preflag,
+        prefunction,
+        afterflag,
+        afterfunction,
+        deal_class)
+        values(#{taskId},
+        #{taskName},
+        #{fileName},
+        #{uOrD},
+        #{tNum},
+        #{taskCron},
+        #{errPhone},
+        #{fileSeq},
+        #{upNull},
+        #{preFlag},
+        #{preFunction},
+        #{afterFlag},
+        #{afterFunction},
+        #{dealClass}
+        )
+    </insert>
+    <!-- 根据taskId 查询FtpItem 信息 -->
+    <select id="queryFtpItemByTaskId" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        SELECT A.TASKID,
+        A.TASKNAME,
+        A.FILE_NAME,
+        A.U_OR_D,
+        A.RUN_STATE,
+        A.RUN_FLAG,
+        A.TNUM,
+        A.TASKCRON,
+        A.ERRPHONE,
+        A.FILESEQ,
+        A.UPNULL,
+        A.PREFLAG,
+        A.PREFUNCTION,
+        A.AFTERFLAG,
+        A.AFTERFUNCTION,
+        A.DEAL_CLASS,
+        A.CREATE_DATE
+        FROM SAOP_FTP_TASK A
+        WHERE A.STATE = 'A'
+        and A.TASKID = #{taskId}
+    </select>
+    <!-- 根据任务名称搜素 -->
+    <select id="searchFtpItemByTaskName" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        <![CDATA[
+		SELECT A.TASKID,
+		A.TASKNAME,
+		A.FILE_NAME,
+		A.U_OR_D,
+		A.RUN_STATE,
+		A.RUN_FLAG,
+		A.TNUM,
+		A.TASKCRON,
+		A.ERRPHONE,
+		A.FILESEQ,
+		A.UPNULL,
+		A.PREFLAG,
+		A.PREFUNCTION,
+		A.AFTERFLAG,
+		A.AFTERFUNCTION,
+		A.DEAL_CLASS,
+		A.CREATE_DATE
+		FROM SAOP_FTP_TASK A
+		WHERE A.STATE = 'A'
+		and A.TASKNAME like '%' || #{taskName} || '%'
+		and rownum < 1000
+	]]>
+    </select>
+    <!-- 修改ftp配置信息 -->
+    <update id="updateFtpItemByTaskId" parameterType="java.util.HashMap">
+        update saop_ftp_task sft
+        set update_date = sysdate
+        <if test="taskName != null and taskName != ''">,sft.taskname = #{taskName}
+        </if>
+        <if test="fileName != null and fileName != ''">,sft.file_name = #{fileName}
+        </if>
+        <if test="uOrD != null and uOrD != ''">,sft.u_or_d = #{uOrD}</if>
+        <if test="runState != null and runState != ''">,sft.run_state = #{runState}
+        </if>
+        <if test="runFlag != null and runFlag != ''">,sft.run_flag = #{runFlag}</if>
+        <if test="tNum != null and tNum != ''">,sft.tnum = #{tNum}</if>
+        <if test="taskCron != null and taskCron != ''">,sft.taskcron = #{taskCron}
+        </if>
+        <if test="errPhone != null and errPhone != ''">,sft.errphone = #{errPhone}
+        </if>
+        <if test="fileSeq != null and fileSeq != ''">,sft.fileseq = #{fileSeq}</if>
+        <if test="upNull != null and upNull != ''">,sft.upnull = #{upNull}</if>
+        <if test="preFlag != null and preFlag != ''">,sft.preflag = #{preFlag}</if>
+        <if test="preFunction != null and preFunction != ''">,sft.prefunction = #{preFunction}
+        </if>
+        <if test="afterFlag != null and afterFlag != ''">,sft.afterflag = #{afterFlag}
+        </if>
+        <if test="afterFunction != null and afterFunction != ''">,sft.afterfunction = #{afterFunction}
+        </if>
+        <if test="dealClass != null and dealClass != ''">,sft.deal_class = #{dealClass}
+        </if>
+        where sft.state = 'A'
+        and sft.taskid = #{taskId}
+    </update>
+
+    <!-- 修改ftp配置信息 -->
+    <update id="updateFtpItemRunState" parameterType="java.util.HashMap">
+        update
+        saop_ftp_task sft
+        set update_date = sysdate,sft.run_state= #{runState}
+        where sft.run_state = #{oldRunState}
+    </update>
+
+    <!-- 删除ftp配置信息 -->
+    <update id="deleteFtpItemByTaskId" parameterType="java.util.HashMap">
+        update
+        saop_ftp_task sft
+        set sft.state = 'R'
+        where sft.state = 'A'
+        and sft.taskid in
+        <foreach collection="taskIds" item="taskId" index="index" open="(" close=")" separator=",">
+            #{taskId}
+        </foreach>
+    </update>
+    <!-- 根据taskids 获取将要操作的ftp配置信息 -->
+    <select id="queryFtpItemsByTaskIds" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        SELECT
+        A.TASKID,
+        A.TASKNAME,
+        A.FILE_NAME,
+        A.U_OR_D,
+        A.RUN_STATE,
+        A.RUN_FLAG,
+        A.TNUM,
+        A.TASKCRON,
+        A.ERRPHONE,
+        A.FILESEQ,
+        A.UPNULL,
+        A.PREFLAG,
+        A.PREFUNCTION,
+        A.AFTERFLAG,
+        A.AFTERFUNCTION,
+        A.DEAL_CLASS
+        FROM SAOP_FTP_TASK A
+        WHERE A.STATE = 'A'
+        AND A.TASKID in
+        <foreach collection="taskIds" item="taskId" index="index" open="(" close=")" separator=",">
+            #{taskId}
+        </foreach>
+    </select>
+    <!-- 查询FTPItem的属性信息 -->
+    <select id="queryFtpItemAttrsByTaskId" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        SELECT A.TASKID, A.ITEM_SPEC_ID, A.VALUE
+        FROM SAOP_FTP_TASK_ATTR A
+        WHERE A.TASKID = #{taskId}
+    </select>
+    <!-- 保存FTPItem的属性信息 -->
+    <insert id="addFtpItemAttrs" parameterType="java.util.HashMap">
+        insert into
+        SAOP_FTP_TASK_ATTR(taskid,item_spec_id,value)
+        values(#{taskId},#{itemSpecId},#{value})
+    </insert>
+    <!-- 查询没有下载过的文件名 -->
+    <select id="queryFileNamesWithOutFtpLog" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        <![CDATA[
+		SELECT #{fileNames} AS fileNames FROM DUAL
+		 where #{fileNames} not in
+		       (select sfl.file_name from saop_ftp_log sfl where sfl.taskId = #{taskId})
+		]]>
+    </select>
+
+    <insert id="addDownloadFileName" parameterType="java.util.HashMap">
+        <selectKey keyProperty="logid" resultType="long">
+            <![CDATA[
+	        SELECT seq_cep_taskid.NEXTVAL  AS logid from dual
+	        ]]>
+        </selectKey>
+        insert into saop_ftp_log(
+        log_id,
+        taskid,
+        file_name,
+        tfs_file_name
+        )
+        values(
+        #{logid},
+        #{taskId},
+        #{fileName},
+        #{tfsFileName}
+        )
+    </insert>
+
+
+    <select id="queryItemSpec" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select a.item_spec_cd, a.domain, a.name, a.describe, a.create_date
+        from saop_ftp_item_spec a
+        where a.status_cd = '0'
+        <if test="domain != null and domain !=''"> and a.domain = #{domain}</if>
+        <if test="name != null and name !=''">  and a.name = #{name}</if>
+        <if test="itemSpecCd != null and itemSpecCd !=''">  and a.item_spec_cd = #i{temSpecCd}
+        </if>
+    </select>
+
+    <delete id="deleteFtpItemAttrsbyTaskId" parameterType="java.util.HashMap">
+        DELETE
+        FROM SAOP_FTP_TASK_ATTR A
+        WHERE A.TASKID = #{taskId}
+    </delete>
+
+    <!-- 执行 存储过程 -->
+    <update id="calltaskfunction" parameterType="java.util.HashMap" statementType="CALLABLE">
+        {call $functionname$()}
+    </update>
+
+
+    <update id="calltaskfunctionwithparam" parameterMap="TaskFunctionProcParameters">
+        { call $functionname$(?,?)}
+    </update>
+
+
+    <insert id="saveTaskRunLog"
+            parameterType="com.java110.entity.listener.FtpTaskLog">
+        insert into
+        cep_ftp_tasklog(taskid,u_or_d,state,serverfilename,localfilename,filelength)
+        values(#{taskid},#{uord},#{state},#{serverfilename},#{localfilename},#{filelength})
+    </insert>
+
+    <update id="updateTaskRunLog"
+            parameterType="com.java110.entity.listener.FtpTaskLog">
+        update cep_ftp_tasklog set update_date=now()
+        <if test="state != null and state !=''">,state = #{state}</if>
+        where logid=#{logid}
+    </update>
+    <insert id="saveTaskRunDetailLog"
+            parameterType="com.java110.entity.listener.FtpTaskLogDetail">
+        insert into
+        cep_ftp_tasklog_detail(logid,taskid,state,tnum,begin,end,data,havedown,remark,SERVERFILENAME,LOCALFILENAME)
+        values(#{logid},#{taskid},#{state},#{tnum},#{begin},#{end},#{data},#{havedown},#{remark},#{serverfilename},#{localfilename})
+    </insert>
+    <update id="updateTaskRunDetailLog"
+            parameterType="com.java110.entity.listener.FtpTaskLogDetail">
+        update cep_ftp_tasklog_detail set update_date=now()
+        <if test="state != null and state !=''">,state = #{state}</if>
+        <if test="data != null and data !=''">,data = #{data}</if>
+        <if test="havedown != null and havedown !=''">,havedown = #{havedown}</if>
+        <if test="remark != null and remark !=''">,remark = #{remark}</if>
+        where id=#id#
+    </update>
+
+    <insert id="insertFileData2Table" parameterType="String">
+        $value$
+    </insert>
+
+    <select id="execConfigSql" parameterType="String" resultType="String">
+        $value$
+    </select>
+
+
+    <select id="queryTableColInfo" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        select distinct column_name,data_type
+        from all_tab_columns
+        where table_name=#tablename#
+        <if test="username != null and username !=''">
+            owner=#{username}
+        </if>
+        <if test="column_name != null and column_name !=''">
+            column_name in($colnames$)
+        </if>
+    </select>
+
+ </mapper>

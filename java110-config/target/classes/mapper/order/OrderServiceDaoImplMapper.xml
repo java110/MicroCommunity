@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="centerServiceDaoImpl">
+
+    <!--order_list order_list_attr  返回结果封装-->
+    <resultMap type="com.java110.entity.order.OrderList" id="orderListMap">
+        <id column="olId" jdbcType="VARCHAR" property="olId"/>
+        <result column="channelId" jdbcType="VARCHAR" property="channelId"/>
+        <result column="custId" jdbcType="VARCHAR" property="custId"/>
+        <result column="olTypeCd" jdbcType="VARCHAR" property="olTypeCd"/>
+        <result column="extSystemId" jdbcType="VARCHAR" property="extSystemId"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_dt" jdbcType="TIMESTAMP" property="create_dt"/>
+        <result column="status_cd" jdbcType="VARCHAR" property="status_cd"/>
+        <!-- 一对多关系 -->
+        <collection property="orderListAttrs" javaType="com.java110.entity.order.OrderListAttr">
+            <id property="olId" column="olId"/>
+            <result property="attrCd" column="attrCd"/>
+            <result property="value" column="value"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+
+    <!--order_list order_list_attr  返回结果封装-->
+    <resultMap type="com.java110.entity.order.BusiOrder" id="busiOrderMap">
+        <id column="olId" jdbcType="VARCHAR" property="olId"/>
+        <result column="boId" jdbcType="VARCHAR" property="boId"/>
+        <result column="actionTypeCd" jdbcType="VARCHAR" property="actionTypeCd"/>
+        <result column="status_cd" jdbcType="VARCHAR" property="status_cd"/>
+        <result column="create_dt" jdbcType="TIMESTAMP" property="create_dt"/>
+        <result column="start_dt" jdbcType="TIMESTAMP" property="start_dt"/>
+        <result column="end_dt" jdbcType="TIMESTAMP" property="end_dt"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <!-- 一对多关系 -->
+        <collection property="busiOrderAttrs" javaType="com.java110.entity.order.BusiOrderAttr">
+            <id property="boId" column="boId"/>
+            <result property="attrCd" column="attrCd"/>
+            <result property="value" column="value"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+
+    <!--保存数据至过程表 bo_cust 中 -->
+    <insert id="saveDataToBoOrderList" parameterType="com.java110.entity.order.OrderList">
+        <![CDATA[
+            insert into order_list(olId,channelId,custId,olTypeCd,extSystemId,remark)
+            values(#{olId},#{channelId},#{custId},#{olTypeCd},#{extSystemId},#{remark})
+        ]]>
+    </insert>
+    <!-- 保存数据至过程表bo_cust_attr 中-->
+    <insert id="saveDataToOrderListAttr" parameterType="com.java110.entity.order.OrderListAttr">
+        <![CDATA[
+            insert into order_list_attr(olId,attrCd,value)
+            values(#{boId},#{attrCd},#{value})
+        ]]>
+    </insert>
+    <!-- 保存 实例客户信息 cust -->
+    <insert id="saveDataToBusiOrder" parameterType="com.java110.entity.order.BusiOrder">
+        <![CDATA[
+            insert into busi_order(boId,olId,actionTypeCd,status_cd,start_dt,end_dt,remark)
+            values(#{boId},#{olId},#{actionTypeCd},#{status_cd},#{start_dt},#{end_dt},#{remark})
+        ]]>
+    </insert>
+    <!-- 删除实例客户信息 cust -->
+    <insert id="saveDataToBusiOrderAttr" parameterType="com.java110.entity.order.BusiOrderAttr">
+        <![CDATA[
+            insert into busi_order_attr(boId,attrCd,value)
+            values(#{boId},#{attrCd},#{value})
+        ]]>
+    </insert>
+    <!-- 查询订单信息(order_list order_list_attr) {'olId':'71234567','extSystemId':'','custId':'','channelId':''} -->
+    <select id="queryOrderListAndAttr" parameterType="com.java110.entity.order.OrderList" resultMap="orderListMap">
+            select ol.olId,ol.channelId,ol.custId,ol.olTypeCd,ol.extSystemId,ol.remark,ol.create_dt,ol.status_cd,ola.attrCd,ola.value,
+            (select ac.name from attr ac where ac.attrCd = ola.attrCd limit 0) name
+            from order_list ol , order_list_attr ola where ol.olId = ola.olId and ol.status_cd in ('0')
+        <if test="olId != null and olId != ''">
+           and ol.olId = #{olId}
+        </if>
+
+        <if test="extSystemId != null and extSystemId != ''">
+            and ol.extSystemId = #{extSystemId}
+        </if>
+
+        <if test="custId != null and custId != ''">
+            and ol.channelId = #{channelId}
+        </if>
+
+    </select>
+    <!-- 查询订单信息 busi_order busi_order_attr-->
+    <select id="queryBusiOrderAndAttr" parameterType="com.java110.entity.order.BusiOrder" resultMap="busiOrderMap">
+        select bo.boId,bo.olId,bo.actionTypeCd,bo.status_cd,bo.start_dt,bo.end_dt,bo.remark,boa.attrCd,value,
+        (select ac.name from attr ac where ac.attrCd = ola.attrCd limit 0) name
+        from busi_order bo,busi_order_attr boa where bo.boId = boa.boId and bo.status_cd in ('0')
+        <if test="olId != null and olId != ''">
+            and bo.olId = #{olId}
+        </if>
+        <if test="boId != null and boId != ''">
+            and bo.boId = #{boId}
+        </if>
+        <if test="actionTypeCd !=null and actionTypeCd != ''">
+
+            and bo.actionTypeCd in (#{actionTypeCd})
+
+        </if>
+    </select>
+
+</mapper>

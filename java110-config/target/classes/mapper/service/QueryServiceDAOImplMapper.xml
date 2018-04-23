@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="queryServiceDAOImpl">
+
+    <resultMap type="com.java110.entity.service.ServiceSql" id="serviceSqlMap">
+        <result column="service_code" jdbcType="VARCHAR" property="serviceCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="params" jdbcType="VARCHAR" property="params"/>
+        <result column="query_model" jdbcType="VARCHAR" property="queryModel"/>
+        <result column="sql" jdbcType="CLOB" property="sql"/>
+        <result column="proc" jdbcType="VARCHAR" property="proc"/>
+        <result column="template" jdbcType="CLOB" property="template"/>
+        <result column="status_cd" jdbcType="VARCHAR" property="statusCd"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <parameterMap type="java.util.Map" id="qryProcParam">
+        <parameter property="resMsg" javaType="java.lang.String" jdbcType="CLOB" mode="OUT" />
+    </parameterMap>
+
+    <!--执行查询sql -->
+    <select id="executeSql" parameterType="String" resultType="Map">
+        ${value}
+    </select>
+    <!--执行 update sql-->
+    <update id="updateSql" parameterMap="String">
+        ${value}
+    </update>
+
+    <select id="executeProc" parameterMap="qryProcParam">
+        {call ${procNameInfo}?)}
+    </select>
+
+    <update id="updateProc" parameterMap="qryProcParam">
+        {call ${procNameInfo}?)}
+    </update>
+
+    <select id="qureyServiceSqlAll" resultMap="serviceSqlMap">
+        SELECT css.service_code,css.name,css.params,css.query_model,css.sql,
+        css.proc,css.template,css.remark,css.status_cd
+        FROM c_service_sql css WHERE css.status_cd = '0'
+    </select>
+
+</mapper>
