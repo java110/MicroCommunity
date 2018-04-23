@@ -11,6 +11,7 @@ import com.java110.common.constant.KafkaConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.*;
+import com.java110.common.factory.AuthenticationFactory;
 import com.java110.common.factory.DataFlowFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
@@ -167,6 +168,13 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "transactionId 不能为空");
+        }
+
+        if(!StringUtil.isNullOrNone(dataFlow.getAppRoutes().get(0).getSecurityCode())){
+            String sign = AuthenticationFactory.dataFlowMd5(dataFlow);
+            if(!sign.equals(dataFlow.getReqSign())){
+                throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "签名失败");
+            }
         }
 
         if (StringUtil.isNullOrNone(dataFlow.getUserId())) {

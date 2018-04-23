@@ -21,12 +21,12 @@ import java.util.Map;
  * Created by wuxw on 2018/4/20.
  */
 @RestController
-public class QueryApi extends BaseController {
+public class BusinessApi extends BaseController {
 
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
 
-    @RequestMapping(path = "/queryApi/query",method= RequestMethod.GET)
+    @RequestMapping(path = "/businessApi/query",method= RequestMethod.GET)
     public String queryGet(HttpServletRequest request) {
         return ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
@@ -48,11 +48,45 @@ public class QueryApi extends BaseController {
      * @return
      */
     @RequestMapping(path = "/queryApi/query",method= RequestMethod.POST)
-    public String servicePost(@RequestBody String businessInfo) {
+    public String queryPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
             initConfig(dataQuery);
             queryServiceSMOImpl.commonQueryService(dataQuery);
+            return dataQuery.getResponseInfo().toJSONString();
+        }catch (Exception e){
+            logger.error("请求订单异常",e);
+            return ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+        }
+    }
+
+    @RequestMapping(path = "/businessApi/do",method= RequestMethod.GET)
+    public String doGet(HttpServletRequest request) {
+        return ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+    }
+
+    /**
+     * {
+     "bId":"12345678",
+     "serviceCode": "querycustinfo",
+     "serviceName": "查询客户",
+     "remark": "备注",
+     "datas": {
+     "params": {
+     //这个做查询时的参数
+     }
+     //这里是具体业务
+     }
+     }
+     * @param businessInfo
+     * @return
+     */
+    @RequestMapping(path = "/businessApi/do",method= RequestMethod.POST)
+    public String doPost(@RequestBody String businessInfo) {
+        try {
+            DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
+            initConfig(dataQuery);
+            queryServiceSMOImpl.commonDoService(dataQuery);
             return dataQuery.getResponseInfo().toJSONString();
         }catch (Exception e){
             logger.error("请求订单异常",e);

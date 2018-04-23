@@ -17,4 +17,13 @@ public interface IQueryServiceSMO {
      * @throws BusinessException
      */
     public void commonQueryService(DataQuery dataQuery) throws BusinessException;
+
+
+    /**
+     * c_common_sql
+     * 公共受理服务
+     * @return
+     * @throws BusinessException
+     */
+    public void commonDoService(DataQuery dataQuery) throws BusinessException;
 }

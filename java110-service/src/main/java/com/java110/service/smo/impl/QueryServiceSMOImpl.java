@@ -57,7 +57,72 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         }
 
     }
+    @Override
+    public void commonDoService(DataQuery dataQuery) throws BusinessException {
+        //查询缓存查询 对应处理的ServiceSql
+        try {
+            ServiceSql currentServiceSql = ServiceSqlCache.getServiceSql(dataQuery.getServiceCode());
+            if (currentServiceSql == null) {
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"未提供该服务 serviceCode = " + dataQuery.getServiceCode());
+            }
+            if ("".equals(currentServiceSql.getQueryModel())) {
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"配置服务 serviceCode = " + dataQuery.getServiceCode() + " 错误，未配置QueryModel,请联系管理员");
+            }
+            dataQuery.setServiceSql(currentServiceSql);
+            if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
+                doExecuteUpdateSql(dataQuery);
+                return;
+            }
+            doExecuteUpdateProc(dataQuery);
+        }catch (BusinessException e){
+            logger.error("公用查询异常：",e);
+            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
+                    e.getMessage()));
+        }
 
+    }
+
+    /**
+     * {"PARAM:"{
+     "param1": "$.a.#A#Object",
+     "param2": "$.a.b.A#B#Array",
+     "param3": "$.a.b.c.A.B#C#Array"
+     },"TEMPLATE":"{}"
+     }
+     * 执行sql
+     * @param dataQuery
+     */
+    private void doExecuteUpdateSql(DataQuery dataQuery) throws BusinessException{
+
+        try {
+            JSONObject params = dataQuery.getRequestParams();
+            JSONObject sqlObj = JSONObject.parseObject(dataQuery.getServiceSql().getSql());
+
+            String currentSql = "";
+            for(String key : sqlObj.keySet()) {
+                currentSql = sqlObj.getString(key);
+                String[] sqls = currentSql.split("#");
+                String currentSqlNew = "";
+                for (int sqlIndex = 0; sqlIndex < sqls.length; sqlIndex++) {
+                    if (sqlIndex % 2 == 0) {
+                        currentSqlNew += sqls[sqlIndex];
+                        continue;
+                    }
+                    currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
+                }
+
+                int flag = queryServiceDAOImpl.updateSql(currentSqlNew);
+
+                if (flag < 1) {
+                    throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR, "调用接口失败");
+                }
+            }
+
+        }catch (Exception e){
+            logger.error("数据交互异常：",e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"数据交互异常。。。");
+        }
+    }
     /**
      * {"PARAM:"{
      "param1": "$.a.#A#Object",
@@ -166,6 +231,27 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         }
 
     }
+
+    /**
+     * 执行存储
+     * @param dataQuery
+     */
+    private void doExecuteUpdateProc(DataQuery dataQuery){
+        Map info = new TreeMap();
+        info.put("procName",dataQuery.getServiceSql().getProc());
+        JSONObject params = dataQuery.getRequestParams();
+        info.putAll(params);
+
+        String jsonStr = queryServiceDAOImpl.updateProc(info);
+
+        if(!Assert.isJsonObject(jsonStr)){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"存储过程 procName = " + dataQuery.getServiceSql().getProc() + " 返回结果不是Json格式");
+        }
+
+        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+                "成功",JSONObject.parseObject(jsonStr)));
+    }
+
 
     /**
      * 执行存储

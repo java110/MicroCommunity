@@ -20,14 +20,22 @@
         <parameter property="resMsg" javaType="java.lang.String" jdbcType="CLOB" mode="OUT" />
     </parameterMap>
 
-    <!--保存订单信息 c_orders 中 -->
+    <!--执行查询sql -->
     <select id="executeSql" parameterType="String" resultType="Map">
         ${value}
     </select>
+    <!--执行 update sql-->
+    <update id="updateSql" parameterMap="String">
+        ${value}
+    </update>
 
     <select id="executeProc" parameterMap="qryProcParam">
         {call ${procNameInfo}?)}
     </select>
+
+    <update id="updateProc" parameterMap="qryProcParam">
+        {call ${procNameInfo}?)}
+    </update>
 
     <select id="qureyServiceSqlAll" resultMap="serviceSqlMap">
         SELECT css.service_code,css.name,css.params,css.query_model,css.sql,

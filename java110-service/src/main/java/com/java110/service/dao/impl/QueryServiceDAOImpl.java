@@ -23,6 +23,10 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
         return sqlSessionTemplate.selectList("queryServiceDAOImpl.executeSql",sql);
     }
 
+    public int updateSql(String sql){
+        return sqlSessionTemplate.update("queryServiceDAOImpl.updateSql",sql);
+    }
+
     @Override
     public String executeProc(Map<String,Object> paramsInfo) {
         String paramsInfoStr = "";
@@ -41,6 +45,28 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
         paramsInfo.put("paramsInfo",paramsInfoStr);
 
         sqlSessionTemplate.selectOne("queryServiceDAOImpl.executeProc",paramsInfo);
+
+        return paramsInfo.get("resMsg") ==null ?"" :paramsInfo.get("resMsg").toString();
+    }
+
+    @Override
+    public String updateProc(Map<String,Object> paramsInfo) {
+        String paramsInfoStr = "";
+        for (String key : paramsInfo.keySet()){
+            if("procName".equals(key)){
+                paramsInfoStr += (paramsInfo.get("procName") + "(");
+            }else{
+                if(StringUtil.isNullOrNone(paramsInfo.get(key))){
+                    paramsInfoStr += "'',";
+                }else{
+                    paramsInfoStr += "'"+paramsInfo.get(key)+"',";
+                }
+            }
+        }
+
+        paramsInfo.put("paramsInfo",paramsInfoStr);
+
+        sqlSessionTemplate.update("queryServiceDAOImpl.updateProc",paramsInfo);
 
         return paramsInfo.get("resMsg") ==null ?"" :paramsInfo.get("resMsg").toString();
     }

@@ -3,6 +3,7 @@ package com.java110.common.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.factory.AuthenticationFactory;
 import com.java110.entity.center.DataFlow;
 
 import java.util.Date;
@@ -49,9 +50,13 @@ public class ResponseTemplateUtil {
 
         JSONObject responseInfo = JSONObject.parseObject("{\"orders\":{\"response\":{}}}");
         JSONObject orderInfo = responseInfo.getJSONObject("orders");
-        orderInfo.put("TransactionId",transactionId);
-        orderInfo.put("ResponseTime",DateUtil.getDefaultFormateTimeString(new Date()));
-        orderInfo.put("sign",sign);
+        orderInfo.put("transactionId",transactionId);
+        orderInfo.put("responseTime",DateUtil.getDefaultFormateTimeString(new Date()));
+        if(StringUtil.isNullOrNone(sign)) {
+            orderInfo.put("sign", AuthenticationFactory.md5(transactionId, orderInfo.getString("responseTime"), business != null && business.size() > 0 ? business.toJSONString() : ""));
+        }else {
+            orderInfo.put("sign",sign);
+        }
         JSONObject orderResponseInfo = orderInfo.getJSONObject("response");
         orderResponseInfo.put("code",code);
         orderResponseInfo.put("message",message);
@@ -79,7 +84,11 @@ public class ResponseTemplateUtil {
      * @return
      */
     public static JSONObject createCommonResponseJson(DataFlow dataFlow){
-        return dataFlow.getResponseBusinessJson();
+        JSONObject responseJson = dataFlow.getResponseBusinessJson();
+        JSONObject orders = responseJson.getJSONObject("orders");
+        JSONArray business = responseJson.getJSONArray("business");
+        orders.put("sign",AuthenticationFactory.md5(orders.getString("transactionId"),orders.getString("responseTime"),business.toJSONString()));
+        return responseJson;
     }
 
     /**

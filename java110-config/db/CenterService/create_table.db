@@ -196,7 +196,7 @@ insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,
 values('query.user.userInfo','1','Q','用户信息查询',1,'http://...','8000418001','0');
 
 insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.order.orderInfo','1','Q','订单信息',1,'http://localhost:8001/queryApi/query','8000418001','0');
+values('query.order.orderInfo','1','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.order.orderInfo','订单信息','oId','1','{
