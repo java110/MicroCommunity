@@ -16,9 +16,9 @@ public interface IQueryServiceDAO {
      * @param sql
      * @return
      */
-    public List<Map> executeSql(String sql);
+    public List<Map<String,Object>> executeSql(String sql,Object []params);
 
-    public int updateSql(String sql);
+    public int updateSql(String sql,Object[] params);
 
     /**
      * 执行存储过程

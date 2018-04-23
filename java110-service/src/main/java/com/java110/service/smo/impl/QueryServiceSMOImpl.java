@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by wuxw on 2018/4/19.
@@ -104,7 +101,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         try {
             JSONObject params = dataQuery.getRequestParams();
             JSONObject sqlObj = JSONObject.parseObject(dataQuery.getServiceSql().getSql());
-
+            List<Object> currentParams = new ArrayList<Object>();
             String currentSql = "";
             for(String key : sqlObj.keySet()) {
                 currentSql = sqlObj.getString(key);
@@ -115,13 +112,15 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                         currentSqlNew += sqls[sqlIndex];
                         continue;
                     }
-                    currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
+                    currentSqlNew += "?";
+                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'");
+                    //currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
                 }
 
-                int flag = queryServiceDAOImpl.updateSql(currentSqlNew);
+                int flag = queryServiceDAOImpl.updateSql(currentSqlNew,currentParams.toArray());
 
                 if (flag < 1) {
-                    throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR, "调用接口失败");
+                    throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR, "数据交互失败");
                 }
             }
 
@@ -215,6 +214,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         try {
             JSONObject params = dataQuery.getRequestParams();
             JSONObject sqlObj = JSONObject.parseObject(dataQuery.getServiceSql().getSql());
+            List<Object> currentParams = new ArrayList<Object>();
 
             String currentSql = sqlObj.getString(dataQuery.getTemplateKey());
             String[] sqls = currentSql.split("#");
@@ -227,17 +227,22 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 if (sqls[sqlIndex].startsWith("PARENT_")) {
                     for (String key : obj.keySet()) {
                         if (sqls[sqlIndex].substring("PARENT_".length()).equals(key)) {
-                            currentSqlNew += obj.get(key) instanceof Integer
-                                    ? obj.getInteger(key) : "'" + obj.getString(key) + "'";
+                            /*currentSqlNew += obj.get(key) instanceof Integer
+                                    ? obj.getInteger(key) : "'" + obj.getString(key) + "'";*/
+                            currentSqlNew += "?";
+                            currentParams.add(obj.get(key) instanceof Integer
+                                    ? obj.getInteger(key) : "'" + obj.getString(key) + "'");
                             continue;
                         }
                     }
                 } else {
-                    currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
+                    currentSqlNew += "?";
+                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'");
+                    //currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
                 }
             }
 
-            List<Map> results = queryServiceDAOImpl.executeSql(currentSqlNew);
+            List<Map<String,Object>> results = queryServiceDAOImpl.executeSql(currentSqlNew, currentParams.toArray());
 
             if (results == null || results.size() == 0) {
                 obj.put(values[1], new JSONObject());
