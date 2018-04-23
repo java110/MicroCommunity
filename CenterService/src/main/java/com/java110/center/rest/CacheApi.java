@@ -24,7 +24,7 @@ public class CacheApi extends BaseController{
     public String flushGet(HttpServletRequest request) {
 
         return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+                ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
 
     @RequestMapping(path = "/cacheApi/flush",method= RequestMethod.POST)
@@ -34,10 +34,10 @@ public class CacheApi extends BaseController{
         }catch (Exception e){
             logger.error("刷新缓存异常",e);
             return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                    ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+                    ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
         }
         return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_SUCCESS,"成功").toJSONString();
+                ResponseConstant.RESULT_CODE_SUCCESS,"成功").toJSONString();
     }
 
     public ICenterServiceCacheSMO getCenterServiceCacheSMOImpl() {

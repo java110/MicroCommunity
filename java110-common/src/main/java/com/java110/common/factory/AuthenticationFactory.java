@@ -71,8 +71,9 @@ public class AuthenticationFactory {
         JSONObject orders = responseJson.getJSONObject("orders");
         JSONArray business = responseJson.getJSONArray("business");
         if(dataFlow == null || dataFlow.getAppRoutes() == null || dataFlow.getAppRoutes().size() == 0) {
-            orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
-                    business.toJSONString(), MappingCache.getValue(MappingConstant.KEY_DEFAULT_SECURITY_CODE)));
+            /*orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
+                    business.toJSONString(), MappingCache.getValue(MappingConstant.KEY_DEFAULT_SECURITY_CODE)));*/
+            orders.put("sign","");
         }else {
             orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
                     business.toJSONString(), dataFlow.getAppRoutes().get(0).getSecurityCode()));
@@ -167,7 +168,7 @@ public class AuthenticationFactory {
     }
 
     /**
-     * 加载公钥
+     * 加载私钥
      * @param privateKeyPem
      * @param algorithm
      * @return
@@ -190,7 +191,7 @@ public class AuthenticationFactory {
     }
 
     /**
-     * 加载私钥
+     * 加载公钥
      * @param publicPemData
      * @param algorithm
      * @return

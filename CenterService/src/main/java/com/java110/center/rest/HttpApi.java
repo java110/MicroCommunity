@@ -27,7 +27,7 @@ public class HttpApi extends BaseController {
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
         return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+                ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
 
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.POST)
@@ -41,7 +41,7 @@ public class HttpApi extends BaseController {
         }catch (Exception e){
             logger.error("请求订单异常",e);
             return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                    ResponseConstant.NO_NEED_SIGN,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+                    ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
         }
     }
 
