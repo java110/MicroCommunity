@@ -11,6 +11,7 @@
         <result column="query_model" jdbcType="VARCHAR" property="queryModel"/>
         <result column="sql" jdbcType="CLOB" property="sql"/>
         <result column="proc" jdbcType="VARCHAR" property="proc"/>
+        <result column="java_script" jdbcType="CLOB" property="javaScript"/>
         <result column="template" jdbcType="CLOB" property="template"/>
         <result column="status_cd" jdbcType="VARCHAR" property="statusCd"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
@@ -39,7 +40,7 @@
 
     <select id="qureyServiceSqlAll" resultMap="serviceSqlMap">
         SELECT css.service_code,css.name,css.params,css.query_model,css.sql,
-        css.proc,css.template,css.remark,css.status_cd
+        css.proc,css.java_script,css.template,css.remark,css.status_cd
         FROM c_service_sql css WHERE css.status_cd = '0'
     </select>
 

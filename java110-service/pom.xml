@@ -48,6 +48,10 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
         </dependency>
         -->
+        <dependency>
+            <groupId>org.beanshell</groupId>
+            <artifactId>bsh-core</artifactId>
+        </dependency>
 
 
         <dependency>
@@ -85,6 +89,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
         </dependency>
     </dependencies>
 </project>

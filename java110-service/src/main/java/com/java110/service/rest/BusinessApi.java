@@ -47,7 +47,7 @@ public class BusinessApi extends BaseController {
      * @param businessInfo
      * @return
      */
-    @RequestMapping(path = "/queryApi/query",method= RequestMethod.POST)
+    @RequestMapping(path = "/businessApi/query",method= RequestMethod.POST)
     public String queryPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
@@ -59,7 +59,7 @@ public class BusinessApi extends BaseController {
             return ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
         }
     }
-
+    @Deprecated
     @RequestMapping(path = "/businessApi/do",method= RequestMethod.GET)
     public String doGet(HttpServletRequest request) {
         return ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
@@ -81,6 +81,7 @@ public class BusinessApi extends BaseController {
      * @param businessInfo
      * @return
      */
+    @Deprecated
     @RequestMapping(path = "/businessApi/do",method= RequestMethod.POST)
     public String doPost(@RequestBody String businessInfo) {
         try {

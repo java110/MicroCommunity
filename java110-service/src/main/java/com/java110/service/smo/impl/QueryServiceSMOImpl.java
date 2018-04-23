@@ -1,5 +1,6 @@
 package com.java110.service.smo.impl;
 
+import bsh.Interpreter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -48,6 +49,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
                 doExecuteSql(dataQuery);
                 return;
+            }else if(CommonConstant.QUERY_MODE_JAVA.equals(currentServiceSql.getQueryModel())){
+                doExecuteJava(dataQuery);
+                return ;
             }
             doExecuteProc(dataQuery);
         }catch (BusinessException e){
@@ -72,6 +76,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
                 doExecuteUpdateSql(dataQuery);
                 return;
+            }else if(CommonConstant.QUERY_MODE_JAVA.equals(currentServiceSql.getQueryModel())){
+                doExecuteJava(dataQuery);
+                return ;
             }
             doExecuteUpdateProc(dataQuery);
         }catch (BusinessException e){
@@ -118,6 +125,35 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 }
             }
 
+        }catch (Exception e){
+            logger.error("数据交互异常：",e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"数据交互异常。。。");
+        }
+    }
+
+    /**
+     * 执行java脚本
+     * @param dataQuery
+     * @throws BusinessException
+     */
+    private void doExecuteJava(DataQuery dataQuery) throws BusinessException{
+        try {
+            JSONObject params = dataQuery.getRequestParams();
+            String javaCode = dataQuery.getServiceSql().getJavaScript();
+
+            Interpreter interpreter = new Interpreter();
+            interpreter.eval(javaCode);
+            String param = "";
+            for(String key : params.keySet()){
+                param += (params.getString(key) + ",");
+            }
+
+            if(param.endsWith(",")){
+                param = param.substring(0,param.length()-1);
+            }
+
+            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+                    "成功",JSONObject.parseObject(interpreter.eval("execute("+param+")").toString())));
         }catch (Exception e){
             logger.error("数据交互异常：",e);
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"数据交互异常。。。");

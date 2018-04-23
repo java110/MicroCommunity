@@ -173,6 +173,7 @@ CREATE TABLE c_service_sql(
     query_model VARCHAR(1) NOT NULL COMMENT '查询方式 1、sql,2、存储过程',
     `sql` LONGTEXT COMMENT '执行sql',
     proc VARCHAR(200) COMMENT '存储过程名称',
+    java_script LONGTEXT COMMENT '执行java脚本代码',
     template LONGTEXT COMMENT '输出模板',
     remark VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

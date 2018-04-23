@@ -31,6 +31,7 @@ public class CommonConstant {
 
     public final static String QUERY_MODEL_SQL = "1";
     public final static String QUERY_MODEL_PROC = "2";
+    public final static String QUERY_MODE_JAVA = "3";
 
     /**
      * 加密 开关

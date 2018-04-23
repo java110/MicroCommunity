@@ -24,6 +24,8 @@ public class ServiceSql implements Serializable{
 
     private String proc;
 
+    private String javaScript;
+
     private String template;
 
     private String statusCd;
@@ -109,5 +111,11 @@ public class ServiceSql implements Serializable{
         this.remark = remark;
     }
 
+    public String getJavaScript() {
+        return javaScript;
+    }
 
+    public void setJavaScript(String javaScript) {
+        this.javaScript = javaScript;
+    }
 }

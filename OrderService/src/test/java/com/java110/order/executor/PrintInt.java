@@ -11,7 +11,7 @@ public class PrintInt implements Callable<Integer> {
 
         System.out.println("1234567");
 
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         throwException();
 
         return 1111;
