@@ -33,4 +33,6 @@ public class StatusConstant {
     public final static String REQUEST_BUSINESS_TYPE = "Q";
     public final static String RESPONSE_BUSINESS_TYPE = "B";
     public final static String NOTIFY_BUSINESS_TYPE = "N";
+
+
 }

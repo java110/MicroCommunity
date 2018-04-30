@@ -2,6 +2,8 @@ package com.java110.core.base.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.NoAuthorityException;
 import com.java110.common.log.LoggerEngine;
 
 import com.java110.core.base.AppBase;
@@ -19,6 +21,16 @@ import java.util.*;
  */
 public class BaseController extends AppBase {
 
+
+    /**
+     * 检查用户登录
+     * @throws NoAuthorityException
+     */
+    protected void checkLogin() throws NoAuthorityException{
+        if(false){
+            throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"用户未登录，请登录！");
+        }
+    }
 
 
     /**

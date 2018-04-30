@@ -44,7 +44,7 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
             while(rs.next()){
                 Map<String,Object> map = new HashMap<String,Object>();
                 for(int i = 0 ; i < rsmd.getColumnCount() ; i++){
-                    String col_name = rsmd.getColumnName(i+1);
+                    String col_name = rsmd.getColumnLabel(i+1);
                     Object col_value = rs.getObject(col_name);
                     if(col_value == null){
                         col_value = "";

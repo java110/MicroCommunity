@@ -6,6 +6,7 @@ import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.NoAuthorityException;
+import com.java110.common.util.StringUtil;
 import com.java110.entity.center.DataFlow;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -70,13 +71,13 @@ public class AuthenticationFactory {
     public static void putSign(DataFlow dataFlow,JSONObject responseJson){
         JSONObject orders = responseJson.getJSONObject("orders");
         JSONArray business = responseJson.getJSONArray("business");
-        if(dataFlow == null || dataFlow.getAppRoutes() == null || dataFlow.getAppRoutes().size() == 0) {
+        if(dataFlow == null || dataFlow.getAppRoutes() == null || dataFlow.getAppRoutes().size() == 0 || StringUtil.isNullOrNone(dataFlow.getAppRoutes().get(0).getSecurityCode())) {
             /*orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
                     business.toJSONString(), MappingCache.getValue(MappingConstant.KEY_DEFAULT_SECURITY_CODE)));*/
             orders.put("sign","");
         }else {
             orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
-                    business.toJSONString(), dataFlow.getAppRoutes().get(0).getSecurityCode()));
+                    business == null ?"":business.toJSONString(), dataFlow.getAppRoutes().get(0).getSecurityCode()));
         }
     }
 

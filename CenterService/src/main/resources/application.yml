@@ -10,7 +10,8 @@ jedis:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://192.168.31.199:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8001
 spring:
@@ -21,9 +22,9 @@ spring:
     host: 192.168.31.199
     port: 6379
     pool:
-      max-active: 8
-      max-wait: -1
-      max-idle: 8
+      max-active: 300
+      max-wait: 10000
+      max-idle: 100
       min-idle: 0
       timeout: 0
   datasource:

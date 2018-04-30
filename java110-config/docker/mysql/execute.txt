@@ -1,0 +1,9 @@
+docker build -t java110/docker-mysql .
+
+docker run -ti --name mysql_test -e MYSQL_ROOT_PASSWORD=123456 -p3306:3306 -idt java110/docker-mysql:latest
+
+docker logs -f mysql_test
+
+docker exec -it mysql_test /bin/bash
+
+mysql -uroot -p123456

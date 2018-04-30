@@ -1,0 +1,53 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.31.199:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
+server:
+  port: 7001
+spring:
+  application:
+    name: console-service
+  redis:
+    database: 0
+    host: 192.168.31.199
+    port: 6379
+    pool:
+      max-active: 300
+      max-wait: 10000
+      max-idle: 100
+      min-idle: 0
+      timeout: 0
+  datasource:
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.31.199:3306/TT
+    maxPoolPreparedStatementPerConnectionSize: 20
+    password: TT@12345678
+    testOnBorrow: false
+    testWhileIdle: true
+    minEvictableIdleTimeMillis: 300000
+    timeBetweenEvictionRunsMillis: 60000
+    testOnReturn: false
+    driverClassName: com.mysql.jdbc.Driver
+    maxActive: 20
+    username: TT
+
+  freemarker:
+    charset: UTF-8
+    cache: false
+    expose-request-attributes: true
+    request-context-attribute: request
+    expose-session-attributes: true
+    content-type: text/html
+    template-loader-path: classpath:/html/
+    suffix: .html
+    check-template-location: true
+
+

@@ -17,6 +17,12 @@ public class MappingConstant {
 
     //公钥
     public final static String KEY_PUBLIC_STRING = "PUBLIC_STRING";
+
+    //私钥(外部系统)
+    public final static String KEY_OUT_PRIVATE_STRING = "OUT_PRIVATE_STRING";
+
+    //公钥(外部系统)
+    public final static String KEY_OUT_PUBLIC_STRING = "OUT_PUBLIC_STRING";
     //解密 KEY_SIZE
     public final static String KEY_DEFAULT_DECRYPT_KEY_SIZE = "DEFAULT_DECRYPT_KEY_SIZE";
 
@@ -41,6 +47,24 @@ public class MappingConstant {
 
     //默认掩码
     public final static String KEY_DEFAULT_SECURITY_CODE = "DEFAULT_SECURITY_CODE";
+
+
+    /**
+     * 中心服务地址
+     */
+    public final static String KEY_CENTER_SERVICE_URL = "CENTER_SERVICE_URL";
+
+    /**
+     * 控制中心服务APP_ID
+     */
+    public final static String KEY_CONSOLE_SERVICE_APP_ID = "CONSOLE_SERVICE_APP_ID";
+
+    public final static String KEY_CONSOLE_SECURITY_CODE = "CONSOLE_SECURITY_CODE";
+
+    /**
+     * 控制服务是否调用接口解密处理
+     */
+    public final static String KEY_CONSOLE_SERVICE_SECURITY_ON_OFF = "CONSOLE_SERVICE_SECURITY_ON_OFF";
 
 
 

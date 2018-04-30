@@ -1,0 +1,6 @@
+docker pull redis
+
+docker run -ti --name redis_test -p6379:6379 -idt redis:latest
+
+
+docker logs -f redis_test

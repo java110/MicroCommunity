@@ -26,7 +26,7 @@
         ${value}
     </select>
     <!--执行 update sql-->
-    <update id="updateSql" parameterMap="String">
+    <update id="updateSql" parameterType="String">
         ${value}
     </update>
 

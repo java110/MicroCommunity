@@ -1,0 +1,6 @@
+docker pull wurstmeister/kafka
+
+docker run -ti --name kafka_test -p2181:2181 -p9092:9092 -idt wurstmeister/kafka:latest
+
+
+docker logs -f kafka_test

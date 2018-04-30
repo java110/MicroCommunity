@@ -34,6 +34,23 @@ public class DataFlowLinksCost {
         this.endDate = endDate;
     }
 
+
+    public String getLinksCode() {
+        return LinksCode;
+    }
+
+    public void setLinksCode(String linksCode) {
+        LinksCode = linksCode;
+    }
+
+    public String getLinksName() {
+        return LinksName;
+    }
+
+    public void setLinksName(String linksName) {
+        LinksName = linksName;
+    }
+
     public DataFlowLinksCost builder(String LinksCode, String LinksName, Date startDate, Date endDate){
         this.LinksCode = LinksCode;
         this.LinksName = LinksName;

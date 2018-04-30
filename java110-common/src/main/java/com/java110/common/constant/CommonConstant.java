@@ -36,7 +36,7 @@ public class CommonConstant {
     /**
      * 加密 开关
      */
-    public final static String ENCRYPT_ON_OFF = "ENCRYPT";
+    public final static String ENCRYPT = "ENCRYPT";
 
     public final static String ENCRYPT_KEY_SIZE = "ENCRYPT_KEY_SIZE";
 

@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
-import com.java110.common.util.ResponseTemplateUtil;
+import com.java110.common.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -26,7 +29,7 @@ public class HttpApi extends BaseController {
 
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
-        return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+        return DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
                 ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
 
@@ -40,7 +43,7 @@ public class HttpApi extends BaseController {
             return centerServiceSMOImpl.service(orderInfo, headers);
         }catch (Exception e){
             logger.error("请求订单异常",e);
-            return ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+            return DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
                     ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
         }
     }

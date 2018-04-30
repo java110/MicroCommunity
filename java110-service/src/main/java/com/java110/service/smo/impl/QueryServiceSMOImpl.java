@@ -8,9 +8,9 @@ import com.java110.common.cache.ServiceSqlCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
+import com.java110.common.factory.DataTransactionFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.common.util.ResponseTemplateUtil;
 import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by wuxw on 2018/4/19.
@@ -53,7 +56,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             doExecuteProc(dataQuery);
         }catch (BusinessException e){
             logger.error("公用查询异常：",e);
-            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
+            dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
                     e.getMessage()));
         }
 
@@ -80,7 +83,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             doExecuteUpdateProc(dataQuery);
         }catch (BusinessException e){
             logger.error("公用查询异常：",e);
-            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
+            dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
                     e.getMessage()));
         }
 
@@ -151,7 +154,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 param = param.substring(0,param.length()-1);
             }
 
-            dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+            dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                     "成功",JSONObject.parseObject(interpreter.eval("execute("+param+")").toString())));
         }catch (Exception e){
             logger.error("数据交互异常：",e);
@@ -200,7 +203,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             }
         }
 
-        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+        dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                 "成功",business));
     }
 
@@ -225,19 +228,24 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                     continue;
                 }
                 if (sqls[sqlIndex].startsWith("PARENT_")) {
+                    if(obj.isEmpty()){
+                        currentSqlNew += "?";
+                        currentParams.add("''");
+                        continue;
+                    }
                     for (String key : obj.keySet()) {
                         if (sqls[sqlIndex].substring("PARENT_".length()).equals(key)) {
                             /*currentSqlNew += obj.get(key) instanceof Integer
                                     ? obj.getInteger(key) : "'" + obj.getString(key) + "'";*/
                             currentSqlNew += "?";
                             currentParams.add(obj.get(key) instanceof Integer
-                                    ? obj.getInteger(key) : "'" + obj.getString(key) + "'");
+                                    ? obj.getInteger(key) : "" + obj.getString(key) + "");
                             continue;
                         }
                     }
                 } else {
                     currentSqlNew += "?";
-                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'");
+                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "" + params.getString(sqls[sqlIndex]) + "");
                     //currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
                 }
             }
@@ -289,7 +297,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"存储过程 procName = " + dataQuery.getServiceSql().getProc() + " 返回结果不是Json格式");
         }
 
-        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+        dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                 "成功",JSONObject.parseObject(jsonStr)));
     }
 
@@ -310,7 +318,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"存储过程 procName = " + dataQuery.getServiceSql().getProc() + " 返回结果不是Json格式");
         }
 
-        dataQuery.setResponseInfo(ResponseTemplateUtil.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+        dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                 "成功",JSONObject.parseObject(jsonStr)));
     }
 

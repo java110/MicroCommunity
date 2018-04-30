@@ -2,6 +2,7 @@ package com.java110.common.cache;
 
 import com.java110.common.util.SerializeUtil;
 import com.java110.entity.service.ServiceSql;
+import redis.clients.jedis.Jedis;
 
 /**
  * 缓存
@@ -15,12 +16,18 @@ public class ServiceSqlCache extends BaseCache {
      * @return
      */
     public static ServiceSql getServiceSql(String serviceCode){
-
-        Object obj = SerializeUtil.unserialize(getJedis().get(serviceCode.getBytes()));
-        if(obj instanceof ServiceSql){
-            return (ServiceSql) obj;
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            Object obj = SerializeUtil.unserialize(redis.get(serviceCode.getBytes()));
+            if(obj instanceof ServiceSql){
+                return (ServiceSql) obj;
+            }
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
         }
-
         return null;
     }
 
@@ -29,6 +36,14 @@ public class ServiceSqlCache extends BaseCache {
      * @param serviceSql
      */
     public static void setServiceSql(ServiceSql serviceSql){
-        getJedis().set(serviceSql.getServiceCode().getBytes(),SerializeUtil.serialize(serviceSql));
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set(serviceSql.getServiceCode().getBytes(),SerializeUtil.serialize(serviceSql));
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 }

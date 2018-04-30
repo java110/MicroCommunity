@@ -3,6 +3,8 @@ package com.java110.common.cache;
 import com.java110.common.constant.DomainContant;
 import com.java110.common.util.SerializeUtil;
 import com.java110.entity.mapping.Mapping;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 
@@ -20,13 +22,21 @@ public class MappingCache extends BaseCache {
      * @return
      */
     public static String getValue(String domain,String key){
-        Object object = SerializeUtil.unserialize(getJedis().get((domain+key).getBytes()));
-        if(object == null){
-            return null;
-        }
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            Object object = SerializeUtil.unserialize(redis.get((domain + key).getBytes()));
+            if (object == null) {
+                return null;
+            }
 
-        Mapping mapping = (Mapping) object;
-        return mapping.getValue();
+            Mapping mapping = (Mapping) object;
+            return mapping.getValue();
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 
     /**
@@ -40,11 +50,18 @@ public class MappingCache extends BaseCache {
     }
 
     public static Mapping getMapping(String key){
-        Object obj = SerializeUtil.unserialize(getJedis().get((DomainContant.COMMON_DOMAIN+key).getBytes()));
-        if(obj instanceof Mapping){
-            return (Mapping) obj;
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            Object obj = SerializeUtil.unserialize(redis.get((DomainContant.COMMON_DOMAIN+key).getBytes()));
+            if(obj instanceof Mapping){
+                return (Mapping) obj;
+            }
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
         }
-
         return null;
     }
 
@@ -54,7 +71,15 @@ public class MappingCache extends BaseCache {
      * @return
      */
     public static List<Mapping> getValueByDomain(String domain){
-        return SerializeUtil.unserializeList(getJedis().get(domain.getBytes()),Mapping.class);
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            return SerializeUtil.unserializeList(redis.get(domain.getBytes()),Mapping.class);
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 
     /**
@@ -62,7 +87,15 @@ public class MappingCache extends BaseCache {
      * @param mapping
      */
     public static void setVaule(Mapping mapping){
-        getJedis().set((mapping.getDomain()+mapping.getKey()).getBytes(),SerializeUtil.serialize(mapping));
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set((mapping.getDomain()+mapping.getKey()).getBytes(),SerializeUtil.serialize(mapping));
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 
     /**
@@ -70,7 +103,15 @@ public class MappingCache extends BaseCache {
      * @param mappings
      */
     public static void setValue(List<Mapping> mappings){
-        getJedis().set((mappings.get(0).getDomain()).getBytes(),SerializeUtil.serializeList(mappings));
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set((mappings.get(0).getDomain()).getBytes(),SerializeUtil.serializeList(mappings));
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 
 

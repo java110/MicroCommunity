@@ -2,6 +2,7 @@ package com.java110.common.cache;
 
 import com.java110.common.util.SerializeUtil;
 import com.java110.entity.center.AppRoute;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -18,12 +19,18 @@ public class AppRouteCache extends BaseCache {
      */
     public static List<AppRoute> getAppRoute(String appId){
         List<AppRoute> appRoutes = null;
-
-            appRoutes = SerializeUtil.unserializeList(getJedis().get(appId.getBytes()),AppRoute.class);
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            appRoutes = SerializeUtil.unserializeList(redis.get(appId.getBytes()),AppRoute.class);
             if(appRoutes == null || appRoutes.size() ==0) {
                 return null;
             }
-
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
         return appRoutes;
     }
 
@@ -33,6 +40,14 @@ public class AppRouteCache extends BaseCache {
      * @param appRoutes
      */
     public static void setAppRoute(List<AppRoute> appRoutes){
-        getJedis().set(appRoutes.get(0).getAppId().getBytes(),SerializeUtil.serializeList(appRoutes));
+        Jedis redis = null;
+        try {
+            redis = getJedis();
+            redis.set(appRoutes.get(0).getAppId().getBytes(),SerializeUtil.serializeList(appRoutes));
+        }finally {
+            if(redis != null){
+                redis.close();
+            }
+        }
     }
 }

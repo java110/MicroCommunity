@@ -13,6 +13,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.*;
 import com.java110.common.factory.AuthenticationFactory;
 import com.java110.common.factory.DataFlowFactory;
+import com.java110.common.factory.DataTransactionFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
@@ -72,10 +73,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             //6.0 调用下游系统
             invokeBusinessSystem(dataFlow);
 
-            responseJson = ResponseTemplateUtil.createCommonResponseJson(dataFlow);
+            responseJson = DataTransactionFactory.createCommonResponseJson(dataFlow);
 
         } catch (DecryptException e){ //解密异常
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+            responseJson =  DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
                     e.getResult().getCode(), e.getMessage());
         }catch (BusinessException e) {
             try {
@@ -91,25 +92,25 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 //9.0 将订单状态改为失败，人工处理。
                 updateOrderAndBusinessError(dataFlow);
             } finally {
-                responseJson = ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+                responseJson = DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                          e.getResult().getCode(), e.getMessage());
             }
 
         } catch (OrdersException e) {
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                      e.getResult().getCode(), e.getMessage());
         } catch (RuleException e) {
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                      e.getResult().getCode(), e.getMessage());
         } catch (NoAuthorityException e) {
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                      e.getResult().getCode(), e.getMessage());
         } catch (InitConfigDataException e){
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+            responseJson =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                     e.getResult().getCode(), e.getMessage());
         }catch (Exception e) {
             logger.error("内部异常了：",e);
-            responseJson =  ResponseTemplateUtil.createOrderResponseJson(dataFlow == null
+            responseJson =  DataTransactionFactory.createOrderResponseJson(dataFlow == null
                             ? ResponseConstant.NO_TRANSACTION_ID
                             : dataFlow.getTransactionId(),
                      ResponseConstant.RESULT_CODE_INNER_ERROR, "内部异常了：" + e.getMessage() + e.getLocalizedMessage());
@@ -145,7 +146,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private String decrypt(String reqJson,Map<String,String> headers) throws DecryptException{
         try {
-            if (MappingConstant.VALUE_ON.equals(headers.get(CommonConstant.ENCRYPT_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(headers.get(CommonConstant.ENCRYPT))) {
                 logger.debug("解密前字符：" + reqJson);
                 reqJson = new String(AuthenticationFactory.decrypt(reqJson.getBytes("UTF-8"), AuthenticationFactory.loadPrivateKey(MappingConstant.KEY_PRIVATE_STRING)
                         , NumberUtils.isNumber(headers.get(CommonConstant.ENCRYPT_KEY_SIZE)) ? Integer.parseInt(headers.get(CommonConstant.ENCRYPT_KEY_SIZE)) :
@@ -167,7 +168,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private String encrypt(String resJson,Map<String,String> headers){
         try {
-            if (MappingConstant.VALUE_ON.equals(headers.get(CommonConstant.ENCRYPT_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(headers.get(CommonConstant.ENCRYPT))) {
                 logger.debug("加密前字符：" + resJson);
                 resJson = new String(AuthenticationFactory.encrypt(resJson.getBytes("UTF-8"), AuthenticationFactory.loadPubKey(MappingConstant.KEY_PUBLIC_STRING)
                         , NumberUtils.isNumber(headers.get(CommonConstant.ENCRYPT_KEY_SIZE)) ? Integer.parseInt(headers.get(CommonConstant.ENCRYPT_KEY_SIZE)) :
@@ -179,6 +180,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }
         return resJson;
     }
+
+
 
     /**
      * 2.0初始化配置信息
@@ -672,7 +675,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
 
-        dataFlow.setResponseBusinessJson(ResponseTemplateUtil.createCommonResponseJson(dataFlow.getTransactionId(),
+        dataFlow.setResponseBusinessJson(DataTransactionFactory.createCommonResponseJson(dataFlow.getTransactionId(),
                  ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses));
 
         DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "同步调用业务系统总耗时", startDate);
@@ -702,7 +705,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
 
-        dataFlow.setResponseBusinessJson(ResponseTemplateUtil.createOrderResponseJson(dataFlow.getTransactionId(),
+        dataFlow.setResponseBusinessJson(DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                  ResponseConstant.RESULT_CODE_SUCCESS, "成功"));
         DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "异步调用业务系统总耗时", startDate);
         saveLogMessage(dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
@@ -737,8 +740,12 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 List<DataFlowLinksCost> dataFlowLinksCosts = dataFlow.getLinksCostDates();
                 JSONObject costDate = new JSONObject();
                 JSONArray costDates = new JSONArray();
+                JSONObject newObj = null;
                 for(DataFlowLinksCost dataFlowLinksCost : dataFlowLinksCosts){
-                    costDates.add(JSONObject.parseObject(JSONObject.toJSONString(dataFlowLinksCost)).put("dataFlowId",dataFlow.getDataFlowId()));
+                    newObj = JSONObject.parseObject(JSONObject.toJSONString(dataFlowLinksCost));
+                    newObj.put("dataFlowId",dataFlow.getDataFlowId());
+                    newObj.put("transactionId",dataFlow.getTransactionId());
+                    costDates.add(newObj);
                 }
                 costDate.put("costDates",costDates);
 

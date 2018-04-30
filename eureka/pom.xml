@@ -26,6 +26,7 @@
 
 
     <build>
+        <finalName>eureka</finalName>
         <plugins>
             <!-- docker的maven插件，官网：https://github.com/spoti
             fy/docker-maven-plugin -->
@@ -49,6 +50,13 @@
                             <include>${project.build.finalName}.jar</include>
                         </resource>
                     </resources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.java110.eureka.ConfigServerEurekaApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -27,6 +27,7 @@
         <module>java110-event</module>
         <module>CenterService</module>
         <module>java110-cacheAgent</module>
+        <module>ConsoleService</module>
     </modules>
 
     <parent>
@@ -89,6 +90,8 @@
                 <artifactId>spring-kafka</artifactId>
                 <version>1.1.1.RELEASE</version>
             </dependency>
+
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
