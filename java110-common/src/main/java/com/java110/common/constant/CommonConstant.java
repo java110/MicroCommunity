@@ -40,4 +40,11 @@ public class CommonConstant {
 
     public final static String ENCRYPT_KEY_SIZE = "ENCRYPT_KEY_SIZE";
 
+    public final static String MENU_GROUP_LEFT = "LEFT";
+
+    /**
+     * 鉴权token
+     */
+    public final static String COOKIE_AUTH_TOKEN = "java110_token";
+
 }

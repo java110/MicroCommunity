@@ -37,6 +37,7 @@ public class SequenceUtil {
         //（11+yyyymmdd+八位序列）
         prefixMap.put("attrId","11");
         prefixMap.put("transactionId","1000001");
+        prefixMap.put("pageTransactionId","1000002");
         prefixMap.put("dataFlowId","2000");
     }
 
@@ -70,6 +71,18 @@ public class SequenceUtil {
         //从内存中获取平台随机码
 
         return prefixMap.get("transactionId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId();
+    }
+
+    /**
+     * 获取交易流水ID
+     *
+     * @return
+     */
+    public static String getPageTransactionId() {
+
+        //从内存中获取平台随机码
+
+        return prefixMap.get("pageTransactionId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId();
     }
 
     public static String getOId(){

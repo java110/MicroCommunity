@@ -94,4 +94,16 @@ public class Assert extends org.springframework.util.Assert{
         }
         return true;
     }
+
+    public static Boolean isPageJsonObject(String msg){
+        try{
+            JSONObject jsonObject = JSONObject.parseObject(msg);
+            if(!jsonObject.containsKey("meta") || !jsonObject.containsKey("param")){
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 }

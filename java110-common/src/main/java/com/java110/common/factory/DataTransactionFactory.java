@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.OrderTypeCdConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
@@ -172,6 +173,31 @@ public class DataTransactionFactory {
     }
 
     /**
+     * 获取Business 内容
+     * @return
+     */
+    public static JSONArray getBusinessFromCenterServiceResponseJson(String resJson){
+
+        JSONObject paramOut = JSONObject.parseObject(resJson);
+        return paramOut.getJSONArray("business");
+    }
+
+    public static JSONObject getOneBusinessFromCenterServiceResponseJson(String resJson){
+        JSONArray paramOut = getBusinessFromCenterServiceResponseJson(resJson);
+
+        if(paramOut != null && paramOut.size() > 0){
+           JSONObject business =  paramOut.getJSONObject(0);
+           if(!"0000".equals(business.getJSONObject("response").getString("code"))){
+               return null;
+            }
+
+            return business;
+        }
+
+        return null;
+    }
+
+    /**
      * 数据加密
      * @param reqInfo
      * @param keySize
@@ -194,4 +220,58 @@ public class DataTransactionFactory {
         return new String(AuthenticationFactory.decrypt(resInfo.getBytes("UTF-8"), AuthenticationFactory.loadPrivateKey(MappingConstant.KEY_OUT_PRIVATE_STRING)
                 ,keySize),"UTF-8");
     }
+
+
+    /**
+     * 页面返回报文封装
+     *
+     * {
+     "meta":{
+     "code":"",//主要用于，日志记录
+     "message":"",
+     "responseTime":"",
+     "transactionId":"请求流水" //由系统返回
+     },
+     "data":{
+     //这里是返回参数
+     }
+     }
+     * @return
+     * @throws Exception
+     */
+    public static String pageResponseJson(String transactionId,String code,String message,JSONObject data){
+        JSONObject paramOut = JSONObject.parseObject("{\"meta\":{}}");
+        JSONObject metaObj = paramOut.getJSONObject("meta");
+        metaObj.put("transactionId",transactionId);
+        metaObj.put("code",transactionId);
+        metaObj.put("message",message);
+        metaObj.put("responseTime",DateUtil.getNowDefault());
+        if(data != null) {
+            paramOut.put("data", data);
+        }
+        return paramOut.toJSONString();
+    }
+
+    /**
+     * 页面返回封装
+     * @param code 编码
+     * @param message 信息
+     * @param data 数据
+     * @return
+     * @throws Exception
+     */
+    public static String pageResponseJson(String code,String message,JSONObject data){
+        return pageResponseJson(ResponseConstant.NO_TRANSACTION_ID,code,message,data);
+    }
+
+    /**
+     * 页面处理成功信息封装
+     * @param transactionId
+     * @return
+     * @throws Exception
+     */
+    public static String pageResponseJson(String transactionId){
+        return pageResponseJson(transactionId,ResponseConstant.RESULT_CODE_SUCCESS,"成功",null);
+    }
+
 }

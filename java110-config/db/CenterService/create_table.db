@@ -206,11 +206,18 @@ insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418001','3','Q','0'
 );
 
+insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
+'8000418002','4','Q','0'
+);
+
 insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
 values('query.user.userInfo','1','Q','用户信息查询',1,'http://...','8000418001','0');
 
 insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
 values('query.order.orderInfo','1','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.console.menu','1','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.order.orderInfo','订单信息','oId','1','{
@@ -229,6 +236,26 @@ VALUES('query.order.orderInfo','订单信息','oId','1','{
                                                          }
                                                        }"}','','0');
 
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('query.console.menu','查询菜单','manageId,menuGroup','1','{
+                                                 	"param1":"select mm.m_id mId,mm.name name,mm.level level,mm.parent_id parentId,mm.menu_group menuGroup,mm.user_id userId,mm.create_time createTime,
+                                                              mm.remark remark,mmc.url url,mmc.template template
+                                                              from m_menu_2_user mm2u,m_menu mm, m_menu_ctg mmc
+                                                              where mm2u.user_id = #manageId#
+                                                              and mm2u.m_id = mm.m_id
+                                                              AND mm.menu_group = #menuGroup#
+                                                              and mm2u.status_cd = ''0''
+                                                              and mm.status_cd = ''0''
+                                                              and mmc.m_id = mm.m_id
+                                                              and mmc.status_cd = ''0''"
+                                                 }','','{"PARAM:"{
+                                                            "param1": "$.#menus#Array"
+                                                            },"TEMPLATE":"{
+                                                         "response": {
+                                                           "code": "0000",
+                                                           "message": "成功"
+                                                         }
+                                                       }"}','','0');
 
 
 

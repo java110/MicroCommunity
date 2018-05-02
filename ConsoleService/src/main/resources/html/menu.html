@@ -14,12 +14,12 @@
 
             <b class="arrow"></b>
         </li>
-
+        <#list menus as menu>
         <li class="">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-desktop"></i>
                 <span class="menu-text">
-								编码映射管理
+								${menu.name}
 							</span>
 
                 <b class="arrow fa fa-angle-down"></b>
@@ -28,35 +28,19 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
+                <#list menu.subMenus as subMenu>
                 <li class="">
-                    <a href="#">
+                    <a href="${subMenu.url}">
                         <i class="menu-icon fa fa-caret-right"></i>
-                        添加映射关系
+                        ${subMenu.name}
                     </a>
 
                     <b class="arrow"></b>
                 </li>
-
-                <li class="">
-                    <a href="#">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        删除映射关系
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="#">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        修改映射关系
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
+                </#list>
             </ul>
         </li>
-
+        </#list>
     </ul><!-- /.nav-list -->
 
     <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">

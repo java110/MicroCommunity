@@ -1,5 +1,7 @@
 package com.java110.console.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +54,7 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
             Assert.hasLength(securityCode, "签名秘钥没有配置");
             Map paramIn = new HashMap();
             paramIn.put("manageId", manageId);
+            paramIn.put("menuGroup",CommonConstant.MENU_GROUP_LEFT);
             String responseMsg = "";
             String requestBody = DataTransactionFactory.createQueryOneCenterServiceRequestJson(appId, manageId, securityCode,
                     DataTransactionFactory.createQueryOneBusinessRequestJson(ServiceCodeConstant.SERVICE_CODE_QUERY_MENU_ITEM,
@@ -73,8 +77,19 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
                 responseMsg = restTemplate.postForObject(centerServiceUrl,requestBody,String.class);
             }
 
+        JSONObject businessObj = DataTransactionFactory.getOneBusinessFromCenterServiceResponseJson(responseMsg);
+        JSONArray menus = businessObj.getJSONArray("menus");
+        return menus.toJavaList(Map.class);
+    }
 
-        //根据
+    /**
+     * 用户登录
+     * @param userObj
+     * @return
+     * @throws SMOException
+     */
+    @Override
+    public String login(JSONObject userObj) throws SMOException {
         return null;
     }
 

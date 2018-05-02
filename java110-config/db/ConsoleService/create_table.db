@@ -1,0 +1,51 @@
+-- m_menu
+
+create table m_menu(
+    m_id INT NOT NULL AUTO_INCREMENT KEY COMMENT '菜单ID',
+    name varchar(10) not null comment '菜单名称',
+    level varchar(2) not null comment '菜单级别 一级菜单 为 1 二级菜单为2',
+    parent_id int not null comment '父类菜单id 如果是一类菜单则写为-1 如果是二类菜单则写父类的菜单id',
+    menu_group varchar(10) not null comment '菜单组 left 显示在页面左边的菜单',
+    user_id varchar(12) not null comment '创建菜单的用户id',
+    remark VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+);
+
+-- m_menu_ctg
+
+create table m_menu_ctg(
+    m_ctg_id INT NOT NULL AUTO_INCREMENT KEY COMMENT '菜单配置ID',
+    m_id INT NOT NULL COMMENT '菜单ID',
+    url varchar(100) not null comment '菜单打开地址',
+    template varchar(50) comment '页面模板 模板名称',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+);
+
+-- m_menu_2_user
+
+create table m_menu_2_user(
+    m_user_id INT NOT NULL AUTO_INCREMENT KEY COMMENT '菜单用户ID',
+    m_id int not null comment '菜单id',
+    user_id varchar(100) not null comment '用户id',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+);
+
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('系统配置','1','-1','LEFT','10001','');
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('映射管理','2','1','LEFT','10001','');
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('外部应用','2','1','LEFT','10001','');
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('路由管理','2','1','LEFT','10001','');
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('服务管理','2','1','LEFT','10001','');
+
+insert into m_menu_ctg(m_id,url,template) values(2,'http://www.java110.com','');
+insert into m_menu_ctg(m_id,url,template) values(3,'http://www.java110.com','');
+insert into m_menu_ctg(m_id,url,template) values(4,'http://www.java110.com','');
+insert into m_menu_ctg(m_id,url,template) values(5,'http://www.java110.com','');
+
+insert into m_menu_2_user(m_id,user_id) values(1,'10001');
+insert into m_menu_2_user(m_id,user_id) values(2,'10001');
+insert into m_menu_2_user(m_id,user_id) values(3,'10001');
+insert into m_menu_2_user(m_id,user_id) values(4,'10001');
+insert into m_menu_2_user(m_id,user_id) values(5,'10001');

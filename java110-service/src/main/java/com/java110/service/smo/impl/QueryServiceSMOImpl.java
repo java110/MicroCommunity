@@ -45,6 +45,13 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             if ("".equals(currentServiceSql.getQueryModel())) {
                 throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"配置服务 serviceCode = " + dataQuery.getServiceCode() + " 错误，未配置QueryModel,请联系管理员");
             }
+            //请求参数校验
+            List<String> sysParams = currentServiceSql.getParamList();
+            for(String param : sysParams) {
+                if(!dataQuery.getRequestParams().containsKey(param)){
+                    throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,"请求参数错误，请求报文中未包含参数 " + param + " 信息");
+                }
+            }
             dataQuery.setServiceSql(currentServiceSql);
             if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
                 doExecuteSql(dataQuery);

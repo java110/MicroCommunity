@@ -5,6 +5,14 @@ eureka:
       #defaultZone: http://localhost:8761/eureka/
 server:
   port: 7001
+  ssl:
+    keyStoreType: PKCS12
+    keyAlias: tomcat
+    key-store: keystore.p12
+    key-store-password: 12345678
+  session:
+      cookie:
+        http-only: true
 spring:
   application:
     name: console-service

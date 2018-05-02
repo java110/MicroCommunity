@@ -1,5 +1,6 @@
 package com.java110.console.smo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.exception.SMOException;
 
 import java.util.List;
@@ -17,4 +18,12 @@ public interface IConsoleServiceSMO {
      * @return
      */
     public List<Map> getMenuItemsByManageId(String manageId) throws SMOException,IllegalArgumentException;
+
+    /**
+     * 用户登录
+     * @param userObj
+     * @return
+     * @throws SMOException
+     */
+    public String login(JSONObject userObj) throws SMOException;
 }

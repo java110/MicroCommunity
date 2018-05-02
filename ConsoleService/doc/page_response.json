@@ -1,0 +1,11 @@
+{
+  "meta":{
+    "code":"",//主要用于，日志记录
+    "message":"",
+    "responseTime":"",
+    "transactionId":"请求流水" //由系统返回
+  },
+  "data":{
+    //这里是返回参数
+  }
+}
