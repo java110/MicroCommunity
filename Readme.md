@@ -41,7 +41,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 7、用post工具属性缓存 地址为：http://yourIp:8001/cacheApi/flush 如下图：
 
-![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507231201.jpg)
 
 
 
@@ -64,6 +64,6 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 加入钉钉java110 工作群随时了解项目进度，和java110开发者零距离沟通
 
-![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507231201.jpg)
+![image](https://github.com/java110/MicroCommunity/blob/test/dingding_java110.jpg)
 
 
