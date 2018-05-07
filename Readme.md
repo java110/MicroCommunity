@@ -10,133 +10,57 @@ java1.8 + idea/eclipse + mysql
 
 技术架构：
 
-Java + spring cloud + mybatis + mysql + activemq + redis
+Java + spring cloud + mybatis + mysql + kafka + redis
 
 
 
-1.0 小区商家 1
-美食
-外卖
-生鲜
-超市
-家政
-其他
-2.0 小区物业 2
-小区公告
-物业缴费（先不实现，只是用于通知作用，如电费，水费，气费）
-房屋登记（先不实现）
-停车位登记（先不实现）
-意见保修
-3.0 小区论坛 5
-4.0 小区二手交易服务（后期实现）
-5.0 小区拼车服务（附近小区显示5公里之内） 4
-6.0 小区运动排名 6
+服务依赖关系
 
-目前提供服务：
-
-1、上下班顺风车服务，用户发布服务，车主联系提供服务。
-
-2、超市，便利店，饭馆外卖，家政商家入驻，提供送货上门服务，主要优势为，商家可以不需要花昂贵的钱租店铺，只需在家提供服务，为小区内无工作者提供就业机会。
-
-3、为物业管理者提供免费的小区公告发布服务，方便及时查看公告，如 停电，停水 公告。
-
-4、免费意见报修服务，用户可以向客户反馈自己的意见，和需要维修的东西，以至于物业管理者及时处理
-
-5、小区论坛，方便小区内交流（正在规划中，欢迎合作）。
-
-订单调度流程：
-
-这里以wechat 服务 order 服务 user服务 为例说明
-
-![image](https://github.com/java110/MicroCommunity/blob/master/OrderService/orderDispatch.png)
+![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
 
 
-1>、受理过程 调用方发起订单受理，订单服务根据订单中每个（busiOrder节点下的actionTypeCd）业务动作，将订单信息预处理后转发相应模块受理数据。
+服务安装说明：
 
-2>、撤单过程 通用方发起撤单，订单服务根据撤单的boId 从数据库中查询信息，分别调相应服务撤单处理。
+1、安装mysql，kafka，redis,git ,maven （详细安装请Google或百度）
 
-3>、事物补偿 如果以上有失败的情况下，作废当前订单信息，订单服务发起消息广播（activemq 消息广播方式），让各模块监听广播监听相应数据，恢复以前数据。
+2、git clone https://github.com/java110/MicroCommunity.git 下载代码
 
-重要说明：
+3、在相应服务下（如：CenterService 服务） src/main/application.yml 中修改mysql地址、用户名和密码、kafka地址、redis地址 
 
-订单调度 外围系统 如用户服务系统，商户服务系统，支付服务系统，必须要实现以下接口：
+4、进入MicroCommunity 目录 执行 mvn clean install 打包
 
-1、受理接口
-
-2、作废订单接口
-
-请求协议为：
-
-{ 
-    'data':
-[
+5、配置数据
+    将 java110-config/db 下的CenterService 和 ConsoleService 中的create_table.db 导入数据库中
     
-    {
-        'olId':'123456',
-        'newBoId': '123456',
-        'boId': '222222',
-        'actionTypeCd': 'C1'
-    },
-    {
-    'olId':'123456',
-        'newBoId': '123456',
-        'boId': '222222',
-        'actionTypeCd': 'C1'
-    },
-    {
-    'olId':'123456',
-        'newBoId': '123456',
-        'boId': '222222',
-        'actionTypeCd': 'C1'
-    }
-]
-}
+
+6、启动
+
+    （1） 启动 eureka 命令为 java -jar eureka.jar
+    （2） 启动 CenterService 命令为 java -jar CenterService.jar
+    （3） 启动 ConsoleService 命令为 java -jar ConsoleService.jar
+
+7、用post工具属性缓存 地址为：http://yourIp:8001/cacheApi/flush 如下图：
+
+![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
 
 
-3、补偿事物（目前是activemq）
 
-请求报文 这里data下为所有要作废的订单boId 
+8、在浏览器输入 http://yourIp:6001/ 如下图
 
-{ 
-    'data':
-[
+![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+
+    点击高级，继续前往。
+
+9、登录系统，用户名为 admin 密码为 admin  如下图
+
+![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+
+    点击登录，进入如下图：
     
-    {
-        'boId': '222222',
-        'actionTypeCd': 'C1'
-    },
-    {
-        'boId': '222222',
-        'actionTypeCd': 'M1'
-    },
-    {
-        'boId': '222222',
-        'actionTypeCd': 'C1'
-    }
-]
-}
-
-统一返回报文模板为：
-
-{
+  ![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
 
 
- "RESULT_CODE": "0000",
- 
- "RESULT_MSG": "成功",
- 
- "RESULT_INFO":{}
-}
-
-RESULT_CODE 结果编码
-
-0000 表示成功
-
-1999 表示失败
-
-RESULT_MSG 描述信息
-
-RESULT_INFO 需要附带信息时，可以添加在这里
+10、统一接口地址：http://yourIp:8001/httpApi/service
 
 加入钉钉java110 工作群随时了解项目进度，和java110开发者零距离沟通
 

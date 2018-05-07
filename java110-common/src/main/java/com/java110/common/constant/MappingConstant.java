@@ -66,6 +66,21 @@ public class MappingConstant {
      */
     public final static String KEY_CONSOLE_SERVICE_SECURITY_ON_OFF = "CONSOLE_SERVICE_SECURITY_ON_OFF";
 
+    /**
+     * 用户秘钥
+     */
+    public final static String KEY_USER_PASSWORD_SECRET = "USER_PASSWORD_SECRET";
+
+    /**
+     * JWT 秘钥
+     */
+    public final static String KEY_JWT_SECRET = "JWT_SECRET";
+
+    /**
+     * JWT 秘钥
+     */
+    public final static String KEY_JWT_EXPIRE_TIME = "JWT_EXPIRE_TIME";
+
 
 
 }

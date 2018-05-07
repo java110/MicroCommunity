@@ -9,6 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.FilterException;
+import com.java110.common.factory.AuthenticationFactory;
 import com.java110.common.factory.DataTransactionFactory;
 import com.java110.common.util.StringUtil;
 import org.springframework.web.filter.GenericFilterBean;
@@ -40,17 +41,10 @@ public class JwtFilter extends GenericFilterBean {
             //获取token
             token = this.getToken(request);
             try {
-                Algorithm algorithm = Algorithm.HMAC256("secret");
-                JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
-                DecodedJWT jwt = verifier.verify(token);
-
-                Map<String, Claim> claims = jwt.getClaims();
-                // Add the claim to request header
+                Map<String, String> claims = AuthenticationFactory.verifyToken(token);
                 request.setAttribute("claims", claims);
-            } catch (UnsupportedEncodingException e) {
-                logger.error("解析token 失败 ：", e);
-                throw new FilterException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "您还没有登录，请先登录");
-            } catch (JWTVerificationException e) {
+
+            } catch (Exception e) {
                 //Invalid signature/claims
                 logger.error("解析token 失败 ：", e);
                 throw new FilterException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "您还没有登录，请先登录");
@@ -63,11 +57,11 @@ public class JwtFilter extends GenericFilterBean {
                         DataTransactionFactory.pageResponseJson(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,e.getMessage(),null),
                         "UTF-8");
             }else{
-                response.sendRedirect("/error?code="+e.getResult().getCode()+"&msg="+e.getResult().getMsg());
+                response.sendRedirect("/login?code="+e.getResult().getCode()+"&msg="+e.getResult().getMsg());
             }
 
         }catch (Exception e){
-            response.sendRedirect("/error?code="+ResponseConstant.RESULT_CODE_INNER_ERROR+"&msg=鉴权失败");
+            response.sendRedirect("/login?code="+ResponseConstant.RESULT_CODE_INNER_ERROR+"&msg=鉴权失败");
         }
     }
 

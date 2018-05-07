@@ -2,6 +2,7 @@ package com.java110.console.smo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.exception.SMOException;
+import com.java110.entity.service.PageData;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,9 @@ public interface IConsoleServiceSMO {
 
     /**
      * 用户登录
-     * @param userObj
+     * @param pd
      * @return
      * @throws SMOException
      */
-    public String login(JSONObject userObj) throws SMOException;
+    public void login(PageData pd) throws SMOException;
 }

@@ -9,6 +9,7 @@ import com.java110.common.util.DateUtil;
 import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.entity.center.DataFlow;
+import com.java110.entity.service.PageData;
 
 import java.util.Date;
 import java.util.Map;
@@ -243,7 +244,7 @@ public class DataTransactionFactory {
         JSONObject paramOut = JSONObject.parseObject("{\"meta\":{}}");
         JSONObject metaObj = paramOut.getJSONObject("meta");
         metaObj.put("transactionId",transactionId);
-        metaObj.put("code",transactionId);
+        metaObj.put("code",code);
         metaObj.put("message",message);
         metaObj.put("responseTime",DateUtil.getNowDefault());
         if(data != null) {
@@ -262,6 +263,18 @@ public class DataTransactionFactory {
      */
     public static String pageResponseJson(String code,String message,JSONObject data){
         return pageResponseJson(ResponseConstant.NO_TRANSACTION_ID,code,message,data);
+    }
+
+    /**
+     * 页面返回封装
+     * @param code 编码
+     * @param message 信息
+     * @param data 数据
+     * @return
+     * @throws Exception
+     */
+    public static String pageResponseJson(PageData pd,String code, String message, JSONObject data){
+        return pageResponseJson(pd == null || StringUtil.isNullOrNone(pd.getTransactionId()) ? ResponseConstant.NO_TRANSACTION_ID:pd.getTransactionId(),code,message,data);
     }
 
     /**

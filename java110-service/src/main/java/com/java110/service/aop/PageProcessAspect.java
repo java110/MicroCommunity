@@ -1,8 +1,10 @@
 package com.java110.service.aop;
 
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.factory.PageDataFactory;
 import com.java110.common.util.Assert;
 import com.java110.common.util.SequenceUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.entity.service.PageData;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,9 +13,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 /**
  * 数据初始化
@@ -22,7 +29,7 @@ import java.io.InputStreamReader;
 @Aspect
 @Component
 public class PageProcessAspect {
-    @Pointcut("execution(public * com.java110..*.*Controller.*(..))")
+    @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
     public void dataProcess(){}
 
     /**
@@ -37,8 +44,10 @@ public class PageProcessAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
+        PageData pd = null;
         if("POST".equals(request.getMethod())){
-            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            InputStream in = request.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             //reader.
             StringBuffer sb = new StringBuffer();
             String str = "";
@@ -47,10 +56,23 @@ public class PageProcessAspect {
             }
             str = sb.toString();
             if(Assert.isPageJsonObject(str)){
-                PageData pd = PageDataFactory.newInstance().builder(str).setTransactionId(SequenceUtil.getPageTransactionId());
-                request.setAttribute("pd",pd);
+                 pd = PageDataFactory.newInstance().builder(str).setTransactionId(SequenceUtil.getPageTransactionId());
             }
         }
+
+        if(pd == null){
+            pd = PageDataFactory.newInstance().setTransactionId(SequenceUtil.getPageTransactionId());
+        }
+
+        if(request.getAttribute("claims") != null && request.getAttribute("claims") instanceof Map){
+            Map<String,String> userInfo = (Map<String,String>)request.getAttribute("claims");
+            if(userInfo.containsKey(CommonConstant.LOGIN_USER_ID)){
+                pd.setUserId(userInfo.get(CommonConstant.LOGIN_USER_ID));
+            }
+            pd.setUserInfo(userInfo);
+
+        }
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
 
     }
 
@@ -61,25 +83,36 @@ public class PageProcessAspect {
 
     //后置异常通知
     @AfterThrowing("dataProcess()")
-    public void throwss(JoinPoint jp){
+    public void throwException(JoinPoint jp){
     }
 
     //后置最终通知,final增强，不管是抛出异常或者正常退出都会执行
     @After("dataProcess()")
-    public void after(JoinPoint jp){
+    public void after(JoinPoint jp) throws IOException {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        PageData pd =request.getAttribute("pd") != null ?(PageData)request.getAttribute("pd"):null ;
-        //保存日志处理
-        if(pd != null){
 
+        HttpServletRequest request = attributes.getRequest();
+        PageData pd =request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) != null ?(PageData)request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA):null ;
+        //保存日志处理
+        if(pd == null){
+            return ;
         }
+
+        if(!StringUtil.isNullOrNone(pd.getToken())) {
+            HttpServletResponse response = attributes.getResponse();
+            Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            response.flushBuffer();
+        }
+
     }
 
     //环绕通知,环绕增强，相当于MethodInterceptor
     @Around("dataProcess()")
-    public Object arround(ProceedingJoinPoint pjp) {
+    public Object around(ProceedingJoinPoint pjp) {
         try {
             Object o =  pjp.proceed();
             return o;

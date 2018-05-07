@@ -38,11 +38,14 @@ insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('映�
 insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('外部应用','2','1','LEFT','10001','');
 insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('路由管理','2','1','LEFT','10001','');
 insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('服务管理','2','1','LEFT','10001','');
+insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('刷新缓存','2','1','LEFT','10001','');
 
 insert into m_menu_ctg(m_id,url,template) values(2,'http://www.java110.com','');
 insert into m_menu_ctg(m_id,url,template) values(3,'http://www.java110.com','');
 insert into m_menu_ctg(m_id,url,template) values(4,'http://www.java110.com','');
 insert into m_menu_ctg(m_id,url,template) values(5,'http://www.java110.com','');
+insert into m_menu_ctg(m_id,url,template) values(5,'http://192.168.31.199:8001/cacheApi/flush','');
+
 
 insert into m_menu_2_user(m_id,user_id) values(1,'10001');
 insert into m_menu_2_user(m_id,user_id) values(2,'10001');

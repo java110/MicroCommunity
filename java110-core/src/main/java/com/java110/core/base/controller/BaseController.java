@@ -2,12 +2,14 @@ package com.java110.core.base.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.NoAuthorityException;
 import com.java110.common.factory.PageDataFactory;
 import com.java110.common.log.LoggerEngine;
 
 import com.java110.common.util.SequenceUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.entity.service.PageData;
 import org.springframework.util.StringUtils;
@@ -29,11 +31,10 @@ public class BaseController extends AppBase {
      * 检查用户登录
      * @throws NoAuthorityException
      */
-    protected String checkLogin() throws NoAuthorityException{
-        if(false){
+    protected void checkLogin(PageData pd) throws NoAuthorityException{
+        if(StringUtil.isNullOrNone(pd.getUserId())){
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"用户未登录，请登录！");
         }
-        return "10001";
     }
 
 
@@ -128,7 +129,10 @@ public class BaseController extends AppBase {
      * @throws IllegalArgumentException
      */
     protected PageData getPageData(HttpServletRequest request){
-        return request.getAttribute("pd") != null ?(PageData) request.getAttribute("pd") : null;
+        if(request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) == null){
+            throw new IllegalArgumentException("请求参数错误");
+        }
+        return (PageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
     }
 
 }

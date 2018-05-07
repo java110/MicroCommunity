@@ -3,6 +3,7 @@ package com.java110.entity.service;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 页面请求数据封装
@@ -10,11 +11,15 @@ import java.io.Serializable;
  */
 public class PageData implements Serializable {
 
+    private String userId ;
+
     private String transactionId;
 
     private String requestTime;
 
     private String method;
+
+    private String token;
 
     private JSONObject param;
 
@@ -32,6 +37,16 @@ public class PageData implements Serializable {
 
     private JSONObject data;
 
+    private Map<String,String> userInfo;
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getTransactionId() {
         return transactionId;
@@ -90,6 +105,10 @@ public class PageData implements Serializable {
         this.resJson = resJson;
     }
 
+    public void setResJson(String resJsonString) {
+        this.resJson = JSONObject.parseObject(resJsonString);
+    }
+
     public String getCode() {
         return code;
     }
@@ -120,6 +139,23 @@ public class PageData implements Serializable {
 
     public void setData(JSONObject data) {
         this.data = data;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
+    public Map<String, String> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(Map<String, String> userInfo) {
+        this.userInfo = userInfo;
     }
 
     public PageData builder(String requestJson) throws IllegalArgumentException{

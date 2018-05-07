@@ -1,4 +1,4 @@
-package com.java110.center.rest;
+package com.java110.center.api;
 
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.constant.ResponseConstant;

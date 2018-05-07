@@ -16,6 +16,19 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_QUERY_MENU_ITEM_NAME = "查询菜单";
 
+    /**
+     * 查询菜单编码
+     */
+    public static final String SERVICE_CODE_QUERY_USER_LOGIN = "query.user.loginInfo";
+
+    /**
+     * 查询菜单编码名称
+     */
+    public static final String SERVICE_CODE_QUERY_USER_LOGIN_NAME = "查询用户登录信息";
+
+    public static final String SERVICE_CODE = "SERVICE_CODE";
+    public static final String SERVICE_CODE_NAME = "SERVICE_CODE_NAME";
+
 
 
 

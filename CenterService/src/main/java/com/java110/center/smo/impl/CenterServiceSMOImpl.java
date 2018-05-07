@@ -364,6 +364,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 &&MappingCache.getValue(MappingConstant.KEY_NO_INVOKE_BUSINESS_SYSTEM).contains(dataFlow.getOrderTypeCd())){
             //不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
             DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
+            dataFlow.setResponseBusinessJson(DataTransactionFactory.createCommonResponseJson(dataFlow.getTransactionId(),
+                    ResponseConstant.RESULT_CODE_SUCCESS, "成功",null));
             return ;
         }
 

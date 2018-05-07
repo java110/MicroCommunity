@@ -4,13 +4,16 @@ jedis:
       maxTotal: 100
       maxIdle: 20
       maxWaitMillis: 20000
-    host: 192.168.31.199
+    host: 135.192.86.200
     port: 6379
 
 eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
   client:
     serviceUrl:
-      defaultZone: http://192.168.31.199:8761/eureka/
+      defaultZone: http://135.192.86.200:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8001
@@ -19,7 +22,7 @@ spring:
     name: center-service
   redis:
     database: 0
-    host: 192.168.31.199
+    host: 135.192.86.200
     port: 6379
     pool:
       max-active: 300
@@ -36,7 +39,7 @@ spring:
     filters: stat,wall,log4j
     poolPreparedStatements: true
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.31.199:3306/TT
+    url: jdbc:mysql://135.192.86.200:3306/TT
     maxPoolPreparedStatementPerConnectionSize: 20
     password: TT@12345678
     testOnBorrow: false
@@ -52,8 +55,8 @@ spring:
 kafka:
   consumer:
     zookeeper:
-      connect: 192.168.31.199:2181
-    servers: 192.168.31.199:9092
+      connect: 135.192.86.200:2181
+    servers: 135.192.86.200:9092
     enable:
       auto:
         commit: true
@@ -71,8 +74,8 @@ kafka:
 
   producer:
     zookeeper:
-      connect: 192.168.31.199:2181
-    servers: 192.168.31.199:9092
+      connect: 135.192.86.200:2181
+    servers: 135.192.86.200:9092
     retries: 0
     batch:
       size: 4096

@@ -64,6 +64,17 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    /**
+     * 获取未来时间
+     * @param second 秒
+     * @return
+     */
+    public static Date getFutureDate(int second){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND,second);
+        return calendar.getTime();
+    }
+
     public static String getFormatTimeString(Date date, String pattern)
     {
         SimpleDateFormat sDateFormat = getDateFormat(pattern);

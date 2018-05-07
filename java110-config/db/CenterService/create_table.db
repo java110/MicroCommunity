@@ -210,14 +210,21 @@ insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418002','4','Q','0'
 );
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.userInfo','1','Q','用户信息查询',1,'http://...','8000418001','0');
+insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
+'8000418002','5','Q','0'
+);
 
 insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.order.orderInfo','1','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+values('query.user.userInfo','S','Q','用户信息查询',1,'http://...','8000418001','0');
 
 insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.console.menu','1','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+values('query.order.orderInfo','S','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.console.menu','S','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.loginInfo','S','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.order.orderInfo','订单信息','oId','1','{
@@ -248,14 +255,26 @@ VALUES('query.console.menu','查询菜单','manageId,menuGroup','1','{
                                                               and mm.status_cd = ''0''
                                                               and mmc.m_id = mm.m_id
                                                               and mmc.status_cd = ''0''"
-                                                 }','','{"PARAM:"{
+                                                 }','','{"PARAM":{
                                                             "param1": "$.#menus#Array"
-                                                            },"TEMPLATE":"{
+                                                            },"TEMPLATE":{
                                                          "response": {
                                                            "code": "0000",
                                                            "message": "成功"
                                                          }
-                                                       }"}','','0');
+                                                       }}','','0');
+
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('query.user.loginInfo','查询用户登录信息','userCode','1','{
+                                                 	"param1":"select u.userId userId,u.name userName,u.password userPwd from user u where u.userCode = #userCode# and u.status_cd = ''0''"
+                                                 }','','{"PARAM":{
+                                                            "param1": "$.#user#Object"
+                                                            },"TEMPLATE":{
+                                                         "response": {
+                                                           "code": "0000",
+                                                           "message": "成功"
+                                                         }
+                                                       }}','','0');
 
 
 

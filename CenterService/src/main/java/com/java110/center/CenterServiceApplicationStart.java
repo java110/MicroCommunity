@@ -3,11 +3,15 @@ package com.java110.center;
 import com.java110.event.center.init.CenterServiceStartInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.Charset;
 
 
 /**
@@ -31,7 +35,9 @@ public class CenterServiceApplicationStart {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        return restTemplate;
     }
 
     public static void main(String[] args) throws Exception{

@@ -2,10 +2,20 @@ package com.java110.common.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.java110.common.cache.JWTCache;
 import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.NoAuthorityException;
+import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.entity.center.DataFlow;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,6 +28,9 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  *
@@ -60,7 +73,7 @@ public class AuthenticationFactory {
      * @return
      */
     public static String md5(String transactionId,String appId,String businesses,String code){
-        return md5(transactionId+appId+businesses).toLowerCase();
+        return md5(transactionId+appId+businesses+code).toLowerCase();
     }
 
     /**
@@ -221,6 +234,89 @@ public class AuthenticationFactory {
         KeyPairGenerator keyPairGenerator=KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(1024);
         return keyPairGenerator.generateKeyPair();
+    }
+
+    /**
+     * 用户密码
+     * @param userPwd
+     * @return
+     */
+    public static String md5UserPassword(String userPwd){
+        String userPasswordSecret = MappingCache.getValue(MappingConstant.KEY_USER_PASSWORD_SECRET);
+        if(StringUtil.isNullOrNone(userPasswordSecret)){
+            userPasswordSecret = CommonConstant.DEFAULT_USER_PWD_SECRET;
+        }
+        return md5(md5(userPwd + userPasswordSecret));
+    }
+
+    /**
+     * 创建token
+     * @return
+     */
+    public static String createAndSaveToken(Map<String,String> info) throws Exception{
+
+        if(!info.containsKey(CommonConstant.LOGIN_USER_ID)){
+            throw new InvalidParameterException("参数中没有包含："+CommonConstant.LOGIN_USER_ID);
+        }
+
+        String jdi = UUID.randomUUID().toString().replace("-","");
+        String jwtSecret = MappingCache.getValue(MappingConstant.KEY_JWT_SECRET);
+        if(StringUtil.isNullOrNone(jwtSecret)){
+            jwtSecret = CommonConstant.DEFAULT_JWT_SECRET;
+        }
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+        JWTCreator.Builder jwt= JWT.create();
+        for(String key:info.keySet()){
+            if(CommonConstant.LOGIN_USER_ID.equals(key)){
+                continue;
+            }
+            jwt.withClaim(key,info.get(key));
+        }
+        String expireTime = MappingCache.getValue(MappingConstant.KEY_JWT_EXPIRE_TIME);
+        if(StringUtil.isNullOrNone(expireTime)){
+            expireTime = CommonConstant.DEFAULT_JWT_EXPIRE_TIME;
+        }
+        //保存token Id
+        JWTCache.setValue(jdi,info.get(CommonConstant.LOGIN_USER_ID),Integer.parseInt(expireTime));
+        jwt.withIssuer("java110");
+        jwt.withJWTId(jdi);
+        return jwt.sign(algorithm);
+    }
+
+    /**
+     * 校验Token
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public static Map<String, String> verifyToken(String token) throws Exception{
+        String jwtSecret = MappingCache.getValue(MappingConstant.KEY_JWT_SECRET);
+        if(StringUtil.isNullOrNone(jwtSecret)){
+            jwtSecret = CommonConstant.DEFAULT_JWT_SECRET;
+        }
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+        JWTVerifier verifier = JWT.require(algorithm).withIssuer("java110").build();
+        DecodedJWT jwt = verifier.verify(token);
+        String jdi = jwt.getId();
+        //保存token Id
+        String userId = JWTCache.getValue(jdi);
+        if(StringUtil.isNullOrNone(userId)){
+            throw new JWTVerificationException("用户还未登录");
+        }
+        String expireTime = MappingCache.getValue(MappingConstant.KEY_JWT_EXPIRE_TIME);
+        if(StringUtil.isNullOrNone(expireTime)){
+            expireTime = CommonConstant.DEFAULT_JWT_EXPIRE_TIME;
+        }
+        //刷新过时时间
+        JWTCache.resetExpireTime(jdi,Integer.parseInt(expireTime));
+        Map<String, Claim> claims = jwt.getClaims();
+        // Add the claim to request header
+        Map<String,String> paramOut = new HashMap<String, String>();
+        for(String key : claims.keySet()){
+            paramOut.put(key,claims.get(key).asString());
+        }
+        paramOut.put(CommonConstant.LOGIN_USER_ID,userId);
+        return paramOut;
     }
 
 

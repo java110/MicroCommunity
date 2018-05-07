@@ -1,4 +1,4 @@
-package com.java110.center.rest;
+package com.java110.center.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.center.smo.ICenterServiceSMO;

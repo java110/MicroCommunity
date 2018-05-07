@@ -1,14 +1,26 @@
+jedis:
+  pool:
+    config:
+      maxTotal: 100
+      maxIdle: 20
+      maxWaitMillis: 20000
+    host: 135.192.86.200
+    port: 6379
+
 eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
   client:
     serviceUrl:
-      defaultZone: http://192.168.31.199:8761/eureka/
+      defaultZone: http://135.192.86.200:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
-  port: 7001
+  port: 8443
   ssl:
     keyStoreType: PKCS12
     keyAlias: tomcat
-    key-store: keystore.p12
+    key-store: classpath:keystore.p12
     key-store-password: 12345678
   session:
       cookie:
@@ -18,7 +30,7 @@ spring:
     name: console-service
   redis:
     database: 0
-    host: 192.168.31.199
+    host: 135.192.86.200
     port: 6379
     pool:
       max-active: 300
@@ -35,7 +47,7 @@ spring:
     filters: stat,wall,log4j
     poolPreparedStatements: true
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.31.199:3306/TT
+    url: jdbc:mysql://135.192.86.200:3306/TT
     maxPoolPreparedStatementPerConnectionSize: 20
     password: TT@12345678
     testOnBorrow: false
@@ -57,5 +69,37 @@ spring:
     template-loader-path: classpath:/html/
     suffix: .html
     check-template-location: true
+
+#============== kafka ===================
+kafka:
+  consumer:
+    zookeeper:
+      connect: 135.192.86.200:2181
+    servers: 135.192.86.200:9092
+    enable:
+      auto:
+        commit: true
+    session:
+      timeout: 6000
+    auto:
+      commit:
+        interval: 100
+      offset:
+        reset: latest
+    topic: test
+    group:
+      id: consoleService
+    concurrency: 10
+
+  producer:
+    zookeeper:
+      connect: 135.192.86.200:2181
+    servers: 135.192.86.200:9092
+    retries: 0
+    batch:
+      size: 4096
+    linger: 1
+    buffer:
+      memory: 40960
 
 

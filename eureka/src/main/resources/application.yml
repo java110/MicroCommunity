@@ -1,7 +1,9 @@
 server:
   port: 8761                    # 指定该Eureka实例的端口
-
 eureka:
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 4000
   instance:
     hostname: discovery         # 指定该Eureka实例的主机名
   client:

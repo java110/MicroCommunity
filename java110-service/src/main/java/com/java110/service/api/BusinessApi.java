@@ -1,4 +1,4 @@
-package com.java110.service.rest;
+package com.java110.service.api;
 
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.factory.DataQueryFactory;

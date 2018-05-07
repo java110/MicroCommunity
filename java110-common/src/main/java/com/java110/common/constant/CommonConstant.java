@@ -45,6 +45,36 @@ public class CommonConstant {
     /**
      * 鉴权token
      */
-    public final static String COOKIE_AUTH_TOKEN = "java110_token";
+    public final static String COOKIE_AUTH_TOKEN = "_java110_token_";
+
+    public final static String DEFAULT_USER_PWD_SECRET = "@java110.com";
+
+    /**
+     * 默认JWT 秘钥
+     */
+    public final static String DEFAULT_JWT_SECRET = "@java110_JWT";
+
+
+    /**
+     * 默认过期时间
+     */
+    public final static String DEFAULT_JWT_EXPIRE_TIME = 2*60*60 + "";
+
+    /**
+     * 登录时的用户ID
+     */
+    public final static String LOGIN_USER_ID = "userId";
+
+    public final static String LOGIN_USER_NAME = "userName";
+
+    /**
+     * 上下文对象
+     */
+    public final static String CONTEXT_PAGE_DATA = "pd";
+
+    public final static String ORDER_USER_ID = "ORDER_USER_ID";
+
+    public final static String ORDER_DEFAULT_USER_ID = "-1";
+
 
 }
