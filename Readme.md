@@ -47,23 +47,23 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 8、在浏览器输入 http://yourIp:6001/ 如下图
 
-![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507230124.jpg)
 
     点击高级，继续前往。
 
 9、登录系统，用户名为 admin 密码为 admin  如下图
 
-![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507230330.jpg)
 
     点击登录，进入如下图：
     
-  ![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+  ![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507231045.jpg)
 
 
 10、统一接口地址：http://yourIp:8001/httpApi/service
 
 加入钉钉java110 工作群随时了解项目进度，和java110开发者零距离沟通
 
-![image](https://github.com/java110/MicroCommunity/blob/test/dingding_java110.jpg)
+![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507231201.jpg)
 
 
