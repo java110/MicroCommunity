@@ -64,13 +64,13 @@ public class CustDispatchListener implements AppListener<AppCustEvent> ,Ordered{
             //{'cust':[{'oldCustId':'-1','custId':'12345678'},{'oldCustId':'-2','custId':'12345678'}]} }
             JSONObject resultInfoJ = returnUserTmp.getJSONObject(ProtocolUtil.RESULT_INFO);
 
-            Assert.isNull(resultInfoJ, "cust", "用户服务，成功时返回信息错误，没有返回新建成功的cust节点 ,returnUser = " + returnUser);
+            Assert.isNotNull(resultInfoJ, "cust", "用户服务，成功时返回信息错误，没有返回新建成功的cust节点 ,returnUser = " + returnUser);
 
             JSONArray newCusts = resultInfoJ.getJSONArray("cust");
 
             for(int newCustIndex = 0 ; newCustIndex < newCusts.size(); newCustIndex++){
                 JSONObject newCust =  newCusts.getJSONObject(newCustIndex);
-                Assert.isNull(newCust,"custId","用户服务，成功时返回信息错误，没有返回新建成功的cust节点下的custId ,returnUser = " + newCust);
+                Assert.isNotNull(newCust,"custId","用户服务，成功时返回信息错误，没有返回新建成功的cust节点下的custId ,returnUser = " + newCust);
 
                 context.setKeyId(AppContext.PREFIX_CUSTID,newCust.getString("oldCustId"),newCust.getString("custId"));
             }

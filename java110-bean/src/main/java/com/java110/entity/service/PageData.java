@@ -21,6 +21,8 @@ public class PageData implements Serializable {
 
     private String token;
 
+    private Object serviceSMOImpl;
+
     private JSONObject param;
 
     private JSONObject meta;
@@ -156,6 +158,15 @@ public class PageData implements Serializable {
 
     public void setUserInfo(Map<String, String> userInfo) {
         this.userInfo = userInfo;
+    }
+
+
+    public Object getServiceSMOImpl() {
+        return serviceSMOImpl;
+    }
+
+    public void setServiceSMOImpl(Object serviceSMOImpl) {
+        this.serviceSMOImpl = serviceSMOImpl;
     }
 
     public PageData builder(String requestJson) throws IllegalArgumentException{

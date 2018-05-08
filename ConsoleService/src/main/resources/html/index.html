@@ -25,27 +25,12 @@
         <div class="main-content-inner">
 
             <div class="page-content">
-                <div class="page-header">
-                    <h1>
-                        控制中心首页
-                        <small>
-                            <i class="ace-icon fa fa-angle-double-right"></i>
-                            简介 &amp; 说明
-                        </small>
-                    </h1>
-                </div><!-- /.page-header -->
+                <#include "page_header.html">
 
                 <div class="row">
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
-                        <div class="alert alert-block alert-success">
-                            <button type="button" class="close" data-dismiss="alert">
-                                <i class="ace-icon fa fa-times"></i>
-                            </button>
-
-                            <i class="ace-icon fa fa-check green"></i>
-                            这里是一条通知信息
-                        </div>
+                        <#include "notify.html">
 
                         <div class="row">
                             <div class="space-6"></div>
@@ -149,23 +134,7 @@
         </div>
     </div><!-- /.main-content -->
 
-    <div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">控制中心系统</span>
-							java110开发团队开发&copy; 2013-2018
-						</span>
-
-                &nbsp; &nbsp;
-                <span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-						</span>
-            </div>
-        </div>
-    </div>
+    <#include "footer.html">
 
 </div><!-- /.main-container -->
 

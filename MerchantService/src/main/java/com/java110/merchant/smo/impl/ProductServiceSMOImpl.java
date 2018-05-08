@@ -145,7 +145,7 @@ public class ProductServiceSMOImpl extends BaseServiceSMO implements IProductSer
     @Override
     public String soProductServiceForOrderService(JSONObject mInfoJson) throws Exception {
 
-        Assert.isNull(mInfoJson,"data","请求报文缺少 data 节点，请检查");
+        Assert.isNotNull(mInfoJson,"data","请求报文缺少 data 节点，请检查");
 
         JSONArray productInfos = mInfoJson.getJSONArray("data");
 
@@ -399,7 +399,7 @@ public class ProductServiceSMOImpl extends BaseServiceSMO implements IProductSer
         for(int boIdIndex = 0 ; boIdIndex < datas.size(); boIdIndex++){
             JSONObject data = datas.getJSONObject(boIdIndex);
 
-            Assert.isNull(data,"boId","当前节点中没有包含boId节点格式错误"+data);
+            Assert.isNotNull(data,"boId","当前节点中没有包含boId节点格式错误"+data);
 
             // 复原Product
             doDeleteBoProduct(data);

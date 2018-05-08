@@ -285,7 +285,7 @@ public class MerchantServiceRest extends BaseController implements IMerchantServ
         try{
             reqParam = this.simpleValidateJSON(data);
 
-            Assert.isNull(reqParam,"data","传入报文错误，没有包含data节点"+reqParam);
+            Assert.isNotNull(reqParam,"data","传入报文错误，没有包含data节点"+reqParam);
 
             resultMerchantInfo = iMerchantServiceSMO.soDeleteMerchantInfo(reqParam.getJSONArray("data"));
 

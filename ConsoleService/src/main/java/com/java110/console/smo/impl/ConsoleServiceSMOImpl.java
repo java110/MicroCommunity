@@ -51,6 +51,7 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_MENU_ITEM);
         paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_MENU_ITEM_NAME);
         JSONObject businessObj = doExecute(paramIn);
+        Assert.isNotNull(businessObj,"menus","接口返回错误，未包含menus节点");
         JSONArray menus = businessObj.getJSONArray("menus");
         return menus.toJavaList(Map.class);
     }
@@ -78,6 +79,8 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         //paramIn.put("userPwd", userPwd);
         JSONObject businessObj = doExecute(paramIn);
 
+        Assert.isNotNull(businessObj,"user","查询模板 服务配置错误，返回报文中未包含user节点");
+
         JSONObject user = businessObj.getJSONObject("user");
         //String newPwd = AuthenticationFactory.md5UserPassword(userPwd);
         if(!AuthenticationFactory.md5UserPassword(userPwd).equals(user.getString("userPwd"))){
@@ -97,6 +100,37 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
 
         //封装成功信息
         pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"登录成功 ",null));
+
+    }
+
+
+    /**
+     * 查询模板信息
+     * @param pd
+     * @throws SMOException
+     */
+    @Override
+    public void getTemplateCol(PageData pd) throws SMOException{
+        String templateCode = pd.getParam().getString("templateCode");
+
+        Assert.hasText(templateCode,"模板编码不能为空");
+
+        Map paramIn = new HashMap();
+        paramIn.put("templateCode", templateCode);
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_NAME);
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        Assert.isNotNull(businessObj,"template","查询模板 服务配置错误，返回报文中未包含template节点");
+
+
+        JSONObject templateObj = new JSONObject();
+        templateObj.put("template",businessObj.getJSONArray("template"));
+
+        pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",templateObj));
+
 
     }
 

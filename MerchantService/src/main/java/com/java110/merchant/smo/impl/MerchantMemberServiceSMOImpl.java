@@ -137,7 +137,7 @@ public class MerchantMemberServiceSMOImpl extends BaseServiceSMO implements IMer
     @Override
     public String soMerchantMemberServiceForOrderService(JSONObject mInfoJson) throws Exception {
 
-        Assert.isNull(mInfoJson,"data","请求报文缺少 data 节点，请检查");
+        Assert.isNotNull(mInfoJson,"data","请求报文缺少 data 节点，请检查");
 
         JSONObject merchantInfos = mInfoJson.getJSONObject("data");
 

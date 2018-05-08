@@ -18,8 +18,8 @@ public class Assert extends org.springframework.util.Assert{
      * @param key
      * @param message
      */
-    public static void isNull(JSONObject jsonObject,String key,String message){
-        Assert.isNull(jsonObject,message);
+    public static void isNotNull(JSONObject jsonObject,String key,String message){
+        Assert.notEmpty(jsonObject,message);
 
         if(!jsonObject.containsKey(key)){
             throw new IllegalArgumentException(message) ;

@@ -7,7 +7,7 @@ import com.java110.common.constant.StateConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
-import com.java110.entity.merchant.BoMerchantMember;
+import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.entity.order.BusiOrder;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
@@ -16,8 +16,6 @@ import com.java110.entity.user.CustAttr;
 import com.java110.feign.base.IPrimaryKeyService;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.user.smo.IUserServiceSMO;
-import com.java110.core.base.smo.BaseServiceSMO;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -148,7 +146,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
     @Override
     public String soUserServiceForOrderService(JSONObject userInfoJson) throws Exception {
 
-        Assert.isNull(userInfoJson,"data","请求报文缺少 data 节点，请检查");
+        Assert.isNotNull(userInfoJson,"data","请求报文缺少 data 节点，请检查");
 
         JSONArray custInfos = userInfoJson.getJSONArray("data");
 
@@ -402,7 +400,7 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
         for(int boIdIndex = 0 ; boIdIndex < datas.size(); boIdIndex++){
             JSONObject data = datas.getJSONObject(boIdIndex);
 
-            Assert.isNull(data,"boId","当前节点中没有包含boId节点格式错误"+data);
+            Assert.isNotNull(data,"boId","当前节点中没有包含boId节点格式错误"+data);
 
             // 复原Cust
             doDeleteBoCust(data);

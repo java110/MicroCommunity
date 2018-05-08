@@ -285,7 +285,7 @@ public class ProductServiceRest extends BaseController implements IProductServic
         try{
             reqParam = this.simpleValidateJSON(data);
 
-            Assert.isNull(reqParam,"data","传入报文错误，没有包含data节点"+reqParam);
+            Assert.isNotNull(reqParam,"data","传入报文错误，没有包含data节点"+reqParam);
 
             resultProductInfo = iProductServiceSMO.soDeleteProductInfo(reqParam.getJSONArray("data"));
 

@@ -12,6 +12,7 @@ import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.entity.service.PageData;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -135,4 +136,58 @@ public class BaseController extends AppBase {
         return (PageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
     }
 
+    /**
+     * 查询菜单
+     * @param model
+     * @param pd
+     */
+    protected void getMenus(Model model,PageData pd,List<Map> menuItems){
+        List<Map> removeMenuItems = new ArrayList<Map>();
+        for(Map menuItem : menuItems){
+            if(!"-1".equals(menuItem.get("parentId")) && !"1".equals(menuItem.get("level"))){
+                Map parentMenuItem = this.getMenuItemFromList(menuItems,menuItem.get("parentId").toString());
+                if(parentMenuItem == null){
+                    continue;
+                }
+                if(parentMenuItem.containsKey("subMenus")){
+                    List<Map> subMenus = (List<Map>) parentMenuItem.get("subMenus");
+                    subMenus.add(menuItem);
+                }else{
+                    List<Map> subMenus = new ArrayList<Map>();
+                    subMenus.add(menuItem);
+                    parentMenuItem.put("subMenus",subMenus);
+                }
+
+                removeMenuItems.add(menuItem);
+            }
+        }
+
+        removeMap(menuItems,removeMenuItems);
+        model.addAttribute("menus",menuItems);
+    }
+
+
+    private Map getMenuItemFromList(List<Map> menuItems,String parentId){
+        for(Map menuItem : menuItems){
+            if(menuItem.get("mId").toString().equals(parentId)){
+                return menuItem;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 删除map
+     * @param menuItems
+     * @param removeMenuItems
+     */
+    private void removeMap(List<Map> menuItems,List<Map> removeMenuItems){
+        if(removeMenuItems == null  || removeMenuItems.size() == 0){
+            return;
+        }
+
+        for(Map removeMenuItem : removeMenuItems){
+            menuItems.remove(removeMenuItem);
+        }
+    }
 }

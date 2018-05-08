@@ -318,7 +318,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
                 throw new IllegalArgumentException("请求报文中busiOrder 节点中没有对应的 busiObj 节点，请检查"+busiOrderJson);
             }*/
 
-            Assert.isNull(busiOrderJson,"busiObj","请求报文中busiOrder 节点中没有对应的 busiObj 节点，请检查"+busiOrderJson);
+            Assert.isNotNull(busiOrderJson,"busiObj","请求报文中busiOrder 节点中没有对应的 busiObj 节点，请检查"+busiOrderJson);
 
             BusiOrder busiOrderObj = JSONObject.parseObject(busiOrderJson.getJSONObject("busiObj").toJSONString(),BusiOrder.class);
 
@@ -356,7 +356,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
                 throw new IllegalArgumentException("请求报文中busiOrder 节点中没有对应的 data 节点，请检查"+busiOrderJson);
             }*/
 
-            Assert.isNull(busiOrderJson,"data","请求报文中busiOrder 节点中没有对应的 data 节点，请检查"+busiOrderJson);
+            Assert.isNotNull(busiOrderJson,"data","请求报文中busiOrder 节点中没有对应的 data 节点，请检查"+busiOrderJson);
 
             //处理data 节点
             JSONObject data = busiOrderJson.getJSONObject("data");
@@ -552,7 +552,7 @@ public class OrderServiceSMOImpl extends BaseServiceSMO implements IOrderService
         //由于撤单，作废订单我们只支持一个购物车操作
         Set keys = datasTmp.keySet();
         Object key =  keys.toArray()[0];
-        Assert.isNull(datasTmp.get(key).getJSONObject(0),"olId","数据错误，需要作废的订单的第一个节点为空，或不包含olId节点，请核查"+datasTmp);
+        Assert.isNotNull(datasTmp.get(key).getJSONObject(0),"olId","数据错误，需要作废的订单的第一个节点为空，或不包含olId节点，请核查"+datasTmp);
         String oldOlId = datasTmp.get(key).getJSONObject(0).getString("olId");
 
 
