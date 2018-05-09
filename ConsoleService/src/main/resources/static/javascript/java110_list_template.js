@@ -8,7 +8,7 @@ var colModels = [];
 
 $.ajax({
        type: "POST",
-       url: "/consoleRest/queryTemplateCol",
+       url: "/console/queryTemplateCol",
        data: reqJson,
        contentType: "application/text",
        dataType:"text",
@@ -77,9 +77,9 @@ function showGradData(colNames,colModels){
 		jQuery(grid_selector).jqGrid({
 			subGrid : false,
 			//data: grid_data,
-			url: "../data/list.json",
+			url: "/console/queryTemplateData?templateCode="+templateCode,
 			datatype: "json",
-			height: 250,
+			height: 325,
 			colNames:colNames,
 			colModel:colModels,
 			viewrecords : true,

@@ -35,4 +35,21 @@ public interface IConsoleServiceSMO {
      * @throws SMOException
      */
     public void getTemplateCol(PageData pd) throws SMOException;
+
+    /**
+     * 获取模板
+     * @param pd
+     * @return
+     * @throws SMOException
+     */
+    public void getTemplate(PageData pd) throws SMOException;
+
+    /**
+     * 查询模板数据
+     * @param pd
+     * @throws SMOException
+     */
+    public void getTemplateData(PageData pd) throws SMOException;
+
+
 }

@@ -40,10 +40,10 @@ insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('路�
 insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('服务管理','2','1','LEFT','10001','');
 insert into m_menu(name,level,parent_id,menu_group,user_id,remark) values('刷新缓存','2','1','LEFT','10001','');
 
-insert into m_menu_ctg(m_id,url,template) values(2,'http://www.java110.com','');
-insert into m_menu_ctg(m_id,url,template) values(3,'http://www.java110.com','');
-insert into m_menu_ctg(m_id,url,template) values(4,'http://www.java110.com','');
-insert into m_menu_ctg(m_id,url,template) values(5,'http://www.java110.com','');
+insert into m_menu_ctg(m_id,url,template) values(2,'/console/list?templateCode=mapping','');
+insert into m_menu_ctg(m_id,url,template) values(3,'/console/list?templateCode=mapping','');
+insert into m_menu_ctg(m_id,url,template) values(4,'/console/list?templateCode=mapping','');
+insert into m_menu_ctg(m_id,url,template) values(5,'/console/list?templateCode=mapping','');
 insert into m_menu_ctg(m_id,url,template) values(5,'http://192.168.31.199:8001/cacheApi/flush','');
 
 
@@ -52,3 +52,69 @@ insert into m_menu_2_user(m_id,user_id) values(2,'10001');
 insert into m_menu_2_user(m_id,user_id) values(3,'10001');
 insert into m_menu_2_user(m_id,user_id) values(4,'10001');
 insert into m_menu_2_user(m_id,user_id) values(5,'10001');
+
+-- c_template
+create table c_template(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT '模板ID',
+    template_code varchar(20) not null comment '模板编码 模板英文名',
+    name varchar(50) not null comment '模板名称',
+    html_name varchar(20) not null comment '对应HTML文件名称',
+    url varchar(200) not null comment '查询数据，修改数据url 其真实地址对应于mapping表中 LIST->key 对应 查询多条数据 QUERY->key 对应单条数据 UPDATE-> 对应修改数据 DELETE->key 对应删除数据 多条之间用 ; 分隔',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+);
+
+-- c_template_col
+
+create table c_template_col(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT '模板ID',
+    template_code varchar(20) not null comment '模板编码 模板英文名',
+    col_name varchar(50) not null comment '前台显示名称',
+    col_code varchar(20) not null comment '字段的编码',
+    col_model longtext not null comment 'jqgrid的colmodel',
+    seq INT NOT NULL  COMMENT '列顺序',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+);
+
+
+insert into c_template(template_code,name,html_name,url) values('mapping','映射管理','list_template','LIST->mapping_list_url;QUERY->mapping_query_url');
+
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','列ID','id','{ "name": "id","index": "id","width": "90",
+                                                                                                             "editable": "true",
+                                                                                                             "sorttype": "int" }',1);
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','域','domain','{ "name": "domain","index": "domain","width": "90",
+                                                                                                             "editable": "true",
+                                                                                                             "formatoptions": { "defaultValue": "DOMAIN.COMMON" } ,
+                                                                                                           }',2);
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','名称','name','{ "name": "name","index": "name","width": "90",
+                                                                                                             "editable": "true" }',3);
+
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','键','key','{ "name": "key","index": "key","width": "90",
+                                                                                                             "editable": "true" }',4);
+
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','值','value','{ "name": "value","index": "value","width": "90",
+                                                                                                             "editable": "true" }',5);
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','备注','value','{ "name": "remark","index": "remark","width": "90",
+                                                                                                             "editable": "true" }',6);
+
+INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('mapping','BUTTON','BUTTON','{
+                                                                                                            "name": "detail",
+                                                                                                            "index": "",
+                                                                                                            "width": "40",
+                                                                                                            "fixed": "true",
+                                                                                                            "sortable": "false",
+                                                                                                            "resize": "false",
+                                                                                                            "formatter": "function(cellvalue, options, rowObject){\n var temp =\"<div style=''margin-left:8px;''><div title=''详情记录'' style=''float:left;cursor:pointer;'' class=''ui-pg-div'' id=''jEditButton_3'' onclick=''detail(\"+rowObject+\")'' onmouseover=''jQuery(this).addClass(''ui-state-hover'');'' onmouseout=''jQuery(this).removeClass(''ui-state-hover'');''><span class=''ui-icon fa-search-plus''/></div></div>\";\n return temp; \n}"
+                                                                                                          }',7);
+/** 如果BUTTON 报错不显示，则直接粘贴到col_model中
+ {
+ 	"name": "detail",
+ 	"index": "",
+ 	"width": "40",
+ 	"fixed": "true",
+ 	"sortable": "false",
+ 	"resize": "false",
+ 	"formatter": "function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><div title='详情记录' style='float:left;cursor:pointer;' class='ui-pg-div' id='jEditButton_3' onclick='detail(\" + rowObject + \")' onmouseover='jQuery(this).addClass('ui-state-hover');' onmouseout='jQuery(this).removeClass('ui-state-hover');'><span class='ui-icon fa-search-plus'/></div></div>\";return temp; }"
+ }
+**/

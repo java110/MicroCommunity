@@ -1,5 +1,6 @@
 package com.java110.service.aop;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.factory.PageDataFactory;
 import com.java110.common.util.Assert;
@@ -59,9 +60,25 @@ public class PageProcessAspect {
                  pd = PageDataFactory.newInstance().builder(str).setTransactionId(SequenceUtil.getPageTransactionId());
             }
         }
-
+        //对 get情况下的参数进行封装
         if(pd == null){
             pd = PageDataFactory.newInstance().setTransactionId(SequenceUtil.getPageTransactionId());
+            Map<String,String[]> params = request.getParameterMap();
+            if(params != null  && !params.isEmpty()) {
+                JSONObject paramObj = new JSONObject();
+                for(String key : params.keySet()) {
+                    if(params.get(key).length>0){
+                        String value = "";
+                        for(int paramIndex = 0 ; paramIndex < params.get(key).length;paramIndex++) {
+                            value = params.get(key)[paramIndex] + ",";
+                        }
+                        value = value.endsWith(",")?value.substring(0,value.length()-1):value;
+                        paramObj.put(key,value);
+                    }
+                    continue;
+                }
+                pd.setParam(paramObj);
+            }
         }
 
         if(request.getAttribute("claims") != null && request.getAttribute("claims") instanceof Map){

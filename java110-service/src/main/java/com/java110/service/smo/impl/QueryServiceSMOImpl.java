@@ -11,6 +11,7 @@ import com.java110.common.exception.BusinessException;
 import com.java110.common.factory.DataTransactionFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
@@ -189,15 +190,11 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         JSONArray currentJsonArr = null;
         for(String key:templateParams.keySet()){
             template = templateParams.getString(key);
-            if(!template.startsWith("$.")){
-                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须以$.开头");
-            }
-            values = template.split("#");
 
-            if(values == null || values.length != 3){
-                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须有两个#号");
-            }
-            Object o = JSONPath.eval(business,values[0]);
+            values = judgeResponseTemplate(template);
+
+            Object o = JSONPath.eval(business, values[0]);
+
             dataQuery.setTemplateKey(key);
             if(o instanceof JSONObject){
                 currentJsonObj = (JSONObject)o;
@@ -260,12 +257,26 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             List<Map<String,Object>> results = queryServiceDAOImpl.executeSql(currentSqlNew, currentParams.toArray());
 
             if (results == null || results.size() == 0) {
+                if(StringUtil.isNullOrNone(values[1])){
+                    return ;
+                }
                 obj.put(values[1], new JSONObject());
                 return;
             }
             if (values[2].equals("Object")) {
+                if(StringUtil.isNullOrNone(values[1])){
+                    obj.putAll(JSONObject.parseObject(JSONObject.toJSONString(results.get(0))));
+                    return ;
+                }
                 obj.put(values[1], JSONObject.parseObject(JSONObject.toJSONString(results.get(0))));
             } else if (values[2].equals("Array")) {
+                if(StringUtil.isNullOrNone(values[1])){
+                    JSONArray datas = JSONArray.parseArray(JSONArray.toJSONString(results));
+                    for(int dataIndex = 0;dataIndex < datas.size();dataIndex ++){
+                        obj.putAll(datas.getJSONObject(dataIndex));
+                    }
+                    return ;
+                }
                 obj.put(values[1], JSONArray.parseArray(JSONArray.toJSONString(results)));
             }
         }catch (Exception e){
@@ -306,6 +317,33 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
         dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                 "成功",JSONObject.parseObject(jsonStr)));
+    }
+
+
+    /**
+     * 校验 返回模板
+     * @param template
+     * @return
+     * @throws BusinessException
+     */
+    private String[] judgeResponseTemplate(String template) throws BusinessException{
+
+
+        if(!template.startsWith("$.")){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须以$.开头");
+        }
+
+        String[] values = template.split("#");
+
+        if(values == null || values.length != 3){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，value 必须有两个#号");
+        }
+
+        if(StringUtil.isNullOrNone(values[1]) && !"$.##Object".equals(template) && !"$.##Array".equals(template)){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"template 配置 不正确，目前只支持 $.##Object 和 $.##Array ");
+        }
+
+        return values;
     }
 
 

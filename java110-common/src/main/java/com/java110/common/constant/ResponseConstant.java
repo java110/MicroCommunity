@@ -32,6 +32,10 @@ public class ResponseConstant {
     public final static String RESULT_CODE_NO_AUTHORITY_ERROR = "1996";
 
     public final static String RESULT_CODE_RULE_ERROR = "1995";
+    /**
+     * 系统配置错误
+     */
+    public final static String RESULT_CODE_CONFIG_ERROR = "1993";
 
     /**
      * 参数不正确

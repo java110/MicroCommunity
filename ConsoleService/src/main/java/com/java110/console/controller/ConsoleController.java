@@ -1,8 +1,10 @@
 package com.java110.console.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.exception.NoAuthorityException;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.PageData;
@@ -35,6 +37,7 @@ public class ConsoleController extends BaseController {
             PageData pd = this.getPageData(request);
             // 判断用户是否登录
             checkLogin(pd);
+            model.addAttribute("templateName","控制中心首页");
             //2.0 查询菜单信息
             getMenus(model,pd,consoleServiceSMOImpl.getMenuItemsByManageId(pd.getUserId()));
             //3.0 查询各个系统调用量
@@ -61,20 +64,26 @@ public class ConsoleController extends BaseController {
      */
     @RequestMapping(path = "/console/list")
     public String listData(Model model, HttpServletRequest request){
-        String template = "list_template";
+        String template = "";
         try {
-            String templateCode = request.getParameter("templateCode");
 
-            Assert.hasLength(templateCode,"请求参数templateCode 不能为空！");
-
-            model.addAttribute("templateCode",templateCode);
             //1.0 获取对象
             PageData pd = this.getPageData(request);
+
+            Assert.hasLength(pd.getParam().getString("templateCode"),"请求参数templateCode 不能为空！");
             // 判断用户是否登录
             checkLogin(pd);
-            //2.0 查询菜单信息
+            //2.0 查询模板信息
+            checkTemplate(pd,model);
+            //3.0 查询菜单信息
             getMenus(model,pd,consoleServiceSMOImpl.getMenuItemsByManageId(pd.getUserId()));
             //3.0 查询各个系统调用量
+
+            template = pd.getData().getJSONObject("template").containsKey("htmlName")
+                    && !StringUtil.isNullOrNone( pd.getData().getJSONObject("template").getString("htmlName")) ?
+                    pd.getData().getJSONObject("template").getString("htmlName"):
+                    "list_template";
+
         }catch (NoAuthorityException e){
             //跳转到登录页面
             template = "redirect:/login";
@@ -87,6 +96,25 @@ public class ConsoleController extends BaseController {
             template = "redirect:/system/error";
         }finally {
             return template;
+        }
+
+    }
+
+
+    /**
+     * 模板校验并将模板写入到 model 对象中 前台页面展示用
+     * @param pd
+     * @param model
+     */
+    private void checkTemplate(PageData pd,Model model) throws IllegalArgumentException{
+        try {
+            consoleServiceSMOImpl.getTemplate(pd);
+            JSONObject template = pd.getData().getJSONObject("template");
+            model.addAttribute("templateCode",template.getString("templateCode"));
+            model.addAttribute("templateName",template.getString("templateName"));
+        }catch (Exception e){
+            logger.error("查询异常",e);
+            throw  new IllegalArgumentException("配置错误，没有当前模板【"+pd.getParam().getString("templateCode")+"】");
         }
 
     }

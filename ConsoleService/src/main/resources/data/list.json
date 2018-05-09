@@ -1,10 +1,10 @@
 {
 
-  "total": "100",
+  "total": 100,
 
-  "page": "2",
+  "page": 2,
 
-  "records": "10",
+  "records": 10,
 
   "rows" : [
 

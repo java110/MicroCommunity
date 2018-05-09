@@ -60,8 +60,12 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
         }finally{
             try {
                 //conn.close();
-                ps.close();
-                rs.close();
+                if( ps!=null) {
+                    ps.close();
+                }
+                if(rs != null) {
+                    rs.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

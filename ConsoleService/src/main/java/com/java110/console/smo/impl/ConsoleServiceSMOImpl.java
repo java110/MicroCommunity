@@ -14,6 +14,7 @@ import com.java110.common.factory.AuthenticationFactory;
 import com.java110.common.factory.DataTransactionFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.entity.service.PageData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,20 +119,56 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         Map paramIn = new HashMap();
         paramIn.put("templateCode", templateCode);
         paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
-        paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE);
-        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_NAME);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_COL);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_COL_NAME);
         //paramIn.put("userPwd", userPwd);
         JSONObject businessObj = doExecute(paramIn);
 
         Assert.isNotNull(businessObj,"template","查询模板 服务配置错误，返回报文中未包含template节点");
 
+        removeButtonName(businessObj);
 
         JSONObject templateObj = new JSONObject();
+
+        paramColModelToJson(businessObj.getJSONArray("template"));
+
         templateObj.put("template",businessObj.getJSONArray("template"));
 
         pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",templateObj));
 
+    }
 
+    /**
+     *  colModel 字段处理
+     * @param jsonArray
+     * @throws SMOException
+     */
+    private void paramColModelToJson(JSONArray jsonArray) throws SMOException{
+        if(jsonArray == null || jsonArray.size() == 0){
+            return ;
+        }
+        try {
+            for(int arrIndex = 0; arrIndex < jsonArray.size();arrIndex ++){
+                JSONObject tObj = jsonArray.getJSONObject(arrIndex);
+                tObj.put("colModel",JSONObject.parse(tObj.getString("colModel")));
+            }
+        }catch (Exception e){
+            logger.error("c_template_col 表 colModel 配置错误",e);
+            throw new SMOException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"colModel 配置错误");
+        }
+    }
+
+    /**
+     * 删除BUTTON 字段 值
+     * @param jsonObject
+     */
+    private void removeButtonName(JSONObject jsonObject){
+        JSONArray template = jsonObject.getJSONArray("template");
+        for(int colIndex = 0 ; colIndex < template.size() ; colIndex ++){
+            if(CommonConstant.TEMPLATE_COLUMN_NAME_BUTTON.equals(template.getJSONObject(colIndex).getString("colName"))){
+                template.getJSONObject(colIndex).put("colName","");
+            }
+        }
     }
 
     private JSONObject doExecute(Map paramIn) {
@@ -185,6 +222,87 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
 
         return DataTransactionFactory.getOneBusinessFromCenterServiceResponseJson(responseMsg);
     }
+
+
+    /**
+     * 获取模板
+     * @param pd
+     * @return
+     * @throws SMOException
+     */
+    public void getTemplate(PageData pd) throws SMOException{
+        String templateCode = pd.getParam().getString("templateCode");
+
+        Assert.hasText(templateCode,"模板编码不能为空");
+
+        Map paramIn = new HashMap();
+        paramIn.put("templateCode", templateCode);
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_NAME);
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        Assert.isNotNull(businessObj,"template","查询模板 服务配置错误，返回报文中未包含template节点");
+
+
+        JSONObject templateObj = new JSONObject();
+        templateObj.put("template",businessObj.getJSONObject("template"));
+        pd.setData(templateObj);
+        pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",templateObj));
+
+    }
+
+    /**
+     * 查询模板数据
+     * @param pd
+     * @throws SMOException
+     */
+    public void getTemplateData(PageData pd) throws SMOException{
+
+        //查询模板信息
+        getTemplate(pd);
+        JSONObject template = pd.getData().getJSONObject("template");
+        String rows = pd.getParam().getString("rows");
+        String page = pd.getParam().getString("page");
+        String sord = pd.getParam().getString("sord");
+        String templateUrl = template.getString("templateUrl");
+        if(StringUtil.isNullOrNone(templateUrl) || !templateUrl.contains(CommonConstant.TEMPLATE_URL_LIST)){
+            throw new SMOException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"配置错误，模板中为配置查询数据的地址");
+        }
+
+        Map paramIn = new HashMap();
+
+        paramIn.put("rows", rows);
+        paramIn.put("page", page);
+        paramIn.put("sord", sord);
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,getServiceCode(templateUrl,CommonConstant.TEMPLATE_URL_LIST));
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,"数据查询");
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        pd.setResJson(businessObj);
+    }
+
+    /**
+     * 获取serviceCode
+     * @param templateUrl
+     * @param model
+     * @return
+     * @throws SMOException
+     */
+    private String getServiceCode(String templateUrl,String model) throws SMOException{
+        String [] tUrls = templateUrl.split(CommonConstant.TEMPLATE_URL_SPILT);
+        for(String url : tUrls){
+            if(url.contains(model)){
+                return url.substring(model.length());
+            }
+        }
+
+        throw new SMOException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"配置错误，模板中为配置["+model+"]数据的地址");
+    }
+
 
 
     public RestTemplate getRestTemplate() {

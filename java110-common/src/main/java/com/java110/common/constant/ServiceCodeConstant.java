@@ -38,6 +38,17 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_NAME = "查询模板信息";
 
 
+    /**
+     * 查询菜单编码
+     */
+    public static final String SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_COL = "query.console.templateCol";
+
+    /**
+     * 查询菜单编码名称
+     */
+    public static final String SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_COL_NAME = "查询模板列信息";
+
+
     public static final String SERVICE_CODE = "SERVICE_CODE";
     public static final String SERVICE_CODE_NAME = "SERVICE_CODE_NAME";
 

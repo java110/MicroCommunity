@@ -76,5 +76,13 @@ public class CommonConstant {
 
     public final static String ORDER_DEFAULT_USER_ID = "-1";
 
+    public final static String TEMPLATE_COLUMN_NAME_BUTTON = "BUTTON";
+
+    public final static String TEMPLATE_URL_LIST = "LIST->";
+    public final static String TEMPLATE_URL_QUERY = "QUERY->";
+    public final static String TEMPLATE_URL_UPDATE = "UPDATE->";
+    public final static String TEMPLATE_URL_DELETE = "DELETE->";
+    public final static String TEMPLATE_URL_SPILT = ";";
+
 
 }

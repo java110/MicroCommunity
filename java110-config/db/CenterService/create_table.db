@@ -103,7 +103,7 @@ CREATE TABLE c_route(
     order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
     invoke_limit_times INT COMMENT '接口调用一分钟调用次数',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
 );
 
 
@@ -169,7 +169,7 @@ CREATE TABLE c_app(
     black_list_ip VARCHAR(200) COMMENT '黑名单ip 多个之间用;隔开',
     remark VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
 
 -- c_service_sql
@@ -185,7 +185,7 @@ CREATE TABLE c_service_sql(
     template LONGTEXT COMMENT '输出模板',
     remark VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
 
 -- 测试用
@@ -197,6 +197,28 @@ values('8000418001','内部测试应用','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89K
 
 insert into c_app(app_id,`name`,security_code,remark,status_cd)
 values('8000418002','控制中心应用','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89KMC','控制中心应用','0');
+
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.userInfo','S','Q','用户信息查询',1,'http://...','8000418001','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.order.orderInfo','S','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.console.menu','S','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+
+insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.loginInfo','S','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.template','S','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.templateCol','S','Q','查询列模板信息',1,'http://center-service/businessApi/query','8000418002');
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.center.mapping','S','Q','查询映射数据',1,'http://center-service/businessApi/query','8000418002');
 
 insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418001','1','Q','0'
@@ -214,17 +236,19 @@ insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418002','5','Q','0'
 );
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.userInfo','S','Q','用户信息查询',1,'http://...','8000418001','0');
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','6','Q','0'
+);
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.order.orderInfo','S','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','7','Q','0'
+);
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.console.menu','S','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','8','Q','0'
+);
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.loginInfo','S','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
+
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.order.orderInfo','订单信息','oId','1','{
@@ -275,6 +299,52 @@ VALUES('query.user.loginInfo','查询用户登录信息','userCode','1','{
                                                            "message": "成功"
                                                          }
                                                        }}','','0');
+
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('query.console.template','查询模板信息','templateCode','1','{
+                                                 	"param1":"SELECT t.template_code templateCode,t.name templateName,t.`html_name` htmlName,t.`url` templateUrl
+                                                              FROM c_template t WHERE t.status_cd = ''0'' AND t.template_code = #templateCode#"
+                                                 }','','{"PARAM":{
+                                                            "param1": "$.#template#Object"
+                                                            },"TEMPLATE":{
+                                                         "response": {
+                                                           "code": "0000",
+                                                           "message": "成功"
+                                                         }
+                                                       }}','','0');
+
+
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('query.console.templateCol','查询模板列信息','templateCode','1','{
+                                                 	"param1":"SELECT t.template_code templateCode,t.name templateName,tc.col_name colName,tc.col_model colModel FROM c_template t,c_template_col tc WHERE t.status_cd = ''0'' AND t.template_code = tc.template_code
+                                                              AND tc.status_cd = ''0''
+                                                              AND t.template_code = #templateCode#"
+                                                 }','','{"PARAM":{
+                                                            "param1": "$.#template#Array"
+                                                            },"TEMPLATE":{
+                                                         "response": {
+                                                           "code": "0000",
+                                                           "message": "成功"
+                                                         }
+                                                       }}','','0');
+
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('query.center.mapping','查询映射数据','page,rows,sord','1','{"select count(1) records,#page# page,ceil(count(1)/10) total from c_mapping m where m.status_cd = ''0''",
+                                                             "param2":"SELECT m.`id` id,m.`domain` domain,m.name name,m.`key` key ,m.`value` value,m.`remark` remark FROM c_mapping m WHERE m.`status_cd` = ''0'' LIMIT (#page#-1)*#rows#, #rows#"
+                                                             }','','{
+                                                        	"PARAM": {
+                                                        		"param1": "$.##Object",
+                                                        		"param2": "$.#rows#Array"
+                                                        	},
+                                                        	"TEMPLATE": {
+                                                        		"response": {
+                                                        			"code": "0000",
+                                                        			"message": "成功"
+                                                        		}
+                                                        	}
+                                                        }','','0');
+
+
 
 
 
