@@ -263,8 +263,10 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         //查询模板信息
         getTemplate(pd);
         JSONObject template = pd.getData().getJSONObject("template");
-        String rows = pd.getParam().getString("rows");
-        String page = pd.getParam().getString("page");
+        Assert.isInteger(pd.getParam().getString("rows"),"rows 字段不能为空,并且为整数");
+        Assert.isInteger(pd.getParam().getString("page"),"page 字段不能为空,并且为整数");
+        int rows = Integer.parseInt(pd.getParam().getString("rows"));
+        int page = Integer.parseInt(pd.getParam().getString("page"));
         String sord = pd.getParam().getString("sord");
         String templateUrl = template.getString("templateUrl");
         if(StringUtil.isNullOrNone(templateUrl) || !templateUrl.contains(CommonConstant.TEMPLATE_URL_LIST)){
@@ -274,8 +276,9 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         Map paramIn = new HashMap();
 
         paramIn.put("rows", rows);
-        paramIn.put("page", page);
+        paramIn.put("page", (page-1)*rows);
         paramIn.put("sord", sord);
+        paramIn.put("userId", pd.getUserId());
         paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
         paramIn.put(ServiceCodeConstant.SERVICE_CODE,getServiceCode(templateUrl,CommonConstant.TEMPLATE_URL_LIST));
         paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,"数据查询");
@@ -285,6 +288,64 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         pd.setResJson(businessObj);
     }
 
+
+    /**
+     * 刷新缓存
+     * @param pd
+     * @throws SMOException
+     */
+    public void flushCache(PageData pd) throws SMOException{
+        //查询单条缓存信息
+        queryCacheOne(pd);
+
+        JSONObject cacheObj = pd.getData().getJSONObject("cache");
+
+        String serviceCode = cacheObj.getString("serviceCode");
+
+        String param = cacheObj.getString("param");
+        if(!Assert.isJsonObject(param)){
+            throw new SMOException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,serviceCode+"缓存配置param错误，不是有效的json格式");
+        }
+        Map paramIn = new HashMap();
+        paramIn.putAll(JSONObject.parseObject(param));
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,serviceCode);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,"刷新缓存");
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        Assert.notEmpty(businessObj,"刷新缓存失败，请联系管理员");
+
+        pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",null));
+
+    }
+
+    /**
+     * 查询缓存信息
+     * @param pd
+     */
+    public void queryCacheOne(PageData pd) throws  SMOException{
+        String cacheCode = pd.getParam().getString("cacheCode");
+
+        Assert.hasText(cacheCode,"缓存编码不能为空");
+
+        Map paramIn = new HashMap();
+        paramIn.put("cacheCode", cacheCode);
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_CACHE);
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_CONSOLE_CACHE_NAME);
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        Assert.isNotNull(businessObj,"cache","查询单条缓存信息 配置错误，返回报文中未包含cache节点");
+
+
+        JSONObject templateObj = new JSONObject();
+        templateObj.put("cache",businessObj.getJSONObject("cache"));
+        pd.setData(templateObj);
+        pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",templateObj));
+
+    }
     /**
      * 获取serviceCode
      * @param templateUrl

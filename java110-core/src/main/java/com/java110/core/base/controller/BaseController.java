@@ -158,11 +158,18 @@ public class BaseController extends AppBase {
                     parentMenuItem.put("subMenus",subMenus);
                 }
 
-                removeMenuItems.add(menuItem);
+                //removeMenuItems.add(menuItem);
             }
         }
 
+
+        //bug 20180510 如果在一级菜单下面没有挂二级菜单报错问题处理
+        ifNoSubMenusToRemove(menuItems,removeMenuItems);
+
         removeMap(menuItems,removeMenuItems);
+
+
+
         model.addAttribute("menus",menuItems);
     }
 
@@ -188,6 +195,14 @@ public class BaseController extends AppBase {
 
         for(Map removeMenuItem : removeMenuItems){
             menuItems.remove(removeMenuItem);
+        }
+    }
+
+    private void ifNoSubMenusToRemove(List<Map> menuItems,List<Map> removeMenuItems){
+        for(Map menu :menuItems){
+            if(!menu.containsKey("subMenus")){
+                removeMenuItems.add(menu);
+            }
         }
     }
 }

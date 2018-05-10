@@ -41,6 +41,17 @@ public class ServiceCodeConstant {
     /**
      * 查询菜单编码
      */
+    public static final String SERVICE_CODE_QUERY_CONSOLE_CACHE = "query.console.cache";
+
+    /**
+     * 查询菜单编码名称
+     */
+    public static final String SERVICE_CODE_QUERY_CONSOLE_CACHE_NAME = "查询单条缓存信息";
+
+
+    /**
+     * 查询菜单编码
+     */
     public static final String SERVICE_CODE_QUERY_CONSOLE_TEMPLATE_COL = "query.console.templateCol";
 
     /**

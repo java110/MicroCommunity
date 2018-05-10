@@ -1,12 +1,18 @@
 package com.java110.center.smo.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.cache.ServiceSqlCache;
+import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.SMOException;
+import com.java110.common.factory.DataTransactionFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
+import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +37,37 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     IQueryServiceDAO queryServiceDAOImpl;
 
     @Override
-    public void flush() {
+    public void flush(DataQuery dataQuery) throws SMOException{
+
+
 
         //1.0 封装 AppRoute
-        flushAppRoute();
+        flushAppRoute(dataQuery);
 
         //2.0 分装 Mapping
-        flushMapping();
+        flushMapping(dataQuery);
 
         //3.0 分装 ServiceSql
-        flushServiceSql();
+        flushServiceSql(dataQuery);
+
+        dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,"刷新成功"));
     }
 
+    private void checkCacheParam(DataQuery dataQuery) throws SMOException{
+        JSONObject params = dataQuery.getRequestParams();
+        if(params == null || !params.containsKey(CommonConstant.CACHE_PARAM_NAME)){
+            throw new SMOException(ResponseConstant.RESULT_PARAM_ERROR,"请求报文错误，未包含字段 "+CommonConstant.CACHE_PARAM_NAME);
+        }
+    }
     /**
      * 3.0 分装 ServiceSql
      */
-    private void flushServiceSql() {
+    private void flushServiceSql(DataQuery dataQuery) {
+
+        JSONObject params = dataQuery.getRequestParams();
+        if(!CommonConstant.CACHE_SERVICE_SQL.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
+            return ;
+        }
         List<ServiceSql> serviceSqls = queryServiceDAOImpl.qureyServiceSqlAll();
 
         if(serviceSqls == null || serviceSqls.size() == 0){
@@ -60,7 +81,13 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     /**
      * 刷新 Mapping 数据
      */
-    private void flushMapping() {
+    private void flushMapping(DataQuery dataQuery) {
+
+        JSONObject params = dataQuery.getRequestParams();
+
+        if(!CommonConstant.CACHE_MAPPING.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
+            return ;
+        }
 
         List<Mapping> mappings = centerServiceDAOImpl.getMappingInfoAll();
 
@@ -89,8 +116,13 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     /**
      * 刷新AppRoute数据
      */
-    private void flushAppRoute(){
+    private void flushAppRoute(DataQuery dataQuery){
 
+        JSONObject params = dataQuery.getRequestParams();
+
+        if(!CommonConstant.CACHE_APP_ROUTE_SERVICE.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
+            return ;
+        }
         List<Map> appInfos = centerServiceDAOImpl.getAppRouteAndServiceInfoAll();
         Map<String,List<AppRoute>> appRoustsMap = new HashMap<String,List<AppRoute>>();
         List<AppRoute> appRoutes = null;

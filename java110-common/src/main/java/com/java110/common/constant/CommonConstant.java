@@ -85,4 +85,23 @@ public class CommonConstant {
     public final static String TEMPLATE_URL_SPILT = ";";
 
 
+    public final static String CACHE_PARAM_NAME = "cacheName";
+
+    /**
+     * 组件路由 服务 缓存常量
+     */
+    public final static String CACHE_APP_ROUTE_SERVICE = "APP_ROUTE_SERVICE";
+
+    /**
+     * 映射 缓存常量
+     */
+    public final static String CACHE_MAPPING = "MAPPING";
+
+    /**
+     * 映射 缓存常量
+     */
+    public final static String CACHE_SERVICE_SQL = "SERVICE_SQL";
+
+
+
 }

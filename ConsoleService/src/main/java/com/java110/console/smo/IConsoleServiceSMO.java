@@ -51,5 +51,18 @@ public interface IConsoleServiceSMO {
      */
     public void getTemplateData(PageData pd) throws SMOException;
 
+    /**
+     * 刷新缓存
+     * @param pd
+     * @throws SMOException
+     */
+    public void flushCache(PageData pd) throws SMOException;
+
+    /**
+     * 查询缓存信息
+     * @param pd
+     */
+    public void queryCacheOne(PageData pd) throws  SMOException;
+
 
 }

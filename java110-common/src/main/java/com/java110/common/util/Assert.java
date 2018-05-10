@@ -2,6 +2,7 @@ package com.java110.common.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -105,5 +106,16 @@ public class Assert extends org.springframework.util.Assert{
             return false;
         }
         return true;
+    }
+
+    /**
+     * 校验是否为整数
+     * @param text
+     * @param msg
+     */
+    public static void isInteger(String text,String msg){
+        if(!StringUtils.isNumeric(text)){
+            throw new IllegalArgumentException(msg);
+        }
     }
 }

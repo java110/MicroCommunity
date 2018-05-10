@@ -60,6 +60,8 @@ Java + spring cloud + mybatis + mysql + kafka + redis
   ![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180507231045.jpg)
   
   ![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180509223107.jpg)
+  
+  ![image](https://github.com/java110/MicroCommunity/blob/master/ConsoleService/doc/img/20180511010848.jpg)
 
 
 10、统一接口地址：http://yourIp:8001/httpApi/service

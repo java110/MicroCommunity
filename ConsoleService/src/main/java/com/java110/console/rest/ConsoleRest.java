@@ -68,4 +68,24 @@ public class ConsoleRest extends BaseController {
 
         return pd.getResJson().toJSONString();
     }
+
+    @RequestMapping(path = "/console/flushCache",method = RequestMethod.POST)
+    public String flushCache(HttpServletRequest request){
+        PageData pd = null;
+        try {
+            pd = this.getPageData(request);
+            // 判断用户是否登录
+            checkLogin(pd);
+            consoleServiceSMOImpl.flushCache(pd);
+        }catch (IllegalArgumentException e){
+            return DataTransactionFactory.pageResponseJson(pd, ResponseConstant.RESULT_PARAM_ERROR,e.getMessage(),null);
+        }catch (SMOException e){
+            return DataTransactionFactory.pageResponseJson(pd,e.getResult().getCode(),e.getMessage(),null);
+        }catch (Exception e){
+            logger.error("异常信息：",e);
+            return DataTransactionFactory.pageResponseJson(pd,ResponseConstant.RESULT_CODE_ERROR,"请求参数出错 ",null);
+        }
+
+        return pd.getResJson().toJSONString();
+    }
 }
