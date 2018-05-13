@@ -1,6 +1,11 @@
 package com.java110.center;
 
-import com.java110.event.center.init.CenterServiceStartInit;
+import com.java110.center.smo.ICenterServiceCacheSMO;
+import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.common.factory.DataQueryFactory;
+import com.java110.entity.service.DataQuery;
+import com.java110.event.center.init.EventConfigInit;
+import com.java110.service.init.ServiceStartInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -43,8 +48,30 @@ public class CenterServiceApplicationStart {
     public static void main(String[] args) throws Exception{
         ApplicationContext context = SpringApplication.run(CenterServiceApplicationStart.class, args);
 
-        CenterServiceStartInit centerServiceStartInit = new CenterServiceStartInit();
+        //服务启动加载
+        ServiceStartInit.initSystemConfig(context);
 
-        centerServiceStartInit.initSystemConfig(context);
+        //加载事件数据
+        EventConfigInit.initSystemConfig();
+
+        //刷新缓存
+        flushMainCache(args);
+    }
+
+
+    /**
+     * 刷新主要的缓存
+     * @param args
+     */
+    private static void flushMainCache(String []args) {
+        if (args == null || args.length == 0) {
+            return;
+        }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("-Dcache")) {
+                ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
+                centerServiceCacheSMO.startFlush();
+            }
+        }
     }
 }

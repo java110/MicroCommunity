@@ -87,22 +87,22 @@ create table c_template_col(
 insert into c_template(template_code,name,html_name,url) values('mapping','映射管理','list_template','LIST->query.center.mapping;QUERY->mapping_query_url');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','列ID','id','{ "name": "id","index": "id","width": "90",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "sorttype": "int" }',1);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','域','domain','{ "name": "domain","index": "domain","width": "90",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "formatoptions": { "defaultValue": "DOMAIN.COMMON" }
                                                                                                            }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','名称','name','{ "name": "name","index": "name","width": "90",
-                                                                                                             "editable": "true" }',3);
+                                                                                                             "editable": true }',3);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','键','key','{ "name": "key","index": "key","width": "90",
-                                                                                                             "editable": "true" }',4);
+                                                                                                             "editable": true }',4);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','值','value','{ "name": "value","index": "value","width": "90",
-                                                                                                             "editable": "true" }',5);
+                                                                                                             "editable": true }',5);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','备注','value','{ "name": "remark","index": "remark","width": "90",
-                                                                                                             "editable": "true" }',6);
+                                                                                                             "editable": true }',6);
 
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('mapping','BUTTON','BUTTON','{
                                                                                                             "name": "detail",
@@ -118,7 +118,7 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
  	"name": "detail",
  	"index": "",
  	"width": "40",
- 	"fixed": "true",
+ 	"fixed": true,
  	"sortable": "false",
  	"resize": "false",
  	"formatter": "function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><div title='详情记录' style='float:left;cursor:pointer;' class='ui-pg-div' id='jEditButton_3' onclick='detail(\" + rowObject + \")' onmouseover='jQuery(this).addClass('ui-state-hover');' onmouseout='jQuery(this).removeClass('ui-state-hover');'><span class='ui-icon fa-search-plus'/></div></div>\";return temp; }"
@@ -130,25 +130,25 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
 insert into c_template(template_code,name,html_name,url) values('app','外部应用','list_template','LIST->query.center.apps;QUERY->query.center.app');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','列ID','id','{ "name": "id","index": "id","width": "20",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "sorttype": "int" }',1);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','AppId','domain','{ "name": "appId","index": "appId","width": "40",
-                                                                                                             "editable": "true"
+                                                                                                             "editable": true
                                                                                                            }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','名称','name','{ "name": "name","index": "name","width": "50",
-                                                                                                             "editable": "true" }',3);
+                                                                                                             "editable": true }',3);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','秘钥','securityCode','{ "name": "securityCode","index": "securityCode","width": "50",
-                                                                                                             "editable": "true" }',4);
+                                                                                                             "editable": true }',4);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','白名单','whileListIp','{ "name": "whileListIp","index": "whileListIp","width": "90",
-                                                                                                             "editable": "true" }',5);
+                                                                                                             "editable": true }',5);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','黑名单','blackListIp','{ "name": "blackListIp","index": "blackListIp","width": "40",
-                                                                                                             "editable": "true" }',6);
+                                                                                                             "editable": true }',6);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('app','备注','value','{ "name": "remark","index": "remark","width": "90",
-                                                                                                             "editable": "true" }',7);
+                                                                                                             "editable": true }',7);
 
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('app','BUTTON','BUTTON','{
                                                                                                             "name": "detail",
@@ -164,28 +164,28 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
 insert into c_template(template_code,name,html_name,url) values('service','服务管理','list_template','LIST->query.center.services;QUERY->query.center.service');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','服务ID','serviceId','{ "name": "serviceId","index": "serviceId","width": "20",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "sorttype": "int" }',1);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','服务编码','serviceCode','{ "name": "serviceCode","index": "serviceCode","width": "40",
-                                                                                                             "editable": "true"
+                                                                                                             "editable": true
                                                                                                            }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','调用方式','invokeModel','{ "name": "invokeModel","index": "invokeModel","width": "50",
-                                                                                                             "editable": "true" }',3);
+                                                                                                             "editable": true }',3);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','业务类型','businessTypeCd','{ "name": "businessTypeCd","index": "businessTypeCd","width": "50",
-                                                                                                             "editable": "true" }',4);
+                                                                                                             "editable": true }',4);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','名称','name','{ "name": "name","index": "name","width": "40",
-                                                                                                             "editable": "true" }',5);
+                                                                                                             "editable": true }',5);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','消息队列','messageQueueName','{ "name": "messageQueueName","index": "messageQueueName","width": "10",
-                                                                                                             "editable": "true" }',6);
+                                                                                                             "editable": true }',6);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','URL','url','{ "name": "url","index": "url","width": "60",
-                                                                                                             "editable": "true" }',7);
+                                                                                                             "editable": true }',7);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','提供者AppId','provideAppId','{ "name": "provideAppId","index": "provideAppId","width": "10",
-                                                                                                             "editable": "true" }',8);
+                                                                                                             "editable": true }',8);
 
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('service','BUTTON','BUTTON','{
                                                                                                             "name": "detail",
@@ -201,23 +201,23 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
 insert into c_template(template_code,name,html_name,url) values('route','路由管理','list_template','LIST->query.center.routes;QUERY->query.center.route');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','路由ID','id','{ "name": "id","index": "id","width": "10",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "sorttype": "int" }',1);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','AppId','appId','{ "name": "appId","index": "appId","width": "30",
-                                                                                                             "editable": "true"
+                                                                                                             "editable": true
                                                                                                            }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务ID','serviceId','{ "name": "serviceId","index": "serviceId","width": "30",
-                                                                                                             "editable": "true" }',3);
+                                                                                                             "editable": true }',3);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务名称','serviceName','{ "name": "serviceName","index": "serviceName","width": "30",
-                                                                                                             "editable": "true" }',4);
+                                                                                                             "editable": true }',4);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务编码','serviceCode','{ "name": "serviceCode","index": "serviceCode","width": "30",
-                                                                                                             "editable": "true" }',5);
+                                                                                                             "editable": true }',5);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','订单类型','orderTypeCd','{ "name": "orderTypeCd","index": "orderTypeCd","width": "30",
-                                                                                                             "editable": "true" }',6);
+                                                                                                             "editable": true }',6);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','调用次数限制','invokelimitTimes','{ "name": "invokelimitTimes","index": "invokelimitTimes","width": "40",
-                                                                                                             "editable": "true" }',7);
+                                                                                                             "editable": true }',7);
 
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('route','BUTTON','BUTTON','{
                                                                                                             "name": "detail",
@@ -232,13 +232,13 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
 insert into c_template(template_code,name,html_name,url) values('cache','刷新缓存','list_template_cache','LIST->query.center.caches;QUERY->query.center.cacheOne');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('cache','缓存ID','id','{ "name": "id","index": "id","width": "10",
-                                                                                                             "editable": "true",
+                                                                                                             "editable": true,
                                                                                                              "sorttype": "int" }',1);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('cache','缓存编码','cacheCode','{ "name": "cacheCode","index": "cacheCode","width": "30",
-                                                                                                             "editable": "true" }',2);
+                                                                                                             "editable": true }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('cache','缓存名称','cacheName','{ "name": "cacheName","index": "cacheName","width": "30",
-                                                                                                             "editable": "true" }',3);
+                                                                                                             "editable": true }',3);
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('cache','BUTTON','BUTTON','{
                                                                                                             "name": "detail",
                                                                                                             "index": "",
@@ -246,7 +246,7 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
                                                                                                             "fixed": "true",
                                                                                                             "sortable": "false",
                                                                                                             "resize": "false",
-                                                                                                            "formatter": "function(cellvalue, options, rowObject){\n var temp =\"<div style=''margin-left:8px;''><div title=''刷新缓存'' style=''float:left;cursor:pointer;'' class=''ui-pg-div'' id=''jEditButton_3'' onclick=''flush(\"+rowObject+\")'' onmouseover=''jQuery(this).addClass(''ui-state-hover'');'' onmouseout=''jQuery(this).removeClass(''ui-state-hover'');''><span class=''ui-icon fa-search-plus''/></div></div>\";\n return temp; \n}"
+                                                                                                            "formatter": ""function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><button type='button' class='btn btn-warning' style='border-radius: .25rem;' onclick='flush(this,\"+rowObject.cacheCode+\")'>刷新缓存</button></div>\";return temp; }"
                                                                                                           }',4);
 /** 如果BUTTON 报错不显示，则直接粘贴到col_model中
  {
@@ -256,7 +256,7 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
  	"fixed": "true",
  	"sortable": "false",
  	"resize": "false",
- 	"formatter": "function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><div title='刷新缓存' style='float:left;cursor:pointer;' class='ui-pg-div' id='jEditButton_3' onclick='flush(\" + rowObject + \")' onmouseover='jQuery(this).addClass('ui-state-hover');' onmouseout='jQuery(this).removeClass('ui-state-hover');'><span class='ui-icon fa-search-plus'/></div></div>\";return temp; }"
+ 	"formatter": "function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><button type='button' class='btn btn-warning' style='border-radius: .25rem;' onclick='flush(this,\"+rowObject.cacheCode+\")'>刷新缓存</button></div>\";return temp; }"
  }
 **/
 
@@ -282,9 +282,9 @@ create table c_cache_2_user(
 );
 
 
-insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1001','query.center.cache','映射缓存（c_mapping表）','{"cacheName":"MAPPING"}',1);
-insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1002','query.center.cache','业务配置缓存（c_app,c_service,c_route表）','{"cacheName":"APP_ROUTE_SERVICE"}',2);
-insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1003','query.center.cache','公用服务缓存（c_service_sql表）','{"cacheName":"SERVICE_SQL"}',3);
+insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1001','flush.center.cache','映射缓存（c_mapping表）','{"cacheName":"MAPPING"}',1);
+insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1002','flush.center.cache','业务配置缓存（c_app,c_service,c_route表）','{"cacheName":"APP_ROUTE_SERVICE"}',2);
+insert into  c_cache (cache_code,service_code,`name`,param,seq) values('1003','flush.center.cache','公用服务缓存（c_service_sql表）','{"cacheName":"SERVICE_SQL"}',3);
 
 insert into c_cache_2_user(cache_code,user_id) values('1001','10001');
 insert into c_cache_2_user(cache_code,user_id) values('1002','10001');

@@ -1,15 +1,10 @@
 package com.java110.event.center.init;
 
 import com.java110.common.factory.ApplicationContextFactory;
-import com.java110.entity.center.DataFlow;
 import com.java110.event.app.AppEventPublishing;
-import com.java110.event.app.AppListener;
 import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.event.center.DataFlowListener;
-import com.java110.event.listener.common.CommonDispatchListener;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
@@ -20,18 +15,18 @@ import java.util.Properties;
  * 系统启动时加载信息
  * Created by wuxw on 2017/4/14.
  */
-public class CenterServiceStartInit  {
+public class EventConfigInit {
 
     /**
      * 默认 事件配置路径classpath:/
      */
-    private final String DEFAULT_EVENT_PATH = "config/";
+    private final static String DEFAULT_EVENT_PATH = "config/";
 
 
     /**
      * 默认 文件名称  .properties
      */
-    private final String DEFAULT_FILE_NAME = "center_event.properties";
+    private final static String DEFAULT_FILE_NAME = "center_event.properties";
 
     /**
      * 订单调度处理侦听
@@ -44,42 +39,11 @@ public class CenterServiceStartInit  {
     private final static String DISPATCH_EVENT = "java110.event.properties.centerServiceEvent";
 
 
-
-
-    /**
-     * 加载配置文件，将侦听初始化
-     * @param event
-     */
-   // @Override
-    public void onApplicationEvent(ApplicationReadyEvent event){
-
-
+    public static void initSystemConfig(){
         //加载配置文件，注册订单处理侦听
         try {
 
-            ApplicationContextFactory.setApplicationContext(event.getApplicationContext());
-
-            Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
-
-            registerListener(properties);
-
-            //注册事件
-            registerEvent(properties);
-
-        }
-        catch (Exception ex) {
-            throw new IllegalStateException("system init error", ex);
-        }
-
-    }
-
-    public void initSystemConfig(ApplicationContext context){
-        //加载配置文件，注册订单处理侦听
-        try {
-
-            ApplicationContextFactory.setApplicationContext(context);
-
-            Properties properties = this.load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
+            Properties properties = load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
 
             registerListener(properties);
 
@@ -99,7 +63,7 @@ public class CenterServiceStartInit  {
      * @param filename
      * @param
      */
-    private Properties load(String location,String filename) throws Exception{
+    private  static Properties load(String location,String filename) throws Exception{
         Properties properties = PropertiesLoaderUtils.loadProperties(new ClassPathResource(location+filename));
         return properties;
     }
@@ -108,7 +72,7 @@ public class CenterServiceStartInit  {
      * 注册侦听
      * @param properties
      */
-    private void registerListener(Properties properties) throws Exception{
+    private static void registerListener(Properties properties) throws Exception{
 
         String[] listeners = properties.getProperty(DATAFLOW_LISTENER).split("\\,");
 
@@ -128,7 +92,7 @@ public class CenterServiceStartInit  {
      * @param properties
      * @throws Exception
      */
-    private void registerEvent(Properties properties) throws Exception{
+    private static void registerEvent(Properties properties) throws Exception{
         String[] events = properties.getProperty(DISPATCH_EVENT).split("\\,");
 
         for (String event : events){

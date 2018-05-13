@@ -53,6 +53,21 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,"刷新成功"));
     }
 
+    /**
+     * 用来系统启动刷新
+     */
+    @Override
+    public void startFlush() {
+        //1.0 封装 AppRoute
+        doFlushAppRoute();
+
+        //2.0 分装 Mapping
+        doFlushMapping();
+
+        //3.0 分装 ServiceSql
+        doFlushServiceSql();
+    }
+
     private void checkCacheParam(DataQuery dataQuery) throws SMOException{
         JSONObject params = dataQuery.getRequestParams();
         if(params == null || !params.containsKey(CommonConstant.CACHE_PARAM_NAME)){
@@ -68,6 +83,11 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         if(!CommonConstant.CACHE_SERVICE_SQL.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
             return ;
         }
+        // 刷新
+        doFlushServiceSql();
+    }
+
+    private void doFlushServiceSql() {
         List<ServiceSql> serviceSqls = queryServiceDAOImpl.qureyServiceSqlAll();
 
         if(serviceSqls == null || serviceSqls.size() == 0){
@@ -77,6 +97,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
             ServiceSqlCache.setServiceSql(serviceSql);
         }
     }
+
 
     /**
      * 刷新 Mapping 数据
@@ -89,6 +110,10 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
             return ;
         }
 
+        doFlushMapping();
+    }
+
+    private void doFlushMapping() {
         List<Mapping> mappings = centerServiceDAOImpl.getMappingInfoAll();
 
         for(Mapping mapping : mappings){
@@ -123,6 +148,11 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         if(!CommonConstant.CACHE_APP_ROUTE_SERVICE.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
             return ;
         }
+        doFlushAppRoute();
+
+    }
+
+    private void doFlushAppRoute() {
         List<Map> appInfos = centerServiceDAOImpl.getAppRouteAndServiceInfoAll();
         Map<String,List<AppRoute>> appRoustsMap = new HashMap<String,List<AppRoute>>();
         List<AppRoute> appRoutes = null;
@@ -140,7 +170,6 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         for (String appId : appRoustsMap.keySet()) {
             AppRouteCache.setAppRoute(appRoustsMap.get(appId));
         }
-
     }
 
     public ICenterServiceDAO getCenterServiceDAOImpl() {

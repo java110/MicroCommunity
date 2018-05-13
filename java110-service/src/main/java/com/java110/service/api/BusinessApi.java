@@ -85,6 +85,7 @@ public class BusinessApi extends BaseController {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
             initConfig(dataQuery);
+            //这里应该添加 只有配置类数据才能处理数据，业务类数据不能操作 逻辑
             queryServiceSMOImpl.commonDoService(dataQuery);
             return dataQuery.getResponseInfo().toJSONString();
         }catch (Exception e){

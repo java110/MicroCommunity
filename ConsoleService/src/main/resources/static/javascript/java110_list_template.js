@@ -99,7 +99,7 @@ function showGradData(colNames,colModels){
 					enableTooltips(table);
 				}, 0);
 			},
-
+            editurl: "/console/editTemplateData?templateCode="+templateCode,
 		});
 		$(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
@@ -112,11 +112,6 @@ function showGradData(colNames,colModels){
 					.after('<span class="lbl"></span>');
 			}, 0);
 		}
-
-		function doItemData(cellvalue, options, rowObject){
-            var temp ='<div style="margin-left:8px;"><div title="详情记录" style="float:left;cursor:pointer;" class="ui-pg-div" id="jEditButton_3" onclick="detail('+rowObject+')" onmouseover="jQuery(this).addClass("ui-state-hover");" onmouseout="jQuery(this).removeClass(\"ui-state-hover\");"><span class="ui-icon fa-search-plus"/></div></div>';
-           return '['+cellvalue+']';
-        }
 
 		//enable datepicker
 		function pickDate( cellvalue, options, cell ) {

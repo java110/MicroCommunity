@@ -64,5 +64,12 @@ public interface IConsoleServiceSMO {
      */
     public void queryCacheOne(PageData pd) throws  SMOException;
 
+    /**
+     * 编辑模板数据
+     * @param pd
+     * @throws SMOException
+     */
+    public void editTemplateData(PageData pd) throws SMOException;
+
 
 }

@@ -82,7 +82,25 @@ public class CommonConstant {
     public final static String TEMPLATE_URL_QUERY = "QUERY->";
     public final static String TEMPLATE_URL_UPDATE = "UPDATE->";
     public final static String TEMPLATE_URL_DELETE = "DELETE->";
+    public final static String TEMPLATE_URL_INSERT = "INSERT->";
     public final static String TEMPLATE_URL_SPILT = ";";
+
+
+    /**
+     * 添加数据
+     */
+    public final static String TEMPLATE_OPER_ADD = "add";
+
+
+    /**
+     * 编辑数据
+     */
+    public final static String TEMPLATE_OPER_EDIT = "edit";
+
+    /**
+     * 删除数据
+     */
+    public final static String TEMPLATE_OPER_DEL = "del";
 
 
     public final static String CACHE_PARAM_NAME = "cacheName";

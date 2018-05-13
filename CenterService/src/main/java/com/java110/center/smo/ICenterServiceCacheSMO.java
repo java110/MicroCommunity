@@ -11,4 +11,9 @@ public interface ICenterServiceCacheSMO {
      * 刷新 缓存
      */
     public void flush(DataQuery dataQuery);
+
+    /**
+     * 系统启动刷新
+     */
+    public void startFlush();
 }

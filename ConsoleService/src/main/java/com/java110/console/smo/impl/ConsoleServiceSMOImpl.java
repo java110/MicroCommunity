@@ -346,6 +346,45 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         pd.setResJson(DataTransactionFactory.pageResponseJson(pd.getTransactionId(),ResponseConstant.RESULT_CODE_SUCCESS,"查询成功 ",templateObj));
 
     }
+
+    /**
+     * 编辑模板数据
+     * @param pd
+     * @throws SMOException
+     */
+    public void editTemplateData(PageData pd) throws SMOException{
+
+        //查询模板信息
+        getTemplate(pd);
+        JSONObject template = pd.getData().getJSONObject("template");
+        String oper = pd.getParam().getString("oper");
+        Assert.hasLength(oper,"oper 字段不能为空");
+        String templateUrl = template.getString("templateUrl");
+        if(StringUtil.isNullOrNone(templateUrl)){
+            throw new SMOException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"配置错误，模板中url 没有被配置");
+        }
+        String serviceCode = "";
+        if(CommonConstant.TEMPLATE_OPER_ADD.equals(oper)){
+            serviceCode = CommonConstant.TEMPLATE_URL_INSERT;
+        }else if(CommonConstant.TEMPLATE_OPER_EDIT.equals(oper)){
+            serviceCode = CommonConstant.TEMPLATE_URL_UPDATE;
+        }else if(CommonConstant.TEMPLATE_OPER_DEL.equals(oper)){
+            serviceCode = CommonConstant.TEMPLATE_URL_DELETE;
+        }else{
+            throw new SMOException(ResponseConstant.RESULT_PARAM_ERROR,"入参错误oper 只能为 add edit del 中的一种");
+        }
+        Map paramIn = new HashMap();
+        paramIn.putAll(pd.getParam());
+        paramIn.put("userId", pd.getUserId());
+        paramIn.put(CommonConstant.ORDER_USER_ID,pd.getUserId());
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE,getServiceCode(templateUrl,serviceCode));
+        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,"数据操作");
+        //paramIn.put("userPwd", userPwd);
+        JSONObject businessObj = doExecute(paramIn);
+
+        pd.setResJson(businessObj);
+    }
+
     /**
      * 获取serviceCode
      * @param templateUrl

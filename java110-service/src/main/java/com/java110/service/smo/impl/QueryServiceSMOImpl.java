@@ -108,10 +108,12 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
      * @param dataQuery
      */
     private void doExecuteUpdateSql(DataQuery dataQuery) throws BusinessException{
-
+        JSONObject business = null;
         try {
             JSONObject params = dataQuery.getRequestParams();
             JSONObject sqlObj = JSONObject.parseObject(dataQuery.getServiceSql().getSql());
+            JSONObject templateObj = JSONObject.parseObject(dataQuery.getServiceSql().getTemplate());
+            business = JSONObject.parseObject(templateObj.getString("TEMPLATE"));
             List<Object> currentParams = new ArrayList<Object>();
             String currentSql = "";
             for(String key : sqlObj.keySet()) {
@@ -124,7 +126,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                         continue;
                     }
                     currentSqlNew += "?";
-                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'");
+                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "" + params.getString(sqls[sqlIndex]) + "");
                     //currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
                 }
 
@@ -139,6 +141,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             logger.error("数据交互异常：",e);
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"数据交互异常。。。");
         }
+
+        dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
+                "成功",business));
     }
 
     /**

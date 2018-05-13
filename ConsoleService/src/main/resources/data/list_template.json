@@ -13,7 +13,8 @@
         "index": "id",
         "width": 60,
         "sorttype": "int",
-        "editable": "true"
+        "editable": "true",
+        "editoptions": {"size" : "10"}
       }
     }, {
       "colName": "日期",

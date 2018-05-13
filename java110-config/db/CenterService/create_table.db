@@ -238,6 +238,16 @@ VALUES('query.console.caches','S','Q','查询所有缓存',1,'http://center-serv
 INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
 VALUES('query.console.cache','S','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
 
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('save.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('delete.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+
+INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('update.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+
 insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418001','1','Q','0'
 );
@@ -284,6 +294,17 @@ INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
 );
 INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
 '8000418002','13','Q','0'
+);
+
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','14','Q','0'
+);
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','15','Q','0'
+);
+
+INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
+'8000418002','16','Q','0'
 );
 
 
@@ -434,9 +455,9 @@ VALUES('query.center.route','查询路由数据','page,rows,sord','1','{"param1"
                                                         }','','0');
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
-VALUES('query.console.caches','查询路由数据','userId','1','{
+VALUES('query.console.caches','查询缓存数据','userId','1','{
                                                              "param1":"SELECT c.id id,c.`cache_code` cacheCode, c.`name` cacheName FROM c_cache c, c_cache_2_user c2u WHERE c.`cache_code` = c2u.`cache_code` AND c.`status_cd` = ''0''
-                                                                       AND c2u.`status_cd` = ''0'' AND c2u.`user_id` = #10001# AND c.`group` = ''COMMON'' ORDER BY c.`seq` ASC"
+                                                                       AND c2u.`status_cd` = ''0'' AND c2u.`user_id` = #userId# AND c.`group` = ''COMMON'' ORDER BY c.`seq` ASC"
                                                              }','','{
                                                         	"PARAM": {
                                                         		"param1": "$.#rows#Array"
@@ -464,7 +485,39 @@ VALUES('query.console.cache','查询单条缓存信息','cacheCode','1','{
                                                         }','','0');
 
 
-
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('save.center.mapping','保存映射信息','domain,name,key,value,remark','1','{
+                                                             "param1":"INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES(#domain#,#name#,#key#,#value#,#remark#)"
+                                                             }','','{
+                                                        	"TEMPLATE": {
+                                                        		"response": {
+                                                        			"code": "0000",
+                                                        			"message": "成功"
+                                                        		}
+                                                        	}
+                                                        }','','0');
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('delete.center.mapping','删除映射信息','id','1','{
+                                                             "param1":"UPDATE c_mapping m SET m.status_cd = ''1'' WHERE m.status_cd = ''0'' AND m.id = #id#"
+                                                             }','','{
+                                                        	"TEMPLATE": {
+                                                        		"response": {
+                                                        			"code": "0000",
+                                                        			"message": "成功"
+                                                        		}
+                                                        	}
+                                                        }','','0');
+INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
+VALUES('update.center.mapping','修改映射信息','id,domain,name,key,value,remark','1','{
+                                                             "param1":"UPDATE c_mapping m SET m.domain=#domain#,m.name = #name#,m.key=#key#,m.value=#value#,m.remark=#remark# WHERE m.status_cd = ''0'' AND m.id = #id#"
+                                                             }','','{
+                                                        	"TEMPLATE": {
+                                                        		"response": {
+                                                        			"code": "0000",
+                                                        			"message": "成功"
+                                                        		}
+                                                        	}
+                                                        }','','0');
 
 
 
