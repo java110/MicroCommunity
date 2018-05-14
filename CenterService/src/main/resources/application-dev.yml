@@ -17,7 +17,15 @@ eureka:
       #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8001
+  tomcat:
+    uri-encoding: UTF-8
+
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
   application:
     name: center-service
   redis:
@@ -39,7 +47,7 @@ spring:
     filters: stat,wall,log4j
     poolPreparedStatements: true
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.31.199:3306/TT
+    url: jdbc:mysql://192.168.31.199:3306/TT?useUnicode=true&characterEncoding=utf-8
     maxPoolPreparedStatementPerConnectionSize: 20
     password: TT@12345678
     testOnBorrow: false

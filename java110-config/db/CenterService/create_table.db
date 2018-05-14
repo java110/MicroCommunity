@@ -243,10 +243,10 @@ INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,
 VALUES('save.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
 
 INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+VALUES('delete.center.mapping','S','Q','删除映射信息',1,'http://center-service/businessApi/do','8000418002');
 
 INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+VALUES('update.center.mapping','S','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
 
 insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
 '8000418001','1','Q','0'

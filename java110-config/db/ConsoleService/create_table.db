@@ -84,7 +84,7 @@ create table c_template_col(
 );
 
 
-insert into c_template(template_code,name,html_name,url) values('mapping','映射管理','list_template','LIST->query.center.mapping;QUERY->mapping_query_url');
+insert into c_template(template_code,name,html_name,url) values('mapping','映射管理','list_template','LIST->query.center.mapping;QUERY->mapping_query_url;INSERT->save.center.mapping;UPDATE->update.center.mapping;DELETE->delete.center.mapping');
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('mapping','列ID','id','{ "name": "id","index": "id","width": "90",
                                                                                                              "editable": true,

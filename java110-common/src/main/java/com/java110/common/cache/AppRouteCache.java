@@ -5,12 +5,16 @@ import com.java110.entity.center.AppRoute;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 路由配置
  * Created by wuxw on 2018/4/14.
  */
 public class AppRouteCache extends BaseCache {
+
+    //后缀 用来刷缓存时删除 所有以这个为后缀的数据
+    public final static String _SUFFIX_APP_ROUTE = "_SUFFIX_APP_ROUTE";
 
     /**
      * 获取 路由配置
@@ -22,7 +26,7 @@ public class AppRouteCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            appRoutes = SerializeUtil.unserializeList(redis.get(appId.getBytes()),AppRoute.class);
+            appRoutes = SerializeUtil.unserializeList(redis.get((appId+_SUFFIX_APP_ROUTE).getBytes()),AppRoute.class);
             if(appRoutes == null || appRoutes.size() ==0) {
                 return null;
             }
@@ -43,11 +47,13 @@ public class AppRouteCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            redis.set(appRoutes.get(0).getAppId().getBytes(),SerializeUtil.serializeList(appRoutes));
+            redis.set((appRoutes.get(0).getAppId()+_SUFFIX_APP_ROUTE).getBytes(),SerializeUtil.serializeList(appRoutes));
         }finally {
             if(redis != null){
                 redis.close();
             }
         }
     }
+
+
 }

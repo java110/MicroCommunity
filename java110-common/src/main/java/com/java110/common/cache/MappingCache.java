@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class MappingCache extends BaseCache {
 
+    //后缀 用来刷缓存时删除 所有以这个为后缀的数据
+    public final static String _SUFFIX_MAPPING = "_SUFFIX_MAPPING";
 
     /**
      * 获取值
@@ -25,7 +27,7 @@ public class MappingCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            Object object = SerializeUtil.unserialize(redis.get((domain + key).getBytes()));
+            Object object = SerializeUtil.unserialize(redis.get((domain + key+_SUFFIX_MAPPING).getBytes()));
             if (object == null) {
                 return null;
             }
@@ -53,7 +55,7 @@ public class MappingCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            Object obj = SerializeUtil.unserialize(redis.get((DomainContant.COMMON_DOMAIN+key).getBytes()));
+            Object obj = SerializeUtil.unserialize(redis.get((DomainContant.COMMON_DOMAIN+key+_SUFFIX_MAPPING).getBytes()));
             if(obj instanceof Mapping){
                 return (Mapping) obj;
             }
@@ -74,7 +76,7 @@ public class MappingCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            return SerializeUtil.unserializeList(redis.get(domain.getBytes()),Mapping.class);
+            return SerializeUtil.unserializeList(redis.get((domain+_SUFFIX_MAPPING).getBytes()),Mapping.class);
         }finally {
             if(redis != null){
                 redis.close();
@@ -90,7 +92,7 @@ public class MappingCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            redis.set((mapping.getDomain()+mapping.getKey()).getBytes(),SerializeUtil.serialize(mapping));
+            redis.set((mapping.getDomain()+mapping.getKey()+_SUFFIX_MAPPING).getBytes(),SerializeUtil.serialize(mapping));
         }finally {
             if(redis != null){
                 redis.close();
@@ -106,7 +108,7 @@ public class MappingCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            redis.set((mappings.get(0).getDomain()).getBytes(),SerializeUtil.serializeList(mappings));
+            redis.set((mappings.get(0).getDomain()+_SUFFIX_MAPPING).getBytes(),SerializeUtil.serializeList(mappings));
         }finally {
             if(redis != null){
                 redis.close();

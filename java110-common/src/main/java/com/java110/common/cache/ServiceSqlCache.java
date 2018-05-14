@@ -10,6 +10,9 @@ import redis.clients.jedis.Jedis;
  */
 public class ServiceSqlCache extends BaseCache {
 
+    //后缀 用来刷缓存时删除 所有以这个为后缀的数据
+    public final static String _SUFFIX_SERVICE_SQL = "_SUFFIX_SERVICE_SQL";
+
     /**
      * 查询 服务sql
      * @param serviceCode
@@ -19,7 +22,7 @@ public class ServiceSqlCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            Object obj = SerializeUtil.unserialize(redis.get(serviceCode.getBytes()));
+            Object obj = SerializeUtil.unserialize(redis.get((serviceCode+_SUFFIX_SERVICE_SQL).getBytes()));
             if(obj instanceof ServiceSql){
                 return (ServiceSql) obj;
             }
@@ -39,7 +42,7 @@ public class ServiceSqlCache extends BaseCache {
         Jedis redis = null;
         try {
             redis = getJedis();
-            redis.set(serviceSql.getServiceCode().getBytes(),SerializeUtil.serialize(serviceSql));
+            redis.set((serviceSql.getServiceCode()+_SUFFIX_SERVICE_SQL).getBytes(),SerializeUtil.serialize(serviceSql));
         }finally {
             if(redis != null){
                 redis.close();

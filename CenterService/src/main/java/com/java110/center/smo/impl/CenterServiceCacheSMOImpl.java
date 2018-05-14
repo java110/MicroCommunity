@@ -93,6 +93,9 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         if(serviceSqls == null || serviceSqls.size() == 0){
             return;
         }
+        //删除原始数据
+        ServiceSqlCache.removeData(ServiceSqlCache._SUFFIX_SERVICE_SQL);
+
         for(ServiceSql serviceSql: serviceSqls){
             ServiceSqlCache.setServiceSql(serviceSql);
         }
@@ -115,7 +118,8 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
 
     private void doFlushMapping() {
         List<Mapping> mappings = centerServiceDAOImpl.getMappingInfoAll();
-
+        //删除原始数据
+        MappingCache.removeData(MappingCache._SUFFIX_MAPPING);
         for(Mapping mapping : mappings){
             MappingCache.setVaule(mapping);
         }
@@ -166,6 +170,8 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
                 appRoustsMap.put(appInfo.get("app_id").toString(),appRoutes);
             }
         }
+        //删除原始数据
+        AppRouteCache.removeData(AppRouteCache._SUFFIX_APP_ROUTE);
 
         for (String appId : appRoustsMap.keySet()) {
             AppRouteCache.setAppRoute(appRoustsMap.get(appId));
