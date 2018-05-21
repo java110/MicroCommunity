@@ -1,16 +1,10 @@
 package com.java110.service.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.FilterException;
-import com.java110.common.factory.AuthenticationFactory;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.util.StringUtil;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -23,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**

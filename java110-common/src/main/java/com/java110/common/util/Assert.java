@@ -28,6 +28,16 @@ public class Assert extends org.springframework.util.Assert{
     }
 
     /**
+     * 判断 jsonObject 是否为空
+     * @param jsonObject
+     * @param key
+     * @param message
+     */
+    public static void jsonObjectHaveKey(JSONObject jsonObject,String key,String message){
+        isNotNull(jsonObject,key,message);
+    }
+
+    /**
      * 判断json是否为空
      * @param jsonArray
      * @param message

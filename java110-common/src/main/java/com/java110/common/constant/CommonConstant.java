@@ -121,5 +121,10 @@ public class CommonConstant {
     public final static String CACHE_SERVICE_SQL = "SERVICE_SQL";
 
 
+    public final static String INSTANCE_Y = "Y";
+
+    public final static String INSTANCE_N = "N";
+
+
 
 }

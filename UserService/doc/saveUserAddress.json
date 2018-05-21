@@ -1,0 +1,34 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "save.user.address",
+    "serviceName": "用户地址信息保存",
+    "remark": "备注",
+    "datas": {
+      "businessUserAddress": {
+        "userId": "-1",
+        "addressId": "-1",
+        "tel": "17797173943",
+        "address": "青海省西宁市城中区129号",
+        "postalCode": "810504",
+        "isDefault": "0"
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

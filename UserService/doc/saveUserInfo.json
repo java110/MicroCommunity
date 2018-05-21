@@ -1,0 +1,43 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "save.user.info",
+    "serviceName": "保存用户信息",
+    "remark": "备注",
+    "datas": {
+      "businessUser": {
+        "userId": "-1",
+        "name": "张三",
+        "email": "928255095@qq.com",
+        "address": "青海省西宁市城中区129号",
+        "password": "ERCBHDUYFJDNDHDJDNDJDHDUDHDJDDKDK",
+        "locationCd": "001",
+        "age": 19,
+        "sex": "0",
+        "tel": "17797173943",
+        "level_cd": "1",
+        "businessUserAttr": [{
+          "attrId":"-1",
+          "specCd":"1001",
+          "value":"01"
+        }]
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

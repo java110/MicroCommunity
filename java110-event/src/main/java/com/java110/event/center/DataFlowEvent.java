@@ -1,6 +1,6 @@
 package com.java110.event.center;
 
-import com.java110.entity.center.DataFlow;
+import com.java110.core.context.DataFlow;
 
 import java.util.EventObject;
 
@@ -19,7 +19,7 @@ public class DataFlowEvent extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public DataFlowEvent(Object source,DataFlow dataFlow) {
+    public DataFlowEvent(Object source, DataFlow dataFlow) {
         super(source);
         this.dataFlow = dataFlow;
     }

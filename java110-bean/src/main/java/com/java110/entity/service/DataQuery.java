@@ -89,9 +89,9 @@ public class DataQuery {
         if(businessInfoObj.containsKey("business")){
             if(businessInfoObj.get("business") instanceof JSONObject){
                 currentBusinessInfo = (JSONObject) businessInfoObj.get("business");
-            }else if(businessInfoObj.get("business") instanceof JSONArray){
+            }/*else if(businessInfoObj.get("business") instanceof JSONArray){
                 currentBusinessInfo =  ((JSONArray) businessInfoObj.get("business")).getJSONObject(0);
-            }else {
+            }*/else {
                 return null;
             }
         }else{

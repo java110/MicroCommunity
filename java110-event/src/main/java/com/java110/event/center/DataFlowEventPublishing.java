@@ -5,7 +5,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.entity.center.DataFlow;
+import com.java110.core.context.DataFlow;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
@@ -163,7 +163,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * @param event
      * @param asyn A 表示异步处理
      */
-    public static void multicastEvent(final DataFlowEvent event,String asyn) {
+    public static void multicastEvent(final DataFlowEvent event, String asyn) {
         for (final DataFlowListener<?> listener : getListeners(event.getClass().getName())) {
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理

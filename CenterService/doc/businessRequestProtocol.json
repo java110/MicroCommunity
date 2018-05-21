@@ -4,9 +4,9 @@
     "requestTime": "20180409224736",
     "orderTypeCd":"订单类型,查询,受理",
     "dataFlowId":"20020180000001",
-    "businessType":"Q"
+    "businessType":"Q"//B business 过程 I Instance过程
   },
-  "business": [{
+  "business": {
     "bId":"12345678",
     "serviceCode": "querycustinfo",
     "serviceName": "查询客户",
@@ -17,5 +17,5 @@
       }
     //这里是具体业务
     }
-  }]
+  }
 }

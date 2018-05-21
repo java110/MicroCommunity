@@ -1,4 +1,4 @@
-package com.java110.common.factory;
+package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -15,9 +15,9 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.NoAuthorityException;
-import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.entity.center.DataFlow;
+
+import com.java110.core.context.DataFlow;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.Cipher;

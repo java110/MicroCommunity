@@ -8,7 +8,7 @@ import com.java110.common.cache.ServiceSqlCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;

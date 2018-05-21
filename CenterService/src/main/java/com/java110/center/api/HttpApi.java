@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -6,17 +6,16 @@ import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.KafkaConstant;
-import com.java110.common.constant.MappingConstant;
-import com.java110.common.constant.ResponseConstant;
+import com.java110.common.constant.*;
 import com.java110.common.exception.*;
-import com.java110.common.factory.AuthenticationFactory;
-import com.java110.common.factory.DataFlowFactory;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
+import com.java110.entity.center.Business;
+import com.java110.core.context.DataFlow;
 import com.java110.entity.center.*;
 import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.service.smo.IQueryServiceSMO;
@@ -26,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -61,7 +57,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         try {
             reqJson = decrypt(reqJson,headers);
             //1.0 创建数据流
-            dataFlow = DataFlowFactory.newInstance().builder(reqJson, headers);
+            dataFlow = DataFlowFactory.newInstance(DataFlow.class).builder(reqJson, headers);
             //2.0 加载配置信息
             initConfigData(dataFlow);
             //3.0 校验 APPID是否有权限操作serviceCode
@@ -373,7 +369,6 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         doSynchronousBusinesses(dataFlow);
 
-
         //6.2 处理异步服务
         doAsynchronousBusinesses(dataFlow);
 
@@ -448,6 +443,28 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     }
 
+    /**
+     * 将订单状态改为作废状态。
+     *
+     * @param dataFlow
+     */
+    private void updateOrderAndBusinessDelete(DataFlow dataFlow) {
+
+        Date startDate = DateUtil.getCurrentDate();
+
+        //作废 订单
+        centerServiceDaoImpl.updateOrder(DataFlowFactory.getNeedInvalidOrder(dataFlow));
+
+        //作废订单项
+        centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedInvalidOrder(dataFlow));
+
+
+
+        DataFlowFactory.addCostTime(dataFlow, "updateOrderAndBusinessError", "订单状态改为失败耗时", startDate);
+
+    }
+
+
 
     /**
      * 接受业务系统通知消息
@@ -460,7 +477,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         DataFlow dataFlow = null;
         try {
             //1.0 创建数据流
-            dataFlow = DataFlowFactory.newInstance().builder(receiveJson, null);
+            dataFlow = DataFlowFactory.newInstance(DataFlow.class).builderByBusiness(receiveJson);
             //如果订单都没有保存，则再不要处理
             if(MappingCache.getValue(MappingConstant.KEY_NO_SAVE_ORDER) != null
                     &&MappingCache.getValue(MappingConstant.KEY_NO_SAVE_ORDER).contains(dataFlow.getOrderTypeCd())){
@@ -483,9 +500,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             try {
                 //6.0 作废订单和所有业务项
                 invalidOrderAndBusiness(dataFlow);
-                //7.0 广播作废业务系统订单信息
-                //想法，这里只广播已经完成的订单项
-                invalidCompletedBusinessSystem(dataFlow);
+
+                //7.0 广播作废业务系统订单信息,这里只有 Instance 失败后才发起 撤单
+                if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
+                    invalidCompletedBusinessSystem(dataFlow);
+                }
             } catch (Exception e1) {
                 LoggerEngine.error("作废订单失败", e1);
                 //8.0 将订单状态改为失败，人工处理。
@@ -533,7 +552,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getBusinesses().get(0).getbId());
         dataFlow.setoId(order.get("o_id").toString());
-
+        dataFlow.setAppId(order.get("app_id").toString());
         if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
             throw new InitConfigDataException(ResponseConstant.RESULT_CODE_ERROR,"请求报文中没有包含 dataFlowId 节点");
         }
@@ -636,36 +655,187 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void doSynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
         Date startDate = DateUtil.getCurrentDate();
-        Date businessStartDate = null;
         List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
+
+        List<Business> deleteBusinesses = new ArrayList<Business>();
 
         if(synchronousBusinesses == null || synchronousBusinesses.size() == 0){
             return ;
         }
-        AppService service = null;
-        JSONObject requestBusinessJson = null;
         JSONArray responseBusinesses = new JSONArray();
-        String responseMessage = "";
-        //6.2处理同步服务
-        for(Business business : synchronousBusinesses) {
+
+        //6.1处理同步服务 发起Business
+        doSaveDataInfoToBusinessTable(dataFlow, synchronousBusinesses, responseBusinesses);
+
+        try {
+            //6.2发起Instance
+            doBusinessTableDataInfoToInstanceTable(dataFlow, synchronousBusinesses,deleteBusinesses);
+        }catch (Exception e){
+            try {
+                //这里发起撤单逻辑
+                doDeleteOrderAndInstanceData(dataFlow, deleteBusinesses);
+            }catch (Exception e1){
+                logger.error("撤单失败",e1);
+                //这里记录撤单失败的信息
+            }
+            throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,e.getMessage());
+        }
+        //6.3 c_business 数据修改为完成
+        /*List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
+        if(asynchronousBusinesses == null || asynchronousBusinesses.size() == 0){
+            doComplateOrderAndBusiness(dataFlow,synchronousBusinesses);
+        }*/
+        dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
+
+        dataFlow.setResponseBusinessJson(DataTransactionFactory.createCommonResponseJson(dataFlow.getTransactionId(),
+                 ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses));
+
+        DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "同步调用业务系统总耗时", startDate);
+}
+
+    /**
+     * 发起撤单业务
+     * @param dataFlow
+     * @param deleteBusinesses
+     */
+    private void doDeleteOrderAndInstanceData(DataFlow dataFlow, List<Business> deleteBusinesses) {
+
+        //1.0 在c_business 表中加入 撤单记录
+        centerServiceDaoImpl.saveBusiness(DataFlowFactory.getDeleteOrderBusiness(dataFlow,"业务系统实例失败，发起撤单"));
+        //2.0 作废 c_orders 和 c_business 数据
+        updateOrderAndBusinessDelete(dataFlow);
+        //3.0 发起 撤单业务
+        doDeleteBusinessSystemInstanceData(dataFlow,deleteBusinesses);
+    }
+
+    /**
+     * 完成订单状态
+     * @param synchronousBusinesses
+     */
+    private void doComplateOrderAndBusiness(DataFlow dataFlow,List<Business> synchronousBusinesses) {
+
+        //Complete Order and business
+        Map order = new HashMap();
+        order.put("oId",dataFlow.getoId());
+        order.put("statusCd", StatusConstant.STATUS_CD_COMPLETE);
+        order.put("finishTime",DateUtil.getCurrentDate());
+        centerServiceDaoImpl.updateOrder(order);
+        centerServiceDaoImpl.updateBusiness(order);
+        Date businessStartDate;
+        AppService service;
+        JSONObject requestBusinessJson;
+        for(Business business : synchronousBusinesses){
             businessStartDate = DateUtil.getCurrentDate();
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            if(!CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
+                continue;
+            }
+            requestBusinessJson = DataFlowFactory.getCompleteInstanceDataJson(dataFlow,business);
+            JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
+
+            DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"-doComplete耗时", businessStartDate);
+            saveLogMessage(requestBusinessJson,responseJson);
+        }
+
+    }
+
+    /**
+     * 将BusinessTable 中的数据保存到 InstanceTable
+     * @param dataFlow
+     * @param synchronousBusinesses
+     */
+    private void doBusinessTableDataInfoToInstanceTable(DataFlow dataFlow, List<Business> synchronousBusinesses,List<Business> deleteBusinesses) {
+        Date businessStartDate;
+        AppService service;
+        JSONObject requestBusinessJson;
+        for(Business business : synchronousBusinesses){
+            businessStartDate = DateUtil.getCurrentDate();
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            if(!CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
+                continue;
+            }
+
+            requestBusinessJson = DataFlowFactory.getBusinessTableDataInfoToInstanceTableJson(dataFlow,business);
+            JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
+            //添加需要撤单的业务信息
+            deleteBusinesses.add(business);
+            updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_BUSINESS);
+            DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
+            saveLogMessage(requestBusinessJson,responseJson);
+        }
+    }
+
+    /**
+     * 业务系统撤单
+     * @param dataFlow
+     * @param deleteBusinesses
+     */
+    private void doDeleteBusinessSystemInstanceData(DataFlow dataFlow, List<Business> deleteBusinesses) {
+        Date businessStartDate;
+        AppService service;
+        JSONObject requestBusinessJson;
+        for(Business business : deleteBusinesses){
+            businessStartDate = DateUtil.getCurrentDate();
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            requestBusinessJson = DataFlowFactory.getDeleteInstanceTableJson(dataFlow,business);
+            JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
+            DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"-撤单 耗时", businessStartDate);
+            saveLogMessage(requestBusinessJson,responseJson);
+        }
+    }
+
+    private JSONObject doRequestBusinessSystem(DataFlow dataFlow, AppService service, JSONObject requestBusinessJson) {
+        String responseMessage;
+        if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
+            //http://user-service/test/sayHello
+            responseMessage = restTemplate.postForObject(service.getUrl(),requestBusinessJson,String.class);
+        }else{//webservice方式
+            responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
+                    new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
+                    service.getTimeOut());
+        }
+
+        if(StringUtil.isNullOrNone(responseMessage) || !Assert.isJsonObject(responseMessage)){
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"下游系统返回格式不正确，请按协议规范处理");
+        }
+        JSONObject responseJson = JSONObject.parseObject(responseMessage);
+
+        Assert.jsonObjectHaveKey(responseJson,"response","下游返回报文格式错误，没有包含responseJson节点【"+service.getUrl()+"】");
+
+        JSONObject responseInfo = responseJson.getJSONObject("responseJson");
+
+        Assert.jsonObjectHaveKey(responseInfo,"code","下游返回报文格式错误，response 节点中没有包含code节点【"+service.getUrl()+"】");
+
+        if(!ResponseConstant.RESULT_CODE_SUCCESS.equals(responseInfo.getString("code"))){
+            throw  new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,"业务系统处理失败，"+responseInfo.getString("message"));
+        }
+        return responseJson;
+    }
+
+    /**
+     * 数据保存到BusinessTable 中
+     * @param dataFlow
+     * @param synchronousBusinesses
+     * @param responseBusinesses
+     */
+    private void doSaveDataInfoToBusinessTable(DataFlow dataFlow, List<Business> synchronousBusinesses, JSONArray responseBusinesses) {
+        Date businessStartDate;
+        AppService service;
+        JSONObject requestBusinessJson;
+        for(Business business : synchronousBusinesses) {
+            businessStartDate = DateUtil.getCurrentDate();
+
+            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
+            if(CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
+                //发起Business过程
+                updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_BUSINESS);
+            }
             requestBusinessJson = DataFlowFactory.getRequestBusinessJson(dataFlow,business);
             dataFlow.setRequestBusinessJson(requestBusinessJson);
 
-            if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
-                //http://user-service/test/sayHello
-                responseMessage = restTemplate.postForObject(service.getUrl(),dataFlow.getRequestBusinessJson().toJSONString(),String.class);
-            }else{//webservice方式
-                responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
-                        new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
-                        service.getTimeOut());
-            }
+            JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, dataFlow.getRequestBusinessJson());
 
-            if(StringUtil.isNullOrNone(responseMessage) || !Assert.isJsonObject(responseMessage)){
-                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"下游系统返回格式不正确，请按协议规范处理");
-            }
-            dataFlow.setResponseBusinessJson(JSONObject.parseObject(responseMessage));
+            dataFlow.setResponseBusinessJson(responseJson);
             //发布事件
             DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
 
@@ -674,14 +844,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
         }
-
-        dataFlow.setRequestBusinessJson(dataFlow.getReqJson());
-
-        dataFlow.setResponseBusinessJson(DataTransactionFactory.createCommonResponseJson(dataFlow.getTransactionId(),
-                 ResponseConstant.RESULT_CODE_SUCCESS, "成功",responseBusinesses));
-
-        DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "同步调用业务系统总耗时", startDate);
-}
+    }
 
     /**
      * 处理异步业务
@@ -756,6 +919,19 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }catch (Exception e){
             logger.error("报错日志出错了，",e);
         }
+    }
+
+    /**
+     * 修改c_business状态
+     * @param bId
+     * @param statusCd
+     */
+    private void updateBusinessStatusCdByBId(String bId,String statusCd){
+        Map business = new HashMap();
+        business.put("bId",bId);
+        business.put("statusCd",statusCd);
+        business.put("finishTime",DateUtil.getCurrentDate());
+        centerServiceDaoImpl.updateBusinessByBId(business);
     }
 
     public ICenterServiceDAO getCenterServiceDaoImpl() {

@@ -23,6 +23,10 @@ public class AppRoute implements Serializable{
     //一分钟，调用限制次数
     private int limitTimes;
 
+    private String invokeModel;
+
+
+
     //掩码
     private String securityCode;
     //白名单
@@ -97,6 +101,14 @@ public class AppRoute implements Serializable{
         this.backListIp.add(backIp);
     }
 
+    public String getInvokeModel() {
+        return invokeModel;
+    }
+
+    public void setInvokeModel(String invokeModel) {
+        this.invokeModel = invokeModel;
+    }
+
     /*public List<AppServiceStatus> getAppServices() {
         return appServices;
     }
@@ -140,6 +152,7 @@ public class AppRoute implements Serializable{
         this.setName(appInfo.get("name").toString());
         this.setOrderTypeCd(appInfo.get("order_type_cd").toString());
         this.setSecurityCode(appInfo.get("security_code").toString());
+        this.setInvokeModel(appInfo.get("invoke_model").toString());
         if(appInfo.get("while_list_ip") != null && !"".equals(appInfo.get("while_list_ip"))){
             listIps = appInfo.get("while_list_ip").toString().split(";");
             for(String whileIp : listIps )

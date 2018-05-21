@@ -2,7 +2,7 @@ package com.java110.service.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
-import com.java110.common.factory.PageDataFactory;
+import com.java110.core.factory.PageDataFactory;
 import com.java110.common.util.Assert;
 import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;

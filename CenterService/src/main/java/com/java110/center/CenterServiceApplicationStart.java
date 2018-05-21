@@ -2,8 +2,6 @@ package com.java110.center;
 
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.factory.ApplicationContextFactory;
-import com.java110.common.factory.DataQueryFactory;
-import com.java110.entity.service.DataQuery;
 import com.java110.event.center.init.EventConfigInit;
 import com.java110.service.init.ServiceStartInit;
 import org.springframework.boot.SpringApplication;

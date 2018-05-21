@@ -1,4 +1,4 @@
-package com.java110.common.factory;
+package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,9 +7,16 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
+import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.SequenceUtil;
-import com.java110.entity.center.*;
+import com.java110.core.context.AbstractDataFlowContext;
+import com.java110.core.context.DataFlow;
+import com.java110.entity.center.AppRoute;
+import com.java110.entity.center.AppService;
+import com.java110.entity.center.Business;
+import com.java110.entity.center.DataFlowLinksCost;
+import org.springframework.beans.BeanInstantiationException;
 
 import java.util.*;
 
@@ -19,8 +26,27 @@ import java.util.*;
  */
 public class DataFlowFactory {
 
-    public static DataFlow newInstance(){
-        return new DataFlow(DateUtil.getCurrentDate(), ResponseConstant.RESULT_CODE_SUCCESS);
+    /**
+     * 初始化
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T newInstance(Class<T> clazz) throws BeanInstantiationException {
+        Assert.notNull(clazz, "Class 不能为空");
+        if (clazz.isInterface()) {
+            throw new BeanInstantiationException(clazz, "指定类是一个接口");
+        }
+        //DateUtil.getCurrentDate(), ResponseConstant.RESULT_CODE_SUCCESS
+        try {
+            return clazz.getConstructor(Date.class,String.class).newInstance(DateUtil.getCurrentDate(), ResponseConstant.RESULT_CODE_SUCCESS);
+        }
+        catch (InstantiationException ex) {
+            throw new BeanInstantiationException(clazz, "是一个抽象类?", ex);
+        }catch (Exception ex){
+            throw new BeanInstantiationException(clazz, "构造函数不能访问?", ex);
+
+        }
     }
 
 
@@ -32,12 +58,11 @@ public class DataFlowFactory {
      * @param startDate 开始时间
      * @return
      */
-    public static DataFlow addCostTime(DataFlow dataFlow, String linksCode, String linksName, Date startDate){
+    public static void addCostTime(AbstractDataFlowContext dataFlow, String linksCode, String linksName, Date startDate){
         if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, DateUtil.getCurrentDate());
             dataFlow.addLinksCostDates(dataFlowLinksCost);
         }
-        return dataFlow;
     }
 
 
@@ -50,21 +75,20 @@ public class DataFlowFactory {
      * @param endDate 结束时间
      * @return
      */
-    public static DataFlow addCostTime(DataFlow dataFlow, String linksCode, String linksName, Date startDate, Date endDate){
+    public static void addCostTime(AbstractDataFlowContext dataFlow, String linksCode, String linksName, Date startDate, Date endDate){
         if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
             DataFlowLinksCost dataFlowLinksCost = new DataFlowLinksCost().builder(linksCode, linksName, startDate, endDate);
             dataFlow.addLinksCostDates(dataFlowLinksCost);
         }
-        return dataFlow;
     }
 
     /**
-     * 获取单个服务
+     * 获取单个路由
      * @param dataFlow
      * @param serviceCode
      * @return
      */
-    public static AppService getService(DataFlow dataFlow, String serviceCode){
+    public static AppRoute getRoute(DataFlow dataFlow, String serviceCode){
         if (dataFlow.getAppRoutes().size() == 0){
             throw new RuntimeException("当前没有获取到AppId对应的信息");
         }
@@ -73,10 +97,23 @@ public class DataFlowFactory {
         for(AppRoute appRoute : appRoutes) {
             if (StatusConstant.STATUS_CD_VALID.equals(appRoute.getStatusCd())
                     &&appRoute.getAppService().getServiceCode().equals(serviceCode)){
-                return appRoute.getAppService();
+                return appRoute;
             }
         }
         return null;
+    }
+    /**
+     * 获取单个服务
+     * @param dataFlow
+     * @param serviceCode
+     * @return
+     */
+    public static AppService getService(DataFlow dataFlow, String serviceCode){
+        AppRoute route = getRoute(dataFlow, serviceCode);
+        if(route == null){
+            return null;
+        }
+        return route.getAppService();
     }
 
     /**
@@ -148,6 +185,24 @@ public class DataFlowFactory {
             businesss.add(busiMap);
         }
         return businesss;
+    }
+
+    /**
+     * 组装撤单数据
+     * @param dataFlow
+     * @param message
+     * @return
+     */
+    public static List<Map> getDeleteOrderBusiness(DataFlow dataFlow,String message){
+        List<Map> business = new ArrayList<Map>();
+        Map busiMap = new HashMap();
+        busiMap.put("oId",dataFlow.getoId());
+        busiMap.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        busiMap.put("remark",message);
+        busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE);
+        busiMap.put("bId",SequenceUtil.getBId());
+        business.add(busiMap);
+        return business;
     }
 
     /**
@@ -324,29 +379,84 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(DataFlow dataFlow,Business business){
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(DataFlow dataFlow,Business business){
 
-        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE);
-        JSONArray businesses = notifyMessage.getJSONArray("business");
-
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
         JSONObject busi = null;
             busi = new JSONObject();
             busi.put("bId",business.getbId());
             busi.put("serviceCode",business.getServiceCode());
             busi.put("serviceName",business.getServiceName());
-            busi.put("remark",business.getRemark());
-            busi.put("datas",business.getDatas());
-            businesses.add(busi);
+            busi.put("isInstance",CommonConstant.INSTANCE_Y);
+        busi.put("datas",business.getDatas());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
+
+
+    /**
+     * 发起撤单请求报文
+     * @param business
+     * @return
+     */
+    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow,Business business){
+
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("serviceCode",business.getServiceCode());
+        busi.put("serviceName",business.getServiceName());
+        busi.put("datas",business.getDatas());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
+
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param business
+     * @return
+     */
+    public static JSONObject getCompleteInstanceDataJson(DataFlow dataFlow,Business business){
+
+        JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE);
+        //JSONObject businesses = notifyMessage.getJSONObject("business");
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("serviceCode",business.getServiceCode());
+        busi.put("serviceName",business.getServiceName());
+        busi.put("isInstance",CommonConstant.INSTANCE_Y);
+        notifyMessage.put("business",busi);
         return notifyMessage;
     }
 
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param business
+     * @return
+     */
+    public static JSONObject getRequestBusinessJson(DataFlow dataFlow,Business business){
+
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
+        //JSONObject businesses = notifyMessage.getJSONObject("business");
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("serviceCode",business.getServiceCode());
+        busi.put("serviceName",business.getServiceName());
+        busi.put("remark",business.getRemark());
+        busi.put("datas",business.getDatas());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
 
     /**
      * 业务系统交互
      * @return
      */
     private static JSONObject getTransactionBusinessBaseJson(DataFlow dataFlow,String businessType){
-        JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
+        JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":{}}");
         JSONObject orders = notifyMessage.getJSONObject("orders");
         orders.put("transactionId",SequenceUtil.getTransactionId());
         orders.put("dataFlowId",dataFlow.getDataFlowId());
@@ -362,10 +472,12 @@ public class DataFlowFactory {
      */
     public static List<Business> getSynchronousBusinesses(DataFlow dataFlow){
         AppService service = null;
+        AppRoute route = null;
         List<Business> syschronousBusinesses = new ArrayList<Business>();
         for(Business business :dataFlow.getBusinesses()){
-            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
-            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(service.getInvokeModel())){
+            route = DataFlowFactory.getRoute(dataFlow,business.getServiceCode());
+            service = route.getAppService();
+            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(route.getInvokeModel())){
                 business.setSeq(service.getSeq());
                 syschronousBusinesses.add(business);
             }
@@ -385,10 +497,13 @@ public class DataFlowFactory {
      */
     public static List<Business> getAsynchronousBusinesses(DataFlow dataFlow){
         AppService service = null;
+        AppRoute route = null;
         List<Business> syschronousBusinesses = new ArrayList<Business>();
         for(Business business :dataFlow.getBusinesses()){
-            service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
-            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(service.getInvokeModel())){
+            route = DataFlowFactory.getRoute(dataFlow,business.getServiceCode());
+            service = route.getAppService();
+            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(route.getInvokeModel())){
+
                 syschronousBusinesses.add(business);
             }
         }

@@ -1,4 +1,4 @@
-package com.java110.common.factory;
+package com.java110.core.factory;
 
 import com.java110.common.cache.ServiceSqlCache;
 import com.java110.entity.service.DataQuery;

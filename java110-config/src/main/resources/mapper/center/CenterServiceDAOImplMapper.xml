@@ -95,7 +95,7 @@
     <select id="getAppRouteAndServiceInfoAll" resultType="Map">
         <![CDATA[
              SELECT ca.app_id,ca.name,ca.security_code,ca.while_list_ip,ca.black_list_ip,cr.invoke_limit_times,
-            cr.order_type_cd,cs.service_id,cs.business_type_cd,cs.invoke_model,
+            cr.order_type_cd,cs.service_id,cs.business_type_cd,cr.invoke_model,cs.is_instance,
             cs.messageQueueName,cs.method,cs.name,cs.provide_app_id,cs.retry_count,cs.seq,cs.service_code,
             cs.timeout,cs.url FROM c_app ca,c_route cr,c_service cs
             WHERE ca.status_cd = '0'

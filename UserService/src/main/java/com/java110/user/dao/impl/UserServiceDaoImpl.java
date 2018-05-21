@@ -1,6 +1,7 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.exception.DAOException;
 import com.java110.common.util.Assert;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
@@ -12,6 +13,7 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.dao.BaseServiceDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -288,5 +290,138 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         return sqlSessionTemplate.selectList("userServiceDAOImpl.queryBoCustAttr",boCustAttr);
 
+    }
+
+    /**
+     * 保存用户信息
+     * @param userInfo
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessUserInfo(Map userInfo) throws DAOException {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserInfo】保存数据入参 : " + JSONObject.toJSONString(userInfo));
+
+        // 查询business_user 数据是否已经存在
+
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserInfo",userInfo);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户数据失败："+JSONObject.toJSONString(userInfo));
+        }
+    }
+    /**
+     * 保存用户属性
+     * @param userAttr
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessUserAttr(Map userAttr) throws DAOException {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserAttr】保存数据入参 : " + JSONObject.toJSONString(userAttr));
+
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserAttr",userAttr);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户属性数据失败："+JSONObject.toJSONString(userAttr));
+        }
+    }
+
+    @Override
+    public void saveUserInfoInstance(Map businessUser) {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveUserInfoInstance】保存数据入参 : " + JSONObject.toJSONString(businessUser));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveUserInfoInstance",businessUser);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户Instance数据失败："+JSONObject.toJSONString(businessUser));
+        }
+    }
+
+    @Override
+    public void saveUserAttrInstance(Map attrInstance) {
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(attrInstance));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveUserAttrInstance",attrInstance);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户Instance数据失败："+JSONObject.toJSONString(attrInstance));
+        }
+    }
+
+    @Override
+    public void updateUserInfoInstance(Map businessUser) {
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserInfoInstance】保存数据入参 : " + JSONObject.toJSONString(businessUser));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.updateUserInfoInstance",businessUser);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUser));
+        }
+    }
+
+    @Override
+    public void updateUserAttrInstance(Map attrInstance) {
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(attrInstance));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.updateUserAttrInstance",attrInstance);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(attrInstance));
+        }
+    }
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public Map queryBusinessUserInfo(Map info) throws DAOException{
+        Assert.notNull(info,"queryBusinessUserInfo 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBusinessUserInfo】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDAOImpl.queryBusinessUserInfo",info);
+        if(users == null || users.size() == 0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> queryBusinessUserInfoAttrs(Map info) throws DAOException{
+        Assert.notNull(info,"queryBusinessUserInfoAttrs 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBusinessUserInfoAttrs】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDAOImpl.queryBusinessUserInfoAttrs",info);
+        return userAttrs;
+    }
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public Map queryUserInfo(Map info) throws DAOException{
+        Assert.notNull(info,"queryUserInfo 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryUserInfo】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDAOImpl.queryUserInfo",info);
+        if(users == null || users.size() == 0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> queryUserInfoAttrs(Map info) throws DAOException{
+        Assert.notNull(info,"queryUserInfo 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDAOImpl.queryUserInfoAttrs",info);
+        return userAttrs;
     }
 }

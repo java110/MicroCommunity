@@ -39,6 +39,7 @@ public class SequenceUtil {
         prefixMap.put("transactionId","1000001");
         prefixMap.put("pageTransactionId","1000002");
         prefixMap.put("dataFlowId","2000");
+        prefixMap.put("userId","3000");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -117,4 +118,13 @@ public class SequenceUtil {
         return null;
 
     }
+
+    public static String getUserId(){
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("userId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+        }
+        //调用服务
+        return null;
+    }
+
 }

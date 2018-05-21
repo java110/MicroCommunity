@@ -4,20 +4,17 @@ package com.java110.core.base.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.InitDataFlowContextException;
 import com.java110.common.exception.NoAuthorityException;
-import com.java110.common.factory.PageDataFactory;
-import com.java110.common.log.LoggerEngine;
 
-import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.core.base.AppBase;
+import com.java110.core.context.BusinessServiceDataFlow;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.service.PageData;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -205,4 +202,18 @@ public class BaseController extends AppBase {
             }
         }
     }
+
+    /**
+     * 封装数据
+     * @param reqJson
+     * @param headers
+     * @return
+     * @throws Exception
+     */
+    protected BusinessServiceDataFlow writeDataToDataFlowContext(String reqJson, Map<String,String> headers) throws InitDataFlowContextException {
+        BusinessServiceDataFlow businessServiceDataFlow = DataFlowFactory.newInstance(BusinessServiceDataFlow.class).builder(reqJson,headers);
+        return businessServiceDataFlow;
+    }
+
+
 }

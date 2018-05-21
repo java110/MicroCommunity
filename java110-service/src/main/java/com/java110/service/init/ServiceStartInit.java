@@ -16,7 +16,7 @@ public class ServiceStartInit {
 
         }
         catch (Exception ex) {
-            throw new IllegalStateException("system init error", ex);
+            throw new IllegalStateException("系统初始化失败", ex);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.java110.user.dao;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.common.exception.DAOException;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.entity.user.BoCust;
@@ -8,6 +10,7 @@ import com.java110.entity.user.Cust;
 import com.java110.entity.user.CustAttr;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户组件内部之间使用，没有给外围系统提供服务能力
@@ -155,4 +158,58 @@ public interface IUserServiceDao {
     public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception;
 
 
+    /**
+     * 保存用户信息
+     * @param userInfo
+     * @throws DAOException
+     */
+    public void saveBusinessUserInfo(Map userInfo) throws DAOException;
+
+    /**
+     * 保存用户属性
+     * @param userAttr
+     * @throws DAOException
+     */
+    public void saveBusinessUserAttr(Map userAttr) throws DAOException;
+
+
+    public void saveUserInfoInstance(Map businessUser);
+
+    public void saveUserAttrInstance(Map attrInstance);
+
+    public void updateUserInfoInstance(Map businessUser);
+
+    public void updateUserAttrInstance(Map attrInstance);
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public Map queryBusinessUserInfo(Map info) throws DAOException;
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> queryBusinessUserInfoAttrs(Map info) throws DAOException;
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public Map queryUserInfo(Map info) throws DAOException;
+
+    /**
+     * 查询用户信息
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> queryUserInfoAttrs(Map info) throws DAOException;
 }

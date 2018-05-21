@@ -1,0 +1,21 @@
+{
+  "orders": {
+    "transactionId": "100000000020180409224736000001",
+    "requestTime": "20180409224736",
+    "orderTypeCd":"订单类型,查询,受理",
+    "dataFlowId":"20020180000001",
+    "businessType":"Q"
+  },
+  "business": [{
+    "bId":"12345678",
+    "serviceCode": "querycustinfo",
+    "serviceName": "查询客户",
+    "remark": "备注",
+    "datas": {
+      "params": {
+        //这个做查询时的参数
+      }
+    //这里是具体业务
+    }
+  }]
+}

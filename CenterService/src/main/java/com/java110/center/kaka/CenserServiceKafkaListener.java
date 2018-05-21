@@ -15,7 +15,7 @@ public class CenserServiceKafkaListener extends AppBase {
     @Autowired
     private ICenterServiceSMO centerServiceSMOImpl;
 
-    @KafkaListener(topics = {"notifyMessageTopic"})
+    @KafkaListener(topics = {"NOTIFY_CENTER_SERVICE"})
     public void listen(ConsumerRecord<?, ?> record) {
         logger.info("kafka的key: " + record.key());
         logger.info("kafka的value: " + record.value().toString());

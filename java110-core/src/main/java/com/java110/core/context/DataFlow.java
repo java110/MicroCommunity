@@ -1,7 +1,10 @@
-package com.java110.entity.center;
+package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.entity.center.AppRoute;
+import com.java110.entity.center.Business;
+
 
 import java.util.*;
 
@@ -9,25 +12,15 @@ import java.util.*;
  * 主要用于离散成对象 httpApi service 请求过程消息记录和返回记录
  * Created by wuxw on 2018/4/13.
  */
-public class DataFlow {
-
-
-    private String dataFlowId;
+public class DataFlow extends AbstractDataFlowContext {
 
     private String oId;
-
-    //交易流水
-    private String transactionId;
 
     private String appId;
 
     private String userId;
 
     private String ip;
-
-    private String orderTypeCd;
-
-    private String requestTime;
 
     private String remark;
 
@@ -37,35 +30,13 @@ public class DataFlow {
 
     private JSONArray reqBusiness;
 
-    private String responseTime;
-
     private String resSign;
-
-    private String code;
-
-    private String message;
 
     private JSONObject resOrders;
 
-    private JSONArray resBusiness;
 
-    //请求开始时间
-    private Date startDate;
-
-    //请求完成时间
-    private Date endDate;
-
-    private JSONObject reqJson;
-
-    private JSONObject resJson;
-
-    private List<Business> businesses;
 
     private String requestURL;
-
-    private List<DataFlowLinksCost> linksCostDates = new ArrayList<DataFlowLinksCost>();
-
-    private Map<String,String> headers = new HashMap<String,String>();
 
     /*private AppRoute appRoute;*/
 
@@ -84,33 +55,10 @@ public class DataFlow {
         this.oId = oId;
     }
 
-    public List<Business> getBusinesses() {
-        return businesses;
-    }
-
-    public String getDataFlowId() {
-        return dataFlowId;
-    }
-
-    public void setDataFlowId(String dataFlowId) {
-        this.dataFlowId = dataFlowId;
-    }
-
-    public void setBusinesses(List<Business> businesses) {
-        this.businesses = businesses;
-    }
-
-
     //public DataFlow(){}
 
     public DataFlow(Date startDate,String code){
-        this.setStartDate(startDate);
-        this.setCode(code);
-    }
-
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
+        super(startDate,code);
     }
 
     public void setAppId(String appId) {
@@ -119,14 +67,6 @@ public class DataFlow {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void setOrderTypeCd(String orderTypeCd) {
-        this.orderTypeCd = orderTypeCd;
-    }
-
-    public void setRequestTime(String requestTime) {
-        this.requestTime = requestTime;
     }
 
     public void setRemark(String remark) {
@@ -145,33 +85,15 @@ public class DataFlow {
         this.reqBusiness = reqBusiness;
     }
 
-    public void setResponseTime(String responseTime) {
-        this.responseTime = responseTime;
-    }
-
     public void setResSign(String resSign) {
         this.resSign = resSign;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public void setResOrders(JSONObject resOrders) {
         this.resOrders = resOrders;
     }
 
-    public void setResBusiness(JSONArray resBusiness) {
-        this.resBusiness = resBusiness;
-    }
 
-    public String getTransactionId() {
-        return transactionId;
-    }
 
     public String getAppId() {
         return appId;
@@ -179,14 +101,6 @@ public class DataFlow {
 
     public String getUserId() {
         return userId;
-    }
-
-    public String getOrderTypeCd() {
-        return orderTypeCd;
-    }
-
-    public String getRequestTime() {
-        return requestTime;
     }
 
     public String getRemark() {
@@ -197,6 +111,11 @@ public class DataFlow {
         return reqSign;
     }
 
+    @Override
+    public Orders getOrder() {
+        return this;
+    }
+
     public JSONObject getReqOrders() {
         return reqOrders;
     }
@@ -205,45 +124,12 @@ public class DataFlow {
         return reqBusiness;
     }
 
-    public String getResponseTime() {
-        return responseTime;
-    }
-
     public String getResSign() {
         return resSign;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public JSONObject getResOrders() {
         return resOrders;
-    }
-
-    public JSONArray getResBusiness() {
-        return resBusiness;
-    }
-
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
 
@@ -256,17 +142,6 @@ public class DataFlow {
         this.requestURL = requestURL;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    /*public AppRoute getAppRoute() {
-        return appRoute;
-    }
-
-    public void setAppRoute(AppRoute appRoute) {
-        this.appRoute = appRoute;
-    }*/
 
     public List<AppRoute> getAppRoutes() {
         return appRoutes;
@@ -301,32 +176,36 @@ public class DataFlow {
         this.responseBusinessJson = responseBusinessJson;
     }
 
-    public JSONObject getReqJson() {
-        return reqJson;
-    }
+    public DataFlow builderByBusiness(String businessInfo) throws Exception{
+        try{
+            Business business = null;
+            JSONObject reqInfoObj = JSONObject.parseObject(businessInfo);
+            this.setReqJson(reqInfoObj);
+            this.setDataFlowId(reqInfoObj.containsKey("dataFlowId")?reqInfoObj.getString("dataFlowId"):"-1");
+            //this.setAppId(orderObj.getString("appId"));
+            this.setTransactionId(reqInfoObj.getString("transactionId"));
+            this.setOrderTypeCd(reqInfoObj.getString("orderTypeCd"));
+            this.setRequestTime(reqInfoObj.getString("responseTime"));
+            //this.setReqOrders(orderObj);
+            JSONObject businessObj = new JSONObject();
+            businessObj.put("bId",reqInfoObj.getString("bId"));
+            businessObj.put("serviceCode",reqInfoObj.getString("serviceCode"));
+            JSONArray reqBusinesses = new JSONArray();
+            reqBusinesses.add(businessInfo);
+            this.setReqBusiness(reqBusinesses);
+            JSONObject response = reqInfoObj.getJSONObject("response");
+            this.setCode(response.getString("code"));
+            this.setMessage(response.getString("message"));
+            businessObj.put("response",response);
+            this.businesses = new ArrayList<Business>();
+            business = new Business().builder(businessObj);
+            businesses.add(business);
 
-    public void setReqJson(JSONObject reqJson) {
-        this.reqJson = reqJson;
-    }
+        }catch (Exception e){
 
-    public JSONObject getResJson() {
-        return resJson;
-    }
-
-    public void setResJson(JSONObject resJson) {
-        this.resJson = resJson;
-    }
-
-    public List<DataFlowLinksCost> getLinksCostDates() {
-        return linksCostDates;
-    }
-
-    /**
-     * 添加各个环节的耗时
-     * @param dataFlowLinksCost
-     */
-    public void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost){
-        this.linksCostDates.add(dataFlowLinksCost);
+            throw e;
+        }
+        return this;
     }
 
     public DataFlow builder(String reqInfo, Map<String,String> headerAll) throws Exception{
@@ -368,7 +247,5 @@ public class DataFlow {
         }
         return this;
     }
-
-
 
 }

@@ -2,7 +2,7 @@ package com.java110.console.rest;
 
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.SMOException;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.PageData;

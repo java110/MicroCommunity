@@ -2,6 +2,8 @@
   "response": {
     "code": "1999",
     "message": "具体值"
-  }
+  },
+  "businessType":"",
+  "bId":""
   //相应内容
 }

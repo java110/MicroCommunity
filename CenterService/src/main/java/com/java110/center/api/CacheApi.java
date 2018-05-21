@@ -2,8 +2,8 @@ package com.java110.center.api;
 
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.constant.ResponseConstant;
-import com.java110.common.factory.DataQueryFactory;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.DataQueryFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.DataQuery;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,14 +1,17 @@
-package com.java110.common.factory;
+package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.OrderTypeCdConstant;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.constant.StatusConstant;
+import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.entity.center.DataFlow;
+import com.java110.core.context.DataFlow;
+import com.java110.core.context.DataFlowContext;
 import com.java110.entity.service.PageData;
 
 import java.util.Date;
@@ -77,6 +80,41 @@ public class DataTransactionFactory {
     public static JSONObject createBusinessResponseJson(String code, String message){
         return   createBusinessResponseJson(code, message,null);
     }
+
+    /**
+     * 在 BusinessServiceDataFlow 中获取不到 bId 和 businessType 时
+     * 从报文中获取，如果报文中也获取不到，说明 报文不对 返回空，也无妨
+     * @param req
+     * @param code
+     * @param message
+     * @param info
+     * @return
+     */
+    public static JSONObject createNoBusinessTypeBusinessResponseJson(String req,String code, String message, JSONObject info){
+        String bId = "";
+        String businessType = "";
+        String transactionId = "";
+        String orderTypeCd = "";
+        String dataFlowId = "";
+        String serviceCode = "";
+        try{
+            JSONObject reqJson = JSONObject.parseObject(req);
+            businessType = reqJson.getJSONObject("orders").getString("businessType");
+            transactionId = reqJson.getJSONObject("orders").getString("transactionId");
+            orderTypeCd = reqJson.getJSONObject("orders").getString("orderTypeCd");
+            dataFlowId = reqJson.getJSONObject("orders").getString("dataFlowId");
+            bId = reqJson.getJSONObject("business").getString("bId");
+            serviceCode = reqJson.getJSONObject("business").getString("serviceCode");
+        }catch (Exception e){
+            bId = "-1";
+            businessType = "";
+            transactionId = "-1";
+            orderTypeCd ="Q";
+            dataFlowId ="-1";
+        }
+
+        return createBusinessResponseJson(code,message,transactionId,bId,businessType,orderTypeCd,dataFlowId,serviceCode,info);
+    }
     /**
      * 业务系统返回报文模板
      * @param code
@@ -85,6 +123,22 @@ public class DataTransactionFactory {
      * @return
      */
     public static JSONObject createBusinessResponseJson(String code, String message, JSONObject info){
+        return createBusinessResponseJson(code,message,"-1","-1", "",StatusConstant.REQUEST_BUSINESS_TYPE,"-1","",info);
+    }
+
+    public static JSONObject createBusinessResponseJson(DataFlowContext dataFlowContext,
+                                                        String code,String message,Map<String,Object> info){
+        return createBusinessResponseJson(code,message,dataFlowContext.getOrder().getTransactionId(),
+                dataFlowContext.getbId(),dataFlowContext.getOrder().getBusinessType(),dataFlowContext.getOrder().getOrderTypeCd(),
+                dataFlowContext.getOrder().getDataFlowId(),dataFlowContext.getCurrentBusiness().getServiceCode(),info);
+    }
+
+    public static JSONObject createBusinessResponseJson(String code, String message,String transactionId,
+                                                        String bId,String businessType,
+                                                        String orderTypeCd,
+                                                        String dataFlowId,
+                                                        String serviceCode,
+                                                        Map<String,Object> info){
         JSONObject responseMessage = JSONObject.parseObject("{\"response\":{}}");
 
         JSONObject response = responseMessage.getJSONObject("response");
@@ -94,9 +148,20 @@ public class DataTransactionFactory {
         if(info != null) {
             responseMessage.putAll(info);
         }
+        responseMessage.put("bId",bId);
+        responseMessage.put("businessType",businessType);
+        responseMessage.put("responseTime",DateUtil.getDefaultFormateTimeString(new Date()));
+        responseMessage.put("transactionId",transactionId);
+        responseMessage.put("orderTypeCd",orderTypeCd);
+        responseMessage.put("dataFlowId",dataFlowId);
+        responseMessage.put("serviceCode",serviceCode);
 
         return responseMessage;
     }
+
+    /*public static JSONObject createBusinessResponseJson(String code, String message,String bId,String businessType, JSONObject info){
+        return createBusinessResponseJson(code,message,bId, businessType,info);
+    }*/
 
     /**
      * 创建查询 请求 centerService json 报文

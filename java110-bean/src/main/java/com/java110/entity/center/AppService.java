@@ -27,7 +27,9 @@ public class AppService implements Serializable{
     //只有webservice时才有用
     private String method;
 
-    private String invokeModel;
+    private String isInstance;
+
+
 
     private int timeOut;
 
@@ -92,13 +94,6 @@ public class AppService implements Serializable{
         this.method = method;
     }
 
-    public String getInvokeModel() {
-        return invokeModel;
-    }
-
-    public void setInvokeModel(String invokeModel) {
-        this.invokeModel = invokeModel;
-    }
 
     public int getTimeOut() {
         return timeOut;
@@ -132,9 +127,16 @@ public class AppService implements Serializable{
         this.messageQueueName = messageQueueName;
     }
 
+    public String getIsInstance() {
+        return isInstance;
+    }
+
+    public void setIsInstance(String isInstance) {
+        this.isInstance = isInstance;
+    }
+
     public AppService builder(Map serviceInfo){
         this.setBusinessTypeCd(serviceInfo.get("business_type_cd").toString());
-        this.setInvokeModel(serviceInfo.get("invoke_model").toString());
         this.setMessageQueueName(serviceInfo.get("messageQueueName") == null ? null :serviceInfo.get("messageQueueName").toString());
         this.setMethod(serviceInfo.get("method")==null ? null:serviceInfo.get("method").toString());
         this.setName(serviceInfo.get("name").toString());
@@ -144,6 +146,7 @@ public class AppService implements Serializable{
         this.setTimeOut(Integer.parseInt(serviceInfo.get("timeout").toString()));
         this.setUrl(serviceInfo.get("url") == null ? null : serviceInfo.get("url").toString());
         this.setServiceId(Integer.parseInt(serviceInfo.get("service_id").toString()));
+        this.setIsInstance(serviceInfo.get("is_instance").toString());
         this.setStatusCd("0");
         return this;
     }

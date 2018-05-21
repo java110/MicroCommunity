@@ -21,7 +21,7 @@ CREATE TABLE c_orders_attrs(
     o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
     attr_id VARCHAR(18) NOT NULL COMMENT '属性id',
     spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
-    VALUE VARCHAR(50) NOT NULL COMMENT '属性值'
+    value VARCHAR(50) NOT NULL COMMENT '属性值'
 );
 
 -- c_business
@@ -61,7 +61,10 @@ INSERT INTO c_status(status_cd,NAME,description) VALUES('S','保存成功','保�
 INSERT INTO c_status(status_cd,NAME,description) VALUES('D','作废订单','作废订单');
 INSERT INTO c_status(status_cd,NAME,description) VALUES('E','错误订单','错误订单');
 INSERT INTO c_status(status_cd,NAME,description) VALUES('NE','通知错误订单','通知错误订单');
-INSERT INTO c_status(status_cd,NAME,description) VALUES('C','错误订单','错误订单');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('C','订单完成','订单完成');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('B','Business过程','Business过程');
+INSERT INTO c_status(status_cd,NAME,description) VALUES('I','Instance过程','Instance过程')
+
 
 --c_order_type
 
@@ -84,10 +87,13 @@ CREATE TABLE c_business_type(
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
 
+insert into c_business_type(business_type_cd,name,description) values('DO','撤单','作废订单');
+
 -- spec
 
 CREATE TABLE spec(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    domain varchar(20) not null comment '属性域',
     spec_cd VARCHAR(4) NOT NULL UNIQUE COMMENT '业务项类型规格编码，从x00020001开始每次加一就可以(约定，x=10表示c_orders_attrs 中属性，x=11表示c_business_attrs 中的属性)',
     `name` VARCHAR(50) NOT NULL COMMENT '名称',
     description VARCHAR(200) COMMENT '描述',
@@ -102,6 +108,7 @@ CREATE TABLE c_route(
     service_id INT NOT NULL COMMENT '下游接口配置ID',
     order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
     invoke_limit_times INT COMMENT '接口调用一分钟调用次数',
+    invoke_model VARCHAR(1) NOT NULL COMMENT '1-同步方式 2-异步方式',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
 );
@@ -113,11 +120,11 @@ CREATE TABLE c_route(
 CREATE TABLE c_service(
     service_id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     service_code VARCHAR(50) NOT NULL UNIQUE COMMENT '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
-    invoke_model VARCHAR(1) NOT NULL COMMENT '1-同步方式 2-异步方式',
     business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
     seq INT NOT NULL COMMENT '顺序 只有同步方式下根据seq从小到大调用接口',
     messageQueueName VARCHAR(50) COMMENT '消息队里名称 只有异步时有用',
+    is_instance varchar(2) not null default 'N' comment '是否Instance Y 需要，N不需要',
     url VARCHAR(200) COMMENT '目标地址',
     method VARCHAR(50) COMMENT '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
     timeout INT NOT NULL DEFAULT 60 COMMENT '超时时间',
@@ -199,112 +206,112 @@ insert into c_app(app_id,`name`,security_code,remark,status_cd)
 values('8000418002','控制中心应用','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89KMC','控制中心应用','0');
 
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.userInfo','S','Q','用户信息查询',1,'http://...','8000418001','0');
+insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.userInfo','Q','用户信息查询',1,'http://...','8000418001','0');
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.order.orderInfo','S','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.order.orderInfo','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.console.menu','S','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.console.menu','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
 
-insert into c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.loginInfo','S','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
+insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('query.user.loginInfo','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.template','S','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.template','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.templateCol','S','Q','查询列模板信息',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.templateCol','Q','查询列模板信息',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.mapping','S','Q','查询映射数据',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.center.mapping','Q','查询映射数据',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.apps','S','Q','查询外部应用',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.center.apps','Q','查询外部应用',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.services','S','Q','查询服务',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.center.services','Q','查询服务',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.routes','S','Q','查询路由',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.center.routes','Q','查询路由',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('flush.center.cache','S','Q','CenterService缓存',1,'http://center-service/cacheApi/flush','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('flush.center.cache','Q','CenterService缓存',1,'http://center-service/cacheApi/flush','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.caches','S','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.caches','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.cache','S','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('query.console.cache','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
 
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.center.mapping','S','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('save.center.mapping','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.center.mapping','S','Q','删除映射信息',1,'http://center-service/businessApi/do','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('delete.center.mapping','Q','删除映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-INSERT INTO c_service(service_code,invoke_model,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.center.mapping','S','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('update.center.mapping','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
-'8000418001','1','Q','0'
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','1','S','Q','0'
 );
 
-insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
-'8000418001','3','Q','0'
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','3','S','Q','0'
 );
 
-insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
-'8000418002','4','Q','0'
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418002','4','S','Q','0'
 );
 
-insert into c_route(app_id,service_id,order_type_cd,status_cd) values(
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418002','5','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','6','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','6','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','7','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','7','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','8','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','8','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','9','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','9','S','Q','0'
 );
 
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','10','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','10','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','11','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','11','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','12','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','12','S','Q','0'
 );
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','13','Q','0'
-);
-
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','14','Q','0'
-);
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','15','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','13','S','Q','0'
 );
 
-INSERT INTO c_route(app_id,service_id,order_type_cd,status_cd) VALUES(
-'8000418002','16','Q','0'
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','14','S','Q','0'
+);
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','15','S','Q','0'
+);
+
+INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
+'8000418002','16','S','Q','0'
 );
 
 
@@ -423,7 +430,7 @@ VALUES('query.center.apps','查询外部应用','page,rows,sord','1','{"param1":
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.center.services','查询服务数据','page,rows,sord','1','{"param1":"select count(1) records,ceil(#page#/#rows#)+1 page,ceil(count(1)/#rows#) total from c_service a where a.status_cd = ''0''",
-                                                             "param2":"SELECT s.`service_id` serviceId,s.`service_code` serviceCode,s.`invoke_model` invokeModel,s.`business_type_cd`  businessTypeCd,s.name `name`,
+                                                             "param2":"SELECT s.`service_id` serviceId,s.`service_code` serviceCode,s.`business_type_cd`  businessTypeCd,s.name `name`,s.is_instance isInstance,
                                                                        s.`messageQueueName` messageQueueName,s.url url,s.`provide_app_id` provideAppId FROM c_service s WHERE s.`status_cd` = ''0'' LIMIT #page#, #rows#"
                                                              }','','{
                                                         	"PARAM": {
@@ -440,7 +447,7 @@ VALUES('query.center.services','查询服务数据','page,rows,sord','1','{"para
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.center.route','查询路由数据','page,rows,sord','1','{"param1":"select count(1) records,ceil(#page#/#rows#)+1 page,ceil(count(1)/#rows#) total from c_route a,c_service cs WHERE a.`service_id` = cs.`service_id` AND cs.`status_cd` = ''0'' and a.status_cd = ''0''",
-                                                             "param2":"SELECT s.id id,s.`app_id` appId,s.`service_id` serviceId,cs.`name` serviceName,cs.`service_code` serviceCode,s.`order_type_cd` orderTypeCd,s.`invoke_limit_times` invokelimitTimes FROM c_route s,c_service cs WHERE s.`service_id` = cs.`service_id` AND cs.`status_cd` = ''0'' AND s.`status_cd` = ''0'' LIMIT #page#, #rows#"
+                                                             "param2":"SELECT s.id id,s.`app_id` appId,s.`service_id` serviceId,s.`invoke_model` invokeModel,cs.`name` serviceName,cs.`service_code` serviceCode,s.`order_type_cd` orderTypeCd,s.`invoke_limit_times` invokelimitTimes FROM c_route s,c_service cs WHERE s.`service_id` = cs.`service_id` AND cs.`status_cd` = ''0'' AND s.`status_cd` = ''0'' LIMIT #page#, #rows#"
                                                              }','','{
                                                         	"PARAM": {
                                                         		"param1": "$.##Object",

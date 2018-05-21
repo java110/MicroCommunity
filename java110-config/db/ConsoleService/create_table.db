@@ -169,16 +169,16 @@ insert into c_template_col(template_code,col_name,col_code,col_model,seq) values
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','服务编码','serviceCode','{ "name": "serviceCode","index": "serviceCode","width": "40",
                                                                                                              "editable": true
                                                                                                            }',2);
-insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','调用方式','invokeModel','{ "name": "invokeModel","index": "invokeModel","width": "50",
-                                                                                                             "editable": true }',3);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','业务类型','businessTypeCd','{ "name": "businessTypeCd","index": "businessTypeCd","width": "50",
-                                                                                                             "editable": true }',4);
+                                                                                                             "editable": true }',3);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','名称','name','{ "name": "name","index": "name","width": "40",
-                                                                                                             "editable": true }',5);
+                                                                                                             "editable": true }',4);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','消息队列','messageQueueName','{ "name": "messageQueueName","index": "messageQueueName","width": "10",
+                                                                                                             "editable": true }',5);
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','需要Instance','isInstance','{ "name": "isInstance","index": "isInstance","width": "10",
                                                                                                              "editable": true }',6);
 
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('service','URL','url','{ "name": "url","index": "url","width": "60",
@@ -208,16 +208,18 @@ insert into c_template_col(template_code,col_name,col_code,col_model,seq) values
                                                                                                            }',2);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务ID','serviceId','{ "name": "serviceId","index": "serviceId","width": "30",
                                                                                                              "editable": true }',3);
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','调用方式','invokeModel','{ "name": "invokeModel","index": "invokeModel","width": "50",
+                                                                                                              "editable": true }',4);
 insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务名称','serviceName','{ "name": "serviceName","index": "serviceName","width": "30",
-                                                                                                             "editable": true }',4);
-insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务编码','serviceCode','{ "name": "serviceCode","index": "serviceCode","width": "30",
                                                                                                              "editable": true }',5);
-
-insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','订单类型','orderTypeCd','{ "name": "orderTypeCd","index": "orderTypeCd","width": "30",
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','服务编码','serviceCode','{ "name": "serviceCode","index": "serviceCode","width": "30",
                                                                                                              "editable": true }',6);
 
-insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','调用次数限制','invokelimitTimes','{ "name": "invokelimitTimes","index": "invokelimitTimes","width": "40",
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','订单类型','orderTypeCd','{ "name": "orderTypeCd","index": "orderTypeCd","width": "30",
                                                                                                              "editable": true }',7);
+
+insert into c_template_col(template_code,col_name,col_code,col_model,seq) values('route','调用次数限制','invokelimitTimes','{ "name": "invokelimitTimes","index": "invokelimitTimes","width": "40",
+                                                                                                             "editable": true }',8);
 
 INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES('route','BUTTON','BUTTON','{
                                                                                                             "name": "detail",

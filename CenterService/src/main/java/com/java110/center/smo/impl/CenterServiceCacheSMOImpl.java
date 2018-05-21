@@ -9,7 +9,7 @@ import com.java110.common.cache.ServiceSqlCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.SMOException;
-import com.java110.common.factory.DataTransactionFactory;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
 import com.java110.entity.service.DataQuery;

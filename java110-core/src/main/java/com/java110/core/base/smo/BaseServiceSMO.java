@@ -7,6 +7,9 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
+import com.java110.core.context.BusinessServiceDataFlow;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.feign.base.IPrimaryKeyService;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -58,9 +61,6 @@ public class BaseServiceSMO extends AppBase {
     protected AppContext createApplicationContext(){
         return AppContext.newInstance();
     }
-
-
-
 
 
 }

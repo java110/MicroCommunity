@@ -18,6 +18,8 @@ public class Business implements Comparable{
 
     private String remark;
 
+    private String isInstance;
+
     private JSONObject datas;
 
     private JSONArray attrs;
@@ -101,6 +103,14 @@ public class Business implements Comparable{
         this.seq = seq;
     }
 
+    public String getIsInstance() {
+        return isInstance;
+    }
+
+    public void setIsInstance(String isInstance) {
+        this.isInstance = isInstance;
+    }
+
     /**
      * 构建成对象
      * @return
@@ -111,10 +121,23 @@ public class Business implements Comparable{
         try{
             this.setbId(businessObj.getString("bId"));
             this.setServiceCode(businessObj.getString("serviceCode"));
-            this.setServiceName(businessObj.getString("serviceName"));
-            this.setRemark(businessObj.getString("remark"));
-            this.setDatas(businessObj.getJSONObject("datas"));
-            this.setAttrs(businessObj.getJSONArray("attrs"));
+            if(businessObj.containsKey("serviceCode")) {
+                this.setServiceName(businessObj.getString("serviceName"));
+            }
+            if(businessObj.containsKey("remark")) {
+                this.setRemark(businessObj.getString("remark"));
+            }
+
+            if(businessObj.containsKey("isInstance")){
+                this.setIsInstance(businessObj.getString("isInstance"));
+            }
+            if(businessObj.containsKey("datas")) {
+                this.setDatas(businessObj.getJSONObject("datas"));
+            }
+
+            if(businessObj.containsKey("attrs")){
+                this.setAttrs(businessObj.getJSONArray("attrs"));
+            }
             if(businessObj.containsKey("response")){
                 this.setCode(businessObj.getJSONObject("response").getString("code"));
                 this.setMessage(businessObj.getJSONObject("response").getString("message"));

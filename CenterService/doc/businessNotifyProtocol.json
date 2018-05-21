@@ -6,7 +6,7 @@
     "dataFlowId":"20020180000001",
     "businessType":"N"
   },
-  "business":[{//这个是相应的业务系统返回的结果，（受理为空，查询时不为空）
+  "business":{//这个是相应的业务系统返回的结果，（受理为空，查询时不为空）
     "response": {
       "code": "1999",
       "message": "错误消息"
@@ -14,5 +14,5 @@
     "bId":"12345678",
     "serviceCode": "querycustinfo"
     //其他字段
-  }]
+  }
 }

@@ -1,0 +1,20 @@
+{
+  "orders": {
+    "transactionId": "100000000020180409224736000001",
+    "responseTime": "20180409224736",
+    "sign": "这个服务是否要求MD5签名",
+    "response": {//这个是centerOrder 返回的状态结果
+      "code": "1999",
+      "message": "具体值"
+    }
+  },
+  "business":[{//这个是相应的业务系统返回的结果，（受理为空，查询时不为空）
+    "response": {
+      "code": "1999",
+      "message": "具体值"
+    },
+    "businessUser": {
+      "userId": "12345678"
+    }
+  }]
+}

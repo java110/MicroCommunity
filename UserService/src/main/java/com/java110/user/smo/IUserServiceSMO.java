@@ -2,7 +2,11 @@ package com.java110.user.smo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.exception.SMOException;
+import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.entity.user.Cust;
+
+import java.util.Map;
 
 /**
  *
@@ -91,5 +95,8 @@ public interface IUserServiceSMO {
      * @throws Exception
      */
     public String queryNeedDeleteCustInfoByOlId(String busiOrder) throws Exception;
+
+
+    public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException;
 
 }

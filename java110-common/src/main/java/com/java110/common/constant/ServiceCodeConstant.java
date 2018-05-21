@@ -64,6 +64,12 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_NAME = "SERVICE_CODE_NAME";
 
 
+    /**
+     * 保存用户
+     */
+    public static final String SERVICE_CODE_SAVE_USER_INFO = "save.user.info";
+
+
 
 
 }

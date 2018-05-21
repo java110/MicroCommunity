@@ -1,0 +1,13 @@
+{
+  "orders": {
+    "transactionId": "100000000020180409224736000001",
+    "requestTime": "20180409224736",
+    "orderTypeCd":"订单类型,查询,受理",
+    "dataFlowId":"20020180000001",
+    "businessType":"I"
+  },
+  "business": {
+    "bId":"12345678",
+    "serviceCode": "save.user.userInfo"
+  }
+}

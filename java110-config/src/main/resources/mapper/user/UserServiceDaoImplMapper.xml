@@ -148,4 +148,115 @@
         and status_cd = '0'
     </select>
 
+    <!-- 保存用户信息 -->
+    <insert id="saveBusinessUserInfo" parameterType="map">
+        insert into business_user(b_id,user_id,name,email,address,password,location_cd,age,sex,tel,level_cd,operate)
+        values(#{bId},#{userId},#{name},#{email},#{address},#{password},#{locationCd},#{age},#{sex},#{tel},#{levelCd},#{operate})
+    </insert>
+
+    <!-- 保存用户属性 -->
+    <insert id="saveBusinessUserAttr" parameterType="map">
+        insert into business_user_attr(b_id,user_id,attr_id,spec_cd,value,operate)
+        values(#{bId},#{userId},#{attId},#{specCd},#{value},#{operate})
+    </insert>
+    <!-- 实例数据 -->
+    <insert id="saveUserInfoInstance" parameterType="map">
+        insert into u_user(user_id,name,email,address,password,location_cd,age,sex,tel,level_cd,b_id,status_cd)
+        select bu.user_id,bu.name,bu.email,bu.address,bu.password,bu.location_cd,bu.age,bu.sex,bu.tel,bu.level_cd,bu.b_id,'0' from business_user bu where bu.operate = 'ADD' and bu.b_id=#{bId}
+    </insert>
+
+    <insert id="saveUserAttrInstance" parameterType="map">
+        insert into u_user_attr(attr_id,user_id,spec_cd,value,b_id,status_cd)
+        select bua.attr_id,bua.user_id,bua.spec_cd,bua.value,'0' from business_user_attr bua where bua.operate='ADD' and bua.b_id=#{bId}
+    </insert>
+
+    <update id="updateUserInfoInstance" parameterType="map">
+        update u_user u set u.status_cd = #{statusCd} where 1 = 1
+        <if test="bId != null and bId != ''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and u.user_id = #{userId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and u.attr_id = #{attrId}
+        </if>
+    </update>
+
+    <update id="updateUserInfoInstance" parameterType="map">
+        update u_user_attr ua set ua.status_cd = #{statusCd} where 1 = 1
+        <if test="bId != null and bId != ''">
+            and ua.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and ua.user_id = #{userId}
+        </if>
+    </update>
+
+    <!-- 查询用户信息 Business -->
+    <select id="queryBusinessUserInfo" parameterType="map" resultType="map">
+        select u.user_id,u.name,u.email,u.address,u.password,u.location_cd,
+        u.age,u.sex,u.tel,u.level_cd,u.b_id,u.operate
+        from business_user u where 1 = 1
+        <if test="operate != null and operate != ''">
+           and u.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and u.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 查询用户属性信息 Business-->
+    <select id="queryBusinessUserInfoAttrs" parameterType="map" resultType="map">
+        select u.attr_id,u.user_id,u.spec_cd,u.value,u.b_id,u.operate
+        from business_user_attr u where 1 = 1
+        <if test="operate != null and operate != ''">
+            and u.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and u.user_id = #{userId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and u.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询用户信息 -->
+    <select id="queryUserInfo" parameterType="map" resultType="map">
+        select u.user_id,u.name,u.email,u.address,u.password,u.location_cd,
+        u.age,u.sex,u.tel,u.level_cd,u.b_id
+        from u_user u where u.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and u.user_id = #{userId}
+        </if>
+    </select>
+
+
+
+    <!-- 查询用户属性信息 -->
+    <select id="queryUserInfoAttrs" parameterType="map" resultType="map">
+        select u.attr_id,u.user_id,u.spec_cd,u.value,u.b_id
+        from u_user_attr u where u.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and u.user_id = #{userId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and u.attr_id = #{attrId}
+        </if>
+    </select>
+
+
+
 </mapper>

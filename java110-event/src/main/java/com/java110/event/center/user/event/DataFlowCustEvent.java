@@ -1,6 +1,6 @@
 package com.java110.event.center.user.event;
 
-import com.java110.entity.center.DataFlow;
+import com.java110.core.context.DataFlow;
 import com.java110.event.center.DataFlowEvent;
 
 /**
