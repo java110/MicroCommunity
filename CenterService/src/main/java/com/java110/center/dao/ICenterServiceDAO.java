@@ -34,6 +34,12 @@ public interface ICenterServiceDAO {
     public void saveBusiness(List<Map> businesses) throws DAOException;
 
     /**
+     * 保存订单项信息
+     * @param business 订单项信息
+     */
+    public void saveBusiness(Map business) throws DAOException;
+
+    /**
      * 保存属性信息
      * @param businessAttrs
      * @return
@@ -70,6 +76,15 @@ public interface ICenterServiceDAO {
     public void completeOrderByBId(String bId) throws DAOException;
 
     /**
+     * 判断 business 过程是否完成 1 表示完成 0表示未完成
+     * @param oId
+     * @return
+     * @throws DAOException
+     */
+    public int judgeAllBusinessCompleted(String oId,String statusCd) throws DAOException;
+
+
+    /**
      * 根据bId查询订单信息
      * @param bId
      * @return
@@ -78,12 +93,28 @@ public interface ICenterServiceDAO {
     public Map getOrderInfoByBId(String bId)throws DAOException;
 
     /**
+     * 根据oId查询订单信息
+     * @param oId
+     * @return
+     * @throws DAOException
+     */
+    public Map getDeleteOrderBusinessByOId(String oId)throws DAOException;
+
+    /**
      * 获取同个订单中已经完成的订单项
      * @param bId
      * @return
      * @throws DAOException
      */
     public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException;
+
+    /**
+     * 根据oId 查询Business
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> getBusinessByOId(Map info) throws DAOException;
 
     /**
      * 查询所有组件
@@ -96,5 +127,7 @@ public interface ICenterServiceDAO {
      * @return
      */
     public List<Mapping> getMappingInfoAll();
+
+
 
 }

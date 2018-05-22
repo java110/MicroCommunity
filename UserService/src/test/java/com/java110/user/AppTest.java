@@ -1,5 +1,6 @@
 package com.java110.user;
 
+import com.java110.common.util.WebServiceAxisClient;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +34,24 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+        String url = "http://135.192.70.67:9084/serviceAgent/http/FactorageManager_ForAgent?AppKey=2017082401";
+        String function = "queryOrderInfo";
+
+        String xml  = "<QueryOrderInfoRequest>\n" +
+                "\t<accNbr>18009706604</accNbr>\n" +
+                "\t<accNbrType>1</accNbrType> \n" +
+                "\t<areaCode>0971</areaCode>\n" +
+                "\t<channelId></channelId>\n" +
+                "\t<staffCode></staffCode> \t\n" +
+                "</QueryOrderInfoRequest>";
+
+        try {
+            Object retObj = WebServiceAxisClient.callWebService(url, function, new Object[]{xml});
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

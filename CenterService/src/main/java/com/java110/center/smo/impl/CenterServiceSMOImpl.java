@@ -379,7 +379,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
 
     /**
-     * 7.0 作废订单和业务项
+     * 7.0 作废订单和业务项 插入撤单记录 等待撤单
      *
      * @param dataFlow
      */
@@ -392,12 +392,25 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             return ;
         }
 
+        //如果已经作废 不存在 或失败，则不做处理
+
+        Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getbId());
+
+        if(order == null || !order.containsKey("status_cd") || StatusConstant.STATUS_CD_DELETE.equals(order.get("status_cd"))
+                || StatusConstant.STATUS_CD_ERROR.equals(order.get("status_cd"))){
+            return ;
+        }
+
         //作废 订单
         centerServiceDaoImpl.updateOrder(DataFlowFactory.getNeedInvalidOrder(dataFlow));
 
         //作废订单项
         centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedInvalidOrder(dataFlow));
 
+        //将当前订单项改为 撤单状态
+        centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedDeleteBusiness(dataFlow));
+        //插入撤单记录
+        doAddDeleteOrderBusinessData(dataFlow);
 
         DataFlowFactory.addCostTime(dataFlow, "invalidOrderAndBusiness", "作废订单和业务项耗时", startDate);
     }
@@ -409,14 +422,28 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param dataFlow
      */
     private void invalidCompletedBusinessSystem(DataFlow dataFlow) throws Exception{
+
+        if(!StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
+            return ;
+        }
+
+        //判断 订单instance 是否都变成了撤单状态
+        if(centerServiceDaoImpl.judgeAllBusinessCompleted(dataFlow.getoId(),StatusConstant.STATUS_CD_DELETE_ORDER) < 1){
+            return ;
+        }
+
         // 根据 c_business 表中的字段business_type_cd 找到对应的消息队列名称
-        List<Map> completedBusinesses = centerServiceDaoImpl.getCommonOrderCompledBusinessByBId(dataFlow.getBusinesses().get(0).getbId());
+        Map paramIn = new HashMap();
+        paramIn.put("oId",dataFlow.getoId());
+        paramIn.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
+        List<Map> completedBusinesses = centerServiceDaoImpl.getBusinessByOId(paramIn);
         for(AppRoute appRoute :dataFlow.getAppRoutes()){
             for(Map completedBusiness : completedBusinesses){
                 if(completedBusiness.get("business_type_cd").equals(appRoute.getAppService().getBusinessTypeCd())){
+                    //发起撤单
                     KafkaFactory.sendKafkaMessage(appRoute.getAppService().getMessageQueueName(),"",
-                            DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,appRoute.getAppService()));
-                    saveLogMessage(DataFlowFactory.getCompletedBusinessErrorJson(dataFlow,completedBusiness,appRoute.getAppService()),null);
+                            DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()));
+                    saveLogMessage(DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()),null);
                 }
             }
         }
@@ -456,12 +483,29 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         centerServiceDaoImpl.updateOrder(DataFlowFactory.getNeedInvalidOrder(dataFlow));
 
         //作废订单项
-        centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedInvalidOrder(dataFlow));
+        centerServiceDaoImpl.updateBusiness(DataFlowFactory.getNeedDeleteBusiness(dataFlow));
+
+        //加入撤单记录
+        //doAddDeleteOrderBusinessData(dataFlow);
 
 
 
         DataFlowFactory.addCostTime(dataFlow, "updateOrderAndBusinessError", "订单状态改为失败耗时", startDate);
 
+    }
+
+    /**
+     * 加入撤单记录
+     * @param dataFlow
+     */
+    private void doAddDeleteOrderBusinessData(DataFlow dataFlow){
+       /* Map business = new HashMap();
+        business.put("bId",SequenceUtil.getBId());
+        business.put("oId",dataFlow.getoId());
+        business.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        business.put("remark","发起撤单");
+        business.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);*/
+        centerServiceDaoImpl.saveBusiness(DataFlowFactory.getDeleteOrderBusiness(dataFlow,"订单失败，加入撤单"));
     }
 
 
@@ -485,22 +529,39 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 return ;
             }
 
+            //如果不是 business 和instance 过程 则直接跳出
+            judgeBusinessOrInstance(dataFlow);
+
             //2.0加载数据，没有找到appId 及配置信息 则抛出InitConfigDataException
             reloadOrderInfoAndConfigData(dataFlow);
 
             //3.0 判断是否成功,失败会抛出BusinessStatusException异常
-            judgeBusinessStatus(dataFlow);
+            judgeBusinessStatusAndCompleteBusiness(dataFlow);
 
             //4.0 修改业务为成功,如果发现业务项已经是作废或失败状态（D或E）则抛出BusinessException异常
-            completeBusiness(dataFlow);
-            //5.0当所有业务动作是否都是C，将订单信息改为 C 并且发布竣工消息，这里在广播之前确认
-            completeOrderAndNotifyBusinessSystem(dataFlow);
+            //completeBusiness(dataFlow);
+
+            //5.0 判断 发起 Instance 条件是否满足，如果满足 发起 Instance过程
+            judgeSendToInstance(dataFlow);
+
+            //7.0 判断撤单条件是否满足，如果满足发起撤单
+            invalidCompletedBusinessSystem(dataFlow);
 
         }catch (BusinessStatusException e){
+
+            logger.error("订单失败:" ,e);
+            //8.0 将订单状态改为失败，人工处理。
+            updateOrderAndBusinessError(dataFlow);
+
+        }catch (BusinessException e) {
+            //9.0说明这个订单已经失败了，再不需要
+            //想法，这里广播当前失败业务
+            logger.error("修改业务数据失败",e);
+        }catch (InitConfigDataException e){ //这种一般不会出现，除非人工改了数据
+            LoggerEngine.error("加载配置数据出错", e);
             try {
                 //6.0 作废订单和所有业务项
                 invalidOrderAndBusiness(dataFlow);
-
                 //7.0 广播作废业务系统订单信息,这里只有 Instance 失败后才发起 撤单
                 if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
                     invalidCompletedBusinessSystem(dataFlow);
@@ -510,28 +571,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 //8.0 将订单状态改为失败，人工处理。
                 updateOrderAndBusinessError(dataFlow);
             }
-        }catch (BusinessException e) {
-            //9.0说明这个订单已经失败了，再不需要
-            //想法，这里广播当前失败业务
-            try {
-                notifyBusinessSystemErrorMessage(dataFlow);
-            }catch (Exception e1){
-                //这里记录日志
-            }
-        }catch (InitConfigDataException e){ //这种一般不会出现，除非人工改了数据
-            LoggerEngine.error("加载配置数据出错", e);
-            try {
-                //6.0 作废订单和所有业务项
-                invalidOrderAndBusiness(dataFlow);
-                //7.0 广播作废业务系统订单信息
-                //想法，这里只广播已经完成的订单项
-                invalidCompletedBusinessSystem(dataFlow);
-            } catch (Exception e1) {
-                LoggerEngine.error("作废订单失败", e1);
-                //8.0 将订单状态改为失败，人工处理。
-                updateOrderAndBusinessError(dataFlow);
-            }
 
+        }catch (NoSupportException e){
+            LoggerEngine.error("当前业务不支持", e);
         }catch (Exception e){
             LoggerEngine.error("作废订单失败", e);
             //10.0 成功的情况下通知下游系统失败将状态改为NE，人工处理。
@@ -540,6 +582,38 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             DataFlowFactory.addCostTime(dataFlow, "receiveBusinessSystemNotifyMessage", "接受业务系统通知消息耗时", startDate);
             saveLogMessage(dataFlow.getReqJson(),null);
         }
+    }
+
+    /**
+     * Instance过程
+     * @param dataFlow
+     */
+    private void doSendInstance(DataFlow dataFlow) {
+        if(dataFlow == null || !StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(dataFlow.getBusinessType())){
+            return ;
+        }
+        try {
+            KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, dataFlow.getCurrentBusiness().getServiceCode()).getMessageQueueName(), "",
+                    DataFlowFactory.getBusinessTableDataInfoToInstanceTableJson(dataFlow, dataFlow.getCurrentBusiness()).toJSONString());
+        }catch (Exception e){
+
+        }
+
+    }
+
+    /**
+     * 判断是否是 business 或者 instance过程
+     * @param dataFlow
+     * @throws NoSupportException
+     */
+    private void judgeBusinessOrInstance(DataFlow dataFlow) throws  NoSupportException{
+
+        if(dataFlow == null || StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(dataFlow.getBusinessType()) ||
+                StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())){
+            return ;
+        }
+
+        throw new NoSupportException(ResponseConstant.RESULT_PARAM_ERROR,"当前只支持 Business 和 Instance过程");
     }
 
 
@@ -579,14 +653,26 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * 判断是否都成功了
      * @param dataFlow
      */
-    private void judgeBusinessStatus(DataFlow dataFlow) throws BusinessStatusException{
+    private void judgeBusinessStatusAndCompleteBusiness(DataFlow dataFlow) throws BusinessStatusException{
 
         List<Business> businesses = dataFlow.getBusinesses();
 
-        for(Business business: businesses){
-            if(!ResponseConstant.RESULT_CODE_SUCCESS.equals(business.getCode())){
-                throw new BusinessStatusException(business.getCode(),"业务bId= "+business.getbId() + " 处理失败，需要作废订单");
+        //1.0 判断是否存在撤单，如果是撤单则将当前 bId 标记为撤单状态
+        if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
+            Map businessMap = centerServiceDaoImpl.getDeleteOrderBusinessByOId(dataFlow.getoId());
+            if(businessMap != null && !businessMap.isEmpty()){
+                centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedDeleteBusiness(dataFlow));
+                return ;
             }
+        }
+
+        Business business = dataFlow.getCurrentBusiness();
+        if(!ResponseConstant.RESULT_CODE_SUCCESS.equals(business.getCode())){
+            //throw new BusinessStatusException(business.getCode(),"业务bId= "+business.getbId() + " 处理失败，需要作废订单");
+            //作废订单和业务项 插入撤单记录 等待撤单
+            invalidOrderAndBusiness(dataFlow);
+        }else{
+            completeBusiness(dataFlow);
         }
 
     }
@@ -598,8 +684,14 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void completeBusiness(DataFlow dataFlow) throws BusinessException{
         try {
-            //完成订单项
-            centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedCompleteBusiness(dataFlow));
+            if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
+                //完成订单项
+                centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedCompleteBusiness(dataFlow));
+            }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(dataFlow.getBusinessType())) {
+                centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedBusinessComplete(dataFlow));
+            }else{ //这里到不了，前面做了校验
+                throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,"当前不支持 业务类型为 businessType" +dataFlow.getBusinessType());
+            }
 
         }catch (DAOException e){
             throw new BusinessException(e.getResult(),e);
@@ -610,11 +702,12 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * //4.0当所有业务动作是否都是C，将订单信息改为 C 并且发布竣工消息，这里在广播之前确认
      * @param dataFlow
      */
-    private void completeOrderAndNotifyBusinessSystem(DataFlow dataFlow) throws Exception{
+    private void judgeSendToInstance(DataFlow dataFlow) throws Exception{
         try {
-            centerServiceDaoImpl.completeOrderByBId(DataFlowFactory.getMoreBId(dataFlow));
-            //通知成功消息
-            notifyBusinessSystemSuccessMessage(dataFlow);
+            if(centerServiceDaoImpl.judgeAllBusinessCompleted(dataFlow.getoId(),StatusConstant.STATUS_CD_BUSINESS_COMPLETE) > 0) {
+                //通知成功消息
+                doSendInstance(dataFlow);
+            }
         }catch (DAOException e){
             //这里什么都不做，说明订单没有完成
         }

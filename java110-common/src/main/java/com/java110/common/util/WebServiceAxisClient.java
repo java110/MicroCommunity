@@ -16,16 +16,21 @@ import org.apache.axis.client.Service;
 
 public class WebServiceAxisClient extends LoggerEngine {
     public static void main(String[] args) {
-        String url = "http://135.192.100.2:9001/QH10000Web/WebTelecom10000";
-        String function = "getBalance";
+        String url = "http://135.192.70.67:9084/serviceAgent/http/FactorageManager_ForAgent?AppKey=2017082401";
+        String function = "queryOrderInfo";
 
-        String areaCode = "0971";
-        String accNbr = "18997240042";
-        String type = "2";
-        Object[] obj = new Object[]{areaCode, accNbr, type};
+        String xml  = "<QueryOrderInfoRequest>\n" +
+                "\t<accNbr>18009706604</accNbr>\n" +
+                "\t<accNbrType>1</accNbrType> \n" +
+                "\t<areaCode>0971</areaCode>\n" +
+                "\t<channelId></channelId>\n" +
+                "\t<staffCode></staffCode> \t\n" +
+                "</QueryOrderInfoRequest>";
 
         try {
-            Object retObj = WebServiceAxisClient.callWebService(url, function, obj);
+            Object retObj = WebServiceAxisClient.callWebService(url, function, new Object[]{xml});
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

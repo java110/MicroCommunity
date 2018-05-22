@@ -18,7 +18,10 @@ public class StatusConstant {
     public final static String STATUS_CD_NOTIFY_ERROR = "NE";//通知错误订单
     public final static String STATUS_CD_COMPLETE = "C";//错误订单
     public final static String STATUS_CD_BUSINESS = "B";//BUSINESS过程
+    public final static String STATUS_CD_BUSINESS_COMPLETE = "BC";//BUSINESS过程 完成
     public final static String STATUS_CD_INSTANCE = "I";//INSTANCE过程
+    public final static String STATUS_CD_DELETE_ORDER = "DO";// 撤单
+
 
     public final static String OPERATE_ADD = "ADD";
     public final static String OPERATE_MOD = "MOD";

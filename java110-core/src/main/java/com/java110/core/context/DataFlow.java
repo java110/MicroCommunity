@@ -186,6 +186,7 @@ public class DataFlow extends AbstractDataFlowContext {
             this.setTransactionId(reqInfoObj.getString("transactionId"));
             this.setOrderTypeCd(reqInfoObj.getString("orderTypeCd"));
             this.setRequestTime(reqInfoObj.getString("responseTime"));
+            this.setBusinessType(reqInfoObj.getString("businessType"));
             //this.setReqOrders(orderObj);
             JSONObject businessObj = new JSONObject();
             businessObj.put("bId",reqInfoObj.getString("bId"));

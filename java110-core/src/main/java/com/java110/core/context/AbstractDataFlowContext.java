@@ -16,6 +16,8 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
 
     private String dataFlowId;
 
+    private String businessType;
+
     //交易流水
     private String transactionId;
 
@@ -220,7 +222,11 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
     public JSONArray getAttrs(){return null;};
 
     public String getBusinessType() {
-        return null;
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 
     public Map<String, Object> getParamOut() {

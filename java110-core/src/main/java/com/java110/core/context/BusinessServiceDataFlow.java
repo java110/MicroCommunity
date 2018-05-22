@@ -18,7 +18,7 @@ import java.util.Map;
 public class BusinessServiceDataFlow extends AbstractDataFlowContext {
 
 
-    private String businessType;
+
 
     private String bId;
 
@@ -29,13 +29,6 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
         return this;
     }
 
-    public String getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
-    }
 
     public BusinessServiceDataFlow(Date startDate, String code) {
         super(startDate, code);

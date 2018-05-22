@@ -199,7 +199,7 @@ public class DataFlowFactory {
         busiMap.put("oId",dataFlow.getoId());
         busiMap.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         busiMap.put("remark",message);
-        busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE);
+        busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
         busiMap.put("bId",SequenceUtil.getBId());
         business.add(busiMap);
         return business;
@@ -267,6 +267,40 @@ public class DataFlowFactory {
         business.put("bId",bId.substring(0,bId.length()-1));
         business.put("finishTime",DateUtil.getCurrentDate());
         business.put("statusCd",StatusConstant.STATUS_CD_COMPLETE);
+        return business;
+    }
+
+    /**
+     * Business 过程完成
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedBusinessComplete(DataFlow dataFlow){
+        Map business = new HashMap();
+        String bId = "";
+        for(Business busi:dataFlow.getBusinesses()){
+            bId += "'"+busi.getbId()+"',";
+        }
+        business.put("bId",bId.substring(0,bId.length()-1));
+        business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("statusCd",StatusConstant.STATUS_CD_BUSINESS_COMPLETE);
+        return business;
+    }
+
+    /**
+     * Business 过程完成
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedDeleteBusiness(DataFlow dataFlow){
+        Map business = new HashMap();
+        String bId = "";
+        for(Business busi:dataFlow.getBusinesses()){
+            bId += "'"+busi.getbId()+"',";
+        }
+        business.put("bId",bId.substring(0,bId.length()-1));
+        business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
         return business;
     }
 
@@ -374,6 +408,8 @@ public class DataFlowFactory {
 
     }
 
+
+
     /**
      * 获取失败消息的报文（订单失败后通知业务系统）
      * @param business
@@ -387,8 +423,8 @@ public class DataFlowFactory {
             busi.put("bId",business.getbId());
             busi.put("serviceCode",business.getServiceCode());
             busi.put("serviceName",business.getServiceName());
-            busi.put("isInstance",CommonConstant.INSTANCE_Y);
-        busi.put("datas",business.getDatas());
+            //busi.put("isInstance",CommonConstant.INSTANCE_Y);
+        //busi.put("datas",business.getDatas());
         requestMessage.put("business",busi);
         return requestMessage;
     }
@@ -407,9 +443,21 @@ public class DataFlowFactory {
         busi.put("bId",business.getbId());
         busi.put("serviceCode",business.getServiceCode());
         busi.put("serviceName",business.getServiceName());
-        busi.put("datas",business.getDatas());
+        //busi.put("datas",business.getDatas());
         requestMessage.put("business",busi);
         return requestMessage;
+    }
+
+    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow,Map business,AppService appService){
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.get("b_id"));
+        busi.put("serviceCode",appService.getServiceCode());
+        //busi.put("datas",business.getDatas());
+        requestMessage.put("business",busi);
+        return requestMessage;
+
     }
 
     /**

@@ -81,6 +81,26 @@
         )
     ]]>
     </select>
+    <!-- 根据 OID 查询 business -->
+    <select id="getBusinessByOId" parameterType="map" resultType="map">
+        SELECT co.`o_id`,co.`app_id`,co.`order_type_cd`,co.`user_id`,cb.`business_type_cd`,cb.`b_id`,cb.`status_cd`
+        FROM c_orders co,c_business cb
+        WHERE co.`o_id` = cb.`o_id`
+        AND cb.`business_type_cd` NOT IN ('DO')
+        <if test="statusCd != null and statusCd != ''">
+        AND cb.`status_cd` = #{statusCd}
+        </if>
+        <if test="oId != null and oId != ''">
+        AND co.`o_id` = #{oId}
+        </if>
+    </select>
+
+    <select id="getDeleteOrderBusinessByOId" parameterType="String" resultType="Map">
+        <![CDATA[
+           select cb.b_id,cb.o_id,cb.business_type_cd,cb.status_cd from c_orders co,c_business cb where co.o_id = cb.o_id and cb.business_type_cd = 'DO' and cb.status_cd = 'DO'
+           and co.o_id = #{oId}
+        ]]>
+    </select>
 
     <!-- 获取同个订单中已经完成的订单项-->
     <select id="getCommonOrderCompledBusinessByBId" parameterType="String" resultType="Map">
@@ -111,6 +131,18 @@
         <![CDATA[
              SELECT cm.domain,cm.name,cm.key,cm.value,cm.remark from c_mapping cm where cm.status_cd = '0'
         ]]>
+    </select>
+
+    <select id="judgeAllBusinessCompleted" parameterType="map" resultType="map">
+        SELECT co.* FROM c_orders co WHERE co.`o_id` = #{oId} and not exists (
+        SELECT 1 FROM c_business cb WHERE cb.`o_id` = co.`o_id`
+        AND cb.`status_cd` NOT IN (#{statusCd})
+        )
+        AND NOT EXISTS (
+        SELECT 1 FROM c_business cbs WHERE cbs.`o_id` =co.`o_id`
+        AND cbs.`business_type_cd` = 'DO'
+        )
+        AND co.`status_cd` NOT IN ('D','C')
     </select>
 
 </mapper>
