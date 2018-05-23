@@ -60,7 +60,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      */
     public static List<BusinessServiceDataFlowListener> getListeners(String serviceCode){
 
-        Assert.isNull(serviceCode,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
+        Assert.hasLength(serviceCode,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
 
         //先从缓存中获取，为了提升效率
         if(cacheListenersMap.containsKey(serviceCode)){
@@ -109,7 +109,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      */
     public static void multicastEvent(String serviceCode,DataFlowContext dataFlowContext,String asyn) throws  BusinessException{
         try {
-            BusinessServiceDataFlowEvent targetDataFlowEvent = new BusinessServiceDataFlowEvent(null,dataFlowContext);
+            BusinessServiceDataFlowEvent targetDataFlowEvent = new BusinessServiceDataFlowEvent(serviceCode,dataFlowContext);
 
             multicastEvent(serviceCode,targetDataFlowEvent, asyn);
         }catch (Exception e){

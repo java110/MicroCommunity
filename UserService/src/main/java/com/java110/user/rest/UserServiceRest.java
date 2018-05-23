@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 用户服务提供类
  * Created by wuxw on 2017/4/5.
  */
-@RestController
+//@RestController
 public class UserServiceRest extends BaseController implements IUserService {
 
     @Autowired

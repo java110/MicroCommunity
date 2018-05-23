@@ -63,12 +63,14 @@ public class SystemStartLoadBusinessConfigure {
 
             //这里不能直接反射，这样 IXXXService 无法注入，所以直接从spring 中获取已经注入的
             //AppListener<?> appListener = (AppListener<?>)Class.forName(listener).newInstance();
+            try {
+                BusinessServiceDataFlowListener businessServiceDataFlowListener = (BusinessServiceDataFlowListener) ApplicationContextFactory.getBean(listener);
+                //将 listener 放入 AppEventPublishing 中方便后期操作
+                //注册侦听
+                BusinessServiceDataFlowEventPublishing.addListenner(businessServiceDataFlowListener);
+            }catch (Exception e){
 
-            BusinessServiceDataFlowListener businessServiceDataFlowListener = (BusinessServiceDataFlowListener) ApplicationContextFactory.getBean(listener);
-
-            //将 listener 放入 AppEventPublishing 中方便后期操作
-            //注册侦听
-            BusinessServiceDataFlowEventPublishing.addListenner(businessServiceDataFlowListener);
+            }
         }
     }
 

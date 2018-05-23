@@ -33,7 +33,7 @@ import java.util.*;
  * Created by wuxw on 2018/4/13.
  */
 @Service("centerServiceSMOImpl")
-@Transactional
+//@Transactional
 public class CenterServiceSMOImpl extends LoggerEngine implements ICenterServiceSMO {
 
     @Autowired
@@ -852,7 +852,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
             //添加需要撤单的业务信息
             deleteBusinesses.add(business);
-            updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_BUSINESS);
+            updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_COMPLETE);
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(requestBusinessJson,responseJson);
         }
@@ -881,7 +881,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         String responseMessage;
         if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
             //http://user-service/test/sayHello
-            responseMessage = restTemplate.postForObject(service.getUrl(),requestBusinessJson,String.class);
+            responseMessage = restTemplate.postForObject(service.getUrl(),requestBusinessJson.toJSONString(),String.class);
         }else{//webservice方式
             responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
                     new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
@@ -895,7 +895,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         Assert.jsonObjectHaveKey(responseJson,"response","下游返回报文格式错误，没有包含responseJson节点【"+service.getUrl()+"】");
 
-        JSONObject responseInfo = responseJson.getJSONObject("responseJson");
+        JSONObject responseInfo = responseJson.getJSONObject("response");
 
         Assert.jsonObjectHaveKey(responseInfo,"code","下游返回报文格式错误，response 节点中没有包含code节点【"+service.getUrl()+"】");
 

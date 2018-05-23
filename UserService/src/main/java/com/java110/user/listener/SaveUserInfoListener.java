@@ -54,7 +54,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
     private void doSaveUserInfo(DataFlowContext dataFlowContext){
         String businessType = dataFlowContext.getOrder().getBusinessType();
         Business business = dataFlowContext.getCurrentBusiness();
-        Assert.hasLength(business.getbId(),"bId 不能为空");
+        //Assert.hasLength(business.getbId(),"bId 不能为空");
         // Instance 过程
         if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
             //doComplateUserInfo(business);
@@ -76,7 +76,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
     private void doDeleteInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
 
         String bId = business.getbId();
-        Assert.hasLength(bId,"请求报文中没有包含 bId");
+        //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
         info.put("bId",bId);
         Map userInfo = userServiceDaoImpl.queryUserInfo(info);
@@ -111,9 +111,9 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
 
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        //Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
+        //Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
 
         //JSONObject businessUser = data.getJSONObject("businessUser");
         Map info = new HashMap();
@@ -190,14 +190,14 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
             JSONObject userAttr = businessUserAttrs.getJSONObject(userAttrIndex);
             Assert.jsonObjectHaveKey(userAttr,"attrId","businessUserAttr 节点下没有包含 attrId 节点");
 
-            if(businessUser.getInteger("attrId") < 0){
+            if(userAttr.getInteger("attrId") < 0){
                 String attrId = SequenceUtil.getAttrId();
                 userAttr.put("attrId",attrId);
             }
 
-            businessUser.put("bId",business.getbId());
-            businessUser.put("userId",businessUser.getString("userId"));
-            businessUser.put("operate", StatusConstant.OPERATE_ADD);
+            userAttr.put("bId",business.getbId());
+            userAttr.put("userId",businessUser.getString("userId"));
+            userAttr.put("operate", StatusConstant.OPERATE_ADD);
 
             userServiceDaoImpl.saveBusinessUserAttr(userAttr);
         }

@@ -168,20 +168,19 @@ public class DataFlowFactory {
      */
     public static List<Map> getBusiness(DataFlow dataFlow){
         List<Map> businesss = new ArrayList<Map>();
-        JSONArray reqBusiness = dataFlow.getReqBusiness();
+        List<Business> businesses= dataFlow.getBusinesses();
         Map busiMap = null;
-        for(int businessIndex = 0 ; businessIndex < reqBusiness.size();businessIndex ++) {
-            JSONObject business = reqBusiness.getJSONObject(businessIndex);
+        for(Business business : businesses) {
             if(business == null){
                 continue;
             }
-            business.put("bId",SequenceUtil.getBId());
+            business.setbId(SequenceUtil.getBId());
             busiMap = new HashMap();
             busiMap.put("oId",dataFlow.getoId());
-            busiMap.put("businessTypeCd",getService(dataFlow,business.getString("serviceCode")).getBusinessTypeCd());
-            busiMap.put("remark",business.getString("remark"));
+            busiMap.put("businessTypeCd",getService(dataFlow,business.getServiceCode()).getBusinessTypeCd());
+            busiMap.put("remark",business.getRemark());
             busiMap.put("statusCd",StatusConstant.STATUS_CD_SAVE);
-            busiMap.put("bId",business.getString("bId"));
+            busiMap.put("bId",business.getbId());
             businesss.add(busiMap);
         }
         return businesss;
@@ -212,17 +211,16 @@ public class DataFlowFactory {
      */
     public static List<Map> getBusinessAttrs(DataFlow dataFlow){
         List<Map> businessAttrs = new ArrayList<Map>();
-        JSONArray reqBusiness = dataFlow.getReqBusiness();
-        for(int businessIndex = 0 ; businessIndex < reqBusiness.size();businessIndex ++) {
-            JSONObject business = reqBusiness.getJSONObject(businessIndex);
-            if (!business.containsKey("attrs") && business.getJSONArray("attrs").size() == 0) {
+        List<Business> businesses = dataFlow.getBusinesses();
+        for(Business business :businesses) {
+            if (business.getAttrs() == null || business.getAttrs().size() ==0) {
                 continue;
             }
-            JSONArray attrs = business.getJSONArray("attrs");
+            JSONArray attrs = business.getAttrs();
             Map attrMap = null;
             for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
                 attrMap = new HashMap();
-                attrMap.put("bId", business.getString("bId"));
+                attrMap.put("bId", business.getbId());
                 attrMap.put("attrId", SequenceUtil.getAttrId());
                 attrMap.put("specCd", attrs.getJSONObject(attrIndex).getString("specCd"));
                 attrMap.put("value", attrs.getJSONObject(attrIndex).getString("value"));

@@ -121,7 +121,7 @@ public class SequenceUtil {
 
     public static String getUserId(){
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("userId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+            return prefixMap.get("userId") + nextId("%08d");
         }
         //调用服务
         return null;

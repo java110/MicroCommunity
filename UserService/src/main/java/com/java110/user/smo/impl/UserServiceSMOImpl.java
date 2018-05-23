@@ -46,7 +46,7 @@ import java.util.*;
 @Transactional
 public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSMO {
 
-    @Autowired
+    //@Autowired
     IPrimaryKeyService iPrimaryKeyService;
 
     @Autowired
@@ -762,6 +762,8 @@ public class UserServiceSMOImpl extends BaseServiceSMO implements IUserServiceSM
     @Override
     public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException {
         try {
+            Assert.hasLength(businessServiceDataFlow.getbId(),"bId 不能为空");
+
             BusinessServiceDataFlowEventPublishing.multicastEvent(businessServiceDataFlow);
             Assert.notEmpty(businessServiceDataFlow.getResJson(),"用户服务["+businessServiceDataFlow.getCurrentBusiness().getServiceCode()+"]没有返回内容");
         } catch (Exception e) {
