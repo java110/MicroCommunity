@@ -201,7 +201,7 @@ public class DataFlow extends AbstractDataFlowContext {
             this.businesses = new ArrayList<Business>();
             business = new Business().builder(businessObj);
             businesses.add(business);
-
+            this.setCurrentBusiness(business);
         }catch (Exception e){
 
             throw e;

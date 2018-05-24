@@ -306,7 +306,7 @@ public class DataFlowFactory {
         Map business = new HashMap();
         String bId = getMoreBId(dataFlow);
         business.put("bId",bId.substring(0,bId.length()-1));
-        //business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("finishTime",DateUtil.getCurrentDate());
         business.put("statusCd",StatusConstant.STATUS_CD_NOTIFY_ERROR);
         return business;
     }
@@ -506,6 +506,7 @@ public class DataFlowFactory {
         JSONObject orders = notifyMessage.getJSONObject("orders");
         orders.put("transactionId",SequenceUtil.getTransactionId());
         orders.put("dataFlowId",dataFlow.getDataFlowId());
+        orders.put("orderTypeCd",dataFlow.getOrderTypeCd());
         orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());
         orders.put("businessType",businessType);
         return notifyMessage;

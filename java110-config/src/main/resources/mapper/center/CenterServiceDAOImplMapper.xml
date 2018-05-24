@@ -63,7 +63,7 @@
     <!-- 当所有业务动作是否都是C，将订单信息改为 C-->
     <update id="completeOrderByBId" parameterType="String" >
         <![CDATA[
-            update c_orders co set co.status_cd = 'C' where co.status='S'
+            update c_orders co set co.status_cd = 'C' where co.status_cd='S'
                 and not exists(
                         select 1 from c_business cb where cb.status_cd <> 'C'
                         and cb.o_id = co.o_id

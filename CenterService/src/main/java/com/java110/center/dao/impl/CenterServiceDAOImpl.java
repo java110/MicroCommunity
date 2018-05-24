@@ -160,7 +160,8 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByBId",bId);
 
         if(updateFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前业务还没有全完成（C）："+ bId);
+            //throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前业务还没有全完成（C）："+ bId);
+            logger.debug("当前业务还没有全完成（C）:"+bId);
         }
     }
 

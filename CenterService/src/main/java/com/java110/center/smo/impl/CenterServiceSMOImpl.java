@@ -655,7 +655,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void judgeBusinessStatusAndCompleteBusiness(DataFlow dataFlow) throws BusinessStatusException{
 
-        List<Business> businesses = dataFlow.getBusinesses();
+        //List<Business> businesses = dataFlow.getBusinesses();
 
         //1.0 判断是否存在撤单，如果是撤单则将当前 bId 标记为撤单状态
         if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
@@ -687,6 +687,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(dataFlow.getBusinessType())) {
                 //完成订单项
                 centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedCompleteBusiness(dataFlow));
+
+                //如果业务都完成，则将 订单改为完成状态
+                centerServiceDaoImpl.completeOrderByBId(dataFlow.getCurrentBusiness().getbId());
             }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(dataFlow.getBusinessType())) {
                 centerServiceDaoImpl.updateBusinessByBId(DataFlowFactory.getNeedBusinessComplete(dataFlow));
             }else{ //这里到不了，前面做了校验
@@ -847,14 +850,23 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             if(!CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
                 continue;
             }
+            dataFlow.setCurrentBusiness(business);
+            //添加需要撤单的业务信息
+            deleteBusinesses.add(business);
 
             requestBusinessJson = DataFlowFactory.getBusinessTableDataInfoToInstanceTableJson(dataFlow,business);
             JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
-            //添加需要撤单的业务信息
-            deleteBusinesses.add(business);
+
             updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_COMPLETE);
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(requestBusinessJson,responseJson);
+        }
+
+        service = DataFlowFactory.getService(dataFlow,dataFlow.getCurrentBusiness().getServiceCode());
+        if(CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
+            //判断业务动作是否都竣工，主要考虑 请求报文中 有异步也有同步的情况
+            //如果业务都完成，则将 订单改为完成状态
+            centerServiceDaoImpl.completeOrderByBId(dataFlow.getCurrentBusiness().getbId());
         }
     }
 
@@ -954,6 +966,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         try {
             for (Business business : asynchronousBusinesses) {
+                dataFlow.setCurrentBusiness(business);
                 KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, business.getServiceCode()).getMessageQueueName(), "",
                         DataFlowFactory.getRequestBusinessJson(dataFlow,business).toJSONString());
             }
