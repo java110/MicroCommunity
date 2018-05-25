@@ -83,6 +83,13 @@ public interface ICenterServiceDAO {
      */
     public int judgeAllBusinessCompleted(String oId,String statusCd) throws DAOException;
 
+    /**
+     * 判断 business 过程是否是否满足撤单条件
+     * @param oId
+     * @return
+     * @throws DAOException
+     */
+    public int judgeAllBusinessDeleteOrder(String oId,String statusCd) throws DAOException;
 
     /**
      * 根据bId查询订单信息

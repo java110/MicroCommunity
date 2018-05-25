@@ -57,7 +57,7 @@
             cb.status_cd=#{statusCd},
             cb.finish_time=#{finishTime}
             where cb.b_id in (#{bId})
-            and cb.status_cd not in ('D','E')
+            and cb.status_cd not in ('E')
          ]]>
     </update>
     <!-- 当所有业务动作是否都是C，将订单信息改为 C-->
@@ -142,7 +142,19 @@
         SELECT 1 FROM c_business cbs WHERE cbs.`o_id` =co.`o_id`
         AND cbs.`business_type_cd` = 'DO'
         )
-        AND co.`status_cd` NOT IN ('D','C')
+        AND co.`status_cd` NOT IN ('D','C','E')
+    </select>
+
+    <select id="judgeAllBusinessDeleteOrder" parameterType="map" resultType="map">
+        SELECT co.* FROM c_orders co WHERE co.`o_id` = #{oId} and not exists (
+        SELECT 1 FROM c_business cb WHERE cb.`o_id` = co.`o_id`
+        AND cb.`status_cd` NOT IN (#{statusCd})
+        )
+        AND EXISTS (
+        SELECT 1 FROM c_business cbs WHERE cbs.`o_id` =co.`o_id`
+        AND cbs.`business_type_cd` = 'DO'
+        )
+        AND co.`status_cd` NOT IN ('C')
     </select>
 
 </mapper>

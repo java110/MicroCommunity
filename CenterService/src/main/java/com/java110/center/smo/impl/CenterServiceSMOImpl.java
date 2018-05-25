@@ -394,7 +394,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         //如果已经作废 不存在 或失败，则不做处理
 
-        Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getbId());
+        Map order = centerServiceDaoImpl.getOrderInfoByBId(dataFlow.getCurrentBusiness().getbId());
 
         if(order == null || !order.containsKey("status_cd") || StatusConstant.STATUS_CD_DELETE.equals(order.get("status_cd"))
                 || StatusConstant.STATUS_CD_ERROR.equals(order.get("status_cd"))){
@@ -428,7 +428,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }
 
         //判断 订单instance 是否都变成了撤单状态
-        if(centerServiceDaoImpl.judgeAllBusinessCompleted(dataFlow.getoId(),StatusConstant.STATUS_CD_DELETE_ORDER) < 1){
+        if(centerServiceDaoImpl.judgeAllBusinessDeleteOrder(dataFlow.getoId(),StatusConstant.STATUS_CD_DELETE_ORDER) < 1){
             return ;
         }
 
@@ -442,7 +442,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 if(completedBusiness.get("business_type_cd").equals(appRoute.getAppService().getBusinessTypeCd())){
                     //发起撤单
                     KafkaFactory.sendKafkaMessage(appRoute.getAppService().getMessageQueueName(),"",
-                            DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()));
+                            DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()).toJSONString());
                     saveLogMessage(DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()),null);
                 }
             }

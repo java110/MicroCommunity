@@ -260,7 +260,7 @@ public class DataFlowFactory {
         Map business = new HashMap();
         String bId = "";
         for(Business busi:dataFlow.getBusinesses()){
-            bId += "'"+busi.getbId()+"',";
+            bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
         business.put("finishTime",DateUtil.getCurrentDate());
@@ -277,7 +277,7 @@ public class DataFlowFactory {
         Map business = new HashMap();
         String bId = "";
         for(Business busi:dataFlow.getBusinesses()){
-            bId += "'"+busi.getbId()+"',";
+            bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
         business.put("finishTime",DateUtil.getCurrentDate());
@@ -294,7 +294,7 @@ public class DataFlowFactory {
         Map business = new HashMap();
         String bId = "";
         for(Business busi:dataFlow.getBusinesses()){
-            bId += "'"+busi.getbId()+"',";
+            bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
         business.put("finishTime",DateUtil.getCurrentDate());
@@ -319,7 +319,7 @@ public class DataFlowFactory {
     public static String getMoreBId(DataFlow dataFlow){
         String bId = "";
         for(Business busi:dataFlow.getBusinesses()){
-            bId += "'"+busi.getbId()+"',";
+            bId += busi.getbId()+",";
         }
         return bId;
     }

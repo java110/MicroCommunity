@@ -177,8 +177,27 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         paramIn.put("oId",oId);
         paramIn.put("statusCd",statusCd);
 
-        Map paramOut = sqlSessionTemplate.selectOne("centerServiceDAOImpl.judgeAllBusinessCompleted",paramIn);
-        if(paramOut == null || paramOut.isEmpty()){
+        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessCompleted",paramIn);
+        if(paramOuts == null || paramOuts.size() == 0){
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * 判断 business 过程是否 满足撤单条件
+     * @param oId
+     * @return
+     * @throws DAOException
+     */
+    public int judgeAllBusinessDeleteOrder(String oId,String statusCd) throws DAOException{
+        LoggerEngine.debug("----【CenterServiceDAOImpl.judgeAllBusinessDeleteOrder】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
+        Map paramIn = new HashMap();
+        paramIn.put("oId",oId);
+        paramIn.put("statusCd",statusCd);
+
+        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessDeleteOrder",paramIn);
+        if(paramOuts == null || paramOuts.size() == 0){
             return 0;
         }
         return 1;
@@ -192,7 +211,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      */
     public Map getOrderInfoByBId(String bId)throws DAOException{
         List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderInfoByBId",bId);
-        if(orders !=null){
+        if(orders !=null && orders.size() >0){
             return orders.get(0);
         }
         return null;
@@ -205,7 +224,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      */
     public Map getDeleteOrderBusinessByOId(String oId)throws DAOException{
         List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getDeleteOrderBusinessByOId",oId);
-        if(orders !=null){
+        if(orders !=null && orders.size() >0){
             return orders.get(0);
         }
         return null;
