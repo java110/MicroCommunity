@@ -267,7 +267,7 @@ INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_i
 VALUES('update.center.mapping','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
 
 INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.center.mapping','D','保存用户信息',1,'http://user-service/userApi/service','8000418003');
+VALUES('save.user.userInfo','D','保存用户信息',1,'http://user-service/userApi/service','8000418003');
 
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','1','S','Q','0'
