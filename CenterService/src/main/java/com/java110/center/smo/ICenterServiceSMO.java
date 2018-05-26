@@ -19,6 +19,15 @@ public interface ICenterServiceSMO {
     public String service(String reqJson, Map<String,String> headers) throws SMOException;
 
     /**
+     * 透传业务
+     * @param reqJson
+     * @param headers
+     * @return
+     * @throws SMOException
+     */
+    public String serviceTransfer(String reqJson, Map<String,String> headers) throws SMOException;
+
+    /**
      * 接受业务系统通知消息
      * @param receiveJson 接受报文
      * @throws SMOException

@@ -4,21 +4,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
+import com.java110.common.util.Assert;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 中心http服务 统一服务类
  *  1、只提供service方法
+ *  2、提供 透传机制
  * Created by wuxw on 2018/4/13.
  */
 @RestController
@@ -49,13 +49,57 @@ public class HttpApi extends BaseController {
     }
 
     /**
+     * 对协议不遵循的 接口进行透传
+     * @param orderInfo
+     * @param request
+     * @return
+     */
+    @RequestMapping(path = "/httpApi/service/{serviceCode}",method= RequestMethod.POST)
+    public String servicePostTransfer(@PathVariable String serviceCode, @RequestBody String orderInfo, HttpServletRequest request,
+                                      HttpServletResponse response) {
+        String resData = "";
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            headers.put("serviceCode",serviceCode);
+            getRequestInfo(request, headers);
+            //预校验
+            preValiateOrderInfo(orderInfo,headers);
+            resData = centerServiceSMOImpl.serviceTransfer(orderInfo, headers);
+        }catch (Exception e){
+            logger.error("请求订单异常",e);
+            resData = DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+                    ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+        }finally {
+            for(String key : headers.keySet()) {
+                response.addHeader(key,headers.get(key));
+            }
+            return resData;
+        }
+    }
+
+    /**
      * 这里预校验，请求报文中不能有 dataFlowId
      * @param orderInfo
      */
     private void preValiateOrderInfo(String orderInfo) {
+
         if(JSONObject.parseObject(orderInfo).getJSONObject("orders").containsKey("dataFlowId")){
             throw new BusinessException(ResponseConstant.RESULT_CODE_ERROR,"报文中不能存在dataFlowId节点");
         }
+    }
+    /**
+     * 这里预校验，请求报文中不能有 dataFlowId
+     * @param orderInfo
+     */
+    private void preValiateOrderInfo(String orderInfo,Map<String, String> headers) {
+
+        Assert.hasKey(headers,"serviceCode","没有包含serviceCode");
+
+        Assert.hasLength(headers.get("serviceCode"),"serviceCode 不能为空");
+
+        Assert.hasKey(headers,"appId","没有包含appId");
+
+        Assert.hasLength(headers.get("appId"),"appId 不能为空");
     }
 
     /**

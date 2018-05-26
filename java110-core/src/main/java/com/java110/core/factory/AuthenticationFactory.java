@@ -15,6 +15,7 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.NoAuthorityException;
+import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
 
 import com.java110.core.context.DataFlow;
@@ -27,10 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  *
@@ -61,7 +59,10 @@ public class AuthenticationFactory {
         if(dataFlow == null){
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"MD5签名过程中出现错误");
         }
-        String reqInfo = dataFlow.getTransactionId() + dataFlow.getAppId() + dataFlow.getReqBusiness().toJSONString()+dataFlow.getAppRoutes().get(0).getSecurityCode();
+        String reqInfo = dataFlow.getTransactionId() +dataFlow.getAppId();
+        reqInfo +=  ((dataFlow.getReqBusiness() == null || dataFlow.getReqBusiness().size() == 0)
+                                            ?dataFlow.getReqData() :dataFlow.getReqBusiness().toJSONString());
+        reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
         return md5(reqInfo);
     }
 
@@ -91,6 +92,20 @@ public class AuthenticationFactory {
         }else {
             orders.put("sign", AuthenticationFactory.md5(orders.getString("transactionId"), orders.getString("responseTime"),
                     business == null ?"":business.toJSONString(), dataFlow.getAppRoutes().get(0).getSecurityCode()));
+        }
+    }
+
+    /**
+     * 添加 sign
+     * @param dataFlow
+     * @param headers
+     */
+    public static void putSign(DataFlow dataFlow,Map<String,String> headers){
+        if(dataFlow == null || dataFlow.getAppRoutes() == null || dataFlow.getAppRoutes().size() == 0 || StringUtil.isNullOrNone(dataFlow.getAppRoutes().get(0).getSecurityCode())) {
+            headers.put("resSign","");
+        }else {
+            headers.put("resSign", AuthenticationFactory.md5(dataFlow.getTransactionId(), headers.get("responseTime"),
+                    dataFlow.getResData(), dataFlow.getAppRoutes().get(0).getSecurityCode()));
         }
     }
 

@@ -22,6 +22,9 @@ public class Business implements Comparable{
 
     private JSONObject datas;
 
+    //透传
+    private String transferData;
+
     private JSONArray attrs;
     //返回 编码
     private String code;
@@ -111,6 +114,14 @@ public class Business implements Comparable{
         this.isInstance = isInstance;
     }
 
+    public String getTransferData() {
+        return transferData;
+    }
+
+    public void setTransferData(String transferData) {
+        this.transferData = transferData;
+    }
+
     /**
      * 构建成对象
      * @return
@@ -121,7 +132,7 @@ public class Business implements Comparable{
         try{
             this.setbId(businessObj.getString("bId"));
             this.setServiceCode(businessObj.getString("serviceCode"));
-            if(businessObj.containsKey("serviceCode")) {
+            if(businessObj.containsKey("serviceName")) {
                 this.setServiceName(businessObj.getString("serviceName"));
             }
             if(businessObj.containsKey("remark")) {
@@ -138,6 +149,11 @@ public class Business implements Comparable{
             if(businessObj.containsKey("attrs")){
                 this.setAttrs(businessObj.getJSONArray("attrs"));
             }
+
+            if(businessObj.containsKey("transferData")){
+                this.setTransferData(businessObj.getString("transferData"));
+            }
+
             if(businessObj.containsKey("response")){
                 this.setCode(businessObj.getJSONObject("response").getString("code"));
                 this.setMessage(businessObj.getJSONObject("response").getString("message"));

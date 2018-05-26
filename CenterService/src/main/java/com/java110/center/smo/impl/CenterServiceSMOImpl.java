@@ -21,6 +21,8 @@ import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +43,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private RestTemplate restTemplateNoLoadBalanced;
 
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
@@ -133,6 +138,93 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         }
 
+    }
+
+    /**
+     * 透传处理
+     * @param reqJson
+     * @param headers
+     * @return
+     * @throws SMOException
+     */
+    @Override
+    public String serviceTransfer(String reqJson, Map<String, String> headers) throws SMOException {
+        DataFlow dataFlow = null;
+
+        String  responseData = null;
+
+        String resJson = "";
+
+        try {
+            reqJson = decrypt(reqJson,headers);
+            //1.0 创建数据流
+            dataFlow = DataFlowFactory.newInstance(DataFlow.class).builderTransfer(reqJson, headers);
+            //2.0 加载配置信息
+            initConfigData(dataFlow);
+            //3.0 校验 APPID是否有权限操作serviceCode
+            judgeAuthority(dataFlow);
+            //4.0 调用规则校验
+            ruleValidate(dataFlow);
+            //5.0 保存订单和业务项 c_orders c_order_attrs c_business c_business_attrs
+            //saveOrdersAndBusiness(dataFlow);
+            //6.0 调用下游系统
+            transferInvokeBusinessSystem(dataFlow);
+
+            responseData = DataTransactionFactory.createCommonResData(dataFlow);
+
+        } catch (DecryptException e){ //解密异常
+            responseData =  DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
+                    e.getResult().getCode(), e.getMessage()).toJSONString();
+        } catch (RuleException e) {
+            responseData =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
+                    e.getResult().getCode(), e.getMessage()).toJSONString();
+        } catch (NoAuthorityException e) {
+            responseData =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
+                    e.getResult().getCode(), e.getMessage()).toJSONString();
+        } catch (InitConfigDataException e){
+            responseData =  DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
+                    e.getResult().getCode(), e.getMessage()).toJSONString();
+        }catch (Exception e) {
+            logger.error("内部异常了：",e);
+            responseData =  DataTransactionFactory.createOrderResponseJson(dataFlow == null
+                            ? ResponseConstant.NO_TRANSACTION_ID
+                            : dataFlow.getTransactionId(),
+                    ResponseConstant.RESULT_CODE_INNER_ERROR, "内部异常了：" + e.getMessage() + e.getLocalizedMessage()).toJSONString();
+        } finally {
+            if(dataFlow != null) {
+                //这里记录日志
+                Date endDate = DateUtil.getCurrentDate();
+
+                dataFlow.setEndDate(endDate);
+                dataFlow.setResData(responseData);
+                //添加耗时
+                DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
+
+                //这里保存耗时，以及日志
+                saveLogMessage(dataFlow.getReqJson(), dataFlow.getResJson());
+
+                //保存耗时
+                saveCostTimeLogMessage(dataFlow);
+
+                //组装返回头信息
+                putResponseHeader(dataFlow,headers);
+
+                //处理返回报文鉴权
+                AuthenticationFactory.putSign(dataFlow, headers);
+            }
+            resJson = encrypt(responseData,headers);
+            return resJson;
+
+        }
+    }
+
+    /**
+     * 抒写返回头信息
+     * @param dataFlow
+     */
+    private void putResponseHeader(DataFlow dataFlow,Map<String,String> headers) {
+        headers.put("responseTime", DateUtil.getDefaultFormateTimeString(new Date()));
+        headers.put("transactionId",dataFlow.getTransactionId());
     }
 
     /**
@@ -375,6 +467,40 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
     }
+
+
+    /**
+     * 6.0 调用下游系统
+     *
+     * @param dataFlow
+     * @throws BusinessException
+     */
+    private void transferInvokeBusinessSystem(DataFlow dataFlow) throws BusinessException {
+        Date startDate = DateUtil.getCurrentDate();
+   /*     if(MappingCache.getValue(MappingConstant.KEY_NO_INVOKE_BUSINESS_SYSTEM) != null
+                &&MappingCache.getValue(MappingConstant.KEY_NO_INVOKE_BUSINESS_SYSTEM).contains(dataFlow.getOrderTypeCd())){
+            //不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)
+            DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
+            dataFlow.setResponseBusinessJson(DataTransactionFactory.createCommonResponseJson(dataFlow.getTransactionId(),
+                    ResponseConstant.RESULT_CODE_SUCCESS, "成功",null));
+            return ;
+        }*/
+
+        //6.1 先处理同步方式的服务，每一同步后发布事件广播
+        AppService  service = DataFlowFactory.getService(dataFlow,dataFlow.getCurrentBusiness().getServiceCode());
+
+
+        String responseJson = doTransferRequestBusinessSystem(dataFlow, service, dataFlow.getCurrentBusiness().getTransferData());
+
+        dataFlow.setResData(responseJson);
+
+        DataFlowFactory.addCostTime(dataFlow,dataFlow.getCurrentBusiness().getServiceCode(), "调用"+dataFlow.getCurrentBusiness().getServiceCode()+"耗时", startDate);
+        saveLogMessage(dataFlow.getCurrentBusiness().getTransferData(),dataFlow.getResData());
+
+
+        DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
+    }
+
 
 
 
@@ -925,6 +1051,24 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         return responseJson;
     }
 
+    private String doTransferRequestBusinessSystem(DataFlow dataFlow, AppService service, String reqData) {
+        String responseMessage;
+        if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
+            //http://user-service/test/sayHello
+            HttpHeaders header = new HttpHeaders();
+            for(String key : dataFlow.getHeaders().keySet()){
+                header.add(key,dataFlow.getHeaders().get(key));
+            }
+            HttpEntity<String> httpEntity = new HttpEntity<String>(reqData, header);
+            responseMessage = restTemplateNoLoadBalanced.postForObject(service.getUrl(),httpEntity,String.class);
+        }else{//webservice方式
+            responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
+                    new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
+                    service.getTimeOut());
+        }
+        return responseMessage;
+    }
+
     /**
      * 数据保存到BusinessTable 中
      * @param dataFlow
@@ -1010,6 +1154,24 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     }
 
     /**
+     * 保存日志信息
+     * @param requestJson
+     */
+    private void saveLogMessage(String requestJson,String responseJson){
+
+        try{
+            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))){
+                JSONObject log = new JSONObject();
+                log.put("request",requestJson);
+                log.put("response",responseJson);
+                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_LOG_NAME,"",log.toJSONString());
+            }
+        }catch (Exception e){
+            logger.error("报错日志出错了，",e);
+        }
+    }
+
+    /**
      * 保存耗时信息
      * @param dataFlow
      */
@@ -1070,5 +1232,13 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     public void setQueryServiceSMOImpl(IQueryServiceSMO queryServiceSMOImpl) {
         this.queryServiceSMOImpl = queryServiceSMOImpl;
+    }
+
+    public RestTemplate getRestTemplateNoLoadBalanced() {
+        return restTemplateNoLoadBalanced;
+    }
+
+    public void setRestTemplateNoLoadBalanced(RestTemplate restTemplateNoLoadBalanced) {
+        this.restTemplateNoLoadBalanced = restTemplateNoLoadBalanced;
     }
 }

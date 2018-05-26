@@ -18,8 +18,9 @@ public interface DataFlowContext {
      * 请求报文
      * @return
      */
-    public JSONObject getReqJson();
+    public String getReqData();
 
+    public JSONObject getReqJson();
     /**
      * 返回报文
      * @return

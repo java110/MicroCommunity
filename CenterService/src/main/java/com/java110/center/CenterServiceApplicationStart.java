@@ -43,6 +43,17 @@ public class CenterServiceApplicationStart {
         return restTemplate;
     }
 
+    /**
+     * 实例化RestTemplate
+     * @return restTemplate
+     */
+    @Bean
+    public RestTemplate restTemplateNoLoadBalanced() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        return restTemplate;
+    }
+
     public static void main(String[] args) throws Exception{
         ApplicationContext context = SpringApplication.run(CenterServiceApplicationStart.class, args);
 

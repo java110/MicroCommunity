@@ -19,7 +19,7 @@ public class Assert extends org.springframework.util.Assert{
      * @param key
      * @param message
      */
-    public static void isNotNull(JSONObject jsonObject,String key,String message){
+    public static void isNotNull(Map jsonObject,String key,String message){
         Assert.notEmpty(jsonObject,message);
 
         if(!jsonObject.containsKey(key)){
@@ -35,6 +35,16 @@ public class Assert extends org.springframework.util.Assert{
      */
     public static void jsonObjectHaveKey(JSONObject jsonObject,String key,String message){
         isNotNull(jsonObject,key,message);
+    }
+
+    /**
+     * 判断 jsonObject 是否为空
+     * @param info
+     * @param key
+     * @param message
+     */
+    public static void hasKey(Map info,String key,String message){
+        isNotNull(info,key,message);
     }
 
     /**

@@ -2,6 +2,9 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.util.DateUtil;
+import com.java110.common.util.SequenceUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.Business;
 
@@ -181,6 +184,7 @@ public class DataFlow extends AbstractDataFlowContext {
             Business business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(businessInfo);
             this.setReqJson(reqInfoObj);
+            this.setReqData(businessInfo);
             this.setDataFlowId(reqInfoObj.containsKey("dataFlowId")?reqInfoObj.getString("dataFlowId"):"-1");
             //this.setAppId(orderObj.getString("appId"));
             this.setTransactionId(reqInfoObj.getString("transactionId"));
@@ -216,6 +220,7 @@ public class DataFlow extends AbstractDataFlowContext {
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
             JSONObject orderObj = reqInfoObj.getJSONObject("orders");
             JSONArray businessArray = reqInfoObj.getJSONArray("business");
+            this.setReqData(reqInfo);
             this.setReqJson(reqInfoObj);
             this.setDataFlowId(orderObj.containsKey("dataFlowId")?orderObj.getString("dataFlowId"):"-1");
             this.setAppId(orderObj.getString("appId"));
@@ -233,6 +238,51 @@ public class DataFlow extends AbstractDataFlowContext {
                     business = new Business().builder(businessArray.getJSONObject(businessIndex));
                     businesses.add(business);
                 }
+            }
+
+            if (headerAll != null){
+                this.headers.putAll(headerAll);
+                this.setRequestURL(headers.get("REQUEST_URL"));
+                this.setIp(headers.get("IP"));
+            }
+
+
+        }catch (Exception e){
+
+            throw e;
+        }
+        return this;
+    }
+
+    /**
+     * 透传时构建对象
+     * @param reqInfo
+     * @param headerAll
+     * @return
+     * @throws Exception
+     */
+    public DataFlow builderTransfer(String reqInfo, Map<String,String> headerAll) throws Exception{
+
+        try{
+            Business business = null;
+            this.setReqData(reqInfo);
+            this.setDataFlowId("-1");
+            this.setAppId(headerAll.get("appId"));
+            this.setTransactionId(StringUtil.isNullOrNone(headerAll.get("transactionId"))? SequenceUtil.getTransactionId():headerAll.get("transactionId"));
+            this.setUserId(StringUtil.isNullOrNone(headerAll.get("userId"))? "-1":headerAll.get("userId"));
+            this.setOrderTypeCd("T");
+            this.setRemark(StringUtil.isNullOrNone(headerAll.get("remark"))? "":headerAll.get("remark"));
+            this.setReqSign(StringUtil.isNullOrNone(headerAll.get("sign"))? "":headerAll.get("sign"));
+            this.setRequestTime(StringUtil.isNullOrNone(headerAll.get("requestTime"))? DateUtil.getyyyyMMddhhmmssDateString():headerAll.get("requestTime"));
+            String serviceCode = headerAll.get("serviceCode");
+            this.businesses = new ArrayList<Business>();
+            if(!StringUtil.isNullOrNone(serviceCode)){
+                JSONObject bInfo = new JSONObject();
+                bInfo.put("serviceCode",serviceCode);
+                bInfo.put("transferData",reqInfo);
+                    business = new Business().builder(bInfo);
+                    businesses.add(business);
+                this.setCurrentBusiness(business);
             }
 
             if (headerAll != null){

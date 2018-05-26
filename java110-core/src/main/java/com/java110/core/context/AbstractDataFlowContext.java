@@ -35,9 +35,13 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
 
     private String message;
 
+    private String reqData;
+
     private JSONObject reqJson;
 
     private JSONObject resJson;
+
+    private String resData;
 
     protected List<Business> businesses;
 
@@ -152,14 +156,13 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
         return headers;
     }
 
-    public JSONObject getReqJson() {
-        return reqJson;
+    public String getReqData() {
+        return reqData;
     }
 
-    public void setReqJson(JSONObject reqJson) {
-        this.reqJson = reqJson;
+    public void setReqData(String reqData) {
+        this.reqData = reqData;
     }
-
 
     public JSONObject getResJson() {
         return resJson;
@@ -233,7 +236,23 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
         return null;
     }
 
-    public void addParamOut(String key,Object value) {
+    public String getResData() {
+        return resData;
+    }
+
+    public void setResData(String resData) {
+        this.resData = resData;
+    }
+
+    public JSONObject getReqJson() {
+        return reqJson;
+    }
+
+    public void setReqJson(JSONObject reqJson) {
+        this.reqJson = reqJson;
+    }
+
+    public void addParamOut(String key, Object value) {
 
     }
 

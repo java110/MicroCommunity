@@ -71,6 +71,15 @@ public class DataTransactionFactory {
     }
 
     /**
+     * 组装返回报文
+     * @param dataFlow 数据流
+     * @return
+     */
+    public static String createCommonResData(DataFlow dataFlow){
+        return dataFlow.getResData();
+    }
+
+    /**
      * 业务系统返回报文模板
      * @param code
      * @param message

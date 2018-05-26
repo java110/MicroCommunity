@@ -160,7 +160,7 @@ INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','日
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','耗时开关','COST_TIME_ON_OFF','ON','耗时开关');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','规则开关','RULE_ON_OFF','OFF','规则开关');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不调规则服务的订单类型','NO_NEED_RULE_VALDATE_ORDER','Q','不调规则服务的订单类型');
-INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不保存订单信息','NO_SAVE_ORDER','Q','不保存订单信息');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不保存订单信息','NO_SAVE_ORDER','Q,T','不保存订单信息');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不用调用 下游系统的配置','NO_INVOKE_BUSINESS_SYSTEM','Q','不用调用 下游系统的配置(一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','不用调用 作废下游系统的配置','NO_INVALID_BUSINESS_SYSTEM','Q','不用调用 作废下游系统的配置 (一般不存在这种情况，这里主要是在没有下游系统的情况下测试中心服务用)');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','需要调用服务生成各个ID','NEED_INVOKE_SERVICE_GENERATE_ID','OFF','需要调用服务生成各个ID');
@@ -268,6 +268,10 @@ VALUES('update.center.mapping','Q','修改映射信息',1,'http://center-service
 
 INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
 VALUES('save.user.userInfo','D','保存用户信息',1,'http://user-service/userApi/service','8000418003');
+
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('transfer.console.menu','T','透传菜单查询',1,'http://192.168.31.199:8001/userApi/service','8000418001');
 
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','1','S','Q','0'
