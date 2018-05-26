@@ -796,6 +796,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void doDeleteOrderAndInstanceData(DataFlow dataFlow, List<Business> deleteBusinesses) {
 
+        if(deleteBusinesses == null || deleteBusinesses.size() == 0){
+            return ;
+        }
+
         //1.0 在c_business 表中加入 撤单记录
         centerServiceDaoImpl.saveBusiness(DataFlowFactory.getDeleteOrderBusiness(dataFlow,"业务系统实例失败，发起撤单"));
         //2.0 作废 c_orders 和 c_business 数据
@@ -860,6 +864,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_COMPLETE);
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(requestBusinessJson,responseJson);
+        }
+
+        if(dataFlow.getCurrentBusiness() == null){
+            return ;
         }
 
         service = DataFlowFactory.getService(dataFlow,dataFlow.getCurrentBusiness().getServiceCode());
