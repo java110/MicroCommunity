@@ -108,7 +108,7 @@ public class HttpApi extends BaseController {
      * @param headers
      * @throws RuntimeException
      */
-    private void getRequestInfo(HttpServletRequest request,Map headers) throws RuntimeException{
+    private void getRequestInfo(HttpServletRequest request,Map headers) throws Exception{
         try{
             super.initHeadParam(request,headers);
             super.initUrlParam(request,headers);

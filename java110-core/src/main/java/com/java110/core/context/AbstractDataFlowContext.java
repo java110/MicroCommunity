@@ -170,6 +170,7 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
 
     public void setResJson(JSONObject resJson) {
         this.resJson = resJson;
+        this.setResData(resJson.toJSONString());
     }
 
     public List<DataFlowLinksCost> getLinksCostDates() {

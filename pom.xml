@@ -20,7 +20,7 @@
         <module>java110-feign</module>
         <module>java110-core</module>
         <module>java110-service</module>
-        <module>CommonService</module>
+        <module>CodeService</module>
         <module>MerchantService</module>
         <module>RuleService</module>
         <module>SimpleListenerService</module>
@@ -68,6 +68,7 @@
         <axis.version>1.4</axis.version>
         <httpclient.verion>3.1</httpclient.verion>
         <spring.version>4.3.2.RELEASE</spring.version>
+        <zookeeper.version>3.3.6</zookeeper.version>
     </properties>
 
     <dependencyManagement>
@@ -353,6 +354,11 @@
             </dependency>
 
 
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>

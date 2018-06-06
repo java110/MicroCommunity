@@ -37,6 +37,23 @@ public class Assert extends org.springframework.util.Assert{
         isNotNull(jsonObject,key,message);
     }
 
+
+    /**
+     * 判断 jsonObject 是否为空
+     * @param jsonStr
+     * @param key
+     * @param message
+     */
+    public static void jsonObjectHaveKey(String jsonStr,String key,String message){
+        Assert.hasLength(jsonStr,"不是有效的json为空,"+message);
+        if(isJsonObject(jsonStr)) {
+            JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+            isNotNull(jsonObject, key, message);
+        }else{
+            throw new IllegalArgumentException(message);
+        }
+    }
+
     /**
      * 判断 jsonObject 是否为空
      * @param info
@@ -46,6 +63,7 @@ public class Assert extends org.springframework.util.Assert{
     public static void hasKey(Map info,String key,String message){
         isNotNull(info,key,message);
     }
+
 
     /**
      * 判断json是否为空

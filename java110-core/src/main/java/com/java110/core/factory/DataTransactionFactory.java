@@ -1,5 +1,6 @@
 package com.java110.core.factory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.MappingConstant;
@@ -359,6 +360,25 @@ public class DataTransactionFactory {
      */
     public static String pageResponseJson(String transactionId){
         return pageResponseJson(transactionId,ResponseConstant.RESULT_CODE_SUCCESS,"成功",null);
+    }
+
+
+    /**
+     * ID生成返回报文
+     * @param transactionId
+     * @param id
+     * @param code
+     * @param message
+     * @return
+     */
+    public static JSONObject createCodeResponseJson(String transactionId, String id, String code,String message){
+        JSONObject paramOut = JSONObject.parseObject("{}");
+        paramOut.put("transactionId",transactionId);
+        paramOut.put("code",code);
+        paramOut.put("message",message);
+        paramOut.put("responseTime",DateUtil.getNowDefault());
+        paramOut.put("id",id);
+        return paramOut;
     }
 
 }
