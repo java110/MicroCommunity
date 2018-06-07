@@ -85,6 +85,19 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>2.10.4</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <reportOutputDirectory>../javadocs</reportOutputDirectory>
+                        <destDir>security-javadoc</destDir>
+                        <javadocExecutable>${java.home}bin/javadoc</javadocExecutable>
+                        <tags>
+                            <tag>
+                                <name>Description</name>
+                                <placement>a</placement>
+                                <head>功能描述:</head>
+                            </tag>
+                        </tags>
+                    </configuration>
                 </plugin>
             </plugins>
     </build>

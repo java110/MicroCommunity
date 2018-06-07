@@ -27,6 +27,11 @@ public class HttpApi extends BaseController {
     @Autowired
     private ICenterServiceSMO centerServiceSMOImpl;
 
+    /**
+     *
+     * @param request HttpServletRequest对象
+     * @return
+     */
     @RequestMapping(path = "/httpApi/service",method= RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
         return DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
