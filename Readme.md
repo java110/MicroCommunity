@@ -16,7 +16,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 服务依赖关系
 
-![image](https://github.com/java110/MicroCommunity/blob/master/dependencies.png)
+![image](dependencies.png)
 
 
 服务安装说明：
