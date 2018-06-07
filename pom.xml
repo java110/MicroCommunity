@@ -359,6 +359,8 @@
                 <artifactId>zookeeper</artifactId>
                 <version>${zookeeper.version}</version>
             </dependency>
+
+
         </dependencies>
 
     </dependencyManagement>
@@ -399,6 +401,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-    </build>
+
 -->
+
 </project>
