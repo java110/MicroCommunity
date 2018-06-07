@@ -23,6 +23,6 @@ e、启动
 （1） 启动 eureka 命令为 java -jar eureka.jar
 （2） 启动 CodeService 命令为 java -jar CodeService.jar
 
-f、协议 访问[这里](MicroCommunity/wiki/系统ID生成协议)
+f、协议 访问[这里](/MicroCommunity/wiki/系统ID生成协议)
 
 
