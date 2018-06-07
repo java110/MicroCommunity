@@ -67,7 +67,7 @@ public class RuleDaoImpl extends BaseServiceDao implements IRuleDao {
     @Cacheable(key=RuleDomain.REDIS_KEY_RULE_ENTRANCE)
     public Map<String, RuleEntrance> getRuleEntranceMap() throws Exception {
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = getJedis();
 
         Map map = new HashMap();
 
@@ -102,7 +102,7 @@ public class RuleDaoImpl extends BaseServiceDao implements IRuleDao {
     public List getRuleGroupRelaList() throws Exception {
         List saopRuleGroupRelaList = new ArrayList();
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = getJedis();
 
         if(jedis.exists(RuleDomain.REDIS_KEY_RULE_ENTRANCE.getBytes())){
             saopRuleGroupRelaList =  SerializeUtil.unserializeList(jedis.get(RuleDomain.REDIS_KEY_RULE_GROUP.getBytes()),Map.class);
@@ -168,7 +168,7 @@ public class RuleDaoImpl extends BaseServiceDao implements IRuleDao {
     @Cacheable(key=RuleDomain.REDIS_KEY_RULE)
     public Map<String, Rule> getRuleMap() throws Exception {
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = getJedis();
 
         List<Rule> ruleList = null;
 

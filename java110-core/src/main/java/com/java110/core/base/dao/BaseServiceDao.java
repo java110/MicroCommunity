@@ -20,8 +20,8 @@ import java.util.logging.Logger;
  */
 public class BaseServiceDao extends AppBase {
 
-    @Autowired
-    protected JedisPool jedisPool;
+   /* @Autowired
+    protected JedisPool jedisPool;*/
 
 
     @Autowired
@@ -100,11 +100,11 @@ public class BaseServiceDao extends AppBase {
         return reqMap;
     }
 
-    public JedisPool getJedisPool() {
+  /*  public JedisPool getJedisPool() {
         return jedisPool;
     }
 
     public void setJedisPool(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
-    }
+    }*/
 }

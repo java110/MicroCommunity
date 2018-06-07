@@ -2,6 +2,7 @@ package com.java110.common.cache;
 
 
 import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.common.log.LoggerEngine;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * 缓存基类
  * Created by wuxw on 2018/4/14.
  */
-public class BaseCache {
+public class BaseCache extends LoggerEngine{
 
     protected static Jedis getJedis(){
         JedisPool jedisPool = (JedisPool) ApplicationContextFactory.getBean("jedisPool");

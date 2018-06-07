@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 主键信息查询
  * Created by wuxw on 2017/4/5.
  */
-@RestController
+//@RestController
 public class PrimaryKeyServiceRest extends BaseController implements IPrimaryKeyService {
 
     @Autowired

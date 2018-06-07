@@ -29,7 +29,7 @@ create table m_menu_ctg(
 create table m_menu_2_user(
     m_user_id INT NOT NULL AUTO_INCREMENT KEY COMMENT '菜单用户ID',
     m_id int not null comment '菜单id',
-    user_id varchar(12) not null comment '用户id',
+    user_id varchar(30) not null comment '用户id',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
@@ -278,7 +278,7 @@ CREATE TABLE c_cache(
 create table c_cache_2_user(
      id INT NOT NULL AUTO_INCREMENT KEY COMMENT '缓存用户ID',
      cache_code int not null comment '缓存编码',
-     user_id varchar(12) not null comment '用户id',
+     user_id varchar(30) not null comment '用户id',
      create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
      status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );

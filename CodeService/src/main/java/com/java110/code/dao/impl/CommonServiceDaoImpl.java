@@ -29,7 +29,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Override
     @Cacheable(key= "CodeMappingAll")
     public List<CodeMapping> getCodeMappingAll() throws Exception{
-       Jedis jedis = jedisPool.getResource();
+       Jedis jedis = this.getJedis();
 
        List<CodeMapping> codeMappings = null;
        if(jedis.exists("CodeMappingAll".getBytes())){
@@ -53,7 +53,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingByDomain")
     public List<CodeMapping> getCodeMappingByDomain(CodeMapping codeMapping)  throws Exception{
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = this.getJedis();
         List<CodeMapping> codeMappings = null;
         if(jedis.exists("CodeMappingByDomain".getBytes())){
             codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomain".getBytes()),CodeMapping.class);
@@ -75,7 +75,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingByHCode")
     public List<CodeMapping> getCodeMappingByHCode(CodeMapping codeMapping) throws Exception{
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = this.getJedis();
         List<CodeMapping> codeMappings = null;
         if(jedis.exists("CodeMappingByHCode".getBytes())){
             codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByHCode".getBytes()),CodeMapping.class);
@@ -97,7 +97,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingByPCode")
     public List<CodeMapping> getCodeMappingByPCode(CodeMapping codeMapping)  throws Exception{
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = this.getJedis();
         List<CodeMapping> codeMappings = null;
         if(jedis.exists("CodeMappingByPCode".getBytes())){
             codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByPCode".getBytes()),CodeMapping.class);
@@ -119,7 +119,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingByDomainAndHCode")
     public List<CodeMapping> getCodeMappingByDomainAndHCode(CodeMapping codeMapping)  throws Exception{
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = this.getJedis();
         List<CodeMapping> codeMappings = null;
         if(jedis.exists("CodeMappingByDomainAndHCode".getBytes())){
             codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomainAndHCode".getBytes()),CodeMapping.class);
@@ -141,7 +141,7 @@ public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServi
     @Cacheable(key= "CodeMappingByDomainAndPCode")
     public List<CodeMapping> getCodeMappingByDomainAndPCode(CodeMapping codeMapping)  throws Exception{
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = this.getJedis();
         List<CodeMapping> codeMappings = null;
         if(jedis.exists("CodeMappingByDomainAndPCode".getBytes())){
             codeMappings = SerializeUtil.unserializeList(jedis.get("CodeMappingByDomainAndPCode".getBytes()),CodeMapping.class);

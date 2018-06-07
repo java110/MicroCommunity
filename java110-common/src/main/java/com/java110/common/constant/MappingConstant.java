@@ -48,6 +48,10 @@ public class MappingConstant {
     //默认掩码
     public final static String KEY_DEFAULT_SECURITY_CODE = "DEFAULT_SECURITY_CODE";
 
+    // 生成 编码路径
+    public final static String KEY_CODE_PATH = "CODE_PATH";
+
+
 
     /**
      * 中心服务地址

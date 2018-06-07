@@ -10,7 +10,7 @@
     <artifactId>CodeService</artifactId>
     <packaging>jar</packaging>
 
-    <name>CommonService</name>
+    <name>CodeService</name>
     <url>http://maven.apache.org</url>
 
     <properties>

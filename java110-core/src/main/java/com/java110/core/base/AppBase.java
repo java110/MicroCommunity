@@ -2,6 +2,7 @@ package com.java110.core.base;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.cache.BaseCache;
 import com.java110.common.log.LoggerEngine;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Created by wuxw on 2017/4/10.
  */
-public class AppBase extends LoggerEngine {
+public class AppBase extends BaseCache {
 
 
     private final static String SERVICE_CASE_JSON_EXCEPTION = "101";//转json异常

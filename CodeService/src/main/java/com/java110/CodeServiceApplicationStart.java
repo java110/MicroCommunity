@@ -17,11 +17,17 @@ import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -35,8 +41,10 @@ import java.util.List;
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.code","com.java110.core","com.java110.cache",
 "com.java110.config.properties.code"})
+//@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.code","com.java110.config.properties.code"})
 @EnableDiscoveryClient
 public class CodeServiceApplicationStart {
+
 
     public static void main(String[] args) throws Exception {
 

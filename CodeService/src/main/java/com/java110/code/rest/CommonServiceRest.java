@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by wuxw on 2017/7/25.
  */
-@RestController
+//@RestController
 public class CommonServiceRest extends BaseController implements ICommonService{
 
     @Autowired

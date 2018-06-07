@@ -381,4 +381,18 @@ public class DataTransactionFactory {
         return paramOut;
     }
 
+    /**
+     * ID生成请求报文
+     * @param transactionId
+     * @return
+     */
+    public static JSONObject createCodeRequestJson(String transactionId, String prefix,String name){
+        JSONObject paramOut = JSONObject.parseObject("{}");
+        paramOut.put("transactionId",transactionId);
+        paramOut.put("prefix",prefix);
+        paramOut.put("name",name);
+        paramOut.put("requestTime",DateUtil.getNowDefault());
+        return paramOut;
+    }
+
 }

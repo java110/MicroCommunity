@@ -3,10 +3,10 @@ create database TT;
 -- c_orders
 
 CREATE TABLE c_orders(
-    o_id VARCHAR(18) NOT NULL UNIQUE COMMENT '订单ID',
-    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    o_id VARCHAR(30) NOT NULL UNIQUE COMMENT '订单ID',
+    app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
     ext_transaction_id VARCHAR(30) NOT NULL COMMENT '外部交易流水',
-    user_id VARCHAR(12) NOT NULL COMMENT '用户ID',
+    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     request_time VARCHAR(16) NOT NULL COMMENT '外部系统请求时间',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
@@ -18,8 +18,8 @@ CREATE TABLE c_orders(
 -- c_orders_attrs
 
 CREATE TABLE c_orders_attrs(
-    o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
-    attr_id VARCHAR(18) NOT NULL COMMENT '属性id',
+    o_id VARCHAR(30) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
     spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
     `value` VARCHAR(50) NOT NULL COMMENT '属性值'
 );
@@ -29,8 +29,8 @@ CREATE TABLE c_orders_attrs(
 -- c_business
 
 CREATE TABLE c_business(
-    b_id VARCHAR(18) NOT NULL UNIQUE COMMENT '业务Id',
-    o_id VARCHAR(18) NOT NULL COMMENT '订单ID',
+    b_id VARCHAR(30) NOT NULL UNIQUE COMMENT '业务Id',
+    o_id VARCHAR(30) NOT NULL COMMENT '订单ID',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     finish_time DATE COMMENT '完成时间',
@@ -41,8 +41,8 @@ CREATE TABLE c_business(
 --c_orders_attrs
 
 CREATE TABLE c_business_attrs(
-    b_id VARCHAR(18) NOT NULL COMMENT '订单ID',
-    attr_id VARCHAR(18) NOT NULL COMMENT '属性id',
+    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
     spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
     `value` VARCHAR(50) NOT NULL COMMENT '属性值'
 );
@@ -111,7 +111,7 @@ insert into spec(domain,spec_cd,name,description) values('BUSINESS','200001','�
 
 CREATE TABLE c_route(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
     service_id INT NOT NULL COMMENT '下游接口配置ID',
     order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
     invoke_limit_times INT COMMENT '接口调用一分钟调用次数',
@@ -136,7 +136,7 @@ CREATE TABLE c_service(
     method VARCHAR(50) COMMENT '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
     timeout INT NOT NULL DEFAULT 60 COMMENT '超时时间',
     retry_count INT NOT NULL DEFAULT 3 COMMENT '重试次数',
-    provide_app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    provide_app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
 );
@@ -173,10 +173,12 @@ INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','中
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','控制中心APP_ID','CONSOLE_SERVICE_APP_ID','8000418002','控制中心APP_ID');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','控制服务加密开关','KEY_CONSOLE_SERVICE_SECURITY_ON_OFF','ON','控制服务加密开关');
 INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','控制服务鉴权秘钥','CONSOLE_SECURITY_CODE','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89KMC','控制服务鉴权秘钥');
+INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','编码生成服务地址','CODE_PATH','http://code-service/codeApi/generate','编码生成服务地址');
+
 -- c_app
 CREATE TABLE c_app(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    app_id VARCHAR(10) NOT NULL UNIQUE COMMENT '应用ID',
+    app_id VARCHAR(30) NOT NULL UNIQUE COMMENT '应用ID',
     `name` VARCHAR(50) NOT NULL COMMENT '名称 对应系统名称',
     security_code VARCHAR(64) NOT NULL COMMENT '签名码 sign签名时用',
     while_list_ip VARCHAR(200) COMMENT '白名单ip 多个之间用;隔开',

@@ -1,8 +1,15 @@
 package com.java110.common.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.MappingConstant;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.GenerateCodeException;
+import com.java110.common.exception.ResponseErrorException;
+import com.java110.common.factory.ApplicationContextFactory;
+import org.springframework.web.client.RestTemplate;
 
+import java.rmi.NoSuchObjectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,9 +34,9 @@ public class SequenceUtil {
      *
      * 只有在不调用服务生成ID时有用
      */
-    private static Map prefixMap = null;
+    private static Map<String,String> prefixMap = null;
     static {
-        prefixMap = new HashMap();
+        prefixMap = new HashMap<String,String>();
         //10+yyyymmdd+八位序列
         prefixMap.put("oId","10");
         //（20+yyyymmdd+八位序列）
@@ -86,45 +93,107 @@ public class SequenceUtil {
         return prefixMap.get("pageTransactionId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId();
     }
 
-    public static String getOId(){
+    public static String getOId() throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("oId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
         }
-        //调用服务
-        return null;
+        return getCode(prefixMap.get("oId"));
     }
 
-    public static String getBId(){
+
+    /**
+     * 查询Code
+     * @param prefix
+     * @return
+     * @throws GenerateCodeException
+     */
+    private static String getCode(String prefix) throws GenerateCodeException{
+        //调用服务
+        String code = "-1";
+        try {
+            String responseMessage = restTemplate().postForObject(MappingCache.getValue(MappingConstant.KEY_CODE_PATH),
+                    createCodeRequestJson(getTransactionId(),prefix,prefix).toJSONString(), String.class);
+
+            Assert.jsonObjectHaveKey(responseMessage, "code", "编码生成系统 返回报文错误" + responseMessage);
+
+            JSONObject resJson = JSONObject.parseObject(responseMessage);
+
+            if (!ResponseConstant.RESULT_CODE_SUCCESS.equals(resJson.getString("code"))) {
+                throw new ResponseErrorException(resJson.getString("code"), "生成oId编码失败 "
+                        + resJson.getString("message"));
+            }
+            code = resJson.getString("id");
+        }catch (Exception e){
+            throw new GenerateCodeException(ResponseConstant.RESULT_CODE_ERROR,e.getMessage());
+        }
+        finally {
+            return code;
+        }
+
+    }
+
+    public static String getBId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("bId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
         }
         //调用服务
-        return null;
+        return getCode(prefixMap.get("bId"));
     }
 
-    public static String getAttrId(){
+    public static String getAttrId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("attrId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
         }
         //调用服务
-        return null;
+        return getCode(prefixMap.get("attrId"));
     }
 
-    public static String getDataFlowId(){
+    public static String getDataFlowId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("dataFlowId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
         }
 
-        return null;
+        return getCode(prefixMap.get("dataFlowId"));
 
     }
 
-    public static String getUserId(){
+    public static String getUserId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("userId") + nextId("%08d");
         }
         //调用服务
-        return null;
+        return getCode(prefixMap.get("userId"));
     }
 
+
+    /**
+     * 获取restTemplate
+     * @return
+     * @throws NoSuchObjectException
+     */
+    private static RestTemplate restTemplate() throws NoSuchObjectException{
+
+       Object bean = ApplicationContextFactory.getBean("restTemplate");
+
+       if(bean == null){
+           throw new NoSuchObjectException("没有找到restTemplate对象，请核实");
+       }
+
+       return (RestTemplate) bean;
+    }
+
+
+    /**
+     * ID生成请求报文
+     * @param transactionId
+     * @return
+     */
+    private static JSONObject createCodeRequestJson(String transactionId, String prefix, String name){
+        JSONObject paramOut = JSONObject.parseObject("{}");
+        paramOut.put("transactionId",transactionId);
+        paramOut.put("prefix",prefix);
+        paramOut.put("name",name);
+        paramOut.put("requestTime",DateUtil.getNowDefault());
+        return paramOut;
+    }
 }
