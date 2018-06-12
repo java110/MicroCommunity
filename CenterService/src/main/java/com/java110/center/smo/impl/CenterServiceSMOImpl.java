@@ -8,23 +8,25 @@ import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.*;
 import com.java110.common.exception.*;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
-import com.java110.entity.center.Business;
 import com.java110.core.context.DataFlow;
-import com.java110.entity.center.*;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.DataTransactionFactory;
+import com.java110.entity.center.AppRoute;
+import com.java110.entity.center.AppService;
+import com.java110.entity.center.Business;
+import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.event.center.DataFlowEventPublishing;
+
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -63,6 +65,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             reqJson = decrypt(reqJson,headers);
             //1.0 创建数据流
             dataFlow = DataFlowFactory.newInstance(DataFlow.class).builder(reqJson, headers);
+
+            /*LogAgent.sendLog(dataFlow.reBuilder(dataFlow.getTransactionId(),LogAgent.LOG_TYPE_S,LogAgent.LOG_STATUS_S,
+                    dataFlow.getRequestURL(),dataFlow.getReqData(),dataFlow.getHeaders()));
+*/
             //2.0 加载配置信息
             initConfigData(dataFlow);
             //3.0 校验 APPID是否有权限操作serviceCode
@@ -123,17 +129,21 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 dataFlow.setEndDate(endDate);
                 dataFlow.setResJson(responseJson);
                 //添加耗时
-                DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
+                //DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
 
                 //这里保存耗时，以及日志
-                saveLogMessage(dataFlow.getReqJson(), dataFlow.getResJson());
+                //saveLogMessage(dataFlow.getReqJson(), dataFlow.getResJson());
 
                 //保存耗时
-                saveCostTimeLogMessage(dataFlow);
+                //saveCostTimeLogMessage(dataFlow);
                 //处理返回报文鉴权
                 AuthenticationFactory.putSign(dataFlow, responseJson);
             }
             resJson = encrypt(responseJson.toJSONString(),headers);
+            /*LogAgent.sendLog(dataFlow.reBuilder(dataFlow.getTransactionId(),
+                            LogAgent.LOG_TYPE_C,DataTransactionFactory.isSuccessBusiness(responseJson)?
+                            LogAgent.LOG_STATUS_S:LogAgent.LOG_STATUS_F,
+                    dataFlow.getRequestURL(),responseJson.toJSONString(),headers));*/
             return resJson;
 
         }

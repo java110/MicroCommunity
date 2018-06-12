@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -149,11 +150,13 @@ public class SequenceUtil {
     }
 
     public static String getDataFlowId()  throws GenerateCodeException{
-        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+        /*if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("dataFlowId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
         }
 
-        return getCode(prefixMap.get("dataFlowId"));
+        return getCode(prefixMap.get("dataFlowId"));*/
+
+        return UUID.randomUUID().toString().replace("-","").toLowerCase();
 
     }
 

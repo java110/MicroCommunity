@@ -2,17 +2,22 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.common.log.LoggerEngine;
+import com.java110.common.util.DateUtil;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
  * 数据流上下文
  * Created by wuxw on 2018/5/18.
  */
-public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
+public abstract class AbstractDataFlowContext extends AbstractTransactionLog implements DataFlowContext,Orders,TransactionLog{
 
     private String dataFlowId;
 
@@ -66,7 +71,37 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
      * @return
      * @throws Exception
      */
-    public abstract DataFlowContext builder(String reqInfo, Map<String,String> headerAll) throws Exception;
+    public  <T> T builder(String reqInfo, Map<String,String> headerAll) throws Exception{
+        //预处理
+        preBuilder(reqInfo, headerAll);
+        //调用builder
+        T dataFlowContext = (T)doBuilder(reqInfo, headerAll);
+        //后处理
+        afterBuilder((DataFlowContext) dataFlowContext);
+        return dataFlowContext;
+    }
+
+    /**
+     * 预处理
+     * @param reqInfo
+     * @param headerAll
+     */
+    protected void preBuilder(String reqInfo, Map<String,String> headerAll) {
+        super.preBuilder(reqInfo,headerAll);
+    }
+
+    /**
+     * 构建对象
+     * @param reqInfo
+     * @param headerAll
+     * @return
+     * @throws Exception
+     */
+    public abstract DataFlowContext doBuilder(String reqInfo, Map<String,String> headerAll) throws Exception;
+
+    protected void afterBuilder(DataFlowContext dataFlowContext){
+
+    }
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
@@ -219,6 +254,16 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
 
     public String getUserId(){return null;};
 
+    @Override
+    public void setAppId(String appId) {
+
+    }
+
+    @Override
+    public void setUserId(String userId) {
+
+    }
+
     public String getRemark(){return null;};
 
     public String getReqSign(){return null;};
@@ -260,6 +305,36 @@ public abstract class AbstractDataFlowContext implements DataFlowContext,Orders{
     public String getbId(){
         return null;
     }
+
+    public String getLogId(){
+        return getbId();
+    }
+
+
+    /**
+     * 业务编码 当前需要处理的业务编码，可以写将要请求服务提供方的方法名
+     * 主要用于 日志端展示
+     * @return 当前服务编码
+     */
+    public String getServiceCode(){
+        if(this.currentBusiness != null){
+            return currentBusiness.getServiceCode();
+        }
+        return "";
+    }
+
+    /**
+     * 业务名称 当前需要处理的业务名称，可以当前调用的业务名称 如 商品购买 等
+     * 主要用于 日志端展示
+     * @return 当前服务名称
+     */
+    public String getServiceName(){
+        if(this.currentBusiness != null){
+            return currentBusiness.getServiceName();
+        }
+        return "";
+    }
+
 
     public abstract Orders getOrder();
 

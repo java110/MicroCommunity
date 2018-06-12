@@ -34,7 +34,7 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
         super(startDate, code);
     }
 
-    public BusinessServiceDataFlow builder(String reqInfo, Map<String, String> headerAll) throws InitDataFlowContextException {
+    public BusinessServiceDataFlow doBuilder(String reqInfo, Map<String, String> headerAll) throws InitDataFlowContextException {
         try{
             Business business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);

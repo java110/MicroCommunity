@@ -37,6 +37,12 @@
             <artifactId>java110-config</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>java110-logAgent</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

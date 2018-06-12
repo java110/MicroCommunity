@@ -11,8 +11,6 @@ import java.util.Map;
  */
 public class CodeDataFlow extends AbstractDataFlowContext {
 
-
-
     /**
      * 前缀
      */
@@ -42,6 +40,8 @@ public class CodeDataFlow extends AbstractDataFlowContext {
         return port;
     }
 
+
+
     public void setPort(String port) {
         this.port = port;
     }
@@ -51,7 +51,7 @@ public class CodeDataFlow extends AbstractDataFlowContext {
     }
 
     @Override
-    public CodeDataFlow builder(String reqInfo, Map<String, String> headerAll) throws Exception {
+    public CodeDataFlow doBuilder(String reqInfo, Map<String, String> headerAll) throws Exception {
         JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
         this.setReqJson(reqInfoObj);
         this.setReqData(reqInfo);

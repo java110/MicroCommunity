@@ -3,6 +3,7 @@ package com.java110.core.factory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.OrderTypeCdConstant;
 import com.java110.common.constant.ResponseConstant;
@@ -49,6 +50,54 @@ public class DataTransactionFactory {
             responseInfo.put("business",business);
         }
         return responseInfo;
+    }
+
+    /**
+     * 业务是否都成功了
+     * @param response true 成功 false 失败
+     * @return
+     */
+    public static boolean isSuccessBusiness(JSONObject response){
+        Object obj = JSONPath.eval(response,"$.orders.response.code");
+
+        if(obj != null && obj instanceof String && ResponseConstant.RESULT_CODE_SUCCESS.equals(obj.toString())){
+            Object businessObj = JSONPath.eval(response,"$.business");
+            if(businessObj == null){
+                return true;
+            }
+
+            if(businessObj instanceof JSONObject){
+                JSONObject businessJson = (JSONObject) businessObj;
+                if(!businessJson.containsKey("response")){ //这里返回协议错误，我们认为是成功
+                    return true;
+                }
+                if(businessJson.getJSONObject("response").containsKey("code")
+                        && ResponseConstant.RESULT_CODE_SUCCESS.equals(businessJson.getJSONObject("response").getString("code"))){
+                    return true;
+                }
+            }
+
+            if(businessObj instanceof JSONArray){
+                JSONArray businessJsons = (JSONArray) businessObj;
+                if(businessJsons == null || businessJsons.size() == 0){
+                    return true;
+                }
+                JSONObject businessJson = null;
+                for (int businessIndex = 0;businessIndex < businessJsons.size();businessIndex++) {
+                    businessJson = businessJsons.getJSONObject(businessIndex);
+                    if (!businessJson.containsKey("response")) { //这里返回协议错误，我们认为是成功
+                        continue;
+                    }
+                    if (businessJson.getJSONObject("response").containsKey("code")
+                            && !ResponseConstant.RESULT_CODE_SUCCESS.equals(businessJson.getJSONObject("response").getString("code"))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

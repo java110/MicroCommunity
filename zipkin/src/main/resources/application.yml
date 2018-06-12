@@ -1,0 +1,22 @@
+#配置kafka
+spring:
+  sleuth:
+    enabled: false
+    sampler:
+      percentage: 1.0
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+          zkNodes: localhost:2181
+
+logging:
+  file: logs/eureka.log
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+# 参考文档：http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#_standalone_mode
+# 参考文档：http://my.oschina.net/buwei/blog/618756

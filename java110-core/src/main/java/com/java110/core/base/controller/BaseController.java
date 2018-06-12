@@ -214,7 +214,7 @@ public class BaseController extends AppBase {
      * @return
      * @throws Exception
      */
-    protected BusinessServiceDataFlow writeDataToDataFlowContext(String reqJson, Map<String,String> headers) throws InitDataFlowContextException {
+    protected BusinessServiceDataFlow writeDataToDataFlowContext(String reqJson, Map<String,String> headers) throws Exception {
         BusinessServiceDataFlow businessServiceDataFlow = DataFlowFactory.newInstance(BusinessServiceDataFlow.class).builder(reqJson,headers);
         return businessServiceDataFlow;
     }

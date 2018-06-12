@@ -213,7 +213,7 @@ public class DataFlow extends AbstractDataFlowContext {
         return this;
     }
 
-    public DataFlow builder(String reqInfo, Map<String,String> headerAll) throws Exception{
+    public DataFlow doBuilder(String reqInfo, Map<String,String> headerAll) throws Exception{
 
         try{
             Business business = null;
