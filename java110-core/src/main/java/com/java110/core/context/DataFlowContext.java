@@ -44,7 +44,28 @@ public interface DataFlowContext {
 
     public List<Business> getBusinesses();
 
-    public Map<String, String> getHeaders();
+    /**
+     * 源请求头信息
+     * @return
+     */
+    public Map<String, String> getRequestHeaders();
+    /**
+     * 终返回头信息
+     * @return
+     */
+    public Map<String, String> getResponseHeaders();
+
+    /**
+     * 当前请求头信息
+     * @return
+     */
+    public Map<String, String> getRequestCurrentHeaders();
+
+    /**
+     * 当前返回头信息
+     * @return
+     */
+    public Map<String, String> getResponseCurrentHeaders();
 
 
     public Orders getOrder();

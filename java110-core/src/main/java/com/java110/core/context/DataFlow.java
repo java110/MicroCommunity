@@ -241,9 +241,10 @@ public class DataFlow extends AbstractDataFlowContext {
             }
 
             if (headerAll != null){
-                this.headers.putAll(headerAll);
-                this.setRequestURL(headers.get("REQUEST_URL"));
-                this.setIp(headers.get("IP"));
+                this.requestHeaders.putAll(headerAll);
+                this.requestCurrentHeaders.putAll(headerAll);
+                this.setRequestURL(requestHeaders.get("REQUEST_URL"));
+                this.setIp(requestHeaders.get("IP"));
             }
 
 
@@ -286,9 +287,10 @@ public class DataFlow extends AbstractDataFlowContext {
             }
 
             if (headerAll != null){
-                this.headers.putAll(headerAll);
-                this.setRequestURL(headers.get("REQUEST_URL"));
-                this.setIp(headers.get("IP"));
+                this.requestHeaders.putAll(headerAll);
+                this.requestCurrentHeaders.putAll(headerAll);
+                this.setRequestURL(requestHeaders.get("REQUEST_URL"));
+                this.setIp(requestHeaders.get("IP"));
             }
 
 

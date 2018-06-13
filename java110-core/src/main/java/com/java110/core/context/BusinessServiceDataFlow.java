@@ -53,7 +53,8 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
             businesses.add(business);
             this.setCurrentBusiness(business);
             if (headerAll != null){
-                this.headers.putAll(headerAll);
+                this.requestCurrentHeaders.putAll(headerAll);
+                this.requestHeaders.putAll(headerAll);
             }
         }catch (Exception e){
             throw new InitDataFlowContextException(ResponseConstant.RESULT_PARAM_ERROR,"初始化对象 BusinessServiceDataFlow 失败 "+reqInfo);

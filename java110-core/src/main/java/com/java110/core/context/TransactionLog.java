@@ -81,6 +81,9 @@ public interface TransactionLog extends Serializable {
 
     /**
      * 重新构建 TransactionLog 对象 主要用于服务提供方
+     * @param requestMessage 请求数据
+     * @param responseMessage 返回数据
+     * @param logStatus 数据交互状态
      * @return
      */
     public TransactionLog reBuilder(String requestMessage,String responseMessage,String logStatus);

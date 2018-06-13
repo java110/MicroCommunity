@@ -56,7 +56,10 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     private List<DataFlowLog> logDatas = new ArrayList<DataFlowLog>();
 
-    protected Map<String,String> headers = new HashMap<String,String>();
+    protected Map<String,String> requestHeaders = new HashMap<String,String>();
+    protected Map<String,String> requestCurrentHeaders = new HashMap<String,String>();
+    protected Map<String,String> responseHeaders = new HashMap<String,String>();
+    protected Map<String,String> responseCurrentHeaders = new HashMap<String,String>();
 
     //请求开始时间
     private Date startDate;
@@ -187,8 +190,20 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         this.endDate = endDate;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public Map<String, String> getRequestHeaders() {
+        return requestHeaders;
+    }
+
+    public Map<String, String> getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    public Map<String, String> getRequestCurrentHeaders() {
+        return requestHeaders;
+    }
+
+    public Map<String, String> getResponseCurrentHeaders() {
+        return responseHeaders;
     }
 
     public String getReqData() {

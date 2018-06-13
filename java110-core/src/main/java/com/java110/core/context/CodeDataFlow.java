@@ -59,7 +59,8 @@ public class CodeDataFlow extends AbstractDataFlowContext {
         this.setRequestTime(reqInfoObj.getString("requestTime"));
 
         if (headerAll != null && !headerAll.isEmpty()){
-           this.headers.putAll(headerAll);
+           this.requestCurrentHeaders.putAll(headerAll);
+           this.requestHeaders.putAll(headerAll);
         }
 
         if(headerAll != null && headerAll.containsKey("hostName")) {
