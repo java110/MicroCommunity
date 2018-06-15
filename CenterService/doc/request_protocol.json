@@ -12,7 +12,8 @@
       "value": "具体值"
     }]
   },
-  "business": [{
+  // 如果是批量方式 写成 "business":[{....}]
+  "business": {
     "serviceCode": "queryCustInfo",
     "serviceName": "查询客户",
     "remark": "备注",
@@ -26,5 +27,5 @@
       "specCd": "配置的字段ID",
       "value": "具体值"
     }]
-  }]
+  }
 }

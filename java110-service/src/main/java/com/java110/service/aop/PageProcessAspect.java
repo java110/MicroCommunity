@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.core.factory.PageDataFactory;
 import com.java110.common.util.Assert;
-import com.java110.common.util.SequenceUtil;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.common.util.StringUtil;
 import com.java110.entity.service.PageData;
 import org.aspectj.lang.JoinPoint;
@@ -57,12 +57,12 @@ public class PageProcessAspect {
             }
             str = sb.toString();
             if(Assert.isPageJsonObject(str)){
-                 pd = PageDataFactory.newInstance().builder(str).setTransactionId(SequenceUtil.getPageTransactionId());
+                 pd = PageDataFactory.newInstance().builder(str).setTransactionId(GenerateCodeFactory.getPageTransactionId());
             }
         }
         //对 get情况下的参数进行封装
         if(pd == null){
-            pd = PageDataFactory.newInstance().setTransactionId(SequenceUtil.getPageTransactionId());
+            pd = PageDataFactory.newInstance().setTransactionId(GenerateCodeFactory.getPageTransactionId());
             Map<String,String[]> params = request.getParameterMap();
             if(params != null  && !params.isEmpty()) {
                 JSONObject paramObj = new JSONObject();

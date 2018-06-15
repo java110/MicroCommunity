@@ -134,7 +134,6 @@ public class LogAgent extends LoggerEngine{
         String headerMessage = (headers == null || headers.isEmpty())?"":JSONObject.toJSONString(headers);
         message.put("headers",headerMessage);
         message.put("body",dataInfo);
-
         return message;
     }
 

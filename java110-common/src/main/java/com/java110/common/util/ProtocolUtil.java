@@ -84,7 +84,7 @@ public class ProtocolUtil {
 
     public static JSONObject createRequestTcpContJson(String serviceCode) {
         //获取交易流水
-        String transactionId = SequenceUtil.getTransactionId();
+        String transactionId = "-1";
         tcpContJson = new JSONObject();
         tcpContJson.put("transactionId", transactionId);
         tcpContJson.put("serviceCode", serviceCode);

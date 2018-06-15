@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="logServiceDaoImpl">
+
+    <!--保存日志-->
+    <insert id="saveTransactionLog" parameterType="java.util.HashMap" >
+        insert into l_transaction_log
+        (log_id,transaction_id,contract_id,ip,port,src_ip,src_port,app_id,user_id,service_code,service_name,timestamp,status_cd)
+        values
+        (#{logId},#{transactionId},#{dataFlowId},#{ip},#{port},#{srcIp},#{srcPort},#{appId},#{userId},#{serviceCode},#{serviceName},#{timestamp},#{logStatus})
+    </insert>
+
+    <!--保存日志（交互报文）-->
+    <insert id="saveTransactionLogMessage" parameterType="java.util.HashMap" >
+        insert into l_transaction_log_message
+        (log_id,request_header,response_header,request_message,response_message,remark)
+        values
+        (#{logId},#{requestHeader},#{responseHeader},#{requestMessage},#{responseMessage},#{remark})
+    </insert>
+
+
+ </mapper>

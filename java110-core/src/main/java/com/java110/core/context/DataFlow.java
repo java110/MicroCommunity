@@ -3,7 +3,7 @@ package com.java110.core.context;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.SequenceUtil;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.common.util.StringUtil;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.Business;
@@ -219,7 +219,17 @@ public class DataFlow extends AbstractDataFlowContext {
             Business business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
             JSONObject orderObj = reqInfoObj.getJSONObject("orders");
-            JSONArray businessArray = reqInfoObj.getJSONArray("business");
+            Object businessObj = reqInfoObj.get("business");
+            JSONArray businessArray = null;
+            if(businessObj instanceof JSONObject){
+                businessArray = new JSONArray();
+                businessArray.add(reqInfoObj.getJSONObject("business"));
+            }else if(businessObj instanceof JSONArray){
+                businessArray = reqInfoObj.getJSONArray("business");
+            }else{
+                // 不做处理
+            }
+
             this.setReqData(reqInfo);
             this.setReqJson(reqInfoObj);
             this.setDataFlowId(orderObj.containsKey("dataFlowId")?orderObj.getString("dataFlowId"):"-1");
@@ -269,7 +279,7 @@ public class DataFlow extends AbstractDataFlowContext {
             this.setReqData(reqInfo);
             this.setDataFlowId("-1");
             this.setAppId(headerAll.get("appId"));
-            this.setTransactionId(StringUtil.isNullOrNone(headerAll.get("transactionId"))? SequenceUtil.getTransactionId():headerAll.get("transactionId"));
+            this.setTransactionId(StringUtil.isNullOrNone(headerAll.get("transactionId"))? GenerateCodeFactory.getTransactionId():headerAll.get("transactionId"));
             this.setUserId(StringUtil.isNullOrNone(headerAll.get("userId"))? "-1":headerAll.get("userId"));
             this.setOrderTypeCd("T");
             this.setRemark(StringUtil.isNullOrNone(headerAll.get("remark"))? "":headerAll.get("remark"));

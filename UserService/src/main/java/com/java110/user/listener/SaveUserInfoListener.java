@@ -2,13 +2,12 @@ package com.java110.user.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.common.util.SequenceUtil;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.Business;
@@ -163,7 +162,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
 
         if(businessUser.getInteger("userId") < 0){
             //生成userId
-            String userId = SequenceUtil.getUserId();
+            String userId = GenerateCodeFactory.getUserId();
             businessUser.put("userId",userId);
         }
         dataFlowContext.addParamOut("userId",businessUser.getString("userId"));
@@ -191,7 +190,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
             Assert.jsonObjectHaveKey(userAttr,"attrId","businessUserAttr 节点下没有包含 attrId 节点");
 
             if(userAttr.getInteger("attrId") < 0){
-                String attrId = SequenceUtil.getAttrId();
+                String attrId = GenerateCodeFactory.getAttrId();
                 userAttr.put("attrId",attrId);
             }
 

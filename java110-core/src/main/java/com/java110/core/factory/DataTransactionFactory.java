@@ -1,6 +1,5 @@
 package com.java110.core.factory;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
@@ -8,9 +7,7 @@ import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.OrderTypeCdConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
-import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.SequenceUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlow;
 import com.java110.core.context.DataFlowContext;
@@ -279,7 +276,7 @@ public class DataTransactionFactory {
         JSONObject paramIn = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         JSONObject orders = paramIn.getJSONObject("orders");
         orders.put("appId",appId);
-        orders.put("transactionId", SequenceUtil.getTransactionId());
+        orders.put("transactionId", GenerateCodeFactory.getTransactionId());
         orders.put("userId",userId);
         orders.put("orderTypeCd",orderTypeCd);
         orders.put("requestTime",DateUtil.getNowDefault());

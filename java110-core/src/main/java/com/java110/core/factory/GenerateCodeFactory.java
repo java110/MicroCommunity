@@ -1,4 +1,4 @@
-package com.java110.common.util;
+package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
@@ -7,6 +7,9 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.GenerateCodeException;
 import com.java110.common.exception.ResponseErrorException;
 import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.common.util.Assert;
+import com.java110.common.util.DateUtil;
+import com.java110.feign.code.ICodeApi;
 import org.springframework.web.client.RestTemplate;
 
 import java.rmi.NoSuchObjectException;
@@ -23,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 生成序列工具类
  * Created by wuxw on 2017/2/27.
  */
-public class SequenceUtil {
+public class GenerateCodeFactory {
 
     private static final long ONE_STEP = 1000000;
     private static final Lock LOCK = new ReentrantLock();
@@ -83,6 +86,15 @@ public class SequenceUtil {
     }
 
     /**
+     * 获取内部平台 交易流水
+     * @return
+     * @throws NoSuchObjectException
+     */
+    public static String getInnerTransactionId() throws Exception{
+        return codeApi().generateCode(prefixMap.get("transactionId"));
+    }
+
+    /**
      * 获取交易流水ID
      *
      * @return
@@ -115,6 +127,9 @@ public class SequenceUtil {
             String responseMessage = restTemplate().postForObject(MappingCache.getValue(MappingConstant.KEY_CODE_PATH),
                     createCodeRequestJson(getTransactionId(),prefix,prefix).toJSONString(), String.class);
 
+            if(ResponseConstant.RESULT_CODE_ERROR.equals(responseMessage)){
+                throw new ResponseErrorException(ResponseConstant.RESULT_CODE_ERROR, "生成oId编码失败");
+            }
             Assert.jsonObjectHaveKey(responseMessage, "code", "编码生成系统 返回报文错误" + responseMessage);
 
             JSONObject resJson = JSONObject.parseObject(responseMessage);
@@ -149,12 +164,12 @@ public class SequenceUtil {
         return getCode(prefixMap.get("attrId"));
     }
 
+    /**
+     * 生成dataFlowId
+     * @return
+     * @throws GenerateCodeException
+     */
     public static String getDataFlowId()  throws GenerateCodeException{
-        /*if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("dataFlowId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
-        }
-
-        return getCode(prefixMap.get("dataFlowId"));*/
 
         return UUID.randomUUID().toString().replace("-","").toLowerCase();
 
@@ -184,6 +199,24 @@ public class SequenceUtil {
 
        return (RestTemplate) bean;
     }
+
+    /**
+     * 获取codeApi
+     * @return
+     * @throws NoSuchObjectException
+     */
+    private static ICodeApi codeApi() throws NoSuchObjectException{
+
+        Object bean = ApplicationContextFactory.getBean("codeApi");
+
+        if(bean == null){
+            throw new NoSuchObjectException("codeApi，请核实");
+        }
+
+        return (ICodeApi) bean;
+    }
+
+
 
 
     /**

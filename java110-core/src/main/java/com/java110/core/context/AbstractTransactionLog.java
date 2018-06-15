@@ -44,7 +44,7 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
      * @return
      */
     public String getTimestamp(){
-        return DateUtil.getCurrentDate().getTime()+"";
+        return DateUtil.getNowDefault();
     }
 
 

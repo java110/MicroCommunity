@@ -1,8 +1,7 @@
-package com.java110.common.rule;
+package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.SequenceUtil;
 
 /**
  * 创建校验单 请求报文协议
@@ -10,7 +9,7 @@ import com.java110.common.util.SequenceUtil;
  * 工具类，提供于第三方系统调用组装请求报文
  * Created by wuxw on 2017/7/24.
  */
-public class RuleProtocol {
+public class RuleProtocolFactory {
 
     /**
      * 创建头部
@@ -40,8 +39,8 @@ public class RuleProtocol {
      * @param serviceCode
      * @return
      */
-    public static JSONObject createTcpCont(String ruleType,String serviceCode){
-        return createTcpCont(SequenceUtil.getTransactionId(),ruleType,serviceCode);
+    public static JSONObject createTcpCont(String ruleType,String serviceCode) throws Exception{
+        return createTcpCont(GenerateCodeFactory.getInnerTransactionId(),ruleType,serviceCode);
     }
 
 
@@ -62,8 +61,8 @@ public class RuleProtocol {
      * @param svcContParam
      * @return
      */
-    public static String createValidateJson(String ruleType,String serviceCode,JSONObject svcContParam){
-        return createValidateJson(SequenceUtil.getTransactionId(),ruleType,serviceCode,svcContParam);
+    public static String createValidateJson(String ruleType,String serviceCode,JSONObject svcContParam) throws Exception{
+        return createValidateJson(GenerateCodeFactory.getInnerTransactionId(),ruleType,serviceCode,svcContParam);
     }
 
     public static String createValidateJson(String transactionId,String ruleType,String serviceCode,JSONObject svcContParam){

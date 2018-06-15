@@ -15,6 +15,7 @@ import com.java110.core.context.DataFlow;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.Business;
@@ -305,7 +306,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }
         //
         if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
-            dataFlow.setDataFlowId(SequenceUtil.getDataFlowId());
+            dataFlow.setDataFlowId(GenerateCodeFactory.getDataFlowId());
         }
 
         //添加耗时

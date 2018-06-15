@@ -64,6 +64,17 @@ public class Assert extends org.springframework.util.Assert{
         isNotNull(info,key,message);
     }
 
+    /**
+     * 判断 jsonObject 是否为空
+     * @param info
+     * @param key
+     * @param message
+     */
+    public static void hasKeyAndValue(Map info,String key,String message){
+        isNotNull(info,key,message);
+        hasLength(info.get(key)== null?"":info.get(key).toString(),message);
+    }
+
 
     /**
      * 判断json是否为空

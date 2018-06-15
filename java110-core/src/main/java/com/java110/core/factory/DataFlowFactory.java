@@ -9,7 +9,6 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.SequenceUtil;
 import com.java110.core.context.AbstractDataFlowContext;
 import com.java110.core.context.DataFlow;
 import com.java110.entity.center.AppRoute;
@@ -123,7 +122,7 @@ public class DataFlowFactory {
      */
     public static Map getOrder(DataFlow dataFlow){
         Map order = new HashMap();
-        dataFlow.setoId(SequenceUtil.getOId());
+        dataFlow.setoId(GenerateCodeFactory.getOId());
         order.put("oId",dataFlow.getoId());
         order.put("appId",dataFlow.getAppId());
         order.put("extTransactionId",dataFlow.getTransactionId());
@@ -153,7 +152,7 @@ public class DataFlowFactory {
         {
             attrMap = new HashMap();
             attrMap.put("oId",dataFlow.getoId());
-            attrMap.put("attrId",SequenceUtil.getAttrId());
+            attrMap.put("attrId", GenerateCodeFactory.getAttrId());
             attrMap.put("specCd",attrs.getJSONObject(attrIndex).getString("specCd"));
             attrMap.put("value",attrs.getJSONObject(attrIndex).getString("value"));
             orderAttrs.add(attrMap);
@@ -174,7 +173,7 @@ public class DataFlowFactory {
             if(business == null){
                 continue;
             }
-            business.setbId(SequenceUtil.getBId());
+            business.setbId(GenerateCodeFactory.getBId());
             busiMap = new HashMap();
             busiMap.put("oId",dataFlow.getoId());
             busiMap.put("businessTypeCd",getService(dataFlow,business.getServiceCode()).getBusinessTypeCd());
@@ -199,7 +198,7 @@ public class DataFlowFactory {
         busiMap.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         busiMap.put("remark",message);
         busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
-        busiMap.put("bId",SequenceUtil.getBId());
+        busiMap.put("bId", GenerateCodeFactory.getBId());
         business.add(busiMap);
         return business;
     }
@@ -221,7 +220,7 @@ public class DataFlowFactory {
             for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
                 attrMap = new HashMap();
                 attrMap.put("bId", business.getbId());
-                attrMap.put("attrId", SequenceUtil.getAttrId());
+                attrMap.put("attrId", GenerateCodeFactory.getAttrId());
                 attrMap.put("specCd", attrs.getJSONObject(attrIndex).getString("specCd"));
                 attrMap.put("value", attrs.getJSONObject(attrIndex).getString("value"));
                 businessAttrs.add(attrMap);
@@ -504,7 +503,7 @@ public class DataFlowFactory {
     private static JSONObject getTransactionBusinessBaseJson(DataFlow dataFlow,String businessType){
         JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":{}}");
         JSONObject orders = notifyMessage.getJSONObject("orders");
-        orders.put("transactionId",SequenceUtil.getTransactionId());
+        orders.put("transactionId", GenerateCodeFactory.getTransactionId());
         orders.put("dataFlowId",dataFlow.getDataFlowId());
         orders.put("orderTypeCd",dataFlow.getOrderTypeCd());
         orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());

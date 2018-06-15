@@ -18,8 +18,6 @@ import java.util.Map;
 public class BusinessServiceDataFlow extends AbstractDataFlowContext {
 
 
-
-
     private String bId;
 
     private Map<String,Object> paramOut;
