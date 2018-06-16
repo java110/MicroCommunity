@@ -94,7 +94,7 @@ public class BaseController extends AppBase {
         headers.put("IP",getIpAddr(request));
 
         headers.put("hostName",request.getLocalName());
-        headers.put("port",request.getLocalPort());
+        headers.put("port",request.getLocalPort()+"");
 
     }
 

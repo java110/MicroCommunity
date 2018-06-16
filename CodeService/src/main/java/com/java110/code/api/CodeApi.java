@@ -12,10 +12,7 @@ import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.feign.code.ICodeApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -100,7 +97,8 @@ public class CodeApi extends BaseController implements ICodeApi {
      * @return
      */
     @Override
-    public String generateCode(String prefix) {
+    @RequestMapping(value = "/codeApi/generateCode",method = RequestMethod.POST)
+    public String generateCode(@RequestParam("prefix") String prefix) {
 
         try {
             JSONObject requestInfo = new JSONObject();
@@ -114,7 +112,7 @@ public class CodeApi extends BaseController implements ICodeApi {
             primaryKeyServiceSMOImpl.generateCode(dataFlow);
 
             if (!ResponseConstant.RESULT_CODE_SUCCESS.equals(dataFlow.getResJson().getString("code"))) {
-                throw new ResponseErrorException(ResponseConstant.RESULT_CODE_ERROR, "生成oId编码失败 "
+                throw new ResponseErrorException(ResponseConstant.RESULT_CODE_ERROR, "生成编码失败 "
                         + dataFlow.getResJson().getString("message"));
             }
 

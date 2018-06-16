@@ -8,6 +8,7 @@ import com.java110.service.init.ServiceStartInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -19,8 +20,10 @@ import org.springframework.context.ApplicationContext;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.log","com.java110.core","com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.log",
+"com.java110.feign.code","com.java110.core","com.java110.cache"})
 @EnableDiscoveryClient
+@EnableFeignClients(basePackages = {"com.java110.feign.code"})
 public class LogServiceApplicationStart {
 
 

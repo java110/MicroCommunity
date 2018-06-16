@@ -1,7 +1,7 @@
 -- 日志表
 
 create table l_transaction_log(
-    log_id varchar(30) not null keY unique COMMENT 'id',
+    log_id varchar(30) not null  COMMENT 'id',
     transaction_id VARCHAR(30) NOT NULL COMMENT '外部交易流水',
     contract_id varchar(64) not null comment '上下文ID',
     ip varchar(20) not null comment '日志产生主机IP',
@@ -15,9 +15,9 @@ create table l_transaction_log(
     timestamp TIMESTAMP NOT NULL comment '日志交互时间，时间戳',
     cost_time int not null default 0 comment '耗时',
     status_cd varchar(2) not null comment '交互状态 S 成功 F 失败',
-    month INT NOT NULL default month(CURRENT_DATE) comment '月份',
+    month INT NOT NULL comment '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    PRIMARY KEY (log_id)
+    unique KEY (log_id,month)
 )
 partition BY RANGE (month) (
     partition transaction_log_1 VALUES LESS THAN (2),
@@ -39,14 +39,15 @@ partition BY RANGE (month) (
 -- 日志原始内容表
 
 create table l_transaction_log_message(
-    log_id varchar(30) not null unique FOREIGN KEY REFERENCES l_transaction_log(log_id) COMMENT 'id',
+    log_id varchar(30) not null  COMMENT 'id',
     request_header LONGTEXT COMMENT '请求头信息',
     response_header LONGTEXT COMMENT '返回头信息',
     request_message LONGTEXT comment '请求报文',
     response_message LONGTEXT comment '返回报文',
     remark varchar(200) comment '备注',
-    month INT NOT NULL default month(CURRENT_DATE) comment '月份',
-    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    month INT NOT NULL  comment '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     UNIQUE KEY (log_id,`month`)
 )
 partition BY RANGE (month) (
     partition transaction_log_message_1 VALUES LESS THAN (2),

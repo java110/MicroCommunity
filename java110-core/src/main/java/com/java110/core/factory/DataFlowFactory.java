@@ -503,7 +503,7 @@ public class DataFlowFactory {
     private static JSONObject getTransactionBusinessBaseJson(DataFlow dataFlow,String businessType){
         JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":{}}");
         JSONObject orders = notifyMessage.getJSONObject("orders");
-        orders.put("transactionId", GenerateCodeFactory.getTransactionId());
+        orders.put("transactionId", UUID.randomUUID().toString().replace("-",""));
         orders.put("dataFlowId",dataFlow.getDataFlowId());
         orders.put("orderTypeCd",dataFlow.getOrderTypeCd());
         orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());

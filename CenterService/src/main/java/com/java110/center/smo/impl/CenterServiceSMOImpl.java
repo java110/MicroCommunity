@@ -8,6 +8,7 @@ import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.*;
 import com.java110.common.exception.*;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
@@ -23,6 +24,7 @@ import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.event.center.DataFlowEventPublishing;
 
 import com.java110.log.agent.LogAgent;
+import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -508,7 +510,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         dataFlow.setResData(responseJson);
 
         DataFlowFactory.addCostTime(dataFlow,dataFlow.getCurrentBusiness().getServiceCode(), "调用"+dataFlow.getCurrentBusiness().getServiceCode()+"耗时", startDate);
-        saveLogMessage(dataFlow.getCurrentBusiness().getTransferData(),dataFlow.getResData());
+        saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),dataFlow.getCurrentBusiness().getTransferData()),
+                LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),dataFlow.getResData()),
+                DateUtil.getCurrentDate().getTime()-startDate.getTime());
 
 
         DataFlowFactory.addCostTime(dataFlow, "invokeBusinessSystem", "调用下游系统耗时", startDate);
@@ -775,6 +779,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         dataFlow.setAppId(order.get("app_id").toString());
         if("-1".equals(dataFlow.getDataFlowId()) || StringUtil.isNullOrNone(dataFlow.getDataFlowId())){
             throw new InitConfigDataException(ResponseConstant.RESULT_CODE_ERROR,"请求报文中没有包含 dataFlowId 节点");
+        }
+        //重新刷端口信息
+        ServiceInfoListener serviceInfoListener =  ApplicationContextFactory.getBean("serviceInfoListener",ServiceInfoListener.class);
+        if(serviceInfoListener != null){
+            dataFlow.setPort(serviceInfoListener.getServerPort()+"");
         }
         //重新加载配置
         initConfigData(dataFlow);
@@ -1164,7 +1173,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         dataFlow.setResponseBusinessJson(DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                  ResponseConstant.RESULT_CODE_SUCCESS, "成功"));
         DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "异步调用业务系统总耗时", startDate);
-        saveLogMessage(dataFlow,dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson(),
+        saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),dataFlow.getRequestBusinessJson().toJSONString()),
+                LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),dataFlow.getResponseBusinessJson().toJSONString()),
                 DateUtil.getCurrentDate().getTime()-startDate.getTime());
     }
 

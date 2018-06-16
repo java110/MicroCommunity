@@ -7,17 +7,17 @@
     <!--保存日志-->
     <insert id="saveTransactionLog" parameterType="java.util.HashMap" >
         insert into l_transaction_log
-        (log_id,transaction_id,contract_id,ip,port,src_ip,src_port,app_id,user_id,service_code,service_name,cost_time,timestamp,status_cd)
+        (log_id,transaction_id,contract_id,ip,port,src_ip,src_port,app_id,user_id,service_code,service_name,cost_time,timestamp,status_cd,month)
         values
-        (#{logId},#{transactionId},#{dataFlowId},#{ip},#{port},#{srcIp},#{srcPort},#{appId},#{userId},#{serviceCode},#{serviceName},#{costTime},#{timestamp},#{logStatus})
+        (#{logId},#{transactionId},#{dataFlowId},#{ip},#{port},#{srcIp},#{srcPort},#{appId},#{userId},#{serviceCode},#{serviceName},#{costTime},#{timestamp},#{logStatus},#{month})
     </insert>
 
     <!--保存日志（交互报文）-->
     <insert id="saveTransactionLogMessage" parameterType="java.util.HashMap" >
         insert into l_transaction_log_message
-        (log_id,request_header,response_header,request_message,response_message,remark)
+        (log_id,request_header,response_header,request_message,response_message,remark,month)
         values
-        (#{logId},#{requestHeader},#{responseHeader},#{requestMessage},#{responseMessage},#{remark})
+        (#{logId},#{requestHeader},#{responseHeader},#{requestMessage},#{responseMessage},#{remark},#{month})
     </insert>
 
 

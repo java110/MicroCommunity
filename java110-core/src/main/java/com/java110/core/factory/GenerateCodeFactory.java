@@ -50,7 +50,7 @@ public class GenerateCodeFactory {
         prefixMap.put("transactionId","1000001");
         prefixMap.put("pageTransactionId","1000002");
         prefixMap.put("dataFlowId","2000");
-        prefixMap.put("userId","3000");
+        prefixMap.put("userId","30");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -177,7 +177,7 @@ public class GenerateCodeFactory {
 
     public static String getUserId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("userId") + nextId("%08d");
+            return prefixMap.get("userId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
         }
         //调用服务
         return getCode(prefixMap.get("userId"));
@@ -207,7 +207,7 @@ public class GenerateCodeFactory {
      */
     private static ICodeApi codeApi() throws NoSuchObjectException{
 
-        Object bean = ApplicationContextFactory.getBean("codeApi");
+        Object bean = ApplicationContextFactory.getBean(ICodeApi.class.getName());
 
         if(bean == null){
             throw new NoSuchObjectException("codeApi，请核实");

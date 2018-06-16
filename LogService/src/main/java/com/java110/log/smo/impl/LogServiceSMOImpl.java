@@ -7,6 +7,7 @@ import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.feign.code.ICodeApi;
 import com.java110.log.dao.LogServiceDao;
 import com.java110.log.smo.ILogServiceSMO;
 import org.slf4j.Logger;
@@ -30,6 +31,9 @@ import java.util.Map;
 public class LogServiceSMOImpl extends BaseServiceSMO implements ILogServiceSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(LogServiceSMOImpl.class);
+
+    @Autowired
+    private ICodeApi codeApi;
 
     @Autowired
     private LogServiceDao logServiceDaoImpl;
@@ -62,6 +66,7 @@ public class LogServiceSMOImpl extends BaseServiceSMO implements ILogServiceSMO 
 
         // 调用服务生成log_id
         String log_id = GenerateCodeFactory.getInnerTransactionId();
+        //String log_id = codeApi.generateCode("1000001");
 
         // 封装日志保存参数
         Map logMessageParams= new HashMap();
@@ -95,6 +100,8 @@ public class LogServiceSMOImpl extends BaseServiceSMO implements ILogServiceSMO 
         logMessageParams.put("responseMessage",responseMessageObj.getString("body"));
 
         logMessageParams.put("timestamp", DateUtil.getDefaultDateFromString(logMessageObj.getString("timestamp")));
+
+        logMessageParams.put("month",DateUtil.getCurrentMonth());
     }
 
     /**
@@ -122,6 +129,13 @@ public class LogServiceSMOImpl extends BaseServiceSMO implements ILogServiceSMO 
         Assert.hasKey(logMessageObj,"responseMessage","can not find responseMessage node ");
     }
 
+    public ICodeApi getCodeApi() {
+        return codeApi;
+    }
+
+    public void setCodeApi(ICodeApi codeApi) {
+        this.codeApi = codeApi;
+    }
 
     public LogServiceDao getLogServiceDaoImpl() {
         return logServiceDaoImpl;

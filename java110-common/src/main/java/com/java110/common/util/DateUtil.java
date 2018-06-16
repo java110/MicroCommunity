@@ -65,6 +65,15 @@ public class DateUtil {
     }
 
     /**
+     * 获取当前月
+     * @return
+     */
+    public static int getCurrentMonth(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH)+1;
+    }
+
+    /**
      * 获取未来时间
      * @param second 秒
      * @return

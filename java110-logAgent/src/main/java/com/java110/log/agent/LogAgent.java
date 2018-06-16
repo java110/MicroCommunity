@@ -77,7 +77,7 @@ public class LogAgent extends LoggerEngine{
         if(Assert.isJsonObject(body)){
             JSONObject bodyObj = JSONObject.parseObject(body);
 
-            Object codeNode = JSONPath.eval(body,"$.orders.response.code");
+            Object codeNode = JSONPath.eval(bodyObj,"$.orders.response.code");
             //判断订单是否成功
             if(codeNode != null && ResponseConstant.RESULT_CODE_SUCCESS.equals(codeNode.toString())){
                 //判断业务是否受理成功个，如果有一个业务受理失败，则认为失败

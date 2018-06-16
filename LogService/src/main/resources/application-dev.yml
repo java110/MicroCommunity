@@ -1,0 +1,92 @@
+jedis:
+  pool:
+    config:
+      maxTotal: 100
+      maxIdle: 20
+      maxWaitMillis: 20000
+    host: 192.168.31.199
+    port: 6379
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.31.199:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8004
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  application:
+    name: log-service
+  redis:
+    database: 0
+    host: 192.168.31.199
+    port: 6379
+    pool:
+      max-active: 300
+      max-wait: 10000
+      max-idle: 100
+      min-idle: 0
+      timeout: 0
+  datasource:
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    minIdle: 5
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    filters: stat,wall,log4j
+    poolPreparedStatements: true
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.31.199:3306/TT?useUnicode=true&characterEncoding=utf-8
+    maxPoolPreparedStatementPerConnectionSize: 20
+    password: TT@12345678
+    testOnBorrow: false
+    testWhileIdle: true
+    minEvictableIdleTimeMillis: 300000
+    timeBetweenEvictionRunsMillis: 60000
+    testOnReturn: false
+    driverClassName: com.mysql.jdbc.Driver
+    maxActive: 20
+    username: TT
+
+#============== kafka ===================
+kafka:
+  consumer:
+    zookeeper:
+      connect: 192.168.31.199:2181
+    servers: 192.168.31.199:9092
+    enable:
+      auto:
+        commit: true
+    session:
+      timeout: 6000
+    auto:
+      commit:
+        interval: 100
+      offset:
+        reset: latest
+    topic: test
+    group:
+      id: logService
+    concurrency: 10
+
+  producer:
+    zookeeper:
+      connect: 192.168.31.199:2181
+    servers: 192.168.31.199:9092
+    retries: 0
+    batch:
+      size: 4096
+    linger: 1
+    buffer:
+      memory: 40960

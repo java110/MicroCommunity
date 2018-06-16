@@ -317,6 +317,10 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     }
 
+    public void setPort(String port) {
+        this.port = port;
+    }
+
     public String getbId(){
         return null;
     }

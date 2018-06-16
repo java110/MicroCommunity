@@ -44,7 +44,7 @@ public class LogServiceKafka extends BaseController {
     @Autowired
     private ILogServiceSMO logServiceSMOImpl;
 
-    @KafkaListener(topics = {KafkaConstant.TOPIC_LOG_NAME})
+    @KafkaListener(topics = {"LOG"})
     public void listen(ConsumerRecord<?, ?> record) {
         logger.info("LogServiceKafka receive message: {}", record.value().toString());
         String logMessage = record.value().toString();

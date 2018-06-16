@@ -2,6 +2,7 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.DateUtil;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
 
     private final static Logger logger = LoggerFactory.getLogger(AbstractTransactionLog.class);
 
-    private String port;
+    protected String port;
 
     private String logStatus;
 
@@ -74,6 +75,10 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
 
     /**
      * 预构建
+     * 如果不是http方式请求构建的对象情况下 port 为 -1 请在创建完对象后
+     * 用这个
+     * ServiceInfoListener serviceInfoListener =  ApplicationContextFactory.getBean("serviceInfoListener",ServiceInfoListener.class);
+     * 对象刷一下 端口
      * @param reqInfo
      * @param headerAll
      */
@@ -81,8 +86,9 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
 
         if(headerAll != null && headerAll.containsKey("port")){
             this.port = headerAll.get("port");
+        }else{
+            this.port = "-1";
         }
-
     }
 
     /**
