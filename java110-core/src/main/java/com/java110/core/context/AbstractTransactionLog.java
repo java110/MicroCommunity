@@ -26,6 +26,8 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
 
     private String requestMessage;
 
+    private long costTime;
+
     private String responseMessage;
 
     public String getHostIp() {
@@ -61,6 +63,10 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
         return responseMessage;
     }
 
+    public long getCostTime() {
+        return costTime;
+    }
+
     @Override
     public String getPort() {
         return port;
@@ -83,12 +89,12 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
      * 重新构建 TransactionLog 对象 主要用于服务调用方
      * @return
      */
-    public TransactionLog reBuilder(String requestMessage,String responseMessage,String logStatus){
+    public TransactionLog reBuilder(String requestMessage,String responseMessage,String logStatus,long costTime){
 
         this.logStatus = logStatus;
         this.requestMessage = requestMessage;
         this.responseMessage = responseMessage;
-
+        this.costTime = costTime;
         return this;
     }
 
@@ -96,13 +102,14 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
      * 重新构建 TransactionLog 对象 主要用于服务提供方
      * @return
      */
-    public TransactionLog reBuilder(String appId,String userId,String requestMessage,String responseMessage,String logStatus){
+    public TransactionLog reBuilder(String appId,String userId,String requestMessage,String responseMessage,String logStatus,long costTime){
 
         this.logStatus = logStatus;
         this.requestMessage = requestMessage;
         this.responseMessage = responseMessage;
         this.setAppId(appId);
         this.setUserId(userId);
+        this.costTime = costTime;
         return this;
     }
 
@@ -121,6 +128,7 @@ public abstract class AbstractTransactionLog  implements TransactionLog {
         logMessage.put("serviceName",getServiceName());
         logMessage.put("timestamp",getTimestamp());
         logMessage.put("logStatus",getLogStatus());
+        logMessage.put("costTime",costTime);
         logMessage.put("requestMessage",getRequestMessage());
         logMessage.put("responseMessage",getResponseMessage());
         return logMessage.toJSONString(logMessage,SerializerFeature.WriteNullStringAsEmpty);

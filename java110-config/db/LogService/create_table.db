@@ -13,6 +13,7 @@ create table l_transaction_log(
     service_code varchar(50) comment '服务编码',
     service_name varchar(50) comment '服务名称',
     timestamp TIMESTAMP NOT NULL comment '日志交互时间，时间戳',
+    cost_time int not null default 0 comment '耗时',
     status_cd varchar(2) not null comment '交互状态 S 成功 F 失败',
     month INT NOT NULL default month(CURRENT_DATE) comment '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

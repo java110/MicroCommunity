@@ -7,9 +7,9 @@
     <!--保存日志-->
     <insert id="saveTransactionLog" parameterType="java.util.HashMap" >
         insert into l_transaction_log
-        (log_id,transaction_id,contract_id,ip,port,src_ip,src_port,app_id,user_id,service_code,service_name,timestamp,status_cd)
+        (log_id,transaction_id,contract_id,ip,port,src_ip,src_port,app_id,user_id,service_code,service_name,cost_time,timestamp,status_cd)
         values
-        (#{logId},#{transactionId},#{dataFlowId},#{ip},#{port},#{srcIp},#{srcPort},#{appId},#{userId},#{serviceCode},#{serviceName},#{timestamp},#{logStatus})
+        (#{logId},#{transactionId},#{dataFlowId},#{ip},#{port},#{srcIp},#{srcPort},#{appId},#{userId},#{serviceCode},#{serviceName},#{costTime},#{timestamp},#{logStatus})
     </insert>
 
     <!--保存日志（交互报文）-->

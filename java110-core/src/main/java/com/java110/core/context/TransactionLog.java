@@ -65,6 +65,12 @@ public interface TransactionLog extends Serializable {
     public String getLogStatus();
 
     /**
+     * 耗时
+     * @return
+     */
+    public long getCostTime();
+
+    /**
      * 接口请求消息
      * @return
      */
@@ -77,7 +83,7 @@ public interface TransactionLog extends Serializable {
      * 重新构建 TransactionLog 对象 主要用于服务调用方
      * @return
      */
-    public TransactionLog reBuilder(String appId,String userId,String requestMessage,String responseMessage,String logStatus);
+    public TransactionLog reBuilder(String appId,String userId,String requestMessage,String responseMessage,String logStatus,long costTime);
 
     /**
      * 重新构建 TransactionLog 对象 主要用于服务提供方
@@ -86,7 +92,7 @@ public interface TransactionLog extends Serializable {
      * @param logStatus 数据交互状态
      * @return
      */
-    public TransactionLog reBuilder(String requestMessage,String responseMessage,String logStatus);
+    public TransactionLog reBuilder(String requestMessage,String responseMessage,String logStatus,long costTime);
 
     /**
      * 转换成json模式

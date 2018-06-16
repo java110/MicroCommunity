@@ -53,8 +53,8 @@ public class LogAgent extends LoggerEngine{
      * @param logStatus 日志状态
      * @return
      */
-    public static boolean sendLog(DataFlow dataFlow,String requestMessage,String responseMessage,String logStatus){
-        return sendLog(dataFlow.reBuilder(requestMessage,responseMessage,logStatus));
+    public static boolean sendLog(DataFlow dataFlow,String requestMessage,String responseMessage,String logStatus,long costTime){
+        return sendLog(dataFlow.reBuilder(requestMessage,responseMessage,logStatus,costTime));
     }
 
     /**
@@ -68,7 +68,7 @@ public class LogAgent extends LoggerEngine{
      * @param responseMessage 返回数据
      * @return
      */
-    public static boolean sendLog(DataFlow dataFlow, JSONObject requestMessage, JSONObject responseMessage){
+    public static boolean sendLog(DataFlow dataFlow, JSONObject requestMessage, JSONObject responseMessage,long costTime){
         Assert.hasKey(responseMessage,"body","返回报文不满足 日志协议要求"+responseMessage.toJSONString());
 
         String body = responseMessage.getString("body");
@@ -82,21 +82,21 @@ public class LogAgent extends LoggerEngine{
             if(codeNode != null && ResponseConstant.RESULT_CODE_SUCCESS.equals(codeNode.toString())){
                 //判断业务是否受理成功个，如果有一个业务受理失败，则认为失败
                 if(!bodyObj.containsKey("business")){
-                    return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S);
+                    return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S,costTime);
                 }
 
                 if(bodyObj.get("business") instanceof JSONObject){
                     JSONObject businessObj = bodyObj.getJSONObject("business");
                     if(businessObj.containsKey("response")&&
                             ResponseConstant.RESULT_CODE_SUCCESS.equals(businessObj.getJSONObject("response").getString("code"))){
-                        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S);
+                        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S,costTime);
                     }
                 }
 
                 if(bodyObj.get("business") instanceof JSONArray){
                     JSONArray businessArrays = bodyObj.getJSONArray("business");
                     if(businessArrays == null || businessArrays.size() == 0){
-                        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S);
+                        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),LOG_STATUS_S,costTime);
                     }
 
                     logStatus = LOG_STATUS_S;
@@ -116,7 +116,7 @@ public class LogAgent extends LoggerEngine{
         if(ResponseConstant.RESULT_CODE_SUCCESS.equals(body)){
             logStatus = LOG_STATUS_S;
         }
-        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),logStatus);
+        return sendLog(dataFlow,requestMessage.toJSONString(),responseMessage.toJSONString(),logStatus,costTime);
     }
 
 

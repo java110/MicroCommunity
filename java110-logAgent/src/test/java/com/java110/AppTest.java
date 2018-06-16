@@ -26,7 +26,7 @@ public class AppTest
     @Test
     public void testDataFlow(){
         TransactionLog transactionLog = new DataFlow(new Date(),"0000");
-        transactionLog.reBuilder("234","234324","F");
+        transactionLog.reBuilder("234","234324","F",0);
 
         System.out.println(transactionLog.toString());
     }

@@ -133,21 +133,19 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 //添加耗时
                 //DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
 
-                //这里保存耗时，以及日志
-                saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
-                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()));
+
 
                 //保存耗时
                 //saveCostTimeLogMessage(dataFlow);
                 //处理返回报文鉴权
                 AuthenticationFactory.putSign(dataFlow, responseJson);
+                saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
+                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()),endDate.getTime()-dataFlow.getStartDate().getTime());
 
             }
             resJson = encrypt(responseJson.toJSONString(),headers);
-            /*LogAgent.sendLog(dataFlow.reBuilder(dataFlow.getTransactionId(),
-                            LogAgent.LOG_TYPE_C,DataTransactionFactory.isSuccessBusiness(responseJson)?
-                            LogAgent.LOG_STATUS_S:LogAgent.LOG_STATUS_F,
-                    dataFlow.getRequestURL(),responseJson.toJSONString(),headers));*/
+            //这里保存耗时，以及日志
+
             return resJson;
 
         }
@@ -216,7 +214,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
                 //这里保存耗时，以及日志
                 saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
-                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()));
+                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()),endDate.getTime()-dataFlow.getStartDate().getTime());
 
                 //保存耗时
                 saveCostTimeLogMessage(dataFlow);
@@ -581,13 +579,15 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         for(AppRoute appRoute :dataFlow.getAppRoutes()){
             for(Map completedBusiness : completedBusinesses){
                 if(completedBusiness.get("business_type_cd").equals(appRoute.getAppService().getBusinessTypeCd())){
+                    long startTime = DateUtil.getCurrentDate().getTime();
                     //发起撤单
                     KafkaFactory.sendKafkaMessage(appRoute.getAppService().getMessageQueueName(),"",
                             DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()).toJSONString());
                     //saveLogMessage(DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()),null);
 
                     saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),DataFlowFactory.getDeleteInstanceTableJson(dataFlow,completedBusiness,appRoute.getAppService()).toJSONString()),
-                            LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS));
+                            LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS),
+                            DateUtil.getCurrentDate().getTime() - startTime);
                 }
             }
         }
@@ -725,7 +725,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         }finally{
             DataFlowFactory.addCostTime(dataFlow, "receiveBusinessSystemNotifyMessage", "接受业务系统通知消息耗时", startDate);
             saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),dataFlow.getReqJson().toJSONString()),
-                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS));
+                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS),
+                    DateUtil.getCurrentDate().getTime() - dataFlow.getStartDate().getTime());
         }
     }
 
@@ -869,12 +870,14 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void notifyBusinessSystemSuccessMessage(DataFlow dataFlow) throws Exception{
 
+        long startTime = DateUtil.getCurrentDate().getTime();
         //拼装报文通知业务系统
         KafkaFactory.sendKafkaMessage(
                 DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",DataFlowFactory.getNotifyBusinessSuccessJson(dataFlow).toJSONString());
 
         saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),DataFlowFactory.getNotifyBusinessSuccessJson(dataFlow).toJSONString()),
-                LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS));
+                LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_SUCCESS),
+                DateUtil.getCurrentDate().getTime() - startTime);
     }
 
     /**
@@ -883,13 +886,14 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param dataFlow
      */
     private void notifyBusinessSystemErrorMessage(DataFlow dataFlow) throws Exception{
-
+        long startTime = DateUtil.getCurrentDate().getTime();
         //拼装报文通知业务系统
         KafkaFactory.sendKafkaMessage(
                 DataFlowFactory.getService(dataFlow,dataFlow.getBusinesses().get(0).getServiceCode()).getMessageQueueName(),"",
                 DataFlowFactory.getNotifyBusinessErrorJson(dataFlow).toJSONString());
         saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),DataFlowFactory.getNotifyBusinessErrorJson(dataFlow).toJSONString()),
-                LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_ERROR));
+                LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),ResponseConstant.RESULT_CODE_ERROR),
+                DateUtil.getCurrentDate().getTime() - startTime);
     }
 
     /**
@@ -982,7 +986,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"-doComplete耗时", businessStartDate);
             saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),requestBusinessJson.toJSONString()),
-                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()));
+                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()),
+                    DateUtil.getCurrentDate().getTime() - businessStartDate.getTime());
         }
 
     }
@@ -1012,7 +1017,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             updateBusinessStatusCdByBId(business.getbId(),StatusConstant.STATUS_CD_COMPLETE);
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),requestBusinessJson.toJSONString()),
-                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()));
+                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()),
+                    DateUtil.getCurrentDate().getTime() - businessStartDate.getTime());
         }
 
         if(dataFlow.getCurrentBusiness() == null){
@@ -1043,7 +1049,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             JSONObject responseJson = doRequestBusinessSystem(dataFlow, service, requestBusinessJson);
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"-撤单 耗时", businessStartDate);
             saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),requestBusinessJson.toJSONString()),
-                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()));
+                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),responseJson.toJSONString()),
+                    DateUtil.getCurrentDate().getTime() - businessStartDate.getTime());
         }
     }
 
@@ -1124,7 +1131,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
             DataFlowFactory.addCostTime(dataFlow, business.getServiceCode(), "调用"+business.getServiceName()+"耗时", businessStartDate);
             saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestCurrentHeaders(),dataFlow.getRequestBusinessJson().toJSONString()),
-                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),dataFlow.getResponseBusinessJson().toJSONString()));
+                    LogAgent.createLogMessage(dataFlow.getResponseCurrentHeaders(),dataFlow.getResponseBusinessJson().toJSONString()),
+                    DateUtil.getCurrentDate().getTime()-businessStartDate.getTime());
         }
     }
 
@@ -1156,7 +1164,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         dataFlow.setResponseBusinessJson(DataTransactionFactory.createOrderResponseJson(dataFlow.getTransactionId(),
                  ResponseConstant.RESULT_CODE_SUCCESS, "成功"));
         DataFlowFactory.addCostTime(dataFlow, "doSynchronousBusinesses", "异步调用业务系统总耗时", startDate);
-        saveLogMessage(dataFlow,dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson());
+        saveLogMessage(dataFlow,dataFlow.getRequestBusinessJson(),dataFlow.getResponseBusinessJson(),
+                DateUtil.getCurrentDate().getTime()-startDate.getTime());
     }
 
 
@@ -1173,8 +1182,8 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      *                     "body":""
      *                     }
      */
-    private void saveLogMessage(DataFlow dataFlow,JSONObject requestJson,JSONObject responseJson){
-            LogAgent.sendLog(dataFlow,requestJson,responseJson);
+    private void saveLogMessage(DataFlow dataFlow,JSONObject requestJson,JSONObject responseJson,long costTime){
+            LogAgent.sendLog(dataFlow,requestJson,responseJson,costTime);
     }
 
     /**
