@@ -173,6 +173,9 @@ public interface IUserServiceDao {
     public void saveBusinessUserAttr(Map userAttr) throws DAOException;
 
 
+
+
+
     public void saveUserInfoInstance(Map businessUser);
 
     public void saveUserAttrInstance(Map attrInstance);
@@ -212,4 +215,38 @@ public interface IUserServiceDao {
      * @throws DAOException
      */
     public List<Map> queryUserInfoAttrs(Map info) throws DAOException;
+
+
+    /**
+     * 保存用户地址信息
+     * Business 过程
+     * @param userAddress 用户地址信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserAddress(Map userAddress) throws DAOException;
+
+
+    /**
+     * 查询用户地址信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户地址信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserAddress(Map info) throws DAOException;
+
+    /**
+     * 保存Business 数据到 Instance
+     * @param businessUserAddress 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserAddressInstance(Map businessUserAddress) throws DAOException;
+
+
+    /**
+     * 作废用户信息数据
+     * @param businessUserAddress 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserAddressInstance(Map businessUserAddress) throws DAOException;
 }

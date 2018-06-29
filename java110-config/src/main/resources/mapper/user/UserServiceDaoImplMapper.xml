@@ -193,6 +193,8 @@
         </if>
     </update>
 
+
+
     <!-- 查询用户信息 Business -->
     <select id="queryBusinessUserInfo" parameterType="map" resultType="map">
         select u.user_id,u.name,u.email,u.address,u.password,u.location_cd,
@@ -258,5 +260,47 @@
     </select>
 
 
+    <!--保存用户地址信息 add by wuxw 2018-06-29 -->
+    <insert id="saveBusinessUserAddress" parameterType="map">
+        insert into business_user_address(address_id,b_id,user_id,tel,postal_code,address,is_default,operate)
+        values(#{addressId},#{b_id},#{userId},#{tel},#{postalCode},#{address},#{isDefault},#{operate})
+    </insert>
 
+
+    <!-- 查询用户地址信息 add by wuxw 2018-06-29-->
+    <select id="queryBusinessUserAddress" parameterType="map" resultType="map">
+        select ua.address_id,ua.b_id,ua.user_id,ua.tel,ua.postal_code,ua.address,ua.is_default,ua.operate
+        from business_user_address ua where 1 = 1
+        <if test="operate != null and operate != ''">
+            and ua.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and ua.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and ua.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 保存用户地址 Business 数据到 Instance add by wuxw 2018-06-29 -->
+    <insert id="saveUserAddressInstance" parameterType="map">
+        insert into u_user_address(address_id,b_id,user_id,tel,postal_code,address,is_default,status_cd)
+        select ua.address_id,ua.b_id,ua.user_id,ua.tel,ua.postal_code,ua.address,ua.is_default,'0'
+        from business_user_address ua where 1 = 1
+        ua.operate = 'ADD' and ua.b_id=#{b_id}
+    </insert>
+
+    <!-- 作废用户地址信息数据 add by wuxw 2018-06-29-->
+    <update id="updateUserAddressInstance" parameterType="map">
+        update u_user_address ua set ua.status_cd = #{statusCd} where 1 = 1
+        <if test="bId != null and bId != ''">
+            and ua.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and ua.user_id = #{userId}
+        </if>
+        <if test="addressId != null and addressId != ''">
+            and ua.address_id = #{addressId}
+        </if>
+    </update>
 </mapper>

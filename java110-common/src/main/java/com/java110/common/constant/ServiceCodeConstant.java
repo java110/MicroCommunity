@@ -69,6 +69,16 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_SAVE_USER_INFO = "save.user.info";
 
+    /**
+     * 保存用户地址信息
+     */
+    public static final String SERVICE_CODE_SAVE_USER_ADDRESS = "save.user.address";
+
+    /**
+     * 用户打标
+     */
+    public static final String SERVICE_CODE_SAVE_USER_TAG = "save.user.tag";
+
 
 
 

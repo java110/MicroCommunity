@@ -25,10 +25,6 @@
         "postalCode": "810504",
         "isDefault": "0"
       }
-    },
-    "attrs": [{
-      "specCd": "配置的字段ID",
-      "value": "具体值"
-    }]
+    }
   }]
 }

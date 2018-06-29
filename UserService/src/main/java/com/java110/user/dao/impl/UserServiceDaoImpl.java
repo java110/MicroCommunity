@@ -348,7 +348,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     @Override
     public void updateUserInfoInstance(Map businessUser) {
         LoggerEngine.debug("----【UserServiceDAOImpl.updateUserInfoInstance】保存数据入参 : " + JSONObject.toJSONString(businessUser));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.updateUserInfoInstance",businessUser);
+        int saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.updateUserInfoInstance",businessUser);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUser));
@@ -358,10 +358,25 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     @Override
     public void updateUserAttrInstance(Map attrInstance) {
         LoggerEngine.debug("----【UserServiceDAOImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(attrInstance));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.updateUserAttrInstance",attrInstance);
+        int saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.updateUserAttrInstance",attrInstance);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(attrInstance));
+        }
+    }
+
+    /**
+     * 保存用户地址信息
+     * Business 过程
+     * @param userAddress 用户地址信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserAddress(Map userAddress) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(userAddress));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserAddress",userAddress);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址数据失败："+JSONObject.toJSONString(userAddress));
         }
     }
 
@@ -423,5 +438,51 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
         LoggerEngine.debug("----【UserServiceDAOImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(info));
         List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDAOImpl.queryUserInfoAttrs",info);
         return userAttrs;
+    }
+
+
+    /**
+     * 查询用户地址信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户地址信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserAddress(Map info) throws DAOException{
+        Assert.notNull(info,"queryBusinessUserAddress 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDAOImpl.queryBusinessUserAddress",info);
+        if(users == null || users.size() == 0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 保存用户地址 Business 数据到 Instance
+     * @param businessUserAddress 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserAddressInstance(Map businessUserAddress) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveUserAddressInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserAddress));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveUserAddressInstance",businessUserAddress);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址Instance数据失败："+JSONObject.toJSONString(businessUserAddress));
+        }
+    }
+
+    /**
+     * 作废用户地址信息数据
+     * @param businessUserAddress 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserAddressInstance(Map businessUserAddress) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserAddressInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserAddress));
+        int saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.updateUserAddressInstance",businessUserAddress);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserAddress));
+        }
     }
 }
