@@ -1,13 +1,14 @@
 package com.java110.event.center;
 
 import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.core.context.DataFlow;
+import com.java110.event.center.event.DataFlowEvent;
+import com.java110.event.center.event.DataPreValidateEvent;
+import com.java110.event.center.event.ReceiveRequestEvent;
+import com.java110.event.center.listener.DataFlowListener;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
     /**
      * 保存事件实例信息，一般启动时加载
      */
-    private final static Map<String,Class<DataFlowEvent>> events = new HashMap<String,Class<DataFlowEvent>>();
+   /* private final static Map<String,Class<DataFlowEvent>> events = new HashMap<String,Class<DataFlowEvent>>();*/
 
     /**
      * 根据 事件类型查询侦听
@@ -51,7 +52,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 添加 侦听，这个只有启动时，单线程 处理，所以是线程安全的
      * @param listener
      */
-    public static void addListenner(DataFlowListener<?> listener){
+    public static void addListener(DataFlowListener<?> listener){
         listeners.add(listener);
     }
 
@@ -59,7 +60,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 获取侦听（全部侦听）
      * @return
      */
-    public static List<DataFlowListener<?>> getListeners(){
+    private static List<DataFlowListener<?>> getListeners(){
         return listeners;
     }
 
@@ -69,7 +70,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * @since 1.8
      * @return
      */
-    public static List<DataFlowListener<?>> getListeners(String interfaceClassName){
+    private static List<DataFlowListener<?>> getListeners(String interfaceClassName){
 
         Assert.isNull(interfaceClassName,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
 
@@ -104,9 +105,9 @@ public class DataFlowEventPublishing extends LoggerEngine {
     /**
      * 注册事件
      */
-    public static void addEvent(String serviceCode ,Class<DataFlowEvent> event) {
+    /*public static void addEvent(String serviceCode ,Class<DataFlowEvent> event) {
         events.put(serviceCode,event);
-    }
+    }*/
 
     /**
      * 获取事件
@@ -114,57 +115,33 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * @return
      * @throws Exception
      */
-    public static Class<DataFlowEvent> getEvent(String serviceCode) throws BusinessException{
+    /*public static Class<DataFlowEvent> getEvent(String serviceCode) throws BusinessException{
         Class<DataFlowEvent> targetEvent = events.get(serviceCode);
         //Assert.notNull(targetEvent,"改服务未注册该事件[serviceCode = "+serviceCode+"]，系统目前不支持!");
         return targetEvent;
-    }
+    }*/
 
 
     /**
      * 发布事件
-     * @param serviceCode
-     * @param dataFlow
+     * @param event 事件
      */
-    public static void multicastEvent(String serviceCode,DataFlow dataFlow) throws BusinessException{
+   /* public static void multicastEvent(String serviceCode,DataFlow dataFlow) throws BusinessException{
         multicastEvent(serviceCode,dataFlow,null);
+    }*/
+
+    private static void multicastEvent(final DataFlowEvent event) throws BusinessException{
+        multicastEvent(event,"S");
     }
-
-    /**
-     * 发布事件
-     * @param serviceCode
-     * @param dataFlow 这个订单信息，以便于 侦听那边需要用
-     */
-    public static void multicastEvent(String serviceCode,DataFlow dataFlow,String asyn) throws  BusinessException{
-        try {
-            Class<DataFlowEvent> dataFlowEventClass = getEvent(serviceCode);
-
-            if(dataFlowEventClass == null){
-                return ;
-            }
-
-            Class[] parameterTypes = {Object.class, DataFlow.class};
-
-            Constructor constructor = dataFlowEventClass.getClass().getConstructor(parameterTypes);
-            Object[] parameters = {null, dataFlow};
-            DataFlowEvent targetDataFlowEvent = (DataFlowEvent) constructor.newInstance(parameters);
-            multicastEvent(targetDataFlowEvent, asyn);
-        }catch (Exception e){
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"发布侦听失败，失败原因为："+e);
-        }
-
-    }
-
-
-
 
     /**
      * 发布事件
      * @param event
      * @param asyn A 表示异步处理
      */
-    public static void multicastEvent(final DataFlowEvent event, String asyn) {
-        for (final DataFlowListener<?> listener : getListeners(event.getClass().getName())) {
+    private static void multicastEvent(final DataFlowEvent event, String asyn) {
+
+        for (final DataFlowListener<?> listener :  getListeners(event.getClass().getName())) {
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 
@@ -208,4 +185,26 @@ public class DataFlowEventPublishing extends LoggerEngine {
             throw new RuntimeException("发布侦听失败,"+listener+ event + e);
         }
     }
+
+
+    /***********************************************发布侦听 开始***************************************************************/
+    /**
+     * 发布接受请求事件
+     * @param requestData
+     * @param headers
+     */
+    public static void receiveRequest(String requestData,Map<String,String> headers){
+        multicastEvent(new ReceiveRequestEvent("",null,requestData,headers));
+    }
+
+    /**
+     * 发布预校验侦听
+     * @param requestData
+     * @param headers
+     */
+    public static void preValidateData(String requestData,Map<String,String> headers){
+        multicastEvent(new DataPreValidateEvent("",null,requestData,headers));
+    }
+
+    /***********************************************发布侦听 结束***************************************************************/
 }

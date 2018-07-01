@@ -365,20 +365,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
         }
     }
 
-    /**
-     * 保存用户地址信息
-     * Business 过程
-     * @param userAddress 用户地址信息
-     * @throws DAOException
-     */
-    public void saveBusinessUserAddress(Map userAddress) throws DAOException{
-        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(userAddress));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserAddress",userAddress);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址数据失败："+JSONObject.toJSONString(userAddress));
-        }
-    }
 
     /**
      * 查询用户信息
@@ -440,6 +427,20 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
         return userAttrs;
     }
 
+    /**
+     * 保存用户地址信息
+     * Business 过程
+     * @param userAddress 用户地址信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserAddress(Map userAddress) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(userAddress));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserAddress",userAddress);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址数据失败："+JSONObject.toJSONString(userAddress));
+        }
+    }
 
     /**
      * 查询用户地址信息
@@ -483,6 +484,132 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserAddress));
+        }
+    }
+
+
+    /**
+     * 保存用户打标信息
+     * Business 过程
+     * @param userTag 用户打标信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserTag(Map userTag) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserTag】保存数据入参 : " + JSONObject.toJSONString(userTag));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserTag",userTag);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标数据失败："+JSONObject.toJSONString(userTag));
+        }
+    }
+
+
+    /**
+     * 查询用户打标信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户打标信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserTag(Map info) throws DAOException{
+        Assert.notNull(info,"queryBusinessUserTag 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBusinessUserTag】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDAOImpl.queryBusinessUserTag",info);
+        if(users == null || users.size() == 0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 保存Business 数据到 Instance
+     * @param businessUserTag 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserTagInstance(Map businessUserTag) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveUserTagInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserTag));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveUserTagInstance",businessUserTag);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标Instance数据失败："+JSONObject.toJSONString(businessUserTag));
+        }
+    }
+
+
+    /**
+     * 作废用户打标数据
+     * @param businessUserTag 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserTagInstance(Map businessUserTag) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserTagInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserTag));
+        int saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.updateUserTagInstance",businessUserTag);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserTag));
+        }
+    }
+
+
+    /**
+     * 保存用户证件信息
+     * Business 过程
+     * @param userCredentials 用户证件信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserCredentials(Map userCredentials) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveBusinessUserCredentials】保存数据入参 : " + JSONObject.toJSONString(userCredentials));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveBusinessUserCredentials",userCredentials);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标数据失败："+JSONObject.toJSONString(userCredentials));
+        }
+    }
+
+
+    /**
+     * 查询用户证件信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户打标信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserCredentials(Map info) throws DAOException{
+        Assert.notNull(info,"queryBusinessUserCredentials 的参数不能为空");
+        LoggerEngine.debug("----【UserServiceDAOImpl.queryBusinessUserCredentials】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDAOImpl.queryBusinessUserCredentials",info);
+        if(users == null || users.size() == 0){
+            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 保存Business 数据到 Instance
+     * @param businessUserCredentials 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserCredentialsInstance(Map businessUserCredentials) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.saveUserCredentialsInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserCredentials));
+        int saveFlag = sqlSessionTemplate.insert("userServiceDAOImpl.saveUserCredentialsInstance",businessUserCredentials);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标Instance数据失败："+JSONObject.toJSONString(businessUserCredentials));
+        }
+    }
+
+
+    /**
+     * 作废用户证件数据
+     * @param businessUserCredentials 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserCredentialsInstance(Map businessUserCredentials) throws DAOException{
+        LoggerEngine.debug("----【UserServiceDAOImpl.updateUserCredentialsInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserCredentials));
+        int saveFlag = sqlSessionTemplate.update("userServiceDAOImpl.updateUserCredentialsInstance",businessUserCredentials);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserCredentials));
         }
     }
 }

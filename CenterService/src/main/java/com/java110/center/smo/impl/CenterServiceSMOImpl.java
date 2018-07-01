@@ -67,6 +67,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         try {
             reqJson = decrypt(reqJson,headers);
+            DataFlowEventPublishing.preValidateData(reqJson,headers);
             //1.0 创建数据流
             dataFlow = DataFlowFactory.newInstance(DataFlow.class).builder(reqJson, headers);
 
@@ -1134,7 +1135,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
             dataFlow.setResponseBusinessJson(responseJson);
             //发布事件
-            DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
+            //DataFlowEventPublishing.multicastEvent(service.getServiceCode(),dataFlow);
 
             responseBusinesses.add(dataFlow.getResponseBusinessJson());
 

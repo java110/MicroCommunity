@@ -109,7 +109,7 @@ create table u_user_address(
 );
 -- 用户标签
 create table business_user_tag(
-    id VARCHAR(30) NOT NULL COMMENT 'Id',
+    tag_id VARCHAR(30) NOT NULL COMMENT '打标ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     tag_cd VARCHAR(12) NOT NULL COMMENT '标签编码,参考tag表',
@@ -121,11 +121,11 @@ create table business_user_tag(
 
 -- 用户标签
 create table u_user_tag(
-    id VARCHAR(30) NOT NULL COMMENT 'Id',
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    tag_id VARCHAR(30) NOT NULL COMMENT '打标ID',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     tag_cd VARCHAR(12) NOT NULL COMMENT '标签编码,参考tag表',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    tag_count int not null default 1 comment '打标数量',
     remark VARCHAR(200) COMMENT '备注',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0在用，1失效'
@@ -140,10 +140,35 @@ create table tag(
     description VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
 );
-
--- 管理员表
-create business_manage(
-
+-- 用户证件 表（过程表）
+create table business_user_credentials(
+    credentials_id VARCHAR(30) NOT NULL COMMENT '证件ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    credentials_cd varchar(12) not null comment '证件类型',
+    value varchar(50) not null  comment '证件号码',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
 );
 
 
+-- 用户证件表
+create table u_user_credentials(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    credentials_id VARCHAR(30) NOT NULL COMMENT '证件ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    credentials_cd varchar(12) not null comment '证件类型',
+    value varchar(50) not null  comment '证件号码',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0在用，1失效'
+);
+
+-- 标签
+create table credentials(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    credentials_cd VARCHAR(12) NOT NULL COMMENT '证件编码',
+    `name` VARCHAR(50) NOT NULL COMMENT '证件名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);

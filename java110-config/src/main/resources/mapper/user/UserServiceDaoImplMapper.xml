@@ -263,7 +263,7 @@
     <!--保存用户地址信息 add by wuxw 2018-06-29 -->
     <insert id="saveBusinessUserAddress" parameterType="map">
         insert into business_user_address(address_id,b_id,user_id,tel,postal_code,address,is_default,operate)
-        values(#{addressId},#{b_id},#{userId},#{tel},#{postalCode},#{address},#{isDefault},#{operate})
+        values(#{addressId},#{bId},#{userId},#{tel},#{postalCode},#{address},#{isDefault},#{operate})
     </insert>
 
 
@@ -301,6 +301,97 @@
         </if>
         <if test="addressId != null and addressId != ''">
             and ua.address_id = #{addressId}
+        </if>
+    </update>
+
+
+    <!--保存用户打标信息 add by wuxw 2018-06-29 -->
+    <insert id="saveBusinessUserTag" parameterType="map">
+        insert into business_user_tag(tag_id,b_id,user_id,tag_cd,remark,operate)
+        values(#{tagId},#{bId},#{userId},#{tagCd},#{remark},#{operate})
+    </insert>
+
+
+    <!-- 查询用户地址信息 add by wuxw 2018-06-29-->
+    <select id="queryBusinessUserTag" parameterType="map" resultType="map">
+        select ut.tag_id,ut.b_id,ut.user_id,ut.tag_cd,ut.remark,ut.operate
+        from business_user_tag ut where 1 = 1
+        <if test="operate != null and operate != ''">
+            and ut.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and ut.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and ut.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 保存用户地址 Business 数据到 Instance add by wuxw 2018-06-29 -->
+    <insert id="saveUserTagInstance" parameterType="map">
+        insert into u_user_tag(tag_id,b_id,user_id,tag_cd,remark,status_cd)
+        select ut.tag_id,ut.b_id,ut.user_id,ut.tag_cd,ut.remark,'0'
+        from business_user_tag ut where 1 = 1
+        ut.operate = 'ADD' and ut.b_id=#{b_id}
+    </insert>
+
+    <!-- 作废用户地址信息数据 add by wuxw 2018-06-29-->
+    <update id="updateUserTagInstance" parameterType="map">
+        update u_user_tag ut set ut.status_cd = #{statusCd} where 1 = 1
+        <if test="bId != null and bId != ''">
+            and ut.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and ut.user_id = #{userId}
+        </if>
+        <if test="addressId != null and addressId != ''">
+            and ut.address_id = #{tagId}
+        </if>
+    </update>
+
+
+
+    <!--保存用户证件信息 add by wuxw 2018-06-29 -->
+    <insert id="saveBusinessUserCredentials" parameterType="map">
+        insert into business_user_credentials(credentials_id,b_id,user_id,credentials_cd,value,operate)
+        values(#{credentialsId},#{bId},#{userId},#{credentialsCd},#{value},#{operate})
+    </insert>
+
+
+    <!-- 查询用户地址信息 add by wuxw 2018-06-29-->
+    <select id="queryBusinessUserCredentials" parameterType="map" resultType="map">
+        select uc.credentials_id,uc.b_id,uc.user_id,uc.credentials_cd,uc.value,uc.operate
+        from business_user_credentials uc where 1 = 1
+        <if test="operate != null and operate != ''">
+            and uc.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and uc.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and uc.user_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 保存用户地址 Business 数据到 Instance add by wuxw 2018-06-29 -->
+    <insert id="saveUserCredentialsInstance" parameterType="map">
+        insert into u_user_credentials(credentials_id,b_id,user_id,credentials_cd,value,status_cd)
+        select uc.credentials_id,uc.b_id,uc.user_id,uc.credentials_cd,uc.value,'0'
+        from business_user_credentials uc where 1 = 1
+        uc.operate = 'ADD' and uc.b_id=#{b_id}
+    </insert>
+
+    <!-- 作废用户地址信息数据 add by wuxw 2018-06-29-->
+    <update id="updateUserCredentialsInstance" parameterType="map">
+        update u_user_credentials uc set uc.status_cd = #{statusCd} where 1 = 1
+        <if test="bId != null and bId != ''">
+            and uc.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId !=''">
+            and uc.user_id = #{userId}
+        </if>
+        <if test="addressId != null and addressId != ''">
+            and uc.credentials_id = #{credentialsId}
         </if>
     </update>
 </mapper>

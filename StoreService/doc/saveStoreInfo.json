@@ -1,0 +1,58 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "save.store.info",
+    "serviceName": "保存商户信息",
+    "remark": "备注",
+    "datas": {
+      "businessStore": {
+        "storeId": "-1",
+        "userId": "用户ID",
+        "name": "齐天超时（王府井店）",
+        "address": "青海省西宁市城中区129号",
+        "password": "ERCBHDUYFJDNDHDJDNDJDHDUDHDJDDKDK",
+        "tel": "15897089471",
+        "storeTypeCd": "M",
+        "nearbyLandmarks": "王府井内",
+        "mapX": "101.801909",
+        "mapY": "36.597263",
+        "businessStoreAttr": [{
+          "attrId":"-1",
+          "specCd":"1001",
+          "value":"01"
+        }]
+      },
+      "businessStorePhoto":[{
+        "storePhotoId":"-1",
+        "storeId":"-1",
+        "storePhotoTypeCd":"T",
+        "photo":"12345678.jpg"
+      }],
+      "businessStoreCerdentials":[{
+        "storeCerdentialsId":"-1",
+        "storeId":"-1",
+        "credentialsCd":"1",
+        "value":"632126XXXXXXXX2011",
+        "validityPeriod":"有效期，长期有效请写3000/01/01",
+        "positivePhoto":"正面照片地址，1234567.jpg",
+        "negativePhoto":"反面照片地址，没有不填写"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

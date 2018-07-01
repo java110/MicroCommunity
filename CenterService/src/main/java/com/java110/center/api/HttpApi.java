@@ -7,6 +7,7 @@ import com.java110.common.exception.BusinessException;
 import com.java110.common.util.Assert;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
+import com.java110.event.center.DataFlowEventPublishing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,8 @@ public class HttpApi extends BaseController {
         try {
             Map<String, String> headers = new HashMap<String, String>();
             getRequestInfo(request, headers);
+            //接受请求事件
+            DataFlowEventPublishing.receiveRequest(orderInfo,headers);
             //预校验
             preValiateOrderInfo(orderInfo);
             return centerServiceSMOImpl.service(orderInfo, headers);

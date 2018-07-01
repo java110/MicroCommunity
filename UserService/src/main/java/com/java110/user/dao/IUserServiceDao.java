@@ -249,4 +249,73 @@ public interface IUserServiceDao {
      * @throws DAOException 数据处理异常
      */
     public void updateUserAddressInstance(Map businessUserAddress) throws DAOException;
+
+
+    /**
+     * 保存用户打标信息
+     * Business 过程
+     * @param userTag 用户打标信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserTag(Map userTag) throws DAOException;
+
+
+    /**
+     * 查询用户打标信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户打标信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserTag(Map info) throws DAOException;
+
+    /**
+     * 保存Business 数据到 Instance
+     * @param businessUserTag 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserTagInstance(Map businessUserTag) throws DAOException;
+
+
+    /**
+     * 作废用户打标数据
+     * @param businessUserTag 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserTagInstance(Map businessUserTag) throws DAOException;
+
+
+
+    /**
+     * 保存用户证件信息
+     * Business 过程
+     * @param userCredentials 用户证件信息
+     * @throws DAOException
+     */
+    public void saveBusinessUserCredentials(Map userCredentials) throws DAOException;
+
+
+    /**
+     * 查询用户证件信息
+     * business 过程
+     * @param info b_id
+     * @return 查询到的用户打标信息
+     * @throws DAOException
+     */
+    public Map queryBusinessUserCredentials(Map info) throws DAOException;
+
+    /**
+     * 保存Business 数据到 Instance
+     * @param businessUserCredentials 从business 中查出的数据
+     * @throws DAOException 数据处理异常
+     */
+    public void saveUserCredentialsInstance(Map businessUserCredentials) throws DAOException;
+
+
+    /**
+     * 作废用户证件数据
+     * @param businessUserCredentials 用户地址信息 b_id
+     * @throws DAOException 数据处理异常
+     */
+    public void updateUserCredentialsInstance(Map businessUserCredentials) throws DAOException;
 }

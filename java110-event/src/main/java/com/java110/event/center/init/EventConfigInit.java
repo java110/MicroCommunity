@@ -3,7 +3,7 @@ package com.java110.event.center.init;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.event.app.AppEventPublishing;
 import com.java110.event.center.DataFlowEventPublishing;
-import com.java110.event.center.DataFlowListener;
+import com.java110.event.center.listener.DataFlowListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -33,10 +33,6 @@ public class EventConfigInit {
      */
     private final static String DATAFLOW_LISTENER = "java110.event.properties.centerServiceListener";
 
-    /**
-     * 订单调度事件
-     */
-    private final static String DISPATCH_EVENT = "java110.event.properties.centerServiceEvent";
 
 
     public static void initSystemConfig(){
@@ -46,9 +42,6 @@ public class EventConfigInit {
             Properties properties = load(DEFAULT_EVENT_PATH,DEFAULT_FILE_NAME);
 
             registerListener(properties);
-
-            //注册事件
-            registerEvent(properties);
 
         }
         catch (Exception ex) {
@@ -83,36 +76,11 @@ public class EventConfigInit {
 
             //将 listener 放入 AppEventPublishing 中方便后期操作
             //注册侦听
-            DataFlowEventPublishing.addListenner(dataFlowListener);
+            DataFlowEventPublishing.addListener(dataFlowListener);
         }
     }
 
-    /**
-     * 注册事件
-     * @param properties
-     * @throws Exception
-     */
-    private static void registerEvent(Properties properties) throws Exception{
-        String[] events = properties.getProperty(DISPATCH_EVENT).split("\\,");
 
-        for (String event : events){
-
-            if(StringUtils.isBlank(event) || !event.contains("::")){
-                throw new ConfigurationException("配置错误，["+DISPATCH_EVENT+"= "+events+"] 当前 [event = "+event+"],不存在 :: ,配置格式为 A::B");
-            }
-
-            String[] tmpEvent = event.split("::");
-
-            if(tmpEvent.length > 2){
-                throw new ConfigurationException("配置错误，["+DISPATCH_EVENT+"= "+events+"] 当前 [event = "+event+"],只能有一个 :: ,配置格式为 A::B");
-            }
-
-            Class clazz = Class.forName(tmpEvent[1]);
-
-            AppEventPublishing.addEvent(tmpEvent[0],clazz);
-        }
-
-    }
 
 
 }

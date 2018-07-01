@@ -80,6 +80,12 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_USER_TAG = "save.user.tag";
 
 
+    /**
+     * 用户证件
+     */
+    public static final String SERVICE_CODE_SAVE_USER_CREDENTIALS = "save.user.credentials";
+
+
 
 
 }

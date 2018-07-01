@@ -21,7 +21,7 @@
         <module>java110-core</module>
         <module>java110-service</module>
         <module>CodeService</module>
-        <module>MerchantService</module>
+        <module>StoreService</module>
         <module>RuleService</module>
         <module>SimpleListenerService</module>
         <module>java110-event</module>
