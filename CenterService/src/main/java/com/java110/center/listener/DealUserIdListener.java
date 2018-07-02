@@ -1,19 +1,21 @@
-package com.java110.event.center.listener;
+package com.java110.center.listener;
 
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.ListenerExecuteException;
+import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlow;
 import com.java110.event.app.order.Ordered;
 import com.java110.event.center.event.InvokeBusinessSystemEvent;
+import com.java110.event.center.listener.DataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * 用户ID处理 侦听
  * Created by wuxw on 2018/7/2.
  */
-@Component
+//@Component
+@Java110Listener(name="dealUserIdListener")
 public class DealUserIdListener implements DataFlowListener<InvokeBusinessSystemEvent>,Ordered {
 
     private final static Logger logger = LoggerFactory.getLogger(DealUserIdListener.class);

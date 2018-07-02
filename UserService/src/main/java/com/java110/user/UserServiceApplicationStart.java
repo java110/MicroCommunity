@@ -1,5 +1,8 @@
 package com.java110.user;
 
+import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.event.center.DataFlowEventPublishing;
+import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.event.service.init.SystemStartLoadBusinessConfigure;
 import com.java110.service.init.ServiceStartInit;
 import org.apache.catalina.Context;
@@ -32,6 +35,8 @@ import java.nio.charset.Charset;
  */
 @SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.user","com.java110.core","com.java110.cache"})
 @EnableDiscoveryClient
+@Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
+        basePackages = {"com.java110.user.listener"})
 public class UserServiceApplicationStart {
 
     private final static String LISTENER_PATH = "java110.UserService.listeners";
@@ -52,6 +57,6 @@ public class UserServiceApplicationStart {
         ApplicationContext context = SpringApplication.run(UserServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
         //加载业务侦听
-        SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+       // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
     }
 }

@@ -3,6 +3,7 @@ package com.java110.event.service;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.context.DataFlowContext;
@@ -29,7 +30,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
     /**
      * 保存侦听实例信息，一般启动时加载
      */
-    private final static List<BusinessServiceDataFlowListener> listeners = new ArrayList<BusinessServiceDataFlowListener>();
+    private final static List<String> listeners = new ArrayList<String>();
 
     /**
      * 根据 事件类型查询侦听
@@ -40,7 +41,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      * 添加 侦听，这个只有启动时，单线程 处理，所以是线程安全的
      * @param listener
      */
-    public static void addListenner(BusinessServiceDataFlowListener listener){
+    public static void addListener(String listener){
         listeners.add(listener);
     }
 
@@ -48,7 +49,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      * 获取侦听（全部侦听）
      * @return
      */
-    public static List<BusinessServiceDataFlowListener> getListeners(){
+    public static List<String> getListeners(){
         return listeners;
     }
 
@@ -68,7 +69,8 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
         }
 
         List<BusinessServiceDataFlowListener> dataFlowListeners = new ArrayList<BusinessServiceDataFlowListener>();
-        for(BusinessServiceDataFlowListener listener : getListeners()){
+        for(String listenerBeanName : getListeners()){
+            BusinessServiceDataFlowListener listener = ApplicationContextFactory.getBean(listenerBeanName,BusinessServiceDataFlowListener.class);
             if(serviceCode.equals(listener.getServiceCode())){
                 dataFlowListeners.add(listener);
             }

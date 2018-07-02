@@ -2,11 +2,11 @@ package com.java110.event.center;
 
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.exception.BusinessException;
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.event.center.event.DataFlowEvent;
-import com.java110.event.center.event.DataPreValidateEvent;
-import com.java110.event.center.event.ReceiveRequestEvent;
+import com.java110.core.context.DataFlow;
+import com.java110.event.center.event.*;
 import com.java110.event.center.listener.DataFlowListener;
 
 import java.lang.reflect.ParameterizedType;
@@ -32,7 +32,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
     /**
      * 保存侦听实例信息，一般启动时加载
      */
-    private final static List<DataFlowListener<?>> listeners = new ArrayList<DataFlowListener<?>>();
+    private final static List<String> listeners = new ArrayList<String>();
 
     /**
      * 保存事件实例信息，一般启动时加载
@@ -52,15 +52,25 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 添加 侦听，这个只有启动时，单线程 处理，所以是线程安全的
      * @param listener
      */
-    public static void addListener(DataFlowListener<?> listener){
+    /*public static void addListener(DataFlowListener<?> listener){
         listeners.add(listener);
+    }*/
+
+    /**
+     * 注解注册侦听
+     * @param listenerBeanName
+     */
+    public static void addListener(String listenerBeanName){
+        //将 listener 放入 AppEventPublishing 中方便后期操作
+        //注册侦听
+        listeners.add(listenerBeanName);
     }
 
     /**
      * 获取侦听（全部侦听）
      * @return
      */
-    private static List<DataFlowListener<?>> getListeners(){
+    private static List<String> getListeners(){
         return listeners;
     }
 
@@ -72,7 +82,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      */
     private static List<DataFlowListener<?>> getListeners(String interfaceClassName){
 
-        Assert.isNull(interfaceClassName,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
+        Assert.hasLength(interfaceClassName,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
 
         //先从缓存中获取，为了提升效率
         if(cacheListenersMap.containsKey(interfaceClassName)){
@@ -80,7 +90,9 @@ public class DataFlowEventPublishing extends LoggerEngine {
         }
 
         List<DataFlowListener<?>> dataFlowListeners = new ArrayList<DataFlowListener<?>>();
-        for(DataFlowListener<?> listener : getListeners()){
+
+        for(String listenerBeanName : getListeners()){
+            DataFlowListener<?> listener = ApplicationContextFactory.getBean(listenerBeanName,DataFlowListener.class);
             Type[] types =  listener.getClass().getGenericInterfaces();
             for (Type type : types) {
                 if (type instanceof ParameterizedType) {
@@ -141,7 +153,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      */
     private static void multicastEvent(final DataFlowEvent event, String asyn) {
 
-        for (final DataFlowListener<?> listener :  getListeners(event.getClass().getName())) {
+            for (final DataFlowListener<?> listener :  getListeners(event.getClass().getName())) {
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 
@@ -204,6 +216,47 @@ public class DataFlowEventPublishing extends LoggerEngine {
      */
     public static void preValidateData(String requestData,Map<String,String> headers){
         multicastEvent(new DataPreValidateEvent("",null,requestData,headers));
+    }
+
+    /**
+     * 初始化 DataFlow 对象完成
+     * @param dataFlow 数据流对象
+     */
+    public static void initDataFlowComplete(DataFlow dataFlow){
+        multicastEvent(new DataFlowInitCompleteEvent("",dataFlow));
+    }
+
+    /**
+     * 规则校验完成事件
+     * @param dataFlow 数据流对象
+     */
+    public static void ruleValidateComplete(DataFlow dataFlow){
+        multicastEvent(new RuleValidateCompleteEvent("",dataFlow));
+    }
+
+    /**
+     * 加载配置文件完成
+     * @param dataFlow 数据流对象
+     */
+    public static void loadConfigDataComplete(DataFlow dataFlow){
+        multicastEvent(new LoadConfigDataCompleteEvent("",dataFlow));
+    }
+
+
+    /**
+     * 调用业务系统事件
+     * @param dataFlow 数据流
+     */
+    public static void invokeBusinessSystem(DataFlow dataFlow){
+        multicastEvent(new InvokeBusinessSystemEvent("",dataFlow));
+    }
+
+    /**
+     * 数据返回事件
+     * @param dataFlow 数据流
+     */
+    public static void dataResponse(DataFlow dataFlow,String responseData,Map<String,String> headers){
+        multicastEvent(new DataResponseEvent("",dataFlow,responseData,headers));
     }
 
     /***********************************************发布侦听 结束***************************************************************/

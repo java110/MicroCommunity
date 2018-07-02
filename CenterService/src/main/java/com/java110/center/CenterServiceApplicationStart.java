@@ -2,6 +2,8 @@ package com.java110.center;
 
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.event.center.init.EventConfigInit;
 import com.java110.service.init.ServiceStartInit;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +31,8 @@ import java.nio.charset.Charset;
 @SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.center","com.java110.core","com.java110.event.center","com.java110.cache"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
+@Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
+        basePackages = {"com.java110.center.listener"})
 public class CenterServiceApplicationStart {
 
     /**
@@ -61,7 +65,7 @@ public class CenterServiceApplicationStart {
         ServiceStartInit.initSystemConfig(context);
 
         //加载事件数据
-        EventConfigInit.initSystemConfig();
+        //EventConfigInit.initSystemConfig();
 
         //刷新缓存
         flushMainCache(args);

@@ -1,4 +1,4 @@
-package com.java110.user.listener;
+package com.java110.store.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,15 +8,14 @@ import com.java110.common.constant.StatusConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
 import com.java110.event.service.BusinessServiceDataFlowListener;
-import com.java110.user.dao.IUserServiceDao;
+import com.java110.store.dao.IStoreServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -27,12 +26,12 @@ import java.util.Map;
  * 保存 用户信息 侦听
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("saveUserInfoListener")
+@Java110Listener("saveStoreInfoListener")
 @Transactional
-public class SaveUserInfoListener extends LoggerEngine implements BusinessServiceDataFlowListener{
+public class SaveStoreInfoListener extends LoggerEngine implements BusinessServiceDataFlowListener{
 
     @Autowired
-    IUserServiceDao userServiceDaoImpl;
+    IStoreServiceDao storeServiceDaoImpl;
 
     @Override
     public int getOrder() {
@@ -41,7 +40,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_SAVE_STORE_INFO;
     }
 
     @Override
@@ -75,31 +74,31 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
      */
     private void doDeleteInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
 
-        String bId = business.getbId();
+        /*String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
         info.put("bId",bId);
-        Map userInfo = userServiceDaoImpl.queryUserInfo(info);
+        Map userInfo = storeServiceDaoImpl.queryUserInfo(info);
         if(userInfo != null && !userInfo.isEmpty()){
             info.put("bId",bId);
             info.put("userId",userInfo.get("user_id").toString());
             info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserInfoInstance(userInfo);
+            storeServiceDaoImpl.updateUserInfoInstance(userInfo);
             dataFlowContext.addParamOut("userId",userInfo.get("user_id"));
         }
 
         info.clear();
         info.put("bId",bId);
 
-        List<Map> userAttrs = userServiceDaoImpl.queryUserInfoAttrs(info);
+        List<Map> userAttrs = storeServiceDaoImpl.queryUserInfoAttrs(info);
 
         if(userAttrs != null && userAttrs.size() >0){
             info.put("bId",bId);
             //info.put("userId",userInfo.get("user_id").toString());
             info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserAttrInstance(info);
+            storeServiceDaoImpl.updateUserAttrInstance(info);
         }
-
+*/
 
     }
 
@@ -116,18 +115,18 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
         //Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
 
         //JSONObject businessUser = data.getJSONObject("businessUser");
-        Map info = new HashMap();
+       /* Map info = new HashMap();
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
-        Map businessUser = userServiceDaoImpl.queryBusinessUserInfo(info);
+        Map businessUser = storeServiceDaoImpl.queryBusinessUserInfo(info);
         if( businessUser != null && !businessUser.isEmpty()) {
-            userServiceDaoImpl.saveUserInfoInstance(businessUser);
+            storeServiceDaoImpl.saveUserInfoInstance(businessUser);
             dataFlowContext.addParamOut("userId",businessUser.get("user_id"));
         }
-        List<Map> businessUserAttrs = userServiceDaoImpl.queryBusinessUserInfoAttrs(info);
+        List<Map> businessUserAttrs = storeServiceDaoImpl.queryBusinessUserInfoAttrs(info);
         if(businessUserAttrs != null && businessUserAttrs.size() > 0) {
-            userServiceDaoImpl.saveUserAttrInstance(businessUser);
-        }
+            storeServiceDaoImpl.saveUserAttrInstance(businessUser);
+        }*/
 
 
     }
@@ -137,12 +136,12 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
      * @param business
      */
     private void doComplateUserInfo(DataFlowContext dataFlowContext,Business business) {
-        String bId = business.getbId();
+        /*String bId = business.getbId();
         Map paramIn = new HashMap();
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        userServiceDaoImpl.updateUserInfoInstance(paramIn);
-        userServiceDaoImpl.updateUserAttrInstance(paramIn);
+        storeServiceDaoImpl.updateUserInfoInstance(paramIn);
+        storeServiceDaoImpl.updateUserAttrInstance(paramIn);*/
     }
 
     /**
@@ -151,7 +150,7 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
      */
     private void doSaveBusinessUserInfo(DataFlowContext dataFlowContext,Business business) {
 
-        JSONObject data = business.getDatas();
+        /*JSONObject data = business.getDatas();
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
@@ -170,20 +169,20 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
         businessUser.put("bId",business.getbId());
         businessUser.put("operate", StatusConstant.OPERATE_ADD);
         //保存用户信息
-        userServiceDaoImpl.saveBusinessUserInfo(businessUser);
+        storeServiceDaoImpl.saveBusinessUserInfo(businessUser);
 
         if(businessUser.containsKey("businessUserAttr")){
             doSaveUserAttrs(business);
-        }
+        }*/
 
-        //userServiceDaoImpl.saveUserInfoInstance(businessUser);
+        //storeServiceDaoImpl.saveUserInfoInstance(businessUser);
 
 
 
     }
 
     private void doSaveUserAttrs(Business business){
-        JSONObject data = business.getDatas();
+        /*JSONObject data = business.getDatas();
         JSONObject businessUser = data.getJSONObject("businessUser");
         JSONArray businessUserAttrs = businessUser.getJSONArray("businessUserAttr");
         for(int userAttrIndex = 0 ; userAttrIndex < businessUserAttrs.size();userAttrIndex ++){
@@ -199,19 +198,19 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
             userAttr.put("userId",businessUser.getString("userId"));
             userAttr.put("operate", StatusConstant.OPERATE_ADD);
 
-            userServiceDaoImpl.saveBusinessUserAttr(userAttr);
-        }
+            storeServiceDaoImpl.saveBusinessUserAttr(userAttr);
+        }*/
 
         /*JSONObject attrInstance = new JSONObject();
         attrInstance.put("bId",business.getbId());
-        userServiceDaoImpl.saveUserAttrInstance(attrInstance);*/
+        storeServiceDaoImpl.saveUserAttrInstance(attrInstance);*/
     }
 
-    public IUserServiceDao getUserServiceDaoImpl() {
-        return userServiceDaoImpl;
+    public IStoreServiceDao getStoreServiceDaoImpl() {
+        return storeServiceDaoImpl;
     }
 
-    public void setUserServiceDaoImpl(IUserServiceDao userServiceDaoImpl) {
-        this.userServiceDaoImpl = userServiceDaoImpl;
+    public void setStoreServiceDaoImpl(IStoreServiceDao storeServiceDaoImpl) {
+        this.storeServiceDaoImpl = storeServiceDaoImpl;
     }
 }

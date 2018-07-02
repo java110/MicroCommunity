@@ -2,11 +2,18 @@ package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
 
+import java.util.Map;
+
 /**
  * 规则校验完成事件
  * Created by wuxw on 2018/7/2.
  */
 public class DataResponseEvent extends DataFlowEvent {
+
+
+    private final String responseData;
+
+    private final Map<String,String> headers;
     /**
      * Constructs a prototypical Event.
      *
@@ -14,7 +21,17 @@ public class DataResponseEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public DataResponseEvent(Object source, DataFlow dataFlow) {
+    public DataResponseEvent(Object source, DataFlow dataFlow,String responseData, Map<String,String> headers) {
         super(source, dataFlow);
+        this.responseData = responseData;
+        this.headers = headers;
+    }
+
+    public String getResponseData() {
+        return responseData;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 }

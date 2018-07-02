@@ -25,4 +25,12 @@ public class ReceiveRequestEvent extends DataFlowEvent {
         this.requestData = requestData;
         this.headers = headers;
     }
+
+    public String getRequestData() {
+        return requestData;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
 }

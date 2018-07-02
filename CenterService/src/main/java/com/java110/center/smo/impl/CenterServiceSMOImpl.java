@@ -70,19 +70,23 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             DataFlowEventPublishing.preValidateData(reqJson,headers);
             //1.0 创建数据流
             dataFlow = DataFlowFactory.newInstance(DataFlow.class).builder(reqJson, headers);
+            DataFlowEventPublishing.initDataFlowComplete(dataFlow);
 
-            /*LogAgent.sendLog(dataFlow.reBuilder(dataFlow.getTransactionId(),LogAgent.LOG_TYPE_S,LogAgent.LOG_STATUS_S,
-                    dataFlow.getRequestURL(),dataFlow.getReqData(),dataFlow.getHeaders()));
-*/
             //2.0 加载配置信息
             initConfigData(dataFlow);
+            DataFlowEventPublishing.loadConfigDataComplete(dataFlow);
+
             //3.0 校验 APPID是否有权限操作serviceCode
             judgeAuthority(dataFlow);
             //4.0 调用规则校验
             ruleValidate(dataFlow);
+            DataFlowEventPublishing.ruleValidateComplete(dataFlow);
+
             //5.0 保存订单和业务项 c_orders c_order_attrs c_business c_business_attrs
             saveOrdersAndBusiness(dataFlow);
+
             //6.0 调用下游系统
+            DataFlowEventPublishing.invokeBusinessSystem(dataFlow);
             invokeBusinessSystem(dataFlow);
 
             responseJson = DataTransactionFactory.createCommonResponseJson(dataFlow);
@@ -144,11 +148,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 AuthenticationFactory.putSign(dataFlow, responseJson);
                 saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
                         LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()),endDate.getTime()-dataFlow.getStartDate().getTime());
-
+                DataFlowEventPublishing.dataResponse(dataFlow,reqJson,headers);
             }
             resJson = encrypt(responseJson.toJSONString(),headers);
             //这里保存耗时，以及日志
-
             return resJson;
 
         }
