@@ -59,7 +59,7 @@ create table s_store(
     name varchar(100) not null comment '店铺名称',
     address varchar(200) not null comment '店铺地址',
     tel varchar(11) not null comment '电话',
-    store_type varchar(10) not null commnet '店铺种类',
+    store_type_cd varchar(10) not null commnet '店铺种类',
     nearby_landmarks varchar(200) comment '地标，如王府井北60米',
     map_x varchar(20) not null comment '地区 x坐标',
     map_y varchar(20) not null comment '地区 y坐标',

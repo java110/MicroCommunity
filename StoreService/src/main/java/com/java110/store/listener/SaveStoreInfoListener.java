@@ -47,21 +47,24 @@ public class SaveStoreInfoListener extends LoggerEngine implements BusinessServi
     public void soService(BusinessServiceDataFlowEvent event) {
         //这里处理业务逻辑数据
         DataFlowContext dataFlowContext = event.getDataFlowContext();
-        doSaveUserInfo(dataFlowContext);
+        doSaveStoreInfo(dataFlowContext);
     }
 
-    private void doSaveUserInfo(DataFlowContext dataFlowContext){
+    /**
+     * 保存商户信息
+     * 主要保存 businessStore，businessStoreAttr，businessStorePhoto，businessStoreCerdentials信息
+     * @param dataFlowContext 数据流对象
+     */
+    private void doSaveStoreInfo(DataFlowContext dataFlowContext){
         String businessType = dataFlowContext.getOrder().getBusinessType();
         Business business = dataFlowContext.getCurrentBusiness();
-        //Assert.hasLength(business.getbId(),"bId 不能为空");
         // Instance 过程
         if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
-            //doComplateUserInfo(business);
-            doSaveInstanceUserInfo(dataFlowContext,business);
+            doSaveInstanceStoreInfo(dataFlowContext,business);
         }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(businessType)){ // Business过程
-            doSaveBusinessUserInfo(dataFlowContext,business);
+            doSaveBusinessStoreInfo(dataFlowContext,business);
         }else if(StatusConstant.REQUEST_BUSINESS_TYPE_DELETE.equals(businessType)){ //撤单过程
-            doDeleteInstanceUserInfo(dataFlowContext,business);
+            doDeleteInstanceStoreInfo(dataFlowContext,business);
         }
 
         dataFlowContext.setResJson(DataTransactionFactory.createBusinessResponseJson(dataFlowContext,ResponseConstant.RESULT_CODE_SUCCESS,"成功",
@@ -72,33 +75,40 @@ public class SaveStoreInfoListener extends LoggerEngine implements BusinessServi
      * 撤单
      * @param business
      */
-    private void doDeleteInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
+    private void doDeleteInstanceStoreInfo(DataFlowContext dataFlowContext, Business business) {
 
-        /*String bId = business.getbId();
+        String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
         info.put("bId",bId);
-        Map userInfo = storeServiceDaoImpl.queryUserInfo(info);
-        if(userInfo != null && !userInfo.isEmpty()){
+        //商户信息
+        Map storeInfo = storeServiceDaoImpl.getStoreInfo(info);
+        if(storeInfo != null && !storeInfo.isEmpty()){
             info.put("bId",bId);
-            info.put("userId",userInfo.get("user_id").toString());
+            info.put("storeId",storeInfo.get("store_id").toString());
             info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            storeServiceDaoImpl.updateUserInfoInstance(userInfo);
-            dataFlowContext.addParamOut("userId",userInfo.get("user_id"));
+            storeServiceDaoImpl.updateStoreInfoInstance(info);
+            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
         }
 
-        info.clear();
-        info.put("bId",bId);
-
-        List<Map> userAttrs = storeServiceDaoImpl.queryUserInfoAttrs(info);
-
-        if(userAttrs != null && userAttrs.size() >0){
-            info.put("bId",bId);
-            //info.put("userId",userInfo.get("user_id").toString());
-            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            storeServiceDaoImpl.updateUserAttrInstance(info);
+        //商户属性
+        List<Map> storeAttrs = storeServiceDaoImpl.getStoreAttrs(info);
+        if(storeAttrs != null && storeAttrs.size()>0){
+            storeServiceDaoImpl.updateStoreAttrInstance(info);
         }
-*/
+
+        //商户照片
+        List<Map> storePhotos = storeServiceDaoImpl.getStorePhoto(info);
+        if(storePhotos != null && storePhotos.size()>0){
+            storeServiceDaoImpl.updateStorePhotoInstance(info);
+        }
+
+        //商户属性
+        List<Map> storeCerdentialses = storeServiceDaoImpl.getStoreCerdentials(info);
+        if(storeCerdentialses != null && storeCerdentialses.size()>0){
+            storeServiceDaoImpl.updateStoreCerdentailsInstance(info);
+        }
+
 
     }
 
@@ -106,28 +116,35 @@ public class SaveStoreInfoListener extends LoggerEngine implements BusinessServi
      * instance过程
      * @param business
      */
-    private void doSaveInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
+    private void doSaveInstanceStoreInfo(DataFlowContext dataFlowContext, Business business) {
 
         JSONObject data = business.getDatas();
 
-        //Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
-
-        //Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
-
-        //JSONObject businessUser = data.getJSONObject("businessUser");
-       /* Map info = new HashMap();
+        Map info = new HashMap();
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
-        Map businessUser = storeServiceDaoImpl.queryBusinessUserInfo(info);
-        if( businessUser != null && !businessUser.isEmpty()) {
-            storeServiceDaoImpl.saveUserInfoInstance(businessUser);
-            dataFlowContext.addParamOut("userId",businessUser.get("user_id"));
-        }
-        List<Map> businessUserAttrs = storeServiceDaoImpl.queryBusinessUserInfoAttrs(info);
-        if(businessUserAttrs != null && businessUserAttrs.size() > 0) {
-            storeServiceDaoImpl.saveUserAttrInstance(businessUser);
-        }*/
 
+        //商户信息
+        Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
+        if( businessStoreInfo != null && !businessStoreInfo.isEmpty()) {
+            storeServiceDaoImpl.saveStoreInfoInstance(info);
+            dataFlowContext.addParamOut("storeId",businessStoreInfo.get("store_id"));
+        }
+        //商户属性
+        List<Map> businessStoreAttrs = storeServiceDaoImpl.getBusinessStoreAttrs(info);
+        if(businessStoreAttrs != null && businessStoreAttrs.size() > 0) {
+            storeServiceDaoImpl.saveStoreAttrsInstance(info);
+        }
+        //商户照片
+        List<Map> businessStorePhotos = storeServiceDaoImpl.getBusinessStorePhoto(info);
+        if(businessStorePhotos != null && businessStorePhotos.size() >0){
+            storeServiceDaoImpl.saveStorePhotoInstance(info);
+        }
+        //商户证件
+        List<Map> businessStoreCerdentialses = storeServiceDaoImpl.getBusinessStoreCerdentials(info);
+        if(businessStoreCerdentialses != null && businessStoreCerdentialses.size()>0){
+            storeServiceDaoImpl.saveStoreCerdentialsInstance(info);
+        }
 
     }
 
@@ -145,66 +162,154 @@ public class SaveStoreInfoListener extends LoggerEngine implements BusinessServi
     }
 
     /**
-     * 处理用户信息
+     * 处理商户信息
      * @param business
      */
-    private void doSaveBusinessUserInfo(DataFlowContext dataFlowContext,Business business) {
+    private void doSaveBusinessStoreInfo(DataFlowContext dataFlowContext, Business business) {
 
-        /*JSONObject data = business.getDatas();
+        JSONObject data = business.getDatas();
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
-
-        JSONObject businessUser = data.getJSONObject("businessUser");
-
-        Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
-
-        if(businessUser.getInteger("userId") < 0){
-            //生成userId
-            String userId = GenerateCodeFactory.getUserId();
-            businessUser.put("userId",userId);
+        //处理 businessStore 节点
+        if(data.containsKey("businessStore")){
+            JSONObject businessStore = data.getJSONObject("businessStore");
+            doBusinessStore(business,businessStore);
+            dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
         }
-        dataFlowContext.addParamOut("userId",businessUser.getString("userId"));
-        businessUser.put("bId",business.getbId());
-        businessUser.put("operate", StatusConstant.OPERATE_ADD);
-        //保存用户信息
-        storeServiceDaoImpl.saveBusinessUserInfo(businessUser);
 
-        if(businessUser.containsKey("businessUserAttr")){
-            doSaveUserAttrs(business);
-        }*/
+        if(data.containsKey("businessStorePhoto")){
+            JSONArray businessStorePhotos = data.getJSONArray("businessStorePhoto");
+            doBusinessStorePhoto(business,businessStorePhotos);
+        }
+
+        if(data.containsKey("businessStoreCerdentials")){
+            JSONArray businessStoreCerdentialses = data.getJSONArray("businessStoreCerdentials");
+            doBusinessStoreCerdentials(business,businessStoreCerdentialses);
+        }
+
 
         //storeServiceDaoImpl.saveUserInfoInstance(businessUser);
-
-
-
     }
 
-    private void doSaveUserAttrs(Business business){
-        /*JSONObject data = business.getDatas();
-        JSONObject businessUser = data.getJSONObject("businessUser");
-        JSONArray businessUserAttrs = businessUser.getJSONArray("businessUserAttr");
-        for(int userAttrIndex = 0 ; userAttrIndex < businessUserAttrs.size();userAttrIndex ++){
-            JSONObject userAttr = businessUserAttrs.getJSONObject(userAttrIndex);
-            Assert.jsonObjectHaveKey(userAttr,"attrId","businessUserAttr 节点下没有包含 attrId 节点");
+    /**
+     * 保存商户照片
+     * @param business 业务对象
+     * @param businessStorePhotos 商户照片
+     */
+    private void doBusinessStorePhoto(Business business, JSONArray businessStorePhotos) {
 
-            if(userAttr.getInteger("attrId") < 0){
+        for(int businessStorePhotoIndex = 0 ;businessStorePhotoIndex < businessStorePhotos.size();businessStorePhotoIndex++) {
+            JSONObject businessStorePhoto = businessStorePhotos.getJSONObject(businessStorePhotoIndex);
+            Assert.jsonObjectHaveKey(businessStorePhoto, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
+
+            if (businessStorePhoto.getLong("storePhotoId") < 0) {
+                String storePhotoId = GenerateCodeFactory.getStorePhotoId();
+                businessStorePhoto.put("storePhotoId", storePhotoId);
+            }
+            businessStorePhoto.put("bId", business.getbId());
+            businessStorePhoto.put("operate", StatusConstant.OPERATE_ADD);
+            //保存商户信息
+            storeServiceDaoImpl.saveBusinessStorePhoto(businessStorePhoto);
+        }
+    }
+
+    /**
+     * 处理 businessStore 节点
+     * @param business 总的数据节点
+     * @param businessStore 商户节点
+     */
+    private void doBusinessStore(Business business,JSONObject businessStore){
+
+        Assert.jsonObjectHaveKey(businessStore,"storeId","businessStore 节点下没有包含 storeId 节点");
+
+        if(businessStore.getInteger("storeId") < 0){
+            //刷新缓存
+            flushStoreId(business.getDatas());
+        }
+
+
+        businessStore.put("bId",business.getbId());
+        businessStore.put("operate", StatusConstant.OPERATE_ADD);
+        //保存商户信息
+        storeServiceDaoImpl.saveBusinessStoreInfo(businessStore);
+        //保存 商户属性信息
+        if(businessStore.containsKey("businessStoreAttr")){
+            JSONArray businessStoreAttrs = businessStore.getJSONArray("businessStoreAttr");
+            doSaveBusinessStoreAttrs(business,businessStoreAttrs);
+        }
+    }
+
+
+
+    /**
+     * 保存商户属性信息
+     * @param business 当前业务
+     * @param businessStoreAttrs 商户属性
+     */
+    private void doSaveBusinessStoreAttrs(Business business,JSONArray businessStoreAttrs){
+        JSONObject data = business.getDatas();
+        JSONObject businessStore = data.getJSONObject("businessStore");
+        for(int storeAttrIndex = 0 ; storeAttrIndex < businessStoreAttrs.size();storeAttrIndex ++){
+            JSONObject storeAttr = businessStoreAttrs.getJSONObject(storeAttrIndex);
+            Assert.jsonObjectHaveKey(storeAttr,"attrId","businessStoreAttr 节点下没有包含 attrId 节点");
+
+            if(storeAttr.getInteger("attrId") < 0){
                 String attrId = GenerateCodeFactory.getAttrId();
-                userAttr.put("attrId",attrId);
+                storeAttr.put("attrId",attrId);
             }
 
-            userAttr.put("bId",business.getbId());
-            userAttr.put("userId",businessUser.getString("userId"));
-            userAttr.put("operate", StatusConstant.OPERATE_ADD);
+            storeAttr.put("bId",business.getbId());
+            storeAttr.put("storeId",businessStore.getString("storeId"));
+            storeAttr.put("operate", StatusConstant.OPERATE_ADD);
 
-            storeServiceDaoImpl.saveBusinessUserAttr(userAttr);
-        }*/
-
-        /*JSONObject attrInstance = new JSONObject();
-        attrInstance.put("bId",business.getbId());
-        storeServiceDaoImpl.saveUserAttrInstance(attrInstance);*/
+            storeServiceDaoImpl.saveBusinessStoreAttr(storeAttr);
+        }
     }
+
+
+    /**
+     * 保存 商户证件 信息
+     * @param business 当前业务
+     * @param businessStoreCerdentialses 商户证件
+     */
+    private void doBusinessStoreCerdentials(Business business, JSONArray businessStoreCerdentialses) {
+        for(int businessStoreCerdentialsIndex = 0 ; businessStoreCerdentialsIndex < businessStoreCerdentialses.size() ; businessStoreCerdentialsIndex ++) {
+            JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);
+            Assert.jsonObjectHaveKey(businessStoreCerdentials, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
+
+            if (businessStoreCerdentials.getLong("storeCerdentialsId") < 0) {
+                String storePhotoId = GenerateCodeFactory.getStoreCerdentialsId();
+                businessStoreCerdentials.put("storeCerdentialsId", storePhotoId);
+            }
+            businessStoreCerdentials.put("bId", business.getbId());
+            businessStoreCerdentials.put("operate", StatusConstant.OPERATE_ADD);
+            //保存商户信息
+            storeServiceDaoImpl.saveBusinessStoreCerdentials(businessStoreCerdentials);
+        }
+    }
+
+
+
+    /**
+     * 刷新 商户ID
+     * @param data
+     */
+    private void flushStoreId(JSONObject data) {
+
+        String storeId = GenerateCodeFactory.getStoreId();
+        JSONObject businessStore = data.getJSONObject("businessStore");
+        businessStore.put("storeId",storeId);
+        if(data.containsKey("businessStorePhoto")) {
+            JSONObject businessStorePhoto = data.getJSONObject("businessStorePhoto");
+            businessStorePhoto.put("storeId", storeId);
+        }
+        if(data.containsKey("businessStoreCerdentials")) {
+            JSONObject businessStoreCerdentials = data.getJSONObject("businessStoreCerdentials");
+            businessStoreCerdentials.put("storeId", storeId);
+        }
+    }
+
 
     public IStoreServiceDao getStoreServiceDaoImpl() {
         return storeServiceDaoImpl;

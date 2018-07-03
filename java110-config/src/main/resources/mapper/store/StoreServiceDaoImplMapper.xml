@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeServiceDaoImpl">
+    
+    <!-- 保存商户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStoreInfo" parameterType="Map">
+        insert into business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,operate)
+        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{operate})
+    </insert>
+    <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStoreAttr" parameterType="Map">
+        insert into business_store_attr(b_id,attr_id,store_id,spec_cd,value,operate)
+        values(#{bId},#{attrId},#{storeId},#{specCd},#{value},#{operate})
+    </insert>
+    <!-- 保存商户照片信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStorePhoto" parameterType="Map">
+        insert into business_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,operate)
+        values(#{storePhotoId},#{bId},#{storeId},#{storePhotoTypeCd},#{photo})
+    </insert>
+    <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStoreCerdentials" parameterType="Map">
+        insert into business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,operate)
+        values(#{storeCerdentialsId},#{bId},#{storeId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{operate})
+    </insert>
+
+    <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessStoreInfo" parameterType="Map" resultType="Map">
+        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        from business_store s where 1 = 1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and s.store_id = #{storeId}
+        </if>
+    </select>
+
+
+    <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessStoreAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.operate
+        from business_store_attr sa where 1=1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and sa.store_id = #{storeId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessStorePhoto" parameterType="Map" resultType="Map">
+        select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,sp.operate
+        from business_store_photo sp where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sp.operate = #{operate}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and sp.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 查询商户 证件信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessStoreCerdentials" parameterType="Map" resultType="Map">
+        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.operate
+        from business_store_cerdentials sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and sc.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 保存商户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreInfoInstance" parameterType="Map">
+        insert into s_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,status_cd)
+        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,'0'
+        from business_store s where 
+        s.operate = 'ADD' and s.b_id=#{bId}
+    </insert>
+
+    <!-- 保存商户属性信息到 instance add by wuxw 2018-07-03 -->
+    <insert id="saveStoreAttrsInstance" parameterType="Map">
+        insert into s_store_attr(b_id,attr_id,store_id,spec_cd,value,status_cd)
+        select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,'0'
+        from business_store_attr sa
+        where sa.operate = 'ADD' and sa.b_id=#{bId}
+    </insert>
+    
+    <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveStorePhotoInstance" parameterType="Map">
+        insert into s_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,status_cd)
+        select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,'0'
+        from business_store_photo sp
+        where  sp.operate = 'ADD' and sp.b_id=#{bId}
+    </insert>
+    <!-- 保存 商户证件信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveStoreCerdentialsInstance" parameterType="Map">
+        insert into s_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
+        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
+        from business_store_cerdentials sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 查询商户信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreInfo" parameterType="Map" resultType="Map">
+        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        from s_store s
+        where s.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and s.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreAttr" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.status_cd
+        from s_store_attr sa
+        where sa.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sa.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getStorePhoto" parameterType="Map" resultType="Map">
+        select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,sp.status_cd
+        from s_store_photo sp
+        where sp.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sp.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreCerdentials" parameterType="Map" resultType="Map">
+        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
+        from s_store_cerdentials sc
+        where sc.status_cd = '0'
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sc.store_id = #{storeId}
+        </if>
+    </select>
+
+
+    <!-- 修改商户信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreInfoInstance" parameterType="Map">
+        update s_store s set s.status_cd = #{statusCd}
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and s.store_id = #{storeId}
+        </if>
+    </update>
+
+    <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreAttrInstance" parameterType="Map">
+        update s_store_attr sa set sa.status_cd = #{statusCd}
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sa.store_id = #{storeId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+    </update>
+
+    <!-- 修改商户照片信息 add by wuxw 2018-07-03 -->
+    <update id="updateStorePhotoInstance" parameterType="Map">
+        update s_store_photo sp set sp.status_cd = #{statusCd}
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sp.store_id = #{storeId}
+        </if>
+        <if test="storePhotoId != null and storePhotoId !=''">
+            and sp.store_photo_id = #{storePhotoId}
+        </if>
+    </update>
+
+    <!-- 修改商户证件信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreCerdentialsInstance" parameterType="Map">
+        update s_store_cerdentials sc set sc.status_cd = #{statusCd}
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sc.store_id = #{storeId}
+        </if>
+        <if test="storeCerdentialsId != null and storeCerdentialsId !=''">
+            and sc.store_cerdentials_id = #{storeCerdentialsId}
+        </if>
+    </update>
+</mapper>

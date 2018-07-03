@@ -51,6 +51,9 @@ public class GenerateCodeFactory {
         prefixMap.put("pageTransactionId","1000002");
         prefixMap.put("dataFlowId","2000");
         prefixMap.put("userId","30");
+        prefixMap.put("storeId","40");
+        prefixMap.put("storePhotoId","41");
+        prefixMap.put("storeCerdentialsId","42");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -183,6 +186,32 @@ public class GenerateCodeFactory {
         return getCode(prefixMap.get("userId"));
     }
 
+
+    public static String getStoreId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("storeId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("storeId"));
+    }
+
+
+    public static String getStorePhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("storePhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("storePhotoId"));
+    }
+
+
+    public static String getStoreCerdentialsId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("storeCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("storeCerdentialsId"));
+    }
 
     /**
      * 获取restTemplate
