@@ -181,4 +181,5 @@ public interface IStoreServiceDao {
      * @throws DAOException
      */
     public void updateStoreCerdentailsInstance(Map info) throws DAOException;
+
 }

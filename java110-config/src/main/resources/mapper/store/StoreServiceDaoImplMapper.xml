@@ -124,7 +124,11 @@
     <select id="getStoreInfo" parameterType="Map" resultType="Map">
         select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
         from s_store s
-        where s.status_cd = '0'
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and s.status_cd = #{statusCd}
+        </if>
+
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
         </if>
@@ -137,12 +141,19 @@
     <select id="getStoreAttr" parameterType="Map" resultType="Map">
         select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.status_cd
         from s_store_attr sa
-        where sa.status_cd = '0'
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sa.status_cd = #{statusCd}
+        </if>
         <if test="bId != null and bId !=''">
             and sa.b_id = #{bId}
         </if>
         <if test="storeId != null and storeId !=''">
             and sa.store_id = #{storeId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
         </if>
     </select>
 
@@ -150,7 +161,10 @@
     <select id="getStorePhoto" parameterType="Map" resultType="Map">
         select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,sp.status_cd
         from s_store_photo sp
-        where sp.status_cd = '0'
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sp.status_cd = #{statusCd}
+        </if>
         <if test="bId != null and bId !=''">
             and sp.b_id = #{bId}
         </if>
@@ -163,7 +177,10 @@
     <select id="getStoreCerdentials" parameterType="Map" resultType="Map">
         select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
         from s_store_cerdentials sc
-        where sc.status_cd = '0'
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
         <if test="bId != null and bId !=''">
             and sc.b_id = #{bId}
         </if>
@@ -176,6 +193,33 @@
     <!-- 修改商户信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreInfoInstance" parameterType="Map">
         update s_store s set s.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="userId != null and userId != ''">
+            ,s.user_id = #{userId}
+        </if>
+        <if test="name != null and name != ''">
+            ,s.name = #{name}
+        </if>
+        <if test="address != null and address != ''">
+            ,s.address = #{address}
+        </if>
+        <if test="tel != null and tel != ''">
+            ,s.tel = #{tel}
+        </if>
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            ,s.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+            ,s.nearby_landmarks = #{nearbyLandmarks}
+        </if>
+        <if test="mapX != null and mapX != ''">
+            ,s.map_x = #{mapX}
+        </if>
+        <if test="mapY != null and mapY != ''">
+            ,s.map_y = #{mapY}
+        </if>
         where 1=1
         <if test="bId != null and bId !=''">
             and s.b_id = #{bId}
@@ -188,6 +232,12 @@
     <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreAttrInstance" parameterType="Map">
         update s_store_attr sa set sa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,sa.value = #{value}
+        </if>
         where 1=1
         <if test="bId != null and bId !=''">
             and sa.b_id = #{bId}
@@ -198,11 +248,23 @@
         <if test="specCd != null and specCd !=''">
             and sa.spec_cd = #{specCd}
         </if>
+        <if test="attrId != null and attrId !=''">
+            and sa.attr_id = #{attrId}
+        </if>
     </update>
 
     <!-- 修改商户照片信息 add by wuxw 2018-07-03 -->
     <update id="updateStorePhotoInstance" parameterType="Map">
         update s_store_photo sp set sp.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sp.b_id = #{newBId}
+        </if>
+        <if test="storePhotoTypeCd != null and storePhotoTypeCd != ''">
+            ,sp.store_photo_type_cd = #{storePhotoTypeCd}
+        </if>
+        <if test="photo != null and photo != ''">
+            ,sp.photo = #{photo}
+        </if>
         where 1=1
         <if test="bId != null and bId !=''">
             and sp.b_id = #{bId}
@@ -216,8 +278,26 @@
     </update>
 
     <!-- 修改商户证件信息 add by wuxw 2018-07-03 -->
-    <update id="updateStoreCerdentialsInstance" parameterType="Map">
+    <update id="updateStoreCerdentailsInstance" parameterType="Map">
         update s_store_cerdentials sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="credentialsCd != null and credentialsCd != ''">
+            ,sc.credentials_cd = #{credentialsCd}
+        </if>
+        <if test="value != null and value != ''">
+            ,sc.value = #{value}
+        </if>
+        <if test="validityPeriod != null and validityPeriod != ''">
+            ,sc.validity_period = #{validityPeriod}
+        </if>
+        <if test="positivePhoto != null and positivePhoto != ''">
+            ,sc.positive_photo = #{positivePhoto}
+        </if>
+        <if test="negativePhoto != null and negativePhoto != ''">
+            ,sc.negative_photo = #{negativePhoto}
+        </if>
         where 1=1
         <if test="bId != null and bId !=''">
             and sc.b_id = #{bId}

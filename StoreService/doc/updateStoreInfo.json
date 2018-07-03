@@ -13,12 +13,12 @@
     }]
   },
   "business": [{
-    "serviceCode": "save.store.info",
-    "serviceName": "保存商户信息",
+    "serviceCode": "update.store.info",
+    "serviceName": "修改商户信息",
     "remark": "备注",
     "datas": {
       "businessStore": {
-        "storeId": "-1",
+        "storeId": "123456",
         "userId": "用户ID",
         "name": "齐天超时（王府井店）",
         "address": "青海省西宁市城中区129号",
@@ -30,20 +30,20 @@
         "mapY": "36.597263"
       },
       "businessStoreAttr": [{
-        "storeId": "-1",
-        "attrId":"-1",
+        "storeId": "123456",
+        "attrId":"1234546",
         "specCd":"1001",
         "value":"01"
       }],
       "businessStorePhoto":[{
-        "storePhotoId":"-1",
-        "storeId":"-1",
+        "storePhotoId":"12321",
+        "storeId": "123456",
         "storePhotoTypeCd":"T",
         "photo":"12345678.jpg"
       }],
       "businessStoreCerdentials":[{
-        "storeCerdentialsId":"-1",
-        "storeId":"-1",
+        "storeCerdentialsId":"123123",
+        "storeId": "123456",
         "credentialsCd":"1",
         "value":"632126XXXXXXXX2011",
         "validityPeriod":"有效期，长期有效请写3000/01/01",

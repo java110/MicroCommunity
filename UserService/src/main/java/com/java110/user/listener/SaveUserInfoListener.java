@@ -8,15 +8,17 @@ import com.java110.common.constant.StatusConstant;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
 import com.java110.event.service.BusinessServiceDataFlowListener;
 import com.java110.user.dao.IUserServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -29,7 +31,9 @@ import java.util.Map;
  */
 @Java110Listener("saveUserInfoListener")
 @Transactional
-public class SaveUserInfoListener extends LoggerEngine implements BusinessServiceDataFlowListener{
+public class SaveUserInfoListener  extends AbstractBusinessServiceDataFlowListener {
+
+    private final static Logger logger = LoggerFactory.getLogger(SaveUserInfoListener.class);
 
     @Autowired
     IUserServiceDao userServiceDaoImpl;
@@ -44,113 +48,14 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
         return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_INFO;
     }
 
+
+    /**
+     * 保存用户信息至 business表中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
     @Override
-    public void soService(BusinessServiceDataFlowEvent event) {
-        //这里处理业务逻辑数据
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        doSaveUserInfo(dataFlowContext);
-    }
-
-    private void doSaveUserInfo(DataFlowContext dataFlowContext){
-        String businessType = dataFlowContext.getOrder().getBusinessType();
-        Business business = dataFlowContext.getCurrentBusiness();
-        //Assert.hasLength(business.getbId(),"bId 不能为空");
-        // Instance 过程
-        if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
-            //doComplateUserInfo(business);
-            doSaveInstanceUserInfo(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(businessType)){ // Business过程
-            doSaveBusinessUserInfo(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_DELETE.equals(businessType)){ //撤单过程
-            doDeleteInstanceUserInfo(dataFlowContext,business);
-        }
-
-        dataFlowContext.setResJson(DataTransactionFactory.createBusinessResponseJson(dataFlowContext,ResponseConstant.RESULT_CODE_SUCCESS,"成功",
-                dataFlowContext.getParamOut()));
-    }
-
-    /**
-     * 撤单
-     * @param business
-     */
-    private void doDeleteInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
-
-        String bId = business.getbId();
-        //Assert.hasLength(bId,"请求报文中没有包含 bId");
-        Map info = new HashMap();
-        info.put("bId",bId);
-        Map userInfo = userServiceDaoImpl.queryUserInfo(info);
-        if(userInfo != null && !userInfo.isEmpty()){
-            info.put("bId",bId);
-            info.put("userId",userInfo.get("user_id").toString());
-            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserInfoInstance(userInfo);
-            dataFlowContext.addParamOut("userId",userInfo.get("user_id"));
-        }
-
-        info.clear();
-        info.put("bId",bId);
-
-        List<Map> userAttrs = userServiceDaoImpl.queryUserInfoAttrs(info);
-
-        if(userAttrs != null && userAttrs.size() >0){
-            info.put("bId",bId);
-            //info.put("userId",userInfo.get("user_id").toString());
-            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserAttrInstance(info);
-        }
-
-
-    }
-
-    /**
-     * instance过程
-     * @param business
-     */
-    private void doSaveInstanceUserInfo(DataFlowContext dataFlowContext,Business business) {
-
-        JSONObject data = business.getDatas();
-
-        //Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
-
-        //Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
-
-        //JSONObject businessUser = data.getJSONObject("businessUser");
-        Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
-        Map businessUser = userServiceDaoImpl.queryBusinessUserInfo(info);
-        if( businessUser != null && !businessUser.isEmpty()) {
-            userServiceDaoImpl.saveUserInfoInstance(businessUser);
-            dataFlowContext.addParamOut("userId",businessUser.get("user_id"));
-        }
-        List<Map> businessUserAttrs = userServiceDaoImpl.queryBusinessUserInfoAttrs(info);
-        if(businessUserAttrs != null && businessUserAttrs.size() > 0) {
-            userServiceDaoImpl.saveUserAttrInstance(businessUser);
-        }
-
-
-    }
-
-    /**
-     * 保存数据至u_user 表中
-     * @param business
-     */
-    private void doComplateUserInfo(DataFlowContext dataFlowContext,Business business) {
-        String bId = business.getbId();
-        Map paramIn = new HashMap();
-        paramIn.put("bId",bId);
-        paramIn.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        userServiceDaoImpl.updateUserInfoInstance(paramIn);
-        userServiceDaoImpl.updateUserAttrInstance(paramIn);
-    }
-
-    /**
-     * 处理用户信息
-     * @param business
-     */
-    private void doSaveBusinessUserInfo(DataFlowContext dataFlowContext,Business business) {
-
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
@@ -175,11 +80,63 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
         if(businessUser.containsKey("businessUserAttr")){
             doSaveUserAttrs(business);
         }
+    }
 
-        //userServiceDaoImpl.saveUserInfoInstance(businessUser);
+    /**
+     * 将 business的用户信息 保存至 instance表中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+        JSONObject data = business.getDatas();
 
+        Map info = new HashMap();
+        info.put("bId",business.getbId());
+        info.put("operate",StatusConstant.OPERATE_ADD);
+        Map businessUser = userServiceDaoImpl.queryBusinessUserInfo(info);
+        if( businessUser != null && !businessUser.isEmpty()) {
+            userServiceDaoImpl.saveUserInfoInstance(businessUser);
+            dataFlowContext.addParamOut("userId",businessUser.get("user_id"));
+        }
+        List<Map> businessUserAttrs = userServiceDaoImpl.queryBusinessUserInfoAttrs(info);
+        if(businessUserAttrs != null && businessUserAttrs.size() > 0) {
+            userServiceDaoImpl.saveUserAttrInstance(businessUser);
+        }
 
+    }
 
+    /**
+     * 将instance 作废
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+        String bId = business.getbId();
+        //Assert.hasLength(bId,"请求报文中没有包含 bId");
+        Map info = new HashMap();
+        info.put("bId",bId);
+        Map userInfo = userServiceDaoImpl.queryUserInfo(info);
+        if(userInfo != null && !userInfo.isEmpty()){
+            info.put("bId",bId);
+            info.put("userId",userInfo.get("user_id").toString());
+            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+            userServiceDaoImpl.updateUserInfoInstance(info);
+            dataFlowContext.addParamOut("userId",userInfo.get("user_id"));
+        }
+
+        info.clear();
+        info.put("bId",bId);
+
+        List<Map> userAttrs = userServiceDaoImpl.queryUserInfoAttrs(info);
+
+        if(userAttrs != null && userAttrs.size() >0){
+            info.put("bId",bId);
+            //info.put("userId",userInfo.get("user_id").toString());
+            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+            userServiceDaoImpl.updateUserAttrInstance(info);
+        }
     }
 
     private void doSaveUserAttrs(Business business){
@@ -201,10 +158,6 @@ public class SaveUserInfoListener extends LoggerEngine implements BusinessServic
 
             userServiceDaoImpl.saveBusinessUserAttr(userAttr);
         }
-
-        /*JSONObject attrInstance = new JSONObject();
-        attrInstance.put("bId",business.getbId());
-        userServiceDaoImpl.saveUserAttrInstance(attrInstance);*/
     }
 
     public IUserServiceDao getUserServiceDaoImpl() {

@@ -90,6 +90,16 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_SAVE_STORE_INFO = "save.store.info";
 
+    /**
+     * 修改商户信息
+     */
+    public static final String SERVICE_CODE_UPDATE_STORE_INFO = "update.store.info";
+
+    /**
+     * 删除商户信息
+     */
+    public static final String SERVICE_CODE_DELETE_STORE_INFO = "delete.store.info";
+
 
 
 

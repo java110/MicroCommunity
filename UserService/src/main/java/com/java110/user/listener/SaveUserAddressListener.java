@@ -13,6 +13,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
 import com.java110.event.service.BusinessServiceDataFlowListener;
 import com.java110.user.dao.IUserServiceDao;
@@ -32,7 +33,7 @@ import java.util.Map;
  */
 @Java110Listener(name = "saveUserAddressListener")
 @Transactional
-public class SaveUserAddressListener implements BusinessServiceDataFlowListener{
+public class SaveUserAddressListener extends AbstractBusinessServiceDataFlowListener {
 
     private final static Logger logger = LoggerFactory.getLogger(SaveUserAddressListener.class);
 
@@ -49,58 +50,40 @@ public class SaveUserAddressListener implements BusinessServiceDataFlowListener{
         return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_ADDRESS;
     }
 
+    /**
+     * 用户地址信息保存至 business表中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
     @Override
-    public void soService(BusinessServiceDataFlowEvent event) {
-        //这里处理业务逻辑数据
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        doSaveUserAddress(dataFlowContext);
-    }
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+        JSONObject data = business.getDatas();
 
-    private void doSaveUserAddress(DataFlowContext dataFlowContext){
-        String businessType = dataFlowContext.getOrder().getBusinessType();
-        Business business = dataFlowContext.getCurrentBusiness();
-        //Assert.hasLength(business.getbId(),"bId 不能为空");
-        // Instance 过程
-        if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
-            //doComplateUserInfo(business);
-            doSaveInstanceUserAddress(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(businessType)){ // Business过程
-            doSaveBusinessUserAddress(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_DELETE.equals(businessType)){ //撤单过程
-            doDeleteInstanceUserAddress(dataFlowContext,business);
+        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+
+        Assert.jsonObjectHaveKey(data,"businessUserAddress","datas 节点下没有包含 businessUser 节点");
+
+        JSONObject businessUser = data.getJSONObject("businessUserAddress");
+
+        Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
+
+        if(businessUser.getLong("userId") <= 0){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"用户地址（saveUserAddress）保存失败，userId 不正确"+businessUser.getInteger("userId"));
         }
-
-        dataFlowContext.setResJson(DataTransactionFactory.createBusinessResponseJson(dataFlowContext,ResponseConstant.RESULT_CODE_SUCCESS,"成功",
-                dataFlowContext.getParamOut()));
+        dataFlowContext.addParamOut("userId",businessUser.getString("userId"));
+        businessUser.put("bId",business.getbId());
+        businessUser.put("operate", StatusConstant.OPERATE_ADD);
+        //保存用户信息
+        userServiceDaoImpl.saveBusinessUserAddress(businessUser);
     }
 
     /**
-     * 撤单
-     * @param business
+     * 保存地址信息至instance
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
      */
-    private void doDeleteInstanceUserAddress(DataFlowContext dataFlowContext, Business business) {
-
-        String bId = business.getbId();
-        //Assert.hasLength(bId,"请求报文中没有包含 bId");
-        Map info = new HashMap();
-        info.put("bId",bId);
-        Map userAddress = userServiceDaoImpl.queryBusinessUserAddress(info);
-        if(userAddress != null && !userAddress.isEmpty()){
-            info.put("bId",bId);
-            info.put("userId",userAddress.get("user_id").toString());
-            info.put("addressId",userAddress.get("address_id").toString());
-            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserAddressInstance(userAddress);
-            dataFlowContext.addParamOut("userId",userAddress.get("user_id"));
-        }
-    }
-
-    /**
-     * instance过程
-     * @param business
-     */
-    private void doSaveInstanceUserAddress(DataFlowContext dataFlowContext, Business business) {
-
+    @Override
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -114,33 +97,29 @@ public class SaveUserAddressListener implements BusinessServiceDataFlowListener{
         }
 
         throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,"当前数据未找到business 数据"+info);
+
     }
 
     /**
-     * 处理用户地址信息
-     * @param business 业务信息
+     * 作废用户地址信息（instance）
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
      */
-    private void doSaveBusinessUserAddress(DataFlowContext dataFlowContext, Business business) {
-
-        JSONObject data = business.getDatas();
-
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
-
-        Assert.jsonObjectHaveKey(data,"businessUserAddress","datas 节点下没有包含 businessUser 节点");
-
-        JSONObject businessUser = data.getJSONObject("businessUserAddress");
-
-        Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
-
-        if(businessUser.getLong("userId") <= 0){
-           throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"用户地址（saveUserAddress）保存失败，userId 不正确"+businessUser.getInteger("userId"));
+    @Override
+    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+        String bId = business.getbId();
+        //Assert.hasLength(bId,"请求报文中没有包含 bId");
+        Map info = new HashMap();
+        info.put("bId",bId);
+        Map userAddress = userServiceDaoImpl.queryBusinessUserAddress(info);
+        if(userAddress != null && !userAddress.isEmpty()){
+            info.put("bId",bId);
+            info.put("userId",userAddress.get("user_id").toString());
+            info.put("addressId",userAddress.get("address_id").toString());
+            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+            userServiceDaoImpl.updateUserAddressInstance(userAddress);
+            dataFlowContext.addParamOut("userId",userAddress.get("user_id"));
         }
-        dataFlowContext.addParamOut("userId",businessUser.getString("userId"));
-        businessUser.put("bId",business.getbId());
-        businessUser.put("operate", StatusConstant.OPERATE_ADD);
-        //保存用户信息
-        userServiceDaoImpl.saveBusinessUserAddress(businessUser);
-
     }
 
     public IUserServiceDao getUserServiceDaoImpl() {

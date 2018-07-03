@@ -1,0 +1,41 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "delete.store.info",
+    "serviceName": "修改商户信息",
+    "remark": "备注",
+    "datas": {
+      "businessStore": {
+        "storeId": "123456"
+      },
+      "businessStoreAttr": [{
+        "storeId": "123456",
+        "attrId":"1234546"
+      }],
+      "businessStorePhoto":[{
+        "storePhotoId":"12321",
+        "storeId": "123456"
+      }],
+      "businessStoreCerdentials":[{
+        "storeCerdentialsId":"123123",
+        "storeId": "123456"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

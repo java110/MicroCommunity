@@ -11,6 +11,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.Business;
+import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
 import com.java110.event.service.BusinessServiceDataFlowListener;
 import com.java110.user.dao.IUserServiceDao;
@@ -24,12 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 保存 用户信息 侦听
+ * 保存 用户证件 侦听
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("saveUserCredentialsListener")
 @Transactional
-public class SaveUserCredentialsListener extends LoggerEngine implements BusinessServiceDataFlowListener{
+public class SaveUserCredentialsListener extends AbstractBusinessServiceDataFlowListener {
 
     private final static Logger logger = LoggerFactory.getLogger(SaveUserCredentialsListener.class);
 
@@ -46,79 +47,14 @@ public class SaveUserCredentialsListener extends LoggerEngine implements Busines
         return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_CREDENTIALS;
     }
 
+
+    /**
+     * 保存用户证件信息
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
     @Override
-    public void soService(BusinessServiceDataFlowEvent event) {
-        //这里处理业务逻辑数据
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        doSaveUserCredentials(dataFlowContext);
-    }
-
-    private void doSaveUserCredentials(DataFlowContext dataFlowContext){
-        String businessType = dataFlowContext.getOrder().getBusinessType();
-        Business business = dataFlowContext.getCurrentBusiness();
-        //Assert.hasLength(business.getbId(),"bId 不能为空");
-        // Instance 过程
-        if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
-            //doComplateUserInfo(business);
-            doSaveInstanceUserCredentials(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS.equals(businessType)){ // Business过程
-            doSaveBusinessUserCredentials(dataFlowContext,business);
-        }else if(StatusConstant.REQUEST_BUSINESS_TYPE_DELETE.equals(businessType)){ //撤单过程
-            doDeleteInstanceUserCredentials(dataFlowContext,business);
-        }
-
-        dataFlowContext.setResJson(DataTransactionFactory.createBusinessResponseJson(dataFlowContext,ResponseConstant.RESULT_CODE_SUCCESS,"成功",
-                dataFlowContext.getParamOut()));
-    }
-
-    /**
-     * 撤单
-     * @param business
-     */
-    private void doDeleteInstanceUserCredentials(DataFlowContext dataFlowContext, Business business) {
-
-        String bId = business.getbId();
-        //Assert.hasLength(bId,"请求报文中没有包含 bId");
-        Map info = new HashMap();
-        info.put("bId",bId);
-        Map userCredentials = userServiceDaoImpl.queryBusinessUserCredentials(info);
-        if(userCredentials != null && !userCredentials.isEmpty()){
-            info.put("bId",bId);
-            info.put("userId",userCredentials.get("user_id").toString());
-            info.put("credentialsId",userCredentials.get("credentials_id").toString());
-            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-            userServiceDaoImpl.updateUserCredentialsInstance(userCredentials);
-            dataFlowContext.addParamOut("userId",userCredentials.get("user_id"));
-        }
-    }
-
-    /**
-     * instance过程
-     * @param business
-     */
-    private void doSaveInstanceUserCredentials(DataFlowContext dataFlowContext, Business business) {
-
-        JSONObject data = business.getDatas();
-
-        Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
-        Map businessUserCredentials = userServiceDaoImpl.queryBusinessUserCredentials(info);
-        if( businessUserCredentials != null && !businessUserCredentials.isEmpty()) {
-            userServiceDaoImpl.saveUserCredentialsInstance(businessUserCredentials);
-            dataFlowContext.addParamOut("userId",businessUserCredentials.get("user_id"));
-            return ;
-        }
-
-        throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,"当前数据未找到business 数据"+info);
-    }
-
-    /**
-     * 处理用户打标信息
-     * @param business 业务信息
-     */
-    private void doSaveBusinessUserCredentials(DataFlowContext dataFlowContext, Business business) {
-
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
@@ -137,7 +73,51 @@ public class SaveUserCredentialsListener extends LoggerEngine implements Busines
         businessUser.put("operate", StatusConstant.OPERATE_ADD);
         //保存用户信息
         userServiceDaoImpl.saveBusinessUserCredentials(businessUser);
+    }
 
+    /**
+     * 保存用户证件信息至 instance中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+        JSONObject data = business.getDatas();
+
+        Map info = new HashMap();
+        info.put("bId",business.getbId());
+        info.put("operate",StatusConstant.OPERATE_ADD);
+        Map businessUserCredentials = userServiceDaoImpl.queryBusinessUserCredentials(info);
+        if( businessUserCredentials != null && !businessUserCredentials.isEmpty()) {
+            userServiceDaoImpl.saveUserCredentialsInstance(businessUserCredentials);
+            dataFlowContext.addParamOut("userId",businessUserCredentials.get("user_id"));
+            return ;
+        }
+
+        throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,"当前数据未找到business 数据"+info);
+
+    }
+
+    /**
+     * 作废用户证件信息
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+        String bId = business.getbId();
+        //Assert.hasLength(bId,"请求报文中没有包含 bId");
+        Map info = new HashMap();
+        info.put("bId",bId);
+        Map userCredentials = userServiceDaoImpl.queryBusinessUserCredentials(info);
+        if(userCredentials != null && !userCredentials.isEmpty()){
+            info.put("bId",bId);
+            info.put("userId",userCredentials.get("user_id").toString());
+            info.put("credentialsId",userCredentials.get("credentials_id").toString());
+            info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+            userServiceDaoImpl.updateUserCredentialsInstance(userCredentials);
+            dataFlowContext.addParamOut("userId",userCredentials.get("user_id"));
+        }
     }
 
     public IUserServiceDao getUserServiceDaoImpl() {
