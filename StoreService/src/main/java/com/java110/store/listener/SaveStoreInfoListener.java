@@ -2,9 +2,13 @@ package com.java110.store.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.DateUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -15,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -164,7 +170,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
             JSONObject businessStorePhoto = businessStorePhotos.getJSONObject(businessStorePhotoIndex);
             Assert.jsonObjectHaveKey(businessStorePhoto, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStorePhoto.getLong("storePhotoId") < 0) {
+            if (businessStorePhoto.getString("storePhotoId").startsWith("-")) {
                 String storePhotoId = GenerateCodeFactory.getStorePhotoId();
                 businessStorePhoto.put("storePhotoId", storePhotoId);
             }
@@ -184,11 +190,10 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
 
         Assert.jsonObjectHaveKey(businessStore,"storeId","businessStore 节点下没有包含 storeId 节点");
 
-        if(businessStore.getInteger("storeId") < 0){
+        if(businessStore.getString("storeId").startsWith("-")){
             //刷新缓存
             flushStoreId(business.getDatas());
         }
-
 
         businessStore.put("bId",business.getbId());
         businessStore.put("operate", StatusConstant.OPERATE_ADD);
@@ -211,7 +216,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
             JSONObject storeAttr = businessStoreAttrs.getJSONObject(storeAttrIndex);
             Assert.jsonObjectHaveKey(storeAttr,"attrId","businessStoreAttr 节点下没有包含 attrId 节点");
 
-            if(storeAttr.getInteger("attrId") < 0){
+            if(storeAttr.getString("attrId").startsWith("-")){
                 String attrId = GenerateCodeFactory.getAttrId();
                 storeAttr.put("attrId",attrId);
             }
@@ -235,10 +240,21 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
             JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);
             Assert.jsonObjectHaveKey(businessStoreCerdentials, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStoreCerdentials.getLong("storeCerdentialsId") < 0) {
+            if (businessStoreCerdentials.getString("storeCerdentialsId").startsWith("-")) {
                 String storePhotoId = GenerateCodeFactory.getStoreCerdentialsId();
                 businessStoreCerdentials.put("storeCerdentialsId", storePhotoId);
             }
+            Date validityPeriod = null;
+            try {
+                if(StringUtil.isNullOrNone(businessStoreCerdentials.getString("validityPeriod"))){
+                    validityPeriod = DateUtil.getLastDate();
+                }else {
+                    validityPeriod = DateUtil.getDateFromString(businessStoreCerdentials.getString("validityPeriod"), DateUtil.DATE_FORMATE_STRING_B);
+                }
+            } catch (ParseException e) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 validityPeriod 格式不正确，请填写 "+DateUtil.DATE_FORMATE_STRING_B +" 格式，"+businessStoreCerdentials);
+            }
+            businessStoreCerdentials.put("validityPeriod",validityPeriod);
             businessStoreCerdentials.put("bId", business.getbId());
             businessStoreCerdentials.put("operate", StatusConstant.OPERATE_ADD);
             //保存商户信息

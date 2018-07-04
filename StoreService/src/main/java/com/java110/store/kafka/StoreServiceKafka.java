@@ -27,7 +27,7 @@ public class StoreServiceKafka extends BaseController {
     @Autowired
     private IStoreServiceSMO storeServiceSMOImpl;
 
-    @KafkaListener(topics = {"userServiceTopic"})
+    @KafkaListener(topics = {"storeServiceTopic"})
     public void listen(ConsumerRecord<?, ?> record) {
         logger.info("kafka的key: " + record.key());
         logger.info("kafka的value: " + record.value().toString());

@@ -6,23 +6,23 @@
     
     <!-- 保存商户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreInfo" parameterType="Map">
-        insert into business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,operate)
-        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{operate})
+        insert into business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
+        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
     </insert>
     <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreAttr" parameterType="Map">
-        insert into business_store_attr(b_id,attr_id,store_id,spec_cd,value,operate)
-        values(#{bId},#{attrId},#{storeId},#{specCd},#{value},#{operate})
+        insert into business_store_attr(b_id,attr_id,store_id,spec_cd,value,month,operate)
+        values(#{bId},#{attrId},#{storeId},#{specCd},#{value},#{month},#{operate})
     </insert>
     <!-- 保存商户照片信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStorePhoto" parameterType="Map">
-        insert into business_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,operate)
-        values(#{storePhotoId},#{bId},#{storeId},#{storePhotoTypeCd},#{photo})
+        insert into business_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,month,operate)
+        values(#{storePhotoId},#{bId},#{storeId},#{storePhotoTypeCd},#{photo},#{month},#{operate})
     </insert>
     <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreCerdentials" parameterType="Map">
-        insert into business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,operate)
-        values(#{storeCerdentialsId},#{bId},#{storeId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{operate})
+        insert into business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
+        values(#{storeCerdentialsId},#{bId},#{storeId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{month},#{operate})
     </insert>
 
     <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
@@ -46,7 +46,7 @@
         select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.operate
         from business_store_attr sa where 1=1
         <if test="operate != null and operate != ''">
-            and s.operate = #{operate}
+            and sa.operate = #{operate}
         </if>
         <if test="bId != null and bId !=''">
             and sa.b_id = #{bId}
@@ -138,7 +138,7 @@
     </select>
 
     <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
-    <select id="getStoreAttr" parameterType="Map" resultType="Map">
+    <select id="getStoreAttrs" parameterType="Map" resultType="Map">
         select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.status_cd
         from s_store_attr sa
         where
@@ -289,7 +289,7 @@
         <if test="value != null and value != ''">
             ,sc.value = #{value}
         </if>
-        <if test="validityPeriod != null and validityPeriod != ''">
+        <if test="validityPeriod != null">
             ,sc.validity_period = #{validityPeriod}
         </if>
         <if test="positivePhoto != null and positivePhoto != ''">

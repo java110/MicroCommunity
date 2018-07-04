@@ -1,5 +1,6 @@
 package com.java110.common.util;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,6 +74,19 @@ public class DateUtil {
         return calendar.get(Calendar.MONTH)+1;
     }
 
+    public static Date getLastDate() throws ParseException {
+        return getDateFromString("3000-01-01",DATE_FORMATE_STRING_B);
+    }
+
+    /**
+     * 转TimeStamp
+     * @param date
+     * @return
+     */
+    public static Timestamp getTimestamp(Date date){
+        Timestamp timestamp = new Timestamp(date.getTime());
+        return timestamp;
+    }
     /**
      * 获取未来时间
      * @param second 秒

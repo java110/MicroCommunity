@@ -92,37 +92,42 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
-        Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
 
-        Map paramIn = new HashMap();
-        paramIn.put("bId",bId);
-        paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
         //商户信息
-        Map storeInfo = storeServiceDaoImpl.getStoreInfo(info);
-        if(storeInfo != null && !storeInfo.isEmpty()){
-            paramIn.put("storeId",storeInfo.get("store_id").toString());
-            storeServiceDaoImpl.updateStoreInfoInstance(paramIn);
-            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
-        }
+        Map info = new HashMap();
+        info.put("bId",business.getbId());
+        info.put("operate",StatusConstant.OPERATE_DEL);
 
+        //商户信息
+        Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
+        if( businessStoreInfo != null && !businessStoreInfo.isEmpty()) {
+            flushBusinessStoreInfo(businessStoreInfo,StatusConstant.STATUS_CD_INVALID);
+            storeServiceDaoImpl.updateStoreInfoInstance(businessStoreInfo);
+            dataFlowContext.addParamOut("storeId",businessStoreInfo.get("store_id"));
+        }
         //商户属性
-        List<Map> storeAttrs = storeServiceDaoImpl.getStoreAttrs(info);
-        if(storeAttrs != null && storeAttrs.size()>0){
-            storeServiceDaoImpl.updateStoreAttrInstance(paramIn);
+        List<Map> businessStoreAttrs = storeServiceDaoImpl.getBusinessStoreAttrs(info);
+        if(businessStoreAttrs != null && businessStoreAttrs.size() > 0) {
+            for(Map businessStoreAttr : businessStoreAttrs) {
+                flushBusinessStoreAttr(businessStoreAttr,StatusConstant.STATUS_CD_INVALID);
+                storeServiceDaoImpl.updateStoreAttrInstance(businessStoreAttr);
+            }
         }
-
         //商户照片
-        List<Map> storePhotos = storeServiceDaoImpl.getStorePhoto(info);
-        if(storePhotos != null && storePhotos.size()>0){
-            storeServiceDaoImpl.updateStorePhotoInstance(paramIn);
+        List<Map> businessStorePhotos = storeServiceDaoImpl.getBusinessStorePhoto(info);
+        if(businessStorePhotos != null && businessStorePhotos.size() >0){
+            for(Map businessStorePhoto : businessStorePhotos) {
+                flushBusinessStorePhoto(businessStorePhoto,StatusConstant.STATUS_CD_INVALID);
+                storeServiceDaoImpl.updateStorePhotoInstance(businessStorePhoto);
+            }
         }
-
-        //商户属性
-        List<Map> storeCerdentialses = storeServiceDaoImpl.getStoreCerdentials(info);
-        if(storeCerdentialses != null && storeCerdentialses.size()>0){
-            storeServiceDaoImpl.updateStoreCerdentailsInstance(paramIn);
+        //商户证件
+        List<Map> businessStoreCerdentialses = storeServiceDaoImpl.getBusinessStoreCerdentials(info);
+        if(businessStoreCerdentialses != null && businessStoreCerdentialses.size()>0){
+            for(Map businessStoreCerdentials : businessStoreCerdentialses) {
+                flushBusinessStoreCredentials(businessStoreCerdentials,StatusConstant.STATUS_CD_INVALID);
+                storeServiceDaoImpl.updateStoreCerdentailsInstance(businessStoreCerdentials);
+            }
         }
     }
 
@@ -210,13 +215,11 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      */
     private void doBusinessStorePhoto(Business business, JSONArray businessStorePhotos) {
 
-        Map info = null;
-        Map currentStorePhoto = null;
         for(int businessStorePhotoIndex = 0 ;businessStorePhotoIndex < businessStorePhotos.size();businessStorePhotoIndex++) {
             JSONObject businessStorePhoto = businessStorePhotos.getJSONObject(businessStorePhotoIndex);
             Assert.jsonObjectHaveKey(businessStorePhoto, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStorePhoto.getLong("storePhotoId") < 0) {
+            if (businessStorePhoto.getString("storePhotoId").startsWith("-")) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storePhotoId 错误，不能自动生成（必须已经存在的storePhotoId）"+businessStorePhoto);
             }
 
@@ -233,7 +236,7 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
 
         Assert.jsonObjectHaveKey(businessStore,"storeId","businessStore 节点下没有包含 storeId 节点");
 
-        if(businessStore.getLong("storeId") < 0){
+        if(businessStore.getString("storeId").startsWith("-")){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storeId 错误，不能自动生成（必须已经存在的storeId）"+businessStore);
         }
         //自动插入DEL
@@ -253,7 +256,7 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         for(int storeAttrIndex = 0 ; storeAttrIndex < businessStoreAttrs.size();storeAttrIndex ++){
             JSONObject storeAttr = businessStoreAttrs.getJSONObject(storeAttrIndex);
             Assert.jsonObjectHaveKey(storeAttr,"attrId","businessStoreAttr 节点下没有包含 attrId 节点");
-            if(storeAttr.getLong("attrId") < 0){
+            if(storeAttr.getString("attrId").startsWith("-")){
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"attrId 错误，不能自动生成（必须已经存在的attrId）"+storeAttr);
             }
 
@@ -275,7 +278,7 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
             JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);
             Assert.jsonObjectHaveKey(businessStoreCerdentials, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStoreCerdentials.getLong("storeCerdentialsId") < 0) {
+            if (businessStoreCerdentials.getString("storeCerdentialsId").startsWith("-")) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storePhotoId 错误，不能自动生成（必须已经存在的storePhotoId）"+businessStoreCerdentials);
             }
 

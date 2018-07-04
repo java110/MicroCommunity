@@ -179,6 +179,6 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentStoreCerdentials.put("positivePhoto",currentStoreCerdentials.get("positive_photo"));
         currentStoreCerdentials.put("negativePhoto",currentStoreCerdentials.get("negative_photo"));
         currentStoreCerdentials.put("operate",StatusConstant.OPERATE_DEL);
-        getStoreServiceDaoImpl().saveBusinessStoreAttr(currentStoreCerdentials);
+        getStoreServiceDaoImpl().saveBusinessStoreCerdentials(currentStoreCerdentials);
     }
 }

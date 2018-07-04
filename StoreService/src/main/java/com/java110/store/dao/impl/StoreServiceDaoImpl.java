@@ -3,6 +3,7 @@ package com.java110.store.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.DAOException;
+import com.java110.common.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.store.dao.IStoreServiceDao;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      */
     @Override
     public void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException {
+        businessStoreInfo.put("month", DateUtil.getCurrentMonth());
         // 查询business_user 数据是否已经存在
         logger.debug("保存商户信息 入参 businessStoreInfo : {}",businessStoreInfo);
         int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreInfo",businessStoreInfo);
@@ -46,6 +48,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      */
     @Override
     public void saveBusinessStoreAttr(Map businessStoreAttr) throws DAOException {
+        businessStoreAttr.put("month", DateUtil.getCurrentMonth());
         // 查询business_user 数据是否已经存在
         logger.debug("保存商户属性信息 入参 businessStoreAttr : {}",businessStoreAttr);
 
@@ -63,7 +66,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      */
     @Override
     public void saveBusinessStorePhoto(Map businessStorePhoto) throws DAOException {
-
+        businessStorePhoto.put("month", DateUtil.getCurrentMonth());
         logger.debug("保存商户照片信息 入参 businessStorePhoto : {}",businessStorePhoto);
 
         int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStorePhoto",businessStorePhoto);
@@ -80,6 +83,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      */
     @Override
     public void saveBusinessStoreCerdentials(Map businessStoreCerdentials) throws DAOException {
+        businessStoreCerdentials.put("month", DateUtil.getCurrentMonth());
         logger.debug("保存商户证件信息 入参 businessStoreCerdentials : {}",businessStoreCerdentials);
 
         int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreCerdentials",businessStoreCerdentials);
@@ -216,7 +220,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
         logger.debug("查询商户信息 入参 info : {}",info);
 
         List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreInfo",info);
-        if(businessStoreInfos == null){
+        if(businessStoreInfos == null || businessStoreInfos.size() == 0){
             return null;
         }
         if(businessStoreInfos.size() >1){

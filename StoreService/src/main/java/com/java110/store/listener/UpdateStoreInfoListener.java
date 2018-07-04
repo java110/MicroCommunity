@@ -220,7 +220,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
             JSONObject businessStorePhoto = businessStorePhotos.getJSONObject(businessStorePhotoIndex);
             Assert.jsonObjectHaveKey(businessStorePhoto, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStorePhoto.getLong("storePhotoId") < 0) {
+            if (businessStorePhoto.getString("storePhotoId").startsWith("-")) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storePhotoId 错误，不能自动生成（必须已经存在的storePhotoId）"+businessStorePhoto);
             }
 
@@ -243,7 +243,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
 
         Assert.jsonObjectHaveKey(businessStore,"storeId","businessStore 节点下没有包含 storeId 节点");
 
-        if(businessStore.getLong("storeId") < 0){
+        if(businessStore.getString("storeId").startsWith("-")){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storeId 错误，不能自动生成（必须已经存在的storeId）"+businessStore);
         }
         //自动保存DEL
@@ -270,7 +270,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         for(int storeAttrIndex = 0 ; storeAttrIndex < businessStoreAttrs.size();storeAttrIndex ++){
             JSONObject storeAttr = businessStoreAttrs.getJSONObject(storeAttrIndex);
             Assert.jsonObjectHaveKey(storeAttr,"attrId","businessStoreAttr 节点下没有包含 attrId 节点");
-            if(storeAttr.getLong("attrId") < 0){
+            if(storeAttr.getString("attrId").startsWith("-")){
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"attrId 错误，不能自动生成（必须已经存在的attrId）"+storeAttr);
             }
             //自动保存DEL数据
@@ -296,7 +296,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
             JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);
             Assert.jsonObjectHaveKey(businessStoreCerdentials, "storeId", "businessStorePhoto 节点下没有包含 storeId 节点");
 
-            if (businessStoreCerdentials.getLong("storeCerdentialsId") < 0) {
+            if (businessStoreCerdentials.getString("storeCerdentialsId").startsWith("-")) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"storePhotoId 错误，不能自动生成（必须已经存在的storePhotoId）"+businessStoreCerdentials);
             }
 
