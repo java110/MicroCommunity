@@ -120,7 +120,6 @@ CREATE INDEX idx_business_store_cerdentials_b_id ON business_store_cerdentials(b
 
 
 CREATE TABLE s_store(
-    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
@@ -139,7 +138,6 @@ CREATE INDEX idx_store_b_id ON s_store(b_id);
 CREATE UNIQUE INDEX idx_store_store_id ON s_store(store_id);
 
 CREATE TABLE s_store_attr(
-    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
     attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
     store_id VARCHAR(30) NOT NULL COMMENT '用户ID',
@@ -154,7 +152,6 @@ CREATE INDEX idx_store_attr_store_id ON s_store_attr(store_id);
 
 -- 商店照片
 CREATE TABLE s_store_photo(
-    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     store_photo_id VARCHAR(30) NOT NULL COMMENT '商户照片ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
@@ -170,7 +167,6 @@ CREATE INDEX idx_store_photo_store_photo_id ON s_store_photo(store_photo_id);
 
 -- 商户证件
 create table s_store_cerdentials(
-    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     store_cerdentials_id varchar(30) not null comment '商户证件ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',

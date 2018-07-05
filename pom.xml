@@ -30,6 +30,7 @@
         <module>ConsoleService</module>
         <module>java110-logAgent</module>
         <module>zipkin</module>
+        <module>ShopService</module>
     </modules>
 
     <parent>

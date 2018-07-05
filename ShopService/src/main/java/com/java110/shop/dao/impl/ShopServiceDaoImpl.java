@@ -1,0 +1,340 @@
+package com.java110.shop.dao.impl;
+
+import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.DAOException;
+import com.java110.common.util.DateUtil;
+import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.shop.dao.IShopServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商户服务 与数据库交互
+ * Created by wuxw on 2017/4/5.
+ */
+@Service("shopServiceDaoImpl")
+//@Transactional
+public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDao {
+
+    private final static Logger logger = LoggerFactory.getLogger(ShopServiceDaoImpl.class);
+
+    /**
+     * 商户信息封装
+     * @param businessStoreInfo 商户信息 封装
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException {
+        businessStoreInfo.put("month", DateUtil.getCurrentMonth());
+        // 查询business_user 数据是否已经存在
+        logger.debug("保存商户信息 入参 businessStoreInfo : {}",businessStoreInfo);
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreInfo",businessStoreInfo);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户数据失败："+ JSONObject.toJSONString(businessStoreInfo));
+        }
+    }
+
+    /**
+     * 商户属性信息分装
+     * @param businessStoreAttr 商户属性信息封装
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessStoreAttr(Map businessStoreAttr) throws DAOException {
+        businessStoreAttr.put("month", DateUtil.getCurrentMonth());
+        // 查询business_user 数据是否已经存在
+        logger.debug("保存商户属性信息 入参 businessStoreAttr : {}",businessStoreAttr);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreAttr",businessStoreAttr);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户属性数据失败："+ JSONObject.toJSONString(businessStoreAttr));
+        }
+    }
+
+    /**
+     * 保存商户照片信息
+     * @param businessStorePhoto 商户照片
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessStorePhoto(Map businessStorePhoto) throws DAOException {
+        businessStorePhoto.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存商户照片信息 入参 businessStorePhoto : {}",businessStorePhoto);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStorePhoto",businessStorePhoto);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户照片数据失败："+ JSONObject.toJSONString(businessStorePhoto));
+        }
+    }
+
+    /**
+     * 保存商户证件信息
+     * @param businessStoreCerdentials 商户证件
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessStoreCerdentials(Map businessStoreCerdentials) throws DAOException {
+        businessStoreCerdentials.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存商户证件信息 入参 businessStoreCerdentials : {}",businessStoreCerdentials);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreCerdentials",businessStoreCerdentials);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户证件数据失败："+ JSONObject.toJSONString(businessStoreCerdentials));
+        }
+    }
+
+    /**
+     * 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    @Override
+    public Map getBusinessStoreInfo(Map info) throws DAOException {
+
+        logger.debug("查询商户信息 入参 info : {}",info);
+
+        List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStoreInfo",info);
+        if(businessStoreInfos == null){
+            return null;
+        }
+        if(businessStoreInfos.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessStoreInfos，"+ JSONObject.toJSONString(info));
+        }
+
+        return businessStoreInfos.get(0);
+    }
+
+    /**
+     * 查询商户属性
+     * @param info bId 信息
+     * @return 商户属性
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getBusinessStoreAttrs(Map info) throws DAOException {
+        logger.debug("查询商户属性信息 入参 info : {}",info);
+
+        List<Map> businessStoreAttrs = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStoreAttrs",info);
+
+        return businessStoreAttrs;
+    }
+
+    /**
+     * 查询商户照片
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getBusinessStorePhoto(Map info) throws DAOException {
+        logger.debug("查询商户照片信息 入参 info : {}",info);
+
+        List<Map> businessStorePhotos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStorePhoto",info);
+
+        return businessStorePhotos;
+    }
+
+    /**
+     * 查询商户证件
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getBusinessStoreCerdentials(Map info) throws DAOException {
+        logger.debug("查询商户证件信息 入参 info : {}",info);
+
+        List<Map> businessStoreCerdentialses = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStoreCerdentials",info);
+
+        return businessStoreCerdentialses;
+    }
+
+    /**
+     * 保存商户信息 到 instance
+     * @param info   bId 信息
+     * @throws DAOException
+     */
+    @Override
+    public void saveStoreInfoInstance(Map info) throws DAOException {
+        logger.debug("保存商户信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveStoreInfoInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    @Override
+    public void saveStoreAttrsInstance(Map info) throws DAOException {
+        logger.debug("保存商户属性信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveStoreAttrsInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    @Override
+    public void saveStorePhotoInstance(Map info) throws DAOException {
+        logger.debug("保存商户照片信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveStorePhotoInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户照片信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    @Override
+    public void saveStoreCerdentialsInstance(Map info) throws DAOException {
+        logger.debug("保存商户证件信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveStoreCerdentialsInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户证件信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 查询商户信息（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public Map getStoreInfo(Map info) throws DAOException {
+        logger.debug("查询商户信息 入参 info : {}",info);
+
+        List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreInfo",info);
+        if(businessStoreInfos == null || businessStoreInfos.size() == 0){
+            return null;
+        }
+        if(businessStoreInfos.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getStoreInfo，"+ JSONObject.toJSONString(info));
+        }
+
+        return businessStoreInfos.get(0);
+    }
+
+    /**
+     * 商户属性查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getStoreAttrs(Map info) throws DAOException {
+        logger.debug("查询商户属性信息 入参 info : {}",info);
+
+        List<Map> storeAttrs = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreAttrs",info);
+
+        return storeAttrs;
+    }
+
+    /**
+     * 商户照片查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getStorePhoto(Map info) throws DAOException {
+        logger.debug("查询商户照片信息 入参 info : {}",info);
+
+        List<Map> storePhotos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStorePhoto",info);
+
+        return storePhotos;
+    }
+
+    /**
+     * 商户证件查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getStoreCerdentials(Map info) throws DAOException {
+        logger.debug("查询商户证件信息 入参 info : {}",info);
+
+        List<Map> storeCerdentialses = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreCerdentials",info);
+
+        return storeCerdentialses;
+    }
+
+    /**
+     * 修改商户信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateStoreInfoInstance(Map info) throws DAOException {
+        logger.debug("修改商户信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStoreInfoInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改商户属性信息（instance）
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateStoreAttrInstance(Map info) throws DAOException {
+        logger.debug("修改商户属性信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStoreAttrInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户属性信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改 商户照片信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateStorePhotoInstance(Map info) throws DAOException {
+        logger.debug("修改商户照片信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStorePhotoInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户照片信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改商户证件信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateStoreCerdentailsInstance(Map info) throws DAOException {
+        logger.debug("修改商户证件信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStoreCerdentailsInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户证件信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+}
