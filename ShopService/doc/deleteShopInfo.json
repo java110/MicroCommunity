@@ -1,0 +1,49 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "delete.shop.info",
+    "serviceName": "删除商品信息",
+    "remark": "备注",
+    "datas": {
+      "businessShop": {
+        "shopId": "123456"
+      },
+      "businessShopAttr": [{
+        "shopId": "123456",
+        "attrId":"123123"
+      }],
+      "businessShopPhoto":[{
+        "shopPhotoId":"123123",
+        "shopId":"123456"
+      }],
+      "businessShopAttrParam":[{
+        "attrParamId":"123123",
+        "shopId":"123456"
+      }],
+      "businessShopPreferential":{
+        "shopPreferentialId":"23213",
+        "shopId":"123456"
+      },
+      "businessShopDesc":{
+        "shopDescId":"343434",
+        "shopId":"123456"
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

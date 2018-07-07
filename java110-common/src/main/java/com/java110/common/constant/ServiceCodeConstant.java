@@ -102,5 +102,27 @@ public class ServiceCodeConstant {
 
 
 
+    /**
+     * 保存商品信息
+     */
+    public static final String SERVICE_CODE_SAVE_SHOP_INFO = "save.shop.info";
+
+    /**
+     * 修改商品信息
+     */
+    public static final String SERVICE_CODE_UPDATE_SHOP_INFO = "update.shop.info";
+
+    /**
+     * 删除商品信息
+     */
+    public static final String SERVICE_CODE_DELETE_SHOP_INFO = "delete.shop.info";
+
+    /**
+     * 购买商品
+     */
+    public static final String SERVICE_CODE_BUY_SHOP_INFO = "buy.shop.info";
+
+
+
 
 }

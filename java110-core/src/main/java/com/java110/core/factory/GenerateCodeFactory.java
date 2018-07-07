@@ -54,6 +54,12 @@ public class GenerateCodeFactory {
         prefixMap.put("storeId","40");
         prefixMap.put("storePhotoId","41");
         prefixMap.put("storeCerdentialsId","42");
+        prefixMap.put("shopId","50");
+        prefixMap.put("shopAttrId","51");
+        prefixMap.put("shopPhotoId","52");
+        prefixMap.put("shopAttrParamId","53");
+        prefixMap.put("shopPreferentialId","54");
+        prefixMap.put("shopDescId","55");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -204,7 +210,11 @@ public class GenerateCodeFactory {
         return getCode(prefixMap.get("storePhotoId"));
     }
 
-
+    /**
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
     public static String getStoreCerdentialsId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
             return prefixMap.get("storeCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
@@ -213,6 +223,85 @@ public class GenerateCodeFactory {
         return getCode(prefixMap.get("storeCerdentialsId"));
     }
 
+    /**
+     * 商品ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopId"));
+    }
+
+    /**
+     * 商品属性ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopAttrId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopAttrId"));
+    }
+
+    /**
+     * 商品优惠ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopPreferentialId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopPreferentialId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopPreferentialId"));
+    }
+
+
+
+    /**
+     * 商品属性参数ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopAttrParamId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopAttrParamId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopAttrParamId"));
+    }
+
+    /**
+     * 商品属性ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopPhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopPhotoId"));
+    }
+
+    /**
+     * 商品描述ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopDescId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopDescId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopDescId"));
+    }
     /**
      * 获取restTemplate
      * @return

@@ -27,158 +27,237 @@ public abstract class AbstractShopBusinessServiceDataFlowListener extends Abstra
     public abstract IShopServiceDao getShopServiceDaoImpl();
 
     /**
-     * 刷新 businessStoreInfo 数据
+     * 刷新 businessShopInfo 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
-     * @param businessStoreInfo
+     * @param businessShopInfo
      */
-    protected void flushBusinessStoreInfo(Map businessStoreInfo,String statusCd){
-        businessStoreInfo.put("newBId",businessStoreInfo.get("b_id"));
-        businessStoreInfo.put("storeId",businessStoreInfo.get("store_id"));
-        businessStoreInfo.put("userId",businessStoreInfo.get("user_id"));
-        businessStoreInfo.put("storeTypeCd",businessStoreInfo.get("store_type_cd"));
-        businessStoreInfo.put("nearbyLandmarks",businessStoreInfo.get("nearby_landmarks"));
-        businessStoreInfo.put("mapX",businessStoreInfo.get("map_x"));
-        businessStoreInfo.put("mapY",businessStoreInfo.get("map_y"));
-        businessStoreInfo.put("statusCd", statusCd);
+    protected void flushBusinessShopInfo(Map businessShopInfo,String statusCd){
+        businessShopInfo.put("newBId",businessShopInfo.get("b_id"));
+        businessShopInfo.put("shopId",businessShopInfo.get("shop_id"));
+        businessShopInfo.put("storeId",businessShopInfo.get("store_id"));
+        businessShopInfo.put("catalogId",businessShopInfo.get("catalog_id"));
+        businessShopInfo.put("hotBuy",businessShopInfo.get("hot_buy"));
+        businessShopInfo.put("salePrice",businessShopInfo.get("sale_price"));
+        businessShopInfo.put("openShopCount",businessShopInfo.get("open_shop_count"));
+        businessShopInfo.put("shopCount",businessShopInfo.get("shop_count"));
+        businessShopInfo.put("startDate",businessShopInfo.get("start_date"));
+        businessShopInfo.put("endDate",businessShopInfo.get("end_date"));
+        businessShopInfo.put("statusCd", statusCd);
     }
 
     /**
-        刷新 businessStoreAttr 数据
+        刷新 businessShopAttr 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
-     * @param businessStoreAttr
+     * @param businessShopAttr
      * @param statusCd
      */
-    protected void flushBusinessStoreAttr(Map businessStoreAttr,String statusCd){
-        businessStoreAttr.put("attrId",businessStoreAttr.get("attr_id"));
-        businessStoreAttr.put("specCd",businessStoreAttr.get("spec_cd"));
-        businessStoreAttr.put("storeId",businessStoreAttr.get("store_id"));
-        businessStoreAttr.put("newBId",businessStoreAttr.get("b_id"));
-        businessStoreAttr.put("statusCd",statusCd);
+    protected void flushBusinessShopAttr(Map businessShopAttr,String statusCd){
+        businessShopAttr.put("attrId",businessShopAttr.get("attr_id"));
+        businessShopAttr.put("specCd",businessShopAttr.get("spec_cd"));
+        businessShopAttr.put("shopId",businessShopAttr.get("shop_id"));
+        businessShopAttr.put("newBId",businessShopAttr.get("b_id"));
+        businessShopAttr.put("statusCd",statusCd);
     }
 
     /**
-     * 刷新 businessStorePhoto 数据
-     * @param businessStorePhoto
+     * 刷新 businessShopAttrParam 数据
+     * @param businessShopAttrParam
      * @param statusCd
      */
-    protected void flushBusinessStorePhoto(Map businessStorePhoto,String statusCd){
-        businessStorePhoto.put("storeId",businessStorePhoto.get("store_id"));
-        businessStorePhoto.put("storePhotoId",businessStorePhoto.get("store_photo_id"));
-        businessStorePhoto.put("storePhotoTypeCd",businessStorePhoto.get("store_photo_type_cd"));
-        businessStorePhoto.put("newBId",businessStorePhoto.get("b_id"));
-        businessStorePhoto.put("statusCd",statusCd);
+    protected void flushBusinessShopAttrParam(Map businessShopAttrParam,String statusCd){
+        businessShopAttrParam.put("newBId",businessShopAttrParam.get("b_id"));
+        businessShopAttrParam.put("attrParamId",businessShopAttrParam.get("attr_param_id"));
+        businessShopAttrParam.put("shopId",businessShopAttrParam.get("shop_id"));
+        businessShopAttrParam.put("specCd",businessShopAttrParam.get("spec_cd"));
+        businessShopAttrParam.put("statusCd",statusCd);
     }
 
     /**
-     * 刷新 businessStoreCerdentials 数据
-     * @param businessStoreCerdentials
+     * 刷新 businessShopPhoto 数据
+     * @param businessShopPhoto
      * @param statusCd
      */
-    protected void flushBusinessStoreCredentials(Map businessStoreCerdentials ,String statusCd){
-        businessStoreCerdentials.put("storeId",businessStoreCerdentials.get("store_id"));
-        businessStoreCerdentials.put("storeCerdentialsId",businessStoreCerdentials.get("store_cerdentials_id"));
-        businessStoreCerdentials.put("credentialsCd",businessStoreCerdentials.get("credentials_cd"));
-        businessStoreCerdentials.put("validityPeriod",businessStoreCerdentials.get("validity_period"));
-        businessStoreCerdentials.put("positivePhoto",businessStoreCerdentials.get("positive_photo"));
-        businessStoreCerdentials.put("negativePhoto",businessStoreCerdentials.get("negative_photo"));
-        businessStoreCerdentials.put("newBId",businessStoreCerdentials.get("b_id"));
-        businessStoreCerdentials.put("statusCd",statusCd);
+    protected void flushBusinessShopPhoto(Map businessShopPhoto,String statusCd){
+        businessShopPhoto.put("shopId",businessShopPhoto.get("shop_id"));
+        businessShopPhoto.put("shopPhotoId",businessShopPhoto.get("shop_photo_id"));
+        businessShopPhoto.put("shopPhotoTypeCd",businessShopPhoto.get("shop_photo_type_cd"));
+        businessShopPhoto.put("newBId",businessShopPhoto.get("b_id"));
+        businessShopPhoto.put("statusCd",statusCd);
+    }
+
+    /**
+     * 刷新 businessShopPreferential 数据
+     * @param businessShopPreferential
+     * @param statusCd
+     */
+    protected void flushBusinessShopPreferential(Map businessShopPreferential ,String statusCd){
+        businessShopPreferential.put("shopPreferentialId",businessShopPreferential.get("shop_preferential_id"));
+        businessShopPreferential.put("shopId",businessShopPreferential.get("shop_id"));
+        businessShopPreferential.put("originalPrice",businessShopPreferential.get("original_price"));
+        businessShopPreferential.put("discountRate",businessShopPreferential.get("discount_rate"));
+        businessShopPreferential.put("showOriginalPrice",businessShopPreferential.get("show_original_price"));
+        businessShopPreferential.put("preferentialStartDate",businessShopPreferential.get("preferential_start_date"));
+        businessShopPreferential.put("preferentialEndDate",businessShopPreferential.get("preferential_end_date"));
+        businessShopPreferential.put("newBId",businessShopPreferential.get("b_id"));
+        businessShopPreferential.put("statusCd",statusCd);
+    }
+
+
+    /**
+     * 刷新 businessShopDesc 数据
+     * @param businessShopDesc
+     * @param statusCd
+     */
+    protected void flushBusinessShopDesc(Map businessShopDesc ,String statusCd){
+        businessShopDesc.put("shopDescId",businessShopDesc.get("shop_desc_id"));
+        businessShopDesc.put("shopId",businessShopDesc.get("shop_id"));
+        businessShopDesc.put("shopDescribe",businessShopDesc.get("shop_describe"));
+        businessShopDesc.put("newBId",businessShopDesc.get("b_id"));
+        businessShopDesc.put("statusCd",statusCd);
     }
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
-     * @param businessStore 商户信息
+     * @param businessShop 商户信息
      */
-    protected void autoSaveDelBusinessStore(Business business, JSONObject businessStore){
+    protected void autoSaveDelBusinessShop(Business business, JSONObject businessShop){
 //自动插入DEL
         Map info = new HashMap();
-        info.put("storeId",businessStore.getString("storeId"));
+        info.put("shopId",businessShop.getString("shopId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        Map currentStoreInfo = getShopServiceDaoImpl().getStoreInfo(info);
-        if(currentStoreInfo == null || currentStoreInfo.isEmpty()){
+        Map currentShopInfo = getShopServiceDaoImpl().getShopInfo(info);
+        if(currentShopInfo == null || currentShopInfo.isEmpty()){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
-        currentStoreInfo.put("bId",business.getbId());
-        currentStoreInfo.put("storeId",currentStoreInfo.get("store_id"));
-        currentStoreInfo.put("userId",currentStoreInfo.get("user_id"));
-        currentStoreInfo.put("storeTypeCd",currentStoreInfo.get("store_type_cd"));
-        currentStoreInfo.put("nearbyLandmarks",currentStoreInfo.get("nearby_landmarks"));
-        currentStoreInfo.put("mapX",currentStoreInfo.get("map_x"));
-        currentStoreInfo.put("mapY",currentStoreInfo.get("map_y"));
-        currentStoreInfo.put("operate",StatusConstant.OPERATE_DEL);
-        getShopServiceDaoImpl().saveBusinessStoreInfo(currentStoreInfo);
+        currentShopInfo.put("bId",business.getbId());
+        currentShopInfo.put("shopId",currentShopInfo.get("shop_id"));
+        currentShopInfo.put("storeId",currentShopInfo.get("store_id"));
+        currentShopInfo.put("catalogId",currentShopInfo.get("catalog_id"));
+        currentShopInfo.put("hotBuy",currentShopInfo.get("hot_buy"));
+        currentShopInfo.put("salePrice",currentShopInfo.get("sale_price"));
+        currentShopInfo.put("openShopCount",currentShopInfo.get("open_shop_count"));
+        currentShopInfo.put("shopCount",currentShopInfo.get("shop_count"));
+        currentShopInfo.put("startDate",currentShopInfo.get("start_date"));
+        currentShopInfo.put("endDate",currentShopInfo.get("end_date"));
+        currentShopInfo.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopInfo(currentShopInfo);
     }
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param business 当前业务
-     * @param storeAttr 商户属性
+     * @param shopAttr 商户属性
      */
-    protected void autoSaveDelBusinessStoreAttr(Business business, JSONObject storeAttr){
+    protected void autoSaveDelBusinessShopAttr(Business business, JSONObject shopAttr){
         Map info = new HashMap();
-        info.put("attrId",storeAttr.getString("attrId"));
-        info.put("storeId",storeAttr.getString("storeId"));
+        info.put("attrId",shopAttr.getString("attrId"));
+        info.put("shopId",shopAttr.getString("shopId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        List<Map> currentStoreAttrs = getShopServiceDaoImpl().getStoreAttrs(info);
-        if(currentStoreAttrs == null || currentStoreAttrs.size() != 1){
+        List<Map> currentShopAttrs = getShopServiceDaoImpl().getShopAttrs(info);
+        if(currentShopAttrs == null || currentShopAttrs.size() != 1){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
-        Map currentStoreAttr = currentStoreAttrs.get(0);
-        currentStoreAttr.put("bId",business.getbId());
-        currentStoreAttr.put("attrId",currentStoreAttr.get("attr_id"));
-        currentStoreAttr.put("storeId",currentStoreAttr.get("store_id"));
-        currentStoreAttr.put("specCd",currentStoreAttr.get("spec_cd"));
-        currentStoreAttr.put("operate",StatusConstant.OPERATE_DEL);
-        getShopServiceDaoImpl().saveBusinessStoreAttr(currentStoreAttr);
+        Map currentShopAttr = currentShopAttrs.get(0);
+        currentShopAttr.put("bId",business.getbId());
+        currentShopAttr.put("attrId",currentShopAttr.get("attr_id"));
+        currentShopAttr.put("shopId",currentShopAttr.get("shop_id"));
+        currentShopAttr.put("specCd",currentShopAttr.get("spec_cd"));
+        currentShopAttr.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopAttr(currentShopAttr);
     }
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
-     * @param business
-     * @param businessStorePhoto 商户照片
+     * @param business 当前业务
+     * @param shopAttrParam 商品属性参数
      */
-    protected void autoSaveDelBusinessStorePhoto(Business business,JSONObject businessStorePhoto){
+    protected void autoSaveDelBusinessShopAttrParam(Business business,JSONObject shopAttrParam){
+        Map info = new HashMap();
+        info.put("attrParamId",shopAttrParam.getString("attrParamId"));
+        info.put("shopId",shopAttrParam.getString("shopId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        List<Map> currentShopAttrParams = getShopServiceDaoImpl().getShopAttrParams(info);
+        if(currentShopAttrParams == null || currentShopAttrParams.size() != 1){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+        Map currentShopAttrParam = currentShopAttrParams.get(0);
+        currentShopAttrParam.put("bId",business.getbId());
+        currentShopAttrParam.put("attrParamId",currentShopAttrParam.get("attr_param_id"));
+        currentShopAttrParam.put("shopId",currentShopAttrParam.get("shop_id"));
+        currentShopAttrParam.put("specCd",currentShopAttrParam.get("spec_cd"));
+        currentShopAttrParam.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopAttrParam(currentShopAttrParam);
+    }
+    /**
+     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     * @param business
+     * @param businessShopPhoto 商户照片
+     */
+    protected void autoSaveDelBusinessShopPhoto(Business business,JSONObject businessShopPhoto){
        Map info = new HashMap();
-        info.put("storePhotoId",businessStorePhoto.getString("storePhotoId"));
-        info.put("storeId",businessStorePhoto.getString("storeId"));
+        info.put("shopPhotoId",businessShopPhoto.getString("shopPhotoId"));
+        info.put("shopId",businessShopPhoto.getString("shopId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        List<Map> currentStorePhotos = getShopServiceDaoImpl().getStorePhoto(info);
-        if(currentStorePhotos == null || currentStorePhotos.size() != 1){
+        List<Map> currentShopPhotos = getShopServiceDaoImpl().getShopPhoto(info);
+        if(currentShopPhotos == null || currentShopPhotos.size() != 1){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
-        Map currentStorePhoto = currentStorePhotos.get(0);
-        currentStorePhoto.put("bId",business.getbId());
-        currentStorePhoto.put("storePhotoId",currentStorePhoto.get("store_photo_id"));
-        currentStorePhoto.put("storeId",currentStorePhoto.get("store_id"));
-        currentStorePhoto.put("storePhotoTypeCd",currentStorePhoto.get("store_photo_type_cd"));
-        currentStorePhoto.put("operate",StatusConstant.OPERATE_DEL);
-        getShopServiceDaoImpl().saveBusinessStorePhoto(currentStorePhoto);
+        Map currentShopPhoto = currentShopPhotos.get(0);
+        currentShopPhoto.put("bId",business.getbId());
+        currentShopPhoto.put("shopPhotoId",currentShopPhoto.get("shop_photo_id"));
+        currentShopPhoto.put("shopId",currentShopPhoto.get("shop_id"));
+        currentShopPhoto.put("shopPhotoTypeCd",currentShopPhoto.get("shop_photo_type_cd"));
+        currentShopPhoto.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopPhoto(currentShopPhoto);
     }
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param business
-     * @param businessStoreCerdentials 商户证件
+     * @param businessShopPreferentials 商品优惠
      */
-    protected void autoSaveDelBusinessStoreCerdentials(Business business,JSONObject businessStoreCerdentials){
+    protected void autoSaveDelBusinessShopPreferential(Business business,JSONObject businessShopPreferentials){
         Map info = new HashMap();
-        info.put("storeCerdentialsId",businessStoreCerdentials.getString("storeCerdentialsId"));
-        info.put("storeId",businessStoreCerdentials.getString("storeId"));
+        info.put("shopPreferentialId",businessShopPreferentials.getString("shopPreferentialId"));
+        info.put("shopId",businessShopPreferentials.getString("shopId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        List<Map> currentStoreCerdentailses = getShopServiceDaoImpl().getStoreCerdentials(info);
-        if(currentStoreCerdentailses == null || currentStoreCerdentailses.size() != 1){
+        Map currentShopPreferential = getShopServiceDaoImpl().getShopPreferential(info);
+        if(currentShopPreferential == null || currentShopPreferential.isEmpty()){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
-        Map currentStoreCerdentials = currentStoreCerdentailses.get(0);
 
-        currentStoreCerdentials.put("bId",business.getbId());
-        currentStoreCerdentials.put("storeCerdentialsId",currentStoreCerdentials.get("store_cerdentials_id"));
-        currentStoreCerdentials.put("storeId",currentStoreCerdentials.get("store_id"));
-        currentStoreCerdentials.put("credentialsCd",currentStoreCerdentials.get("credentials_cd"));
-        currentStoreCerdentials.put("validityPeriod",currentStoreCerdentials.get("validity_period"));
-        currentStoreCerdentials.put("positivePhoto",currentStoreCerdentials.get("positive_photo"));
-        currentStoreCerdentials.put("negativePhoto",currentStoreCerdentials.get("negative_photo"));
-        currentStoreCerdentials.put("operate",StatusConstant.OPERATE_DEL);
-        getShopServiceDaoImpl().saveBusinessStoreCerdentials(currentStoreCerdentials);
+        currentShopPreferential.put("bId",business.getbId());
+        currentShopPreferential.put("shopPreferentialId",currentShopPreferential.get("shop_preferential_id"));
+        currentShopPreferential.put("shopId",currentShopPreferential.get("shop_id"));
+        currentShopPreferential.put("originalPrice",currentShopPreferential.get("original_price"));
+        currentShopPreferential.put("discountRate",currentShopPreferential.get("discount_rate"));
+        currentShopPreferential.put("showOriginalPrice",currentShopPreferential.get("show_original_price"));
+        currentShopPreferential.put("preferentialStartDate",currentShopPreferential.get("preferential_start_date"));
+        currentShopPreferential.put("preferentialEndDate",currentShopPreferential.get("preferential_end_date"));
+        currentShopPreferential.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopPreferential(currentShopPreferential);
+    }
+
+    /**
+     *
+     * @param business
+     * @param businessShopDesc
+     */
+    protected void autoSaveDelBusinessShopDesc(Business business,JSONObject businessShopDesc){
+        Map info = new HashMap();
+        info.put("shopDescId",businessShopDesc.getString("shopDescId"));
+        info.put("shopId",businessShopDesc.getString("shopId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        Map currentShopDesc = getShopServiceDaoImpl().getShopDesc(info);
+        if(currentShopDesc == null || currentShopDesc.isEmpty()){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+
+        currentShopDesc.put("bId",business.getbId());
+        currentShopDesc.put("shopDescId",currentShopDesc.get("shop_desc_id"));
+        currentShopDesc.put("shopId",currentShopDesc.get("shop_id"));
+        currentShopDesc.put("shopDescribe",currentShopDesc.get("shop_describe"));
+        currentShopDesc.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopDesc(currentShopDesc);
     }
 }

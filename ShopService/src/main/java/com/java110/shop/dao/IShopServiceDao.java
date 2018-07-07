@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 商户组件内部之间使用，没有给外围系统提供服务能力
- * 商户服务接口类，要求全部以字符串传输，方便微服务化
+ * 商品组件内部之间使用，没有给外围系统提供服务能力
+ * 商品服务接口类，要求全部以字符串传输，方便微服务化
  * 新建客户，修改客户，删除客户，查询客户等功能
  *
  * Created by wuxw on 2016/12/27.
@@ -16,165 +16,238 @@ import java.util.Map;
 public interface IShopServiceDao {
 
     /**
-     * 保存 商户信息
-     * @param businessStoreInfo 商户信息 封装
+     * 保存 商品信息
+     * @param businessShopInfo 商品信息 封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException;
+    public void saveBusinessShopInfo(Map businessShopInfo) throws DAOException;
 
     /**
-     * 保存商户属性
-     * @param businessStoreAttr 商户属性信息封装
+     * 保存商品属性
+     * @param businessShopAttr 商品属性信息封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessStoreAttr(Map businessStoreAttr) throws DAOException;
-
+    public void saveBusinessShopAttr(Map businessShopAttr) throws DAOException;
 
     /**
-     * 保存商户照片信息
-     * @param businessStorePhoto 商户照片
+     * 保存 商品属性参数
+     * @param businessShopAttrParam 商品属性参数信息封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessStorePhoto(Map businessStorePhoto) throws DAOException;
+    public void saveBusinessShopAttrParam(Map businessShopAttrParam) throws DAOException;
+
 
     /**
-     * 保存商户证件信息
-     * @param businessStoreCerdentials 商户证件
+     * 保存商品照片信息
+     * @param businessShopPhoto 商品照片
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessStoreCerdentials(Map businessStoreCerdentials) throws DAOException;
+    public void saveBusinessShopPhoto(Map businessShopPhoto) throws DAOException;
 
     /**
-     * 查询商户信息（business过程）
-     * 根据bId 查询商户信息
-     * @param info bId 信息
-     * @return 商户信息
+     * 保存商品证件信息
+     * @param businessShopPreferential 商品证件
+     * @throws DAOException 操作数据库异常
+     */
+    public void saveBusinessShopPreferential(Map businessShopPreferential) throws DAOException;
+
+    /**
+     * 保存商品 描述 信息
+     * @param businessShopDesc 商品 描述信息
      * @throws DAOException
      */
-    public Map getBusinessStoreInfo(Map info) throws DAOException;
-
+    public void saveBusinessShopDesc(Map businessShopDesc) throws DAOException;
 
     /**
-     * 查询商户属性信息（business过程）
+     * 查询商品信息（business过程）
+     * 根据bId 查询商品信息
      * @param info bId 信息
-     * @return 商户属性
+     * @return 商品信息
      * @throws DAOException
      */
-    public List<Map> getBusinessStoreAttrs(Map info) throws DAOException;
+    public Map getBusinessShopInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询商户照片
+     * 查询商品属性信息（business过程）
      * @param info bId 信息
-     * @return 商户照片
+     * @return 商品属性
      * @throws DAOException
      */
-    public List<Map> getBusinessStorePhoto(Map info) throws DAOException;
-
+    public List<Map> getBusinessShopAttrs(Map info) throws DAOException;
 
     /**
-     * 查询商户证件信息
+     * 查询商品属性参数信息（business过程）
      * @param info bId 信息
-     * @return 商户照片
+     * @return 商品属性参数
      * @throws DAOException
      */
-    public List<Map> getBusinessStoreCerdentials(Map info) throws DAOException;
+    public List<Map> getBusinessShopAttrParams(Map info) throws DAOException;
+
 
     /**
-     * 保存 商户信息 Business数据到 Instance中
+     * 查询商品照片
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessShopPhoto(Map info) throws DAOException;
+
+
+    /**
+     * 查询商品优惠信息
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public Map getBusinessShopPreferential(Map info) throws DAOException;
+
+    /**
+     * 查询商品描述信息
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public Map getBusinessShopDesc(Map info) throws DAOException;
+
+    /**
+     * 保存 商品信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
      */
-    public void saveStoreInfoInstance(Map info) throws DAOException;
+    public void saveShopInfoInstance(Map info) throws DAOException;
 
 
     /**
-     * 保存 商户属性信息 Business数据到 Instance中
+     * 保存 商品属性信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
      */
-    public void saveStoreAttrsInstance(Map info) throws DAOException;
+    public void saveShopAttrsInstance(Map info) throws DAOException;
 
     /**
-     * 保存 商户照片信息 Business数据到 Instance中
+     * 保存 商户属性参数 business 数据到 Instance 中
      * @param info
      * @throws DAOException
      */
-    public void saveStorePhotoInstance(Map info) throws DAOException;
-
+    public void saveShopAttrParamsInstance(Map info) throws DAOException;
 
     /**
-     * 保存 商户证件信息 Business数据到 Instance中
+     * 保存 商品照片信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
      */
-    public void saveStoreCerdentialsInstance(Map info) throws DAOException;
-
+    public void saveShopPhotoInstance(Map info) throws DAOException;
 
 
     /**
-     * 查询商户信息（instance过程）
-     * 根据bId 查询商户信息
-     * @param info bId 信息
-     * @return 商户信息
+     * 保存 商品证件信息 Business数据到 Instance中
+     * @param info
      * @throws DAOException
      */
-    public Map getStoreInfo(Map info) throws DAOException;
-
+    public void saveShopPreferentialInstance(Map info) throws DAOException;
 
     /**
-     * 查询商户属性信息（instance过程）
-     * @param info bId 信息
-     * @return 商户属性
+     * 保存 商品描述信息 Business数据到 Instance中
+     * @param info
      * @throws DAOException
      */
-    public List<Map> getStoreAttrs(Map info) throws DAOException;
+    public void saveShopDescInstance(Map info) throws DAOException;
 
 
     /**
-     * 查询商户照片（instance 过程）
+     * 查询商品信息（instance过程）
+     * 根据bId 查询商品信息
      * @param info bId 信息
-     * @return 商户照片
+     * @return 商品信息
      * @throws DAOException
      */
-    public List<Map> getStorePhoto(Map info) throws DAOException;
+    public Map getShopInfo(Map info) throws DAOException;
+
 
     /**
-     * 查询商户证件信息（instance 过程）
+     * 查询商品属性信息（instance过程）
      * @param info bId 信息
-     * @return 商户照片
+     * @return 商品属性
      * @throws DAOException
      */
-    public List<Map> getStoreCerdentials(Map info) throws DAOException;
+    public List<Map> getShopAttrs(Map info) throws DAOException;
 
     /**
-     * 修改商户信息
+     * 查询商品属性参数信息 （instance过程）
+     * @param info bId 信息
+     * @return 商品属性参数
+     * @throws DAOException
+     */
+    public List<Map> getShopAttrParams(Map info) throws DAOException;
+
+
+    /**
+     * 查询商品照片（instance 过程）
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public List<Map> getShopPhoto(Map info) throws DAOException;
+
+    /**
+     * 查询商品优惠信息（instance 过程）
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public Map getShopPreferential(Map info) throws DAOException;
+
+    /**
+     * 查询商品描述信息（instance 过程）
+     * @param info bId 信息
+     * @return 商品照片
+     * @throws DAOException
+     */
+    public Map getShopDesc(Map info) throws DAOException;
+
+    /**
+     * 修改商品信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateStoreInfoInstance(Map info) throws DAOException;
+    public void updateShopInfoInstance(Map info) throws DAOException;
 
 
     /**
-     * 修改商户属性信息
+     * 修改商品属性信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateStoreAttrInstance(Map info) throws DAOException;
+    public void updateShopAttrInstance(Map info) throws DAOException;
+
+    /**
+     * 修改商品属性参数信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateShopAttrParamInstance(Map info) throws DAOException;
 
 
     /**
-     * 修改商户照片信息
+     * 修改商品照片信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateStorePhotoInstance(Map info) throws DAOException;
+    public void updateShopPhotoInstance(Map info) throws DAOException;
 
     /**
-     * 修改商户证件信息
+     * 修改商品优惠信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateStoreCerdentailsInstance(Map info) throws DAOException;
+    public void updateShopPreferentialInstance(Map info) throws DAOException;
+
+    /**
+     * 修改商品描述信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateShopDescInstance(Map info) throws DAOException;
 
 }

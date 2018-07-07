@@ -2,6 +2,7 @@
 create table business_shop(
     shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    catalog_id varchar(30) not null comment '目录ID',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
     `name` VARCHAR(100) NOT NULL COMMENT '商品名称',
     hot_buy varchar(2) not null default 'N' comment '是否热卖 Y是 N否',
@@ -57,6 +58,65 @@ PARTITION BY RANGE (`month`) (
 );
 CREATE INDEX idx_business_shop_attr_shop_id ON business_shop_attr(shop_id);
 CREATE INDEX idx_business_shop_attr_b_id ON business_shop_attr(b_id);
+
+-- 商品 目录
+create table business_shop_catalog(
+    catalog_id varchar(30) not null comment '目录ID',
+    store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    `name` varchar(100) not null comment '目录名称',
+    level varchar(2) not null comment '目录等级',
+    parent_catalog_id varchar(30) not null default '-1' comment '父目录ID，一级目录则写-1',
+    `month` INT NOT NULL COMMENT '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+)
+PARTITION BY RANGE (`month`) (
+    PARTITION business_shop_catalog_1 VALUES LESS THAN (2),
+    PARTITION business_shop_catalog_2 VALUES LESS THAN (3),
+    PARTITION business_shop_catalog_3 VALUES LESS THAN (4),
+    PARTITION business_shop_catalog_4 VALUES LESS THAN (5),
+    PARTITION business_shop_catalog_5 VALUES LESS THAN (6),
+    PARTITION business_shop_catalog_6 VALUES LESS THAN (7),
+    PARTITION business_shop_catalog_7 VALUES LESS THAN (8),
+    PARTITION business_shop_catalog_8 VALUES LESS THAN (9),
+    PARTITION business_shop_catalog_9 VALUES LESS THAN (10),
+    PARTITION business_shop_catalog_10 VALUES LESS THAN (11),
+    PARTITION business_shop_catalog_11 VALUES LESS THAN (12),
+    PARTITION business_shop_catalog_12 VALUES LESS THAN (13)
+);
+CREATE INDEX idx_business_shop_catalog_store_id ON business_shop_catalog(store_id);
+CREATE INDEX idx_business_shop_catalog_b_id ON business_shop_catalog(b_id);
+
+
+-- 商店照片
+CREATE TABLE business_shop_photo(
+    shop_photo_id VARCHAR(30) NOT NULL COMMENT '商品照片ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    shop_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    shop_photo_type_cd VARCHAR(12) NOT NULL COMMENT '商品照片类型,L logo O 其他照片',
+    photo VARCHAR(100) NOT NULL COMMENT '照片',
+    `month` INT NOT NULL COMMENT '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+)
+PARTITION BY RANGE (`month`) (
+    PARTITION business_shop_photo_1 VALUES LESS THAN (2),
+    PARTITION business_shop_photo_2 VALUES LESS THAN (3),
+    PARTITION business_shop_photo_3 VALUES LESS THAN (4),
+    PARTITION business_shop_photo_4 VALUES LESS THAN (5),
+    PARTITION business_shop_photo_5 VALUES LESS THAN (6),
+    PARTITION business_shop_photo_6 VALUES LESS THAN (7),
+    PARTITION business_shop_photo_7 VALUES LESS THAN (8),
+    PARTITION business_shop_photo_8 VALUES LESS THAN (9),
+    PARTITION business_shop_photo_9 VALUES LESS THAN (10),
+    PARTITION business_shop_photo_10 VALUES LESS THAN (11),
+    PARTITION business_shop_photo_11 VALUES LESS THAN (12),
+    PARTITION business_shop_photo_12 VALUES LESS THAN (13)
+);
+
+CREATE INDEX idx_business_shop_photo_shop_id ON business_shop_photo(shop_id);
+CREATE INDEX idx_business_shop_photo_b_id ON business_shop_photo(b_id);
+
 
 -- 商品属性 离散值表，例如 手机颜色 黑 白 红
 create table business_shop_attr_param(
@@ -150,6 +210,7 @@ create table s_shop(
     shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    catalog_id varchar(30) not null comment '目录ID',
     `name` VARCHAR(100) NOT NULL COMMENT '商品名称',
     hot_buy varchar(2) not null default 'N' comment '是否热卖 Y是 N否',
     sale_price DECIMAL(10,2) not null comment '商品销售价,再没有打折情况下显示',
@@ -219,6 +280,21 @@ create table s_shop_desc(
 );
 CREATE INDEX idx_shop_desc_b_id ON s_shop_desc(b_id);
 CREATE INDEX idx_shop_desc_shop_id ON s_shop_desc(shop_id);
+
+-- 商店照片
+CREATE TABLE s_shop_photo(
+    shop_photo_id VARCHAR(30) NOT NULL COMMENT '商品照片ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
+    shop_photo_type_cd VARCHAR(12) NOT NULL COMMENT '商品照片类型,L logo O 其他照片',
+    photo VARCHAR(100) NOT NULL COMMENT '照片',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
+    UNIQUE KEY (store_photo_id)
+);
+CREATE INDEX idx_shop_photo_b_id ON s_store_photo(b_id);
+CREATE INDEX idx_shop_photo_shop_id ON s_store_photo(shop_id);
+CREATE INDEX idx_shop_photo_shop_photo_id ON s_store_photo(shop_photo_id);
 
 -- 商品购买记录
 

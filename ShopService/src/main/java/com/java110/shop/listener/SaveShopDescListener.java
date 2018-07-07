@@ -1,6 +1,5 @@
 package com.java110.shop.listener;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
@@ -8,10 +7,8 @@ import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.shop.dao.IShopServiceDao;
 import org.slf4j.Logger;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,18 +26,18 @@ import java.util.Map;
  * 处理 businessShop 节点
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("saveShopInfoListener")
+@Java110Listener("saveShopDescListener")
 @Transactional
-public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowListener {
+public class SaveShopDescListener extends AbstractShopBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(SaveShopInfoListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(SaveShopDescListener.class);
 
     @Autowired
     IShopServiceDao shopServiceDaoImpl;
 
     @Override
     public int getOrder() {
-        return 1;
+        return 5;
     }
 
     @Override
@@ -50,7 +46,7 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
     }
 
     /**
-     * 保存商户信息 business 表中
+     * 保存商品信息 business 表中
      * @param dataFlowContext 数据对象
      * @param business 当前业务对象
      */
@@ -59,11 +55,11 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessShop 节点
-        if(data.containsKey("businessShop")){
-            JSONObject businessShop = data.getJSONObject("businessShop");
-            doBusinessShop(business,businessShop);
-            dataFlowContext.addParamOut("shopId",businessShop.getString("shopId"));
+        //处理 shopDescId 节点
+        if(data.containsKey("businessShopDesc")){
+            JSONObject businessShopDesc = data.getJSONObject("businessShopDesc");
+            doBusinessShopDesc(business,businessShopDesc);
+            dataFlowContext.addParamOut("shopDescId",businessShopDesc.getString("shop_desc_Id"));
         }
 
     }
@@ -82,10 +78,10 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
         info.put("operate",StatusConstant.OPERATE_ADD);
 
         //商户信息
-        Map businessShopInfo = shopServiceDaoImpl.getBusinessShopInfo(info);
-        if( businessShopInfo != null && !businessShopInfo.isEmpty()) {
-            shopServiceDaoImpl.saveShopInfoInstance(info);
-            dataFlowContext.addParamOut("storeId",businessShopInfo.get("store_id"));
+        Map businessShopDesc = shopServiceDaoImpl.getBusinessShopDesc(info);
+        if( businessShopDesc != null && !businessShopDesc.isEmpty()) {
+            shopServiceDaoImpl.saveShopDescInstance(info);
+            dataFlowContext.addParamOut("shopDescId",businessShopDesc.get("shop_desc_id"));
         }
 
     }
@@ -106,41 +102,30 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
         //商户信息
-        Map storeInfo = shopServiceDaoImpl.getShopInfo(info);
-        if(storeInfo != null && !storeInfo.isEmpty()){
-            paramIn.put("shopId",storeInfo.get("shop_id").toString());
-            shopServiceDaoImpl.updateShopInfoInstance(paramIn);
-            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
+        Map storeDesc = shopServiceDaoImpl.getShopDesc(info);
+        if(storeDesc != null && !storeDesc.isEmpty()){
+            paramIn.put("shopId",storeDesc.get("shop_id").toString());
+            shopServiceDaoImpl.updateShopDescInstance(paramIn);
+            dataFlowContext.addParamOut("shopDescId",storeDesc.get("shop_desc_id"));
         }
     }
 
 
 
     /**
-     * 处理 businessShop 节点
+     * 处理 businessShopDesc 节点
      * @param business 总的数据节点
-     * @param businessShop 商品节点
+     * @param businessShopDesc 商品节点
      */
-    private void doBusinessShop(Business business,JSONObject businessShop){
+    private void doBusinessShopDesc(Business business, JSONObject businessShopDesc){
 
-        Assert.jsonObjectHaveKey(businessShop,"shopId","businessShop 节点下没有包含 storeId 节点");
+        Assert.jsonObjectHaveKey(businessShopDesc,"shopDescId","businessShop 节点下没有包含 shopDescId 节点");
 
-        businessShop.put("bId",business.getbId());
-        businessShop.put("operate", StatusConstant.OPERATE_ADD);
-        //对日期处理
-        Date startDate = null;
-        Date entDate = null;
-        try {
-            startDate = DateUtil.getDateFromString(businessShop.getString("startDate"), DateUtil.DATE_FORMATE_STRING_A);
-            entDate = DateUtil.getDateFromString(businessShop.getString("entDate"), DateUtil.DATE_FORMATE_STRING_A);
-            businessShop.put("startDate",startDate);
-            businessShop.put("entDate",entDate);
-        } catch (ParseException e) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 startDate entDate 格式不正确，请填写 "
-                    +DateUtil.DATE_FORMATE_STRING_A +" 格式，"+businessShop);
-        }
+        businessShopDesc.put("bId",business.getbId());
+        businessShopDesc.put("operate", StatusConstant.OPERATE_ADD);
+
         //保存商户信息
-        shopServiceDaoImpl.saveBusinessShopInfo(businessShop);
+        shopServiceDaoImpl.saveBusinessShopDesc(businessShopDesc);
 
     }
 

@@ -24,21 +24,21 @@ import java.util.Map;
  * 修改商户信息 侦听
  *
  * 处理节点
- * 1、businessShop:{} 商品基本信息节点
+ * 1、businessShopPhoto:{} 商品照片信息
  * 协议地址 ：https://github.com/java110/MicroCommunity/wiki/%E4%BF%AE%E6%94%B9%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF-%E5%8D%8F%E8%AE%AE
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("updateShopInfoListener")
+@Java110Listener("updateShopPhotoListener")
 @Transactional
-public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowListener {
+public class UpdateShopPhotoListener extends AbstractShopBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(UpdateShopInfoListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(UpdateShopPhotoListener.class);
     @Autowired
     IShopServiceDao shopServiceDaoImpl;
 
     @Override
     public int getOrder() {
-        return 1;
+        return 3;
     }
 
     @Override
@@ -59,11 +59,11 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessShop 节点
-        if(data.containsKey("businessShop")){
-            JSONObject businessShop = data.getJSONObject("businessShop");
-            doBusinessShop(business,businessShop);
-            dataFlowContext.addParamOut("shopId",businessShop.getString("shopId"));
+        if(data.containsKey("businessShopPhoto")){
+            JSONArray businessShopPhotos = data.getJSONArray("businessShopPhoto");
+            doBusinessShopPhoto(business,businessShopPhotos);
         }
+
     }
 
 
@@ -81,12 +81,13 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
 
-        //商户信息
-        Map businessShopInfo = shopServiceDaoImpl.getBusinessShopInfo(info);
-        if( businessShopInfo != null && !businessShopInfo.isEmpty()) {
-            flushBusinessShopInfo(businessShopInfo,StatusConstant.STATUS_CD_VALID);
-            shopServiceDaoImpl.updateShopInfoInstance(businessShopInfo);
-            dataFlowContext.addParamOut("shopId",businessShopInfo.get("shop_id"));
+        //商户属性信息
+        List<Map> businessShopPhotos = shopServiceDaoImpl.getBusinessShopPhoto(info);
+        if(businessShopPhotos != null && businessShopPhotos.size() > 0) {
+            for(Map businessShopPhoto : businessShopPhotos) {
+                flushBusinessShopPhoto(businessShopPhoto,StatusConstant.STATUS_CD_VALID);
+                shopServiceDaoImpl.updateShopPhotoInstance(businessShopPhoto);
+            }
         }
     }
 
@@ -107,19 +108,18 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
         delInfo.put("bId",business.getbId());
         delInfo.put("operate",StatusConstant.OPERATE_DEL);
         //商户信息
-        Map shopInfo = shopServiceDaoImpl.getShopInfo(info);
-        if(shopInfo != null && !shopInfo.isEmpty()){
+        List<Map> shopPhotos = shopServiceDaoImpl.getShopPhoto(info);
+        if(shopPhotos != null && shopPhotos.size()>0){
 
-            //商户信息
-            Map businessShopInfo = shopServiceDaoImpl.getBusinessShopInfo(delInfo);
+            List<Map> businessShopPhotos = shopServiceDaoImpl.getBusinessShopPhoto(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessShopInfo == null || businessShopInfo.isEmpty()){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（shop），程序内部异常,请检查！ "+delInfo);
+            if(businessShopPhotos == null || businessShopPhotos.size() ==0 ){
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败(shop_photo)，程序内部异常,请检查！ "+delInfo);
             }
-
-            flushBusinessShopInfo(businessShopInfo,StatusConstant.STATUS_CD_VALID);
-            shopServiceDaoImpl.updateShopInfoInstance(businessShopInfo);
-            dataFlowContext.addParamOut("shopId",shopInfo.get("shop_id"));
+            for(Map businessShopPhoto : businessShopPhotos) {
+                flushBusinessShopPhoto(businessShopPhoto,StatusConstant.STATUS_CD_VALID);
+                shopServiceDaoImpl.updateShopPhotoInstance(businessShopPhoto);
+            }
         }
 
     }
@@ -127,24 +127,29 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
 
 
     /**
-     * 处理 businessShop 节点
+     * 处理 businessShopPhoto 节点
      * @param business 总的数据节点
-     * @param businessShop 商户节点
+     * @param businessShopPhotos 商品属性节点
      */
-    private void doBusinessShop(Business business,JSONObject businessShop){
+    private void doBusinessShopPhoto(Business business,JSONArray businessShopPhotos){
+        JSONObject data = business.getDatas();
 
-        Assert.jsonObjectHaveKey(businessShop,"shopId","businessShop 节点下没有包含 shopId 节点");
 
-        if(businessShop.getString("shopId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"shopId 错误，不能自动生成（必须已经存在的shopId）"+businessShop);
+        for(int shopPhotoIndex = 0 ; shopPhotoIndex < businessShopPhotos.size();shopPhotoIndex ++){
+            JSONObject shopPhoto = businessShopPhotos.getJSONObject(shopPhotoIndex);
+            Assert.jsonObjectHaveKey(shopPhoto,"shopPhotoId","businessShopPhoto 节点下没有包含 shopPhotoId 节点");
+            if(shopPhoto.getString("shopPhotoId").startsWith("-")){
+                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"shopPhotoId 错误，不能自动生成（必须已经存在的shopPhotoId）"+shopPhoto);
+            }
+            //自动保存DEL数据
+            autoSaveDelBusinessShopPhoto(business,shopPhoto);
+
+            shopPhoto.put("bId",business.getbId());
+            shopPhoto.put("shopId",shopPhoto.getString("shopId"));
+            shopPhoto.put("operate", StatusConstant.OPERATE_ADD);
+
+            shopServiceDaoImpl.saveBusinessShopPhoto(shopPhoto);
         }
-        //自动保存DEL
-        autoSaveDelBusinessShop(business,businessShop);
-
-        businessShop.put("bId",business.getbId());
-        businessShop.put("operate", StatusConstant.OPERATE_ADD);
-        //保存商户信息
-        shopServiceDaoImpl.saveBusinessShopInfo(businessShop);
 
     }
 

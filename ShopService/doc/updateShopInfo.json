@@ -1,0 +1,70 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "update.shop.info",
+    "serviceName": "修改商品信息",
+    "remark": "备注",
+    "datas": {
+      "businessShop": {
+        "shopId": "123456",
+        "storeId": "123",
+        "catalogId":"-1",
+        "name": "西红柿鸡蛋盖浇饭",
+        "hotBuy": "Y",
+        "salePrice": "12.00",
+        "openShopCount": "N",
+        "shopCount": "1",
+        "startDate": "2018-07-07 11:04:00",
+        "endDate": "2019-07-07 11:04:00"
+      },
+      "businessShopAttr": [{
+        "shopId": "123456",
+        "attrId":"123123",
+        "specCd":"1001",
+        "value":"01"
+      }],
+      "businessShopPhoto":[{
+        "shopPhotoId":"123123",
+        "shopId":"123456",
+        "shopPhotoTypeCd":"L",
+        "photo":"123.jpg"
+      }],
+      "businessShopAttrParam":[{
+        "attrParamId":"123123",
+        "shopId":"123456",
+        "specCd":"123",
+        "param":"加米"
+      }],
+      "businessShopPreferential":{
+        "shopPreferentialId":"23213",
+        "shopId":"123456",
+        "originalPrice":"12.00",
+        "discountRate":"1.00",
+        "showOriginalPrice":"N",
+        "preferentialStartDate":"2018-07-07 12:17:00",
+        "preferentialEndDate":"2018-07-08 12:17:00"
+      },
+      "businessShopDesc":{
+        "shopDescId":"343434",
+        "shopId":"123456",
+        "shopDescribe":""
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

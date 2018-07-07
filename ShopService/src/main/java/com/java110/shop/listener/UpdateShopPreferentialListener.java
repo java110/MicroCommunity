@@ -1,6 +1,5 @@
 package com.java110.shop.listener;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
@@ -17,28 +16,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * 修改商户信息 侦听
  *
  * 处理节点
- * 1、businessShop:{} 商品基本信息节点
+ * 1、businessShopPreferential:{} 商品优惠信息节点
  * 协议地址 ：https://github.com/java110/MicroCommunity/wiki/%E4%BF%AE%E6%94%B9%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF-%E5%8D%8F%E8%AE%AE
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("updateShopInfoListener")
+@Java110Listener("updateShopPreferentialListener")
 @Transactional
-public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowListener {
+public class UpdateShopPreferentialListener extends AbstractShopBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(UpdateShopInfoListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(UpdateShopPreferentialListener.class);
     @Autowired
     IShopServiceDao shopServiceDaoImpl;
 
     @Override
     public int getOrder() {
-        return 1;
+        return 4;
     }
 
     @Override
@@ -58,11 +56,10 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessShop 节点
-        if(data.containsKey("businessShop")){
-            JSONObject businessShop = data.getJSONObject("businessShop");
-            doBusinessShop(business,businessShop);
-            dataFlowContext.addParamOut("shopId",businessShop.getString("shopId"));
+        //处理 businessShopPreferential 节点
+        if(data.containsKey("businessShopPreferential")){
+            JSONObject businessShopPreferential = data.getJSONObject("businessShopPreferential");
+            doBusinessShopPreferential(business,businessShopPreferential);
         }
     }
 
@@ -81,12 +78,12 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
 
-        //商户信息
-        Map businessShopInfo = shopServiceDaoImpl.getBusinessShopInfo(info);
-        if( businessShopInfo != null && !businessShopInfo.isEmpty()) {
-            flushBusinessShopInfo(businessShopInfo,StatusConstant.STATUS_CD_VALID);
-            shopServiceDaoImpl.updateShopInfoInstance(businessShopInfo);
-            dataFlowContext.addParamOut("shopId",businessShopInfo.get("shop_id"));
+        //商户优惠信息
+        Map businessShopPreferential = shopServiceDaoImpl.getBusinessShopPreferential(info);
+        if( businessShopPreferential != null && !businessShopPreferential.isEmpty()) {
+            flushBusinessShopPreferential(businessShopPreferential,StatusConstant.STATUS_CD_VALID);
+            shopServiceDaoImpl.updateShopPreferentialInstance(businessShopPreferential);
+            dataFlowContext.addParamOut("shopPreferentialId",businessShopPreferential.get("shop_preferential_id"));
         }
     }
 
@@ -107,19 +104,19 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
         delInfo.put("bId",business.getbId());
         delInfo.put("operate",StatusConstant.OPERATE_DEL);
         //商户信息
-        Map shopInfo = shopServiceDaoImpl.getShopInfo(info);
-        if(shopInfo != null && !shopInfo.isEmpty()){
+        Map shopPreferential = shopServiceDaoImpl.getShopPreferential(info);
+        if(shopPreferential != null && !shopPreferential.isEmpty()){
 
             //商户信息
-            Map businessShopInfo = shopServiceDaoImpl.getBusinessShopInfo(delInfo);
+            Map businessShopPreferential = shopServiceDaoImpl.getBusinessShopPreferential(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessShopInfo == null || businessShopInfo.isEmpty()){
+            if(businessShopPreferential == null || businessShopPreferential.isEmpty()){
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（shop），程序内部异常,请检查！ "+delInfo);
             }
 
-            flushBusinessShopInfo(businessShopInfo,StatusConstant.STATUS_CD_VALID);
-            shopServiceDaoImpl.updateShopInfoInstance(businessShopInfo);
-            dataFlowContext.addParamOut("shopId",shopInfo.get("shop_id"));
+            flushBusinessShopPreferential(businessShopPreferential,StatusConstant.STATUS_CD_VALID);
+            shopServiceDaoImpl.updateShopPreferentialInstance(businessShopPreferential);
+            dataFlowContext.addParamOut("shopPreferentialId",businessShopPreferential.get("shop_preferential_id"));
         }
 
     }
@@ -129,22 +126,22 @@ public class UpdateShopInfoListener extends AbstractShopBusinessServiceDataFlowL
     /**
      * 处理 businessShop 节点
      * @param business 总的数据节点
-     * @param businessShop 商户节点
+     * @param businessShopPreferential 商户节点
      */
-    private void doBusinessShop(Business business,JSONObject businessShop){
+    private void doBusinessShopPreferential(Business business,JSONObject businessShopPreferential){
 
-        Assert.jsonObjectHaveKey(businessShop,"shopId","businessShop 节点下没有包含 shopId 节点");
+        Assert.jsonObjectHaveKey(businessShopPreferential,"shopPreferentialId","businessShop 节点下没有包含 shopPreferentialId 节点");
 
-        if(businessShop.getString("shopId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"shopId 错误，不能自动生成（必须已经存在的shopId）"+businessShop);
+        if(businessShopPreferential.getString("shopPreferentialId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"shopPreferentialId 错误，不能自动生成（必须已经存在的shopPreferentialId）"+businessShopPreferential);
         }
         //自动保存DEL
-        autoSaveDelBusinessShop(business,businessShop);
+        autoSaveDelBusinessShopPreferential(business,businessShopPreferential);
 
-        businessShop.put("bId",business.getbId());
-        businessShop.put("operate", StatusConstant.OPERATE_ADD);
+        businessShopPreferential.put("bId",business.getbId());
+        businessShopPreferential.put("operate", StatusConstant.OPERATE_ADD);
         //保存商户信息
-        shopServiceDaoImpl.saveBusinessShopInfo(businessShop);
+        shopServiceDaoImpl.saveBusinessShopPreferential(businessShopPreferential);
 
     }
 
