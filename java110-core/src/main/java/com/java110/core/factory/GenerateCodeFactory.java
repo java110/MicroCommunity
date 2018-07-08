@@ -61,6 +61,8 @@ public class GenerateCodeFactory {
         prefixMap.put("shopPreferentialId","54");
         prefixMap.put("shopDescId","55");
         prefixMap.put("shopCatalogId","56");
+        prefixMap.put("buyId","57");
+        prefixMap.put("buyAttrId","58");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -315,6 +317,32 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("shopCatalogId"));
+    }
+
+    /**
+     * 商品buyID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopBuyId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("buyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("buyId"));
+    }
+
+    /**
+     * 商品buyAttrID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopBuyAttrId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("buyAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("buyAttrId"));
     }
     /**
      * 获取restTemplate

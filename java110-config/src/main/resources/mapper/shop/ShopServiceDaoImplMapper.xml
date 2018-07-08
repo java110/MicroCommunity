@@ -41,6 +41,7 @@
         values(#{catalogId},#{bId},#{storeId},#{name},#{level},#{parentCatalogId},#{month},#{operate})
     </insert>
 
+
     <!-- 查询商品信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessShopInfo" parameterType="Map" resultType="Map">
         select s.shop_id,s.b_id,s.catalog_id,s.store_id,s.name,s.hot_buy,s.sale_price,s.open_shop_count,s.shop_count,s.start_date,s.end_date,s.operate
@@ -208,6 +209,18 @@
         where sc.operate = 'ADD' and sc.b_id=#{bId}
     </insert>
 
+    <!-- 商品购买记录 保存 add by wuxw 2018-07-08 -->
+    <insert id="saveBuyShopInstance" parameterType="Map">
+        insert into s_buy_shop(buy_id,b_id,shop_id,buy_count,month,status_cd)
+        values(#{buyId},#{bId},#{shopId},#{buyCount},#{month},'0')
+    </insert>
+
+    <!-- 保存购买记录属性 add by wuxw 2018-07-08 -->
+    <insert id="saveBuyShopAttrInstance" parameterType="Map">
+        insert into s_buy_shop_attr(buy_id,b_id,attr_id,spec_cd,value,month,status_cd)
+        values(#{buyId},#{bId},#{attrId},#{specCd},#{value},#{month},'0')
+    </insert>
+
     <!-- 查询商品信息 add by wuxw 2018-07-03 -->
     <select id="getShopInfo" parameterType="Map" resultType="Map">
         select s.shop_id,s.b_id,s.catalog_id,s.store_id,s.name,s.hot_buy,s.sale_price,s.open_shop_count,s.shop_count,s.start_date,s.end_date,s.status_cd
@@ -326,6 +339,42 @@
         </if>
         <if test="catalogId != null and catalogId !=''">
             and sd.catalog_id = #{catalogId}
+        </if>
+    </select>
+
+    <!-- 查询商品目录 instance add by wuxw 2018-07-08 -->
+    <select id="getBuyShop" parameterType="Map" resultType="Map">
+        select bs.buy_id,bs.b_id,bs.shop_id,bs.buy_count,bs.month,bs.status_cd
+        from s_buy_shop bs
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and bs.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and bs.b_id = #{bId}
+        </if>
+        <if test="buyId != null and buyId !=''">
+            and bs.buy_id = #{buyId}
+        </if>
+    </select>
+
+    <!-- 查询购买记录属性信息 add by wuxw 2018-07-03 -->
+    <select id="getBuyShopAttrs" parameterType="Map" resultType="Map">
+        select bs.b_id,bs.attr_id,bs.buy_id,bs.spec_cd,bs.value,bs.status_cd
+        from s_buy_shop_attr bs
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and bs.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and bs.b_id = #{bId}
+        </if>
+        <if test="buyId != null and buyId !=''">
+            and bs.buy_id = #{buyId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and bs.attr_id = #{attrId}
         </if>
     </select>
 
@@ -522,6 +571,51 @@
         </if>
         <if test="catalogId != null and catalogId !=''">
             and sc.catalog_id = #{catalogId}
+        </if>
+    </update>
+
+    <!-- 修改 商品购买信息 add by wuxw 2018-07-08 -->
+    <update id="updateBuyShopInstance" parameterType="Map">
+        update s_buy_shop bs set bs.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,bs.b_id = #{newBId}
+        </if>
+        <if test="buyCount != null and buyCount != ''">
+            ,bs.buy_count = #{buy_count}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and bs.b_id = #{bId}
+        </if>
+        <if test="shopId != null and shopId !=''">
+            and bs.shop_id = #{shopId}
+        </if>
+        <if test="buyId != null and buyId !=''">
+            and bs.buy_id = #{buyId}
+        </if>
+    </update>
+
+    <!-- 修改商品属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateBuyShopAttrInstance" parameterType="Map">
+        update s_buy_shop_attr bsa set bsa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,bsa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,bsa.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and bsa.b_id = #{bId}
+        </if>
+        <if test="buyId != null and buyId !=''">
+            and bsa.buy_id = #{buyId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and bsa.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and bsa.attr_id = #{attrId}
         </if>
     </update>
 </mapper>

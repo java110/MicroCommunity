@@ -363,6 +363,40 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
 
 
     /**
+     * 保存购买记录
+     * @param businessBuyShop
+     * @throws DAOException
+     */
+    @Override
+    public void saveBuyShopInstance(Map businessBuyShop) throws DAOException {
+        businessBuyShop.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存商品购买记录信息 入参 businessBuyShop : {}",businessBuyShop);
+
+        int saveFlag = sqlSessionTemplate.insert("shopServiceDaoImpl.saveBuyShopInstance",businessBuyShop);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商品购买记录数据失败："+ JSONObject.toJSONString(businessBuyShop));
+        }
+    }
+
+    /**
+     * 购买商品属性保存
+     * @param businessBuyShopAttr
+     * @throws DAOException
+     */
+    @Override
+    public void saveBuyShopAttrInstance(Map businessBuyShopAttr) throws DAOException {
+        businessBuyShopAttr.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存商品购买记录属性信息 入参 businessBuyShopAttr : {}",businessBuyShopAttr);
+
+        int saveFlag = sqlSessionTemplate.insert("shopServiceDaoImpl.saveBuyShopAttrInstance",businessBuyShopAttr);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商品购买记录属性数据失败："+ JSONObject.toJSONString(businessBuyShopAttr));
+        }
+    }
+
+    /**
      * 查询商品信息（instance）
      * @param info bId 信息
      * @return
@@ -488,6 +522,40 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
         return shopCatalogs.get(0);
     }
 
+    /**
+     * 商品描述查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public Map getBuyShop(Map info) throws DAOException {
+        logger.debug("查询商品购买信息 入参 info : {}",info);
+
+        List<Map> getBuyShops = sqlSessionTemplate.selectList("shopServiceDaoImpl.getBuyShop",info);
+        if(getBuyShops == null || getBuyShops.size() == 0){
+            return null;
+        }
+        if(getBuyShops.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getShopCatalog，"+ JSONObject.toJSONString(info));
+        }
+        return getBuyShops.get(0);
+    }
+
+    /**
+     * 商品属性查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getBuyShopAttrs(Map info) throws DAOException {
+        logger.debug("查询商品购买属性信息 入参 info : {}",info);
+
+        List<Map> buyShopAttrs = sqlSessionTemplate.selectList("shopServiceDaoImpl.getBuyShopAttrs",info);
+
+        return buyShopAttrs;
+    }
 
     /**
      * 修改商品信息
@@ -598,6 +666,38 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商品目录信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改商品购买信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateBuyShopInstance(Map info) throws DAOException {
+        logger.debug("修改商品购买信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("shopServiceDaoImpl.updateBuyShopInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商品购买信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改商品购买属性信息（instance）
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateBuyShopAttrInstance(Map info) throws DAOException {
+        logger.debug("修改商品购买属性信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("shopServiceDaoImpl.updateBuyShopAttrInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商品购买属性信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
 }

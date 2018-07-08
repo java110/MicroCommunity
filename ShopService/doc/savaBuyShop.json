@@ -1,0 +1,37 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "buy.shop.info",
+    "serviceName": "购买",
+    "remark": "备注",
+    "datas": {
+      "businessBuyShop": {
+        "shopId": "123",
+        "buyId": "-1",
+        "buyCount":"10"
+      },
+      "businessBuyShopAttr": [{
+        "buyId": "-1",
+        "attrId":"-1",
+        "specCd":"1001",
+        "value":"01"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}
