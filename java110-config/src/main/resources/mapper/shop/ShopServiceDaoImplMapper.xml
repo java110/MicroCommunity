@@ -35,6 +35,11 @@
         insert into business_shop_desc(shop_desc_id,shop_id,b_id,shop_describe,month,operate)
         values(#{shopDescId},#{shopId},#{bId},#{shopDescribe},#{month},#{operate})
     </insert>
+    <!-- 商品目录 add by wuxw 2018-07-08 -->
+    <insert id="saveBusinessShopCatalog" parameterType="Map">
+        insert into business_shop_catalog(catalog_id,b_id,store_id,name,level,parent_catalog_id,month,operate)
+        values(#{catalogId},#{bId},#{storeId},#{name},#{level},#{parentCatalogId},#{month},#{operate})
+    </insert>
 
     <!-- 查询商品信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessShopInfo" parameterType="Map" resultType="Map">
@@ -133,6 +138,21 @@
         </if>
     </select>
 
+    <!-- 查询商品目录（business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessShopCatalog" parameterType="Map" resultType="Map">
+        select sc.catalog_id,sc.b_id,sc.store_id,sc.name,sc.level,sc.parent_catalog_id,sc.operate
+        from business_shop_catalog sc where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="shopId != null and shopId != ''">
+            and sc.store_id = #{storeId}
+        </if>
+    </select>
+
     <!-- 保存商品信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveShopInfoInstance" parameterType="Map">
         insert into s_shop(shop_id,b_id,catalog_id,store_id,name,hot_buy,sale_price,open_shop_count,shop_count,start_date,end_date,status_cd)
@@ -178,6 +198,14 @@
         select sd.shop_desc_id,sd.b_id,sd.shop_id,sd.shop_describe,'0'
         from business_shop_desc sd
         where sd.operate = 'ADD' and sd.b_id=#{bId}
+    </insert>
+
+    <!-- 保存 商品目录 信息 instance add by wuxw 2018-07-08 -->
+    <insert id="saveShopCatalogInstance" parameterType="Map">
+        insert into s_shop_catalog(catalog_id,b_id,store_id,name,level,parent_catalog_id,status_cd)
+        select sc.catalog_id,sc.b_id,sc.store_id,sc.name,sc.level,sc.parent_catalog_id,'0'
+        from business_shop_catalog sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
     </insert>
 
     <!-- 查询商品信息 add by wuxw 2018-07-03 -->
@@ -285,6 +313,21 @@
         </if>
     </select>
 
+    <!-- 查询商品目录 instance add by wuxw 2018-07-08 -->
+    <select id="getShopCatalog" parameterType="Map" resultType="Map">
+        select sc.catalog_id,sc.b_id,sc.store_id,sc.name,sc.level,sc.parent_catalog_id,sc.status_cd
+        from s_shop_catalog sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sd.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sd.b_id = #{bId}
+        </if>
+        <if test="catalogId != null and catalogId !=''">
+            and sd.catalog_id = #{catalogId}
+        </if>
+    </select>
 
 
     <!-- 修改商品信息 add by wuxw 2018-07-03 -->
@@ -452,6 +495,33 @@
         </if>
         <if test="shopDescId != null and shopDescId !=''">
             and sd.shop_desc_id = #{shopDescId}
+        </if>
+    </update>
+
+    <!-- 修改 商品目录信息 add by wuxw 2018-07-08 -->
+    <update id="updateShopCatalogInstance" parameterType="Map">
+        update s_shop_catalog sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="name != null and name != ''">
+            ,sc.name = #{name}
+        </if>
+        <if test="level != null and level != ''">
+            ,sc.level = #{level}
+        </if>
+        <if test="parentCatalogId != null and parentCatalogId != ''">
+            ,sc.parent_catalog_id = #{parentCatalogId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sc.store_id = #{storeId}
+        </if>
+        <if test="catalogId != null and catalogId !=''">
+            and sc.catalog_id = #{catalogId}
         </if>
     </update>
 </mapper>

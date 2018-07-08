@@ -43,7 +43,7 @@ public class DeleteShopPhotoListener extends AbstractShopBusinessServiceDataFlow
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_STORE_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_DELETE_SHOP_INFO;
     }
 
     /**

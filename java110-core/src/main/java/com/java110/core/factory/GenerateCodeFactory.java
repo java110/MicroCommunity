@@ -60,6 +60,7 @@ public class GenerateCodeFactory {
         prefixMap.put("shopAttrParamId","53");
         prefixMap.put("shopPreferentialId","54");
         prefixMap.put("shopDescId","55");
+        prefixMap.put("shopCatalogId","56");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -301,6 +302,19 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("shopDescId"));
+    }
+
+    /**
+     * 商品目录ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getShopCatalogId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("shopCatalogId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("shopCatalogId"));
     }
     /**
      * 获取restTemplate

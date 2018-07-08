@@ -62,6 +62,7 @@ CREATE INDEX idx_business_shop_attr_b_id ON business_shop_attr(b_id);
 -- 商品 目录
 create table business_shop_catalog(
     catalog_id varchar(30) not null comment '目录ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
     `name` varchar(100) not null comment '目录名称',
     level varchar(2) not null comment '目录等级',
@@ -295,6 +296,22 @@ CREATE TABLE s_shop_photo(
 CREATE INDEX idx_shop_photo_b_id ON s_store_photo(b_id);
 CREATE INDEX idx_shop_photo_shop_id ON s_store_photo(shop_id);
 CREATE INDEX idx_shop_photo_shop_photo_id ON s_store_photo(shop_photo_id);
+
+create table s_shop_catalog(
+    catalog_id varchar(30) not null comment '目录ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    `name` varchar(100) not null comment '目录名称',
+    level varchar(2) not null comment '目录等级',
+    parent_catalog_id varchar(30) not null default '-1' comment '父目录ID，一级目录则写-1',
+    `month` INT NOT NULL COMMENT '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
+     UNIQUE KEY (catalog_id)
+);
+CREATE INDEX idx_shop_catalog_b_id ON s_shop_catalog(b_id);
+CREATE INDEX idx_shop_catalog_store_id ON s_shop_catalog(store_id);
+CREATE INDEX idx_shop_catalog_catalog_id ON s_shop_catalog(catalog_id);
 
 -- 商品购买记录
 

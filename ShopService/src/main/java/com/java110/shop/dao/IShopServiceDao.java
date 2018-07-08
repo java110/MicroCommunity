@@ -59,6 +59,13 @@ public interface IShopServiceDao {
     public void saveBusinessShopDesc(Map businessShopDesc) throws DAOException;
 
     /**
+     * 保存商品目录信息 add by wuxw 2018-09-08
+     * @param businessShopCatalog 商品目录
+     * @throws DAOException
+     */
+    public void saveBusinessShopCatalog(Map businessShopCatalog) throws DAOException;
+
+    /**
      * 查询商品信息（business过程）
      * 根据bId 查询商品信息
      * @param info bId 信息
@@ -111,6 +118,14 @@ public interface IShopServiceDao {
     public Map getBusinessShopDesc(Map info) throws DAOException;
 
     /**
+     * 查询商品目录信息
+     * @param info bId 信息
+     * @return 商品目录
+     * @throws DAOException
+     */
+    public Map getBusinessShopCatalog(Map info) throws DAOException;
+
+    /**
      * 保存 商品信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
@@ -154,6 +169,12 @@ public interface IShopServiceDao {
      */
     public void saveShopDescInstance(Map info) throws DAOException;
 
+    /**
+     * 保存 商品目录信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void saveShopCatalogInstance(Map info) throws DAOException;
 
     /**
      * 查询商品信息（instance过程）
@@ -207,6 +228,14 @@ public interface IShopServiceDao {
     public Map getShopDesc(Map info) throws DAOException;
 
     /**
+     * 查询商品目录信息（instance 过程）
+     * @param info bId 信息
+     * @return 商品目录
+     * @throws DAOException
+     */
+    public Map getShopCatalog(Map info) throws DAOException;
+
+    /**
      * 修改商品信息
      * @param info 修改信息
      * @throws DAOException
@@ -249,5 +278,12 @@ public interface IShopServiceDao {
      * @throws DAOException
      */
     public void updateShopDescInstance(Map info) throws DAOException;
+
+    /**
+     * 修改商品目录信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateShopCatalogInstance(Map info) throws DAOException;
 
 }

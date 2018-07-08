@@ -128,6 +128,23 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
     }
 
     /**
+     * 保存商品目录
+     * @param businessShopCatalog 商品目录
+     * @throws DAOException
+     */
+    @Override
+    public void saveBusinessShopCatalog(Map businessShopCatalog) throws DAOException {
+        businessShopCatalog.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存商品目录信息 入参 businessShopCatalog : {}",businessShopCatalog);
+
+        int saveFlag = sqlSessionTemplate.insert("shopServiceDaoImpl.saveBusinessShopCatalog",businessShopCatalog);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商品目录数据失败："+ JSONObject.toJSONString(businessShopCatalog));
+        }
+    }
+
+    /**
      * 查询商品信息
      * @param info bId 信息
      * @return 商品信息
@@ -236,6 +253,26 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
         return businessShopDesces.get(0);
     }
 
+    /**
+     * 查询商品目录
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public Map getBusinessShopCatalog(Map info) throws DAOException {
+        logger.debug("查询商品证件信息 入参 info : {}",info);
+
+        List<Map> businessShopCatalogs = sqlSessionTemplate.selectList("shopServiceDaoImpl.getBusinessShopCatalog",info);
+        if(businessShopCatalogs == null){
+            return null;
+        }
+        if(businessShopCatalogs.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessShopCatalogs，"+ JSONObject.toJSONString(info));
+        }
+
+        return businessShopCatalogs.get(0);
+    }
 
     /**
      * 保存商品信息 到 instance
@@ -312,6 +349,18 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商品证件信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
+    @Override
+    public void saveShopCatalogInstance(Map info) throws DAOException {
+        logger.debug("保存商品目录信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("shopServiceDaoImpl.saveShopCatalogInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商品目录信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
 
     /**
      * 查询商品信息（instance）
@@ -419,6 +468,26 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
         return shopDesces.get(0);
     }
 
+    /**
+     * 商品描述查询（instance）
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public Map getShopCatalog(Map info) throws DAOException {
+        logger.debug("查询商品证件信息 入参 info : {}",info);
+
+        List<Map> shopCatalogs = sqlSessionTemplate.selectList("shopServiceDaoImpl.getShopCatalog",info);
+        if(shopCatalogs == null || shopCatalogs.size() == 0){
+            return null;
+        }
+        if(shopCatalogs.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getShopCatalog，"+ JSONObject.toJSONString(info));
+        }
+        return shopCatalogs.get(0);
+    }
+
 
     /**
      * 修改商品信息
@@ -513,6 +582,22 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商品描述信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 修改商品描述信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    @Override
+    public void updateShopCatalogInstance(Map info) throws DAOException {
+        logger.debug("修改商品描述信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("shopServiceDaoImpl.updateShopCatalogInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商品目录信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
 }

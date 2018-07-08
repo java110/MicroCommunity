@@ -17,13 +17,13 @@
     "serviceName": "保存商品目录",
     "remark": "备注",
     "datas": {
-      "businessShopCatalog":[{
+      "businessShopCatalog":{
         "catalogId":"-1",
         "storeId":"123",
         "name":"盖浇饭",
         "level":"1",
         "parentCatalogId":"-1"
-      }]
+      }
     },
     "attrs": [{
       "specCd": "配置的字段ID",

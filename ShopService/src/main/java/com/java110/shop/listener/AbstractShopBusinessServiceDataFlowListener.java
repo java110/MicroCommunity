@@ -117,6 +117,20 @@ public abstract class AbstractShopBusinessServiceDataFlowListener extends Abstra
     }
 
     /**
+     * 刷新 businessShopCatalog 数据
+     * @param businessShopCatalog
+     * @param statusCd
+     */
+    protected void flushBusinessShopCatalog(Map businessShopCatalog ,String statusCd){
+        businessShopCatalog.put("catalogId",businessShopCatalog.get("catalog_id"));
+        businessShopCatalog.put("storeId",businessShopCatalog.get("store_id"));
+        businessShopCatalog.put("parentCatalogId",businessShopCatalog.get("parent_catalog_id"));
+        businessShopCatalog.put("newBId",businessShopCatalog.get("b_id"));
+        businessShopCatalog.put("statusCd",statusCd);
+    }
+
+
+    /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessShop 商户信息
      */
@@ -259,5 +273,28 @@ public abstract class AbstractShopBusinessServiceDataFlowListener extends Abstra
         currentShopDesc.put("shopDescribe",currentShopDesc.get("shop_describe"));
         currentShopDesc.put("operate",StatusConstant.OPERATE_DEL);
         getShopServiceDaoImpl().saveBusinessShopDesc(currentShopDesc);
+    }
+
+    /**
+     * 商品目录 自动刷 DEL数据
+     * @param business
+     * @param businessShopCalalog
+     */
+    protected void autoSaveDelBusinessShopCatalog(Business business,JSONObject businessShopCalalog){
+        Map info = new HashMap();
+        info.put("catalogId",businessShopCalalog.getString("catalogId"));
+        info.put("storeId",businessShopCalalog.getString("storeId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        Map currentShopCatalog = getShopServiceDaoImpl().getShopCatalog(info);
+        if(currentShopCatalog == null || currentShopCatalog.isEmpty()){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+
+        currentShopCatalog.put("bId",business.getbId());
+        currentShopCatalog.put("catalogId",currentShopCatalog.get("catalog_id"));
+        currentShopCatalog.put("storeId",currentShopCatalog.get("store_id"));
+        currentShopCatalog.put("parentCatalogId",currentShopCatalog.get("parent_catalog_id"));
+        currentShopCatalog.put("operate",StatusConstant.OPERATE_DEL);
+        getShopServiceDaoImpl().saveBusinessShopCatalog(currentShopCatalog);
     }
 }
