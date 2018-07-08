@@ -125,6 +125,9 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
 
         Assert.jsonObjectHaveKey(businessShop,"shopId","businessShop 节点下没有包含 storeId 节点");
 
+        Assert.jsonObjectHaveKey(businessShop,"startDate","businessShop 节点下没有包含 startDate 节点");
+        Assert.jsonObjectHaveKey(businessShop,"endDate","businessShop 节点下没有包含 endDate 节点");
+
         businessShop.put("bId",business.getbId());
         businessShop.put("operate", StatusConstant.OPERATE_ADD);
         //对日期处理
@@ -132,11 +135,11 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
         Date entDate = null;
         try {
             startDate = DateUtil.getDateFromString(businessShop.getString("startDate"), DateUtil.DATE_FORMATE_STRING_A);
-            entDate = DateUtil.getDateFromString(businessShop.getString("entDate"), DateUtil.DATE_FORMATE_STRING_A);
+            entDate = DateUtil.getDateFromString(businessShop.getString("endDate"), DateUtil.DATE_FORMATE_STRING_A);
             businessShop.put("startDate",startDate);
-            businessShop.put("entDate",entDate);
-        } catch (ParseException e) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 startDate entDate 格式不正确，请填写 "
+            businessShop.put("endDate",entDate);
+        } catch (Exception e) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 startDate endDate 格式不正确，请填写 "
                     +DateUtil.DATE_FORMATE_STRING_A +" 格式，"+businessShop);
         }
         //保存商户信息

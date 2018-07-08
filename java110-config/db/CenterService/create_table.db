@@ -284,6 +284,28 @@ VALUES('delete.store.info','D','删除商户信息',1,'http://store-service/stor
 INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
 VALUES('transfer.console.menu','T','透传菜单查询',1,'http://192.168.31.199:8001/userApi/service','8000418001');
 
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('save.shop.info','D','保存商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('update.shop.info','D','修改商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('delete.shop.info','D','删除商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('buy.shop.info','D','购买商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('save.shop.catalog','D','保存商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('update.shop.catalog','D','修改商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('delete.shop.catalog','D','删除商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','1','S','Q','0'
 );
@@ -345,6 +367,32 @@ INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALU
 INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
 '8000418002','17','S','Q','0'
 );
+
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','21','S','Q','0'
+);
+
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','22','S','Q','0'
+);
+
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','23','S','Q','0'
+);
+
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','24','S','Q','0'
+);
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','25','S','Q','0'
+);
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','26','S','Q','0'
+);
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418001','27','S','Q','0'
+);
+
 
 
 

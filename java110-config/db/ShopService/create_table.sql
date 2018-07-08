@@ -149,15 +149,15 @@ CREATE INDEX idx_business_shop_attr_param_shop_id ON business_shop_attr_param(sh
 CREATE INDEX idx_business_shop_attr_param_b_id ON business_shop_attr_param(b_id);
 
 -- 商品优惠表
-create table business_shop_preferential(
+CREATE TABLE business_shop_preferential(
     shop_preferential_id VARCHAR(30) NOT NULL COMMENT '商品ID',
     shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    original_price DECIMAL(10,2) not null comment '商品销售价，再没有优惠的情况下和售价是一致的',
-    discount_rate decimal(1,2) not null default 1.00 comment '商品打折率',
-    show_original_price varchar(2) not null default 'N' comment '是否显示原价，Y显示，N 不显示',
-    preferential_start_date not null comment '商品优惠开始时间',
-    preferential_end_date date not null comment '商品优惠结束时间',
+    original_price DECIMAL(10,2) NOT NULL COMMENT '商品销售价，再没有优惠的情况下和售价是一致的',
+    discount_rate DECIMAL(3,2) NOT NULL DEFAULT 1.00 COMMENT '商品打折率',
+    show_original_price VARCHAR(2) NOT NULL DEFAULT 'N' COMMENT '是否显示原价，Y显示，N 不显示',
+    preferential_start_date DATE NOT NULL COMMENT '商品优惠开始时间',
+    preferential_end_date DATE NOT NULL COMMENT '商品优惠结束时间',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -259,9 +259,9 @@ create table s_shop_preferential(
     shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     original_price DECIMAL(10,2) not null comment '商品销售价，再没有优惠的情况下和售价是一致的',
-    discount_rate decimal(1,2) not null default 1.00 comment '商品打折率',
+    discount_rate decimal(3,2) not null default 1.00 comment '商品打折率',
     show_original_price varchar(2) not null default 'N' comment '是否显示原价，Y显示，N 不显示',
-    preferential_start_date not null comment '商品优惠开始时间',
+    preferential_start_date date not null comment '商品优惠开始时间',
     preferential_end_date date not null comment '商品优惠结束时间',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
@@ -291,11 +291,11 @@ CREATE TABLE s_shop_photo(
     photo VARCHAR(100) NOT NULL COMMENT '照片',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-    UNIQUE KEY (store_photo_id)
+    UNIQUE KEY (shop_photo_id)
 );
-CREATE INDEX idx_shop_photo_b_id ON s_store_photo(b_id);
-CREATE INDEX idx_shop_photo_shop_id ON s_store_photo(shop_id);
-CREATE INDEX idx_shop_photo_shop_photo_id ON s_store_photo(shop_photo_id);
+CREATE INDEX idx_shop_photo_b_id ON s_shop_photo(b_id);
+CREATE INDEX idx_shop_photo_shop_id ON s_shop_photo(shop_id);
+CREATE INDEX idx_shop_photo_shop_photo_id ON s_shop_photo(shop_photo_id);
 
 create table s_shop_catalog(
     catalog_id varchar(30) not null comment '目录ID',
@@ -304,7 +304,6 @@ create table s_shop_catalog(
     `name` varchar(100) not null comment '目录名称',
     level varchar(2) not null comment '目录等级',
     parent_catalog_id varchar(30) not null default '-1' comment '父目录ID，一级目录则写-1',
-    `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
      UNIQUE KEY (catalog_id)
@@ -315,15 +314,15 @@ CREATE INDEX idx_shop_catalog_catalog_id ON s_shop_catalog(catalog_id);
 
 -- 商品购买记录
 
-create table s_buy_shop(
-    buy_id varchar(30) not null comment '购买ID',
+CREATE TABLE s_buy_shop(
+    buy_id VARCHAR(30) NOT NULL COMMENT '购买ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
-    buy_count DECIMAL(10,0) not null default 1 comment '购买商品数',
+    buy_count DECIMAL(10,0) NOT NULL DEFAULT 1 COMMENT '购买商品数',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-     UNIQUE KEY (buy_id)
+     UNIQUE KEY (buy_id,`month`)
 )
 PARTITION BY RANGE (`month`) (
     PARTITION buy_shop_1 VALUES LESS THAN (2),
@@ -350,7 +349,7 @@ create table s_buy_shop_attr(
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-     UNIQUE KEY (attr_id)
+     UNIQUE KEY (attr_id,`month`)
 )
 PARTITION BY RANGE (`month`) (
     PARTITION buy_shop_attr_1 VALUES LESS THAN (2),

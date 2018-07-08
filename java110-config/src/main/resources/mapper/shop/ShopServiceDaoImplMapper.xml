@@ -87,10 +87,10 @@
             and sap.b_id = #{bId}
         </if>
         <if test="shopId != null and shopId != ''">
-            and sa.shop_id = #{shopId}
+            and sap.shop_id = #{shopId}
         </if>
         <if test="attrParamId != null and attrParamId != ''">
-            and sa.attr_param_id = #{attrParamId}
+            and sap.attr_param_id = #{attrParamId}
         </if>
     </select>
 
@@ -111,7 +111,7 @@
 
     <!-- 查询商品 证件信息 add by wuxw 2018-07-03 -->
     <select id="getBusinessShopPreferential" parameterType="Map" resultType="Map">
-        select sp.shop_preferential_id,sp.b_id,sc.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,sp.operate
+        select sp.shop_preferential_id,sp.b_id,sp.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,sp.operate
         from business_shop_preferential sp where 1 = 1
         <if test="bId != null and bId !=''">
             and sp.b_id = #{bId}
@@ -174,8 +174,8 @@
     <insert id="saveShopAttrParamsInstance" parameterType="Map">
         insert into s_shop_attr_param(attr_param_id,b_id,shop_id,spec_cd,param,status_cd)
         select sap.attr_param_id,sap.b_id,sap.shop_id,sap.spec_cd,sap.param,'0'
-        from business_shop_attr_param sa
-        where sa.operate = 'ADD' and sa.b_id=#{bId}
+        from business_shop_attr_param sap
+        where sap.operate = 'ADD' and sap.b_id=#{bId}
     </insert>
     
     <!-- 保存 商品照片信息 instance add by wuxw 2018-07-03 -->
@@ -188,7 +188,7 @@
     <!-- 保存 商品证件信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveShopPreferentialInstance" parameterType="Map">
         insert into s_shop_preferential(shop_preferential_id,b_id,shop_id,original_price,discount_rate,show_original_price,preferential_start_date,preferential_end_date,status_cd)
-        select sp.shop_preferential_id,sp.b_id,sc.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,'0'
+        select sp.shop_preferential_id,sp.b_id,sp.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,'0'
         from business_shop_preferential sp
         where sp.operate = 'ADD' and sp.b_id=#{bId}
     </insert>
@@ -296,7 +296,7 @@
 
     <!-- 查询商品证件信息 add by wuxw 2018-07-03 -->
     <select id="getShopPreferential" parameterType="Map" resultType="Map">
-        select sp.shop_preferential_id,sp.b_id,sc.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,sc.status_cd
+        select sp.shop_preferential_id,sp.b_id,sp.shop_id,sp.original_price,sp.discount_rate,sp.show_original_price,sp.preferential_start_date,sp.preferential_end_date,sp.status_cd
         from s_shop_preferential sp
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -332,13 +332,13 @@
         from s_shop_catalog sc
         where 1=1
         <if test="statusCd != null and statusCd != ''">
-            and sd.status_cd = #{statusCd}
+            and sc.status_cd = #{statusCd}
         </if>
         <if test="bId != null and bId !=''">
-            and sd.b_id = #{bId}
+            and sc.b_id = #{bId}
         </if>
         <if test="catalogId != null and catalogId !=''">
-            and sd.catalog_id = #{catalogId}
+            and sc.catalog_id = #{catalogId}
         </if>
     </select>
 
@@ -406,10 +406,10 @@
         <if test="shopCount != null and shopCount != ''">
             ,s.shop_count = #{shopCount}
         </if>
-        <if test="startDate != null and startDate != ''">
+        <if test="startDate != null">
             ,s.start_date = #{startDate}
         </if>
-        <if test="endDate != null and endDate != ''">
+        <if test="endDate != null">
             ,s.end_date = #{endDate}
         </if>
         where 1=1

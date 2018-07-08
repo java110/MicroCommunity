@@ -503,14 +503,14 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
     }
 
     /**
-     * 商品描述查询（instance）
+     * 商品目录查询（instance）
      * @param info bId 信息
      * @return
      * @throws DAOException
      */
     @Override
     public Map getShopCatalog(Map info) throws DAOException {
-        logger.debug("查询商品证件信息 入参 info : {}",info);
+        logger.debug("查询商品目录信息 入参 info : {}",info);
 
         List<Map> shopCatalogs = sqlSessionTemplate.selectList("shopServiceDaoImpl.getShopCatalog",info);
         if(shopCatalogs == null || shopCatalogs.size() == 0){
@@ -660,7 +660,7 @@ public class ShopServiceDaoImpl extends BaseServiceDao implements IShopServiceDa
      */
     @Override
     public void updateShopCatalogInstance(Map info) throws DAOException {
-        logger.debug("修改商品描述信息Instance 入参 info : {}",info);
+        logger.debug("修改商品目录信息Instance 入参 info : {}",info);
 
         int saveFlag = sqlSessionTemplate.update("shopServiceDaoImpl.updateShopCatalogInstance",info);
 

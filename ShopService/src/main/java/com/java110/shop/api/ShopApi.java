@@ -28,7 +28,7 @@ public class ShopApi extends BaseController {
     @Autowired
     IShopServiceSMO shopServiceSMOImpl;
 
-    @RequestMapping(path = "/storeApi/service",method= RequestMethod.GET)
+    @RequestMapping(path = "/shopApi/service",method= RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
         return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
     }
@@ -39,7 +39,7 @@ public class ShopApi extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(path = "/storeApi/service",method= RequestMethod.POST)
+    @RequestMapping(path = "/shopApi/service",method= RequestMethod.POST)
     public String servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
         BusinessServiceDataFlow businessServiceDataFlow = null;
         JSONObject responseJson = null;

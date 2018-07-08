@@ -77,5 +77,14 @@ public class FlushAboutBuyIdListener extends AbstractShopBusinessServiceDataFlow
         String buyId = GenerateCodeFactory.getShopBuyId();
         JSONObject businessBuyShop = data.getJSONObject("businessBuyShop");
         businessBuyShop.put("buyId",buyId);
+
+        //刷商品属性
+        if(data.containsKey("businessBuyShopAttr")) {
+            JSONArray businessBuyShopAttrs = data.getJSONArray("businessBuyShopAttr");
+            for(int businessBuyShopAttrIndex = 0;businessBuyShopAttrIndex < businessBuyShopAttrs.size();businessBuyShopAttrIndex++) {
+                JSONObject businessBuyShopAttr = businessBuyShopAttrs.getJSONObject(businessBuyShopAttrIndex);
+                businessBuyShopAttr.put("buyId", buyId);
+            }
+        }
     }
 }

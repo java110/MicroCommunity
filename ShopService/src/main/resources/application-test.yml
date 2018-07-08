@@ -77,7 +77,7 @@ kafka:
         reset: latest
     topic: test
     group:
-      id: storeBusinessStatus
+      id: shopBusinessStatus
     concurrency: 10
 
   producer:

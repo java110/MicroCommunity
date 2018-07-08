@@ -119,7 +119,7 @@ public class SaveShopCatalogListener extends AbstractShopBusinessServiceDataFlow
      */
     private void doBusinessShopCatalog(Business business,JSONObject businessShopCatalog){
 
-        Assert.jsonObjectHaveKey(businessShopCatalog,"shopId","businessShopCatalog 节点下没有包含 shopId 节点");
+        Assert.jsonObjectHaveKey(businessShopCatalog,"storeId","businessShopCatalog 节点下没有包含 storeId 节点");
 
         businessShopCatalog.put("bId",business.getbId());
         businessShopCatalog.put("operate", StatusConstant.OPERATE_ADD);

@@ -78,7 +78,7 @@ public class FlushAboutShopIdListener extends AbstractShopBusinessServiceDataFlo
         //刷新 shopPreferentialId
         if(data.containsKey("businessShopPreferential")){
             JSONObject businessShopPreferential = data.getJSONObject("businessShopPreferential");
-            if(!businessShopPreferential.containsKey("shopPreferentialId") || businessShopPreferential.getString("shopId").startsWith("-")){
+            if(!businessShopPreferential.containsKey("shopPreferentialId") || businessShopPreferential.getString("shopPreferentialId").startsWith("-")){
                 businessShopPreferential.put("shopPreferentialId",GenerateCodeFactory.getShopPreferentialId());
             }
         }
@@ -116,6 +116,14 @@ public class FlushAboutShopIdListener extends AbstractShopBusinessServiceDataFlo
             for(int businessShopAttrIndex = 0;businessShopAttrIndex < businessShopAttrs.size();businessShopAttrIndex++) {
                 JSONObject businessStoreAttr = businessShopAttrs.getJSONObject(businessShopAttrIndex);
                 businessStoreAttr.put("shopId", shopId);
+            }
+        }
+        //刷商品属性
+        if(data.containsKey("businessShopAttrParam")) {
+            JSONArray businessShopAttrParams = data.getJSONArray("businessShopAttrParam");
+            for(int businessShopAttrParamIndex = 0;businessShopAttrParamIndex < businessShopAttrParams.size();businessShopAttrParamIndex++) {
+                JSONObject businessStoreAttrParam = businessShopAttrParams.getJSONObject(businessShopAttrParamIndex);
+                businessStoreAttrParam.put("shopId", shopId);
             }
         }
         //刷 是商品照片 的 shopId

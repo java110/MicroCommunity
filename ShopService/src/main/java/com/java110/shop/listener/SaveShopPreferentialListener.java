@@ -120,6 +120,8 @@ public class SaveShopPreferentialListener extends AbstractShopBusinessServiceDat
     private void doBusinessShopPreferential(Business business, JSONObject businessShopPreferential){
 
         Assert.jsonObjectHaveKey(businessShopPreferential,"shopPreferentialId","businessShop 节点下没有包含 shopPreferentialId 节点");
+        Assert.jsonObjectHaveKey(businessShopPreferential,"preferentialStartDate","businessShop 节点下没有包含 preferentialStartDate 节点");
+        Assert.jsonObjectHaveKey(businessShopPreferential,"preferentialEndDate","businessShop 节点下没有包含 preferentialEndDate 节点");
 
         businessShopPreferential.put("bId",business.getbId());
         businessShopPreferential.put("operate", StatusConstant.OPERATE_ADD);
@@ -127,11 +129,11 @@ public class SaveShopPreferentialListener extends AbstractShopBusinessServiceDat
         Date preferentialStartDate = null;
         Date preferentialEndDate = null;
         try {
-            preferentialStartDate = DateUtil.getDateFromString(businessShopPreferential.getString("startDate"), DateUtil.DATE_FORMATE_STRING_A);
-            preferentialEndDate = DateUtil.getDateFromString(businessShopPreferential.getString("entDate"), DateUtil.DATE_FORMATE_STRING_A);
-            businessShopPreferential.put("startDate",preferentialStartDate);
-            businessShopPreferential.put("entDate",preferentialEndDate);
-        } catch (ParseException e) {
+            preferentialStartDate = DateUtil.getDateFromString(businessShopPreferential.getString("preferentialStartDate"), DateUtil.DATE_FORMATE_STRING_A);
+            preferentialEndDate = DateUtil.getDateFromString(businessShopPreferential.getString("preferentialEndDate"), DateUtil.DATE_FORMATE_STRING_A);
+            businessShopPreferential.put("preferentialStartDate",preferentialStartDate);
+            businessShopPreferential.put("preferentialEndDate",preferentialEndDate);
+        } catch (Exception e) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 preferentialStartDate preferentialEndDate 格式不正确，请填写 "
                     +DateUtil.DATE_FORMATE_STRING_A +" 格式，"+businessShopPreferential);
         }
