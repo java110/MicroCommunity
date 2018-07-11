@@ -31,6 +31,7 @@
         <module>java110-logAgent</module>
         <module>zipkin</module>
         <module>ShopService</module>
+        <module>CommentService</module>
     </modules>
 
     <parent>
