@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="commentServiceDaoImpl">
+    
+
+
+
+    <!-- 评论信息 保存 add by wuxw 2018-07-12 -->
+    <insert id="saveCommentInstance" parameterType="Map">
+        insert into c_comment(comment_id,user_id,b_id,comment_type_cd,out_id,month,status_cd)
+        values(#{commentId},#{userId},#{bId},#{commentTypeCd},#{outId},#{month},'0')
+    </insert>
+
+    <!-- 评论信息 保存 add by wuxw 2018-07-12 -->
+    <insert id="saveSubCommentInstance" parameterType="Map">
+        insert into c_sub_comment(sub_comment_id,comment_id,parent_sub_comment_id,b_id,sub_comment_type_cd,comment_context,month,status_cd)
+        values(#{subCommentId},#{commentId},#{parentSubCommentId},#{bId},#{subCommentTypeCd},#{commentContext},#{month},'0')
+    </insert>
+
+    <!-- 保存购买记录属性 add by wuxw 2018-07-08 -->
+    <insert id="saveSubCommentAttrInstance" parameterType="Map">
+        insert into c_sub_comment_attr(sub_comment_id,b_id,attr_id,spec_cd,value,month,status_cd)
+        values(#{subCommentId},#{bId},#{attrId},#{specCd},#{value},#{month},'0')
+    </insert>
+
+
+
+
+    <!-- 查询商品目录 instance add by wuxw 2018-07-08 -->
+    <select id="getComment" parameterType="Map" resultType="Map">
+        select c.comment_id,c.user_id,c.b_id,c.comment_type_cd,c.out_id,c.month,c.status_cd
+        from c_comment c
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and c.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and c.b_id = #{bId}
+        </if>
+        <if test="commentId != null and commentId !=''">
+            and c.comment_id = #{commentId}
+        </if>
+    </select>
+
+    <!-- 查询商品目录 instance add by wuxw 2018-07-08 -->
+    <select id="getSubComment" parameterType="Map" resultType="Map">
+        select sc.sub_comment_id,sc.comment_id,sc.parent_sub_comment_id,sc.b_id,sc.sub_comment_type_cd,sc.comment_context,sc.month,sc.status_cd
+        from c_sub_comment sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="subCommentId != null and subCommentId !=''">
+            and sc.sub_comment_id = #{subCommentId}
+        </if>
+        <if test="commentId != null and commentId != ''">
+            and sc.comment_id = #{commentId}
+        </if>
+    </select>
+
+    <!-- 查询购买记录属性信息 add by wuxw 2018-07-03 -->
+    <select id="getSubCommentAttrs" parameterType="Map" resultType="Map">
+        select sca.b_id,sca.attr_id,sca.sub_comment_id,sca.spec_cd,sca.value,sca.status_cd
+        from c_sub_comment_attr sca
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sca.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sca.b_id = #{bId}
+        </if>
+        <if test="subCommentId != null and subCommentId !=''">
+            and sca.sub_comment_id = #{subCommentId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sca.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 修改 评论信息 add by wuxw 2018-07-08 -->
+    <update id="updateCommentInstance" parameterType="Map">
+        update c_comment c set c.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,c.b_id = #{newBId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and c.b_id = #{bId}
+        </if>
+        <if test="commentId != null and commentId !=''">
+            and c.comment_id = #{commentId}
+        </if>
+    </update>
+
+    <update id="updateSubCommentInstance" parameterType="Map">
+        update c_sub_comment sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="subCommentId != null and subCommentId !=''">
+            and sc.sub_comment_id = #{subCommentId}
+        </if>
+        <if test="commentId != null and commentId !=''">
+            and sc.comment_id = #{commentId}
+        </if>
+    </update>
+
+    <!-- 修改评价属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateSubCommentAttrInstance" parameterType="Map">
+        update c_sub_comment_attr bca set bca.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,bca.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,bca.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and bca.b_id = #{bId}
+        </if>
+        <if test="subCommentId != null and subCommentId !=''">
+            and bca.sub_comment_id = #{subCommentId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and bca.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and bca.attr_id = #{attrId}
+        </if>
+    </update>
+
+
+    <insert id="saveSubCommentPhotoInstance" parameterType="Map">
+        insert into c_sub_comment_photo(comment_photo_id,b_id,sub_comment_id,comment_photo_type_cd,photo,month,status_cd)
+        values(#{commentPhotoId},#{bId},#{subCommentId},#{commentPhotoTypeCd},#{photo},#{month},'0')
+    </insert>
+
+    <select id="getSubCommentPhotos" parameterType="Map" resultType="Map">
+        select scp.comment_photo_id,scp.b_id,scp.sub_comment_id,scp.comment_photo_type_cd,scp.photo,scp.month,scp.status_cd
+        from c_sub_comment_photo scp
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and scp.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and scp.b_id = #{bId}
+        </if>
+        <if test="commentPhotoId != null and commentPhotoId !=''">
+            and scp.comment_photo_id = #{commentPhotoId}
+        </if>
+    </select>
+
+    <update id="updateSubCommentPhotoInstance" parameterType="Map">
+        update c_sub_comment_photo scp set scp.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,scp.b_id = #{newBId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and scp.b_id = #{bId}
+        </if>
+        <if test="commentPhotoId != null and commentPhotoId !=''">
+            and scp.comment_photo_id = #{commentPhotoId}
+        </if>
+    </update>
+
+    <insert id="saveCommentScoreInstance" parameterType="Map">
+        insert into c_comment_score(comment_score_id,b_id,comment_id,score_type_cd,value,month,status_cd)
+        values(#{commentScoreId},#{bId},#{commentId},#{scoreTypeCd},#{value},#{month},'0')
+    </insert>
+
+    <select id="getCommentScores" parameterType="Map" resultType="Map">
+        select cs.comment_score_id,cs.b_id,cs.comment_id,cs.score_type_cd,cs.value,cs.month,cs.status_cd
+        from c_comment_score cs
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and cs.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and cs.b_id = #{bId}
+        </if>
+        <if test="commentScoreId != null and commentScoreId !=''">
+            and cs.comment_score_id = #{commentScoreId}
+        </if>
+        <if test="commentId != null and commentId !=''">
+            and cs.comment_id = #{commentId}
+        </if>
+    </select>
+
+    <update id="updateCommentScoreInstance" parameterType="Map">
+        update c_comment_score cs set cs.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,cs.b_id = #{newBId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and cs.b_id = #{bId}
+        </if>
+        <if test="commentScoreId != null and commentScoreId !=''">
+            and cs.comment_score_id = #{commentScoreId}
+        </if>
+        <if test="commentId != null and commentId !=''">
+            and cs.comment_id = #{commentId}
+        </if>
+    </update>
+</mapper>

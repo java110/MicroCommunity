@@ -138,6 +138,11 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DELETE_SHOP_CATALOG = "delete.shop.catalog";
 
+    /**
+     * 保存评论
+     */
+    public static final String SERVICE_CODE_SAVE_COMMENT_INFO = "sava.comment.info";
+
 
 
 

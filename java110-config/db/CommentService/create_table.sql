@@ -32,7 +32,7 @@ create table c_sub_comment(
     comment_id varchar(30) not null  comment '评论ID ',
     b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
     parent_sub_comment_id varchar(30) not null default '-1' comment '父 子评论ID 如果不是回复 写成-1',
-    sub_commnet_type_cd varchar(2) not null default 'C' comment '评论类型 C 评论 R 回复 A 追加',
+    sub_comment_type_cd varchar(2) not null default 'C' comment '评论类型 C 评论 R 回复 A 追加',
     comment_context LONGTEXT not null COMMENT '评论内容',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

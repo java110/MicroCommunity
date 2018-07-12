@@ -63,6 +63,11 @@ public class GenerateCodeFactory {
         prefixMap.put("shopCatalogId","56");
         prefixMap.put("buyId","57");
         prefixMap.put("buyAttrId","58");
+        prefixMap.put("commentId","60");
+        prefixMap.put("subCommentId","61");
+        prefixMap.put("subCommentAttrId","62");
+        prefixMap.put("commentPhotoId","63");
+        prefixMap.put("commentScoreId","64");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -279,6 +284,21 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("shopAttrParamId"));
     }
+    /**
+     * 商品属性参数ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommentPhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("commentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("commentPhotoId"));
+    }
+
+
+
 
     /**
      * 商品属性ID生成
@@ -344,6 +364,59 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("buyAttrId"));
     }
+
+    /**
+     * 评论ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommentId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("commentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("commentId"));
+    }
+
+    /**
+     * 评论ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getSubCommentId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("subCommentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("subCommentId"));
+    }
+
+    /**
+     * 评论ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getSubCommentAttrId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("subCommentAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("subCommentAttrId"));
+    }
+    /**
+     * commentScoreId生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommentScoreId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("commentScoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("commentScoreId"));
+    }
+
+
     /**
      * 获取restTemplate
      * @return
