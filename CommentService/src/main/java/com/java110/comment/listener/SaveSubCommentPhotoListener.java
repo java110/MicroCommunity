@@ -105,7 +105,7 @@ public class SaveSubCommentPhotoListener extends AbstractCommentBusinessServiceD
             JSONObject subCommentPhoto = subCommentPhotos.getJSONObject(subCommentPhotoIndex);
             Assert.jsonObjectHaveKey(subCommentPhoto,"commentPhotoTypeCd","subCommentPhoto 节点下没有包含 commentPhotoTypeCd 节点");
             subCommentPhoto.put("bId",business.getbId());
-            commentServiceDaoImpl.saveSubCommentAttrInstance(subCommentPhoto);
+            commentServiceDaoImpl.saveSubCommentPhotoInstance(subCommentPhoto);
         }
     }
 

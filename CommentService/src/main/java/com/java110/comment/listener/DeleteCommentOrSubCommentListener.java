@@ -42,7 +42,7 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_SHOP_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_DELETE_COMMENT_INFO;
     }
 
     /**
@@ -98,30 +98,30 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
         Map delInfo = new HashMap();
         delInfo.put("bId",business.getbId());
         delInfo.put("operate",StatusConstant.STATUS_CD_VALID);
-        //商户信息
+        //评论信息
         Map comment = commentServiceDaoImpl.getComment(info);
         if(comment != null && !comment.isEmpty()){
             commentServiceDaoImpl.updateCommentInstance(delInfo);
         }
 
-        //商户信息
+        //评论信息
         List<Map> subComments = commentServiceDaoImpl.getSubComments(info);
         if(subComments != null && subComments.size() > 0){
             commentServiceDaoImpl.updateSubCommentInstance(delInfo);
         }
 
-        //商户信息
+        //评论属性信息
         List<Map> commentAttrs = commentServiceDaoImpl.getSubCommentAttrs(info);
         if(commentAttrs != null && commentAttrs.size() > 0){
             commentServiceDaoImpl.updateSubCommentAttrInstance(delInfo);
         }
 
-        //商户信息
+        //评论照片信息
         List<Map> commentPhotos = commentServiceDaoImpl.getSubCommentPhotos(info);
         if(commentPhotos != null && commentPhotos.size() > 0){
             commentServiceDaoImpl.updateSubCommentPhotoInstance(delInfo);
         }
-
+        //评论分数信息
         List<Map> commentScores = commentServiceDaoImpl.getCommentScores(info);
         if(commentScores != null && commentScores.size() > 0){
             commentServiceDaoImpl.updateCommentScoreInstance(delInfo);
@@ -144,7 +144,7 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
 
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
+        //delInfo.put("bId",business.getbId());
         delInfo.put("statusCd",StatusConstant.STATUS_CD_INVALID);
 
         Map commentMap = commentServiceDaoImpl.getComment(info);
@@ -164,7 +164,7 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
         // 作废 sub_comment
         List<Map> subComments = commentServiceDaoImpl.getSubComments(info);
 
-        if(subComments == null || subComments.size()>0){
+        if(subComments == null || subComments.size() == 0){
             return ;
         }
         commentServiceDaoImpl.updateSubCommentInstance(delInfo);
@@ -192,7 +192,8 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
 
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
+        //delInfo.put("bId",business.getbId());
+        delInfo.put("subCommentId",subComment.getString("subCommentId"));
         delInfo.put("statusCd",StatusConstant.STATUS_CD_INVALID);
 
 

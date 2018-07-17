@@ -117,12 +117,12 @@ PARTITION BY RANGE (`month`) (
 CREATE INDEX idx_sub_comment_photo_b_id ON c_sub_comment_photo(b_id);
 CREATE INDEX idx_sub_comment_photo_sub_comment_id ON c_sub_comment_photo(sub_comment_id);
 -- 评论分数
-create table c_comment_score(
-    comment_score_id varchar(30) not null comment '评论分数ID',
-    comment_id varchar(30) not null comment '评论ID',
+CREATE TABLE c_comment_score(
+    comment_score_id VARCHAR(30) NOT NULL COMMENT '评论分数ID',
+    comment_id VARCHAR(30) NOT NULL COMMENT '评论ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    score_type_cd varchar(30) not null comment '打分类别，S 商品相符，U 卖家打分，T 物流打分'
-    value int not null comment '分数',
+    score_type_cd VARCHAR(30) NOT NULL COMMENT '打分类别，S 商品相符，U 卖家打分，T 物流打分',
+    `value` INT NOT NULL COMMENT '分数',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'

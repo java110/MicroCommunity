@@ -141,9 +141,12 @@ public class ServiceCodeConstant {
     /**
      * 保存评论
      */
-    public static final String SERVICE_CODE_SAVE_COMMENT_INFO = "sava.comment.info";
+    public static final String SERVICE_CODE_SAVE_COMMENT_INFO = "save.comment.info";
 
-
+    /**
+     * 删除评论
+     */
+    public static final String SERVICE_CODE_DELETE_COMMENT_INFO = "delete.comment.info";
 
 
 

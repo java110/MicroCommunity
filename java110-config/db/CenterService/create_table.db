@@ -306,6 +306,13 @@ INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_i
 VALUES('delete.shop.catalog','D','删除商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
 
 
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('save.comment.info','D','保存评论',1,'http://comment-service/commentApi/service','8000418003');
+
+INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('delete.comment.info','D','删除评论',1,'http://comment-service/commentApi/service','8000418003');
+
+
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','1','S','Q','0'
 );
