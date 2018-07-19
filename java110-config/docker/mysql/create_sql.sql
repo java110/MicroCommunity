@@ -45,7 +45,7 @@ CREATE TABLE c_business(
     status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表'
 );
 
---c_orders_attrs
+-- business_attrs
 
 CREATE TABLE c_business_attrs(
     b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
@@ -72,10 +72,10 @@ INSERT INTO c_status(status_cd,NAME,description) VALUES('E','错误订单','错�
 INSERT INTO c_status(status_cd,NAME,description) VALUES('NE','通知错误订单','通知错误订单');
 INSERT INTO c_status(status_cd,NAME,description) VALUES('C','订单完成','订单完成');
 INSERT INTO c_status(status_cd,NAME,description) VALUES('B','Business过程','Business过程');
-INSERT INTO c_status(status_cd,NAME,description) VALUES('I','Instance过程','Instance过程')
+INSERT INTO c_status(status_cd,NAME,description) VALUES('I','Instance过程','Instance过程');
 
 
---c_order_type
+-- c_order_type
 
 CREATE TABLE c_order_type(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
@@ -333,7 +333,7 @@ insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) valu
 );
 
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
-'8000418002','5','Q','0'
+'8000418002','5','S','Q','0'
 );
 
 INSERT INTO c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) VALUES(
@@ -880,18 +880,6 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
                                                                                                             "resize": "false",
                                                                                                             "formatter": "function(cellvalue, options, rowObject){\n var temp =\"<div style=''margin-left:8px;''><div title=''详情记录'' style=''float:left;cursor:pointer;'' class=''ui-pg-div'' id=''jEditButton_3'' onclick=''detail(\"+rowObject+\")'' onmouseover=''jQuery(this).addClass(''ui-state-hover'');'' onmouseout=''jQuery(this).removeClass(''ui-state-hover'');''><span class=''ui-icon fa-search-plus''/></div></div>\";\n return temp; \n}"
                                                                                                           }',7);
-/** 如果BUTTON 报错不显示，则直接粘贴到col_model中
- {
- 	"name": "detail",
- 	"index": "",
- 	"width": "40",
- 	"fixed": true,
- 	"sortable": "false",
- 	"resize": "false",
- 	"formatter": "function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><div title='详情记录' style='float:left;cursor:pointer;' class='ui-pg-div' id='jEditButton_3' onclick='detail(\" + rowObject + \")' onmouseover='jQuery(this).addClass('ui-state-hover');' onmouseout='jQuery(this).removeClass('ui-state-hover');'><span class='ui-icon fa-search-plus'/></div></div>\";return temp; }"
- }
-**/
-
 
 
 insert into c_template(template_code,name,html_name,url) values('app','外部应用','list_template','LIST->query.center.apps;QUERY->query.center.app');
@@ -995,7 +983,7 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
                                                                                                             "fixed": "true",
                                                                                                             "sortable": "false",
                                                                                                             "resize": "false",
-                                                                                                            "formatter": "function(cellvalue, options, rowObject){\n var temp =\"<div style=''margin-left:8px;''><div title=''详情记录'' style=''float:left;cursor:pointer;'' class=''ui-pg-div'' id=''jEditButton_3'' onclick=''detail(\"+rowObject+\")'' onmouseover=''jQuery(this).addClass(''ui-state-hover'');'' onmouseout=''jQuery(this).removeClass(''ui-state-hover'');''><span class=''ui-icon fa-search-plus''/></div></div>\";\n return temp; \n}"
+                                                                                                            "formatter": "function(cellvalue, options, rowObject){\n var temp =\"<div style=''margin-left:8px;''><div title=''详情记录'' style=''float:left;cursor:pointer;'' class=''ui-pg-div'' id=''jEditButton_3'' onclick=''detail(\"+rowObject+\")'' onmouseover=''jQuery(this).addClass(''ui-state-hover'');'' onmouseout=''jQuery(this).removeClass(''ui-state-hover'');''><span class=''ui-icon fa-search-plus''/></div></div>\";\n return temp; \n}"}',9);
 
 
 insert into c_template(template_code,name,html_name,url) values('cache','刷新缓存','list_template_cache','LIST->query.center.caches;QUERY->query.center.cacheOne');
@@ -1015,7 +1003,7 @@ INSERT INTO c_template_col(template_code,col_name,col_code,col_model,seq) VALUES
                                                                                                             "fixed": "true",
                                                                                                             "sortable": "false",
                                                                                                             "resize": "false",
-                                                                                                            "formatter": ""function(cellvalue, options, rowObject){ var temp =\"<div style='margin-left:8px;'><button type='button' class='btn btn-warning' style='border-radius: .25rem;' onclick='flush(this,\"+rowObject.cacheCode+\")'>刷新缓存</button></div>\";return temp; }"
+                                                                                                            "formatter": ""function(cellvalue, options, rowObject){ var temp =\"<div style=''margin-left:8px;''><button type=''button'' class=''btn btn-warning'' style=''border-radius: .25rem;'' onclick=''flush(this,\"+rowObject.cacheCode+\")''>刷新缓存</button></div>\";return temp; }"
                                                                                                           }',4);
 
 
