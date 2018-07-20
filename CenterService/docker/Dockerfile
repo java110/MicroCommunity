@@ -8,4 +8,4 @@ ADD bin/start_eureka.sh /root/
 
 RUN chmod u+x /root/start_centerService.sh
 
-CMD ["/root/start_centerService.sh"]
+CMD ["/root/start_centerService.sh dev"]
