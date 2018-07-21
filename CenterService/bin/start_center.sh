@@ -10,6 +10,6 @@
 
 #### normal dev model
 #nohup java -jar -Dspring.profiles.active=dev $1 target/CenterService.jar > center.log $1 2>&1 &
-nohup java -jar -Dspring.profiles.active=$1 $2 target/CenterService.jar > center.log $1 2>&1 &
+nohup java -jar -Dspring.profiles.active=$1 $2 target/CenterService.jar > center.log $2 2>&1 &
 
 tail -100f center.log
