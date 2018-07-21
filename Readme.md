@@ -21,7 +21,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 服务安装说明：
 
-1、安装点[这里](/wiki/install)
+1、安装点[这里](https://github.com/java110/MicroCommunity/wiki/install)
 
 2、用post工具属性缓存 地址为：http://yourIp:8001/cacheApi/flush 如下图：
 
