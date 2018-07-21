@@ -4,8 +4,8 @@ cp -r ../bin .
 
 cp  -r ../target .
 
-docker build -t java110/docker-centerService .
+docker build -t java110/center .
 
-docker run -ti --name centerService_test -p8001:8001 -idt java110/docker-centerService:latest
+docker run -ti --name center_test -p8001:8001 -idt java110/center:latest
 
-docker logs -f centerService_test
+docker logs -f center_test

@@ -1,11 +1,11 @@
 FROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0
-MAINTAINER wuxw <wuxw7@asiainfo.com>
+MAINTAINER wuxw <928255095@qq.com>
 
 ADD target/CenterService.jar /root/target/
 
-ADD bin/start_eureka.sh /root/
+ADD bin/start_center.sh /root/
 
 
-RUN chmod u+x /root/start_centerService.sh
+RUN chmod u+x /root/start_center.sh
 
-CMD ["/root/start_centerService.sh dev"]
+CMD ["/root/start_center.sh","dev -Dcache"]
