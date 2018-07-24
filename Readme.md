@@ -1,13 +1,13 @@
-### 变更历史
+### 变更历史（change history）
 版本|变更内容|变更时间|变更人员
 :-: | :-: | :-: | :-:
 v0.01|初稿|2018-07-24|wuxw
 
-### 分支说明
+### 分支说明（branch）
 
 分支管理说明，test为最新代码未测试代码（主要为了防止本地代码遗失），master 为最新测试过代码（待产品化），product 为产品化代码
 
-### 系统简介
+### 系统简介（introduction）
 1. 开发工具：
 
 java1.8 + idea/eclipse + mysql 
@@ -26,7 +26,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何安装（how to install）
 
-1. 安装点[这里](https://github.com/java110/MicroCommunity/wiki/install)
+[从这里安装](https://github.com/java110/MicroCommunity/wiki/install)
 
 ### 运行效果（view）
 1.在浏览器输入 http://yourIp:6001/ 如下图
