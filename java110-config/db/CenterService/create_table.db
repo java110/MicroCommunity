@@ -4,7 +4,7 @@ create database TT;
 
 CREATE TABLE c_orders(
     o_id VARCHAR(30) NOT NULL UNIQUE COMMENT '订单ID',
-    app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
+    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
     ext_transaction_id VARCHAR(30) NOT NULL COMMENT '外部交易流水',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     request_time VARCHAR(16) NOT NULL COMMENT '外部系统请求时间',
@@ -98,7 +98,7 @@ insert into c_business_type(business_type_cd,name,description) values('DO','撤�
 CREATE TABLE spec(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     domain varchar(20) not null comment '属性域',
-    spec_cd VARCHAR(4) NOT NULL UNIQUE COMMENT '业务项类型规格编码，从x00020001开始每次加一就可以(约定，x=10表示c_orders_attrs 中属性，x=11表示c_business_attrs 中的属性)',
+    spec_cd VARCHAR(12) NOT NULL UNIQUE COMMENT '业务项类型规格编码，从x00020001开始每次加一就可以(约定，x=10表示c_orders_attrs 中属性，x=11表示c_business_attrs 中的属性)',
     `name` VARCHAR(50) NOT NULL COMMENT '名称',
     description VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
@@ -111,11 +111,11 @@ insert into spec(domain,spec_cd,name,description) values('BUSINESS','200001','�
 
 CREATE TABLE c_route(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
-    service_id INT NOT NULL COMMENT '下游接口配置ID',
+    app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
+    service_id VARCHAR(12) NOT NULL COMMENT '下游接口配置ID',
     order_type_cd VARCHAR(4) NOT NULL COMMENT '订单类型，参考c_order_type表',
     invoke_limit_times INT COMMENT '接口调用一分钟调用次数',
-    invoke_model VARCHAR(1) NOT NULL COMMENT '1-同步方式 2-异步方式',
+    invoke_model VARCHAR(1) NOT NULL COMMENT 'S-同步方式 A-异步方式',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效，2 表示下线（当组件调用服务超过限制时自动下线）'
 );
@@ -125,7 +125,8 @@ CREATE TABLE c_route(
 -- c_service
 
 CREATE TABLE c_service(
-    service_id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    service_id VARCHAR(12) NOT NULL COMMENT '服务ID',
     service_code VARCHAR(50) NOT NULL UNIQUE COMMENT '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
     business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
@@ -178,7 +179,7 @@ INSERT c_mapping(domain,`name`,`key`,`value`,remark) VALUES('DOMAIN.COMMON','编
 -- c_app
 CREATE TABLE c_app(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    app_id VARCHAR(30) NOT NULL UNIQUE COMMENT '应用ID',
+    app_id VARCHAR(10) NOT NULL UNIQUE COMMENT '应用ID',
     `name` VARCHAR(50) NOT NULL COMMENT '名称 对应系统名称',
     security_code VARCHAR(64) NOT NULL COMMENT '签名码 sign签名时用',
     while_list_ip VARCHAR(200) COMMENT '白名单ip 多个之间用;隔开',
@@ -412,15 +413,15 @@ VALUES('query.order.orderInfo','订单信息','oId','1','{
                                                   FROM c_orders co WHERE co.o_id = #oId#",
                                                   "param2":"SELECT cb.b_id bId, cb.business_type_cd businessTypeCd,cb.create_time createTime,cb.finish_time finishTime ,cb.o_id oId,
                                                  cb.remark remark,cb.status_cd statusCd FROM c_business cb WHERE cb.o_id = #oId#"
-                                                 }','','{"PARAM:"{
+                                                 }','','{"PARAM":{
                                                             "param1": "$.#order#Object",
                                                             "param2": "$.#business#Array"
-                                                            },"TEMPLATE":"{
+                                                            },"TEMPLATE":{
                                                          "response": {
                                                            "code": "0000",
                                                            "message": "成功"
                                                          }
-                                                       }"}','','0');
+                                                       }}','','0');
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.console.menu','查询菜单','manageId,menuGroup','1','{
