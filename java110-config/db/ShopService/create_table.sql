@@ -150,12 +150,10 @@ CREATE INDEX idx_business_shop_attr_param_b_id ON business_shop_attr_param(b_id)
 
 -- 商品优惠表
 CREATE TABLE business_shop_preferential(
-    shop_preferential_id VARCHAR(30) NOT NULL COMMENT '商品ID',
-    shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
+    preferential_id VARCHAR(30) NOT NULL COMMENT '优惠ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    original_price DECIMAL(10,2) NOT NULL COMMENT '商品销售价，再没有优惠的情况下和售价是一致的',
-    discount_rate DECIMAL(3,2) NOT NULL DEFAULT 1.00 COMMENT '商品打折率',
-    show_original_price VARCHAR(2) NOT NULL DEFAULT 'N' COMMENT '是否显示原价，Y显示，N 不显示',
+    preferential_type varchar(10) not null default 'U' comment '优惠类型，U 打折 ， N 新用户优惠',
+    preferential_value varchar(10) not null comment '根据优惠类型填写值',
     preferential_start_date DATE NOT NULL COMMENT '商品优惠开始时间',
     preferential_end_date DATE NOT NULL COMMENT '商品优惠结束时间',
     `month` INT NOT NULL COMMENT '月份',
@@ -176,8 +174,8 @@ PARTITION BY RANGE (`month`) (
     PARTITION business_shop_preferential_11 VALUES LESS THAN (12),
     PARTITION business_shop_preferential_12 VALUES LESS THAN (13)
 );
-CREATE INDEX idx_business_shop_preferential_shop_id ON business_shop_preferential(shop_id);
 CREATE INDEX idx_business_shop_preferential_b_id ON business_shop_preferential(b_id);
+
 -- 商品描述
 create table business_shop_desc(
     shop_desc_id VARCHAR(30) NOT NULL COMMENT '商品描述ID',
@@ -253,22 +251,20 @@ create table s_shop_attr_param(
 CREATE INDEX idx_shop_attr_param_b_id ON s_shop_attr_param(b_id);
 CREATE INDEX idx_shop_attr_param_shop_id ON s_shop_attr_param(shop_id);
 
--- 商品优惠表
+
 create table s_shop_preferential(
-    shop_preferential_id VARCHAR(30) NOT NULL COMMENT '商品ID',
-    shop_id VARCHAR(30) NOT NULL COMMENT '商品ID',
+    preferential_id VARCHAR(30) NOT NULL COMMENT '优惠ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    original_price DECIMAL(10,2) not null comment '商品销售价，再没有优惠的情况下和售价是一致的',
-    discount_rate decimal(3,2) not null default 1.00 comment '商品打折率',
-    show_original_price varchar(2) not null default 'N' comment '是否显示原价，Y显示，N 不显示',
+    preferential_type varchar(10) not null default 'U' comment '优惠类型，U 打折 ， N 新用户优惠',
+    preferential_value varchar(10) not null comment '根据优惠类型填写值',
     preferential_start_date date not null comment '商品优惠开始时间',
     preferential_end_date date not null comment '商品优惠结束时间',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-    UNIQUE KEY (shop_preferential_id)
+    UNIQUE KEY (preferential_id)
 );
 CREATE INDEX idx_shop_preferential_b_id ON s_shop_preferential(b_id);
-CREATE INDEX idx_shop_preferential_shop_id ON s_shop_preferential(shop_id);
+
 -- 商品描述
 create table s_shop_desc(
     shop_desc_id VARCHAR(30) NOT NULL COMMENT '商品描述ID',

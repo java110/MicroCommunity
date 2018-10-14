@@ -265,7 +265,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 if(StringUtil.isNullOrNone(values[1])){
                     return ;
                 }
-                obj.put(values[1], new JSONObject());
+                obj.put(values[1], values[2].equals("Object")?new JSONObject():new JSONArray());
                 return;
             }
             if (values[2].equals("Object")) {

@@ -233,10 +233,10 @@ insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_i
 values('query.order.orderInfo','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
 
 insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.console.menu','Q','查询菜单',1,'http://console-service/businessApi/query','8000418002','0');
+values('query.console.menu','Q','查询菜单',1,'http://center-service/businessApi/query','8000418002','0');
 
 insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.loginInfo','Q','查询用户登录信息',1,'http://console-service/businessApi/query','8000418002','0');
+values('query.user.loginInfo','Q','查询用户登录信息',1,'http://center-service/businessApi/query','8000418002','0');
 
 INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
 VALUES('query.console.template','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
@@ -327,6 +327,11 @@ insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) valu
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','3','S','Q','0'
 );
+
+insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
+'8000418002','3','S','Q','0'
+);
+
 
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418002','4','S','Q','0'
@@ -453,7 +458,7 @@ VALUES('query.console.menu','查询菜单','manageId,menuGroup','1','{
 
 INSERT INTO c_service_sql(service_code,`name`,params,query_model,`sql`,proc,template,remark,status_cd)
 VALUES('query.user.loginInfo','查询用户登录信息','userCode','1','{
-                                                 	"param1":"select u.userId userId,u.name userName,u.password userPwd from user u where u.userCode = #userCode# and u.status_cd = ''0''"
+                                                 	"param1":"SELECT ''10001'' userId,''admin'' userName,''d57167e07915c9428b1c3aae57003807'' userPwd FROM DUAL WHERE #userCode#=''admin''"
                                                  }','','{"PARAM":{
                                                             "param1": "$.#user#Object"
                                                             },"TEMPLATE":{
