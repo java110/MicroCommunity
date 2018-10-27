@@ -32,6 +32,7 @@
         <module>zipkin</module>
         <module>ShopService</module>
         <module>CommentService</module>
+        <module>Api</module>
     </modules>
 
     <parent>
@@ -73,6 +74,7 @@
         <httpclient.verion>3.1</httpclient.verion>
         <spring.version>4.3.2.RELEASE</spring.version>
         <zookeeper.version>3.3.6</zookeeper.version>
+        <swagger.version>2.5.0</swagger.version>
     </properties>
 
     <dependencyManagement>
@@ -365,6 +367,18 @@
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
                 <version>${zookeeper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- swagger-ui -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
 
 

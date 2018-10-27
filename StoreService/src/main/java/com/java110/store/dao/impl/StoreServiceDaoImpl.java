@@ -338,4 +338,91 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户证件信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
+    /**
+     * 商户成员加入信息
+     * @param businessMemberStore 商户成员信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    public void saveBusinessMemberStore(Map businessMemberStore) throws DAOException{
+        logger.debug("商户成员加入 入参 businessMemberStore : {}",businessMemberStore);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessMemberStore",businessMemberStore);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"商户成员加入失败："+ JSONObject.toJSONString(businessMemberStore));
+        }
+    }
+
+    /**
+     * 成员加入 保存信息至instance
+     * @param info
+     * @throws DAOException
+     */
+    @Override
+    public void saveMemberStoreInstance(Map info) throws DAOException {
+        logger.debug("商户成员加入Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveMemberStoreInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户照片信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 查询商户成员加入信息（business过程）
+     * 根据bId 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    public Map getBusinessMemberStore(Map info) throws DAOException{
+        logger.debug("查询商户成员加入信息 入参 info : {}",info);
+
+        List<Map> businessMemberStores = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessMemberStore",info);
+        if(businessMemberStores == null || businessMemberStores.size() == 0){
+            return null;
+        }
+        if(businessMemberStores.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessMemberStore，"+ JSONObject.toJSONString(info));
+        }
+
+        return businessMemberStores.get(0);
+    }
+
+    /**
+     * 查询商户成员加入信息（instance过程）
+     * 根据bId 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    public Map getMemberStore(Map info) throws DAOException{
+        logger.debug("查询商户成员加入信息 入参 info : {}",info);
+
+        List<Map> memberStores = sqlSessionTemplate.selectList("storeServiceDaoImpl.getMemberStore",info);
+        if(memberStores == null || memberStores.size() == 0){
+            return null;
+        }
+        if(memberStores.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getMemberStore，"+ JSONObject.toJSONString(info));
+        }
+
+        return memberStores.get(0);
+    }
+    /**
+     * 修改商户成员加入信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateMemberStoreInstance(Map info) throws DAOException{
+        logger.debug("修改商户成员加入信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateMemberStoreInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户成员加入信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
 }

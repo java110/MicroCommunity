@@ -117,6 +117,33 @@ partition BY RANGE (`month`) (
 CREATE INDEX idx_business_store_cerdentials_store_id ON business_store_cerdentials(store_id);
 CREATE INDEX idx_business_store_cerdentials_b_id ON business_store_cerdentials(b_id);
 
+-- 商户成员
+create table business_member_store(
+    member_store_id varchar(30) not null comment 'ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    member_id varchar(50) not null  comment '商户成员ID',
+    `month` INT NOT NULL comment '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+)
+partition BY RANGE (`month`) (
+    partition business_member_store_1 VALUES LESS THAN (2),
+    partition business_member_store_2 VALUES LESS THAN (3),
+    partition business_member_store_3 VALUES LESS THAN (4),
+    partition business_member_store_4 VALUES LESS THAN (5),
+    partition business_member_store_5 VALUES LESS THAN (6),
+    partition business_member_store_6 VALUES LESS THAN (7),
+    partition business_member_store_7 VALUES LESS THAN (8),
+    partition business_member_store_8 VALUES LESS THAN (9),
+    partition business_member_store_9 VALUES LESS THAN (10),
+    partition business_member_store_10 VALUES LESS THAN (11),
+    partition business_member_store_11 VALUES LESS THAN (12),
+    partition business_member_store_12 VALUES LESS THAN (13)
+);
+CREATE INDEX idx_business_member_store_store_id ON business_member_store(store_id);
+CREATE INDEX idx_business_member_store_b_id ON business_member_store(b_id);
+
 
 
 CREATE TABLE s_store(
@@ -184,12 +211,34 @@ CREATE INDEX idx_store_cerdentials_b_id ON s_store_cerdentials(b_id);
 CREATE INDEX idx_store_cerdentials_store_id ON s_store_cerdentials(store_id);
 CREATE INDEX idx_store_cerdentials_store_cerdentials_id ON s_store_cerdentials(store_cerdentials_id);
 
+-- 商户成员
+create table s_member_store(
+    member_store_id varchar(30) not null comment 'ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    store_id VARCHAR(30) NOT NULL COMMENT '商店ID',
+    member_id varchar(50) not null  comment '商户成员ID',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
+    unique KEY (member_store_id)
+)
+CREATE INDEX idx_s_member_store_store_id ON s_member_store(store_id);
+CREATE INDEX idx_s_member_store_b_id ON s_member_store(b_id);
+
 -- 店铺种类
 create table store_type(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    domain varchar(20) not null comment '域',
     store_type_cd VARCHAR(12) NOT NULL COMMENT '店铺编码',
     `name` VARCHAR(50) NOT NULL COMMENT '店铺种类编码',
     description VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     unique KEY (store_type_cd)
 );
+
+insert into store_type(domain,store_type_cd,name,description) values('CORE_STROE','870000000001','小区','小区');
+insert into store_type(domain,store_type_cd,name,description) values('CORE_STROE','870000000002','物业','物业');
+insert into store_type(domain,store_type_cd,name,description) values('CORE_STROE','870000000003','物流公司','物流公司');
+insert into store_type(domain,store_type_cd,name,description) values('APP_VIEW','870181027001','饭店','饭店');
+insert into store_type(domain,store_type_cd,name,description) values('APP_VIEW','870181027002','餐厅','餐厅');
+insert into store_type(domain,store_type_cd,name,description) values('APP_VIEW','870181027003','火锅店','火锅店');
+insert into store_type(domain,store_type_cd,name,description) values('APP_VIEW','870181027004','超市','超市');

@@ -101,6 +101,15 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_STORE_INFO = "delete.store.info";
 
 
+    /**
+     * 商户成员加入信息
+     */
+    public static final String SERVICE_CODE_MEMBER_JOINED_STORE = "member.joined.store";
+
+    /**
+     * 商户成员退出信息
+     */
+    public static final String SERVICE_CODE_MEMBER_QUIT_STORE = "member.quit.store";
 
     /**
      * 保存商品信息

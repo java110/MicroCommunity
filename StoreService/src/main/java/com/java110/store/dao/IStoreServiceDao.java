@@ -182,4 +182,44 @@ public interface IStoreServiceDao {
      */
     public void updateStoreCerdentailsInstance(Map info) throws DAOException;
 
+
+    /**
+     * 商户成员加入信息
+     * @param businessMemberStore 商户成员信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    public void saveBusinessMemberStore(Map businessMemberStore) throws DAOException;
+
+    /**
+     * 成员加入 保存信息至instance
+     * @param info
+     * @throws DAOException
+     */
+    public void saveMemberStoreInstance(Map info) throws DAOException;
+
+    /**
+     * 查询商户成员加入信息（business过程）
+     * 根据bId 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    public Map getBusinessMemberStore(Map info) throws DAOException;
+
+    /**
+     * 查询商户成员加入信息（instance过程）
+     * 根据bId 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    public Map getMemberStore(Map info) throws DAOException;
+
+    /**
+     * 修改商户成员加入信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateMemberStoreInstance(Map info) throws DAOException;
+
 }

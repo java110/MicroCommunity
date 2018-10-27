@@ -54,6 +54,7 @@ public class GenerateCodeFactory {
         prefixMap.put("storeId","40");
         prefixMap.put("storePhotoId","41");
         prefixMap.put("storeCerdentialsId","42");
+        prefixMap.put("memberStoreId","43");
         prefixMap.put("shopId","50");
         prefixMap.put("shopAttrId","51");
         prefixMap.put("shopPhotoId","52");
@@ -68,6 +69,8 @@ public class GenerateCodeFactory {
         prefixMap.put("subCommentAttrId","62");
         prefixMap.put("commentPhotoId","63");
         prefixMap.put("commentScoreId","64");
+        prefixMap.put("communityId","70");
+        prefixMap.put("communityPhotoId","71");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -209,6 +212,14 @@ public class GenerateCodeFactory {
         return getCode(prefixMap.get("storeId"));
     }
 
+    public static String getMemberStoreId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("memberStoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("memberStoreId"));
+    }
+
 
     public static String getStorePhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
@@ -230,6 +241,35 @@ public class GenerateCodeFactory {
         //调用服务
         return getCode(prefixMap.get("storeCerdentialsId"));
     }
+
+
+    /**
+     * 获取小区ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommunityId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("communityId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("communityId"));
+    }
+
+
+    /**
+     * 获取小区照片ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommunityPhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("communityPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("communityPhotoId"));
+    }
+
 
     /**
      * 商品ID生成

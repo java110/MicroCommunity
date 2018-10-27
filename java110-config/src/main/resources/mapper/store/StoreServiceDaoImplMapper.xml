@@ -309,4 +309,67 @@
             and sc.store_cerdentials_id = #{storeCerdentialsId}
         </if>
     </update>
+
+    <!--商户成员加入 add by wuxw 2018-10-27 saveBusinessMemberStore-->
+    <insert id="saveBusinessMemberStore" parameterType="Map">
+        insert into business_member_store(member_store_id,b_id,store_id,member_id,month,operate)
+        values(#{memberStoreId},#{bId},#{storeId},#{memberId},#{month},#{operate})
+    </insert>
+
+    <!-- 商户成员加入 instance表中 add by wuxw 2018-10-27 -->
+    <insert id="saveMemberStoreInstance" parameterType="Map">
+        insert into s_member_store(member_store_id,b_id,store_id,member_id,status_cd)
+        select ms.member_store_id,ms.b_id,ms.store_id,ms.member_id,'0'
+        from business_member_store ms where
+        ms.operate = 'ADD' and ms.b_id=#{bId}
+    </insert>
+
+    <!-- 查询商户成员 add by wuxw 2018-10-27 getBusinessMemberStore-->
+    <select id="getBusinessMemberStore" parameterType="Map" resultType="Map">
+        select ms.member_store_id,ms.b_id,ms.store_id,ms.member_id,ms.operate
+        from business_member_store ms where 1 = 1
+        <if test="operate != null and operate != ''">
+            and ms.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and ms.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and ms.store_id = #{storeId}
+        </if>
+    </select>
+
+
+    <!-- 查询商户成员  add by wuxw 2018-07-03 -->
+    <select id="getMemberStore" parameterType="Map" resultType="Map">
+        select ms.member_store_id,ms.b_id,ms.store_id,ms.member_id,ms.status_cd
+        from business_member_store ms
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and ms.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and ms.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and ms.member_store_id = #{memberStoreId}
+        </if>
+    </select>
+
+    <!-- 修改商户成员 add by wuxw 2018-07-03 -->
+    <update id="updateMemberStoreInstance" parameterType="Map">
+        update s_member_store ms set ms.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,ms.b_id = #{newBId}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and ms.b_id = #{bId}
+        </if>
+        <if test="memberStoreId != null and memberStoreId !=''">
+            and ms.member_store_id = #{memberStoreId}
+        </if>
+    </update>
+
 </mapper>

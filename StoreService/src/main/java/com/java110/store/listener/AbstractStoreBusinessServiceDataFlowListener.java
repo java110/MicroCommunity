@@ -86,6 +86,19 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
     }
 
     /**
+     * 刷新 businessMemberStore 数据
+     * 主要将 数据库 中字段和 接口传递字段建立关系
+     * @param businessMemberStore
+     */
+    protected void flushBusinessMemberStore(Map businessMemberStore,String statusCd){
+        businessMemberStore.put("newBId",businessMemberStore.get("b_id"));
+        businessMemberStore.put("storeId",businessMemberStore.get("store_id"));
+        businessMemberStore.put("memberStoreId",businessMemberStore.get("member_store_id"));
+        businessMemberStore.put("memberId",businessMemberStore.get("member_id"));
+        businessMemberStore.put("statusCd", statusCd);
+    }
+
+    /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessStore 商户信息
      */
@@ -180,5 +193,27 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentStoreCerdentials.put("negativePhoto",currentStoreCerdentials.get("negative_photo"));
         currentStoreCerdentials.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStoreCerdentials(currentStoreCerdentials);
+    }
+
+
+    /**
+     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     * @param businessMemberStore 商户信息
+     */
+    protected void autoSaveDelBusinessMemberStore(Business business, JSONObject businessMemberStore){
+//自动插入DEL
+        Map info = new HashMap();
+        info.put("memberStoreId",businessMemberStore.getString("memberStoreId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        Map currentMemberStore = getStoreServiceDaoImpl().getMemberStore(info);
+        if(currentMemberStore == null || currentMemberStore.isEmpty()){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+        currentMemberStore.put("bId",business.getbId());
+        currentMemberStore.put("storeId",currentMemberStore.get("store_id"));
+        currentMemberStore.put("memberStoreId",currentMemberStore.get("member_store_id"));
+        currentMemberStore.put("memberId",currentMemberStore.get("member_id"));
+        currentMemberStore.put("operate",StatusConstant.OPERATE_DEL);
+        getStoreServiceDaoImpl().saveBusinessStoreInfo(currentMemberStore);
     }
 }
