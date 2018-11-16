@@ -10,6 +10,7 @@ import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
 import com.java110.core.context.AbstractDataFlowContext;
+import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
@@ -101,6 +102,27 @@ public class DataFlowFactory {
         }
         return null;
     }
+
+    /**
+     * 获取单个路由
+     * @param dataFlow
+     * @param serviceCode
+     * @return
+     */
+    public static AppRoute getRoute(ApiDataFlow dataFlow, String serviceCode){
+        if (dataFlow.getAppRoutes().size() == 0){
+            throw new RuntimeException("当前没有获取到AppId对应的信息");
+        }
+
+        List<AppRoute> appRoutes = dataFlow.getAppRoutes();
+        for(AppRoute appRoute : appRoutes) {
+            if (StatusConstant.STATUS_CD_VALID.equals(appRoute.getStatusCd())
+                    &&appRoute.getAppService().getServiceCode().equals(serviceCode)){
+                return appRoute;
+            }
+        }
+        return null;
+    }
     /**
      * 获取单个服务
      * @param dataFlow
@@ -108,6 +130,20 @@ public class DataFlowFactory {
      * @return
      */
     public static AppService getService(DataFlow dataFlow, String serviceCode){
+        AppRoute route = getRoute(dataFlow, serviceCode);
+        if(route == null){
+            return null;
+        }
+        return route.getAppService();
+    }
+
+    /**
+     * 获取单个服务
+     * @param dataFlow
+     * @param serviceCode
+     * @return
+     */
+    public static AppService getService(ApiDataFlow dataFlow, String serviceCode){
         AppRoute route = getRoute(dataFlow, serviceCode);
         if(route == null){
             return null;

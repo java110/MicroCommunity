@@ -6,7 +6,12 @@ import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by wuxw on 2018/4/20.
  */
 @RestController
+@Api(value = "查询业务统一提供服务")
 public class BusinessApi extends BaseController {
 
     @Autowired
@@ -46,15 +52,19 @@ public class BusinessApi extends BaseController {
      * @return
      */
     @RequestMapping(path = "/businessApi/query",method= RequestMethod.POST)
-    public String queryPost(@RequestBody String businessInfo) {
+    @ApiOperation(value="业务查询post请求", notes="test: 返回 2XX 表示服务正常")
+    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    public ResponseEntity<String> queryPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
             initConfig(dataQuery);
             queryServiceSMOImpl.commonQueryService(dataQuery);
-            return dataQuery.getResponseInfo().toJSONString();
+            return dataQuery.getResponseEntity();
         }catch (Exception e){
             logger.error("请求订单异常",e);
-            return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+             //DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+            return new ResponseEntity<String>("请求发生异常，"+e.getMessage()+e, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
     @Deprecated

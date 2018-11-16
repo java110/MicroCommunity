@@ -158,5 +158,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_COMMENT_INFO = "delete.comment.info";
 
 
+    /**
+     * 透传服务
+     */
+    public static final String SERVICE_CODE_DO_SERVICE_TRANSFER = "do.service.transfer";
+
+
 
 }

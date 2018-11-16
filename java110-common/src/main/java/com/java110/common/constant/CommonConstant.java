@@ -126,5 +126,19 @@ public class CommonConstant {
     public final static String INSTANCE_N = "N";
 
 
+    public final static String HTTP_SERVICE = "SERVICE";
+    public final static String HTTP_METHOD = "METHOD";
+    public final static String HTTP_APP_ID = "app_id";
+    public final static String HTTP_TRANSACTION_ID = "transaction_id";
+    public final static String HTTP_REQ_TIME = "req_time";
+    public final static String HTTP_SIGN = "sign";
+
+
+    public final static String HTTP_METHOD_POST = "POST";
+    public final static String HTTP_METHOD_PUT = "PUT";
+    public final static String HTTP_METHOD_GET = "GET";
+    public final static String HTTP_METHOD_DELETE = "DELETE";
+
+
 
 }

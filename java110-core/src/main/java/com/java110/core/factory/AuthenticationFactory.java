@@ -18,6 +18,7 @@ import com.java110.common.exception.NoAuthorityException;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
 
+import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -62,6 +63,22 @@ public class AuthenticationFactory {
         String reqInfo = dataFlow.getTransactionId() +dataFlow.getAppId();
         reqInfo +=  ((dataFlow.getReqBusiness() == null || dataFlow.getReqBusiness().size() == 0)
                                             ?dataFlow.getReqData() :dataFlow.getReqBusiness().toJSONString());
+        reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
+        return md5(reqInfo);
+    }
+
+    /**
+     * dataFlow 对象签名
+     * @param dataFlow
+     * @return
+     */
+    public static String apiDataFlowMd5(ApiDataFlow dataFlow) throws NoAuthorityException{
+        if(dataFlow == null){
+            throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"MD5签名过程中出现错误");
+        }
+        String reqInfo = dataFlow.getTransactionId() + dataFlow.getRequestTime() + dataFlow.getAppId();
+        reqInfo +=  "GET,DELETE".equals(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_METHOD))?
+                dataFlow.getRequestHeaders().get("REQUEST_URL") :dataFlow.getReqData();
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
         return md5(reqInfo);
     }

@@ -88,7 +88,7 @@ public class BaseController extends AppBase {
 
         while( reqHeaderEnum.hasMoreElements() ) {
             String headerName = (String)reqHeaderEnum.nextElement();
-            headers.put(headerName, request.getHeader(headerName));
+            headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
 
         headers.put("IP",getIpAddr(request));

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,11 @@ public interface DataFlowContext {
 
 
     public String getbId();
+
+    //业务编码,如果是批量受理就取第一个
+    public String getServiceCode();
+
+    public void setResponseEntity(ResponseEntity responseEntity);
 
 
 }

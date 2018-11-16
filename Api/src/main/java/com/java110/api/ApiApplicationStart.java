@@ -1,5 +1,8 @@
 package com.java110.api;
 
+import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.event.service.api.ServiceDataFlowEventPublishing;
+import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,9 +33,10 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.api","com.java110.core","com.java110.event.center","com.java110.cache"})
+@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.api","com.java110.core","com.java110.event.service.api","com.java110.cache"})
 @EnableDiscoveryClient
-
+@Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
+        basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
 public class ApiApplicationStart {
@@ -86,7 +90,10 @@ public class ApiApplicationStart {
 
 
     public static void main(String[] args) throws Exception{
-        SpringApplication.run(ApiApplicationStart.class, args);
+        ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
+
+        //服务启动加载
+        ServiceStartInit.initSystemConfig(context);
     }
 
 }

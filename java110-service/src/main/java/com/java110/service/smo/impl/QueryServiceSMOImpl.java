@@ -17,6 +17,8 @@ import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
     @Override
     public void commonQueryService(DataQuery dataQuery) throws BusinessException {
         //查询缓存查询 对应处理的ServiceSql
+        ResponseEntity<String> responseEntity = null;
         try {
             ServiceSql currentServiceSql = ServiceSqlCache.getServiceSql(dataQuery.getServiceCode());
             if (currentServiceSql == null) {
@@ -62,11 +65,14 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 return ;
             }
             doExecuteProc(dataQuery);
+            responseEntity = new ResponseEntity<String>(dataQuery.getResponseInfo().toJSONString(), HttpStatus.OK);
         }catch (BusinessException e){
             logger.error("公用查询异常：",e);
-            dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
-                    e.getMessage()));
+            /*dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
+                    e.getMessage()));*/
+            responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        dataQuery.setResponseEntity(responseEntity);
 
     }
     @Override

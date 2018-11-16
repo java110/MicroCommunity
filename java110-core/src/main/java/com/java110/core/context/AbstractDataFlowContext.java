@@ -8,6 +8,7 @@ import com.java110.common.util.DateUtil;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
+import org.springframework.http.ResponseEntity;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -83,6 +84,7 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         afterBuilder((DataFlowContext) dataFlowContext);
         return dataFlowContext;
     }
+
 
     /**
      * 预处理
@@ -362,5 +364,9 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         this.setCode(code);
     }
 
+
+    public void setResponseEntity(ResponseEntity responseEntity){
+
+    }
 
 }

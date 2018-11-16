@@ -132,7 +132,7 @@ CREATE TABLE c_service(
     `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
     seq INT NOT NULL COMMENT '顺序 只有同步方式下根据seq从小到大调用接口',
     messageQueueName VARCHAR(50) COMMENT '消息队里名称 只有异步时有用',
-    is_instance varchar(2) not null default 'N' comment '是否Instance Y 需要，N不需要',
+    is_instance varchar(2) not null default 'N' comment '是否Instance Y 需要，N不需要，NT透传类',
     url VARCHAR(200) COMMENT '目标地址',
     method VARCHAR(50) COMMENT '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
     timeout INT NOT NULL DEFAULT 60 COMMENT '超时时间',

@@ -27,7 +27,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: api
+    name: api-service
   redis:
     database: 0
     host: 135.192.86.200

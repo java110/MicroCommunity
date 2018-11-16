@@ -62,7 +62,7 @@ public class HttpApi extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(path = "/httpApi/service/{serviceCode}",method= RequestMethod.POST)
+    @RequestMapping(path = "/httpApi/service/{serviceCode:.+}",method= RequestMethod.POST)
     public String servicePostTransfer(@PathVariable String serviceCode, @RequestBody String orderInfo, HttpServletRequest request,
                                       HttpServletResponse response) {
         String resData = "";

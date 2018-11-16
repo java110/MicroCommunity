@@ -2,6 +2,7 @@ package com.java110.entity.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 数据查询对象
@@ -21,6 +22,9 @@ public class DataQuery {
     private JSONObject responseInfo;
 
     private ServiceSql serviceSql;
+
+    //rest 返回对象
+    private ResponseEntity responseEntity;
 
 
 
@@ -65,6 +69,13 @@ public class DataQuery {
         this.serviceSql = serviceSql;
     }
 
+    public ResponseEntity getResponseEntity() {
+        return responseEntity;
+    }
+
+    public void setResponseEntity(ResponseEntity responseEntity) {
+        this.responseEntity = responseEntity;
+    }
 
     /**
      * {
