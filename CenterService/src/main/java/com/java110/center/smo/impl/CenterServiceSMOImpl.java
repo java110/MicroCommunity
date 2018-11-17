@@ -30,6 +30,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -57,6 +59,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private IQueryServiceSMO queryServiceSMOImpl;
 
     @Override
+    @Deprecated
     public String service(String reqJson, Map<String, String> headers) throws SMOException{
 
         DataFlow dataFlow = null;
@@ -156,6 +159,102 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         }
 
+    }
+
+    /**
+     * 业务统一处理服务方法
+     * @param reqJson 请求报文json
+     * @return
+     */
+    public ResponseEntity<String> serviceApi(String reqJson, Map<String,String> headers) throws SMOException{
+        DataFlow dataFlow = null;
+
+        JSONObject responseJson = null;
+
+        ResponseEntity<String> responseEntity = null;
+
+        try {
+            DataFlowEventPublishing.preValidateData(reqJson,headers);
+            //1.0 创建数据流
+            dataFlow = DataFlowFactory.newInstance(DataFlow.class).builder(reqJson, headers);
+            DataFlowEventPublishing.initDataFlowComplete(dataFlow);
+
+            //2.0 加载配置信息
+            initConfigData(dataFlow);
+            DataFlowEventPublishing.loadConfigDataComplete(dataFlow);
+
+            //3.0 校验 APPID是否有权限操作serviceCode
+            judgeAuthority(dataFlow);
+            //4.0 调用规则校验
+            ruleValidate(dataFlow);
+            DataFlowEventPublishing.ruleValidateComplete(dataFlow);
+
+            //5.0 保存订单和业务项 c_orders c_order_attrs c_business c_business_attrs
+            saveOrdersAndBusiness(dataFlow);
+
+            //6.0 调用下游系统
+            DataFlowEventPublishing.invokeBusinessSystem(dataFlow);
+            invokeBusinessSystem(dataFlow);
+
+            responseJson = DataTransactionFactory.createCommonResponseJson(dataFlow);
+
+        } catch (DecryptException e){ //解密异常
+            responseEntity = new ResponseEntity<String>(e.getMessage() , HttpStatus.PROXY_AUTHENTICATION_REQUIRED);
+        }catch (BusinessException e) {
+            try {
+                //7.0 作废订单和业务项
+                invalidOrderAndBusiness(dataFlow);
+                //8.0 广播作废业务系统订单信息
+                //想法:这里可以直接不广播，只有在业务返回时才广播,
+                // 疑问：在这里部分消息发出去了，如果在receiveBusinessSystemNotifyMessage这个方法中依然没有收到，我们认为是下游系统也是失败了不用处理，
+                //目前看逻辑也是对的
+                //invalidBusinessSystem(dataFlow);
+            } catch (Exception e1) {
+                LoggerEngine.error("作废订单失败", e);
+                //9.0 将订单状态改为失败，人工处理。
+                updateOrderAndBusinessError(dataFlow);
+            } finally {
+                responseEntity = new ResponseEntity<String>(e.getMessage() , HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } catch (OrdersException e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage() , HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (RuleException e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
+        } catch (NoAuthorityException e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (InitConfigDataException e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e) {
+            logger.error("内部异常了：",e);
+            responseEntity = new ResponseEntity<String>("内部异常了："+e.getMessage() + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            if(dataFlow != null) {
+                //这里记录日志
+                Date endDate = DateUtil.getCurrentDate();
+
+                dataFlow.setEndDate(endDate);
+                if(responseJson != null ) {
+                    dataFlow.setResJson(responseJson);
+                    //处理返回报文鉴权
+                    AuthenticationFactory.putSign(dataFlow, responseJson);
+                }
+                //添加耗时
+                //DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
+                //保存耗时
+                //saveCostTimeLogMessage(dataFlow);
+                saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
+                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()),endDate.getTime()-dataFlow.getStartDate().getTime());
+                DataFlowEventPublishing.dataResponse(dataFlow,reqJson,headers);
+            }
+            if(responseEntity == null){
+                String resJson = encrypt(responseJson.toJSONString(),headers);
+                responseEntity = new ResponseEntity<String>(resJson,HttpStatus.OK);
+            }
+            //这里保存耗时，以及日志
+            return responseEntity ;
+
+        }
     }
 
     /**
@@ -374,6 +473,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                     //添加耗时
                     DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
                     throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "AppId 没有权限访问 serviceCod = " + business.getServiceCode());
+                }
+
+                if(CommonConstant.HTTP_SERVICE_API.equals(appService.getBusinessTypeCd())){
+                    DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
+                    throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "当前服务配置为API 该AppId 没有权限访问 serviceCod = " + business.getServiceCode());
                 }
             }
         }

@@ -126,6 +126,8 @@ public class CommonConstant {
     public final static String INSTANCE_N = "N";
 
 
+
+    public final static String HTTP_SERVICE_API = "API";
     public final static String HTTP_SERVICE = "SERVICE";
     public final static String HTTP_METHOD = "METHOD";
     public final static String HTTP_APP_ID = "app_id";

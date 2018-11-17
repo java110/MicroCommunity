@@ -5,10 +5,15 @@ import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
 import com.java110.common.util.Assert;
-import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
+import com.java110.core.factory.DataTransactionFactory;
 import com.java110.event.center.DataFlowEventPublishing;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +28,9 @@ import java.util.Map;
  * Created by wuxw on 2018/4/13.
  */
 @RestController
-@Deprecated
-public class HttpApi extends BaseController {
+@Api(value = "中心服务接口服务规范")
+@RequestMapping(path = "/centerApi")
+public class CenterApi extends BaseController {
 
     @Autowired
     private ICenterServiceSMO centerServiceSMOImpl;
@@ -34,14 +40,37 @@ public class HttpApi extends BaseController {
      * @param request HttpServletRequest对象
      * @return
      */
-    @RequestMapping(path = "/httpApi/service",method= RequestMethod.GET)
-    public String serviceGet(HttpServletRequest request) {
-        return DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+    @RequestMapping(path = "/service",method= RequestMethod.GET)
+    @ApiOperation(value="中心服务get方式请求", notes="test: 返回 502 表示服务不支持GET 请求方式")
+    public ResponseEntity<String> serviceGet(HttpServletRequest request) {
+        return new ResponseEntity<String>("center服务 不支持GET 请求方式", HttpStatus.METHOD_NOT_ALLOWED);
+    }
+    /**
+     *
+     * @param request HttpServletRequest对象
+     * @return
+     */
+    @RequestMapping(path = "/service",method= RequestMethod.PUT)
+    @ApiOperation(value="中心服务put方式请求", notes="test: 返回 502 表示服务不支持PUT 请求方式")
+    public ResponseEntity<String> servicePut(HttpServletRequest request) {
+        return new ResponseEntity<String>("center服务 不支持GET 请求方式", HttpStatus.METHOD_NOT_ALLOWED);
+    }
+    /**
+     *
+     * @param request HttpServletRequest对象
+     * @return
+     */
+    @RequestMapping(path = "/service",method= RequestMethod.DELETE)
+    @ApiOperation(value="中心服务delete方式请求", notes="test: 返回 502 表示服务不支持DELETE 请求方式")
+    public ResponseEntity<String> serviceDelete(HttpServletRequest request) {
+        return new ResponseEntity<String>("center服务 不支持GET 请求方式", HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    @RequestMapping(path = "/httpApi/service",method= RequestMethod.POST)
-    public String servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
+
+    @RequestMapping(path = "/service",method= RequestMethod.POST)
+    @ApiOperation(value="中心服务订单受理", notes="test: 返回 200 表示服务受理成功，其他表示失败")
+    @ApiImplicitParam(paramType="query", name = "orderInfo", value = "订单受理信息", required = true, dataType = "String")
+    public ResponseEntity<String> servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
         try {
             Map<String, String> headers = new HashMap<String, String>();
             getRequestInfo(request, headers);
@@ -49,40 +78,10 @@ public class HttpApi extends BaseController {
             DataFlowEventPublishing.receiveRequest(orderInfo,headers);
             //预校验
             preValiateOrderInfo(orderInfo);
-            return centerServiceSMOImpl.service(orderInfo, headers);
+            return centerServiceSMOImpl.serviceApi(orderInfo, headers);
         }catch (Exception e){
             logger.error("请求订单异常",e);
-            return DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                    ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
-        }
-    }
-
-    /**
-     * 对协议不遵循的 接口进行透传
-     * @param orderInfo
-     * @param request
-     * @return
-     */
-    @RequestMapping(path = "/httpApi/service/{serviceCode:.+}",method= RequestMethod.POST)
-    public String servicePostTransfer(@PathVariable String serviceCode, @RequestBody String orderInfo, HttpServletRequest request,
-                                      HttpServletResponse response) {
-        String resData = "";
-        Map<String, String> headers = new HashMap<String, String>();
-        try {
-            headers.put("serviceCode",serviceCode);
-            getRequestInfo(request, headers);
-            //预校验
-            preValiateOrderInfo(orderInfo,headers);
-            resData = centerServiceSMOImpl.serviceTransfer(orderInfo, headers);
-        }catch (Exception e){
-            logger.error("请求订单异常",e);
-            resData = DataTransactionFactory.createOrderResponseJson(ResponseConstant.NO_TRANSACTION_ID,
-                    ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
-        }finally {
-            for(String key : headers.keySet()) {
-                response.addHeader(key,headers.get(key));
-            }
-            return resData;
+            return new ResponseEntity<String>("请求中心服务发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -91,6 +90,10 @@ public class HttpApi extends BaseController {
      * @param orderInfo
      */
     private void preValiateOrderInfo(String orderInfo) {
+
+        Assert.jsonObjectHaveKey(orderInfo,"orders","请求报文中未包含orders节点，"+orderInfo);
+
+        Assert.jsonObjectHaveKey(orderInfo,"business","请求报文中未包含business节点，"+orderInfo);
 
         if(JSONObject.parseObject(orderInfo).getJSONObject("orders").containsKey("dataFlowId")){
             throw new BusinessException(ResponseConstant.RESULT_CODE_ERROR,"报文中不能存在dataFlowId节点");

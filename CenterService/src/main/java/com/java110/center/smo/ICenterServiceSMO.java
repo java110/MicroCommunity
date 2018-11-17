@@ -1,6 +1,7 @@
 package com.java110.center.smo;
 
 import com.java110.common.exception.SMOException;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -16,6 +17,7 @@ public interface ICenterServiceSMO {
      * @param reqJson 请求报文json
      * @return
      */
+    @Deprecated
     public String service(String reqJson, Map<String,String> headers) throws SMOException;
 
     /**
@@ -26,6 +28,13 @@ public interface ICenterServiceSMO {
      * @throws SMOException
      */
     public String serviceTransfer(String reqJson, Map<String,String> headers) throws SMOException;
+
+    /**
+     * 业务统一处理服务方法
+     * @param reqJson 请求报文json
+     * @return
+     */
+    public ResponseEntity<String> serviceApi(String reqJson, Map<String,String> headers) throws SMOException;
 
     /**
      * 接受业务系统通知消息

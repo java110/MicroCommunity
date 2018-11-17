@@ -50,7 +50,7 @@ public class RestApi extends BaseController {
 
     @RequestMapping(path = "/{service:.+}",method = RequestMethod.POST )
     @ApiOperation(value="资源post请求", notes="test: 返回 2XX 表示服务正常")
-    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @ApiImplicitParam(paramType="query", name = "service", value = "用户编号", required = true, dataType = "String")
     public ResponseEntity<String> servicePost(@PathVariable String service,
                                               @RequestBody String postInfo,
                                               HttpServletRequest request){
@@ -134,7 +134,7 @@ public class RestApi extends BaseController {
 
     @RequestMapping(path = "/{service:.+}",method = RequestMethod.DELETE )
     @ApiOperation(value="资源delete请求", notes="test: 返回 2XX 表示服务正常")
-    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @ApiImplicitParam(paramType="query", name = "service", value = "用户编号", required = true, dataType = "String")
     public ResponseEntity<String> serviceDelete(@PathVariable String service,
                                              HttpServletRequest request){
         ResponseEntity<String> responseEntity = null;

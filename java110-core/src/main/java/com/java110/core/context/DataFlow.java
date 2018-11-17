@@ -2,6 +2,7 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.util.DateUtil;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.common.util.StringUtil;
@@ -218,7 +219,7 @@ public class DataFlow extends AbstractDataFlowContext {
         try{
             Business business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
-            JSONObject orderObj = reqInfoObj.getJSONObject("orders");
+            JSONObject orderObj = refreshOrderObj(reqInfoObj,headerAll);
             Object businessObj = reqInfoObj.get("business");
             JSONArray businessArray = null;
             if(businessObj instanceof JSONObject){
@@ -311,4 +312,23 @@ public class DataFlow extends AbstractDataFlowContext {
         return this;
     }
 
+    private JSONObject refreshOrderObj(JSONObject reqInfoObj,Map<String,String> headerAll){
+
+        JSONObject reqInfoOrder = reqInfoObj.getJSONObject("orders");
+
+        if(!reqInfoOrder.containsKey("appId")) {
+            reqInfoOrder.put("appId", headerAll.get(CommonConstant.HTTP_APP_ID));
+        }
+        if(!reqInfoOrder.containsKey("transactionId")) {
+            reqInfoOrder.put("transactionId", headerAll.get(CommonConstant.HTTP_TRANSACTION_ID));
+        }
+        if(!reqInfoOrder.containsKey("sign")) {
+            reqInfoOrder.put("sign", headerAll.get(CommonConstant.HTTP_SIGN));
+        }
+
+        if(!reqInfoOrder.containsKey("requestTime")) {
+            reqInfoOrder.put("requestTime", headerAll.get(CommonConstant.HTTP_REQ_TIME));
+        }
+        return reqInfoOrder;
+    }
 }

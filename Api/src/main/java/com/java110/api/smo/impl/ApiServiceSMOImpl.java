@@ -245,8 +245,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         //判断 AppId 是否有权限操作相应的服务
         AppService appService = DataFlowFactory.getService(dataFlow, dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
 
-                //这里调用缓存 查询缓存信息
-        if (appService == null) {
+        //这里调用缓存 查询缓存信息
+        if (appService == null || !CommonConstant.HTTP_SERVICE_API.equals(appService.getBusinessTypeCd())) {
             //添加耗时
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "AppId 没有权限访问 serviceCode = " + dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));

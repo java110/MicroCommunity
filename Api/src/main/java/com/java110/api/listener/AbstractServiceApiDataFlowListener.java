@@ -64,7 +64,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             } else {
                 responseEntity = tmpRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
             }
-        }catch (HttpServerErrorException e){
+        }catch (HttpServerErrorException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
             responseEntity = new ResponseEntity<String>("请求下游系统异常异常，"+e.getResponseBodyAsString(),e.getStatusCode());
 
         }
