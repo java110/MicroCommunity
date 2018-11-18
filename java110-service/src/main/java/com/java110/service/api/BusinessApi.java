@@ -1,6 +1,8 @@
 package com.java110.service.api;
 
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.util.Assert;
 import com.java110.core.factory.DataQueryFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 查询服务
@@ -30,9 +34,29 @@ public class BusinessApi extends BaseController {
     @Autowired
     private IQueryServiceSMO queryServiceSMOImpl;
 
+
     @RequestMapping(path = "/businessApi/query",method= RequestMethod.GET)
-    public String queryGet(HttpServletRequest request) {
-        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+    @ApiOperation(value="业务查询get请求", notes="test: 返回 2XX 表示服务正常")
+    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @Deprecated
+    public ResponseEntity<String> service(HttpServletRequest request) {
+        try {
+            Map<String, Object> headers = new HashMap<String, Object>();
+            this.getRequestInfo(request, headers);
+            Assert.isNotNull(headers, CommonConstant.HTTP_SERVICE.toLowerCase(),"请求信息中没有包含service信息");
+            //Assert.isNotNull(headers, CommonConstant.HTTP_PARAM,"请求信息中没有包含参数（params）信息");
+            Map readOnlyMap = super.getParameterStringMap(request);
+            headers.put("params",readOnlyMap);
+            DataQuery dataQuery = DataQueryFactory.newInstance().builder(headers);
+            initConfig(dataQuery);
+            queryServiceSMOImpl.commonQueryService(dataQuery);
+            return dataQuery.getResponseEntity();
+        }catch (Exception e){
+            logger.error("请求订单异常",e);
+            //DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+            return new ResponseEntity<String>("请求发生异常，"+e.getMessage()+e, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     /**
@@ -54,6 +78,7 @@ public class BusinessApi extends BaseController {
     @RequestMapping(path = "/businessApi/query",method= RequestMethod.POST)
     @ApiOperation(value="业务查询post请求", notes="test: 返回 2XX 表示服务正常")
     @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @Deprecated
     public ResponseEntity<String> queryPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
@@ -110,6 +135,23 @@ public class BusinessApi extends BaseController {
      */
     private void initConfig(DataQuery dataQuery){
         dataQuery.setServiceSql(DataQueryFactory.getServiceSql(dataQuery));
+    }
+
+
+    /**
+     * 获取请求信息
+     * @param request
+     * @param headers
+     * @throws RuntimeException
+     */
+    private void getRequestInfo(HttpServletRequest request,Map headers) throws Exception{
+        try{
+            super.initHeadParam(request,headers);
+            super.initUrlParam(request,headers);
+        }catch (Exception e){
+            logger.error("加载头信息失败",e);
+            throw e;
+        }
     }
 
     public IQueryServiceSMO getQueryServiceSMOImpl() {

@@ -16,6 +16,7 @@ import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import com.java110.service.smo.IQueryServiceSMO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,20 +60,21 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             dataQuery.setServiceSql(currentServiceSql);
             if (CommonConstant.QUERY_MODEL_SQL.equals(currentServiceSql.getQueryModel())) {
                 doExecuteSql(dataQuery);
-                return;
             }else if(CommonConstant.QUERY_MODE_JAVA.equals(currentServiceSql.getQueryModel())){
                 doExecuteJava(dataQuery);
-                return ;
+            }else {
+                doExecuteProc(dataQuery);
             }
-            doExecuteProc(dataQuery);
             responseEntity = new ResponseEntity<String>(dataQuery.getResponseInfo().toJSONString(), HttpStatus.OK);
         }catch (BusinessException e){
             logger.error("公用查询异常：",e);
             /*dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_PARAM_ERROR,
                     e.getMessage()));*/
             responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            dataQuery.setResponseEntity(responseEntity);
         }
-        dataQuery.setResponseEntity(responseEntity);
+
 
     }
     @Override
@@ -260,7 +262,15 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                     }
                 } else {
                     currentSqlNew += "?";
-                    currentParams.add(params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "" + params.getString(sqls[sqlIndex]) + "");
+                    Object param =  params.getString(sqls[sqlIndex]);
+                    if(params.get(sqls[sqlIndex]) instanceof Integer){
+                        param = params.getInteger(sqls[sqlIndex]);
+                    }
+                   //这里对 page 和 rows 特殊处理 ，目前没有想到其他的办法
+                    if(StringUtils.isNumeric(param.toString()) && "page,rows".contains(sqls[sqlIndex])){
+                        param = Integer.parseInt(param.toString());
+                    }
+                    currentParams.add(param);
                     //currentSqlNew += params.get(sqls[sqlIndex]) instanceof Integer ? params.getInteger(sqls[sqlIndex]) : "'" + params.getString(sqls[sqlIndex]) + "'";
                 }
             }

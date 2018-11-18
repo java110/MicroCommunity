@@ -134,6 +134,7 @@ public class CommonConstant {
     public final static String HTTP_TRANSACTION_ID = "transaction_id";
     public final static String HTTP_REQ_TIME = "req_time";
     public final static String HTTP_SIGN = "sign";
+    public final static String HTTP_PARAM = "params";
 
 
     public final static String HTTP_METHOD_POST = "POST";

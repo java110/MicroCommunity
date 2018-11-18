@@ -38,6 +38,8 @@ public class Assert extends org.springframework.util.Assert{
     }
 
 
+
+
     /**
      * 判断 jsonObject 是否为空
      * @param jsonStr
@@ -129,6 +131,17 @@ public class Assert extends org.springframework.util.Assert{
             throw new IllegalArgumentException(message);
         }
 
+    }
+
+    /**
+     * 判断 jsonObject 是否为空
+     * @param strValue
+     * @param message
+     */
+    public static void isJsonObject(String strValue,String message){
+        if(!isJsonObject(strValue)){
+            throw new IllegalArgumentException(message);
+        }
     }
 
     /**

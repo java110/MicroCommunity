@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 /**
  * 数据查询对象
  * Created by wuxw on 2018/4/19.
@@ -110,6 +112,12 @@ public class DataQuery {
         }
         this.setServiceCode(currentBusinessInfo.getString("serviceCode"));
         this.setRequestParams(currentBusinessInfo.getJSONObject("datas").getJSONObject("params"));
+        return this;
+    }
+
+    public DataQuery builder(Map<String, Object> headers){
+        this.setServiceCode(headers.get("service").toString());
+        this.setRequestParams(JSONObject.parseObject(JSONObject.toJSONString(headers.get("params"))));
         return this;
     }
 }

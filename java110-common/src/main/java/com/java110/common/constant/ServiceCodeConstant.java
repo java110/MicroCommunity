@@ -163,6 +163,11 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DO_SERVICE_TRANSFER = "do.service.transfer";
 
+    /**
+     * 订单类服务处理
+     */
+    public static final String SERVICE_CODE_DO_SERVICE_ORDER = "do.service.order";
+
 
 
 }

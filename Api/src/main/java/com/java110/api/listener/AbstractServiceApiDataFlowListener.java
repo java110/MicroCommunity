@@ -40,7 +40,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
                 String requestUrl = dataFlowContext.getRequestHeaders().get("REQUEST_URL");
                 if (!StringUtil.isNullOrNone(requestUrl)) {
-                    String param = requestUrl.contains("?") ? requestUrl.substring(requestUrl.indexOf("?"), requestUrl.length()) : "";
+                    String param = requestUrl.contains("?") ? requestUrl.substring(requestUrl.indexOf("?")+1, requestUrl.length()) : "";
                     if (service.getUrl().contains("?")) {
                         requestUrl = service.getUrl() + "&" + param;
                     } else {

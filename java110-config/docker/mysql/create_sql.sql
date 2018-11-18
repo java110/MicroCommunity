@@ -132,22 +132,23 @@ CREATE TABLE c_route(
 -- c_service
 
 CREATE TABLE c_service(
-    service_id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    service_id VARCHAR(12) NOT NULL COMMENT '服务ID',
     service_code VARCHAR(50) NOT NULL UNIQUE COMMENT '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
     business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
     seq INT NOT NULL COMMENT '顺序 只有同步方式下根据seq从小到大调用接口',
     messageQueueName VARCHAR(50) COMMENT '消息队里名称 只有异步时有用',
-    is_instance varchar(2) not null default 'N' comment '是否Instance Y 需要，N不需要',
+    is_instance varchar(2) not null default 'N' comment '是否Instance Y 需要，N不需要，NT透传类',
     url VARCHAR(200) COMMENT '目标地址',
     method VARCHAR(50) COMMENT '方法 空 为http post LOCAL_SERVICE 为调用本地服务 其他为webservice方式调用',
     timeout INT NOT NULL DEFAULT 60 COMMENT '超时时间',
     retry_count INT NOT NULL DEFAULT 3 COMMENT '重试次数',
     provide_app_id VARCHAR(30) NOT NULL COMMENT '应用ID',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+    status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',
+    UNIQUE KEY (service_id)
 );
-
 
 
 -- c_mapping
@@ -192,7 +193,8 @@ CREATE TABLE c_app(
     black_list_ip VARCHAR(200) COMMENT '黑名单ip 多个之间用;隔开',
     remark VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',
+    UNIQUE KEY (app_id)
 );
 
 -- c_service_sql
@@ -226,99 +228,105 @@ insert into c_app(app_id,`name`,security_code,remark,status_cd)
 values('8000418003','用户管理应用','WEBURFPKIFJUHNCJUEIKMKJUJHULSMNCHDY89KMC','用户管理应用','0');
 
 
-insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.userInfo','Q','用户信息查询',1,'http://...','8000418001','0');
+insert into c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('1','query.user.userInfo','Q','用户信息查询',1,'http://...','8000418001','0');
 
-insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.order.orderInfo','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
+insert into c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('2','query.order.orderInfo','Q','订单信息',1,'http://center-service/businessApi/query','8000418001','0');
 
-insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.console.menu','Q','查询菜单',1,'http://center-service/businessApi/query','8000418002','0');
+insert into c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('3','query.console.menu','Q','查询菜单',1,'http://center-service/businessApi/query','8000418002','0');
 
-insert into c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
-values('query.user.loginInfo','Q','查询用户登录信息',1,'http://center-service/businessApi/query','8000418002','0');
+insert into c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id,status_cd)
+values('4','query.user.loginInfo','Q','查询用户登录信息',1,'http://center-service/businessApi/query','8000418002','0');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.template','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('5','query.console.template','Q','查询模板信息',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.templateCol','Q','查询列模板信息',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('6','query.console.templateCol','Q','查询列模板信息',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.mapping','Q','查询映射数据',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('7','query.center.mapping','Q','查询映射数据',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.apps','Q','查询外部应用',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('8','query.center.apps','Q','查询外部应用',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.services','Q','查询服务',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('9','query.center.services','Q','查询服务',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.center.routes','Q','查询路由',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('10','query.center.routes','Q','查询路由',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('flush.center.cache','Q','CenterService缓存',1,'http://center-service/cacheApi/flush','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('11','flush.center.cache','Q','CenterService缓存',1,'http://center-service/cacheApi/flush','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.caches','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('12','query.console.caches','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('query.console.cache','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
-
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.center.mapping','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.center.mapping','Q','删除映射信息',1,'http://center-service/businessApi/do','8000418002');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.center.mapping','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.user.userInfo','D','保存用户信息',1,'http://user-service/userApi/service','8000418003');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.store.info','D','保存商户信息',1,'http://store-service/storeApi/service','8000418003');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.store.info','D','修改商户信息',1,'http://store-service/storeApi/service','8000418003');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.store.info','D','删除商户信息',1,'http://store-service/storeApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('13','query.console.cache','Q','查询所有缓存',1,'http://center-service/businessApi/query','8000418002');
 
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('transfer.console.menu','T','透传菜单查询',1,'http://192.168.31.199:8001/userApi/service','8000418001');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('14','save.center.mapping','Q','保存映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.shop.info','D','保存商品信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('15','delete.center.mapping','Q','删除映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.shop.info','D','修改商品信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('16','update.center.mapping','Q','修改映射信息',1,'http://center-service/businessApi/do','8000418002');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.shop.info','D','删除商品信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('17','save.user.userInfo','D','保存用户信息',1,'http://user-service/userApi/service','8000418003');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('buy.shop.info','D','购买商品信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('18','save.store.info','D','保存商户信息',1,'http://store-service/storeApi/service','8000418003');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.shop.catalog','D','保存商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('19','update.store.info','D','修改商户信息',1,'http://store-service/storeApi/service','8000418003');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('update.shop.catalog','D','修改商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
-
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.shop.catalog','D','删除商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('20','delete.store.info','D','删除商户信息',1,'http://store-service/storeApi/service','8000418003');
 
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('save.comment.info','D','保存评论',1,'http://comment-service/commentApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('21','transfer.console.menu','T','透传菜单查询',1,'http://192.168.31.199:8001/userApi/service','8000418001');
 
-INSERT INTO c_service(service_code,business_type_cd,`name`,seq,url,provide_app_id)
-VALUES('delete.comment.info','D','删除评论',1,'http://comment-service/commentApi/service','8000418003');
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('22','save.shop.info','D','保存商品信息',1,'http://shop-service/shopApi/service','8000418003');
 
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('23','update.shop.info','D','修改商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('24','delete.shop.info','D','删除商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('25','buy.shop.info','D','购买商品信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('26','save.shop.catalog','D','保存商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('27','update.shop.catalog','D','修改商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('28','delete.shop.catalog','D','删除商品目录信息',1,'http://shop-service/shopApi/service','8000418003');
+
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('29','save.comment.info','D','保存评论',1,'http://comment-service/commentApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('30','delete.comment.info','D','删除评论',1,'http://comment-service/commentApi/service','8000418003');
+
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('31','member.joined.store','D','商户成员加入',1,'http://store-service/storeApi/service','8000418003');
+
+INSERT INTO c_service(service_id,service_code,business_type_cd,`name`,seq,url,provide_app_id)
+VALUES('32','member.quit.store','D','商户成员退出',1,'http://store-service/storeApi/service','8000418003');
 
 insert into c_route(app_id,service_id,invoke_model,order_type_cd,status_cd) values(
 '8000418001','1','S','Q','0'

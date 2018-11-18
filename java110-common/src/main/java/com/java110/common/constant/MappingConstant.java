@@ -58,6 +58,8 @@ public class MappingConstant {
      */
     public final static String KEY_CENTER_SERVICE_URL = "CENTER_SERVICE_URL";
 
+    public final static String KEY_API_SERVICE_URL = "API_SERVICE_URL";
+
     /**
      * 控制中心服务APP_ID
      */

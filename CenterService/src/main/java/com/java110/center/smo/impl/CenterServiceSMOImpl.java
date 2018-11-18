@@ -229,6 +229,10 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             logger.error("内部异常了：",e);
             responseEntity = new ResponseEntity<String>("内部异常了："+e.getMessage() + e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
+
+            if(responseEntity == null){
+                responseEntity = new ResponseEntity<String>(responseJson.toJSONString(),HttpStatus.OK);
+            }
             if(dataFlow != null) {
                 //这里记录日志
                 Date endDate = DateUtil.getCurrentDate();
@@ -236,21 +240,16 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
                 dataFlow.setEndDate(endDate);
                 if(responseJson != null ) {
                     dataFlow.setResJson(responseJson);
-                    //处理返回报文鉴权
-                    AuthenticationFactory.putSign(dataFlow, responseJson);
                 }
                 //添加耗时
                 //DataFlowFactory.addCostTime(dataFlow, "service", "业务处理总耗时", dataFlow.getStartDate(), dataFlow.getEndDate());
                 //保存耗时
                 //saveCostTimeLogMessage(dataFlow);
                 saveLogMessage(dataFlow,LogAgent.createLogMessage(dataFlow.getRequestHeaders(),dataFlow.getReqJson().toJSONString()),
-                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),dataFlow.getResJson().toJSONString()),endDate.getTime()-dataFlow.getStartDate().getTime());
+                        LogAgent.createLogMessage(dataFlow.getResponseHeaders(),responseEntity.getBody()),endDate.getTime()-dataFlow.getStartDate().getTime());
                 DataFlowEventPublishing.dataResponse(dataFlow,reqJson,headers);
             }
-            if(responseEntity == null){
-                String resJson = encrypt(responseJson.toJSONString(),headers);
-                responseEntity = new ResponseEntity<String>(resJson,HttpStatus.OK);
-            }
+
             //这里保存耗时，以及日志
             return responseEntity ;
 

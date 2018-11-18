@@ -82,6 +82,30 @@ public class BaseController extends AppBase {
 
     }
 
+    public static Map<String, String> getParameterStringMap(HttpServletRequest request) {
+        Map<String, String[]> properties = request.getParameterMap();//把请求参数封装到Map<String, String[]>中
+        Map<String, String> returnMap = new HashMap<String, String>();
+        String name = "";
+        String value = "";
+        for (Map.Entry<String, String[]> entry : properties.entrySet()) {
+            name = entry.getKey();
+            String[] values = entry.getValue();
+            if (null == values) {
+                value = "";
+            } else if (values.length>1) {
+                for (int i = 0; i < values.length; i++) { //用于请求参数中有多个相同名称
+                    value = values[i] + ",";
+                }
+                value = value.substring(0, value.length() - 1);
+            } else {
+                value = values[0];//用于请求参数中请求参数名唯一
+            }
+            returnMap.put(name, value);
+
+        }
+        return returnMap;
+    }
+
     protected void initHeadParam(HttpServletRequest request,Map headers) {
 
         Enumeration reqHeaderEnum = request.getHeaderNames();

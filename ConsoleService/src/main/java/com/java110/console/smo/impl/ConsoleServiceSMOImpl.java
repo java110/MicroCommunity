@@ -8,17 +8,22 @@ import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.SMOException;
+import com.java110.common.util.DateUtil;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.console.smo.IConsoleServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.service.PageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -73,7 +78,6 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         paramIn.put("userCode", userCode);
         paramIn.put(CommonConstant.ORDER_USER_ID,CommonConstant.ORDER_DEFAULT_USER_ID);
         paramIn.put(ServiceCodeConstant.SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
-        paramIn.put(ServiceCodeConstant.SERVICE_CODE_NAME,ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN_NAME);
         //paramIn.put("userPwd", userPwd);
         JSONObject businessObj = doExecute(paramIn);
 
@@ -168,22 +172,20 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         }
     }
 
-    private JSONObject doExecute(Map paramIn) {
+    private JSONObject doExecute(Map<String,Object> paramIn) {
         //获取组件
         String appId = MappingCache.getValue(MappingConstant.KEY_CONSOLE_SERVICE_APP_ID);
 
         Assert.hasLength(appId, "组件不能为空");
 
-        String centerServiceUrl = MappingCache.getValue(MappingConstant.KEY_CENTER_SERVICE_URL);
+        String apiServiceUrl = MappingCache.getValue(MappingConstant.KEY_API_SERVICE_URL);
 
-        Assert.hasLength(centerServiceUrl, "中心服务器地址没有配置");
+        Assert.hasLength(apiServiceUrl, "api服务器地址没有配置");
 
         String securityCode = MappingCache.getValue(MappingConstant.KEY_CONSOLE_SECURITY_CODE);
         Assert.hasLength(securityCode, "签名秘钥没有配置");
 
         String serviceCode = paramIn.get(ServiceCodeConstant.SERVICE_CODE).toString();
-        String serviceCodeName = paramIn.get(ServiceCodeConstant.SERVICE_CODE_NAME).toString();
-        String userId = paramIn.get(CommonConstant.ORDER_USER_ID).toString();
         if(paramIn.containsKey(ServiceCodeConstant.SERVICE_CODE)){
             paramIn.remove(ServiceCodeConstant.SERVICE_CODE);
         }
@@ -194,30 +196,46 @@ public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServi
         if(paramIn.containsKey(CommonConstant.ORDER_USER_ID)){
             paramIn.remove(CommonConstant.ORDER_USER_ID);
         }
-
-        String responseMsg = "";
-        String requestBody = DataTransactionFactory.createQueryOneCenterServiceRequestJson(appId, userId, securityCode,
-                DataTransactionFactory.createQueryOneBusinessRequestJson(serviceCode,
-                        serviceCodeName, paramIn));
+        String params = "?";
+        for(String key : paramIn.keySet()){
+            params += (key +"=" + paramIn.get(key)+"&");
+        }
+        params = params.lastIndexOf("&") >-1 ? params.substring(0,params.length()-1):params;
+        apiServiceUrl = apiServiceUrl.replace("#serviceCode#",serviceCode) + params;
+        ResponseEntity<String> responseEntity = null;
         if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_CONSOLE_SERVICE_SECURITY_ON_OFF))) {
             try {
-                requestBody = DataTransactionFactory.encrypt(requestBody, 2048);
-                //调用查询菜单信息
-                HttpHeaders header = new HttpHeaders();
-                header.add(CommonConstant.ENCRYPT, MappingConstant.VALUE_ON);
-                header.add(CommonConstant.ENCRYPT_KEY_SIZE, "2048");
-                HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, header);
-                responseMsg = restTemplate.postForObject(centerServiceUrl, httpEntity, String.class);
-                responseMsg = DataTransactionFactory.decrypt(responseMsg, 2048);
+//                requestBody = DataTransactionFactory.encrypt(requestBody, 2048);
+//                //调用查询菜单信息
+//                HttpHeaders header = new HttpHeaders();
+//                header.add(CommonConstant.ENCRYPT, MappingConstant.VALUE_ON);
+//                header.add(CommonConstant.ENCRYPT_KEY_SIZE, "2048");
+//                HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, header);
+//                responseMsg = restTemplate.postForObject(centerServiceUrl, httpEntity, String.class);
+//                responseMsg = DataTransactionFactory.decrypt(responseMsg, 2048);
             }catch (Exception e){
                 logger.error("调用接口失败",e);
                 throw new SMOException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"调用接口失败"+e);
             }
         } else {
-            responseMsg = restTemplate.postForObject(centerServiceUrl,requestBody,String.class);
+            HttpHeaders header = new HttpHeaders();
+            header.add(CommonConstant.HTTP_APP_ID, appId);
+            header.add(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getTransactionId());
+            header.add(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
+            header.add(CommonConstant.HTTP_SIGN, "");
+            HttpEntity<String> httpEntity = new HttpEntity<String>(header);
+            try {
+                responseEntity = restTemplate.exchange(apiServiceUrl, HttpMethod.GET, httpEntity, String.class);
+            }catch (HttpClientErrorException e){
+                //responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(),e.getStatusCode());
+
+                return null;
+            }
         }
 
-        return DataTransactionFactory.getOneBusinessFromCenterServiceResponseJson(responseMsg);
+        Assert.isJsonObject(responseEntity.getBody(),"下游系统返回报文不是有效的json格式");
+
+        return JSONObject.parseObject(responseEntity.getBody());
     }
 
 
