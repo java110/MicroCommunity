@@ -32,7 +32,7 @@ spring:
     name: center-service
   redis:
     database: 0
-    host: hc.java110.com
+    host: dev.redis.java110.com
     port: 6379
     pool:
       max-active: 300
