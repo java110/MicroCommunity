@@ -4,16 +4,18 @@ jedis:
       maxTotal: 100
       maxIdle: 20
       maxWaitMillis: 20000
-    host: 135.192.86.200
+    host: prod.redis.java110.com
     port: 6379
 
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
     leaseExpirationDurationInSeconds: 30
+    preferIpAddress: true
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://135.192.86.200:8761/eureka/
+      defaultZone: http://prod.java110.com:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8008
@@ -30,7 +32,7 @@ spring:
     name: api-service
   redis:
     database: 0
-    host: 135.192.86.200
+    host: prod.redis.java110.com
     port: 6379
     pool:
       max-active: 300
@@ -43,8 +45,8 @@ spring:
 kafka:
   consumer:
     zookeeper:
-      connect: 135.192.86.200:2181
-    servers: 135.192.86.200:9092
+      connect: prod.zk.java110.com:2181
+    servers: prod.kafka.java110.com:9092
     enable:
       auto:
         commit: true
@@ -62,8 +64,8 @@ kafka:
 
   producer:
     zookeeper:
-      connect: 135.192.86.200:2181
-    servers: 135.192.86.200:9092
+      connect: prod.zk.java110.com:2181
+    servers: prod.kafka.java110.com:9092
     retries: 0
     batch:
       size: 4096

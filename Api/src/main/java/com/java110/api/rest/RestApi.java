@@ -21,7 +21,6 @@ import java.util.Map;
  * Created by wuxw on 2018/10/16.
  */
 @RestController
-
 @RequestMapping(path = "/api")
 @Api(value = "对外统一提供服务接口服务")
 public class RestApi extends BaseController {

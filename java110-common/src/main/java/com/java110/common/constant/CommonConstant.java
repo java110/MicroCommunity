@@ -135,12 +135,19 @@ public class CommonConstant {
     public final static String HTTP_REQ_TIME = "req_time";
     public final static String HTTP_SIGN = "sign";
     public final static String HTTP_PARAM = "params";
+    public final static String HTTP_ORDER_TYPE_CD = "order_type_cd";
+    public final static String HTTP_USER_ID = "user_id";
 
 
     public final static String HTTP_METHOD_POST = "POST";
     public final static String HTTP_METHOD_PUT = "PUT";
     public final static String HTTP_METHOD_GET = "GET";
     public final static String HTTP_METHOD_DELETE = "DELETE";
+
+
+    public final static String HTTP_BUSINESS_SERVICE_CODE = "serviceCode";
+    public final static String HTTP_BUSINESS_SERVICE_NAME = "serviceName";
+    public final static String HTTP_BUSINESS_DATAS = "datas";
 
 
 

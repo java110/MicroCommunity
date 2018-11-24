@@ -1,5 +1,6 @@
 package com.java110.api.listener;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 /**
  * Created by wuxw on 2018/11/15.
@@ -72,6 +75,50 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
+
+    /**
+     * 将rest 协议转为 订单协议
+     * @param business
+     * @return
+     */
+    protected JSONObject restToCenterProtocol(JSONObject business, Map<String,String> headers){
+
+        JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
+        freshOrderProtocol(centerProtocol.getJSONObject("orders"),headers);
+        centerProtocol.getJSONArray("business").add(business);
+        return centerProtocol;
+    }
+
+    /**
+     * 刷入order信息
+     * @param orders 订单信息
+     * @param headers 头部信息
+     */
+    protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
+        for(String key : headers.keySet()){
+
+            if(CommonConstant.HTTP_APP_ID.equals(key)) {
+                orders.put("appId", headers.get(key));
+            }
+            if(CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
+                orders.put("transactionId", headers.get(key));
+            }
+            if(CommonConstant.HTTP_SIGN.equals(key)) {
+                orders.put("sign", headers.get(key));
+            }
+
+            if(CommonConstant.HTTP_REQ_TIME.equals(key)) {
+                orders.put("requestTime", headers.get(key));
+            }
+            if(CommonConstant.HTTP_ORDER_TYPE_CD.equals(key)){
+                orders.put("orderTypeCd",headers.get(key));
+            }
+            if(CommonConstant.HTTP_USER_ID.equals(key)){
+                orders.put("userId",headers.get(key));
+            }
+        }
+
+    }
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

@@ -16,7 +16,6 @@
         <module>LogService</module>
         <module>PayService</module>
         <module>eureka</module>
-        <module>WechatService</module>
         <module>java110-feign</module>
         <module>java110-core</module>
         <module>java110-service</module>

@@ -168,6 +168,11 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DO_SERVICE_ORDER = "do.service.order";
 
+    /**
+     * 用户注册服务处理
+     */
+    public static final String SERVICE_CODE_USER_SERVICE_REGISTER = "user.service.register";
+
 
 
 }

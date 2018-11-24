@@ -7,16 +7,18 @@ jedis:
       maxTotal: 100
       maxIdle: 20
       maxWaitMillis: 20000
-    host: hc.java110.com
+    host: dev.redis.java110.com
     port: 6379
 
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
     leaseExpirationDurationInSeconds: 30
+    preferIpAddress: true
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://hc.java110.com:8761/eureka/
+      defaultZone: http://dev.java110.com:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
   port: 8443
@@ -41,7 +43,7 @@ spring:
     name: console-service
   redis:
     database: 0
-    host: hc.java110.com
+    host: dev.redis.java110.com
     port: 6379
     pool:
       max-active: 300
@@ -58,7 +60,7 @@ spring:
     filters: stat,wall,log4j
     poolPreparedStatements: true
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://hc.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
     maxPoolPreparedStatementPerConnectionSize: 20
     password: TT@12345678
     testOnBorrow: false
@@ -85,8 +87,8 @@ spring:
 kafka:
   consumer:
     zookeeper:
-      connect: hc.java110.com:2181
-    servers: hc.java110.com:9092
+      connect: dev.zk.java110.com:2181
+    servers: dev.kafka.java110.com:9092
     enable:
       auto:
         commit: true
@@ -104,8 +106,8 @@ kafka:
 
   producer:
     zookeeper:
-      connect: hc.java110.com:2181
-    servers: hc.java110.com:9092
+      connect: dev.zk.java110.com:2181
+    servers: dev.kafka.java110.com:9092
     retries: 0
     batch:
       size: 4096
