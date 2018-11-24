@@ -3,7 +3,7 @@ MAINTAINER wuxw <928255095@qq.com>
 
 ADD target/Api.jar /root/target/
 
-ADD bin/start_center.sh /root/
+ADD bin/start_api.sh /root/
 
 
 RUN chmod u+x /root/start_api.sh
