@@ -124,6 +124,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             if(busiJson.containsKey("transactionId")){
                 busiJson.remove("transactionId");
             }
+            //这里不直接把 下游系统返回的头信息直接扔给ResponseEntity 的原因是 下游系统的 header中的 Context-* 信息导致 客户端调用耗时很长，所以做一下处理
+            //newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),responseEntity.getHeaders(), HttpStatus.OK);
             Map<String,String> headersMap = responseEntity.getHeaders().toSingleValueMap();
             if(headersMap.containsKey("Content-Disposition")) {
                 headersMap.remove("Content-Disposition");
@@ -144,7 +146,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             HttpHeaders header = new HttpHeaders();
             header.setAll(headersMap);
             newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),header, HttpStatus.OK);
-            //newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(), HttpStatus.OK);
+
 
             dataFlowContext.setResponseEntity(newResponseEntity);
         }
