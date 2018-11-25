@@ -83,7 +83,10 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
     protected void doResponse(DataFlowContext dataFlowContext) {
         ResponseEntity<String> responseEntity = dataFlowContext.getResponseEntity();
         ResponseEntity<String> newResponseEntity = null;
-        if(responseEntity == null || StringUtil.isNullOrNone(responseEntity.getBody()) || !Assert.isJsonObject(responseEntity.getBody())){ //这里一般进不去
+        if(responseEntity == null ||
+                responseEntity.getStatusCode() != HttpStatus.OK ||
+                StringUtil.isNullOrNone(responseEntity.getBody()) ||
+                !Assert.isJsonObject(responseEntity.getBody())){ //这里一般进不去
             return ;
         }
         JSONObject resJson = JSONObject.parseObject(responseEntity.getBody());
@@ -119,7 +122,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             if(busiJson.containsKey("transactionId")){
                 busiJson.remove("transactionId");
             }
-            newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),responseEntity.getHeaders(), HttpStatus.OK);
+            //newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),responseEntity.getHeaders(), HttpStatus.OK);
+            newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(), HttpStatus.OK);
 
             dataFlowContext.setResponseEntity(newResponseEntity);
         }
