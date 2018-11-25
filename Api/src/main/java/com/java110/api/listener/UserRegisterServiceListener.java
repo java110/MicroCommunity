@@ -76,6 +76,7 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",JSONObject.parseObject(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
         String paramInObj = super.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
