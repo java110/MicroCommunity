@@ -91,7 +91,8 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
      */
     private JSONObject refreshParamIn(String paramIn){
         JSONObject paramObj = JSONObject.parseObject(paramIn);
-        paramObj.put(CommonConstant.HTTP_USER_ID,"-1");
+        paramObj.put("userId","-1");
+        paramObj.put("levelCd","0");
 
         return paramObj;
     }
