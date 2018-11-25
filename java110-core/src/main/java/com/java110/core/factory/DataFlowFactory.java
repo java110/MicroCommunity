@@ -179,7 +179,7 @@ public class DataFlowFactory {
     public static List<Map> getOrderAttrs(DataFlow dataFlow){
         List<Map> orderAttrs = new ArrayList<Map>();
         JSONObject reqOrders = dataFlow.getReqOrders();
-        if(!reqOrders.containsKey("attrs") && reqOrders.getJSONArray("attrs").size() ==0){
+        if(!reqOrders.containsKey("attrs") || reqOrders.getJSONArray("attrs").size() ==0){
             return orderAttrs;
         }
         JSONArray attrs = reqOrders.getJSONArray("attrs");
