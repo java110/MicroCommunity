@@ -61,7 +61,7 @@ public class RestApi extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_POST);
             responseEntity = apiServiceSMOImpl.service(postInfo,headers);
         }catch (Throwable e){
-            logger.error("请求post 方法["+service+"]失败：",e);
+            logger.error("请求post 方法["+service+"]失败："+postInfo,e);
             return new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
