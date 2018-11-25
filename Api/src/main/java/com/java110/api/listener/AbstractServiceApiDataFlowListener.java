@@ -10,11 +10,13 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,8 +124,27 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             if(busiJson.containsKey("transactionId")){
                 busiJson.remove("transactionId");
             }
-            //newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),responseEntity.getHeaders(), HttpStatus.OK);
-            newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(), HttpStatus.OK);
+            Map<String,String> headersMap = responseEntity.getHeaders().toSingleValueMap();
+            if(headersMap.containsKey("Content-Disposition")) {
+                headersMap.remove("Content-Disposition");
+            }
+            if(headersMap.containsKey("Content-Type")) {
+                headersMap.remove("Content-Type");
+            }
+            if(headersMap.containsKey("Content-Length")) {
+                headersMap.remove("Content-Length");
+            }
+            if(headersMap.containsKey("Accept-Charset")) {
+                headersMap.remove("Accept-Charset");
+            }
+            if(headersMap.containsKey("X-Application-Context")) {
+                headersMap.remove("X-Application-Context");
+            }
+
+            HttpHeaders header = new HttpHeaders();
+            header.setAll(headersMap);
+            newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),header, HttpStatus.OK);
+            //newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(), HttpStatus.OK);
 
             dataFlowContext.setResponseEntity(newResponseEntity);
         }
