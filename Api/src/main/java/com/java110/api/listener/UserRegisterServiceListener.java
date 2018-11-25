@@ -72,8 +72,8 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_SAVE_USER_INFO);
         business.put(CommonConstant.HTTP_BUSINESS_SERVICE_NAME,"用户注册");
-        business.put(CommonConstant.HTTP_USER_ID,"-1");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",JSONObject.parseObject(paramIn));
+
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
@@ -82,6 +82,18 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);
+    }
+
+    /**
+     * 对请求报文处理
+     * @param paramIn
+     * @return
+     */
+    private JSONObject refreshParamIn(String paramIn){
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
+        paramObj.put(CommonConstant.HTTP_USER_ID,"-1");
+
+        return paramObj;
     }
 
 
