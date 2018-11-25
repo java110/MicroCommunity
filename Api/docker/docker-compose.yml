@@ -1,0 +1,20 @@
+version: '2'
+services:
+   api-1:
+       container_name: api-1
+       image: 'registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0'
+       user: tomcat
+       restart: always
+       ports:
+       - "8008:8008"
+       volumes:
+       - ./prop:/home/tomcat/prop
+       - ./webapps/portal-web.war:/home/tomcat/webapps/portal-web.war
+       - ./conf/catalina.sh:/home/tomcat/bin/catalina.sh
+       - ./dump:/home/tomcat/dump
+       - ../hlog:/home/tomcat/hlog
+       - ../pinpoint:/home/tomcat/pinpoint
+       - ../ojdbc/ojdbc7.jar:/home/tomcat/lib/ojdbc7.jar
+       dns:
+       - 135.192.40.121
+       network_mode: "bridge"
