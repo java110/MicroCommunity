@@ -11,7 +11,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -67,9 +69,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             } else {
                 responseEntity = tmpRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
             }
-        }catch (HttpServerErrorException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>("请求下游系统异常异常，"+e.getResponseBodyAsString(),e.getStatusCode());
-
+        }catch (HttpStatusCodeException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>("请求下游系统异常，"+e.getResponseBodyAsString(),e.getStatusCode());
         }
 
         dataFlowContext.setResponseEntity(responseEntity);
