@@ -2,15 +2,14 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -74,6 +73,56 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         }
 
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+
+    /**
+     * 处理返回报文信息
+     * @param dataFlowContext
+     */
+    protected void doResponse(DataFlowContext dataFlowContext) {
+        ResponseEntity<String> responseEntity = dataFlowContext.getResponseEntity();
+        ResponseEntity<String> newResponseEntity = null;
+        if(responseEntity == null || StringUtil.isNullOrNone(responseEntity.getBody()) || !Assert.isJsonObject(responseEntity.getBody())){ //这里一般进不去
+            return ;
+        }
+        JSONObject resJson = JSONObject.parseObject(responseEntity.getBody());
+
+        if(!resJson.containsKey("orders")
+                || !ResponseConstant.RESULT_CODE_SUCCESS.equals(resJson.getJSONObject("orders").getJSONObject("response").getString("code"))){
+            return ;
+        }
+
+        if(resJson.containsKey("business") && resJson.getJSONArray("business").size() == 1){
+            JSONObject busiJson = resJson.getJSONArray("business").getJSONObject(0);
+            if(busiJson.containsKey("orderTypeCd")){
+                busiJson.remove("orderTypeCd");
+            }
+            if(busiJson.containsKey("serviceCode")){
+                busiJson.remove("serviceCode");
+            }
+            if(busiJson.containsKey("response")){
+                busiJson.remove("response");
+            }
+            if(busiJson.containsKey("bId")){
+                busiJson.remove("bId");
+            }
+
+            if(busiJson.containsKey("businessType")){
+                busiJson.remove("businessType");
+            }
+
+            if(busiJson.containsKey("dataFlowId")){
+                busiJson.remove("dataFlowId");
+            }
+            //这个一般是 center服务和下游系统之间交互的流水可以删掉，返回出去也没有啥意义
+            if(busiJson.containsKey("transactionId")){
+                busiJson.remove("transactionId");
+            }
+            newResponseEntity = new ResponseEntity<String>(busiJson.toJSONString(),responseEntity.getHeaders(), HttpStatus.OK);
+
+            dataFlowContext.setResponseEntity(newResponseEntity);
+        }
     }
 
 

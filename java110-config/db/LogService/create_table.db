@@ -2,7 +2,7 @@
 
 create table l_transaction_log(
     log_id varchar(30) not null  COMMENT 'id',
-    transaction_id VARCHAR(30) NOT NULL COMMENT '外部交易流水',
+    transaction_id VARCHAR(32) NOT NULL COMMENT '外部交易流水',
     contract_id varchar(64) not null comment '上下文ID',
     ip varchar(20) not null comment '日志产生主机IP',
     port varchar(10) not null comment '日志产生端口',

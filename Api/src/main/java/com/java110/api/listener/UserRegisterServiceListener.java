@@ -2,8 +2,11 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -15,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -82,6 +87,8 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);
+
+        super.doResponse(dataFlowContext);
     }
 
     /**

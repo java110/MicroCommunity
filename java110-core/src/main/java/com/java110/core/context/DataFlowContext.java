@@ -101,5 +101,5 @@ public interface DataFlowContext {
 
     public void setResponseEntity(ResponseEntity responseEntity);
 
-
+    public ResponseEntity getResponseEntity();
 }

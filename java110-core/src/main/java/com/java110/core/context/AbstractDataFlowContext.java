@@ -369,4 +369,8 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     }
 
+    public ResponseEntity getResponseEntity(){
+        return null;
+    }
+
 }
