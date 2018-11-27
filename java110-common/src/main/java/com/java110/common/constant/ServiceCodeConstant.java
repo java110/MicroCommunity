@@ -173,6 +173,16 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_USER_SERVICE_REGISTER = "user.service.register";
 
+    /**
+     * 用户登录服务处理
+     */
+    public static final String SERVICE_CODE_USER_SERVICE_LOGIN = "user.service.login";
+
+    /**
+     * 检查用户登录服务处理
+     */
+    public static final String SERVICE_CODE_CHECK_SERVICE_LOGIN = "check.service.login";
+
 
 
 }

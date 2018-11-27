@@ -5,7 +5,7 @@ create database TT;
 CREATE TABLE c_orders(
     o_id VARCHAR(30) NOT NULL UNIQUE COMMENT '订单ID',
     app_id VARCHAR(10) NOT NULL COMMENT '应用ID',
-    ext_transaction_id VARCHAR(32) NOT NULL COMMENT '外部交易流水',
+    ext_transaction_id VARCHAR(36) NOT NULL COMMENT '外部交易流水',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     request_time VARCHAR(16) NOT NULL COMMENT '外部系统请求时间',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

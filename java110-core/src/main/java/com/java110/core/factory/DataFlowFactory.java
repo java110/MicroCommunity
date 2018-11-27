@@ -2,6 +2,7 @@ package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.cache.AppRouteCache;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
@@ -123,6 +124,23 @@ public class DataFlowFactory {
         }
         return null;
     }
+
+    /**
+     * 根据AppId 和serviceCode 查询AppRoute
+     * @param appId
+     * @param serviceCode
+     * @return
+     */
+    public static AppRoute getRoute(String appId,String serviceCode){
+        List<AppRoute> appRoutes = AppRouteCache.getAppRoute(appId);
+        for(AppRoute appRoute : appRoutes) {
+            if (StatusConstant.STATUS_CD_VALID.equals(appRoute.getStatusCd())
+                    &&appRoute.getAppService().getServiceCode().equals(serviceCode)){
+                return appRoute;
+            }
+        }
+        return null;
+    }
     /**
      * 获取单个服务
      * @param dataFlow
@@ -145,6 +163,20 @@ public class DataFlowFactory {
      */
     public static AppService getService(ApiDataFlow dataFlow, String serviceCode){
         AppRoute route = getRoute(dataFlow, serviceCode);
+        if(route == null){
+            return null;
+        }
+        return route.getAppService();
+    }
+
+    /**
+     * 根据appid 和 serviceCode 查询相应的 appservice
+     * @param appId
+     * @param serviceCode
+     * @return
+     */
+    public static AppService getService(String appId,String serviceCode){
+        AppRoute route = getRoute(appId, serviceCode);
         if(route == null){
             return null;
         }
