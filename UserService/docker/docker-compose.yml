@@ -1,10 +1,10 @@
 version: '2'
 services:
    api-1:
-       container_name: api-1
+       container_name: userService-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
        volumes:
-       - ../target/Api.jar:/root/target/Api.jar
+       - ../target/UserService.jar:/root/target/UserService.jar
