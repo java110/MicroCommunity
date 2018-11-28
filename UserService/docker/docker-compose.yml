@@ -1,7 +1,7 @@
 version: '2'
 services:
-   userService-1:
-       container_name: userService-1
+   userservice-1:
+       container_name: userservice-1
        build:
           context: .
           dockerfile: Dockerfile
