@@ -1,6 +1,6 @@
 version: '2'
 services:
-   api-1:
+   userService-1:
        container_name: userService-1
        build:
           context: .
