@@ -1,10 +1,12 @@
 version: '2'
 services:
-   api-1:
+   api:
        container_name: api-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
+       ports:
+       - "8008:8008"
        volumes:
        - ../target/Api.jar:/root/target/Api.jar

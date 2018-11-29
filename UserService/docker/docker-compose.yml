@@ -1,10 +1,12 @@
 version: '2'
 services:
-   userservice-1:
+   userservice:
        container_name: userservice-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
+       ports:
+       - "8002:8002"
        volumes:
        - ../target/UserService.jar:/root/target/UserService.jar

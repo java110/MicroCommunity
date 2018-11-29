@@ -1,10 +1,12 @@
 version: '2'
 services:
-   storeserivce-1:
+   storeserivce:
        container_name: storeserivce-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
+       ports:
+       - "8006:8006"
        volumes:
        - ../target/StoreService.jar:/root/target/StoreService.jar

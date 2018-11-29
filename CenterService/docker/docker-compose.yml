@@ -1,10 +1,12 @@
 version: '2'
 services:
-   centerservice-1:
+   centerservice:
        container_name: centerservice-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
+       ports:
+       - "8001:8001"
        volumes:
        - ../target/CenterService.jar:/root/target/CenterService.jar
