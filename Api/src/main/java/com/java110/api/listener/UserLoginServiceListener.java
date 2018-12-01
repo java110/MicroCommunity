@@ -72,7 +72,9 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
         //根据AppId 查询 是否有登录的服务，查询登录地址调用
         AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
         String requestUrl = appService.getUrl() + "?userCode="+paramInJson.getString("username");
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
         try{
             responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
         }catch (HttpStatusCodeException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
