@@ -316,6 +316,28 @@ public class AuthenticationFactory {
     }
 
     /**
+     * 删除Token
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public static void deleteToken(String token) throws Exception{
+        String jwtSecret = MappingCache.getValue(MappingConstant.KEY_JWT_SECRET);
+        if(StringUtil.isNullOrNone(jwtSecret)){
+            jwtSecret = CommonConstant.DEFAULT_JWT_SECRET;
+        }
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+        JWTVerifier verifier = JWT.require(algorithm).withIssuer("java110").build();
+        DecodedJWT jwt = verifier.verify(token);
+        String jdi = jwt.getId();
+        //保存token Id
+        String userId = JWTCache.getValue(jdi);
+        if(!StringUtil.isNullOrNone(userId)){ //说明redis中jdi 已经失效
+            JWTCache.removeValue(jdi);
+        }
+    }
+
+    /**
      * 校验Token
      * @param token
      * @return
