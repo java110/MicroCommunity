@@ -71,6 +71,11 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
         JSONObject paramInJson = JSONObject.parseObject(paramIn);
         //根据AppId 查询 是否有登录的服务，查询登录地址调用
         AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN,HttpStatus.UNAUTHORIZED);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
         String requestUrl = appService.getUrl() + "?userCode="+paramInJson.getString("username");
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN);
