@@ -9,6 +9,7 @@ import com.java110.common.cache.ServiceSqlCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.SMOException;
+import com.java110.common.util.Assert;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
@@ -54,6 +55,20 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     }
 
     /**
+     * 根据缓存类别刷新缓存
+     * @param headers 缓存类别
+     */
+    public void flush(Map<String,String> headers) throws SMOException{
+
+        flushAppRoute(headers);
+
+        flushMapping(headers);
+
+        //3.0 分装 ServiceSql
+        flushServiceSql(headers);
+    }
+
+    /**
      * 用来系统启动刷新
      */
     @Override
@@ -87,6 +102,20 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         doFlushServiceSql();
     }
 
+    /**
+     * 3.0 分装 ServiceSql
+     */
+    private void flushServiceSql(Map<String,String> headers) {
+
+        Assert.hasKey(headers,CommonConstant.CACHE_PARAM,"未包含cache参数"+headers.toString());
+        if(!CommonConstant.CACHE_SERVICE_SQL.equals(headers.get(CommonConstant.CACHE_PARAM))
+                && !CommonConstant.CACHE_ALL.equals(headers.get(CommonConstant.CACHE_PARAM))){
+            return ;
+        }
+        // 刷新
+        doFlushServiceSql();
+    }
+
     private void doFlushServiceSql() {
         List<ServiceSql> serviceSqls = queryServiceDAOImpl.qureyServiceSqlAll();
 
@@ -110,6 +139,21 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         JSONObject params = dataQuery.getRequestParams();
 
         if(!CommonConstant.CACHE_MAPPING.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
+            return ;
+        }
+
+        doFlushMapping();
+    }
+
+    /**
+     * 刷新 Mapping 数据
+     */
+    private void flushMapping(Map<String,String> headers) {
+
+        Assert.hasKey(headers,CommonConstant.CACHE_PARAM,"未包含cache参数"+headers.toString());
+
+        if(!CommonConstant.CACHE_MAPPING.equals(headers.get(CommonConstant.CACHE_PARAM))
+                && !CommonConstant.CACHE_ALL.equals(headers.get(CommonConstant.CACHE_PARAM))){
             return ;
         }
 
@@ -150,6 +194,21 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
         JSONObject params = dataQuery.getRequestParams();
 
         if(!CommonConstant.CACHE_APP_ROUTE_SERVICE.equals(params.getString(CommonConstant.CACHE_PARAM_NAME))){
+            return ;
+        }
+        doFlushAppRoute();
+
+    }
+
+    /**
+     * 刷新AppRoute数据
+     */
+    private void flushAppRoute(Map<String,String> headers){
+
+        Assert.hasKey(headers,CommonConstant.CACHE_PARAM,"未包含cache参数"+headers.toString());
+
+        if(!CommonConstant.CACHE_APP_ROUTE_SERVICE.equals(headers.get(CommonConstant.CACHE_PARAM))
+                && !CommonConstant.CACHE_ALL.equals(headers.get(CommonConstant.CACHE_PARAM))){
             return ;
         }
         doFlushAppRoute();

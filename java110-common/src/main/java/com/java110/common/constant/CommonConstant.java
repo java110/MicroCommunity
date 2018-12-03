@@ -105,6 +105,7 @@ public class CommonConstant {
 
     public final static String CACHE_PARAM_NAME = "cacheName";
 
+    public final static String CACHE_PARAM = "cache";
     /**
      * 组件路由 服务 缓存常量
      */
@@ -119,6 +120,8 @@ public class CommonConstant {
      * 映射 缓存常量
      */
     public final static String CACHE_SERVICE_SQL = "SERVICE_SQL";
+
+    public final static String CACHE_ALL = "All";
 
 
     public final static String INSTANCE_Y = "Y";

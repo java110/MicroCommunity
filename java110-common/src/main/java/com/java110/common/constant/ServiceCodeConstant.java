@@ -186,6 +186,12 @@ public class ServiceCodeConstant {
      * 检查用户登录服务处理
      */
     public static final String SERVICE_CODE_CHECK_SERVICE_LOGIN = "check.service.login";
+    /**
+     * 刷新缓存
+     */
+    public static final String SERVICE_CODE_CACHE_SERVICE_FLUSH = "cache.service.flush";
+
+
 
 
 
