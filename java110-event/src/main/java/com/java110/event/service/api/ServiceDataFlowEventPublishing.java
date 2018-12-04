@@ -141,7 +141,13 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
      */
     public static void multicastEvent(String serviceCode,final ServiceDataFlowEvent event, String asyn) {
         String httpMethod = event.getDataFlowContext().getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
-        for (final ServiceDataFlowListener listener : getListeners(serviceCode,httpMethod)) {
+        List<ServiceDataFlowListener> listeners = getListeners(serviceCode,httpMethod);
+        //这里判断 serviceCode + httpMethod 的侦听，如果没有注册直接报错。
+        if(listeners == null || listeners.size() == 0){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
+                    "服务【" + serviceCode + "】调用方式【"+httpMethod+"】当前不支持");
+        }
+        for (final ServiceDataFlowListener listener : listeners) {
             //如果是透传类 请求方式必须与接口提供方调用方式一致
             if(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER.equals(serviceCode)){
                 AppService appService = event.getAppService();
