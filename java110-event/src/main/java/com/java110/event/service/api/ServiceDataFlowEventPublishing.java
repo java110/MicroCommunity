@@ -148,14 +148,6 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
                     "服务【" + serviceCode + "】调用方式【"+httpMethod+"】当前不支持");
         }
         for (final ServiceDataFlowListener listener : listeners) {
-            //如果是透传类 请求方式必须与接口提供方调用方式一致
-            if(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER.equals(serviceCode)){
-                AppService appService = event.getAppService();
-                if(!appService.getMethod().equals(httpMethod)) {
-                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
-                            "服务【" + serviceCode + "】调用方式不对请检查,当前请求方式为："+httpMethod);
-                }
-            }
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 

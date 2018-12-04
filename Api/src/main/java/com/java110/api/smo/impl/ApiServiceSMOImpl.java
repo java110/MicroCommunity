@@ -284,6 +284,12 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         AppService appService = DataFlowFactory.getService(dataFlow, dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
         //这里对透传类处理
         if("NT".equals(appService.getIsInstance())){
+            //如果是透传类 请求方式必须与接口提供方调用方式一致
+            String httpMethod = dataFlow.getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
+            if(!appService.getMethod().equals(httpMethod)) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
+                        "服务【" + appService.getServiceCode() + "】调用方式不对请检查,当前请求方式为："+httpMethod);
+            }
             dataFlow.setApiCurrentService(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER);
         }else{
             dataFlow.setApiCurrentService(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
