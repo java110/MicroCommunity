@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 /**
  * 订单类信息处理 侦听
@@ -27,6 +28,11 @@ public class OrderServiceListener extends AbstractServiceApiDataFlowListener{
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_ORDER;
+    }
+
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.POST;
     }
 
 

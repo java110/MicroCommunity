@@ -11,6 +11,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,6 +32,11 @@ public class UserLogoutServiceListener extends AbstractServiceApiDataFlowListene
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_USER_SERVICE_LOGOUT;
+    }
+
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.POST;
     }
 
 

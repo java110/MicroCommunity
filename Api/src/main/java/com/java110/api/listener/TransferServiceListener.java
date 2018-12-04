@@ -32,6 +32,11 @@ public class TransferServiceListener extends AbstractServiceApiDataFlowListener{
         return ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER;
     }
 
+    @Override
+    public HttpMethod getHttpMethod() {
+        return null;
+    }
+
 
     @Override
     public int getOrder() {

@@ -2,6 +2,7 @@ package com.java110.event.service.api;
 
 import com.java110.event.app.order.Ordered;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
+import org.springframework.http.HttpMethod;
 
 import java.util.EventListener;
 
@@ -16,6 +17,12 @@ public interface ServiceDataFlowListener extends EventListener,Ordered {
      * @return
      */
     public String getServiceCode();
+
+    /**
+     * 获取调用时的方法
+     * @return 接口对外提供方式 如HttpMethod.POST
+     */
+    public HttpMethod getHttpMethod();
 
     public void soService(ServiceDataFlowEvent event);
 }

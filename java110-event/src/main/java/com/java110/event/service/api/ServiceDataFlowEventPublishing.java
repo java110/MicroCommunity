@@ -2,7 +2,9 @@ package com.java110.event.service.api;
 
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.BusinessException;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
@@ -11,6 +13,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.center.DataFlowListenerOrderComparator;
 import com.java110.event.service.BusinessServiceDataFlowEvent;
 import com.java110.event.service.BusinessServiceDataFlowListener;
+import org.springframework.http.HttpMethod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,19 +65,25 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
      * @since 1.8
      * @return
      */
-    public static List<ServiceDataFlowListener> getListeners(String serviceCode){
+    public static List<ServiceDataFlowListener> getListeners(String serviceCode,String httpMethod){
 
         Assert.hasLength(serviceCode,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
 
+        String needCachedServiceCode = serviceCode+httpMethod;
         //先从缓存中获取，为了提升效率
-        if(cacheListenersMap.containsKey(serviceCode)){
-            return cacheListenersMap.get(serviceCode);
+        if(cacheListenersMap.containsKey(needCachedServiceCode)){
+            return cacheListenersMap.get(needCachedServiceCode);
         }
 
         List<ServiceDataFlowListener> dataFlowListeners = new ArrayList<ServiceDataFlowListener>();
         for(String listenerBeanName : getListeners()){
             ServiceDataFlowListener listener = ApplicationContextFactory.getBean(listenerBeanName,ServiceDataFlowListener.class);
-            if(serviceCode.equals(listener.getServiceCode())){
+            if(serviceCode.equals(listener.getServiceCode())
+                    && listener.getHttpMethod() == HttpMethod.valueOf(httpMethod)){
+                dataFlowListeners.add(listener);
+            }
+            //特殊处理 透传类接口
+            if(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER.equals(listener.getServiceCode())){
                 dataFlowListeners.add(listener);
             }
         }
@@ -83,7 +92,7 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
         DataFlowListenerOrderComparator.sort(dataFlowListeners);
 
         //将数据放入缓存中
-        cacheListenersMap.put(serviceCode,dataFlowListeners);
+        cacheListenersMap.put(needCachedServiceCode,dataFlowListeners);
         return dataFlowListeners;
     }
 
@@ -118,7 +127,8 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
 
             multicastEvent(serviceCode,targetDataFlowEvent, asyn);
         }catch (Exception e){
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"发布侦听失败，失败原因为："+e);
+            logger.error("发布侦听失败，失败原因为：",e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"发布侦听失败，失败原因为："+e.getMessage());
         }
 
     }
@@ -130,7 +140,16 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
      * @param asyn A 表示异步处理
      */
     public static void multicastEvent(String serviceCode,final ServiceDataFlowEvent event, String asyn) {
-        for (final ServiceDataFlowListener listener : getListeners(serviceCode)) {
+        String httpMethod = event.getDataFlowContext().getRequestCurrentHeaders().get(CommonConstant.HTTP_METHOD);
+        for (final ServiceDataFlowListener listener : getListeners(serviceCode,httpMethod)) {
+            //如果是透传类 请求方式必须与接口提供方调用方式一致
+            if(ServiceCodeConstant.SERVICE_CODE_DO_SERVICE_TRANSFER.equals(serviceCode)){
+                AppService appService = event.getAppService();
+                if(!appService.getMethod().equals(httpMethod)) {
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR,
+                            "服务【" + serviceCode + "】调用方式不对请检查,当前请求方式为："+httpMethod);
+                }
+            }
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 
@@ -149,6 +168,8 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
             }
         }
     }
+
+
 
     /**
      * Return the current task executor for this multicaster.

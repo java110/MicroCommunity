@@ -37,6 +37,11 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
         return ServiceCodeConstant.SERVICE_CODE_USER_SERVICE_LOGIN;
     }
 
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.POST;
+    }
+
 
     @Override
     public int getOrder() {

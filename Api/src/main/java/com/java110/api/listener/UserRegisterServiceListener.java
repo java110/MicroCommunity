@@ -16,10 +16,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Map;
 
@@ -37,6 +34,11 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_USER_SERVICE_REGISTER;
+    }
+
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.POST;
     }
 
 
