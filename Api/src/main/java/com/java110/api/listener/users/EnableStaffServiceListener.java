@@ -14,16 +14,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 /**
- * 员工停用接口
+ * 启用员工接口
  * @author wuxw
  * @create 2018-12-08 下午2:46
- * @desc 停用员工信息，如离职等情况 员工账号信息停用处理
+ * @desc 启用员工信息，如二次入职，启用之前工号信息
  **/
-@Java110Listener("disableStaffServiceListener")
-public class DisableStaffServiceListener  extends AbstractServiceApiDataFlowListener {
+@Java110Listener("enableStaffServiceListener")
+public class EnableStaffServiceListener extends AbstractServiceApiDataFlowListener {
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_USER_STAFF_DISABLE;
+        return ServiceCodeConstant.SERVICE_CODE_USER_STAFF_ENABLE;
     }
 
     /**
@@ -50,7 +50,7 @@ public class DisableStaffServiceListener  extends AbstractServiceApiDataFlowList
         Assert.jsonObjectHaveKey(paramIn,"userId","当前请求报文中未包含userId节点");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_REMOVE_USER_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_RECOVER_USER_INFO);
         business.put(CommonConstant.HTTP_BUSINESS_SERVICE_NAME,"停用用户");
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramIn));

@@ -63,7 +63,6 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(paramIn,"name","请求参数中未包含name 节点，请确认");
         Assert.jsonObjectHaveKey(paramIn,"email","请求参数中未包含email 节点，请确认");
-        Assert.jsonObjectHaveKey(paramIn,"levelCd","请求参数中未包含levelCd 节点，请确认");
         Assert.jsonObjectHaveKey(paramIn,"tel","请求参数中未包含tel 节点，请确认");
 
 

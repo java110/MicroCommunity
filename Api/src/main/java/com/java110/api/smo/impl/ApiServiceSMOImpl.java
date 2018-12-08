@@ -240,6 +240,10 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "requestTime 格式不对，遵循yyyyMMddHHmmss格式");
         }
+        //用户ID校验
+        if (StringUtil.isNullOrNone(dataFlow.getUserId())){
+             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "USER_ID 不能为空");
+        }
 
 
         //判断 AppId 是否有权限操作相应的服务
@@ -251,6 +255,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
             DataFlowFactory.addCostTime(dataFlow, "judgeAuthority", "鉴权耗时", startDate);
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "AppId 没有权限访问 serviceCode = " + dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE));
         }
+
 
         //检验白名单
         List<String> whileListIp = dataFlow.getAppRoutes().get(0).getWhileListIp();

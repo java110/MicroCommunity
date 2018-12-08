@@ -128,6 +128,7 @@ public class ApiDataFlow extends AbstractDataFlowContext {
             this.setTransactionId(headerAll.get(CommonConstant.HTTP_TRANSACTION_ID));
             this.setReqSign(headerAll.get(CommonConstant.HTTP_SIGN));
             this.setRequestTime(headerAll.get(CommonConstant.HTTP_REQ_TIME));
+            this.setUserId(headerAll.get(CommonConstant.HTTP_USER_ID));
 
             if (headerAll != null){
                 this.requestHeaders.putAll(headerAll);
