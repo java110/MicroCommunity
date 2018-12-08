@@ -87,6 +87,11 @@ public class MappingConstant {
      */
     public final static String KEY_JWT_EXPIRE_TIME = "JWT_EXPIRE_TIME";
 
+    /**
+     * 员工默认密码
+     */
+    public final static String KEY_STAFF_DEFAULT_PASSWORD = "STAFF_DEFAULT_PASSWORD";
+
 
 
 }

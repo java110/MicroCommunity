@@ -192,6 +192,12 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_CACHE_SERVICE_FLUSH = "cache.service.flush";
 
 
+    /**
+     * 添加员工 服务
+     */
+    public static final String SERVICE_CODE_USER_STAFF_ADD = "user.staff.add";
+
+
 
 
 
