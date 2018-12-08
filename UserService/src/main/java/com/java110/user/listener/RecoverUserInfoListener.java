@@ -1,0 +1,136 @@
+package com.java110.user.listener;
+
+import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.StatusConstant;
+import com.java110.common.exception.ListenerExecuteException;
+import com.java110.common.util.Assert;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
+import com.java110.user.dao.IUserServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 恢复 用户信息 侦听
+ * Created by wuxw on 2018/5/18.
+ */
+@Java110Listener("recoverUserInfoListener")
+@Transactional
+public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlowListener {
+
+    private final static Logger logger = LoggerFactory.getLogger(RecoverUserInfoListener.class);
+
+    @Autowired
+    IUserServiceDao userServiceDaoImpl;
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+
+    /**
+     * 恢复用户信息
+     * @return
+     */
+    @Override
+    public String getServiceCode() {
+        return ServiceCodeConstant.SERVICE_CODE_RECOVER_USER_INFO;
+    }
+
+
+    /**
+     * 修改用户信息至 business表中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+        JSONObject data = business.getDatas();
+
+        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+
+        Assert.jsonObjectHaveKey(data,"businessUser","datas 节点下没有包含 businessUser 节点");
+
+        JSONObject businessUser = data.getJSONObject("businessUser");
+
+        Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
+
+        if(businessUser.getString("userId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"userId 错误，不能自动生成（必须已经存在的userId）"+businessUser);
+        }
+
+        //自动插入ADD
+        autoSaveAddBusinessUser(business,businessUser);
+    }
+
+    /**
+     * 将 business的用户信息 保存至 instance表中
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+        JSONObject data = business.getDatas();
+
+        Map info = new HashMap();
+        info.put("bId",business.getbId());
+        info.put("operate",StatusConstant.OPERATE_ADD);
+
+        //商户信息
+        Map businessUserInfo = userServiceDaoImpl.queryBusinessUserInfo(info);
+        if( businessUserInfo != null && !businessUserInfo.isEmpty()) {
+            flushBusinessUserInfo(businessUserInfo,StatusConstant.STATUS_CD_VALID);
+            userServiceDaoImpl.updateUserInfoInstance(businessUserInfo);
+            dataFlowContext.addParamOut("userId",businessUserInfo.get("user_id"));
+        }
+    }
+
+    /**
+     * 将instance 作废
+     * @param dataFlowContext 数据对象
+     * @param business 当前业务对象
+     */
+    @Override
+    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+        String bId = business.getbId();
+        //Assert.hasLength(bId,"请求报文中没有包含 bId");
+        Map info = new HashMap();
+        info.put("bId",bId);
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+
+        Map addInfo = new HashMap();
+        addInfo.put("bId",business.getbId());
+        addInfo.put("operate",StatusConstant.OPERATE_ADD);
+        //商户信息
+        Map userInfo = userServiceDaoImpl.queryUserInfo(info);
+        if(userInfo != null && !userInfo.isEmpty()){
+
+            //商户信息
+            Map businessUserInfo = userServiceDaoImpl.queryBusinessUserInfo(addInfo);
+            //除非程序出错了，这里不会为空
+            if(businessUserInfo == null || businessUserInfo.isEmpty()){
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（user），程序内部异常,请检查！ "+addInfo);
+            }
+
+            flushBusinessUserInfo(businessUserInfo,StatusConstant.STATUS_CD_INVALID);
+            userServiceDaoImpl.updateUserInfoInstance(businessUserInfo);
+            dataFlowContext.addParamOut("userId",userInfo.get("user_id"));
+        }
+    }
+
+    public IUserServiceDao getUserServiceDaoImpl() {
+        return userServiceDaoImpl;
+    }
+
+    public void setUserServiceDaoImpl(IUserServiceDao userServiceDaoImpl) {
+        this.userServiceDaoImpl = userServiceDaoImpl;
+    }
+}

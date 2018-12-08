@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="userServiceDAOImpl">
+<mapper namespace="userServiceDaoImpl">
 
     <resultMap type="com.java110.entity.user.Cust" id="custMap">
         <id column="custId" jdbcType="VARCHAR" property="custId"/>
@@ -171,7 +171,35 @@
     </insert>
 
     <update id="updateUserInfoInstance" parameterType="map">
-        update u_user u set u.status_cd = #{statusCd} where 1 = 1
+        update u_user u set u.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="name !=null and name != ''">
+            ,s.name= #{name}
+        </if>
+        <if test="email !=null and email != ''">
+            ,s.email= #{email}
+        </if>
+        <if test="address !=null and address != ''">
+            ,s.address= #{address}
+        </if>
+        <if test="password !=null and password != ''">
+            ,s.password= #{password}
+        </if>
+        <if test="locationCd !=null and locationCd != ''">
+            ,s.location_cd= #{locationCd}
+        </if>
+        <if test="age !=null and age != ''">
+            ,s.age= #{age}
+        </if>
+        <if test="sex !=null and sex != ''">
+            ,s.sex= #{sex}
+        </if>
+        <if test="tel !=null and tel != ''">
+            ,s.tel= #{tel}
+        </if>
+        where 1 = 1
         <if test="bId != null and bId != ''">
             and u.b_id = #{bId}
         </if>
@@ -233,12 +261,15 @@
     <select id="queryUserInfo" parameterType="map" resultType="map">
         select u.user_id,u.name,u.email,u.address,u.password,u.location_cd,
         u.age,u.sex,u.tel,u.level_cd,u.b_id
-        from u_user u where u.status_cd = '0'
+        from u_user u where 1= 1
         <if test="bId != null and bId !=''">
             and u.b_id = #{bId}
         </if>
         <if test="userId != null and userId != ''">
             and u.user_id = #{userId}
+        </if>
+        <if test="statusCd !=null statusCd != ''">
+            and u.status_cd = #{statusCd}
         </if>
     </select>
 

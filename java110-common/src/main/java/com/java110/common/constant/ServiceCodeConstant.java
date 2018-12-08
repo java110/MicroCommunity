@@ -70,6 +70,21 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_USER_INFO = "save.user.info";
 
     /**
+     * 修改用户信息
+     */
+    public static final String SERVICE_CODE_MODIFY_USER_INFO = "modify.user.info";
+
+    /**
+     * 停用用户信息
+     */
+    public static final String SERVICE_CODE_REMOVE_USER_INFO = "remove.user.info";
+
+    /**
+     * 恢复用户信息
+     */
+    public static final String SERVICE_CODE_RECOVER_USER_INFO = "recover.user.info";
+
+    /**
      * 保存用户地址信息
      */
     public static final String SERVICE_CODE_SAVE_USER_ADDRESS = "save.user.address";
@@ -196,6 +211,16 @@ public class ServiceCodeConstant {
      * 添加员工 服务
      */
     public static final String SERVICE_CODE_USER_STAFF_ADD = "user.staff.add";
+
+    /**
+     * 停用员工服务
+     */
+    public static final String SERVICE_CODE_USER_STAFF_DISABLE = "user.staff.disable";
+
+    /**
+     * 启用员工服务
+     */
+    public static final String SERVICE_CODE_USER_STAFF_ENABLE = "user.staff.enable";
 
 
 
