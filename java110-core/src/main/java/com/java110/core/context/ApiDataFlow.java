@@ -27,6 +27,8 @@ public class ApiDataFlow extends AbstractDataFlowContext {
 
     private String apiCurrentService;
 
+    private String userId;
+
     private String reqSign;
 
     private String resSign;
@@ -67,14 +69,18 @@ public class ApiDataFlow extends AbstractDataFlowContext {
         this.resSign = resSign;
     }
 
-
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
 
     public String getAppId() {
         return appId;
     }
 
-
+    public String getUserId() {
+        return userId;
+    }
 
     public String getReqSign() {
         return reqSign;
