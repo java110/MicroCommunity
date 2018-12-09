@@ -268,7 +268,7 @@
         <if test="userId != null and userId != ''">
             and u.user_id = #{userId}
         </if>
-        <if test="statusCd !=null statusCd != ''">
+        <if test="statusCd !=null and statusCd != ''">
             and u.status_cd = #{statusCd}
         </if>
     </select>
