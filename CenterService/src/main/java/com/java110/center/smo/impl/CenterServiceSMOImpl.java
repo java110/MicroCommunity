@@ -28,10 +28,7 @@ import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -1172,13 +1169,14 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
     private JSONObject doRequestBusinessSystem(DataFlow dataFlow, AppService service, JSONObject requestBusinessJson) {
         String responseMessage;
-        if(service.getMethod() == null || "".equals(service.getMethod())) {//post方式
-            //http://user-service/test/sayHello
-            responseMessage = restTemplate.postForObject(service.getUrl(),requestBusinessJson.toJSONString(),String.class);
-        }else{//webservice方式
+        if(!StringUtil.isNullOrNone(service.getMethod())
+                && !"POST,PUT,GET,DELETE,PATCH,HEAD,OPTIONS,TRACE".contains(service.getMethod())) {//webservice方式
             responseMessage = (String) WebServiceAxisClient.callWebService(service.getUrl(),service.getMethod(),
                     new Object[]{dataFlow.getRequestBusinessJson().toJSONString()},
                     service.getTimeOut());
+        }else{//post方式
+            //http://user-service/test/sayHello
+            responseMessage = restTemplate.postForObject(service.getUrl(),requestBusinessJson.toJSONString(),String.class);
         }
 
         if(StringUtil.isNullOrNone(responseMessage) || !Assert.isJsonObject(responseMessage)){
