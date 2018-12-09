@@ -173,31 +173,31 @@
     <update id="updateUserInfoInstance" parameterType="map">
         update u_user u set u.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
-            ,s.b_id = #{newBId}
+            ,u.b_id = #{newBId}
         </if>
         <if test="name !=null and name != ''">
-            ,s.name= #{name}
+            ,u.name= #{name}
         </if>
         <if test="email !=null and email != ''">
-            ,s.email= #{email}
+            ,u.email= #{email}
         </if>
         <if test="address !=null and address != ''">
-            ,s.address= #{address}
+            ,u.address= #{address}
         </if>
         <if test="password !=null and password != ''">
-            ,s.password= #{password}
+            ,u.password= #{password}
         </if>
         <if test="locationCd !=null and locationCd != ''">
-            ,s.location_cd= #{locationCd}
+            ,u.location_cd= #{locationCd}
         </if>
         <if test="age !=null and age != ''">
-            ,s.age= #{age}
+            ,u.age= #{age}
         </if>
         <if test="sex !=null and sex != ''">
-            ,s.sex= #{sex}
+            ,u.sex= #{sex}
         </if>
         <if test="tel !=null and tel != ''">
-            ,s.tel= #{tel}
+            ,u.tel= #{tel}
         </if>
         where 1 = 1
         <if test="bId != null and bId != ''">
