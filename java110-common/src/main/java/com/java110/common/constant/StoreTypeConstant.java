@@ -24,7 +24,7 @@ public class StoreTypeConstant {
     /**
      * 物业公司
      */
-    public final static String STORE_TYPE_COMMUNITY_MANAGE = "800900000003";
+    public final static String STORE_TYPE_PROPERTY = "800900000003";
 
     /**
      * 物流公司

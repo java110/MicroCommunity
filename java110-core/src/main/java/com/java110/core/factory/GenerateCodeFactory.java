@@ -71,6 +71,12 @@ public class GenerateCodeFactory {
         prefixMap.put("commentScoreId","64");
         prefixMap.put("communityId","70");
         prefixMap.put("communityPhotoId","71");
+        prefixMap.put("agentId","80");
+        prefixMap.put("agentIdPhotoId","81");
+        prefixMap.put("agentCerdentialsId","82");
+        prefixMap.put("propertyId","90");
+        prefixMap.put("propertyIdPhotoId","91");
+        prefixMap.put("propertyCerdentialsId","92");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -268,6 +274,87 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("communityPhotoId"));
+    }
+
+    /**
+     * 获取小区ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getAgentId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("agentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("agentId"));
+    }
+
+
+    /**
+     * 获取小区照片ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getAgentPhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("agentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("agentPhotoId"));
+    }
+
+    /**
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getAgentCerdentialsId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("agentCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("agentCerdentialsId"));
+    }
+
+
+    /**
+     * 获取小区ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPropertyId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("propertyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("propertyId"));
+    }
+
+
+    /**
+     * 获取小区照片ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPropertyPhotoId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("propertyPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("propertyPhotoId"));
+    }
+
+    /**
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPropertyCerdentialsId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("propertyCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("propertyCerdentialsId"));
     }
 
 

@@ -32,6 +32,9 @@
         <module>ShopService</module>
         <module>CommentService</module>
         <module>Api</module>
+        <module>CommunityService</module>
+        <module>AgentService</module>
+        <module>PropertyService</module>
     </modules>
 
     <parent>
