@@ -174,6 +174,6 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         currentCommunityMember.put("memberId",currentCommunityMember.get("member_id"));
         currentCommunityMember.put("memberTypeCd",currentCommunityMember.get("member_type_cd"));
         currentCommunityMember.put("operate",StatusConstant.OPERATE_DEL);
-        getCommunityServiceDaoImpl().saveBusinessCommunityInfo(currentCommunityMember);
+        getCommunityServiceDaoImpl().saveBusinessCommunityMember(currentCommunityMember);
     }
 }

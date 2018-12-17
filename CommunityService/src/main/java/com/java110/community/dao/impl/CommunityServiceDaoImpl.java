@@ -308,7 +308,7 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
      */
     public void saveBusinessCommunityMember(Map businessCommunityMember) throws DAOException{
         logger.debug("小区成员加入 入参 businessCommunityMember : {}",businessCommunityMember);
-
+        businessCommunityMember.put("month", DateUtil.getCurrentMonth());
         int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveBusinessCommunityMember",businessCommunityMember);
 
         if(saveFlag < 1){

@@ -244,7 +244,7 @@
     <!-- 小区成员加入 instance表中 add by wuxw 2018-10-27 -->
     <insert id="saveCommunityMemberInstance" parameterType="Map">
         insert into s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd)
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.memberTypeCd,'0'
+        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0'
         from business_community_member ms where
         ms.operate = 'ADD' and ms.b_id=#{bId}
     </insert>
@@ -253,7 +253,7 @@
     <select id="getBusinessCommunityMember" parameterType="Map" resultType="Map">
         select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate
         from business_community_member ms where 1 = 1
-        <if test="operate != null and operate != ''">,
+        <if test="operate != null and operate != ''">
             and ms.operate = #{operate}
         </if>
         <if test="bId != null and bId !=''">
@@ -268,16 +268,16 @@
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMember" parameterType="Map" resultType="Map">
         select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd
-        from business_community_member ms
+        from s_community_member ms
         where 1=1
         <if test="statusCd != null and statusCd != ''">
             and ms.status_cd = #{statusCd}
-        </if>,
+        </if>
 
         <if test="bId != null and bId !=''">
             and ms.b_id = #{bId}
         </if>
-        <if test="communityId != null and communityId !=''">
+        <if test="communityMemberId != null and communityMemberId !=''">
             and ms.community_member_id = #{communityMemberId}
         </if>
     </select>

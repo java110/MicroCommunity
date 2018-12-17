@@ -59,7 +59,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         if(data.containsKey("businessCommunityMember")){
             JSONObject memberCommunity = data.getJSONObject("businessCommunityMember");
             doBusinessCommunityMember(business,memberCommunity);
-            dataFlowContext.addParamOut("memberCommunityId",memberCommunity.getString("memberCommunityId"));
+            dataFlowContext.addParamOut("communityMemberId",memberCommunity.getString("communityMemberId"));
         }
 
     }
@@ -84,7 +84,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         if( businessCommunityMember != null && !businessCommunityMember.isEmpty()) {
             flushBusinessCommunityMember(businessCommunityMember,StatusConstant.STATUS_CD_INVALID);
             communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
-            dataFlowContext.addParamOut("memberCommunityId",businessCommunityMember.get("member_community_id"));
+            dataFlowContext.addParamOut("communityMemberId",businessCommunityMember.get("member_community_id"));
         }
     }
 
@@ -118,7 +118,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
 
             flushBusinessCommunityMember(businessCommunityMember,StatusConstant.STATUS_CD_VALID);
             communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
-            dataFlowContext.addParamOut("memberCommunityId",memberCommunity.get("member_community_id"));
+            dataFlowContext.addParamOut("communityMemberId",memberCommunity.get("member_community_id"));
         }
     }
 
@@ -131,10 +131,10 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
      */
     private void doBusinessCommunityMember(Business business,JSONObject businessCommunity){
 
-        Assert.jsonObjectHaveKey(businessCommunity,"memberCommunityId","doBusinessCommunityMember 节点下没有包含 memberCommunityId 节点");
+        Assert.jsonObjectHaveKey(businessCommunity,"communityMemberId","doBusinessCommunityMember 节点下没有包含 communityMemberId 节点");
 
-        if(businessCommunity.getString("memberCommunityId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"memberCommunityId 错误，不能自动生成（必须已经存在的memberCommunityId）"+businessCommunity);
+        if(businessCommunity.getString("communityMemberId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"communityMemberId 错误，不能自动生成（必须已经存在的communityMemberId）"+businessCommunity);
         }
         //自动插入DEL
         autoSaveDelBusinessCommunityMember(business,businessCommunity);
