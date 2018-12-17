@@ -71,6 +71,7 @@ public class GenerateCodeFactory {
         prefixMap.put("commentScoreId","64");
         prefixMap.put("communityId","70");
         prefixMap.put("communityPhotoId","71");
+        prefixMap.put("communityMemberId","72");
         prefixMap.put("agentId","80");
         prefixMap.put("agentIdPhotoId","81");
         prefixMap.put("agentCerdentialsId","82");
@@ -276,6 +277,18 @@ public class GenerateCodeFactory {
         return getCode(prefixMap.get("communityPhotoId"));
     }
 
+    /**
+     * 生成小区成员ID
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getCommunityMemberId() throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("communityMemberId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("communityMemberId"));
+    }
     /**
      * 获取小区ID
      * @return

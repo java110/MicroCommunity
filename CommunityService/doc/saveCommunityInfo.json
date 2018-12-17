@@ -1,0 +1,47 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "save.community.info",
+    "serviceName": "保存小区信息",
+    "remark": "备注",
+    "datas": {
+      "businessCommunity": {
+        "communityId": "-1",
+        "name": "方博家园",
+        "address": "青海省西宁市城中区129号",
+        "cityCode": "100010",
+        "nearbyLandmarks": "王府井旁30米",
+        "mapX": "101.801909",
+        "mapY": "36.597263"
+      },
+      "businessCommunityAttr": [{
+        "communityId": "-1",
+        "attrId":"-1",
+        "specCd":"1001",
+        "value":"01"
+      }],
+      "businessCommunityPhoto":[{
+        "communityPhotoId":"-1",
+        "communityId":"-1",
+        "communityPhotoTypeCd":"T",
+        "photo":"12345678.jpg"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}

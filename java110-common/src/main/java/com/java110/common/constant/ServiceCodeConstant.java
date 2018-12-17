@@ -224,6 +224,34 @@ public class ServiceCodeConstant {
 
 
 
+    /**
+     * 保存商户信息
+     */
+    public static final String SERVICE_CODE_SAVE_COMMUNITY_INFO = "save.community.info";
+
+    /**
+     * 修改商户信息
+     */
+    public static final String SERVICE_CODE_UPDATE_COMMUNITY_INFO = "update.community.info";
+
+    /**
+     * 删除商户信息
+     */
+    public static final String SERVICE_CODE_DELETE_COMMUNITY_INFO = "delete.community.info";
+
+
+    /**
+     * 商户成员加入信息
+     */
+    public static final String SERVICE_CODE_MEMBER_JOINED_COMMUNITY = "member.join.community";
+
+    /**
+     * 商户成员退出信息
+     */
+    public static final String SERVICE_CODE_MEMBER_QUIT_COMMUNITY = "member.quit.community";
+
+
+
 
 
 }

@@ -1,0 +1,12 @@
+version: '2'
+services:
+   communityserivce:
+       container_name: communityserivce-1
+       build:
+          context: .
+          dockerfile: Dockerfile
+       restart: always
+       ports:
+       - "8009:8009"
+       volumes:
+       - ../target/CommunityService.jar:/root/target/CommunityService.jar

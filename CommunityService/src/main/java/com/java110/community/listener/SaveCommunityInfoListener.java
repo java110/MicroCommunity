@@ -45,7 +45,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_STORE_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_SAVE_COMMUNITY_INFO;
     }
 
     /**
@@ -75,10 +75,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
             doBusinessCommunityPhoto(business,businessCommunityPhotos);
         }
 
-        if(data.containsKey("businessCommunityCerdentials")){
-            JSONArray businessCommunityCerdentialses = data.getJSONArray("businessCommunityCerdentials");
-            doBusinessCommunityCerdentials(business,businessCommunityCerdentialses);
-        }
+
     }
 
     /**
@@ -110,11 +107,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
         if(businessCommunityPhotos != null && businessCommunityPhotos.size() >0){
             communityServiceDaoImpl.saveCommunityPhotoInstance(info);
         }
-        //小区证件
-        List<Map> businessCommunityCerdentialses = communityServiceDaoImpl.getBusinessCommunityCerdentials(info);
-        if(businessCommunityCerdentialses != null && businessCommunityCerdentialses.size()>0){
-            communityServiceDaoImpl.saveCommunityCerdentialsInstance(info);
-        }
+
     }
 
     /**
@@ -152,11 +145,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
             communityServiceDaoImpl.updateCommunityPhotoInstance(paramIn);
         }
 
-        //小区属性
-        List<Map> communityCerdentialses = communityServiceDaoImpl.getCommunityCerdentials(info);
-        if(communityCerdentialses != null && communityCerdentialses.size()>0){
-            communityServiceDaoImpl.updateCommunityCerdentailsInstance(paramIn);
-        }
+
     }
 
     /**
@@ -230,38 +219,6 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
     }
 
 
-    /**
-     * 保存 小区证件 信息
-     * @param business 当前业务
-     * @param businessCommunityCerdentialses 小区证件
-     */
-    private void doBusinessCommunityCerdentials(Business business, JSONArray businessCommunityCerdentialses) {
-        for(int businessCommunityCerdentialsIndex = 0 ; businessCommunityCerdentialsIndex < businessCommunityCerdentialses.size() ; businessCommunityCerdentialsIndex ++) {
-            JSONObject businessCommunityCerdentials = businessCommunityCerdentialses.getJSONObject(businessCommunityCerdentialsIndex);
-            Assert.jsonObjectHaveKey(businessCommunityCerdentials, "communityId", "businessCommunityPhoto 节点下没有包含 communityId 节点");
-
-            if (businessCommunityCerdentials.getString("communityCerdentialsId").startsWith("-")) {
-                String communityPhotoId = "";//GenerateCodeFactory.getCommunityCerdentialsId();
-                businessCommunityCerdentials.put("communityCerdentialsId", communityPhotoId);
-            }
-            Date validityPeriod = null;
-            try {
-                if(StringUtil.isNullOrNone(businessCommunityCerdentials.getString("validityPeriod"))){
-                    validityPeriod = DateUtil.getLastDate();
-                }else {
-                    validityPeriod = DateUtil.getDateFromString(businessCommunityCerdentials.getString("validityPeriod"), DateUtil.DATE_FORMATE_STRING_B);
-                }
-            } catch (ParseException e) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 validityPeriod 格式不正确，请填写 "+DateUtil.DATE_FORMATE_STRING_B +" 格式，"+businessCommunityCerdentials);
-            }
-            businessCommunityCerdentials.put("validityPeriod",validityPeriod);
-            businessCommunityCerdentials.put("bId", business.getbId());
-            businessCommunityCerdentials.put("operate", StatusConstant.OPERATE_ADD);
-            //保存小区信息
-            communityServiceDaoImpl.saveBusinessCommunityCerdentials(businessCommunityCerdentials);
-        }
-    }
-
 
 
     /**
@@ -289,14 +246,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
                 businessCommunityPhoto.put("communityId", communityId);
             }
         }
-        //刷 小区证件 的communityId
-        if(data.containsKey("businessCommunityCerdentials")) {
-            JSONArray businessCommunityCerdentialses = data.getJSONArray("businessCommunityCerdentials");
-            for(int businessCommunityCerdentialsIndex = 0;businessCommunityCerdentialsIndex < businessCommunityCerdentialses.size();businessCommunityCerdentialsIndex++) {
-                JSONObject businessCommunityCerdentials = businessCommunityCerdentialses.getJSONObject(businessCommunityCerdentialsIndex);
-                businessCommunityCerdentials.put("communityId", communityId);
-            }
-        }
+
     }
 
 

@@ -46,7 +46,7 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_STORE_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_UPDATE_COMMUNITY_INFO;
     }
 
     /**
@@ -78,10 +78,7 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
             doBusinessCommunityPhoto(business,businessCommunityPhotos);
         }
 
-        if(data.containsKey("businessCommunityCerdentials")){
-            JSONArray businessCommunityCerdentialses = data.getJSONArray("businessCommunityCerdentials");
-            doBusinessCommunityCerdentials(business,businessCommunityCerdentialses);
-        }
+
     }
 
 
@@ -122,14 +119,7 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
                 communityServiceDaoImpl.updateCommunityPhotoInstance(businessCommunityPhoto);
             }
         }
-        //小区证件
-        List<Map> businessCommunityCerdentialses = communityServiceDaoImpl.getBusinessCommunityCerdentials(info);
-        if(businessCommunityCerdentialses != null && businessCommunityCerdentialses.size()>0){
-            for(Map businessCommunityCerdentials : businessCommunityCerdentialses) {
-                flushBusinessCommunityCredentials(businessCommunityCerdentials,StatusConstant.STATUS_CD_VALID);
-                communityServiceDaoImpl.updateCommunityCerdentailsInstance(businessCommunityCerdentials);
-            }
-        }
+
     }
 
     /**
@@ -193,19 +183,7 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
             }
         }
 
-        //小区属性
-        List<Map> communityCerdentialses = communityServiceDaoImpl.getCommunityCerdentials(info);
-        if(communityCerdentialses != null && communityCerdentialses.size()>0){
-            List<Map> businessCommunityCerdentialses = communityServiceDaoImpl.getBusinessCommunityCerdentials(delInfo);
-            //除非程序出错了，这里不会为空
-            if(businessCommunityCerdentialses == null || businessCommunityCerdentialses.size() ==0 ){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败(community_cerdentials)，程序内部异常,请检查！ "+delInfo);
-            }
-            for(Map businessCommunityCerdentials : businessCommunityCerdentialses) {
-                flushBusinessCommunityCredentials(businessCommunityCerdentials,StatusConstant.STATUS_CD_VALID);
-                communityServiceDaoImpl.updateCommunityCerdentailsInstance(businessCommunityCerdentials);
-            }
-        }
+
     }
 
     /**
@@ -285,29 +263,7 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
     }
 
 
-    /**
-     * 保存 小区证件 信息
-     * @param business 当前业务
-     * @param businessCommunityCerdentialses 小区证件
-     */
-    private void doBusinessCommunityCerdentials(Business business, JSONArray businessCommunityCerdentialses) {
 
-        for(int businessCommunityCerdentialsIndex = 0 ; businessCommunityCerdentialsIndex < businessCommunityCerdentialses.size() ; businessCommunityCerdentialsIndex ++) {
-            JSONObject businessCommunityCerdentials = businessCommunityCerdentialses.getJSONObject(businessCommunityCerdentialsIndex);
-            Assert.jsonObjectHaveKey(businessCommunityCerdentials, "communityId", "businessCommunityPhoto 节点下没有包含 communityId 节点");
-
-            if (businessCommunityCerdentials.getString("communityCerdentialsId").startsWith("-")) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"communityPhotoId 错误，不能自动生成（必须已经存在的communityPhotoId）"+businessCommunityCerdentials);
-            }
-
-            autoSaveDelBusinessCommunityCerdentials(business,businessCommunityCerdentials);
-
-            businessCommunityCerdentials.put("bId", business.getbId());
-            businessCommunityCerdentials.put("operate", StatusConstant.OPERATE_ADD);
-            //保存小区信息
-            communityServiceDaoImpl.saveBusinessCommunityCerdentials(businessCommunityCerdentials);
-        }
-    }
 
     public ICommunityServiceDao getCommunityServiceDaoImpl() {
         return communityServiceDaoImpl;

@@ -34,8 +34,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
     protected void flushBusinessCommunityInfo(Map businessCommunityInfo,String statusCd){
         businessCommunityInfo.put("newBId",businessCommunityInfo.get("b_id"));
         businessCommunityInfo.put("communityId",businessCommunityInfo.get("community_id"));
-        businessCommunityInfo.put("userId",businessCommunityInfo.get("user_id"));
-        businessCommunityInfo.put("communityTypeCd",businessCommunityInfo.get("community_type_cd"));
+        businessCommunityInfo.put("cityCode",businessCommunityInfo.get("city_code"));
         businessCommunityInfo.put("nearbyLandmarks",businessCommunityInfo.get("nearby_landmarks"));
         businessCommunityInfo.put("mapX",businessCommunityInfo.get("map_x"));
         businessCommunityInfo.put("mapY",businessCommunityInfo.get("map_y"));
@@ -69,33 +68,20 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         businessCommunityPhoto.put("statusCd",statusCd);
     }
 
-    /**
-     * 刷新 businessCommunityCerdentials 数据
-     * @param businessCommunityCerdentials
-     * @param statusCd
-     */
-    protected void flushBusinessCommunityCredentials(Map businessCommunityCerdentials ,String statusCd){
-        businessCommunityCerdentials.put("communityId",businessCommunityCerdentials.get("community_id"));
-        businessCommunityCerdentials.put("communityCerdentialsId",businessCommunityCerdentials.get("community_cerdentials_id"));
-        businessCommunityCerdentials.put("credentialsCd",businessCommunityCerdentials.get("credentials_cd"));
-        businessCommunityCerdentials.put("validityPeriod",businessCommunityCerdentials.get("validity_period"));
-        businessCommunityCerdentials.put("positivePhoto",businessCommunityCerdentials.get("positive_photo"));
-        businessCommunityCerdentials.put("negativePhoto",businessCommunityCerdentials.get("negative_photo"));
-        businessCommunityCerdentials.put("newBId",businessCommunityCerdentials.get("b_id"));
-        businessCommunityCerdentials.put("statusCd",statusCd);
-    }
+
 
     /**
-     * 刷新 businessMemberCommunity 数据
+     * 刷新 businessCommunityMember 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
-     * @param businessMemberCommunity
+     * @param businessCommunityMember
      */
-    protected void flushBusinessMemberCommunity(Map businessMemberCommunity,String statusCd){
-        businessMemberCommunity.put("newBId",businessMemberCommunity.get("b_id"));
-        businessMemberCommunity.put("communityId",businessMemberCommunity.get("community_id"));
-        businessMemberCommunity.put("memberCommunityId",businessMemberCommunity.get("member_community_id"));
-        businessMemberCommunity.put("memberId",businessMemberCommunity.get("member_id"));
-        businessMemberCommunity.put("statusCd", statusCd);
+    protected void flushBusinessCommunityMember(Map businessCommunityMember,String statusCd){
+        businessCommunityMember.put("newBId",businessCommunityMember.get("b_id"));
+        businessCommunityMember.put("communityId",businessCommunityMember.get("community_id"));
+        businessCommunityMember.put("communityMemberId",businessCommunityMember.get("community_member_id"));
+        businessCommunityMember.put("memberId",businessCommunityMember.get("member_id"));
+        businessCommunityMember.put("memberTypeCd",businessCommunityMember.get("member_type_cd"));
+        businessCommunityMember.put("statusCd", statusCd);
     }
 
     /**
@@ -113,8 +99,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         }
         currentCommunityInfo.put("bId",business.getbId());
         currentCommunityInfo.put("communityId",currentCommunityInfo.get("community_id"));
-        currentCommunityInfo.put("userId",currentCommunityInfo.get("user_id"));
-        currentCommunityInfo.put("communityTypeCd",currentCommunityInfo.get("community_type_cd"));
+        currentCommunityInfo.put("cityCode",currentCommunityInfo.get("city_code"));
         currentCommunityInfo.put("nearbyLandmarks",currentCommunityInfo.get("nearby_landmarks"));
         currentCommunityInfo.put("mapX",currentCommunityInfo.get("map_x"));
         currentCommunityInfo.put("mapY",currentCommunityInfo.get("map_y"));
@@ -168,52 +153,27 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         getCommunityServiceDaoImpl().saveBusinessCommunityPhoto(currentCommunityPhoto);
     }
 
-    /**
-     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
-     * @param business
-     * @param businessCommunityCerdentials 小区证件
-     */
-    protected void autoSaveDelBusinessCommunityCerdentials(Business business,JSONObject businessCommunityCerdentials){
-        Map info = new HashMap();
-        info.put("communityCerdentialsId",businessCommunityCerdentials.getString("communityCerdentialsId"));
-        info.put("communityId",businessCommunityCerdentials.getString("communityId"));
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        List<Map> currentCommunityCerdentailses = getCommunityServiceDaoImpl().getCommunityCerdentials(info);
-        if(currentCommunityCerdentailses == null || currentCommunityCerdentailses.size() != 1){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
-        }
-        Map currentCommunityCerdentials = currentCommunityCerdentailses.get(0);
-
-        currentCommunityCerdentials.put("bId",business.getbId());
-        currentCommunityCerdentials.put("communityCerdentialsId",currentCommunityCerdentials.get("community_cerdentials_id"));
-        currentCommunityCerdentials.put("communityId",currentCommunityCerdentials.get("community_id"));
-        currentCommunityCerdentials.put("credentialsCd",currentCommunityCerdentials.get("credentials_cd"));
-        currentCommunityCerdentials.put("validityPeriod",currentCommunityCerdentials.get("validity_period"));
-        currentCommunityCerdentials.put("positivePhoto",currentCommunityCerdentials.get("positive_photo"));
-        currentCommunityCerdentials.put("negativePhoto",currentCommunityCerdentials.get("negative_photo"));
-        currentCommunityCerdentials.put("operate",StatusConstant.OPERATE_DEL);
-        getCommunityServiceDaoImpl().saveBusinessCommunityCerdentials(currentCommunityCerdentials);
-    }
 
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
-     * @param businessMemberCommunity 小区信息
+     * @param businessCommunityMember 小区信息
      */
-    protected void autoSaveDelBusinessMemberCommunity(Business business, JSONObject businessMemberCommunity){
+    protected void autoSaveDelBusinessCommunityMember(Business business, JSONObject businessCommunityMember){
 //自动插入DEL
         Map info = new HashMap();
-        info.put("memberCommunityId",businessMemberCommunity.getString("memberCommunityId"));
+        info.put("communityMemberId",businessCommunityMember.getString("communityMemberId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        Map currentMemberCommunity = getCommunityServiceDaoImpl().getMemberCommunity(info);
-        if(currentMemberCommunity == null || currentMemberCommunity.isEmpty()){
+        Map currentCommunityMember = getCommunityServiceDaoImpl().getCommunityMember(info);
+        if(currentCommunityMember == null || currentCommunityMember.isEmpty()){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
-        currentMemberCommunity.put("bId",business.getbId());
-        currentMemberCommunity.put("communityId",currentMemberCommunity.get("community_id"));
-        currentMemberCommunity.put("memberCommunityId",currentMemberCommunity.get("member_community_id"));
-        currentMemberCommunity.put("memberId",currentMemberCommunity.get("member_id"));
-        currentMemberCommunity.put("operate",StatusConstant.OPERATE_DEL);
-        getCommunityServiceDaoImpl().saveBusinessCommunityInfo(currentMemberCommunity);
+        currentCommunityMember.put("bId",business.getbId());
+        currentCommunityMember.put("communityId",currentCommunityMember.get("community_id"));
+        currentCommunityMember.put("communityMemberId",currentCommunityMember.get("community_member_id"));
+        currentCommunityMember.put("memberId",currentCommunityMember.get("member_id"));
+        currentCommunityMember.put("memberTypeCd",currentCommunityMember.get("member_type_cd"));
+        currentCommunityMember.put("operate",StatusConstant.OPERATE_DEL);
+        getCommunityServiceDaoImpl().saveBusinessCommunityInfo(currentCommunityMember);
     }
 }

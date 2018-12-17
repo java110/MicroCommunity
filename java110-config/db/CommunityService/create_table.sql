@@ -90,7 +90,8 @@ create table business_community_member(
     community_member_id varchar(30) not null comment 'ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     community_id VARCHAR(30) NOT NULL COMMENT '小区ID',
-    member_id varchar(50) not null  comment '商户成员ID',
+    member_id varchar(50) not null  comment '成员ID',
+    member_type_cd varchar(12) not null comment '成员类型见 community_member_type表',
     `month` INT NOT NULL comment '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -164,10 +165,19 @@ create table s_community_member(
     community_member_id varchar(30) not null comment 'ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     community_id VARCHAR(30) NOT NULL COMMENT '小区ID',
-    member_id varchar(50) not null  comment '商户成员ID',
+    member_id varchar(50) not null  comment '成员ID',
+    member_type_cd varchar(12) not null comment '成员类型见 community_member_type表',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
     unique KEY (community_member_id)
-)
+);
 CREATE INDEX idx_s_community_member_id ON s_community_member(community_id);
 CREATE INDEX idx_s_community_member_b_id ON s_community_member(b_id);
+
+create table  community_member_type(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    member_type_cd VARCHAR(12) NOT NULL UNIQUE COMMENT '编码',
+    `name` VARCHAR(50) NOT NULL COMMENT '名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);

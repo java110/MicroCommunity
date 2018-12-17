@@ -197,16 +197,7 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         }
     }
 
-    @Override
-    public void saveCommunityCerdentialsInstance(Map info) throws DAOException {
-        logger.debug("保存小区证件信息Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveCommunityCerdentialsInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存小区证件信息Instance数据失败："+ JSONObject.toJSONString(info));
-        }
-    }
 
     /**
      * 查询小区信息（instance）
@@ -259,20 +250,7 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         return communityPhotos;
     }
 
-    /**
-     * 小区证件查询（instance）
-     * @param info bId 信息
-     * @return
-     * @throws DAOException
-     */
-    @Override
-    public List<Map> getCommunityCerdentials(Map info) throws DAOException {
-        logger.debug("查询小区证件信息 入参 info : {}",info);
 
-        List<Map> communityCerdentialses = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityCerdentials",info);
-
-        return communityCerdentialses;
-    }
 
     /**
      * 修改小区信息
@@ -322,34 +300,19 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         }
     }
 
-    /**
-     * 修改小区证件信息
-     * @param info 修改信息
-     * @throws DAOException
-     */
-    @Override
-    public void updateCommunityCerdentailsInstance(Map info) throws DAOException {
-        logger.debug("修改小区证件信息Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.update("communityServiceDaoImpl.updateCommunityCerdentailsInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改小区证件信息Instance数据失败："+ JSONObject.toJSONString(info));
-        }
-    }
 
     /**
      * 小区成员加入信息
-     * @param businessMemberCommunity 小区成员信息 封装
+     * @param businessCommunityMember 小区成员信息 封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessMemberCommunity(Map businessMemberCommunity) throws DAOException{
-        logger.debug("小区成员加入 入参 businessMemberCommunity : {}",businessMemberCommunity);
+    public void saveBusinessCommunityMember(Map businessCommunityMember) throws DAOException{
+        logger.debug("小区成员加入 入参 businessCommunityMember : {}",businessCommunityMember);
 
-        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveBusinessMemberCommunity",businessMemberCommunity);
+        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveBusinessCommunityMember",businessCommunityMember);
 
         if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"小区成员加入失败："+ JSONObject.toJSONString(businessMemberCommunity));
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"小区成员加入失败："+ JSONObject.toJSONString(businessCommunityMember));
         }
     }
 
@@ -359,10 +322,10 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
      * @throws DAOException
      */
     @Override
-    public void saveMemberCommunityInstance(Map info) throws DAOException {
+    public void saveCommunityMemberInstance(Map info) throws DAOException {
         logger.debug("小区成员加入Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveMemberCommunityInstance",info);
+        int saveFlag = sqlSessionTemplate.insert("communityServiceDaoImpl.saveCommunityMemberInstance",info);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存小区照片信息Instance数据失败："+ JSONObject.toJSONString(info));
@@ -376,18 +339,18 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
      * @return 小区信息
      * @throws DAOException
      */
-    public Map getBusinessMemberCommunity(Map info) throws DAOException{
+    public Map getBusinessCommunityMember(Map info) throws DAOException{
         logger.debug("查询小区成员加入信息 入参 info : {}",info);
 
-        List<Map> businessMemberCommunitys = sqlSessionTemplate.selectList("communityServiceDaoImpl.getBusinessMemberCommunity",info);
-        if(businessMemberCommunitys == null || businessMemberCommunitys.size() == 0){
+        List<Map> businessCommunityMembers = sqlSessionTemplate.selectList("communityServiceDaoImpl.getBusinessCommunityMember",info);
+        if(businessCommunityMembers == null || businessCommunityMembers.size() == 0){
             return null;
         }
-        if(businessMemberCommunitys.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessMemberCommunity，"+ JSONObject.toJSONString(info));
+        if(businessCommunityMembers.size() >1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessCommunityMember，"+ JSONObject.toJSONString(info));
         }
 
-        return businessMemberCommunitys.get(0);
+        return businessCommunityMembers.get(0);
     }
 
     /**
@@ -397,15 +360,15 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
      * @return 小区信息
      * @throws DAOException
      */
-    public Map getMemberCommunity(Map info) throws DAOException{
+    public Map getCommunityMember(Map info) throws DAOException{
         logger.debug("查询小区成员加入信息 入参 info : {}",info);
 
-        List<Map> memberCommunitys = sqlSessionTemplate.selectList("communityServiceDaoImpl.getMemberCommunity",info);
+        List<Map> memberCommunitys = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityMember",info);
         if(memberCommunitys == null || memberCommunitys.size() == 0){
             return null;
         }
         if(memberCommunitys.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getMemberCommunity，"+ JSONObject.toJSONString(info));
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getCommunityMember，"+ JSONObject.toJSONString(info));
         }
 
         return memberCommunitys.get(0);
@@ -415,10 +378,10 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateMemberCommunityInstance(Map info) throws DAOException{
+    public void updateCommunityMemberInstance(Map info) throws DAOException{
         logger.debug("修改小区成员加入信息Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("communityServiceDaoImpl.updateMemberCommunityInstance",info);
+        int saveFlag = sqlSessionTemplate.update("communityServiceDaoImpl.updateCommunityMemberInstance",info);
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改小区成员加入信息Instance数据失败："+ JSONObject.toJSONString(info));

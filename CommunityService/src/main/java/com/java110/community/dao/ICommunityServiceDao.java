@@ -103,12 +103,7 @@ public interface ICommunityServiceDao {
     public void saveCommunityPhotoInstance(Map info) throws DAOException;
 
 
-    /**
-     * 保存 小区证件信息 Business数据到 Instance中
-     * @param info
-     * @throws DAOException
-     */
-    public void saveCommunityCerdentialsInstance(Map info) throws DAOException;
+
 
 
 
@@ -139,13 +134,7 @@ public interface ICommunityServiceDao {
      */
     public List<Map> getCommunityPhoto(Map info) throws DAOException;
 
-    /**
-     * 查询小区证件信息（instance 过程）
-     * @param info bId 信息
-     * @return 小区照片
-     * @throws DAOException
-     */
-    public List<Map> getCommunityCerdentials(Map info) throws DAOException;
+
 
     /**
      * 修改小区信息
@@ -170,27 +159,22 @@ public interface ICommunityServiceDao {
      */
     public void updateCommunityPhotoInstance(Map info) throws DAOException;
 
-    /**
-     * 修改小区证件信息
-     * @param info 修改信息
-     * @throws DAOException
-     */
-    public void updateCommunityCerdentailsInstance(Map info) throws DAOException;
+    
 
 
     /**
      * 小区成员加入信息
-     * @param businessMemberCommunity 小区成员信息 封装
+     * @param businessCommunityMember 小区成员信息 封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessMemberCommunity(Map businessMemberCommunity) throws DAOException;
+    public void saveBusinessCommunityMember(Map businessCommunityMember) throws DAOException;
 
     /**
      * 成员加入 保存信息至instance
      * @param info
      * @throws DAOException
      */
-    public void saveMemberCommunityInstance(Map info) throws DAOException;
+    public void saveCommunityMemberInstance(Map info) throws DAOException;
 
     /**
      * 查询小区成员加入信息（business过程）
@@ -199,7 +183,7 @@ public interface ICommunityServiceDao {
      * @return 小区信息
      * @throws DAOException
      */
-    public Map getBusinessMemberCommunity(Map info) throws DAOException;
+    public Map getBusinessCommunityMember(Map info) throws DAOException;
 
     /**
      * 查询小区成员加入信息（instance过程）
@@ -208,13 +192,13 @@ public interface ICommunityServiceDao {
      * @return 小区信息
      * @throws DAOException
      */
-    public Map getMemberCommunity(Map info) throws DAOException;
+    public Map getCommunityMember(Map info) throws DAOException;
 
     /**
      * 修改小区成员加入信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateMemberCommunityInstance(Map info) throws DAOException;
+    public void updateCommunityMemberInstance(Map info) throws DAOException;
 
 }

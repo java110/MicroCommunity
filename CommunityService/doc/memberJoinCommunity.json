@@ -1,0 +1,32 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "member.join.community",
+    "serviceName": "小区成员加入",
+    "remark": "备注",
+    "datas": {
+      "businessCommunityMember": {
+        "communityMemberId": "-1",
+        "communityId": "123456",
+        "memberId": "345678",
+        "memberTypeCd": "390001200001"
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}
