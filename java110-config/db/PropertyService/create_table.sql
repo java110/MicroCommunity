@@ -120,7 +120,47 @@ CREATE TABLE business_property_user(
     property_user_id VARCHAR(30) NOT NULL COMMENT '物业用户ID',
     property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',,
+    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    `month` INT NOT NULL COMMENT '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+);
+
+-- 物业费 停车费
+CREATE TABLE business_property_fee(
+    fee_id VARCHAR(30) NOT NULL COMMENT 'ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
+    fee_type_cd VARCHAR(10) NOT NULL COMMENT '费用类型,物业费，停车费 请查看property_fee_type表',
+    fee_money VARCHAR(20) NOT NULL COMMENT '费用金额',
+    fee_time VARCHAR(10) NOT NULL COMMENT '费用周期，一个月，半年，或一年 请查看property_fee_time表',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    start_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+    end_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
+    `month` INT NOT NULL COMMENT '月份',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+);
+
+CREATE TABLE business_property_house(
+    house_id VARCHAR(30) NOT NULL COMMENT 'ID',
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+    house_num VARCHAR(30) NOT NULL COMMENT '门牌号',
+    house_name VARCHAR(50) NOT NULL COMMENT '住户名称',
+    house_phone VARCHAR(11) COMMENT '住户联系号码',
+    house_area VARCHAR(30) NOT NULL COMMENT '房屋面积',
+    fee_type_cd VARCHAR(10) NOT NULL COMMENT '费用类型 property_fee_type表',
+    fee_price VARCHAR(30) NOT NULL COMMENT '费用单价',
+    `month` INT NOT NULL COMMENT '月份',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+);
+
+CREATE TABLE business_property_house_attr(
+    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
+    house_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
+    VALUE VARCHAR(50) NOT NULL COMMENT '属性值',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -197,7 +237,7 @@ CREATE TABLE p_property_user(
     property_user_id VARCHAR(30) NOT NULL COMMENT '物业用户ID',
     property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',,
+    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
@@ -208,7 +248,6 @@ CREATE TABLE p_property_fee(
     fee_id VARCHAR(30) NOT NULL COMMENT 'ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
-    user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     fee_type_cd VARCHAR(10) NOT NULL COMMENT '费用类型,物业费，停车费 请查看property_fee_type表',
     fee_money VARCHAR(20) NOT NULL COMMENT '费用金额',
     fee_time VARCHAR(10) NOT NULL COMMENT '费用周期，一个月，半年，或一年 请查看property_fee_time表',
@@ -222,6 +261,7 @@ CREATE INDEX idx_property_fee_fee_id ON p_property_fee(fee_id);
 CREATE INDEX idx_property_fee_b_id ON p_property_fee(b_id);
 
 CREATE TABLE p_property_house(
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     house_id VARCHAR(30) NOT NULL COMMENT 'ID',
     house_num VARCHAR(30) NOT NULL COMMENT '门牌号',
     house_name VARCHAR(50) NOT NULL COMMENT '住户名称',
@@ -229,14 +269,13 @@ CREATE TABLE p_property_house(
     house_area VARCHAR(30) NOT NULL COMMENT '房屋面积',
     fee_type_cd VARCHAR(10) NOT NULL COMMENT '费用类型 property_fee_type表',
     fee_price VARCHAR(30) NOT NULL COMMENT '费用单价',
-    user_id VARCHAR(10) NOT NULL COMMENT '录入人',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
     UNIQUE KEY (house_id)
 );
 
 CREATE TABLE p_property_house_attr(
+    b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
     house_id VARCHAR(30) NOT NULL COMMENT '用户ID',
     spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',

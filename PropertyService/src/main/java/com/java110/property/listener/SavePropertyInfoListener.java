@@ -45,7 +45,7 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_STORE_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_SAVE_PROPERTY_INFO;
     }
 
     /**

@@ -1,0 +1,12 @@
+version: '2'
+services:
+   propertyserivce:
+       container_name: propertyserivce-1
+       build:
+          context: .
+          dockerfile: Dockerfile
+       restart: always
+       ports:
+       - "8009:8009"
+       volumes:
+       - ../target/PropertyService.jar:/root/target/PropertyService.jar

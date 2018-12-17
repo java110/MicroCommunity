@@ -2,7 +2,6 @@ package com.java110.property.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.property.dao.IPropertyServiceDao;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
@@ -11,6 +10,7 @@ import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.property.dao.IPropertyServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,11 @@ import java.util.Map;
  * 协议地址 ：https://github.com/java110/MicroCommunity/wiki/%E4%BF%AE%E6%94%B9%E5%95%86%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8D%8F%E8%AE%AE
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("updatePropertyInfoListener")
+@Java110Listener("updatePropertyPhotoListener")
 @Transactional
-public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceDataFlowListener {
+public class UpdatePropertyPhotoListener extends AbstractPropertyBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(UpdatePropertyInfoListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(UpdatePropertyPhotoListener.class);
     @Autowired
     IPropertyServiceDao propertyServiceDaoImpl;
 
@@ -46,7 +46,7 @@ public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceD
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_INFO;
+        return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_PHOTO;
     }
 
     /**

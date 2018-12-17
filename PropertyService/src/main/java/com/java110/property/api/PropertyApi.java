@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用户服务类
+ * 物业服务类
  * Created by wuxw on 2018/5/14.
  */
 @RestController
@@ -34,7 +34,7 @@ public class PropertyApi extends BaseController {
     }
 
     /**
-     * 用户服务统一处理接口
+     * 物业服务统一处理接口
      * @param orderInfo
      * @param request
      * @return

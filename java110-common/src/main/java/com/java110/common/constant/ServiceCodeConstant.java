@@ -251,6 +251,23 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_MEMBER_QUIT_COMMUNITY = "member.quit.community";
 
 
+    public static final String SERVICE_CODE_SAVE_PROPERTY_INFO = "save.property.info";
+    public static final String SERVICE_CODE_SAVE_PROPERTY_PHOTO = "save.property.photo";
+    public static final String SERVICE_CODE_SAVE_PROPERTY_CERDENTIALS = "save.property.cerdentials";
+    public static final String SERVICE_CODE_SAVE_PROPERTY_USER = "save.property.user";
+    public static final String SERVICE_CODE_SAVE_PROPERTY_FEE = "save.property.fee";
+    public static final String SERVICE_CODE_SAVE_PROPERTY_HOUSE = "save.property.house";
+    public static final String SERVICE_CODE_UPDATE_PROPERTY_INFO = "update.property.info";
+    public static final String SERVICE_CODE_UPDATE_PROPERTY_PHOTO = "update.property.photo";
+    public static final String SERVICE_CODE_UPDATE_PROPERTY_CERDENTIALS = "update.property.cerdentials";
+    public static final String SERVICE_CODE_UPDATE_PROPERTY_FEE = "update.property.fee";
+    public static final String SERVICE_CODE_UPDATE_PROPERTY_HOUSE = "update.property.house";
+    public static final String SERVICE_CODE_DELETE_PROPERTY_PHOTO = "delete.property.photo";
+    public static final String SERVICE_CODE_DELETE_PROPERTY_CERDENTIALS = "delete.property.cerdentials";
+    public static final String SERVICE_CODE_DELETE_PROPERTY_USER = "delete.property.user";
+    public static final String SERVICE_CODE_DELETE_PROPERTY_HOUSE = "delete.property.house";
+
+
 
 
 
