@@ -44,6 +44,14 @@ public interface IPropertyServiceDao {
      */
     public void saveBusinessPropertyCerdentials(Map businessPropertyCerdentials) throws DAOException;
 
+
+    /**
+     * 保存物业用户信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessPropertyUser(Map info) throws DAOException;
+
     /**
      * 查询物业信息（business过程）
      * 根据bId 查询物业信息
@@ -81,6 +89,13 @@ public interface IPropertyServiceDao {
     public List<Map> getBusinessPropertyCerdentials(Map info) throws DAOException;
 
     /**
+     * 查询物业用户信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessPropertyUser(Map info) throws DAOException;
+    /**
      * 保存 物业信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
@@ -109,6 +124,14 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public void savePropertyCerdentialsInstance(Map info) throws DAOException;
+
+
+    /**
+     * 保存 物业用户信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyUserInstance(Map info) throws DAOException;
 
 
 
@@ -148,6 +171,14 @@ public interface IPropertyServiceDao {
     public List<Map> getPropertyCerdentials(Map info) throws DAOException;
 
     /**
+     * 查询物业用户信息（instance 过程）
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getPropertyUser(Map info) throws DAOException;
+
+    /**
      * 修改物业信息
      * @param info 修改信息
      * @throws DAOException
@@ -179,42 +210,12 @@ public interface IPropertyServiceDao {
 
 
     /**
-     * 物业成员加入信息
-     * @param businessMemberProperty 物业成员信息 封装
-     * @throws DAOException 操作数据库异常
-     */
-    public void saveBusinessMemberProperty(Map businessMemberProperty) throws DAOException;
-
-    /**
-     * 成员加入 保存信息至instance
-     * @param info
-     * @throws DAOException
-     */
-    public void saveMemberPropertyInstance(Map info) throws DAOException;
-
-    /**
-     * 查询物业成员加入信息（business过程）
-     * 根据bId 查询物业信息
-     * @param info bId 信息
-     * @return 物业信息
-     * @throws DAOException
-     */
-    public Map getBusinessMemberProperty(Map info) throws DAOException;
-
-    /**
-     * 查询物业成员加入信息（instance过程）
-     * 根据bId 查询物业信息
-     * @param info bId 信息
-     * @return 物业信息
-     * @throws DAOException
-     */
-    public Map getMemberProperty(Map info) throws DAOException;
-
-    /**
-     * 修改物业成员加入信息
+     * 修改物业用户信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateMemberPropertyInstance(Map info) throws DAOException;
+    public void updatePropertyUserInstance(Map info) throws DAOException;
+
+
 
 }

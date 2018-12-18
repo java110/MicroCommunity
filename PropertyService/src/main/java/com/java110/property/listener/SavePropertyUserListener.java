@@ -59,26 +59,13 @@ public class SavePropertyUserListener extends AbstractPropertyBusinessServiceDat
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessProperty 节点
-        if(data.containsKey("businessProperty")){
-            JSONObject businessProperty = data.getJSONObject("businessProperty");
-            doBusinessProperty(business,businessProperty);
-            dataFlowContext.addParamOut("propertyId",businessProperty.getString("propertyId"));
+        if(!data.containsKey("businessPropertyUser")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"没有businessPropertyUser节点");
         }
 
-        if(data.containsKey("businessPropertyAttr")){
-            JSONArray businessPropertyAttrs = data.getJSONArray("businessPropertyAttr");
-            doSaveBusinessPropertyAttrs(business,businessPropertyAttrs);
-        }
 
-        if(data.containsKey("businessPropertyPhoto")){
-            JSONArray businessPropertyPhotos = data.getJSONArray("businessPropertyPhoto");
-            doBusinessPropertyPhoto(business,businessPropertyPhotos);
-        }
-
-        if(data.containsKey("businessPropertyCerdentials")){
-            JSONArray businessPropertyCerdentialses = data.getJSONArray("businessPropertyCerdentials");
-            doBusinessPropertyCerdentials(business,businessPropertyCerdentialses);
-        }
+        JSONArray businessPropertyUsers = data.getJSONArray("businessPropertyUser");
+        doBusinessPropertyUser(business,businessPropertyUsers);
     }
 
     /**
@@ -94,26 +81,10 @@ public class SavePropertyUserListener extends AbstractPropertyBusinessServiceDat
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
 
-        //物业信息
-        Map businessPropertyInfo = propertyServiceDaoImpl.getBusinessPropertyInfo(info);
-        if( businessPropertyInfo != null && !businessPropertyInfo.isEmpty()) {
-            propertyServiceDaoImpl.savePropertyInfoInstance(info);
-            dataFlowContext.addParamOut("propertyId",businessPropertyInfo.get("property_id"));
-        }
-        //物业属性
-        List<Map> businessPropertyAttrs = propertyServiceDaoImpl.getBusinessPropertyAttrs(info);
-        if(businessPropertyAttrs != null && businessPropertyAttrs.size() > 0) {
-            propertyServiceDaoImpl.savePropertyAttrsInstance(info);
-        }
-        //物业照片
-        List<Map> businessPropertyPhotos = propertyServiceDaoImpl.getBusinessPropertyPhoto(info);
-        if(businessPropertyPhotos != null && businessPropertyPhotos.size() >0){
-            propertyServiceDaoImpl.savePropertyPhotoInstance(info);
-        }
-        //物业证件
-        List<Map> businessPropertyCerdentialses = propertyServiceDaoImpl.getBusinessPropertyCerdentials(info);
-        if(businessPropertyCerdentialses != null && businessPropertyCerdentialses.size()>0){
-            propertyServiceDaoImpl.savePropertyCerdentialsInstance(info);
+        //物业用户
+        List<Map> businessPropertyUsers = propertyServiceDaoImpl.getBusinessPropertyUser(info);
+        if(businessPropertyUsers != null && businessPropertyUsers.size() >0){
+            propertyServiceDaoImpl.savePropertyUserInstance(info);
         }
     }
 
@@ -132,73 +103,36 @@ public class SavePropertyUserListener extends AbstractPropertyBusinessServiceDat
         Map paramIn = new HashMap();
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-        //物业信息
-        Map propertyInfo = propertyServiceDaoImpl.getPropertyInfo(info);
-        if(propertyInfo != null && !propertyInfo.isEmpty()){
-            paramIn.put("propertyId",propertyInfo.get("property_id").toString());
-            propertyServiceDaoImpl.updatePropertyInfoInstance(paramIn);
-            dataFlowContext.addParamOut("propertyId",propertyInfo.get("property_id"));
-        }
-
-        //物业属性
-        List<Map> propertyAttrs = propertyServiceDaoImpl.getPropertyAttrs(info);
-        if(propertyAttrs != null && propertyAttrs.size()>0){
-            propertyServiceDaoImpl.updatePropertyAttrInstance(paramIn);
-        }
-
         //物业照片
-        List<Map> propertyPhotos = propertyServiceDaoImpl.getPropertyPhoto(info);
-        if(propertyPhotos != null && propertyPhotos.size()>0){
-            propertyServiceDaoImpl.updatePropertyPhotoInstance(paramIn);
-        }
-
-        //物业属性
-        List<Map> propertyCerdentialses = propertyServiceDaoImpl.getPropertyCerdentials(info);
-        if(propertyCerdentialses != null && propertyCerdentialses.size()>0){
-            propertyServiceDaoImpl.updatePropertyCerdentailsInstance(paramIn);
+        List<Map> propertyUsers = propertyServiceDaoImpl.getPropertyUser(info);
+        if(propertyUsers != null && propertyUsers.size()>0){
+            propertyServiceDaoImpl.updatePropertyUserInstance(paramIn);
         }
     }
 
-    /**
-     * 保存物业照片
-     * @param business 业务对象
-     * @param businessPropertyPhotos 物业照片
-     */
-    private void doBusinessPropertyPhoto(Business business, JSONArray businessPropertyPhotos) {
-
-        for(int businessPropertyPhotoIndex = 0 ;businessPropertyPhotoIndex < businessPropertyPhotos.size();businessPropertyPhotoIndex++) {
-            JSONObject businessPropertyPhoto = businessPropertyPhotos.getJSONObject(businessPropertyPhotoIndex);
-            Assert.jsonObjectHaveKey(businessPropertyPhoto, "propertyId", "businessPropertyPhoto 节点下没有包含 propertyId 节点");
-
-            if (businessPropertyPhoto.getString("propertyPhotoId").startsWith("-")) {
-                String propertyPhotoId = GenerateCodeFactory.getPropertyPhotoId();
-                businessPropertyPhoto.put("propertyPhotoId", propertyPhotoId);
-            }
-            businessPropertyPhoto.put("bId", business.getbId());
-            businessPropertyPhoto.put("operate", StatusConstant.OPERATE_ADD);
-            //保存物业信息
-            propertyServiceDaoImpl.saveBusinessPropertyPhoto(businessPropertyPhoto);
-        }
-    }
 
     /**
      * 处理 businessProperty 节点
      * @param business 总的数据节点
-     * @param businessProperty 物业节点
+     * @param businessPropertyUsers 物业用户节点
      */
-    private void doBusinessProperty(Business business,JSONObject businessProperty){
+    private void doBusinessPropertyUser(Business business,JSONArray businessPropertyUsers){
 
-        Assert.jsonObjectHaveKey(businessProperty,"propertyId","businessProperty 节点下没有包含 propertyId 节点");
 
-        if(businessProperty.getString("propertyId").startsWith("-")){
-            //刷新缓存
-            flushPropertyId(business.getDatas());
+        for(int businessPropertyUserIndex = 0 ;businessPropertyUserIndex < businessPropertyUsers.size();businessPropertyUserIndex++) {
+            JSONObject businessPropertyUser = businessPropertyUsers.getJSONObject(businessPropertyUserIndex);
+            Assert.jsonObjectHaveKey(businessPropertyUser,"propertyId","businessPropertyUser 节点下没有包含 propertyId 节点");
+            Assert.jsonObjectHaveKey(businessPropertyUser,"userId","businessPropertyUser 节点下没有包含 userId 节点");
+
+            if(businessPropertyUser.getString("propertyUserId").startsWith("-")){
+                String propertyUserId = GenerateCodeFactory.getPropertyUserId();
+                businessPropertyUser.put("propertyUserId", propertyUserId);
+            }
+            businessPropertyUser.put("bId",business.getbId());
+            businessPropertyUser.put("operate", StatusConstant.OPERATE_ADD);
+            //保存物业信息
+            propertyServiceDaoImpl.saveBusinessPropertyUser(businessPropertyUser);
         }
-
-        businessProperty.put("bId",business.getbId());
-        businessProperty.put("operate", StatusConstant.OPERATE_ADD);
-        //保存物业信息
-        propertyServiceDaoImpl.saveBusinessPropertyInfo(businessProperty);
 
     }
 

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="propertyServiceDaoImpl">
+    
+    <!-- 保存商户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyInfo" parameterType="Map">
+        insert into business_property(property_id,b_id,name,address,tel,nearby_landmarks,map_x,map_y,month,operate)
+        values(#{propertyId},#{bId},#{name},#{address},#{tel},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
+    </insert>
+    <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyAttr" parameterType="Map">
+        insert into business_property_attr(b_id,attr_id,property_id,spec_cd,value,month,operate)
+        values(#{bId},#{attrId},#{propertyId},#{specCd},#{value},#{month},#{operate})
+    </insert>
+    <!-- 保存商户照片信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyPhoto" parameterType="Map">
+        insert into business_property_photo(property_photo_id,b_id,property_id,property_photo_type_cd,photo,month,operate)
+        values(#{propertyPhotoId},#{bId},#{propertyId},#{propertyPhotoTypeCd},#{photo},#{month},#{operate})
+    </insert>
+    <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyCerdentials" parameterType="Map">
+        insert into business_property_cerdentials(property_cerdentials_id,b_id,property_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
+        values(#{propertyCerdentialsId},#{bId},#{propertyId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{month},#{operate})
+    </insert>
+
+    <!-- 保存物业用户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyUser" parameterType="Map">
+        insert into business_property_user(property_user_id,b_id,property_id,user_id,rel_cd,month,operate)
+        values(#{propertyUserId},#{bId},#{propertyId},#{userId},#{relCd},#{month},#{operate})
+    </insert>
+
+    <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyInfo" parameterType="Map" resultType="Map">
+        select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        from business_property s where 1 = 1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and s.property_id = #{propertyId}
+        </if>
+    </select>
+
+
+    <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.operate
+        from business_property_attr sa where 1=1
+        <if test="operate != null and operate != ''">
+            and sa.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and sa.property_id = #{propertyId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyPhoto" parameterType="Map" resultType="Map">
+        select sp.property_photo_id,sp.b_id,sp.property_id,sp.property_photo_type_cd,sp.photo,sp.operate
+        from business_property_photo sp where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sp.operate = #{operate}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and sp.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 查询商户 证件信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyCerdentials" parameterType="Map" resultType="Map">
+        select sc.property_cerdentials_id,sc.b_id,sc.property_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.operate
+        from business_property_cerdentials sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 查询物业 用户信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyUser" parameterType="Map" resultType="Map">
+        select sc.property_user_id,sc.b_id,sc.property_id,sc.user_id,sc.rel_cd,sc.operate
+        from business_property_user sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 保存商户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="savePropertyInfoInstance" parameterType="Map">
+        insert into p_property(property_id,b_id,name,address,tel,nearby_landmarks,map_x,map_y,status_cd)
+        select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,'0'
+        from business_property s where 
+        s.operate = 'ADD' and s.b_id=#{bId}
+    </insert>
+
+    <!-- 保存商户属性信息到 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyAttrsInstance" parameterType="Map">
+        insert into p_property_attr(b_id,attr_id,property_id,spec_cd,value,status_cd)
+        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,'0'
+        from business_property_attr sa
+        where sa.operate = 'ADD' and sa.b_id=#{bId}
+    </insert>
+    
+    <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyPhotoInstance" parameterType="Map">
+        insert into p_property_photo(property_photo_id,b_id,property_id,property_photo_type_cd,photo,status_cd)
+        select sp.property_photo_id,sp.b_id,sp.property_id,sp.property_photo_type_cd,sp.photo,'0'
+        from business_property_photo sp
+        where  sp.operate = 'ADD' and sp.b_id=#{bId}
+    </insert>
+    <!-- 保存 商户证件信息 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyCerdentialsInstance" parameterType="Map">
+        insert into p_property_cerdentials(property_cerdentials_id,b_id,property_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
+        select sc.property_cerdentials_id,sc.b_id,sc.property_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
+        from business_property_cerdentials sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyUserInstance" parameterType="Map">
+        insert into p_property_user(property_user_id,b_id,property_id,user_id,rel_cd,status_cd)
+        select sc.property_user_id,sc.b_id,sc.property_id,sc.user_id,sc.rel_cd,'0'
+        from business_property_user sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 查询商户信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyInfo" parameterType="Map" resultType="Map">
+        select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        from p_property s
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and s.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and s.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.status_cd
+        from p_property_attr sa
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sa.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sa.property_id = #{propertyId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyPhoto" parameterType="Map" resultType="Map">
+        select sp.property_photo_id,sp.b_id,sp.property_id,sp.property_photo_type_cd,sp.photo,sp.status_cd
+        from p_property_photo sp
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sp.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sp.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyCerdentials" parameterType="Map" resultType="Map">
+        select sc.property_cerdentials_id,sc.b_id,sc.property_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
+        from p_property_cerdentials sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyUser" parameterType="Map" resultType="Map">
+        select sc.property_user_id,sc.b_id,sc.property_id,sc.user_id,sc.rel_cd,sc.status_cd
+        from p_property_user sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
+
+    <!-- 修改商户信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyInfoInstance" parameterType="Map">
+        update p_property s set s.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="name != null and name != ''">
+            ,s.name = #{name}
+        </if>
+        <if test="address != null and address != ''">
+            ,s.address = #{address}
+        </if>
+        <if test="tel != null and tel != ''">
+            ,s.tel = #{tel}
+        </if>
+        <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+            ,s.nearby_landmarks = #{nearbyLandmarks}
+        </if>
+        <if test="mapX != null and mapX != ''">
+            ,s.map_x = #{mapX}
+        </if>
+        <if test="mapY != null and mapY != ''">
+            ,s.map_y = #{mapY}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and s.property_id = #{propertyId}
+        </if>
+    </update>
+
+    <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyAttrInstance" parameterType="Map">
+        update p_property_attr sa set sa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,sa.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sa.property_id = #{propertyId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </update>
+
+    <!-- 修改商户照片信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyPhotoInstance" parameterType="Map">
+        update p_property_photo sp set sp.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sp.b_id = #{newBId}
+        </if>
+        <if test="propertyPhotoTypeCd != null and propertyPhotoTypeCd != ''">
+            ,sp.property_photo_type_cd = #{propertyPhotoTypeCd}
+        </if>
+        <if test="photo != null and photo != ''">
+            ,sp.photo = #{photo}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sp.property_id = #{propertyId}
+        </if>
+        <if test="propertyPhotoId != null and propertyPhotoId !=''">
+            and sp.property_photo_id = #{propertyPhotoId}
+        </if>
+    </update>
+
+    <!-- 修改商户证件信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyCerdentailsInstance" parameterType="Map">
+        update p_property_cerdentials sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="credentialsCd != null and credentialsCd != ''">
+            ,sc.credentials_cd = #{credentialsCd}
+        </if>
+        <if test="value != null and value != ''">
+            ,sc.value = #{value}
+        </if>
+        <if test="validityPeriod != null">
+            ,sc.validity_period = #{validityPeriod}
+        </if>
+        <if test="positivePhoto != null and positivePhoto != ''">
+            ,sc.positive_photo = #{positivePhoto}
+        </if>
+        <if test="negativePhoto != null and negativePhoto != ''">
+            ,sc.negative_photo = #{negativePhoto}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+        <if test="propertyCerdentialsId != null and propertyCerdentialsId !=''">
+            and sc.property_cerdentials_id = #{propertyCerdentialsId}
+        </if>
+    </update>
+
+
+    <!-- 修改商户用户信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyUserInstance" parameterType="Map">
+        update p_property_user sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="relCd != null and relCd != ''">
+            ,sc.rel_cd = #{relCd}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+        <if test="propertyUserId != null and propertyUserId !=''">
+            and sc.property_user_id = #{propertyUserId}
+        </if>
+    </update>
+
+</mapper>

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 保存 用户信息 侦听
+ * 保存 物业信息 侦听
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("savePropertyInfoListener")
@@ -69,16 +69,6 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
             JSONArray businessPropertyAttrs = data.getJSONArray("businessPropertyAttr");
             doSaveBusinessPropertyAttrs(business,businessPropertyAttrs);
         }
-
-        if(data.containsKey("businessPropertyPhoto")){
-            JSONArray businessPropertyPhotos = data.getJSONArray("businessPropertyPhoto");
-            doBusinessPropertyPhoto(business,businessPropertyPhotos);
-        }
-
-        if(data.containsKey("businessPropertyCerdentials")){
-            JSONArray businessPropertyCerdentialses = data.getJSONArray("businessPropertyCerdentials");
-            doBusinessPropertyCerdentials(business,businessPropertyCerdentialses);
-        }
     }
 
     /**
@@ -104,16 +94,6 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
         List<Map> businessPropertyAttrs = propertyServiceDaoImpl.getBusinessPropertyAttrs(info);
         if(businessPropertyAttrs != null && businessPropertyAttrs.size() > 0) {
             propertyServiceDaoImpl.savePropertyAttrsInstance(info);
-        }
-        //物业照片
-        List<Map> businessPropertyPhotos = propertyServiceDaoImpl.getBusinessPropertyPhoto(info);
-        if(businessPropertyPhotos != null && businessPropertyPhotos.size() >0){
-            propertyServiceDaoImpl.savePropertyPhotoInstance(info);
-        }
-        //物业证件
-        List<Map> businessPropertyCerdentialses = propertyServiceDaoImpl.getBusinessPropertyCerdentials(info);
-        if(businessPropertyCerdentialses != null && businessPropertyCerdentialses.size()>0){
-            propertyServiceDaoImpl.savePropertyCerdentialsInstance(info);
         }
     }
 
@@ -145,41 +125,9 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
         if(propertyAttrs != null && propertyAttrs.size()>0){
             propertyServiceDaoImpl.updatePropertyAttrInstance(paramIn);
         }
-
-        //物业照片
-        List<Map> propertyPhotos = propertyServiceDaoImpl.getPropertyPhoto(info);
-        if(propertyPhotos != null && propertyPhotos.size()>0){
-            propertyServiceDaoImpl.updatePropertyPhotoInstance(paramIn);
-        }
-
-        //物业属性
-        List<Map> propertyCerdentialses = propertyServiceDaoImpl.getPropertyCerdentials(info);
-        if(propertyCerdentialses != null && propertyCerdentialses.size()>0){
-            propertyServiceDaoImpl.updatePropertyCerdentailsInstance(paramIn);
-        }
     }
 
-    /**
-     * 保存物业照片
-     * @param business 业务对象
-     * @param businessPropertyPhotos 物业照片
-     */
-    private void doBusinessPropertyPhoto(Business business, JSONArray businessPropertyPhotos) {
 
-        for(int businessPropertyPhotoIndex = 0 ;businessPropertyPhotoIndex < businessPropertyPhotos.size();businessPropertyPhotoIndex++) {
-            JSONObject businessPropertyPhoto = businessPropertyPhotos.getJSONObject(businessPropertyPhotoIndex);
-            Assert.jsonObjectHaveKey(businessPropertyPhoto, "propertyId", "businessPropertyPhoto 节点下没有包含 propertyId 节点");
-
-            if (businessPropertyPhoto.getString("propertyPhotoId").startsWith("-")) {
-                String propertyPhotoId = GenerateCodeFactory.getPropertyPhotoId();
-                businessPropertyPhoto.put("propertyPhotoId", propertyPhotoId);
-            }
-            businessPropertyPhoto.put("bId", business.getbId());
-            businessPropertyPhoto.put("operate", StatusConstant.OPERATE_ADD);
-            //保存物业信息
-            propertyServiceDaoImpl.saveBusinessPropertyPhoto(businessPropertyPhoto);
-        }
-    }
 
     /**
      * 处理 businessProperty 节点
@@ -230,39 +178,6 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
     }
 
 
-    /**
-     * 保存 物业证件 信息
-     * @param business 当前业务
-     * @param businessPropertyCerdentialses 物业证件
-     */
-    private void doBusinessPropertyCerdentials(Business business, JSONArray businessPropertyCerdentialses) {
-        for(int businessPropertyCerdentialsIndex = 0 ; businessPropertyCerdentialsIndex < businessPropertyCerdentialses.size() ; businessPropertyCerdentialsIndex ++) {
-            JSONObject businessPropertyCerdentials = businessPropertyCerdentialses.getJSONObject(businessPropertyCerdentialsIndex);
-            Assert.jsonObjectHaveKey(businessPropertyCerdentials, "propertyId", "businessPropertyPhoto 节点下没有包含 propertyId 节点");
-
-            if (businessPropertyCerdentials.getString("propertyCerdentialsId").startsWith("-")) {
-                String propertyPhotoId = GenerateCodeFactory.getPropertyCerdentialsId();
-                businessPropertyCerdentials.put("propertyCerdentialsId", propertyPhotoId);
-            }
-            Date validityPeriod = null;
-            try {
-                if(StringUtil.isNullOrNone(businessPropertyCerdentials.getString("validityPeriod"))){
-                    validityPeriod = DateUtil.getLastDate();
-                }else {
-                    validityPeriod = DateUtil.getDateFromString(businessPropertyCerdentials.getString("validityPeriod"), DateUtil.DATE_FORMATE_STRING_B);
-                }
-            } catch (ParseException e) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"传入参数 validityPeriod 格式不正确，请填写 "+DateUtil.DATE_FORMATE_STRING_B +" 格式，"+businessPropertyCerdentials);
-            }
-            businessPropertyCerdentials.put("validityPeriod",validityPeriod);
-            businessPropertyCerdentials.put("bId", business.getbId());
-            businessPropertyCerdentials.put("operate", StatusConstant.OPERATE_ADD);
-            //保存物业信息
-            propertyServiceDaoImpl.saveBusinessPropertyCerdentials(businessPropertyCerdentials);
-        }
-    }
-
-
 
     /**
      * 刷新 物业ID
@@ -281,22 +196,22 @@ public class SavePropertyInfoListener extends AbstractPropertyBusinessServiceDat
                 businessPropertyAttr.put("propertyId", propertyId);
             }
         }
-        //刷 是物业照片 的 propertyId
-        if(data.containsKey("businessPropertyPhoto")) {
-            JSONArray businessPropertyPhotos = data.getJSONArray("businessPropertyPhoto");
-            for(int businessPropertyPhotoIndex = 0;businessPropertyPhotoIndex < businessPropertyPhotos.size();businessPropertyPhotoIndex++) {
-                JSONObject businessPropertyPhoto = businessPropertyPhotos.getJSONObject(businessPropertyPhotoIndex);
-                businessPropertyPhoto.put("propertyId", propertyId);
-            }
-        }
-        //刷 物业证件 的propertyId
-        if(data.containsKey("businessPropertyCerdentials")) {
-            JSONArray businessPropertyCerdentialses = data.getJSONArray("businessPropertyCerdentials");
-            for(int businessPropertyCerdentialsIndex = 0;businessPropertyCerdentialsIndex < businessPropertyCerdentialses.size();businessPropertyCerdentialsIndex++) {
-                JSONObject businessPropertyCerdentials = businessPropertyCerdentialses.getJSONObject(businessPropertyCerdentialsIndex);
-                businessPropertyCerdentials.put("propertyId", propertyId);
-            }
-        }
+//        //刷 是物业照片 的 propertyId
+//        if(data.containsKey("businessPropertyPhoto")) {
+//            JSONArray businessPropertyPhotos = data.getJSONArray("businessPropertyPhoto");
+//            for(int businessPropertyPhotoIndex = 0;businessPropertyPhotoIndex < businessPropertyPhotos.size();businessPropertyPhotoIndex++) {
+//                JSONObject businessPropertyPhoto = businessPropertyPhotos.getJSONObject(businessPropertyPhotoIndex);
+//                businessPropertyPhoto.put("propertyId", propertyId);
+//            }
+//        }
+//        //刷 物业证件 的propertyId
+//        if(data.containsKey("businessPropertyCerdentials")) {
+//            JSONArray businessPropertyCerdentialses = data.getJSONArray("businessPropertyCerdentials");
+//            for(int businessPropertyCerdentialsIndex = 0;businessPropertyCerdentialsIndex < businessPropertyCerdentialses.size();businessPropertyCerdentialsIndex++) {
+//                JSONObject businessPropertyCerdentials = businessPropertyCerdentialses.getJSONObject(businessPropertyCerdentialsIndex);
+//                businessPropertyCerdentials.put("propertyId", propertyId);
+//            }
+//        }
     }
 
 

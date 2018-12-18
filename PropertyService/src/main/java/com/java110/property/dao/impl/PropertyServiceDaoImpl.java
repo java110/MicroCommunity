@@ -93,6 +93,22 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
     }
 
     /**
+     * 保存物业用户信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessPropertyUser(Map info) throws DAOException{
+        info.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存物业用户信息入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.saveBusinessPropertyUser",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业用户信息数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
      * 查询物业信息
      * @param info bId 信息
      * @return 物业信息
@@ -160,6 +176,22 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
     }
 
     /**
+     * 查询物业用户信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessPropertyUser(Map info) throws DAOException{
+        logger.debug("查询物业用户信息 入参 info : {}",info);
+
+        List<Map> businessPropertyUsers = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getBusinessPropertyUser",info);
+
+        return businessPropertyUsers;
+    }
+
+
+
+    /**
      * 保存物业信息 到 instance
      * @param info   bId 信息
      * @throws DAOException
@@ -207,6 +239,23 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业证件信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
+    /**
+     * 保存 物业用户信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyUserInstance(Map info) throws DAOException{
+        logger.debug("保存物业用户信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.savePropertyUserInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业用户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+
 
     /**
      * 查询物业信息（instance）
@@ -275,6 +324,20 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
     }
 
     /**
+     * 查询物业用户信息（instance 过程）
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getPropertyUser(Map info) throws DAOException{
+        logger.debug("查询物业用户信息 入参 info : {}",info);
+
+        List<Map> propertyUsers = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getPropertyUser",info);
+
+        return propertyUsers;
+    }
+
+    /**
      * 修改物业信息
      * @param info 修改信息
      * @throws DAOException
@@ -339,89 +402,18 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
     }
 
     /**
-     * 物业成员加入信息
-     * @param businessMemberProperty 物业成员信息 封装
-     * @throws DAOException 操作数据库异常
-     */
-    public void saveBusinessMemberProperty(Map businessMemberProperty) throws DAOException{
-        logger.debug("物业成员加入 入参 businessMemberProperty : {}",businessMemberProperty);
-
-        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.saveBusinessMemberProperty",businessMemberProperty);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"物业成员加入失败："+ JSONObject.toJSONString(businessMemberProperty));
-        }
-    }
-
-    /**
-     * 成员加入 保存信息至instance
-     * @param info
-     * @throws DAOException
-     */
-    @Override
-    public void saveMemberPropertyInstance(Map info) throws DAOException {
-        logger.debug("物业成员加入Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.saveMemberPropertyInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业照片信息Instance数据失败："+ JSONObject.toJSONString(info));
-        }
-    }
-
-    /**
-     * 查询物业成员加入信息（business过程）
-     * 根据bId 查询物业信息
-     * @param info bId 信息
-     * @return 物业信息
-     * @throws DAOException
-     */
-    public Map getBusinessMemberProperty(Map info) throws DAOException{
-        logger.debug("查询物业成员加入信息 入参 info : {}",info);
-
-        List<Map> businessMemberPropertys = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getBusinessMemberProperty",info);
-        if(businessMemberPropertys == null || businessMemberPropertys.size() == 0){
-            return null;
-        }
-        if(businessMemberPropertys.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessMemberProperty，"+ JSONObject.toJSONString(info));
-        }
-
-        return businessMemberPropertys.get(0);
-    }
-
-    /**
-     * 查询物业成员加入信息（instance过程）
-     * 根据bId 查询物业信息
-     * @param info bId 信息
-     * @return 物业信息
-     * @throws DAOException
-     */
-    public Map getMemberProperty(Map info) throws DAOException{
-        logger.debug("查询物业成员加入信息 入参 info : {}",info);
-
-        List<Map> memberPropertys = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getMemberProperty",info);
-        if(memberPropertys == null || memberPropertys.size() == 0){
-            return null;
-        }
-        if(memberPropertys.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getMemberProperty，"+ JSONObject.toJSONString(info));
-        }
-
-        return memberPropertys.get(0);
-    }
-    /**
-     * 修改物业成员加入信息
+     * 修改物业用户信息
      * @param info 修改信息
      * @throws DAOException
      */
-    public void updateMemberPropertyInstance(Map info) throws DAOException{
-        logger.debug("修改物业成员加入信息Instance 入参 info : {}",info);
+    public void updatePropertyUserInstance(Map info) throws DAOException{
+        logger.debug("修改物业用户信息Instance 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("propertyServiceDaoImpl.updateMemberPropertyInstance",info);
+        int saveFlag = sqlSessionTemplate.update("propertyServiceDaoImpl.updatePropertyUserInstance",info);
 
         if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改物业成员加入信息Instance数据失败："+ JSONObject.toJSONString(info));
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改物业用户信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
 }

@@ -121,6 +121,7 @@ CREATE TABLE business_property_user(
     property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    rel_cd varchar(30) not null comment '用户和物业关系 详情查看 property_user_rel表',
     `month` INT NOT NULL COMMENT '月份',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -238,7 +239,7 @@ CREATE TABLE p_property_user(
     property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-    `month` INT NOT NULL COMMENT '月份',
+    rel_cd varchar(30) not null comment '用户和物业关系 详情查看 property_user_rel表',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
         unique KEY (property_user_id)
@@ -297,6 +298,16 @@ CREATE TABLE property_fee_type(
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE KEY (fee_type_cd)
 );
+
+CREATE TABLE property_user_rel(
+    id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
+    rel_cd VARCHAR(12) NOT NULL COMMENT '物业用户关系编码',
+    `name` VARCHAR(50) NOT NULL COMMENT '物业用户关系编码名称',
+    description VARCHAR(200) COMMENT '描述',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE KEY (fee_type_cd)
+);
+
 
 -- 收费周期表
 CREATE TABLE property_fee_time(

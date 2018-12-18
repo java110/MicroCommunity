@@ -76,8 +76,9 @@ public class GenerateCodeFactory {
         prefixMap.put("agentIdPhotoId","81");
         prefixMap.put("agentCerdentialsId","82");
         prefixMap.put("propertyId","90");
-        prefixMap.put("propertyIdPhotoId","91");
+        prefixMap.put("propertyPhotoId","91");
         prefixMap.put("propertyCerdentialsId","92");
+        prefixMap.put("propertyUserId","93");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -368,6 +369,20 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("propertyCerdentialsId"));
+    }
+
+
+    /**
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPropertyUserId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("propertyUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("propertyUserId"));
     }
 
 

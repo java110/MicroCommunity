@@ -196,24 +196,5 @@ public abstract class AbstractPropertyBusinessServiceDataFlowListener extends Ab
     }
 
 
-    /**
-     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
-     * @param businessMemberProperty 物业信息
-     */
-    protected void autoSaveDelBusinessMemberProperty(Business business, JSONObject businessMemberProperty){
-//自动插入DEL
-        Map info = new HashMap();
-        info.put("memberPropertyId",businessMemberProperty.getString("memberPropertyId"));
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        Map currentMemberProperty = getPropertyServiceDaoImpl().getMemberProperty(info);
-        if(currentMemberProperty == null || currentMemberProperty.isEmpty()){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
-        }
-        currentMemberProperty.put("bId",business.getbId());
-        currentMemberProperty.put("propertyId",currentMemberProperty.get("property_id"));
-        currentMemberProperty.put("memberPropertyId",currentMemberProperty.get("member_property_id"));
-        currentMemberProperty.put("memberId",currentMemberProperty.get("member_id"));
-        currentMemberProperty.put("operate",StatusConstant.OPERATE_DEL);
-        getPropertyServiceDaoImpl().saveBusinessPropertyInfo(currentMemberProperty);
-    }
+
 }
