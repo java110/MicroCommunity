@@ -79,6 +79,7 @@ public class GenerateCodeFactory {
         prefixMap.put("propertyPhotoId","91");
         prefixMap.put("propertyCerdentialsId","92");
         prefixMap.put("propertyUserId","93");
+        prefixMap.put("propertyFeeId","94");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -383,6 +384,19 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("propertyUserId"));
+    }
+
+    /**
+     * 物业费用ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getPropertyFeeId() throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("propertyFeeId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%06d"));
+        }
+
+        return getCode(prefixMap.get("propertyFeeId"));
     }
 
 

@@ -109,6 +109,22 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
     }
 
     /**
+     * 保存物业费用信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessPropertyFee(Map info) throws DAOException{
+        info.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存物业费用信息入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.saveBusinessPropertyFee",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业费用信息数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
      * 查询物业信息
      * @param info bId 信息
      * @return 物业信息
@@ -189,6 +205,19 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
         return businessPropertyUsers;
     }
 
+    /**
+     * 查询物业费用信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessPropertyFee(Map info) throws DAOException{
+        logger.debug("查询物业用户信息 入参 info : {}",info);
+
+        List<Map> businessPropertyUsers = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getBusinessPropertyFee",info);
+
+        return businessPropertyUsers;
+    }
 
 
     /**
@@ -255,6 +284,20 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
         }
     }
 
+    /**
+     * 保存 物业费用信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyFeeInstance(Map info) throws DAOException{
+        logger.debug("保存物业费用信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("propertyServiceDaoImpl.savePropertyFeeInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存物业费用信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
 
 
     /**
@@ -337,6 +380,12 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
         return propertyUsers;
     }
 
+    public List<Map> getPropertyFee(Map info) throws DAOException{
+        logger.debug("查询物业费用信息 入参 info : {}",info);
+        List<Map> propertyFees = sqlSessionTemplate.selectList("propertyServiceDaoImpl.getPropertyFee",info);
+        return propertyFees;
+    }
+
     /**
      * 修改物业信息
      * @param info 修改信息
@@ -413,6 +462,23 @@ public class PropertyServiceDaoImpl extends BaseServiceDao implements IPropertyS
 
         if(saveFlag < 1){
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改物业用户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+
+
+    /**
+     * 修改物业费用信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updatePropertyFeeInstance(Map info) throws DAOException{
+        logger.debug("修改物业费用信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("propertyServiceDaoImpl.updatePropertyFeeInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改物业费用信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
 

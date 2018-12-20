@@ -53,6 +53,12 @@ public interface IPropertyServiceDao {
     public void saveBusinessPropertyUser(Map info) throws DAOException;
 
     /**
+     * 保存物业费用信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessPropertyFee(Map info) throws DAOException;
+    /**
      * 查询物业信息（business过程）
      * 根据bId 查询物业信息
      * @param info bId 信息
@@ -95,6 +101,14 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public List<Map> getBusinessPropertyUser(Map info) throws DAOException;
+
+    /**
+     * 查询物业费用信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessPropertyFee(Map info) throws DAOException;
     /**
      * 保存 物业信息 Business数据到 Instance中
      * @param info
@@ -133,7 +147,12 @@ public interface IPropertyServiceDao {
      */
     public void savePropertyUserInstance(Map info) throws DAOException;
 
-
+    /**
+     * 保存 物业费用信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyFeeInstance(Map info) throws DAOException;
 
     /**
      * 查询物业信息（instance过程）
@@ -179,6 +198,14 @@ public interface IPropertyServiceDao {
     public List<Map> getPropertyUser(Map info) throws DAOException;
 
     /**
+     * 查询物业费用信息（instance 过程）
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getPropertyFee(Map info) throws DAOException;
+
+    /**
      * 修改物业信息
      * @param info 修改信息
      * @throws DAOException
@@ -215,6 +242,15 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public void updatePropertyUserInstance(Map info) throws DAOException;
+
+
+
+    /**
+     * 修改物业费用信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updatePropertyFeeInstance(Map info) throws DAOException;
 
 
 

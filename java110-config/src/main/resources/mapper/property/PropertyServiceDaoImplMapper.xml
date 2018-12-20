@@ -30,7 +30,11 @@
         insert into business_property_user(property_user_id,b_id,property_id,user_id,rel_cd,month,operate)
         values(#{propertyUserId},#{bId},#{propertyId},#{userId},#{relCd},#{month},#{operate})
     </insert>
-
+    <!-- 保存物业费用信息 add by wuxw 2018-12-20 -->
+    <insert id="saveBusinessPropertyFee" parameterType="Map">
+        insert into business_property_fee(fee_id,b_id,property_id,fee_type_cd,fee_money,fee_time,start_time,end_time,month,operate)
+        values(#{feeId},#{bId},#{propertyId},#{feeTypeCd},#{feeMoney},#{feeTime},#{startTime},#{endTime},#{month},#{operate})
+    </insert>
     <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPropertyInfo" parameterType="Map" resultType="Map">
         select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.operate
@@ -49,7 +53,7 @@
 
     <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPropertyAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.operate
+        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.oppropertyServiceDaoImplerate
         from business_property_attr sa where 1=1
         <if test="operate != null and operate != ''">
             and sa.operate = #{operate}
@@ -110,6 +114,21 @@
         </if>
     </select>
 
+    <!-- 查询物业费用 add by wuxw 2018-12-20 -->
+    <select id="getBusinessPropertyFee" parameterType="Map" resultType="Map">
+        select sc.fee_id,sc.b_id,sc.property_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.create_time,sc.start_time,sc.end_time,sc.operate
+        from business_property_fee sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
     <!-- 保存商户信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePropertyInfoInstance" parameterType="Map">
         insert into p_property(property_id,b_id,name,address,tel,nearby_landmarks,map_x,map_y,status_cd)
@@ -149,6 +168,15 @@
         where sc.operate = 'ADD' and sc.b_id=#{bId}
     </insert>
 
+
+    <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyFeeInstance" parameterType="Map">
+        insert into p_property_fee(fee_id,b_id,property_id,fee_type_cd,fee_money,fee_time,start_time,end_time,status_cd)
+        select sc.fee_id,sc.b_id,sc.property_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.start_time,sc.end_time,'0'
+        from business_property_fee sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
     <!-- 查询商户信息 add by wuxw 2018-07-03 -->
     <select id="getPropertyInfo" parameterType="Map" resultType="Map">
         select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
@@ -170,7 +198,7 @@
     <select id="getPropertyAttrs" parameterType="Map" resultType="Map">
         select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.status_cd
         from p_property_attr sa
-        where
+        wheregetPropertyFee
         1=1
         <if test="statusCd != null and statusCd != ''">
             and sa.status_cd = #{statusCd}
@@ -222,6 +250,23 @@
     <select id="getPropertyUser" parameterType="Map" resultType="Map">
         select sc.property_user_id,sc.b_id,sc.property_id,sc.user_id,sc.rel_cd,sc.status_cd
         from p_property_user sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+    </select>
+
+
+    <!-- 查询物业费用信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyFee" parameterType="Map" resultType="Map">
+        select sc.fee_id,sc.b_id,sc.property_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.start_time,sc.end_time,sc.status_cd
+        from p_property_fee sc
         where 1=1
         <if test="statusCd != null and statusCd != ''">
             and sc.status_cd = #{statusCd}
@@ -368,6 +413,37 @@
         </if>
         <if test="propertyUserId != null and propertyUserId !=''">
             and sc.property_user_id = #{propertyUserId}
+        </if>
+    </update>
+
+
+    <!-- 修改商户用户信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyFeeInstance" parameterType="Map">
+        update p_property_fee sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="feeMoney != null and feeMoney != ''">
+            ,sc.fee_money = #{feeMoney}
+        </if>
+        <if test="feeTime != null and feeTime != ''">
+            ,sc.fee_time = #{feeTime}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            ,sc.start_time = #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            ,sc.end_time = #{endTime}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and sc.property_id = #{propertyId}
+        </if>
+        <if test="feeId != null and feeId !=''">
+            and sc.fee_id = #{feeId}
         </if>
     </update>
 
