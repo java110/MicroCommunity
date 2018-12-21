@@ -144,6 +144,7 @@ CREATE TABLE business_property_fee(
 
 CREATE TABLE business_property_house(
     house_id VARCHAR(30) NOT NULL COMMENT 'ID',
+    property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     house_num VARCHAR(30) NOT NULL COMMENT '门牌号',
     house_name VARCHAR(50) NOT NULL COMMENT '住户名称',
@@ -264,6 +265,7 @@ CREATE INDEX idx_property_fee_b_id ON p_property_fee(b_id);
 CREATE TABLE p_property_house(
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     house_id VARCHAR(30) NOT NULL COMMENT 'ID',
+    property_id VARCHAR(30) NOT NULL COMMENT '物业ID',
     house_num VARCHAR(30) NOT NULL COMMENT '门牌号',
     house_name VARCHAR(50) NOT NULL COMMENT '住户名称',
     house_phone VARCHAR(11) COMMENT '住户联系号码',

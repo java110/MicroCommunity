@@ -35,6 +35,18 @@
         insert into business_property_fee(fee_id,b_id,property_id,fee_type_cd,fee_money,fee_time,start_time,end_time,month,operate)
         values(#{feeId},#{bId},#{propertyId},#{feeTypeCd},#{feeMoney},#{feeTime},#{startTime},#{endTime},#{month},#{operate})
     </insert>
+
+    <!-- 保存住户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyHouse" parameterType="Map">
+        insert into business_property_house(house_id,property_id,b_id,house_num,house_name,house_phone,house_area,fee_type_cd,fee_price,month,operate)
+        values(#{houseId},#{propertyId},#{bId},#{houseNum},#{houseName},#{housePhone},#{houseArea},#{feeTypeCd},#{feePrice},#{month},#{operate})
+    </insert>
+    <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPropertyHouseAttr" parameterType="Map">
+        insert into business_property_house_attr(b_id,attr_id,house_id,spec_cd,value,month,operate)
+        values(#{bId},#{attrId},#{houseId},#{specCd},#{value},#{month},#{operate})
+    </insert>
+
     <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPropertyInfo" parameterType="Map" resultType="Map">
         select s.property_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.operate
@@ -53,7 +65,7 @@
 
     <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPropertyAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.oppropertyServiceDaoImplerate
+        select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.operate
         from business_property_attr sa where 1=1
         <if test="operate != null and operate != ''">
             and sa.operate = #{operate}
@@ -63,6 +75,43 @@
         </if>
         <if test="propertyId != null and propertyId != ''">
             and sa.property_id = #{propertyId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询住户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyHouse" parameterType="Map" resultType="Map">
+        select s.house_id,s.property_id,s.b_id,s.house_num,s.house_name,s.house_phone,s.house_area,s.fee_type_cd,s.fee_price,s.operate
+        from business_property_house s where 1 = 1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId != ''">
+            and s.property_id = #{propertyId}
+        </if>
+        <if test="houseId != null and houseId != ''">
+            and s.house_id = #{houseId}
+        </if>
+    </select>
+
+
+    <!-- 查询住户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPropertyHouseAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,sa.operate
+        from business_property_house_attr sa where 1=1
+        <if test="operate != null and operate != ''">
+            and sa.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId != ''">
+            and sa.house_id = #{houseId}
         </if>
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
@@ -144,6 +193,22 @@
         from business_property_attr sa
         where sa.operate = 'ADD' and sa.b_id=#{bId}
     </insert>
+
+    <!-- 保存住户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="savePropertyHouseInstance" parameterType="Map">
+        insert into p_property_house(house_id,property_id,b_id,house_num,house_name,house_phone,house_area,fee_type_cd,fee_price,status_cd)
+        select s.house_id,s.property_id,s.b_id,s.house_num,s.house_name,s.house_phone,s.house_area,s.fee_type_cd,s.fee_price,'0'
+        from business_property_house s where
+        s.operate = 'ADD' and s.b_id=#{bId}
+    </insert>
+
+    <!-- 保存住户属性信息到 instance add by wuxw 2018-07-03 -->
+    <insert id="savePropertyHouseAttrsInstance" parameterType="Map">
+        insert into p_property_house_attr(b_id,attr_id,house_id,spec_cd,value,status_cd)
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,'0'
+        from business_property_house_attr sa
+        where sa.operate = 'ADD' and sa.b_id=#{bId}
+    </insert>
     
     <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
     <insert id="savePropertyPhotoInstance" parameterType="Map">
@@ -198,7 +263,7 @@
     <select id="getPropertyAttrs" parameterType="Map" resultType="Map">
         select sa.b_id,sa.attr_id,sa.property_id,sa.spec_cd,sa.value,sa.status_cd
         from p_property_attr sa
-        wheregetPropertyFee
+        where
         1=1
         <if test="statusCd != null and statusCd != ''">
             and sa.status_cd = #{statusCd}
@@ -208,6 +273,48 @@
         </if>
         <if test="propertyId != null and propertyId !=''">
             and sa.property_id = #{propertyId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+
+
+    <!-- 查询住户信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyHouse" parameterType="Map" resultType="Map">
+        select s.house_id,s.property_id,s.b_id,s.house_num,s.house_name,s.house_area,s.house_phone,s.fee_type_cd,s.fee_price,s.status_cd
+        from p_property_house s
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and s.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and s.property_id = #{propertyId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and s.house_id = #{houseId}
+        </if>
+    </select>
+
+    <!-- 查询住户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getPropertyHouseAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,sa.status_cd
+        from p_property_house_attr sa
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sa.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and sa.house_id = #{houseId}
         </if>
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
@@ -328,6 +435,66 @@
         </if>
         <if test="propertyId != null and propertyId !=''">
             and sa.property_id = #{propertyId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </update>
+
+    <!-- 修改住户信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyHouseInstance" parameterType="Map">
+        update p_property_house s set s.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="houseName != null and houseName != ''">
+            ,s.house_name = #{houseName}
+        </if>
+        <if test="houseNum != null and houseNum != ''">
+            ,s.house_num = #{houseNum}
+        </if>
+        <if test="housePhone != null and housePhone != ''">
+            ,s.house_phone = #{housePhone}
+        </if>
+        <if test="houseArea != null and houseArea != ''">
+            ,s.house_area = #{houseArea}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            ,s.fee_type_cd = #{feeTypeCd}
+        </if>
+        <if test="feePrice != null and feePrice != ''">
+            ,s.fee_price = #{feePrice}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="propertyId != null and propertyId !=''">
+            and s.property_id = #{propertyId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and s.house_id = #{houseId}
+        </if>
+    </update>
+
+    <!-- 修改住户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updatePropertyHouseAttrInstance" parameterType="Map">
+        update p_property_house_attr sa set sa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,sa.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and sa.house_id = #{houseId}
         </if>
         <if test="specCd != null and specCd !=''">
             and sa.spec_cd = #{specCd}

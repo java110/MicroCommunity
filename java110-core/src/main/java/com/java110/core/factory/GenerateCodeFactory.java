@@ -80,6 +80,7 @@ public class GenerateCodeFactory {
         prefixMap.put("propertyCerdentialsId","92");
         prefixMap.put("propertyUserId","93");
         prefixMap.put("propertyFeeId","94");
+        prefixMap.put("houseId","95");
     }
 
     private static String PLATFORM_CODE = "0001";
@@ -398,6 +399,20 @@ public class GenerateCodeFactory {
 
         return getCode(prefixMap.get("propertyFeeId"));
     }
+
+    /**
+     * 住户ID生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getHouseId() throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("houseId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%06d"));
+        }
+
+        return getCode(prefixMap.get("houseId"));
+    }
+
 
 
     /**

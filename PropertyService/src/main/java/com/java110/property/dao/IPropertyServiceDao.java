@@ -58,6 +58,22 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public void saveBusinessPropertyFee(Map info) throws DAOException;
+
+    /**
+     * 保存 住户信息
+     * @param businessPropertyHouse 住户信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    public void saveBusinessPropertyHouse(Map businessPropertyHouse) throws DAOException;
+
+    /**
+     * 保存住户属性
+     * @param businessPropertyHouseAttr 住户信息封装
+     * @throws DAOException 操作数据库异常
+     */
+    public void saveBusinessPropertyHouseAttr(Map businessPropertyHouseAttr) throws DAOException;
+
+
     /**
      * 查询物业信息（business过程）
      * 根据bId 查询物业信息
@@ -75,6 +91,25 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public List<Map> getBusinessPropertyAttrs(Map info) throws DAOException;
+
+    /**
+     * 查询住户信息（business过程）
+     * 根据bId 查询物业信息
+     * @param info bId 信息
+     * @return 物业信息
+     * @throws DAOException
+     */
+    public Map getBusinessPropertyHouse(Map info) throws DAOException;
+
+
+    /**
+     * 查询住户属性信息（business过程）
+     * @param info bId 信息
+     * @return 物业属性
+     * @throws DAOException
+     */
+    public List<Map> getBusinessPropertyHouseAttrs(Map info) throws DAOException;
+
 
 
     /**
@@ -125,6 +160,21 @@ public interface IPropertyServiceDao {
     public void savePropertyAttrsInstance(Map info) throws DAOException;
 
     /**
+     * 保存 住户信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyHouseInstance(Map info) throws DAOException;
+
+
+    /**
+     * 保存 住户属性信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void savePropertyHouseAttrsInstance(Map info) throws DAOException;
+
+    /**
      * 保存 物业照片信息 Business数据到 Instance中
      * @param info
      * @throws DAOException
@@ -171,6 +221,24 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public List<Map> getPropertyAttrs(Map info) throws DAOException;
+
+    /**
+     * 查询住户信息（instance过程）
+     * 根据bId 查询物业信息
+     * @param info bId 信息
+     * @return 物业信息
+     * @throws DAOException
+     */
+    public Map getPropertyHouse(Map info) throws DAOException;
+
+
+    /**
+     * 查询住户属性信息（instance过程）
+     * @param info bId 信息
+     * @return 物业属性
+     * @throws DAOException
+     */
+    public List<Map> getPropertyHouseAttrs(Map info) throws DAOException;
 
 
     /**
@@ -219,6 +287,21 @@ public interface IPropertyServiceDao {
      * @throws DAOException
      */
     public void updatePropertyAttrInstance(Map info) throws DAOException;
+
+    /**
+     * 修改住户信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updatePropertyHouseInstance(Map info) throws DAOException;
+
+
+    /**
+     * 修改住户属性信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updatePropertyHouseAttrInstance(Map info) throws DAOException;
 
 
     /**

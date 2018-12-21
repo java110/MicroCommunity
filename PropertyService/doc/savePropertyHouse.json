@@ -1,0 +1,42 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": {
+    "serviceCode": "save.property.house",
+    "serviceName": "保存物业费用",
+    "remark": "备注",
+    "datas": {
+      "businessPropertyHouse":{
+        "houseId":"-1",
+        "propertyId":"123213",
+        "houseNum":"T",
+        "houseName":"10",
+        "housePhone":"17797173942",
+        "houseArea": "01918",
+        "feeTypeCd": "111",
+        "feePrice": "10.09"
+      },
+      "businessPropertyHouseAttr": [{
+        "houseId": "-1",
+        "attrId":"-1",
+        "specCd":"1001",
+        "value":"01"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }
+}
