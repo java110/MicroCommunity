@@ -13,17 +13,18 @@
     }]
   },
   "business": {
-    "serviceCode": "update.property.fee",
+    "serviceCode": "save.property.fee",
     "serviceName": "保存物业费用",
     "remark": "备注",
     "datas": {
       "businessPropertyFee":[{
-        "feeId":"9420181221000001",
-        "propertyId":"9020181218000001",
+        "feeId":"-1",
+        "propertyId":"123213",
+        "feeTypeCd":"T",
         "feeMoney":"10",
         "feeTime":"0.5",
-        "startTime": "2018-05-01",
-        "endTime": "2020-11-31"
+        "startTime": "2018-01-01",
+        "endTime": "2020-12-31"
       }]
     },
     "attrs": [{

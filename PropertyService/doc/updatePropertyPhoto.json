@@ -13,17 +13,15 @@
     }]
   },
   "business": {
-    "serviceCode": "update.property.fee",
-    "serviceName": "保存物业费用",
+    "serviceCode": "update.property.photo",
+    "serviceName": "修改物业照片信息",
     "remark": "备注",
     "datas": {
-      "businessPropertyFee":[{
-        "feeId":"9420181221000001",
+      "businessPropertyPhoto":[{
+        "propertyPhotoId":"12320181218000001",
         "propertyId":"9020181218000001",
-        "feeMoney":"10",
-        "feeTime":"0.5",
-        "startTime": "2018-05-01",
-        "endTime": "2020-11-31"
+        "propertyPhotoTypeCd":"T",
+        "photo":"123456789.jpg"
       }]
     },
     "attrs": [{

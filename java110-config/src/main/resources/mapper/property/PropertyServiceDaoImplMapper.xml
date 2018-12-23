@@ -596,10 +596,10 @@
         <if test="feeTime != null and feeTime != ''">
             ,sc.fee_time = #{feeTime}
         </if>
-        <if test="startTime != null and startTime != ''">
+        <if test="startTime != null">
             ,sc.start_time = #{startTime}
         </if>
-        <if test="endTime != null and endTime != ''">
+        <if test="endTime != null">
             ,sc.end_time = #{endTime}
         </if>
         where 1=1

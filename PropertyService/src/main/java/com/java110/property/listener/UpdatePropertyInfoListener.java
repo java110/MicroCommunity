@@ -24,11 +24,8 @@ import java.util.Map;
  * 修改物业信息 侦听
  *
  * 处理节点
- * 1、businessProperty:{} 物业基本信息节点
+ * 1、businessPropertyInfo:{} 物业基本信息节点
  * 2、businessPropertyAttr:[{}] 物业属性信息节点
- * 3、businessPropertyPhoto:[{}] 物业照片信息节点
- * 4、businessPropertyCerdentials:[{}] 物业证件信息节点
- * 协议地址 ：https://github.com/java110/MicroCommunity/wiki/%E4%BF%AE%E6%94%B9%E5%95%86%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8D%8F%E8%AE%AE
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("updatePropertyInfoListener")
@@ -71,16 +68,6 @@ public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceD
         if(data.containsKey("businessPropertyAttr")){
             JSONArray businessPropertyAttrs = data.getJSONArray("businessPropertyAttr");
             doSaveBusinessPropertyAttrs(business,businessPropertyAttrs);
-        }
-
-        if(data.containsKey("businessPropertyPhoto")){
-            JSONArray businessPropertyPhotos = data.getJSONArray("businessPropertyPhoto");
-            doBusinessPropertyPhoto(business,businessPropertyPhotos);
-        }
-
-        if(data.containsKey("businessPropertyCerdentials")){
-            JSONArray businessPropertyCerdentialses = data.getJSONArray("businessPropertyCerdentials");
-            doBusinessPropertyCerdentials(business,businessPropertyCerdentialses);
         }
     }
 
@@ -178,60 +165,6 @@ public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceD
                 propertyServiceDaoImpl.updatePropertyAttrInstance(businessPropertyAttr);
             }
         }
-
-        //物业照片
-        List<Map> propertyPhotos = propertyServiceDaoImpl.getPropertyPhoto(info);
-        if(propertyPhotos != null && propertyPhotos.size()>0){
-            List<Map> businessPropertyPhotos = propertyServiceDaoImpl.getBusinessPropertyPhoto(delInfo);
-            //除非程序出错了，这里不会为空
-            if(businessPropertyPhotos == null || businessPropertyPhotos.size() ==0 ){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败(property_photo)，程序内部异常,请检查！ "+delInfo);
-            }
-            for(Map businessPropertyPhoto : businessPropertyPhotos) {
-                flushBusinessPropertyPhoto(businessPropertyPhoto,StatusConstant.STATUS_CD_VALID);
-                propertyServiceDaoImpl.updatePropertyPhotoInstance(businessPropertyPhoto);
-            }
-        }
-
-        //物业属性
-        List<Map> propertyCerdentialses = propertyServiceDaoImpl.getPropertyCerdentials(info);
-        if(propertyCerdentialses != null && propertyCerdentialses.size()>0){
-            List<Map> businessPropertyCerdentialses = propertyServiceDaoImpl.getBusinessPropertyCerdentials(delInfo);
-            //除非程序出错了，这里不会为空
-            if(businessPropertyCerdentialses == null || businessPropertyCerdentialses.size() ==0 ){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败(property_cerdentials)，程序内部异常,请检查！ "+delInfo);
-            }
-            for(Map businessPropertyCerdentials : businessPropertyCerdentialses) {
-                flushBusinessPropertyCredentials(businessPropertyCerdentials,StatusConstant.STATUS_CD_VALID);
-                propertyServiceDaoImpl.updatePropertyCerdentailsInstance(businessPropertyCerdentials);
-            }
-        }
-    }
-
-    /**
-     * 保存物业照片
-     * @param business 业务对象
-     * @param businessPropertyPhotos 物业照片
-     */
-    private void doBusinessPropertyPhoto(Business business, JSONArray businessPropertyPhotos) {
-
-
-        for(int businessPropertyPhotoIndex = 0 ;businessPropertyPhotoIndex < businessPropertyPhotos.size();businessPropertyPhotoIndex++) {
-            JSONObject businessPropertyPhoto = businessPropertyPhotos.getJSONObject(businessPropertyPhotoIndex);
-            Assert.jsonObjectHaveKey(businessPropertyPhoto, "propertyId", "businessPropertyPhoto 节点下没有包含 propertyId 节点");
-
-            if (businessPropertyPhoto.getString("propertyPhotoId").startsWith("-")) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"propertyPhotoId 错误，不能自动生成（必须已经存在的propertyPhotoId）"+businessPropertyPhoto);
-            }
-
-            //自动保存DEL信息
-            autoSaveDelBusinessPropertyPhoto(business,businessPropertyPhoto);
-
-            businessPropertyPhoto.put("bId", business.getbId());
-            businessPropertyPhoto.put("operate", StatusConstant.OPERATE_ADD);
-            //保存物业信息
-            propertyServiceDaoImpl.saveBusinessPropertyPhoto(businessPropertyPhoto);
-        }
     }
 
     /**
@@ -284,30 +217,6 @@ public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceD
         }
     }
 
-
-    /**
-     * 保存 物业证件 信息
-     * @param business 当前业务
-     * @param businessPropertyCerdentialses 物业证件
-     */
-    private void doBusinessPropertyCerdentials(Business business, JSONArray businessPropertyCerdentialses) {
-
-        for(int businessPropertyCerdentialsIndex = 0 ; businessPropertyCerdentialsIndex < businessPropertyCerdentialses.size() ; businessPropertyCerdentialsIndex ++) {
-            JSONObject businessPropertyCerdentials = businessPropertyCerdentialses.getJSONObject(businessPropertyCerdentialsIndex);
-            Assert.jsonObjectHaveKey(businessPropertyCerdentials, "propertyId", "businessPropertyPhoto 节点下没有包含 propertyId 节点");
-
-            if (businessPropertyCerdentials.getString("propertyCerdentialsId").startsWith("-")) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"propertyPhotoId 错误，不能自动生成（必须已经存在的propertyPhotoId）"+businessPropertyCerdentials);
-            }
-
-            autoSaveDelBusinessPropertyCerdentials(business,businessPropertyCerdentials);
-
-            businessPropertyCerdentials.put("bId", business.getbId());
-            businessPropertyCerdentials.put("operate", StatusConstant.OPERATE_ADD);
-            //保存物业信息
-            propertyServiceDaoImpl.saveBusinessPropertyCerdentials(businessPropertyCerdentials);
-        }
-    }
 
     public IPropertyServiceDao getPropertyServiceDaoImpl() {
         return propertyServiceDaoImpl;

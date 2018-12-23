@@ -13,17 +13,17 @@
     }]
   },
   "business": {
-    "serviceCode": "update.property.fee",
-    "serviceName": "保存物业费用",
+    "serviceCode": "update.property.cerdentials",
+    "serviceName": "修改物业证件信息",
     "remark": "备注",
     "datas": {
-      "businessPropertyFee":[{
-        "feeId":"9420181221000001",
+      "businessPropertyCerdentials":[{
+        "propertyCerdentialsId":"9220181218000002",
         "propertyId":"9020181218000001",
-        "feeMoney":"10",
-        "feeTime":"0.5",
-        "startTime": "2018-05-01",
-        "endTime": "2020-11-31"
+        "value":"632126XXXXXXXX2012",
+        "validityPeriod":"3000-2-1",
+        "positivePhoto":"1234567.jpg",
+        "negativePhoto":"11.jpg"
       }]
     },
     "attrs": [{

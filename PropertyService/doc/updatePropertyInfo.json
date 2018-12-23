@@ -12,36 +12,29 @@
       "value": "具体值"
     }]
   },
-  "business": [{
-    "serviceCode": "update.community.info",
+  "business": {
+    "serviceCode": "update.property.info",
     "serviceName": "修改商户信息",
     "remark": "备注",
     "datas": {
-      "businessCommunity": {
-        "communityId": "123456",
-        "name": "万博家博园（城西区）",
+      "businessProperty": {
+        "propertyId": "123123",
+        "name": "方博家园",
         "address": "青海省西宁市城中区129号",
-        "cityCode": "100010",
+        "tel": "17797173942",
         "nearbyLandmarks": "王府井旁30米",
         "mapX": "101.801909",
         "mapY": "36.597263"
       },
-      "businessCommunityAttr": [{
-        "communityId": "123456",
-        "attrId":"1234546",
-        "specCd":"1001",
+      "businessPropertyAttr": [{
+        "propertyId": "12313",
+        "attrId":"123123",
         "value":"01"
-      }],
-      "businessCommunityPhoto":[{
-        "communityPhotoId":"12321",
-        "communityId": "123456",
-        "communityPhotoTypeCd":"T",
-        "photo":"12345678.jpg"
       }]
     },
     "attrs": [{
       "specCd": "配置的字段ID",
       "value": "具体值"
     }]
-  }]
+  }
 }
