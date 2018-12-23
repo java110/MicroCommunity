@@ -1,0 +1,33 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": {
+    "serviceCode": "delete.property.house",
+    "serviceName": "删除住户",
+    "remark": "备注",
+    "datas": {
+      "businessPropertyHouse":{
+        "houseId":"9520181222000005"
+      },
+      "businessPropertyHouseAttr": [{
+        "houseId": "9520181222000005",
+        "attrId":"112018122200000006"
+      }]
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }
+}

@@ -262,13 +262,10 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_UPDATE_PROPERTY_CERDENTIALS = "update.property.cerdentials";
     public static final String SERVICE_CODE_UPDATE_PROPERTY_FEE = "update.property.fee";
     public static final String SERVICE_CODE_UPDATE_PROPERTY_HOUSE = "update.property.house";
+    public static final String SERVICE_CODE_DELETE_PROPERTY_ATTR = "delete.property.attr";
     public static final String SERVICE_CODE_DELETE_PROPERTY_PHOTO = "delete.property.photo";
     public static final String SERVICE_CODE_DELETE_PROPERTY_CERDENTIALS = "delete.property.cerdentials";
     public static final String SERVICE_CODE_DELETE_PROPERTY_USER = "delete.property.user";
     public static final String SERVICE_CODE_DELETE_PROPERTY_HOUSE = "delete.property.house";
-
-
-
-
 
 }

@@ -101,6 +101,21 @@ public abstract class AbstractPropertyBusinessServiceDataFlowListener extends Ab
 
     /**
      * 刷新 businessPropertyPhoto 数据
+     * @param businessPropertyUser
+     * @param statusCd
+     */
+    protected void flushBusinessPropertyUser(Map businessPropertyUser,String statusCd){
+        businessPropertyUser.put("propertyId",businessPropertyUser.get("property_id"));
+        businessPropertyUser.put("propertyUserId",businessPropertyUser.get("property_user_id"));
+        businessPropertyUser.put("userId",businessPropertyUser.get("user_id"));
+        businessPropertyUser.put("relCd",businessPropertyUser.get("rel_cd"));
+        businessPropertyUser.put("newBId",businessPropertyUser.get("b_id"));
+        businessPropertyUser.put("statusCd",statusCd);
+    }
+
+
+    /**
+     * 刷新 businessPropertyPhoto 数据
      * @param businessPropertyFee
      * @param statusCd
      */
@@ -268,6 +283,30 @@ public abstract class AbstractPropertyBusinessServiceDataFlowListener extends Ab
         currentPropertyPhoto.put("propertyPhotoTypeCd",currentPropertyPhoto.get("property_photo_type_cd"));
         currentPropertyPhoto.put("operate",StatusConstant.OPERATE_DEL);
         getPropertyServiceDaoImpl().saveBusinessPropertyPhoto(currentPropertyPhoto);
+    }
+
+    /**
+     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     * @param business
+     * @param businessPropertyUser 物业用户
+     */
+    protected void autoSaveDelBusinessPropertyUser(Business business,JSONObject businessPropertyUser){
+        Map info = new HashMap();
+        info.put("propertyUserId",businessPropertyUser.getString("propertyUserId"));
+        info.put("propertyId",businessPropertyUser.getString("propertyId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        List<Map> currentPropertyUsers = getPropertyServiceDaoImpl().getPropertyUser(info);
+        if(currentPropertyUsers == null || currentPropertyUsers.size() != 1){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+        Map currentPropertyUser = currentPropertyUsers.get(0);
+        currentPropertyUser.put("bId",business.getbId());
+        currentPropertyUser.put("propertyUserId",currentPropertyUser.get("property_user_id"));
+        currentPropertyUser.put("propertyId",currentPropertyUser.get("property_id"));
+        currentPropertyUser.put("userId",currentPropertyUser.get("user_id"));
+        currentPropertyUser.put("relCd",currentPropertyUser.get("rel_cd"));
+        currentPropertyUser.put("operate",StatusConstant.OPERATE_DEL);
+        getPropertyServiceDaoImpl().saveBusinessPropertyUser(currentPropertyUser);
     }
 
     /**
