@@ -10,30 +10,13 @@ package com.java110.common.util;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.BusinessException;
 import com.java110.common.log.LoggerEngine;
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
+//import org.apache.axis.client.Call;
+//import org.apache.axis.client.Service;
 
 
 public class WebServiceAxisClient extends LoggerEngine {
     public static void main(String[] args) {
-        String url = "http://135.192.70.67:9084/serviceAgent/http/FactorageManager_ForAgent?AppKey=2017082401";
-        String function = "queryOrderInfo";
 
-        String xml  = "<QueryOrderInfoRequest>\n" +
-                "\t<accNbr>18009706604</accNbr>\n" +
-                "\t<accNbrType>1</accNbrType> \n" +
-                "\t<areaCode>0971</areaCode>\n" +
-                "\t<channelId></channelId>\n" +
-                "\t<staffCode></staffCode> \t\n" +
-                "</QueryOrderInfoRequest>";
-
-        try {
-            Object retObj = WebServiceAxisClient.callWebService(url, function, new Object[]{xml});
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -64,17 +47,17 @@ public class WebServiceAxisClient extends LoggerEngine {
         try {
             logger.debug("-----------开始调用Web Service-----------");
             // 创建Service对象，Service对用用于创建Call对象
-            Service service = new Service();
-            // 创建Call对象，Call对象用于调用服务
-            Call call = (Call) service.createCall();
-            // 为Call对象设置WebService的url
-            call.setTargetEndpointAddress(new java.net.URL(url));
-            // 为Call对象设置调用的方法名
-            call.setOperationName(function);
-            // 设置等待时间
-            call.setTimeout(timeOut);
-            // 调用WebService的方法，并获得返回值
-            retObj = call.invoke(obj);
+//            Service service = new Service();
+//            // 创建Call对象，Call对象用于调用服务
+//            Call call = (Call) service.createCall();
+//            // 为Call对象设置WebService的url
+//            call.setTargetEndpointAddress(new java.net.URL(url));
+//            // 为Call对象设置调用的方法名
+//            call.setOperationName(function);
+//            // 设置等待时间
+//            call.setTimeout(timeOut);
+//            // 调用WebService的方法，并获得返回值
+//            retObj = call.invoke(obj);
             logger.debug("-----------调用Web Service正常结束-----------");
         } catch (Exception e) {
             logger.error("-----------调用Web Service异常,原因:{}", e);
