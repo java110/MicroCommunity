@@ -73,8 +73,9 @@ public class GenerateCodeFactory {
         prefixMap.put("communityPhotoId","71");
         prefixMap.put("communityMemberId","72");
         prefixMap.put("agentId","80");
-        prefixMap.put("agentIdPhotoId","81");
+        prefixMap.put("agentPhotoId","81");
         prefixMap.put("agentCerdentialsId","82");
+        prefixMap.put("agentUserId","83");
         prefixMap.put("propertyId","90");
         prefixMap.put("propertyPhotoId","91");
         prefixMap.put("propertyCerdentialsId","92");
@@ -330,6 +331,21 @@ public class GenerateCodeFactory {
         }
         //调用服务
         return getCode(prefixMap.get("agentCerdentialsId"));
+    }
+
+
+
+    /**
+     *
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getAgentUserId()  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefixMap.get("agentUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+        }
+        //调用服务
+        return getCode(prefixMap.get("agentUserId"));
     }
 
 

@@ -268,4 +268,17 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_PROPERTY_USER = "delete.property.user";
     public static final String SERVICE_CODE_DELETE_PROPERTY_HOUSE = "delete.property.house";
 
+
+    public static final String SERVICE_CODE_SAVE_AGENT_INFO = "save.agent.info";
+    public static final String SERVICE_CODE_SAVE_AGENT_PHOTO = "save.agent.photo";
+    public static final String SERVICE_CODE_SAVE_AGENT_CERDENTIALS = "save.agent.cerdentials";
+    public static final String SERVICE_CODE_SAVE_AGENT_USER = "save.agent.user";
+    public static final String SERVICE_CODE_UPDATE_AGENT_INFO = "update.agent.info";
+    public static final String SERVICE_CODE_UPDATE_AGENT_PHOTO = "update.agent.photo";
+    public static final String SERVICE_CODE_UPDATE_AGENT_CERDENTIALS = "update.agent.cerdentials";
+    public static final String SERVICE_CODE_DELETE_AGENT_ATTR = "delete.agent.attr";
+    public static final String SERVICE_CODE_DELETE_AGENT_PHOTO = "delete.agent.photo";
+    public static final String SERVICE_CODE_DELETE_AGENT_CERDENTIALS = "delete.agent.cerdentials";
+    public static final String SERVICE_CODE_DELETE_AGENT_USER = "delete.agent.user";
+
 }

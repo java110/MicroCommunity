@@ -307,7 +307,7 @@ CREATE TABLE property_user_rel(
     `name` VARCHAR(50) NOT NULL COMMENT '物业用户关系编码名称',
     description VARCHAR(200) COMMENT '描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    UNIQUE KEY (fee_type_cd)
+    UNIQUE KEY (rel_cd)
 );
 
 

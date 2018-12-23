@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="agentServiceDaoImpl">
+    
+    <!-- 保存商户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentInfo" parameterType="Map">
+        insert into business_agent(agent_id,b_id,name,address,tel,nearby_landmarks,map_x,map_y,month,operate)
+        values(#{agentId},#{bId},#{name},#{address},#{tel},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
+    </insert>
+    <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentAttr" parameterType="Map">
+        insert into business_agent_attr(b_id,attr_id,agent_id,spec_cd,value,month,operate)
+        values(#{bId},#{attrId},#{agentId},#{specCd},#{value},#{month},#{operate})
+    </insert>
+    <!-- 保存商户照片信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentPhoto" parameterType="Map">
+        insert into business_agent_photo(agent_photo_id,b_id,agent_id,agent_photo_type_cd,photo,month,operate)
+        values(#{agentPhotoId},#{bId},#{agentId},#{agentPhotoTypeCd},#{photo},#{month},#{operate})
+    </insert>
+    <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentCerdentials" parameterType="Map">
+        insert into business_agent_cerdentials(agent_cerdentials_id,b_id,agent_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
+        values(#{agentCerdentialsId},#{bId},#{agentId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{month},#{operate})
+    </insert>
+
+    <!-- 保存代理商用户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentUser" parameterType="Map">
+        insert into business_agent_user(agent_user_id,b_id,agent_id,user_id,rel_cd,month,operate)
+        values(#{agentUserId},#{bId},#{agentId},#{userId},#{relCd},#{month},#{operate})
+    </insert>
+    <!-- 保存代理商费用信息 add by wuxw 2018-12-20 -->
+    <insert id="saveBusinessAgentFee" parameterType="Map">
+        insert into business_agent_fee(fee_id,b_id,agent_id,fee_type_cd,fee_money,fee_time,start_time,end_time,month,operate)
+        values(#{feeId},#{bId},#{agentId},#{feeTypeCd},#{feeMoney},#{feeTime},#{startTime},#{endTime},#{month},#{operate})
+    </insert>
+
+    <!-- 保存住户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentHouse" parameterType="Map">
+        insert into business_agent_house(house_id,agent_id,b_id,house_num,house_name,house_phone,house_area,fee_type_cd,fee_price,month,operate)
+        values(#{houseId},#{agentId},#{bId},#{houseNum},#{houseName},#{housePhone},#{houseArea},#{feeTypeCd},#{feePrice},#{month},#{operate})
+    </insert>
+    <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAgentHouseAttr" parameterType="Map">
+        insert into business_agent_house_attr(b_id,attr_id,house_id,spec_cd,value,month,operate)
+        values(#{bId},#{attrId},#{houseId},#{specCd},#{value},#{month},#{operate})
+    </insert>
+
+    <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentInfo" parameterType="Map" resultType="Map">
+        select s.agent_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        from business_agent s where 1 = 1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and s.agent_id = #{agentId}
+        </if>
+    </select>
+
+
+    <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.agent_id,sa.spec_cd,sa.value,sa.operate
+        from business_agent_attr sa where 1=1
+        <if test="operate != null and operate != ''">
+            and sa.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and sa.agent_id = #{agentId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询住户信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentHouse" parameterType="Map" resultType="Map">
+        select s.house_id,s.agent_id,s.b_id,s.house_num,s.house_name,s.house_phone,s.house_area,s.fee_type_cd,s.fee_price,s.operate
+        from business_agent_house s where 1 = 1
+        <if test="operate != null and operate != ''">
+            and s.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and s.agent_id = #{agentId}
+        </if>
+        <if test="houseId != null and houseId != ''">
+            and s.house_id = #{houseId}
+        </if>
+    </select>
+
+
+    <!-- 查询住户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentHouseAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,sa.operate
+        from business_agent_house_attr sa where 1=1
+        <if test="operate != null and operate != ''">
+            and sa.operate = #{operate}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId != ''">
+            and sa.house_id = #{houseId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentPhoto" parameterType="Map" resultType="Map">
+        select sp.agent_photo_id,sp.b_id,sp.agent_id,sp.agent_photo_type_cd,sp.photo,sp.operate
+        from business_agent_photo sp where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sp.operate = #{operate}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and sp.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询商户 证件信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentCerdentials" parameterType="Map" resultType="Map">
+        select sc.agent_cerdentials_id,sc.b_id,sc.agent_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.operate
+        from business_agent_cerdentials sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询代理商 用户信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessAgentUser" parameterType="Map" resultType="Map">
+        select sc.agent_user_id,sc.b_id,sc.agent_id,sc.user_id,sc.rel_cd,sc.operate
+        from business_agent_user sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询代理商费用 add by wuxw 2018-12-20 -->
+    <select id="getBusinessAgentFee" parameterType="Map" resultType="Map">
+        select sc.fee_id,sc.b_id,sc.agent_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.create_time,sc.start_time,sc.end_time,sc.operate
+        from business_agent_fee sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 保存商户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAgentInfoInstance" parameterType="Map">
+        insert into a_agent(agent_id,b_id,name,address,tel,nearby_landmarks,map_x,map_y,status_cd)
+        select s.agent_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,'0'
+        from business_agent s where 
+        s.operate = 'ADD' and s.b_id=#{bId}
+    </insert>
+
+    <!-- 保存商户属性信息到 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentAttrsInstance" parameterType="Map">
+        insert into a_agent_attr(b_id,attr_id,agent_id,spec_cd,value,status_cd)
+        select sa.b_id,sa.attr_id,sa.agent_id,sa.spec_cd,sa.value,'0'
+        from business_agent_attr sa
+        where sa.operate = 'ADD' and sa.b_id=#{bId}
+    </insert>
+
+    <!-- 保存住户信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAgentHouseInstance" parameterType="Map">
+        insert into a_agent_house(house_id,agent_id,b_id,house_num,house_name,house_phone,house_area,fee_type_cd,fee_price,status_cd)
+        select s.house_id,s.agent_id,s.b_id,s.house_num,s.house_name,s.house_phone,s.house_area,s.fee_type_cd,s.fee_price,'0'
+        from business_agent_house s where
+        s.operate = 'ADD' and s.b_id=#{bId}
+    </insert>
+
+    <!-- 保存住户属性信息到 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentHouseAttrsInstance" parameterType="Map">
+        insert into a_agent_house_attr(b_id,attr_id,house_id,spec_cd,value,status_cd)
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,'0'
+        from business_agent_house_attr sa
+        where sa.operate = 'ADD' and sa.b_id=#{bId}
+    </insert>
+    
+    <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentPhotoInstance" parameterType="Map">
+        insert into a_agent_photo(agent_photo_id,b_id,agent_id,agent_photo_type_cd,photo,status_cd)
+        select sp.agent_photo_id,sp.b_id,sp.agent_id,sp.agent_photo_type_cd,sp.photo,'0'
+        from business_agent_photo sp
+        where  sp.operate = 'ADD' and sp.b_id=#{bId}
+    </insert>
+    <!-- 保存 商户证件信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentCerdentialsInstance" parameterType="Map">
+        insert into a_agent_cerdentials(agent_cerdentials_id,b_id,agent_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
+        select sc.agent_cerdentials_id,sc.b_id,sc.agent_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
+        from business_agent_cerdentials sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentUserInstance" parameterType="Map">
+        insert into a_agent_user(agent_user_id,b_id,agent_id,user_id,rel_cd,status_cd)
+        select sc.agent_user_id,sc.b_id,sc.agent_id,sc.user_id,sc.rel_cd,'0'
+        from business_agent_user sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+
+    <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveAgentFeeInstance" parameterType="Map">
+        insert into a_agent_fee(fee_id,b_id,agent_id,fee_type_cd,fee_money,fee_time,start_time,end_time,status_cd)
+        select sc.fee_id,sc.b_id,sc.agent_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.start_time,sc.end_time,'0'
+        from business_agent_fee sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 查询商户信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentInfo" parameterType="Map" resultType="Map">
+        select s.agent_id,s.b_id,s.name,s.address,s.tel,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        from a_agent s
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and s.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and s.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.agent_id,sa.spec_cd,sa.value,sa.status_cd
+        from a_agent_attr sa
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sa.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sa.agent_id = #{agentId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+
+
+    <!-- 查询住户信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentHouse" parameterType="Map" resultType="Map">
+        select s.house_id,s.agent_id,s.b_id,s.house_num,s.house_name,s.house_area,s.house_phone,s.fee_type_cd,s.fee_price,s.status_cd
+        from a_agent_house s
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and s.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and s.agent_id = #{agentId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and s.house_id = #{houseId}
+        </if>
+    </select>
+
+    <!-- 查询住户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentHouseAttrs" parameterType="Map" resultType="Map">
+        select sa.b_id,sa.attr_id,sa.house_id,sa.spec_cd,sa.value,sa.status_cd
+        from a_agent_house_attr sa
+        where
+        1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sa.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and sa.house_id = #{houseId}
+        </if>
+        <if test="attrId != null and attrId != ''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </select>
+
+    <!-- 查询商户照片信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentPhoto" parameterType="Map" resultType="Map">
+        select sp.agent_photo_id,sp.b_id,sp.agent_id,sp.agent_photo_type_cd,sp.photo,sp.status_cd
+        from a_agent_photo sp
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sp.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sp.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentCerdentials" parameterType="Map" resultType="Map">
+        select sc.agent_cerdentials_id,sc.b_id,sc.agent_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
+        from a_agent_cerdentials sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentUser" parameterType="Map" resultType="Map">
+        select sc.agent_user_id,sc.b_id,sc.agent_id,sc.user_id,sc.rel_cd,sc.status_cd
+        from a_agent_user sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+
+    <!-- 查询代理商费用信息 add by wuxw 2018-07-03 -->
+    <select id="getAgentFee" parameterType="Map" resultType="Map">
+        select sc.fee_id,sc.b_id,sc.agent_id,sc.fee_type_cd,sc.fee_money,sc.fee_time,sc.start_time,sc.end_time,sc.status_cd
+        from a_agent_fee sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+    </select>
+
+
+    <!-- 修改商户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentInfoInstance" parameterType="Map">
+        update a_agent s set s.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="name != null and name != ''">
+            ,s.name = #{name}
+        </if>
+        <if test="address != null and address != ''">
+            ,s.address = #{address}
+        </if>
+        <if test="tel != null and tel != ''">
+            ,s.tel = #{tel}
+        </if>
+        <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+            ,s.nearby_landmarks = #{nearbyLandmarks}
+        </if>
+        <if test="mapX != null and mapX != ''">
+            ,s.map_x = #{mapX}
+        </if>
+        <if test="mapY != null and mapY != ''">
+            ,s.map_y = #{mapY}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and s.agent_id = #{agentId}
+        </if>
+    </update>
+
+    <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentAttrInstance" parameterType="Map">
+        update a_agent_attr sa set sa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,sa.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sa.agent_id = #{agentId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </update>
+
+    <!-- 修改住户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentHouseInstance" parameterType="Map">
+        update a_agent_house s set s.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,s.b_id = #{newBId}
+        </if>
+        <if test="houseName != null and houseName != ''">
+            ,s.house_name = #{houseName}
+        </if>
+        <if test="houseNum != null and houseNum != ''">
+            ,s.house_num = #{houseNum}
+        </if>
+        <if test="housePhone != null and housePhone != ''">
+            ,s.house_phone = #{housePhone}
+        </if>
+        <if test="houseArea != null and houseArea != ''">
+            ,s.house_area = #{houseArea}
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            ,s.fee_type_cd = #{feeTypeCd}
+        </if>
+        <if test="feePrice != null and feePrice != ''">
+            ,s.fee_price = #{feePrice}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and s.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and s.agent_id = #{agentId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and s.house_id = #{houseId}
+        </if>
+    </update>
+
+    <!-- 修改住户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentHouseAttrInstance" parameterType="Map">
+        update a_agent_house_attr sa set sa.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sa.b_id = #{newBId}
+        </if>
+        <if test="value != null and value != ''">
+            ,sa.value = #{value}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sa.b_id = #{bId}
+        </if>
+        <if test="houseId != null and houseId !=''">
+            and sa.house_id = #{houseId}
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
+        </if>
+        <if test="attrId != null and attrId !=''">
+            and sa.attr_id = #{attrId}
+        </if>
+    </update>
+
+    <!-- 修改商户照片信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentPhotoInstance" parameterType="Map">
+        update a_agent_photo sp set sp.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sp.b_id = #{newBId}
+        </if>
+        <if test="agentPhotoTypeCd != null and agentPhotoTypeCd != ''">
+            ,sp.agent_photo_type_cd = #{agentPhotoTypeCd}
+        </if>
+        <if test="photo != null and photo != ''">
+            ,sp.photo = #{photo}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sp.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sp.agent_id = #{agentId}
+        </if>
+        <if test="agentPhotoId != null and agentPhotoId !=''">
+            and sp.agent_photo_id = #{agentPhotoId}
+        </if>
+    </update>
+
+    <!-- 修改商户证件信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentCerdentailsInstance" parameterType="Map">
+        update a_agent_cerdentials sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="credentialsCd != null and credentialsCd != ''">
+            ,sc.credentials_cd = #{credentialsCd}
+        </if>
+        <if test="value != null and value != ''">
+            ,sc.value = #{value}
+        </if>
+        <if test="validityPeriod != null">
+            ,sc.validity_period = #{validityPeriod}
+        </if>
+        <if test="positivePhoto != null and positivePhoto != ''">
+            ,sc.positive_photo = #{positivePhoto}
+        </if>
+        <if test="negativePhoto != null and negativePhoto != ''">
+            ,sc.negative_photo = #{negativePhoto}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+        <if test="agentCerdentialsId != null and agentCerdentialsId !=''">
+            and sc.agent_cerdentials_id = #{agentCerdentialsId}
+        </if>
+    </update>
+
+
+    <!-- 修改商户用户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentUserInstance" parameterType="Map">
+        update a_agent_user sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="relCd != null and relCd != ''">
+            ,sc.rel_cd = #{relCd}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+        <if test="agentUserId != null and agentUserId !=''">
+            and sc.agent_user_id = #{agentUserId}
+        </if>
+    </update>
+
+
+    <!-- 修改商户用户信息 add by wuxw 2018-07-03 -->
+    <update id="updateAgentFeeInstance" parameterType="Map">
+        update a_agent_fee sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="feeMoney != null and feeMoney != ''">
+            ,sc.fee_money = #{feeMoney}
+        </if>
+        <if test="feeTime != null and feeTime != ''">
+            ,sc.fee_time = #{feeTime}
+        </if>
+        <if test="startTime != null">
+            ,sc.start_time = #{startTime}
+        </if>
+        <if test="endTime != null">
+            ,sc.end_time = #{endTime}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            and sc.agent_id = #{agentId}
+        </if>
+        <if test="feeId != null and feeId !=''">
+            and sc.fee_id = #{feeId}
+        </if>
+    </update>
+
+</mapper>
