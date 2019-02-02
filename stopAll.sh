@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-docker-compose -f /data/qhcrm-assist/docker-compose.yml       down;
+docker-compose -f ./Api/docker/docker-compose.yml        down;
+docker-compose -f ./CenterService/docker/docker-compose.yml      down;
+docker-compose -f ./ShopService/docker/docker-compose.yml       down;
+docker-compose -f ./StoreService/docker/docker-compose.yml       down;
+docker-compose -f ./UserService/docker/docker-compose.yml       down;
