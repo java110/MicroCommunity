@@ -66,13 +66,13 @@
     <logger name="com.java110" level="DEBUG"/>
 
     <!--myibatis log configure-->
-    <logger name="com.apache.ibatis" level="TRACE"/>
-    <logger name="java.sql.Connection" level="DEBUG"/>
-    <logger name="java.sql.Statement" level="DEBUG"/>
-    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <logger name="com.apache.ibatis" level="ERROR"/>
 
-    <logger name="org.mybatis" level="DEBUG" />
-    <logger name="dao" level="DEBUG"></logger>
+    <logger name="org.mybatis" level="ERROR" />
+    <logger name="druid.sql.Statement" level="DEBUG"></logger>
+    <logger name="druid.sql.ResultSet" level="DEBUG"></logger>
+
+
     <!--
     <logger name="com.java110" level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
