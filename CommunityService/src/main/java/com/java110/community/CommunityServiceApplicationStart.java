@@ -3,6 +3,8 @@ package com.java110.community;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,6 +32,9 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.community.listener"})
 public class CommunityServiceApplicationStart {
+
+    private final static Logger logger = LoggerFactory.getLogger(CommunityServiceApplicationStart.class);
+
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.

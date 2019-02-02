@@ -6,6 +6,8 @@ import com.java110.core.factory.DataTransactionFactory;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.PageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class LoginRest extends BaseController {
 
+    private final static Logger logger = LoggerFactory.getLogger(LoginRest.class);
 
     @Autowired
     private IConsoleServiceSMO consoleServiceSMOImpl;

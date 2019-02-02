@@ -4,6 +4,8 @@ import com.java110.code.smo.ICommonServiceSmo;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.mapping.CodeMapping;
 import com.java110.feign.base.ICommonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,8 @@ import java.util.List;
  */
 //@RestController
 public class CommonServiceRest extends BaseController implements ICommonService{
+
+    protected final static Logger logger = LoggerFactory.getLogger(CommonServiceRest.class);
 
     @Autowired
     ICommonServiceSmo commonServiceSmoImpl;

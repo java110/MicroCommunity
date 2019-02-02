@@ -7,6 +7,8 @@ import com.java110.entity.rule.Rule;
 import com.java110.entity.rule.RuleCondCfg;
 import com.java110.entity.rule.RuleEntrance;
 import com.java110.rule.dao.IRuleDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.util.*;
 @Service("ruleDaoImpl")
 @Transactional
 public class RuleDaoImpl extends BaseServiceDao implements IRuleDao {
+    private final static Logger logger = LoggerFactory.getLogger(RuleDaoImpl.class);
 
 
     @Override

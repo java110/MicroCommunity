@@ -9,6 +9,8 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -38,6 +40,8 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
 public class UserServiceApplicationStart {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserServiceApplicationStart.class);
 
     private final static String LISTENER_PATH = "java110.UserService.listeners";
 

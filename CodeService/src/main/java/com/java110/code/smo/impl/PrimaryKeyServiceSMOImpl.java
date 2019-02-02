@@ -9,6 +9,8 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.CodeDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.service.init.ServiceInfoListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @Service("primaryKeyServiceSMOImpl")
 public class PrimaryKeyServiceSMOImpl extends BaseServiceSMO implements IPrimaryKeyServiceSMO {
+    protected final static Logger logger = LoggerFactory.getLogger(PrimaryKeyServiceSMOImpl.class);
 
 
     @Autowired

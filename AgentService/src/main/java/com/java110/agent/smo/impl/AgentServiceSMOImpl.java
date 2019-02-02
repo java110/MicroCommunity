@@ -17,6 +17,8 @@ import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.agent.smo.IAgentServiceSMO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ import java.util.List;
 @Transactional
 public class AgentServiceSMOImpl extends BaseServiceSMO implements IAgentServiceSMO {
 
+    private final static Logger logger = LoggerFactory.getLogger(AgentServiceSMOImpl.class);
 
         @Override
         public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException {

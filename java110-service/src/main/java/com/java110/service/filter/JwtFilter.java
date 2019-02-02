@@ -6,6 +6,8 @@ import com.java110.common.exception.FilterException;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.common.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -23,6 +25,9 @@ import java.util.Map;
  * Created by wuxw on 2018/5/2.
  */
 public class JwtFilter extends GenericFilterBean {
+
+    private final static Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+
 
     public void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain)
             throws IOException, ServletException {

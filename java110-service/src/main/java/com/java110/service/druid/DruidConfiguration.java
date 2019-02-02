@@ -2,6 +2,8 @@ package com.java110.service.druid;
 
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,9 @@ import org.springframework.context.annotation.Bean;
  * Created by wuxw on 2018/4/23.
  */
 public class DruidConfiguration {
+
+    private final static Logger logger = LoggerFactory.getLogger(DruidConfiguration.class);
+
 
     /**
      * 注册一个StatViewServlet

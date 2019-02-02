@@ -1,6 +1,8 @@
 package com.java110.code.rest;
 
 import com.java110.core.base.controller.BaseController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -15,6 +17,7 @@ import com.java110.core.base.controller.BaseController;
  * Created by wuxw on 2017/10/9.
  */
 public class ServiceConfigServiceRest extends BaseController {
+    protected final static Logger logger = LoggerFactory.getLogger(ServiceConfigServiceRest.class);
 
 
 }

@@ -14,6 +14,8 @@ import com.java110.service.init.ServiceInfoListener;
 import com.java110.service.init.ServiceStartInit;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -37,6 +39,7 @@ import java.util.List;
 //@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.code","com.java110.config.properties.code"})
 @EnableDiscoveryClient
 public class CodeServiceApplicationStart {
+    protected final static Logger logger = LoggerFactory.getLogger(CodeServiceApplicationStart.class);
 
 
     public static void main(String[] args) throws Exception {

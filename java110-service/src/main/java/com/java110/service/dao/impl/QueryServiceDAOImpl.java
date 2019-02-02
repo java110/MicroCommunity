@@ -4,6 +4,8 @@ import com.java110.common.util.StringUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,8 @@ import java.util.*;
 @Service("queryServiceDAOImpl")
 @Transactional
 public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryServiceDAO {
+
+    private final static Logger logger = LoggerFactory.getLogger(QueryServiceDAOImpl.class);
 
     /**
      *  防止sql注入 改造成直接用prepareStatement 预处理sql

@@ -1,6 +1,8 @@
 package com.java110.rule;
 
 import com.java110.config.properties.EventProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,6 +22,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @EnableConfigurationProperties(EventProperties.class)
 public class AppSpringBootApplication {
+
+    private final static Logger logger = LoggerFactory.getLogger(AppSpringBootApplication.class);
+
 
     public static void main(String[] args) throws Exception{
         SpringApplication.run(AppSpringBootApplication.class, args);

@@ -3,6 +3,8 @@ package com.java110.shop;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -31,6 +33,7 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.shop.listener"})
 public class ShopServiceApplicationStart {
 
+    private final static Logger logger = LoggerFactory.getLogger(ShopServiceApplicationStart.class);
     private final static String LISTENER_PATH = "java110.ShopService.listeners";
 
     /**

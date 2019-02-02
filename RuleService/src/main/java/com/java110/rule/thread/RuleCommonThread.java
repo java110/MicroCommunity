@@ -8,6 +8,8 @@ import com.java110.common.util.RuleUtil;
 import com.java110.entity.rule.ContractRootRule;
 import com.java110.entity.rule.Rule;
 import com.java110.rule.common.RuleCommon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.concurrent.*;
  */
 public class RuleCommonThread extends LoggerEngine{
 
+    private final static Logger logger = LoggerFactory.getLogger(RuleCommonThread.class);
 
     private RuleCommon ruleCommon;
 

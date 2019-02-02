@@ -6,6 +6,8 @@ import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.controller.BaseController;
 import com.java110.feign.base.IPrimaryKeyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 //@RestController
 public class PrimaryKeyServiceRest extends BaseController implements IPrimaryKeyService {
+
+    protected final static Logger logger = LoggerFactory.getLogger(PrimaryKeyServiceRest.class);
 
     @Autowired
     IPrimaryKeyServiceSMO iPrimaryKeyServiceSMO;

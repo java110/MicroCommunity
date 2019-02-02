@@ -22,6 +22,8 @@ import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,7 @@ import java.util.Map;
 //@Transactional
 public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
+    private final static Logger logger = LoggerFactory.getLogger(ApiServiceSMOImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;

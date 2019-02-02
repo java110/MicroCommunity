@@ -2,6 +2,8 @@ package com.java110.store.rest;
 
 import com.java110.core.base.controller.BaseController;
 import com.java110.store.smo.IStoreServiceSMO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 //@RestController
 public class StoreServiceRest extends BaseController  {
+
+    private final static Logger logger = LoggerFactory.getLogger(StoreServiceRest.class);
 
     @Autowired
     IStoreServiceSMO storeServiceSMOImpl;

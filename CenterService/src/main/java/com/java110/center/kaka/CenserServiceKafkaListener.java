@@ -3,6 +3,8 @@ package com.java110.center.kaka;
 import com.java110.center.smo.ICenterServiceSMO;
 import com.java110.core.base.AppBase;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 
@@ -11,6 +13,9 @@ import org.springframework.kafka.annotation.KafkaListener;
  * Created by wuxw on 2018/4/15.
  */
 public class CenserServiceKafkaListener extends AppBase {
+
+    protected final static Logger logger = LoggerFactory.getLogger(CenserServiceKafkaListener.class);
+
 
     @Autowired
     private ICenterServiceSMO centerServiceSMOImpl;

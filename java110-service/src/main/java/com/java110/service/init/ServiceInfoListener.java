@@ -1,5 +1,7 @@
 package com.java110.service.init;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ServiceInfoListener implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
+
+    private final static Logger logger = LoggerFactory.getLogger(ServiceInfoListener.class);
 
     private int serverPort;
 

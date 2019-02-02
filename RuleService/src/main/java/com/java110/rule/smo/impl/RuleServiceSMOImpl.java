@@ -14,6 +14,8 @@ import com.java110.rule.common.RuleCommon;
 import com.java110.rule.dao.IRuleDao;
 import com.java110.rule.smo.IRuleServiceSMO;
 import com.java110.rule.thread.RuleCommonThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -28,6 +30,7 @@ import java.util.*;
  */
 @Service("ruleServiceSMOImpl")
 public class RuleServiceSMOImpl extends BaseServiceSMO implements IRuleServiceSMO {
+    private final static Logger logger = LoggerFactory.getLogger(RuleServiceSMOImpl.class);
 
 
     public static DateFormat df = new SimpleDateFormat("yyyyMMddHHmmSSS");

@@ -12,6 +12,8 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 
@@ -23,6 +25,8 @@ import java.util.Map;
  * Created by wuxw on 2018/4/15.
  */
 public class PropertyServiceKafka extends BaseController {
+
+    private final static Logger logger = LoggerFactory.getLogger(PropertyServiceKafka.class);
 
     @Autowired
     private IPropertyServiceSMO propertyServiceSMOImpl;

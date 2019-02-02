@@ -9,6 +9,8 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.shop.dao.IShopServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 如果buyId  buyAttrId 填写的值为-1,则重新生成
@@ -17,6 +19,8 @@ import com.java110.shop.dao.IShopServiceDao;
  */
 @Java110Listener(name="flushAboutBuyIdListener")
 public class FlushAboutBuyIdListener extends AbstractShopBusinessServiceDataFlowListener {
+    private final static Logger logger = LoggerFactory.getLogger(FlushAboutBuyIdListener.class);
+
     @Override
     public int getOrder() {
         return 1;

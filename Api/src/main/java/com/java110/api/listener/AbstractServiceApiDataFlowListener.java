@@ -8,6 +8,8 @@ import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
@@ -23,6 +25,8 @@ import java.util.Map;
  * Created by wuxw on 2018/11/15.
  */
 public abstract class AbstractServiceApiDataFlowListener implements ServiceDataFlowListener {
+
+    private final static Logger logger = LoggerFactory.getLogger(AbstractServiceApiDataFlowListener.class);
 
     @Autowired
     private RestTemplate restTemplate;

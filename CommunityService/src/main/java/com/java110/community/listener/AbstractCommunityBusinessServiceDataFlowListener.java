@@ -7,6 +7,8 @@ import com.java110.common.exception.ListenerExecuteException;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.community.dao.ICommunityServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractCommunityBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener{
+
+    private final static Logger logger = LoggerFactory.getLogger(AbstractCommunityBusinessServiceDataFlowListener.class);
 
 
     /**

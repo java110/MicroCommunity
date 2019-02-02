@@ -8,6 +8,8 @@ import com.java110.common.util.StringUtil;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.entity.service.PageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,9 @@ import java.util.Map;
  */
 @Controller
 public class ConsoleController extends BaseController {
+
+    private final static Logger logger = LoggerFactory.getLogger(ConsoleController.class);
+
 
     @Autowired
     private IConsoleServiceSMO consoleServiceSMOImpl;

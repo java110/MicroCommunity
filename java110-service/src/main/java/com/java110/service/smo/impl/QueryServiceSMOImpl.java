@@ -17,6 +17,8 @@ import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import com.java110.service.smo.IQueryServiceSMO;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,10 @@ import java.util.TreeMap;
 @Service("queryServiceSMOImpl")
 @Transactional
 public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSMO {
+
+
+    private final static Logger logger = LoggerFactory.getLogger(QueryServiceSMOImpl.class);
+
 
     @Autowired
     private IQueryServiceDAO queryServiceDAOImpl;

@@ -4,6 +4,8 @@ import com.java110.code.dao.ICommonServiceDao;
 import com.java110.common.util.SerializeUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.mapping.CodeMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ import java.util.List;
 @Service("commonServiceDaoImpl")
 @Transactional
 public class CommonServiceDaoImpl extends BaseServiceDao implements ICommonServiceDao {
+
+    protected final static Logger logger = LoggerFactory.getLogger(CommonServiceDaoImpl.class);
+
 
     /**
      * 查询所有有效的映射数据

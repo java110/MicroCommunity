@@ -3,6 +3,8 @@ package com.java110.comment;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,6 +32,7 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.comment.listener"})
 public class CommentServiceApplicationStart {
+    private final static Logger logger = LoggerFactory.getLogger(CommentServiceApplicationStart.class);
 
 
     /**

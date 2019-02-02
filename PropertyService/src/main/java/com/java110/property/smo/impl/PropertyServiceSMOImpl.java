@@ -17,6 +17,8 @@ import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ import java.util.List;
 @Service("propertyServiceSMOImpl")
 @Transactional
 public class PropertyServiceSMOImpl extends BaseServiceSMO implements IPropertyServiceSMO {
+    private final static Logger logger = LoggerFactory.getLogger(PropertyServiceSMOImpl.class);
 
 
         @Override

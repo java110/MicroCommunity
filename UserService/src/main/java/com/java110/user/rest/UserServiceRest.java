@@ -9,6 +9,8 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.entity.user.Cust;
 import com.java110.feign.user.IUserService;
 import com.java110.user.smo.IUserServiceSMO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 //@RestController
 public class UserServiceRest extends BaseController implements IUserService {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserServiceRest.class);
 
     @Autowired
     IUserServiceSMO iUserServiceSMO;

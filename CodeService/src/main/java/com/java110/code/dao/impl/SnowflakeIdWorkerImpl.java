@@ -19,6 +19,8 @@ import com.java110.common.exception.DAOException;
 import com.java110.common.log.LoggerEngine;
 import com.java110.code.dao.ISnowflakeldWorker;
 import com.java110.service.init.ServiceInfoListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import java.net.InetAddress;
 @Service
 public class SnowflakeIdWorkerImpl extends LoggerEngine implements ISnowflakeldWorker {
 
+    protected final static Logger logger = LoggerFactory.getLogger(SnowflakeIdWorkerImpl.class);
 
 
     // ==============================Fields===========================================

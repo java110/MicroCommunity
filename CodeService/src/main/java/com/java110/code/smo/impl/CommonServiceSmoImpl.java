@@ -3,6 +3,8 @@ package com.java110.code.smo.impl;
 import com.java110.code.dao.ICommonServiceDao;
 import com.java110.code.smo.ICommonServiceSmo;
 import com.java110.entity.mapping.CodeMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.List;
  */
 @Service("commonServiceSmoImpl")
 public class CommonServiceSmoImpl implements ICommonServiceSmo {
+
+    protected final static Logger logger = LoggerFactory.getLogger(CommonServiceSmoImpl.class);
 
     @Autowired
     ICommonServiceDao commonServiceDaoImpl;

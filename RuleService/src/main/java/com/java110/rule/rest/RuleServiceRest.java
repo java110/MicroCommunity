@@ -9,6 +9,8 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.entity.rule.ContractRootRule;
 import com.java110.entity.rule.TcpContRule;
 import com.java110.rule.smo.IRuleServiceSMO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import java.util.Date;
  */
 @RestController
 public class RuleServiceRest extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(RuleServiceRest.class);
 
 
     @Autowired

@@ -4,6 +4,8 @@ import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.event.service.init.SystemStartLoadBusinessConfigure;
 import com.java110.service.init.ServiceStartInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -31,6 +33,9 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.store.listener"})
 public class StoreServiceApplicationStart {
+
+    private final static Logger logger = LoggerFactory.getLogger(StoreServiceApplicationStart.class);
+
 
     private final static String LISTENER_PATH = "java110.StoreService.listeners";
 

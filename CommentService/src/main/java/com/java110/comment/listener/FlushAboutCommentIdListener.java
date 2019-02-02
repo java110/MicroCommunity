@@ -9,6 +9,8 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 如果commentId填写的值为-1,则重新生成
@@ -16,6 +18,10 @@ import com.java110.entity.center.Business;
  */
 @Java110Listener(name="flushAboutCommentIdListener")
 public class FlushAboutCommentIdListener extends AbstractCommentBusinessServiceDataFlowListener {
+
+    protected final static Logger logger = LoggerFactory.getLogger(FlushAboutCommentIdListener.class);
+
+
     @Override
     public int getOrder() {
         return 1;

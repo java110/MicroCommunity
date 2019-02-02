@@ -3,6 +3,8 @@ package com.java110.code.dao.impl;
 import com.java110.code.dao.IPrimaryKeyServiceDao;
 import com.java110.common.log.LoggerEngine;
 import com.java110.core.base.dao.BaseServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.Map;
 @Transactional
 public class PrimaryKeyServiceDaoImpl extends BaseServiceDao implements IPrimaryKeyServiceDao {
 
+    protected final static Logger logger = LoggerFactory.getLogger(PrimaryKeyServiceDaoImpl.class);
 
     /**
      * 根据主键name查询主键生成ID

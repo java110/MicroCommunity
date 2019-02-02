@@ -11,6 +11,8 @@ import com.java110.event.center.DataFlowEventPublishing;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ import java.util.Map;
 @Api(value = "中心服务接口服务规范")
 @RequestMapping(path = "/centerApi")
 public class CenterApi extends BaseController {
+
+    protected final static Logger logger = LoggerFactory.getLogger(CenterApi.class);
+
 
     @Autowired
     private ICenterServiceSMO centerServiceSMOImpl;

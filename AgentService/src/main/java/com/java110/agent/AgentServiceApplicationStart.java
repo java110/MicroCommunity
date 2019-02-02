@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.agent.listener"})
 public class AgentServiceApplicationStart {
-    
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.

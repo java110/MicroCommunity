@@ -9,6 +9,8 @@ import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
 import com.java110.user.smo.IUserServiceSMO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,8 @@ import java.util.Map;
  */
 @RestController
 public class UserApi extends BaseController {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserApi.class);
 
     @Autowired
     IUserServiceSMO userServiceSMOImpl;

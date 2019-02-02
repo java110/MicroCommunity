@@ -17,6 +17,8 @@ import com.java110.common.util.StringUtil;
 import com.java110.console.smo.IConsoleServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.service.PageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +39,7 @@ import java.util.Map;
 @Service("consoleServiceSMOImpl")
 public class ConsoleServiceSMOImpl extends LoggerEngine implements IConsoleServiceSMO {
 
+    private final static Logger logger = LoggerFactory.getLogger(ConsoleServiceSMOImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;

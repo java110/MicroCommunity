@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.center.dao.ICenterServiceDAO;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.DAOException;
-import com.java110.common.log.LoggerEngine;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.mapping.Mapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,8 @@ import java.util.Map;
 @Transactional
 public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServiceDAO {
 
+    protected final static Logger logger = LoggerFactory.getLogger(CenterServiceDAOImpl.class);
+
     /**
      * 保存订单信息
      * @param order 订单信息
@@ -30,7 +33,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void saveOrder(Map order) throws DAOException{
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveOrder】保存数据入参 : " + JSONObject.toJSONString(order));
+        logger.debug("----【CenterServiceDAOImpl.saveOrder】保存数据入参 : " + JSONObject.toJSONString(order));
 
         int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrder",order);
         if(saveFlag < 1){
@@ -47,7 +50,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void saveOrderAttrs(List<Map> orderAttrs) throws DAOException {
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveOrderAttrs】保存数据入参 : " + JSONObject.toJSONString(orderAttrs));
+        logger.debug("----【CenterServiceDAOImpl.saveOrderAttrs】保存数据入参 : " + JSONObject.toJSONString(orderAttrs));
 
         for(Map orderAttr:orderAttrs){
             int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrderAttrs",orderAttr);
@@ -64,7 +67,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void saveBusiness(Map business) throws DAOException {
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(business));
+        logger.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(business));
             int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
             if (saveFlag < 1) {
                 throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(business));
@@ -78,7 +81,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void saveBusiness(List<Map> businesses) throws DAOException {
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(businesses));
+        logger.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(businesses));
         for(Map business:businesses) {
             int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
             if (saveFlag < 1) {
@@ -94,7 +97,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     @Override
     public void saveBusinessAttrs(List<Map> businessAttrs) throws DAOException {
 
-        LoggerEngine.debug("----【CenterServiceDAOImpl.saveBusinessAttrs】保存数据入参 : " + JSONObject.toJSONString(businessAttrs));
+        logger.debug("----【CenterServiceDAOImpl.saveBusinessAttrs】保存数据入参 : " + JSONObject.toJSONString(businessAttrs));
 
         for(Map businessAttr:businessAttrs){
             int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusinessAttrs",businessAttr);
@@ -111,7 +114,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      */
     @Override
     public void updateOrder(Map order) throws DAOException {
-        LoggerEngine.debug("----【CenterServiceDAOImpl.updateOrder】保存数据入参 : " + JSONObject.toJSONString(order));
+        logger.debug("----【CenterServiceDAOImpl.updateOrder】保存数据入参 : " + JSONObject.toJSONString(order));
 
         int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateOrder",order);
         if(saveFlag < 1){
@@ -126,7 +129,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      */
     @Override
     public void updateBusiness(Map order) throws DAOException {
-        LoggerEngine.debug("----【CenterServiceDAOImpl.updateBusiness】保存数据入参 : " + JSONObject.toJSONString(order));
+        logger.debug("----【CenterServiceDAOImpl.updateBusiness】保存数据入参 : " + JSONObject.toJSONString(order));
 
         int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusiness",order);
         if(saveFlag < 1){
@@ -140,7 +143,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public void updateBusinessByBId(Map business) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.updateBusinessByBId】保存数据入参 : " + JSONObject.toJSONString(business));
+        logger.debug("----【CenterServiceDAOImpl.updateBusinessByBId】保存数据入参 : " + JSONObject.toJSONString(business));
 
         int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessByBId",business);
         if(saveFlag < 1){
@@ -155,7 +158,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public void completeOrderByBId(String bId) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.completeOrderByBId】数据入参 : " + bId);
+        logger.debug("----【CenterServiceDAOImpl.completeOrderByBId】数据入参 : " + bId);
 
         int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByBId",bId);
 
@@ -172,7 +175,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public int judgeAllBusinessCompleted(String oId,String statusCd) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.judgeAllBusinessCompleted】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
+        logger.debug("----【CenterServiceDAOImpl.judgeAllBusinessCompleted】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
         Map paramIn = new HashMap();
         paramIn.put("oId",oId);
         paramIn.put("statusCd",statusCd);
@@ -191,7 +194,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public int judgeAllBusinessDeleteOrder(String oId,String statusCd) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.judgeAllBusinessDeleteOrder】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
+        logger.debug("----【CenterServiceDAOImpl.judgeAllBusinessDeleteOrder】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
         Map paramIn = new HashMap();
         paramIn.put("oId",oId);
         paramIn.put("statusCd",statusCd);
@@ -238,7 +241,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.getCommonOrderCompledBusinessByBId】数据入参 : " + bId);
+        logger.debug("----【CenterServiceDAOImpl.getCommonOrderCompledBusinessByBId】数据入参 : " + bId);
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.getCommonOrderCompledBusinessByBId",bId);
     }
 
@@ -264,7 +267,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
      * @throws DAOException
      */
     public List<Map> getBusinessByOId(Map info) throws DAOException{
-        LoggerEngine.debug("----【CenterServiceDAOImpl.getBusinessByOId】保存数据入参 : " + JSONObject.toJSONString(info));
+        logger.debug("----【CenterServiceDAOImpl.getBusinessByOId】保存数据入参 : " + JSONObject.toJSONString(info));
 
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.getBusinessByOId",info);
     }

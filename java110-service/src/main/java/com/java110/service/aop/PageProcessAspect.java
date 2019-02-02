@@ -10,6 +10,8 @@ import com.java110.entity.service.PageData;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,6 +32,10 @@ import java.util.Map;
 @Aspect
 @Component
 public class PageProcessAspect {
+
+    private final static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
+
+
     @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
     public void dataProcess(){}
 
