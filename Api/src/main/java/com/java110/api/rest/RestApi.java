@@ -6,6 +6,8 @@ import com.java110.core.base.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ import java.util.Map;
 @Api(value = "对外统一提供服务接口服务")
 public class RestApi extends BaseController {
 
-
+    private final static Logger logger = LoggerFactory.getLogger(RestApi.class);
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
     /**
@@ -59,11 +61,13 @@ public class RestApi extends BaseController {
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE,service);
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_POST);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}",service,postInfo,headers);
             responseEntity = apiServiceSMOImpl.service(postInfo,headers);
         }catch (Throwable e){
             logger.error("请求post 方法["+service+"]失败："+postInfo,e);
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.debug("api：{} 返回信息为：{}",service,responseEntity);
 
         return responseEntity;
     }
@@ -86,11 +90,13 @@ public class RestApi extends BaseController {
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE,service);
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_GET);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}","",headers);
             responseEntity = apiServiceSMOImpl.service("",headers);
         }catch (Throwable e){
             logger.error("请求get 方法["+service+"]失败：",e);
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        logger.debug("api：{} 返回信息为：{}",service,responseEntity);
 
         return responseEntity;
     }
@@ -115,12 +121,13 @@ public class RestApi extends BaseController {
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE,service);
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_PUT);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}",service,postInfo,headers);
             responseEntity = apiServiceSMOImpl.service(postInfo,headers);
         }catch (Throwable e){
             logger.error("请求put 方法["+service+"]失败：",e);
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
+        logger.debug("api：{} 返回信息为：{}",service,responseEntity);
         return responseEntity;
     }
 
@@ -142,12 +149,14 @@ public class RestApi extends BaseController {
             this.getRequestInfo(request, headers);
             headers.put(CommonConstant.HTTP_SERVICE,service);
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_DELETE);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}",service,"",headers);
             responseEntity = apiServiceSMOImpl.service("",headers);
         }catch (Throwable e){
             logger.error("请求delete 方法["+service+"]失败：",e);
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        logger.debug("api：{} 返回信息为：{}",service,responseEntity);
         return responseEntity;
     }
 
