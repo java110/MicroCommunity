@@ -3,6 +3,7 @@ package com.java110.center;
 import com.java110.center.smo.ICenterServiceCacheSMO;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.client.RestTemplate;
 import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.event.center.init.EventConfigInit;
 import com.java110.service.init.ServiceStartInit;
@@ -14,7 +15,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.nio.charset.Charset;
 
@@ -43,7 +44,7 @@ public class CenterServiceApplicationStart {
     @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 
@@ -54,7 +55,7 @@ public class CenterServiceApplicationStart {
     @Bean
     public RestTemplate restTemplateNoLoadBalanced() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         return restTemplate;
     }
 

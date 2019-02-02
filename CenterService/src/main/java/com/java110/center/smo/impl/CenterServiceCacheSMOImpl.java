@@ -16,6 +16,8 @@ import com.java110.entity.mapping.Mapping;
 import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ import java.util.Map;
  */
 @Service("centerServiceCacheSMOImpl")
 public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
+
+    private final static Logger logger = LoggerFactory.getLogger(CenterServiceCacheSMOImpl.class);
 
     @Autowired
     ICenterServiceDAO centerServiceDAOImpl;
@@ -117,6 +121,9 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     }
 
     private void doFlushServiceSql() {
+
+        logger.debug("开始刷新 ServiceSql数据到redis数据库中");
+
         List<ServiceSql> serviceSqls = queryServiceDAOImpl.qureyServiceSqlAll();
 
         if(serviceSqls == null || serviceSqls.size() == 0){
@@ -161,6 +168,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     }
 
     private void doFlushMapping() {
+        logger.debug("开始刷新 Mapping数据到redis数据库中");
         List<Mapping> mappings = centerServiceDAOImpl.getMappingInfoAll();
         //删除原始数据
         MappingCache.removeData(MappingCache._SUFFIX_MAPPING);
@@ -216,6 +224,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
     }
 
     private void doFlushAppRoute() {
+        logger.debug("开始刷新 AppRoute数据到redis数据库中");
         List<Map> appInfos = centerServiceDAOImpl.getAppRouteAndServiceInfoAll();
         Map<String,List<AppRoute>> appRoustsMap = new HashMap<String,List<AppRoute>>();
         List<AppRoute> appRoutes = null;

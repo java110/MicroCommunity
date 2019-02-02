@@ -11,6 +11,7 @@ import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
 import com.java110.core.factory.AuthenticationFactory;
@@ -28,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.util.Date;
 import java.util.List;

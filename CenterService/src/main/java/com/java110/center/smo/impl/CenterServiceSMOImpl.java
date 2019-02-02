@@ -12,6 +12,7 @@ import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.kafka.KafkaFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.*;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.context.DataFlow;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
@@ -30,7 +31,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.util.*;
 

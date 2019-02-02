@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="60 seconds">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <!-- 控制台输出 -->
@@ -61,6 +61,8 @@
     </appender>
 
     <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="com.java110.api" level="DEBUG"/>
+    <logger name="com.java110.center" level="DEBUG"/>
     <logger name="com.java110" level="DEBUG"/>
 
     <!--myibatis log configure-->
@@ -68,10 +70,15 @@
     <logger name="java.sql.Connection" level="DEBUG"/>
     <logger name="java.sql.Statement" level="DEBUG"/>
     <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <!--
+    <logger name="com.java110" level="DEBUG">
+        <appender-ref ref="STDOUT_FILE" />
+    </logger>-->
 
-    <!-- 日志输出级别 -->
+    <!-- 日志输出级别
     <root level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
         <appender-ref ref="DEBUG_FILE" />
     </root>
+    -->
 </configuration>
