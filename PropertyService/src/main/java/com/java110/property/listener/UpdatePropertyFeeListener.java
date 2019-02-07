@@ -41,7 +41,7 @@ public class UpdatePropertyFeeListener extends AbstractPropertyBusinessServiceDa
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_FEE;
     }
 

@@ -28,7 +28,7 @@ public class FlushAboutCommentIdListener extends AbstractCommentBusinessServiceD
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_COMMENT_INFO;
     }
 

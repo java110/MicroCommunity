@@ -46,7 +46,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_MEMBER_JOINED_STORE;
     }
 

@@ -42,7 +42,7 @@ public class UpdateAgentInfoListener extends AbstractAgentBusinessServiceDataFlo
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_AGENT_INFO;
     }
 

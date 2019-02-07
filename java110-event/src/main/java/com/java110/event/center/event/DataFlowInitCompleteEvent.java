@@ -1,6 +1,8 @@
 package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.OrderDataFlow;
 
 /**
  * dataFlow 对象初始化完成
@@ -14,7 +16,7 @@ public class DataFlowInitCompleteEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public DataFlowInitCompleteEvent(Object source, DataFlow dataFlow) {
+    public DataFlowInitCompleteEvent(Object source, IOrderDataFlowContext dataFlow) {
         super(source, dataFlow);
     }
 }

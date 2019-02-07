@@ -62,7 +62,7 @@
 
     <logger name="org.springframework" level="error"/>
     <logger name="com.java110.api" level="DEBUG"/>
-    <logger name="com.java110.center" level="DEBUG"/>
+    <logger name="com.java110.order" level="DEBUG"/>
     <logger name="com.java110" level="DEBUG"/>
 
     <!--myibatis log configure-->

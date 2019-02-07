@@ -41,7 +41,7 @@ public class UpdateAgentPhotoListener extends AbstractAgentBusinessServiceDataFl
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_AGENT_PHOTO;
     }
 

@@ -41,7 +41,7 @@ public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlow
      * @return
      */
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_RECOVER_USER_INFO;
     }
 

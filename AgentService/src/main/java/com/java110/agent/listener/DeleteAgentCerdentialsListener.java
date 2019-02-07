@@ -45,7 +45,7 @@ public class DeleteAgentCerdentialsListener extends AbstractAgentBusinessService
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_AGENT_CERDENTIALS;
     }
 

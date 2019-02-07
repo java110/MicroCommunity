@@ -1,6 +1,8 @@
 package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.OrderDataFlow;
 
 /**
  * 加载配置文件完成
@@ -14,7 +16,7 @@ public class LoadConfigDataCompleteEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public LoadConfigDataCompleteEvent(Object source, DataFlow dataFlow) {
+    public LoadConfigDataCompleteEvent(Object source, IOrderDataFlowContext dataFlow) {
         super(source, dataFlow);
     }
 }

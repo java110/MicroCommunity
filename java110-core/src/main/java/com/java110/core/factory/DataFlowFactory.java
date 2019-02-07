@@ -10,14 +10,21 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.AbstractDataFlowContext;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.OrderDataFlow;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.entity.order.BusinessAttrs;
+import com.java110.entity.order.Orders;
+import com.java110.entity.order.OrdersAttrs;
 import org.springframework.beans.BeanInstantiationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 
@@ -202,6 +209,25 @@ public class DataFlowFactory {
         return order ;
     }
 
+    /**
+     * 获取Order信息
+     * @param orders 订单信息
+     * @return
+     */
+    public static Map getOrder(Orders orders){
+        Map order = new HashMap();
+        orders.setoId(GenerateCodeFactory.getOId());
+        order.put("oId",orders.getoId());
+        order.put("appId",orders.getAppId());
+        order.put("extTransactionId",orders.getExtTransactionId());
+        order.put("userId",orders.getUserId());
+        order.put("requestTime",orders.getRequestTime());
+        order.put("orderTypeCd",orders.getOrderTypeCd());
+        order.put("remark",orders.getRemark());
+        order.put("statusCd",StatusConstant.STATUS_CD_SAVE);
+        return order ;
+    }
+
 
     /**
      * 获取订单属性
@@ -229,6 +255,28 @@ public class DataFlowFactory {
     }
 
     /**
+     * 获取订单属性
+     * @param orders
+     * @return
+     */
+    public static List<Map> getOrderAttrs(Orders orders){
+        List<Map> orderAttrs = new ArrayList<Map>();
+
+        List<OrdersAttrs> attrs = orders.getOrdersAttrs();
+        Map attrMap = null;
+        for(OrdersAttrs ordersAttr:attrs)
+        {
+            ordersAttr.setAttrId(GenerateCodeFactory.getAttrId());
+            attrMap = new HashMap();
+            attrMap.put("oId",orders.getoId());
+            attrMap.put("attrId", ordersAttr.getAttrId());
+            attrMap.put("specCd",ordersAttr.getSpecCd());
+            attrMap.put("value",ordersAttr.getValue());
+            orderAttrs.add(attrMap);
+        }
+        return orderAttrs;
+    }
+    /**
      * 获取订单项
      * @param dataFlow
      * @return
@@ -253,6 +301,33 @@ public class DataFlowFactory {
         return businesss;
     }
 
+
+    /**
+     * 获取订单项
+     * @param dataFlow
+     * @return
+     */
+    public static List<Map> getBusiness(OrderDataFlow dataFlow){
+        List<Map> businesss = new ArrayList<Map>();
+        Map busiMap = null;
+        List<com.java110.entity.order.Business> businessList = dataFlow.getBusinessList();
+        for(com.java110.entity.order.Business business : businessList) {
+            if(business == null){
+                continue;
+            }
+            business.setbId(GenerateCodeFactory.getBId());
+            busiMap = new HashMap();
+            busiMap.put("oId",dataFlow.getOrders().getoId());
+            busiMap.put("businessTypeCd",business.getBusinessTypeCd());
+            busiMap.put("remark",business.getRemark());
+            busiMap.put("statusCd",StatusConstant.STATUS_CD_SAVE);
+            busiMap.put("bId",business.getbId());
+            businesss.add(busiMap);
+        }
+        return businesss;
+    }
+
+
     /**
      * 组装撤单数据
      * @param dataFlow
@@ -263,6 +338,24 @@ public class DataFlowFactory {
         List<Map> business = new ArrayList<Map>();
         Map busiMap = new HashMap();
         busiMap.put("oId",dataFlow.getoId());
+        busiMap.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        busiMap.put("remark",message);
+        busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
+        busiMap.put("bId", GenerateCodeFactory.getBId());
+        business.add(busiMap);
+        return business;
+    }
+
+    /**
+     * 组装撤单数据
+     * @param dataFlow
+     * @param message
+     * @return
+     */
+    public static List<Map> getDeleteOrderBusiness(OrderDataFlow dataFlow,String message){
+        List<Map> business = new ArrayList<Map>();
+        Map busiMap = new HashMap();
+        busiMap.put("oId",dataFlow.getOrders().getoId());
         busiMap.put("businessTypeCd",StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         busiMap.put("remark",message);
         busiMap.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
@@ -297,6 +390,34 @@ public class DataFlowFactory {
         return businessAttrs;
     }
 
+
+    /**
+     * 获取订单属性
+     * @param dataFlow
+     * @return
+     */
+    public static List<Map> getBusinessAttrs(OrderDataFlow dataFlow){
+        List<Map> businessAttrs = new ArrayList<Map>();
+        List<com.java110.entity.order.Business> businesses = dataFlow.getBusinessList();
+        for(com.java110.entity.order.Business business :businesses) {
+            if (business.getBusinessAttrs() == null || business.getBusinessAttrs().size() ==0) {
+                continue;
+            }
+            List<BusinessAttrs> attrs = business.getBusinessAttrs();
+            Map attrMap = null;
+            for (BusinessAttrs businessAttrs1 : attrs) {
+                attrMap = new HashMap();
+                businessAttrs1.setAttrId(GenerateCodeFactory.getAttrId());
+                attrMap.put("bId", business.getbId());
+                attrMap.put("attrId", businessAttrs1.getAttrId());
+                attrMap.put("specCd", businessAttrs1.getSpecCd());
+                attrMap.put("value", businessAttrs1.getValue());
+                businessAttrs.add(attrMap);
+            }
+        }
+        return businessAttrs;
+    }
+
     /**
      * 获取将要作废的订单
      * @param dataFlow
@@ -306,6 +427,19 @@ public class DataFlowFactory {
         Map order = new HashMap();
         order.put("oId",dataFlow.getoId());
        // order.put("finishTime",DateUtil.getCurrentDate());
+        order.put("statusCd",StatusConstant.STATUS_CD_DELETE);
+        return order;
+    }
+
+    /**
+     * 获取将要作废的订单
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedInvalidOrder(OrderDataFlow dataFlow){
+        Map order = new HashMap();
+        order.put("oId",dataFlow.getOrders().getoId());
+        // order.put("finishTime",DateUtil.getCurrentDate());
         order.put("statusCd",StatusConstant.STATUS_CD_DELETE);
         return order;
     }
@@ -361,6 +495,23 @@ public class DataFlowFactory {
         Map business = new HashMap();
         String bId = "";
         for(Business busi:dataFlow.getBusinesses()){
+            bId += busi.getbId()+",";
+        }
+        business.put("bId",bId.substring(0,bId.length()-1));
+        business.put("finishTime",DateUtil.getCurrentDate());
+        business.put("statusCd",StatusConstant.STATUS_CD_DELETE_ORDER);
+        return business;
+    }
+
+    /**
+     * Business 过程完成
+     * @param dataFlow
+     * @return
+     */
+    public static Map getNeedDeleteBusiness(OrderDataFlow dataFlow){
+        Map business = new HashMap();
+        String bId = "";
+        for(com.java110.entity.order.Business busi:dataFlow.getBusinessList()){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
@@ -494,6 +645,21 @@ public class DataFlowFactory {
         return requestMessage;
     }
 
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param business
+     * @return
+     */
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("businessTypeCd",business.getBusinessTypeCd());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
 
     /**
      * 发起撤单请求报文
@@ -508,6 +674,23 @@ public class DataFlowFactory {
         busi.put("bId",business.getbId());
         busi.put("serviceCode",business.getServiceCode());
         busi.put("serviceName",business.getServiceName());
+        //busi.put("datas",business.getDatas());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
+
+    /**
+     * 发起撤单请求报文
+     * @param business
+     * @return
+     */
+    public static JSONObject getDeleteInstanceTableJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("businessTypeCd",business.getBusinessTypeCd());
         //busi.put("datas",business.getDatas());
         requestMessage.put("business",busi);
         return requestMessage;
@@ -564,6 +747,26 @@ public class DataFlowFactory {
         return requestMessage;
     }
 
+
+    /**
+     * 获取失败消息的报文（订单失败后通知业务系统）
+     * @param business
+     * @return
+     */
+    public static JSONObject getRequestBusinessJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+
+        JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
+        //JSONObject businesses = notifyMessage.getJSONObject("business");
+        JSONObject busi = null;
+        busi = new JSONObject();
+        busi.put("bId",business.getbId());
+        busi.put("businessTypeCd",business.getBusinessTypeCd());
+        busi.put("remark",business.getRemark());
+        busi.put("datas",business.getData());
+        requestMessage.put("business",busi);
+        return requestMessage;
+    }
+
     /**
      * 业务系统交互
      * @return
@@ -574,6 +777,21 @@ public class DataFlowFactory {
         orders.put("transactionId", UUID.randomUUID().toString().replace("-",""));
         orders.put("dataFlowId",dataFlow.getDataFlowId());
         orders.put("orderTypeCd",dataFlow.getOrderTypeCd());
+        orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());
+        orders.put("businessType",businessType);
+        return notifyMessage;
+    }
+
+    /**
+     * 业务系统交互
+     * @return
+     */
+    private static JSONObject getTransactionBusinessBaseJson(OrderDataFlow dataFlow,String businessType){
+        JSONObject notifyMessage = JSONObject.parseObject("{\"orders\":{},\"business\":{}}");
+        JSONObject orders = notifyMessage.getJSONObject("orders");
+        orders.put("transactionId", UUID.randomUUID().toString().replace("-",""));
+        orders.put("dataFlowId",dataFlow.getDataFlowId());
+        orders.put("orderTypeCd",dataFlow.getOrders().getOrderTypeCd());
         orders.put("requestTime",DateUtil.getyyyyMMddhhmmssDateString());
         orders.put("businessType",businessType);
         return notifyMessage;
@@ -605,6 +823,30 @@ public class DataFlowFactory {
 
 
     /**
+     * 获取同步处理业务
+     * @param dataFlow
+     * @return
+     */
+    public static List<com.java110.entity.order.Business> getSynchronousBusinesses(OrderDataFlow dataFlow){
+        AppService service = null;
+        AppRoute route = null;
+        List<com.java110.entity.order.Business> syschronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
+        for(com.java110.entity.order.Business business :dataFlow.getBusinessList()){
+
+            if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(business.getInvokeModel()) || StringUtil.isEmpty(business.getInvokeModel())){
+                business.setSeq(service.getSeq());
+                syschronousBusinesses.add(business);
+            }
+        }
+        if(syschronousBusinesses.size() > 0) {
+            Collections.sort(syschronousBusinesses);
+        }
+
+        return syschronousBusinesses;
+    }
+
+
+    /**
      * 获取异步处理业务
      * @param dataFlow
      * @return
@@ -623,6 +865,39 @@ public class DataFlowFactory {
         }
 
         return syschronousBusinesses;
+    }
+
+    /**
+     * 获取异步处理业务
+     * @param dataFlow
+     * @return
+     */
+    public static List<com.java110.entity.order.Business> getAsynchronousBusinesses(OrderDataFlow dataFlow){
+
+        List<com.java110.entity.order.Business> asynchronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
+        for(com.java110.entity.order.Business business :dataFlow.getBusinessList()){
+            if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(business.getInvokeModel())){
+
+                asynchronousBusinesses.add(business);
+            }
+        }
+
+        return asynchronousBusinesses;
+    }
+
+
+    /**
+     * hashmap 转MultiValueMap
+     * @param httpHeaders
+     * @return
+     */
+    public static MultiValueMap<String, String> hashMap2MultiValueMap(Map<String,String> httpHeaders){
+        MultiValueMap<String, String> multiValueMap = new HttpHeaders();
+        for(String key:httpHeaders.keySet()) {
+            multiValueMap.add(key,httpHeaders.get(key));
+        }
+
+        return multiValueMap;
     }
 
 

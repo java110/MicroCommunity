@@ -14,7 +14,7 @@ public interface BusinessServiceDataFlowListener extends EventListener,Ordered {
      * 业务 编码
      * @return
      */
-    public String getServiceCode();
+    public String getBusinessTypeCd();
 
     public void soService(BusinessServiceDataFlowEvent event);
 }

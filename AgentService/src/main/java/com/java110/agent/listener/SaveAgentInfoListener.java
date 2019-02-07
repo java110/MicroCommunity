@@ -38,7 +38,7 @@ public class SaveAgentInfoListener extends AbstractAgentBusinessServiceDataFlowL
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_AGENT_INFO;
     }
 

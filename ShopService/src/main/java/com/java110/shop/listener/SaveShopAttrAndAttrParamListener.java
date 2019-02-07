@@ -39,7 +39,7 @@ public class SaveShopAttrAndAttrParamListener extends AbstractShopBusinessServic
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_SHOP_INFO;
     }
 

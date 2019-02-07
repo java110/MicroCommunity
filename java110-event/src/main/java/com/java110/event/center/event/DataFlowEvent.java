@@ -1,6 +1,8 @@
 package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.OrderDataFlow;
 
 import java.util.EventObject;
 
@@ -11,7 +13,7 @@ import java.util.EventObject;
 public class DataFlowEvent extends EventObject {
 
 
-    private DataFlow dataFlow;
+    private IOrderDataFlowContext dataFlow;
 
     /**
      * Constructs a prototypical Event.
@@ -19,16 +21,16 @@ public class DataFlowEvent extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public DataFlowEvent(Object source, DataFlow dataFlow) {
+    public DataFlowEvent(Object source, IOrderDataFlowContext dataFlow) {
         super(source);
         this.dataFlow = dataFlow;
     }
 
-    public DataFlow getDataFlow() {
+    public IOrderDataFlowContext getDataFlow() {
         return dataFlow;
     }
 
-    public void setDataFlow(DataFlow dataFlow) {
+    public void setDataFlow(IOrderDataFlowContext dataFlow) {
         this.dataFlow = dataFlow;
     }
 }

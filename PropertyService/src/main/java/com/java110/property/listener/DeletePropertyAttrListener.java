@@ -42,7 +42,7 @@ public class DeletePropertyAttrListener extends AbstractPropertyBusinessServiceD
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_PROPERTY_ATTR;
     }
 

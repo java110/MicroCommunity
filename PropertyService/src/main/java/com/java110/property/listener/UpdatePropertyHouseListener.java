@@ -42,7 +42,7 @@ public class UpdatePropertyHouseListener extends AbstractPropertyBusinessService
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_HOUSE;
     }
 

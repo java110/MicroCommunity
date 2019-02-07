@@ -55,23 +55,23 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
 
     /**
      * 根据是否实现了某个接口，返回侦听
-     * @param serviceCode
+     * @param businessTypeCd
      * @since 1.8
      * @return
      */
-    public static List<BusinessServiceDataFlowListener> getListeners(String serviceCode){
+    public static List<BusinessServiceDataFlowListener> getListeners(String businessTypeCd){
 
-        Assert.hasLength(serviceCode,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
+        Assert.hasLength(businessTypeCd,"获取需要发布的事件处理侦听时，传递事件为空，请检查");
 
         //先从缓存中获取，为了提升效率
-        if(cacheListenersMap.containsKey(serviceCode)){
-            return cacheListenersMap.get(serviceCode);
+        if(cacheListenersMap.containsKey(businessTypeCd)){
+            return cacheListenersMap.get(businessTypeCd);
         }
 
         List<BusinessServiceDataFlowListener> dataFlowListeners = new ArrayList<BusinessServiceDataFlowListener>();
         for(String listenerBeanName : getListeners()){
             BusinessServiceDataFlowListener listener = ApplicationContextFactory.getBean(listenerBeanName,BusinessServiceDataFlowListener.class);
-            if(serviceCode.equals(listener.getServiceCode())){
+            if(businessTypeCd.equals(listener.getBusinessTypeCd())){
                 dataFlowListeners.add(listener);
             }
         }
@@ -80,7 +80,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
         DataFlowListenerOrderComparator.sort(dataFlowListeners);
 
         //将数据放入缓存中
-        cacheListenersMap.put(serviceCode,dataFlowListeners);
+        cacheListenersMap.put(businessTypeCd,dataFlowListeners);
         return dataFlowListeners;
     }
 
@@ -91,29 +91,29 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      */
     public static void multicastEvent(DataFlowContext dataFlowContext) throws BusinessException{
         Assert.notNull(dataFlowContext.getCurrentBusiness(),"当前没有可处理的业务信息！");
-        multicastEvent(dataFlowContext.getCurrentBusiness().getServiceCode(),dataFlowContext,null);
+        multicastEvent(dataFlowContext.getCurrentBusiness().getBusinessTypeCd(),dataFlowContext,null);
     }
 
 
     /**
      * 发布事件
-     * @param serviceCode
+     * @param businessTypeCd
      * @param dataFlowContext
      */
-    public static void multicastEvent(String serviceCode,DataFlowContext dataFlowContext) throws BusinessException{
-        multicastEvent(serviceCode,dataFlowContext,null);
+    public static void multicastEvent(String businessTypeCd,DataFlowContext dataFlowContext) throws BusinessException{
+        multicastEvent(businessTypeCd,dataFlowContext,null);
     }
 
     /**
      * 发布事件
-     * @param serviceCode
+     * @param businessTypeCd
      * @param dataFlowContext 这个订单信息，以便于 侦听那边需要用
      */
-    public static void multicastEvent(String serviceCode,DataFlowContext dataFlowContext,String asyn) throws  BusinessException{
+    public static void multicastEvent(String businessTypeCd,DataFlowContext dataFlowContext,String asyn) throws  BusinessException{
         try {
-            BusinessServiceDataFlowEvent targetDataFlowEvent = new BusinessServiceDataFlowEvent(serviceCode,dataFlowContext);
+            BusinessServiceDataFlowEvent targetDataFlowEvent = new BusinessServiceDataFlowEvent(businessTypeCd,dataFlowContext);
 
-            multicastEvent(serviceCode,targetDataFlowEvent, asyn);
+            multicastEvent(businessTypeCd,targetDataFlowEvent, asyn);
         }catch (Exception e){
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"发布侦听失败，失败原因为："+e);
         }
@@ -126,8 +126,8 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
      * @param event
      * @param asyn A 表示异步处理
      */
-    public static void multicastEvent(String serviceCode,final BusinessServiceDataFlowEvent event, String asyn) {
-        for (final BusinessServiceDataFlowListener listener : getListeners(serviceCode)) {
+    public static void multicastEvent(String businessTypeCd,final BusinessServiceDataFlowEvent event, String asyn) {
+        for (final BusinessServiceDataFlowListener listener : getListeners(businessTypeCd)) {
 
             if(CommonConstant.PROCESS_ORDER_ASYNCHRONOUS.equals(asyn)){ //异步处理
 

@@ -42,7 +42,7 @@ public class DeleteAgentAttrListener extends AbstractAgentBusinessServiceDataFlo
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_AGENT_ATTR;
     }
 

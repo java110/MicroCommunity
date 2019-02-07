@@ -267,7 +267,7 @@ public class DataTransactionFactory {
 
 
     /**
-     * 创建请求 center 报文 分装成JSON
+     * 创建请求 order 报文 分装成JSON
      * @param appId
      * @return
      */

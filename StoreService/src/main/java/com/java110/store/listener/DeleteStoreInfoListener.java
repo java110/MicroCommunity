@@ -45,7 +45,7 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_STORE_INFO;
     }
 

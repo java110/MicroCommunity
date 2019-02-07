@@ -42,7 +42,7 @@ public class memberQuitStoreListener extends AbstractStoreBusinessServiceDataFlo
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_MEMBER_QUIT_STORE;
     }
 

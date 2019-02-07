@@ -1,6 +1,8 @@
 package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.OrderDataFlow;
 
 /**
  * 调用业务系统事件
@@ -15,7 +17,7 @@ public class InvokeBusinessSystemEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public InvokeBusinessSystemEvent(Object source, DataFlow dataFlow) {
+    public InvokeBusinessSystemEvent(Object source, IOrderDataFlowContext dataFlow) {
         super(source, dataFlow);
     }
 }

@@ -44,7 +44,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_STORE_INFO;
     }
 

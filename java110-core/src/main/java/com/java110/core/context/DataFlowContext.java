@@ -72,7 +72,7 @@ public interface DataFlowContext {
     public Map<String, String> getResponseCurrentHeaders();
 
 
-    public Orders getOrder();
+    public IOrders getOrder();
 
 
     /**

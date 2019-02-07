@@ -1,6 +1,7 @@
 package com.java110.event.center.event;
 
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class ReceiveRequestEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public ReceiveRequestEvent(Object source, DataFlow dataFlow,
+    public ReceiveRequestEvent(Object source, IOrderDataFlowContext dataFlow,
                                String requestData, Map<String,String> headers) {
         super(source, dataFlow);
         this.requestData = requestData;

@@ -40,7 +40,7 @@ public class DeleteShopCatalogListener extends AbstractShopBusinessServiceDataFl
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_SHOP_CATALOG;
     }
 

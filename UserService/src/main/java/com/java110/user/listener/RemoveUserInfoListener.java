@@ -41,7 +41,7 @@ public class RemoveUserInfoListener extends AbstractUserBusinessServiceDataFlowL
      * @return
      */
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_REMOVE_USER_INFO;
     }
 

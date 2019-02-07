@@ -42,7 +42,7 @@ public class UpdatePropertyInfoListener extends AbstractPropertyBusinessServiceD
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_INFO;
     }
 

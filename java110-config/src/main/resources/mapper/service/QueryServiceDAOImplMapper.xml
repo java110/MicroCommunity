@@ -21,6 +21,16 @@
         <parameter property="resMsg" javaType="java.lang.String" jdbcType="CLOB" mode="OUT" />
     </parameterMap>
 
+    <resultMap type="com.java110.entity.service.ServiceSql" id="serviceBusinessMap">
+        <result column="service_business_id" jdbcType="INT" property="serviceBusinessId"/>
+        <result column="business_type_cd" jdbcType="VARCHAR" property="serviceTypeCd"/>
+        <result column="invoke_type" jdbcType="VARCHAR" property="invokeType"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="message_topic" jdbcType="VARCHAR" property="messageTopic"/>
+        <result column="timeout" jdbcType="INT" property="timeout"/>
+        <result column="retry_count" jdbcType="INT" property="retryCount"/>
+    </resultMap>
+
     <!--执行查询sql -->
     <select id="executeSql" parameterType="String" resultType="Map">
         ${value}
@@ -42,6 +52,21 @@
         SELECT css.service_code,css.name,css.params,css.query_model,css.sql,
         css.proc,css.java_script,css.template,css.remark,css.status_cd
         FROM c_service_sql css WHERE css.status_cd = '0'
+    </select>
+
+    <select id="queryServiceBusiness" resultMap="serviceBusinessMap">
+        SELECT
+            a.service_business_id,
+            a.business_type_cd,
+            a.invoke_type,
+            a.url,
+            a.message_topic,
+            a.timeout,
+            a.retry_count
+        FROM
+            c_service_business a
+        WHERE
+            a.status_cd = '0'
     </select>
 
 </mapper>

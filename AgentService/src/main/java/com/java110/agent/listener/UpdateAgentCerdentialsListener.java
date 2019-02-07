@@ -41,7 +41,7 @@ public class UpdateAgentCerdentialsListener extends AbstractAgentBusinessService
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_AGENT_CERDENTIALS;
     }
 

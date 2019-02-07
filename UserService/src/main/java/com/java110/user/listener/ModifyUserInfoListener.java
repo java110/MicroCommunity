@@ -44,7 +44,7 @@ public class ModifyUserInfoListener extends AbstractUserBusinessServiceDataFlowL
      * @return
      */
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_MODIFY_USER_INFO;
     }
 

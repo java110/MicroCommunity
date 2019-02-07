@@ -45,7 +45,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_STORE_INFO;
     }
 

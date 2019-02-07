@@ -1,6 +1,7 @@
 package com.java110.event.center.event;
 
-import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.core.context.OrderDataFlow;
 
 /**
  * 规则校验完成事件
@@ -14,7 +15,7 @@ public class RuleValidateCompleteEvent extends DataFlowEvent {
      * @param dataFlow
      * @throws IllegalArgumentException if source is null.
      */
-    public RuleValidateCompleteEvent(Object source, DataFlow dataFlow) {
+    public RuleValidateCompleteEvent(Object source, IOrderDataFlowContext dataFlow) {
         super(source, dataFlow);
     }
 }

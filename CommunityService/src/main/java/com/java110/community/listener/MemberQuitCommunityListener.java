@@ -40,7 +40,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_MEMBER_QUIT_COMMUNITY;
     }
 

@@ -2,23 +2,18 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.factory.ApplicationContextFactory;
-import com.java110.common.log.LoggerEngine;
-import com.java110.common.util.DateUtil;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
 import org.springframework.http.ResponseEntity;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 /**
  * 数据流上下文
  * Created by wuxw on 2018/5/18.
  */
-public abstract class AbstractDataFlowContext extends AbstractTransactionLog implements DataFlowContext,Orders,TransactionLog{
+public abstract class AbstractDataFlowContext extends AbstractTransactionLog implements DataFlowContext, IOrders,TransactionLog{
 
     private String dataFlowId;
 
@@ -357,7 +352,7 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     }
 
 
-    public abstract Orders getOrder();
+    public abstract IOrders getOrder();
 
     protected AbstractDataFlowContext(Date startDate, String code){
         this.setStartDate(startDate);

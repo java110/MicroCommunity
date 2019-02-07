@@ -14,6 +14,8 @@ public class Business implements Comparable{
     //业务编码
     private String serviceCode;
 
+    private String businessTypeCd;
+
     private String serviceName;
 
     private String remark;
@@ -131,7 +133,7 @@ public class Business implements Comparable{
 
         try{
             this.setbId(businessObj.getString("bId"));
-            this.setServiceCode(businessObj.getString("serviceCode"));
+            this.setBusinessTypeCd(businessObj.getString("businessTypeCd"));
             if(businessObj.containsKey("serviceName")) {
                 this.setServiceName(businessObj.getString("serviceName"));
             }
@@ -171,5 +173,13 @@ public class Business implements Comparable{
             return -1;
         }
         return 0;
+    }
+
+    public String getBusinessTypeCd() {
+        return businessTypeCd;
+    }
+
+    public void setBusinessTypeCd(String businessTypeCd) {
+        this.businessTypeCd = businessTypeCd;
     }
 }

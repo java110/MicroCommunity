@@ -180,4 +180,12 @@ public class Assert extends org.springframework.util.Assert{
             throw new IllegalArgumentException(msg);
         }
     }
+
+    public static void isDate(String text,String msg){
+        try{
+            DateUtil.getDefaultDateFromString(text);
+        }catch (Exception e){
+            throw new IllegalArgumentException(msg);
+        }
+    }
 }

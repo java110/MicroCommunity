@@ -46,7 +46,7 @@ public class SaveUserTagListener extends AbstractBusinessServiceDataFlowListener
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_TAG;
     }
 

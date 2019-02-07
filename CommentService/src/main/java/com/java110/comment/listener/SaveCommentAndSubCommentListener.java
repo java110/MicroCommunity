@@ -36,7 +36,7 @@ public class SaveCommentAndSubCommentListener extends AbstractCommentBusinessSer
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_COMMENT_INFO;
     }
 

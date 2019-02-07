@@ -2,6 +2,7 @@ package com.java110.service.dao.impl;
 
 import com.java110.common.util.StringUtil;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import org.slf4j.Logger;
@@ -162,5 +163,14 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
     @Override
     public List<ServiceSql> qureyServiceSqlAll() {
         return sqlSessionTemplate.selectList("queryServiceDAOImpl.qureyServiceSqlAll");
+    }
+
+
+    /**
+     * 查询服务业务信息
+     * @return
+     */
+    public List<ServiceBusiness> qureyServiceBusiness(){
+        return sqlSessionTemplate.selectList("queryServiceDAOImpl.queryServiceBusiness");
     }
 }

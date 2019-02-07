@@ -1,7 +1,9 @@
 package com.java110.service.dao;
 
+import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;
 
+import javax.validation.OverridesAttribute;
 import java.util.List;
 import java.util.Map;
 
@@ -31,4 +33,10 @@ public interface IQueryServiceDAO {
     public String updateProc(Map<String,Object> paramsInfo);
 
     public List<ServiceSql> qureyServiceSqlAll();
+
+    /**
+     * 查询服务业务信息
+     * @return
+     */
+    public List<ServiceBusiness> qureyServiceBusiness();
 }

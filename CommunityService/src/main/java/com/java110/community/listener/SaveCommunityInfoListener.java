@@ -44,7 +44,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_COMMUNITY_INFO;
     }
 

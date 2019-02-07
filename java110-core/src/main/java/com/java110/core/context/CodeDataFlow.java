@@ -74,7 +74,7 @@ public class CodeDataFlow extends AbstractDataFlowContext {
     }
 
     @Override
-    public Orders getOrder() {
+    public IOrders getOrder() {
         return this;
     }
 }

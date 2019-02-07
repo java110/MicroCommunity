@@ -1,6 +1,5 @@
 package com.java110.core.context;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.InitDataFlowContextException;
@@ -23,7 +22,7 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
     private Map<String,Object> paramOut;
 
     @Override
-    public Orders getOrder() {
+    public IOrders getOrder() {
         return this;
     }
 

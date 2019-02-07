@@ -44,7 +44,7 @@ public class SavePropertyHouseListener extends AbstractPropertyBusinessServiceDa
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_PROPERTY_HOUSE;
     }
 

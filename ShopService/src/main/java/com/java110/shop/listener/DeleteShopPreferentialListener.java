@@ -40,7 +40,7 @@ public class DeleteShopPreferentialListener extends AbstractShopBusinessServiceD
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_SHOP_INFO;
     }
 

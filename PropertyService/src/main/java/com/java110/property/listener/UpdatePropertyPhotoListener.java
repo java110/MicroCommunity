@@ -41,7 +41,7 @@ public class UpdatePropertyPhotoListener extends AbstractPropertyBusinessService
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_UPDATE_PROPERTY_PHOTO;
     }
 

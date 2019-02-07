@@ -38,7 +38,7 @@ public class SaveBuyShopAttrListener extends AbstractShopBusinessServiceDataFlow
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_BUY_SHOP_INFO;
     }
 

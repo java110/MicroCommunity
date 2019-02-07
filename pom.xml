@@ -24,7 +24,7 @@
         <module>RuleService</module>
         <module>SimpleListenerService</module>
         <module>java110-event</module>
-        <module>CenterService</module>
+        <module>OrderService</module>
         <module>java110-cacheAgent</module>
         <module>ConsoleService</module>
         <module>java110-logAgent</module>

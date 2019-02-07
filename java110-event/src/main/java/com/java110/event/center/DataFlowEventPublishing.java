@@ -5,7 +5,8 @@ import com.java110.common.exception.BusinessException;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.core.context.DataFlow;
+import com.java110.core.context.IOrderDataFlowContext;
+import com.java110.entity.order.Business;
 import com.java110.event.center.event.*;
 import com.java110.event.center.listener.DataFlowListener;
 
@@ -222,7 +223,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 初始化 DataFlow 对象完成
      * @param dataFlow 数据流对象
      */
-    public static void initDataFlowComplete(DataFlow dataFlow){
+    public static void initDataFlowComplete(IOrderDataFlowContext dataFlow){
         multicastEvent(new DataFlowInitCompleteEvent("",dataFlow));
     }
 
@@ -230,7 +231,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 规则校验完成事件
      * @param dataFlow 数据流对象
      */
-    public static void ruleValidateComplete(DataFlow dataFlow){
+    public static void ruleValidateComplete(IOrderDataFlowContext dataFlow){
         multicastEvent(new RuleValidateCompleteEvent("",dataFlow));
     }
 
@@ -238,7 +239,7 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 加载配置文件完成
      * @param dataFlow 数据流对象
      */
-    public static void loadConfigDataComplete(DataFlow dataFlow){
+    public static void loadConfigDataComplete(IOrderDataFlowContext dataFlow){
         multicastEvent(new LoadConfigDataCompleteEvent("",dataFlow));
     }
 
@@ -247,15 +248,34 @@ public class DataFlowEventPublishing extends LoggerEngine {
      * 调用业务系统事件
      * @param dataFlow 数据流
      */
-    public static void invokeBusinessSystem(DataFlow dataFlow){
+    public static void invokeBusinessSystem(IOrderDataFlowContext dataFlow){
         multicastEvent(new InvokeBusinessSystemEvent("",dataFlow));
     }
+
+    /**
+     * 调用业务系统成功后事件
+     * @param dataFlow
+     * @param business 成功的事件业务数据封装对象
+     */
+    public static void invokeBusinessBSuccess(IOrderDataFlowContext dataFlow, Business business){
+        multicastEvent(new InvokeBusinessBSuccessEvent("",dataFlow,business));
+    }
+
+    /**
+     * 调用业务系统成功后事件
+     * @param dataFlow
+     * @param business 成功的事件业务数据封装对象
+     */
+    public static void invokeBusinessISuccess(IOrderDataFlowContext dataFlow, Business business){
+        multicastEvent(new InvokeBusinessISuccessEvent("",dataFlow,business));
+    }
+
 
     /**
      * 数据返回事件
      * @param dataFlow 数据流
      */
-    public static void dataResponse(DataFlow dataFlow,String responseData,Map<String,String> headers){
+    public static void dataResponse(IOrderDataFlowContext dataFlow,String responseData,Map<String,String> headers){
         multicastEvent(new DataResponseEvent("",dataFlow,responseData,headers));
     }
 

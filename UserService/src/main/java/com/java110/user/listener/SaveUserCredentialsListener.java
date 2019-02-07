@@ -43,7 +43,7 @@ public class SaveUserCredentialsListener extends AbstractBusinessServiceDataFlow
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_CREDENTIALS;
     }
 

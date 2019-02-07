@@ -42,7 +42,7 @@ public class DeletePropertyHouseListener extends AbstractPropertyBusinessService
     }
 
     @Override
-    public String getServiceCode() {
+    public String getBusinessTypeCd() {
         return ServiceCodeConstant.SERVICE_CODE_DELETE_PROPERTY_HOUSE;
     }
 
