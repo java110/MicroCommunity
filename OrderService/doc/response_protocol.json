@@ -1,7 +1,7 @@
 
 header:
 "transactionId": "100000000020180409224736000001",
-"requestTime": "20180409224736",
+"responseTime": "20180409224736",
 
 {
   "msg":"成功"
