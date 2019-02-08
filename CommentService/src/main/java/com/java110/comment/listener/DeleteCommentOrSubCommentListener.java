@@ -2,6 +2,7 @@ package com.java110.comment.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.comment.dao.ICommentServiceDao;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
@@ -42,7 +43,7 @@ public class DeleteCommentOrSubCommentListener extends AbstractCommentBusinessSe
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_COMMENT_INFO;
+        return BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMENT_INFO;
     }
 
     /**

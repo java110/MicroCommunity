@@ -1,8 +1,8 @@
 package com.java110.user.listener;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
@@ -42,7 +42,7 @@ public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlow
      */
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_RECOVER_USER_INFO;
+        return BusinessTypeConstant.BUSINESS_TYPE_RECOVER_USER_INFO;
     }
 
 

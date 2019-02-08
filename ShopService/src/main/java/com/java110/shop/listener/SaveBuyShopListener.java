@@ -1,7 +1,7 @@
 package com.java110.shop.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
@@ -37,7 +37,7 @@ public class SaveBuyShopListener extends AbstractShopBusinessServiceDataFlowList
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_BUY_SHOP_INFO;
+        return BusinessTypeConstant.BUSINESS_TYPE_BUY_SHOP_INFO;
     }
 
     /**

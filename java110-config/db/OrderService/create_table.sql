@@ -32,7 +32,7 @@ CREATE TABLE c_business(
     b_id VARCHAR(30) NOT NULL UNIQUE COMMENT '业务Id',
     o_id VARCHAR(30) NOT NULL COMMENT '订单ID',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
+    business_type_cd VARCHAR(12) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     finish_time DATE COMMENT '完成时间',
     remark VARCHAR(200) COMMENT '备注',
     status_cd VARCHAR(2) NOT NULL COMMENT '数据状态，详细参考c_status表'
@@ -85,13 +85,66 @@ CREATE TABLE c_order_type(
 
 CREATE TABLE c_business_type(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    business_type_cd VARCHAR(4) NOT NULL UNIQUE COMMENT '业务项类型',
+    business_type_cd VARCHAR(12) NOT NULL UNIQUE COMMENT '业务项类型',
     `name` VARCHAR(50) NOT NULL COMMENT '名称',
     description VARCHAR(200) COMMENT '描述',
-    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE KEY (business_type_cd)
 );
 
 insert into c_business_type(business_type_cd,name,description) values('DO','撤单','作废订单');
+insert into c_business_type(business_type_cd,name,description) values('100100030001','保存用户信息','保存用户信息');
+insert into c_business_type(business_type_cd,name,description) values('100100030002','保存用户地址信息','保存用户地址信息');
+insert into c_business_type(business_type_cd,name,description) values('100100030003','用户打标','用户打标');
+insert into c_business_type(business_type_cd,name,description) values('100100030004','用户证件','保存用户地址信息');
+insert into c_business_type(business_type_cd,name,description) values('100100040001','修改用户信息','修改用户信息');
+insert into c_business_type(business_type_cd,name,description) values('100100040002','停用用户信息','停用用户信息');
+insert into c_business_type(business_type_cd,name,description) values('100100040003','恢复用户信息','恢复用户信息');
+insert into c_business_type(business_type_cd,name,description) values('200100030001','保存商户信息','保存商户信息');
+insert into c_business_type(business_type_cd,name,description) values('200100030002','商户成员加入信息','商户成员加入信息');
+insert into c_business_type(business_type_cd,name,description) values('200100040001','修改商户信息','修改商户信息');
+insert into c_business_type(business_type_cd,name,description) values('200100040002','商户成员退出信息','商户成员退出信息');
+insert into c_business_type(business_type_cd,name,description) values('200100050001','删除商户信息','删除商户信息');
+insert into c_business_type(business_type_cd,name,description) values('300100030001','保存商品信息','保存商品信息');
+insert into c_business_type(business_type_cd,name,description) values('300100030002','购买商品','购买商品');
+insert into c_business_type(business_type_cd,name,description) values('300100030003','保存商品目录','保存商品目录');
+insert into c_business_type(business_type_cd,name,description) values('300100040001','修改商品信息','修改商品信息');
+insert into c_business_type(business_type_cd,name,description) values('300100040002','修改商品目录','修改商品目录');
+insert into c_business_type(business_type_cd,name,description) values('300100050001','删除商品信息','删除商品信息');
+insert into c_business_type(business_type_cd,name,description) values('300100050002','修改商品目录','修改商品目录');
+insert into c_business_type(business_type_cd,name,description) values('400100030001','保存评论','保存评论');
+insert into c_business_type(business_type_cd,name,description) values('400100050001','删除评论','删除评论');
+insert into c_business_type(business_type_cd,name,description) values('500100030001','保存小区信息','保存小区信息');
+insert into c_business_type(business_type_cd,name,description) values('500100030002','小区成员加入信息','小区成员加入信息');
+insert into c_business_type(business_type_cd,name,description) values('500100040001','修改商户信息','修改商户信息');
+insert into c_business_type(business_type_cd,name,description) values('500100040002','小区成员退出信息','小区成员退出信息');
+insert into c_business_type(business_type_cd,name,description) values('500100050001','删除商户信息','删除商户信息');
+insert into c_business_type(business_type_cd,name,description) values('600100030002','保存物业照片','保存物业照片');
+insert into c_business_type(business_type_cd,name,description) values('600100030003','保存物业证件','保存物业证件');
+insert into c_business_type(business_type_cd,name,description) values('600100030004','保存物业员工','保存物业员工');
+insert into c_business_type(business_type_cd,name,description) values('600100030005','保存物业费用','保存物业费用');
+insert into c_business_type(business_type_cd,name,description) values('600100030006','保存住户','保存住户');
+insert into c_business_type(business_type_cd,name,description) values('600100040001','修改物业信息','修改物业信息');
+insert into c_business_type(business_type_cd,name,description) values('600100040002','修改物业照片','修改物业照片');
+insert into c_business_type(business_type_cd,name,description) values('600100040003','修改物业证件','修改物业证件');
+insert into c_business_type(business_type_cd,name,description) values('600100040004','修改 费用信息','修改 费用信息');
+insert into c_business_type(business_type_cd,name,description) values('600100040005','修改住户信息','修改住户信息');
+insert into c_business_type(business_type_cd,name,description) values('600100050001','删除物业属性','删除物业属性');
+insert into c_business_type(business_type_cd,name,description) values('600100050002','删除物业照片','删除物业照片');
+insert into c_business_type(business_type_cd,name,description) values('600100050003','删除 物业证件','删除 物业证件');
+insert into c_business_type(business_type_cd,name,description) values('600100050004','删除物业员工','删除物业员工');
+insert into c_business_type(business_type_cd,name,description) values('600100050005','删除住户','删除住户');
+insert into c_business_type(business_type_cd,name,description) values('700100030001','保存代理商信息','保存代理商信息');
+insert into c_business_type(business_type_cd,name,description) values('700100030002','保存代理商照片','保存代理商照片');
+insert into c_business_type(business_type_cd,name,description) values('700100030003','保存代理商证件','保存代理商证件');
+insert into c_business_type(business_type_cd,name,description) values('700100030004','添加代理商员工','添加代理商员工');
+insert into c_business_type(business_type_cd,name,description) values('700100040001','修改代理商信息','修改代理商信息');
+insert into c_business_type(business_type_cd,name,description) values('700100040002','修改代理商照片','修改代理商照片');
+insert into c_business_type(business_type_cd,name,description) values('700100040003','修改代理商证件','修改代理商证件');
+insert into c_business_type(business_type_cd,name,description) values('700100050001','删除代理商属性','删除代理商属性');
+insert into c_business_type(business_type_cd,name,description) values('700100050002','删除代理商照片','删除代理商照片');
+insert into c_business_type(business_type_cd,name,description) values('700100050003','删除代理商证件','删除代理商证件');
+insert into c_business_type(business_type_cd,name,description) values('700100050004','删除代理商员工','删除代理商员工');
 
 -- spec
 
@@ -128,7 +181,7 @@ CREATE TABLE c_service(
     id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
     service_id VARCHAR(12) NOT NULL COMMENT '服务ID',
     service_code VARCHAR(50) NOT NULL UNIQUE COMMENT '自定义，命名方式查询类query.+目标系统+.+业务名称 保存类 save.+目标系统+.+业务名称 修改类 modify.+目标系统+.+业务名称 删除类 remove.+目标系统+.+业务名称 例如：query.user.userinfo save.user.adduserinfo',
-    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
+    business_type_cd VARCHAR(12) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     `name` VARCHAR(50) NOT NULL COMMENT '服务名称',
     seq INT NOT NULL COMMENT '顺序 只有同步方式下根据seq从小到大调用接口',
     messageQueueName VARCHAR(50) COMMENT '消息队里名称 只有异步时有用',
@@ -145,7 +198,7 @@ CREATE TABLE c_service(
 -- 服务业务表
 create table c_service_business(
     service_business_id INT NOT NULL AUTO_INCREMENT KEY COMMENT 'id',
-    business_type_cd VARCHAR(4) NOT NULL COMMENT '业务项类型，参考c_business_type表',
+    business_type_cd VARCHAR(12) NOT NULL COMMENT '业务项类型，参考c_business_type表',
     invoke_type varchar(4) not null comment '调用类型，1 http-post(微服务内应用) 2 webservice 3 http-post(微服务之外应用)',
     url VARCHAR(200) COMMENT '目标地址',
     message_topic varchar(50) comment '异步时的消息topic名称',
@@ -155,6 +208,8 @@ create table c_service_business(
     status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',
     UNIQUE KEY (business_type_cd)
 );
+
+
 
 
 

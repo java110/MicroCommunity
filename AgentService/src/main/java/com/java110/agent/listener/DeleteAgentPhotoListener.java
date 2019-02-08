@@ -2,6 +2,7 @@ package com.java110.agent.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
@@ -42,7 +43,7 @@ public class DeleteAgentPhotoListener extends AbstractAgentBusinessServiceDataFl
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_AGENT_PHOTO;
+        return BusinessTypeConstant.BUSINESS_TYPE_DELETE_AGENT_PHOTO;
     }
 
     /**

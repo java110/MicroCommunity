@@ -1,24 +1,19 @@
 package com.java110.user.listener;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
-import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.event.service.BusinessServiceDataFlowEvent;
-import com.java110.event.service.BusinessServiceDataFlowListener;
 import com.java110.user.dao.IUserServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -44,7 +39,7 @@ public class SaveUserCredentialsListener extends AbstractBusinessServiceDataFlow
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_USER_CREDENTIALS;
+        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_CREDENTIALS;
     }
 
 

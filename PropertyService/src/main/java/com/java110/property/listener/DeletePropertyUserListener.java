@@ -2,6 +2,7 @@ package com.java110.property.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
@@ -42,7 +43,7 @@ public class DeletePropertyUserListener extends AbstractPropertyBusinessServiceD
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_PROPERTY_USER;
+        return BusinessTypeConstant.BUSINESS_TYPE_DELETE_PROPERTY_USER;
     }
 
     /**

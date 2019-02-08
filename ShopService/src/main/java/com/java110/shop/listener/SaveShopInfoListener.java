@@ -1,17 +1,14 @@
 package com.java110.shop.listener;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.shop.dao.IShopServiceDao;
 import org.slf4j.Logger;
@@ -19,10 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +41,7 @@ public class SaveShopInfoListener extends AbstractShopBusinessServiceDataFlowLis
 
     @Override
     public String getBusinessTypeCd() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_SHOP_INFO;
+        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_SHOP_INFO;
     }
 
     /**
