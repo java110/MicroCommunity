@@ -8,8 +8,7 @@
   },
   "business": {
     "bId":"12345678",
-    "serviceCode": "querycustinfo",
-    "serviceName": "查询客户",
+    "businessTypeCd": "100100030001",
     "remark": "备注",
     "datas": {
       "params": {

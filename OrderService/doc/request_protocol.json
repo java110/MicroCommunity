@@ -14,21 +14,16 @@ body:
       "value": "具体值"
     }]
   },
-  // 如果是批量方式 写成 "business":[{....}]
-  "business": {
+  "business": [{
     "businessTypeCd": "B",
     "invokeModel":"S",
     "remark": "备注",
         "seq":1,
     "datas": {
-      "params": {
-        //这个做查询时的参数
-      }
-      //这里是具体业务
     },
     "attrs": [{
       "specCd": "配置的字段ID",
       "value": "具体值"
     }]
-  }
+  }]
 }

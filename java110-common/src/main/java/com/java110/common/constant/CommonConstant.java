@@ -157,6 +157,13 @@ public class CommonConstant {
 
     public final static String HTTP_BUSINESS_SERVICE_CODE = "serviceCode";
     public final static String HTTP_BUSINESS_SERVICE_NAME = "serviceName";
+
+    public final static String HTTP_BUSINESS_TYPE_CD = "businessTypeCd";
+    public final static String HTTP_SEQ = "seq";
+    public final static String HTTP_INVOKE_MODEL = "invokeModel";
+    public final static String HTTP_INVOKE_MODEL_S = "S";//同步
+    public final static String HTTP_INVOKE_MODEL_A = "A";//异步
+
     public final static String HTTP_BUSINESS_DATAS = "datas";
 
 

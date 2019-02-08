@@ -201,6 +201,32 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
 
     }
 
+    /**
+     * 刷入order信息
+     * @param httpHeaders http 头信息
+     * @param headers 头部信息
+     */
+    protected void freshHttpHeader(HttpHeaders httpHeaders, Map<String, String> headers) {
+        for(String key : headers.keySet()){
+
+            if(CommonConstant.HTTP_APP_ID.equals(key)) {
+                httpHeaders.add("appId", headers.get(key));
+            }
+            if(CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
+                httpHeaders.add("transactionId", headers.get(key));
+            }
+
+            if(CommonConstant.HTTP_REQ_TIME.equals(key)) {
+                httpHeaders.add("requestTime", headers.get(key));
+            }
+
+            if(CommonConstant.HTTP_USER_ID.equals(key)){
+                httpHeaders.add("userId",headers.get(key));
+            }
+        }
+
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;
