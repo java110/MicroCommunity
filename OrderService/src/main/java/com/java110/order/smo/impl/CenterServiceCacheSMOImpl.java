@@ -179,7 +179,7 @@ public class CenterServiceCacheSMOImpl implements ICenterServiceCacheSMO {
             return;
         }
         //删除原始数据
-        ServiceSqlCache.removeData(ServiceBusinessCache._KEY_SERVICE_BUSINESS);
+        ServiceBusinessCache.removeData(ServiceBusinessCache._KEY_SERVICE_BUSINESS);
 
         //设置缓存
         ServiceBusinessCache.setServiceBusiness(serviceBusinesses);

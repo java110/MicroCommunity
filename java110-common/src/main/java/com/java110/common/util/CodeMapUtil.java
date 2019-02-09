@@ -17,10 +17,12 @@ import java.util.List;
 /**
  * 类名称：CodeMapUtil
  * 类描述：
- * 创建人：吴学文
+ * 创建人：wuxw
  * 创建时间：2017-3-1
  */
 @SuppressWarnings("unchecked")
+
+@Deprecated
 public class CodeMapUtil extends LoggerEngine {
 
 

@@ -32,7 +32,7 @@ public class Orders extends BaseOrder{
     /**
      * 外部系统请求时间
      */
-    private Date requestTime;
+    private String requestTime;
 
 
     /**
@@ -77,11 +77,11 @@ public class Orders extends BaseOrder{
         this.userId = userId;
     }
 
-    public Date getRequestTime() {
+    public String getRequestTime() {
         return requestTime;
     }
 
-    public void setRequestTime(Date requestTime) {
+    public void setRequestTime(String requestTime) {
         this.requestTime = requestTime;
     }
 

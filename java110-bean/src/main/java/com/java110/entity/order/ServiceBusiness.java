@@ -1,11 +1,13 @@
 package com.java110.entity.order;
 
+import java.io.Serializable;
+
 /**
  * @author wux
  * @create 2019-02-05 下午10:22
  * @desc 服务业务类
  **/
-public class ServiceBusiness {
+public class ServiceBusiness implements Serializable {
 
     private long serviceBusinessId;
 

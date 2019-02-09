@@ -18,8 +18,9 @@ import java.util.*;
  */
 public class OrderDataFlow extends AbstractOrderDataFlowContext {
 
+    public OrderDataFlow(){}
 
-    protected OrderDataFlow(Date startDate, String code) {
+    public OrderDataFlow(Date startDate, String code) {
         super(startDate, code);
     }
 
@@ -73,7 +74,7 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
         Assert.isJsonObject(reqInfo,"当前报文不是有效json,请检查"+reqInfo);
          this.setDataFlowId(UUID.randomUUID().toString().replace("-","").toLowerCase());
         //赋值请求报文
-        this.setResJson(JSONObject.parseObject(reqInfo));
+        this.setReqJson(JSONObject.parseObject(reqInfo));
         //赋值 请求头信息
         this.setReqHeaders(headerAll);
 
@@ -123,7 +124,7 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
 
         Assert.isDate(this.getReqHeaders().get(CommonConstant.HTTP_REQ_TIME),"构建OrderDataFlow对象失败，请求头中"+CommonConstant.HTTP_REQ_TIME+"格式错误");
 
-        this.orders.setRequestTime(DateUtil.getDefaultDateFromString(this.getReqHeaders().get(CommonConstant.HTTP_REQ_TIME)));
+        this.orders.setRequestTime(this.getReqHeaders().get(CommonConstant.HTTP_REQ_TIME));
 
         this.orders.setoId("-1");
 
@@ -160,7 +161,7 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
 
         this.businessList = new ArrayList<Business>();
 
-        JSONArray tmpBusiness = this.getResJson().getJSONArray("business");
+        JSONArray tmpBusiness = this.getReqJson().getJSONArray("business");
 
         Business business = null;
         for (int tmpBusinessIndex = 0;tmpBusinessIndex < tmpBusiness.size();tmpBusinessIndex++){

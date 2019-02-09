@@ -15,10 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.rmi.NoSuchObjectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -96,12 +93,12 @@ public class GenerateCodeFactory {
             count = lastCount++;
         } finally {
             LOCK.unlock();
-            return String.format(idLength, count);
+            return getRandom()+String.format(idLength, count);
         }
     }
 
     public static String nextId(){
-        return nextId("%06d");
+        return nextId("%04d");
     }
 
     /**
@@ -139,7 +136,7 @@ public class GenerateCodeFactory {
 
     public static String getOId() throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("oId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+            return prefixMap.get("oId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
         return getCode(prefixMap.get("oId"));
     }
@@ -181,7 +178,7 @@ public class GenerateCodeFactory {
 
     public static String getBId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("bId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+            return prefixMap.get("bId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("bId"));
@@ -189,7 +186,7 @@ public class GenerateCodeFactory {
 
     public static String getAttrId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("attrId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%08d");
+            return prefixMap.get("attrId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("attrId"));
@@ -208,7 +205,7 @@ public class GenerateCodeFactory {
 
     public static String getUserId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("userId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("userId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("userId"));
@@ -217,7 +214,7 @@ public class GenerateCodeFactory {
 
     public static String getStoreId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("storeId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("storeId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("storeId"));
@@ -225,7 +222,7 @@ public class GenerateCodeFactory {
 
     public static String getMemberStoreId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("memberStoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("memberStoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("memberStoreId"));
@@ -234,7 +231,7 @@ public class GenerateCodeFactory {
 
     public static String getStorePhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("storePhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("storePhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("storePhotoId"));
@@ -247,7 +244,7 @@ public class GenerateCodeFactory {
      */
     public static String getStoreCerdentialsId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("storeCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("storeCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("storeCerdentialsId"));
@@ -261,7 +258,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommunityId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("communityId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("communityId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("communityId"));
@@ -275,7 +272,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommunityPhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("communityPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("communityPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("communityPhotoId"));
@@ -288,7 +285,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommunityMemberId() throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("communityMemberId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("communityMemberId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("communityMemberId"));
@@ -300,7 +297,7 @@ public class GenerateCodeFactory {
      */
     public static String getAgentId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("agentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("agentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("agentId"));
@@ -314,7 +311,7 @@ public class GenerateCodeFactory {
      */
     public static String getAgentPhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("agentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("agentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("agentPhotoId"));
@@ -327,7 +324,7 @@ public class GenerateCodeFactory {
      */
     public static String getAgentCerdentialsId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("agentCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("agentCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("agentCerdentialsId"));
@@ -342,7 +339,7 @@ public class GenerateCodeFactory {
      */
     public static String getAgentUserId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("agentUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("agentUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("agentUserId"));
@@ -356,7 +353,7 @@ public class GenerateCodeFactory {
      */
     public static String getPropertyId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("propertyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("propertyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("propertyId"));
@@ -370,7 +367,7 @@ public class GenerateCodeFactory {
      */
     public static String getPropertyPhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("propertyPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("propertyPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("propertyPhotoId"));
@@ -383,7 +380,7 @@ public class GenerateCodeFactory {
      */
     public static String getPropertyCerdentialsId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("propertyCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("propertyCerdentialsId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("propertyCerdentialsId"));
@@ -397,7 +394,7 @@ public class GenerateCodeFactory {
      */
     public static String getPropertyUserId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("propertyUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("propertyUserId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("propertyUserId"));
@@ -410,7 +407,7 @@ public class GenerateCodeFactory {
      */
     public static String getPropertyFeeId() throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("propertyFeeId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%06d"));
+            return prefixMap.get("propertyFeeId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%04d"));
         }
 
         return getCode(prefixMap.get("propertyFeeId"));
@@ -423,7 +420,7 @@ public class GenerateCodeFactory {
      */
     public static String getHouseId() throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("houseId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%06d"));
+            return prefixMap.get("houseId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H+nextId("%04d"));
         }
 
         return getCode(prefixMap.get("houseId"));
@@ -438,7 +435,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopId"));
@@ -451,7 +448,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopAttrId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopAttrId"));
@@ -464,7 +461,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopPreferentialId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopPreferentialId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopPreferentialId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopPreferentialId"));
@@ -479,7 +476,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopAttrParamId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopAttrParamId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopAttrParamId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopAttrParamId"));
@@ -491,7 +488,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommentPhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("commentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("commentPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("commentPhotoId"));
@@ -507,7 +504,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopPhotoId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopPhotoId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopPhotoId"));
@@ -520,7 +517,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopDescId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopDescId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopDescId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopDescId"));
@@ -533,7 +530,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopCatalogId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("shopCatalogId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("shopCatalogId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("shopCatalogId"));
@@ -546,7 +543,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopBuyId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("buyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("buyId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("buyId"));
@@ -559,7 +556,7 @@ public class GenerateCodeFactory {
      */
     public static String getShopBuyAttrId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("buyAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("buyAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("buyAttrId"));
@@ -572,7 +569,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommentId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("commentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("commentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("commentId"));
@@ -585,7 +582,7 @@ public class GenerateCodeFactory {
      */
     public static String getSubCommentId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("subCommentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("subCommentId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("subCommentId"));
@@ -598,7 +595,7 @@ public class GenerateCodeFactory {
      */
     public static String getSubCommentAttrId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("subCommentAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("subCommentAttrId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("subCommentAttrId"));
@@ -610,7 +607,7 @@ public class GenerateCodeFactory {
      */
     public static String getCommentScoreId()  throws GenerateCodeException{
         if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
-            return prefixMap.get("commentScoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%06d");
+            return prefixMap.get("commentScoreId") +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
         }
         //调用服务
         return getCode(prefixMap.get("commentScoreId"));
@@ -664,5 +661,19 @@ public class GenerateCodeFactory {
         paramOut.put("name",name);
         paramOut.put("requestTime",DateUtil.getNowDefault());
         return paramOut;
+    }
+
+    /**
+     * 获取随机数
+     * @return
+     */
+    private static  String getRandom(){
+        Random random = new Random();
+        String result="";
+        for (int i=0;i<4;i++)
+        {
+            result+=random.nextInt(10);
+        }
+        return result;
     }
 }

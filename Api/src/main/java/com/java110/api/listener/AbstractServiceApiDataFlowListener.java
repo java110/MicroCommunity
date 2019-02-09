@@ -210,18 +210,18 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         for(String key : headers.keySet()){
 
             if(CommonConstant.HTTP_APP_ID.equals(key)) {
-                httpHeaders.add("appId", headers.get(key));
+                httpHeaders.add("app_id", headers.get(key));
             }
             if(CommonConstant.HTTP_TRANSACTION_ID.equals(key)) {
-                httpHeaders.add("transactionId", headers.get(key));
+                httpHeaders.add("transaction_id", headers.get(key));
             }
 
             if(CommonConstant.HTTP_REQ_TIME.equals(key)) {
-                httpHeaders.add("requestTime", headers.get(key));
+                httpHeaders.add("req_time", headers.get(key));
             }
 
             if(CommonConstant.HTTP_USER_ID.equals(key)){
-                httpHeaders.add("userId",headers.get(key));
+                httpHeaders.add("user_id",headers.get(key));
             }
         }
 

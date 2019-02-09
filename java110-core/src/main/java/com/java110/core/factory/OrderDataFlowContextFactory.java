@@ -388,6 +388,11 @@ public class OrderDataFlowContextFactory {
         List<Map> orderAttrs = new ArrayList<Map>();
 
         List<OrdersAttrs> attrs = orders.getOrdersAttrs();
+
+        if(attrs == null || attrs.size() == 0){
+            return orderAttrs;
+        }
+
         Map attrMap = null;
         for(OrdersAttrs ordersAttr:attrs)
         {
@@ -694,13 +699,10 @@ public class OrderDataFlowContextFactory {
      * @return
      */
     public static List<com.java110.entity.order.Business> getSynchronousBusinesses(IOrderDataFlowContext dataFlow){
-        AppService service = null;
-        AppRoute route = null;
         List<com.java110.entity.order.Business> syschronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
         for(com.java110.entity.order.Business business :dataFlow.getBusinessList()){
 
             if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(business.getInvokeModel()) || StringUtil.isEmpty(business.getInvokeModel())){
-                business.setSeq(service.getSeq());
                 syschronousBusinesses.add(business);
             }
         }

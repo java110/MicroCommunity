@@ -15,6 +15,8 @@ import java.util.*;
  */
 public abstract class AbstractOrderDataFlowContext extends AbstractDataFlowContextPlus implements IOrderDataFlowContext{
 
+    protected AbstractOrderDataFlowContext(){}
+
     protected AbstractOrderDataFlowContext(Date startDate, String code){}
 
     /**

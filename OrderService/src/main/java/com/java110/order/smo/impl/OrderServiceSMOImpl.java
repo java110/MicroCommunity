@@ -883,17 +883,17 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
             if(urls.length != 2){
                 throw new ConfigDataException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"配置错误：c_service_business配置url字段错误"+serviceBusiness.getBusinessTypeCd());
             }
-            String webserviceUrl = CodeMapUtil.getDynamicConstantValue(urls[0]);
-            String method = CodeMapUtil.getDynamicConstantValue(urls[1]);
+            String webserviceUrl = MappingCache.getValue(urls[0]);
+            String method = MappingCache.getValue(urls[1]);
             responseMessage = (String) WebServiceAxisClient.callWebService(webserviceUrl,method,
                     new Object[]{requestBusinessJson.toJSONString()},
                     serviceBusiness.getTimeout());
         }else if(ServiceBusinessConstant.INVOKE_TYPE_HTTP_POST.equals(serviceBusiness.getInvokeType())){
             //http://user-service/test/sayHello
-            String httpPostUrl = CodeMapUtil.getDynamicConstantValue(serviceBusiness.getUrl());
+            String httpPostUrl = MappingCache.getValue(serviceBusiness.getUrl());
             responseMessage = restTemplate.postForObject(httpPostUrl,requestBusinessJson.toJSONString(),String.class);
         }else if(ServiceBusinessConstant.INVOKE_TYPE_OUT_HTTP_POST.equals(serviceBusiness.getInvokeType())){
-            String httpPostUrl = CodeMapUtil.getDynamicConstantValue(serviceBusiness.getUrl());
+            String httpPostUrl = MappingCache.getValue(serviceBusiness.getUrl());
             responseMessage = restTemplateNoLoadBalanced.postForObject(httpPostUrl,requestBusinessJson.toJSONString(),String.class);
         }
         else {//post方式
