@@ -74,15 +74,17 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         String paramIn = dataFlowContext.getReqData();
         Assert.isJsonObject(paramIn,"用户注册请求参数有误，不是有效的json格式 "+paramIn);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_SAVE_USER_INFO);
-        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_NAME,"用户注册");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
         String paramInObj = super.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
-
+        //将 rest header 信息传递到下层服务中去
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);

@@ -2,6 +2,7 @@ package com.java110.api.listener.users;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
@@ -55,13 +56,17 @@ public class DisableStaffServiceListener  extends AbstractServiceApiDataFlowList
         Assert.jsonObjectHaveKey(paramIn,"userId","当前请求报文中未包含userId节点");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_CODE,ServiceCodeConstant.SERVICE_CODE_REMOVE_USER_INFO);
-        business.put(CommonConstant.HTTP_BUSINESS_SERVICE_NAME,"停用用户");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
         String paramInObj = super.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+
+        //将 rest header 信息传递到下层服务中去
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
