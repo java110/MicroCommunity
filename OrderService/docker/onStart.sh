@@ -4,8 +4,8 @@ cp -r ../bin .
 
 cp  -r ../target .
 
-docker build -t java110/center .
+docker build -t java110/order .
 
-docker run -ti --name center_test -p8001:8001 -idt java110/center:latest
+docker run -ti --name order_test -p8001:8001 -idt java110/order:latest
 
-docker logs -f center_test
+docker logs -f order_test

@@ -1,7 +1,7 @@
 version: '2'
 services:
    centerservice:
-       container_name: centerservice-1
+       container_name: orderservice-1
        build:
           context: .
           dockerfile: Dockerfile
@@ -9,4 +9,4 @@ services:
        ports:
        - "8001:8001"
        volumes:
-       - ../target/CenterService.jar:/root/target/CenterService.jar
+       - ../target/OrderService.jar:/root/target/OrderService.jar
