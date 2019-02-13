@@ -50,6 +50,9 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 3.统一接口地址：http://ip:8001/httpApi/service
 
+4.数据模型图
+![image](dataModel.png)
+
 加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685，邮箱：928255095@qq.com
 
 ![image](MicroCommunity_qq.png)

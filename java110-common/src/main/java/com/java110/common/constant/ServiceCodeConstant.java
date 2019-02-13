@@ -267,6 +267,10 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_PROPERTY_CERDENTIALS = "delete.property.cerdentials";
     public static final String SERVICE_CODE_DELETE_PROPERTY_USER = "delete.property.user";
     public static final String SERVICE_CODE_DELETE_PROPERTY_HOUSE = "delete.property.house";
+    /**
+     * 用工是否有物业信息
+     */
+    public static final String SERVICE_CODE_CHECK_PROPERTY_STAFFHASPROPERTY = "check.property.staffHasProperty";
 
 
     public static final String SERVICE_CODE_SAVE_AGENT_INFO = "save.agent.info";
@@ -280,5 +284,7 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_AGENT_PHOTO = "delete.agent.photo";
     public static final String SERVICE_CODE_DELETE_AGENT_CERDENTIALS = "delete.agent.cerdentials";
     public static final String SERVICE_CODE_DELETE_AGENT_USER = "delete.agent.user";
+
+
 
 }

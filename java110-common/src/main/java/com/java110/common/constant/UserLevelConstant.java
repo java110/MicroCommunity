@@ -14,13 +14,13 @@ public class UserLevelConstant {
     public static final String USER_LEVEL_ADMIN = "00";
 
     /**
-     * 员工
+     * 普通员工
      */
     public static final String USER_LEVEL_STAFF = "01";
 
 
     /**
-     * 普通员工
+     * 普通用户
      */
     public static final String USER_LEVEL_ORDINARY = "02";
 }
