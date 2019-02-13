@@ -43,9 +43,9 @@ public class CheckStaffHasPropertyListener extends AbstractServiceApiDataFlowLis
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         String paramIn = dataFlowContext.getReqData();
-        Assert.isJsonObject(paramIn,"用户注册请求参数有误，不是有效的json格式 "+paramIn);
-        Assert.jsonObjectHaveKey(paramIn,"userId","请求报文中未包含userId 节点请检查");
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
+       /* Assert.isJsonObject(paramIn,"用户注册请求参数有误，不是有效的json格式 "+paramIn);
+        Assert.jsonObjectHaveKey(paramIn,"userId","请求报文中未包含userId 节点请检查 " +paramIn);
+        JSONObject paramObj = JSONObject.parseObject(paramIn);*/
         ResponseEntity responseEntity= null;
 
         HttpHeaders header = new HttpHeaders();
