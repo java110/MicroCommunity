@@ -2,19 +2,17 @@ package com.java110.api.listener.property;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.AuthenticationFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
-
-import javax.naming.AuthenticationException;
-import java.util.Map;
 
 /**
  * @author wux
@@ -39,6 +37,9 @@ public class CheckStaffHasPropertyListener extends AbstractServiceApiDataFlowLis
 
     @Override
     public void soService(ServiceDataFlowEvent event) {
+
+        logger.debug("ServiceDataFlowEvent : {}",event);
+
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         String paramIn = dataFlowContext.getReqData();
@@ -46,19 +47,36 @@ public class CheckStaffHasPropertyListener extends AbstractServiceApiDataFlowLis
         Assert.jsonObjectHaveKey(paramIn,"userId","请求报文中未包含userId 节点请检查");
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         ResponseEntity responseEntity= null;
-        try {
-            HttpHeaders header = new HttpHeaders();
-            for(String key : dataFlowContext.getRequestCurrentHeaders().keySet()){
-                header.add(key,dataFlowContext.getRequestCurrentHeaders().get(key));
-            }
-            HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn, header);
-            super.doRequest(dataFlowContext, service, httpEntity);
-            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-        } catch (Exception e) {
-            //Invalid signature/claims
-            responseEntity = new ResponseEntity<String>("认证失败，不是有效的token", HttpStatus.UNAUTHORIZED);
+
+        HttpHeaders header = new HttpHeaders();
+        for(String key : dataFlowContext.getRequestCurrentHeaders().keySet()){
+            header.add(key,dataFlowContext.getRequestCurrentHeaders().get(key));
         }
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn, header);
+        super.doRequest(dataFlowContext, service, httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
         dataFlowContext.setResponseEntity(responseEntity);
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return ;
+        }
+        String resObj = responseEntity.getBody().toString();
+
+        Assert.isJsonObject(resObj,"下游服务返回格式错误，不是有效json格式"+resObj);
+
+        JSONObject resJson = JSONObject.parseObject(resObj);
+
+        Assert.jsonObjectHaveKey(resJson,"count","下游服务返回格式错误，返回报文中未包含count"+resObj);
+
+        long count = resJson.getLongValue("count");
+
+        if(count < 1){
+            throw  new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前员工没有相关物业信息，数据异常请检查");
+        }
+
+        responseEntity = new ResponseEntity<String>("成功",HttpStatus.OK);
+
+
     }
 
     @Override
