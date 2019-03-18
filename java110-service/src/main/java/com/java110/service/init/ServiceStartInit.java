@@ -11,9 +11,7 @@ public class ServiceStartInit {
     public static void initSystemConfig(ApplicationContext context){
         //加载配置文件，注册订单处理侦听
         try {
-
             ApplicationContextFactory.setApplicationContext(context);
-
         }
         catch (Exception ex) {
             throw new IllegalStateException("系统初始化失败", ex);
