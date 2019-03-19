@@ -1,0 +1,20 @@
+<nav class="navbar-default navbar-static-side" role="navigation" id="menu-nav">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li>
+                <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
+            </li>
+            <li  v-for="menu in menus" :key="menu.id">
+                <a href="#">
+                    <i class="fa fa-desktop"></i>
+                    <span class="nav-label">{{menu.name}}</span>
+                    <span class="float-right label label-primary">SPECIAL</span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li v-for="subMenu in menu.childs"><a v-bind:href="subMenu.href">{{subMenu.name}}</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>

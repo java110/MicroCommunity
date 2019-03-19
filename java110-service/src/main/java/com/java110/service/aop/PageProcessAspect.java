@@ -35,8 +35,9 @@ public class PageProcessAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
 
+    //@Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
 
-    @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
+    @Pointcut(" execution(public * com.java110..*.*Rest.*(..))")
     public void dataProcess(){}
 
     /**
@@ -63,7 +64,7 @@ public class PageProcessAspect {
             }
             str = sb.toString();
             if(Assert.isPageJsonObject(str)){
-                 pd = PageDataFactory.newInstance().builder(str).setTransactionId(GenerateCodeFactory.getPageTransactionId());
+                pd = PageDataFactory.newInstance().builder(str).setTransactionId(GenerateCodeFactory.getPageTransactionId());
             }
         }
         //对 get情况下的参数进行封装

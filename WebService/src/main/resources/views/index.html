@@ -5,10 +5,21 @@
       xmlns:vc="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
+    <title>小区管理系统|java110</title>
+    <vc:create name="commonTop"></vc:create>
 </head>
 <body>
+<div id="wrapper">
+    <vc:create name="menu"></vc:create>
 
-<vc:create name="login"></vc:create>
+
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <vc:create name="nav"></vc:create>
+        </div>
+
+    </div>
+</div>
+<vc:create name="commonBottom"></vc:create>
 </body>
 </html>
