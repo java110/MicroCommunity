@@ -55,11 +55,11 @@ public class JwtFilter extends GenericFilterBean {
                         DataTransactionFactory.pageResponseJson(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,e.getMessage(),null),
                         "UTF-8");
             }else{
-                response.sendRedirect("/login?code="+e.getResult().getCode()+"&msg="+e.getResult().getMsg());
+                response.sendRedirect("/login");
             }
 
         }catch (Exception e){
-            response.sendRedirect("/login?code="+ResponseConstant.RESULT_CODE_INNER_ERROR+"&msg=鉴权失败");
+            response.sendRedirect("/login");
         }
     }
 

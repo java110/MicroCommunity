@@ -1,7 +1,7 @@
 package com.java110.web.smo;
 
 import com.java110.common.exception.SMOException;
-import com.java110.entity.service.PageData;
+import com.java110.core.context.PageData;
 
 import java.util.List;
 import java.util.Map;

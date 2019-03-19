@@ -5,13 +5,31 @@
     var vm = new Vue({
         el:'#nav',
         data:{
-            welcomeText:'欢迎来到小区管理系统'
+            nav:{}
         },
         mounted:function(){
-            //this.getMenus();
+            this.getNavData();
         },
         methods:{
+            getNavData:function(){
+                var param = {
+                    msg:'123',
+                };
 
+                //发送get请求
+               vc.http.call('nav',
+                            'getNavData',
+                             param,
+                             {
+                                emulateJSON:true
+                             },function(json){
+                                vm.nav = JSON.parse(json);
+                             },function(){
+                                console.log('请求失败处理');
+                             }
+                           );
+
+            }
         }
 
     });

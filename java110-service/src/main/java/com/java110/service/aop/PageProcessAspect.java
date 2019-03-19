@@ -6,7 +6,7 @@ import com.java110.core.factory.PageDataFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.common.util.StringUtil;
-import com.java110.entity.service.PageData;
+import com.java110.core.context.PageData;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -35,9 +35,7 @@ public class PageProcessAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
 
-    //@Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
-
-    @Pointcut(" execution(public * com.java110..*.*Rest.*(..))")
+    @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
     public void dataProcess(){}
 
     /**
@@ -53,7 +51,7 @@ public class PageProcessAspect {
         HttpServletRequest request = attributes.getRequest();
 
         PageData pd = null;
-        if("POST".equals(request.getMethod())){
+        if("POST,PUT".contains(request.getMethod())){
             InputStream in = request.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             //reader.

@@ -14,7 +14,7 @@ public class ServiceConfiguration {
     public FilterRegistrationBean jwtFilter() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/");
+        //registrationBean.addUrlPatterns("/");
         registrationBean.addUrlPatterns("/console/*");
 
         return registrationBean;

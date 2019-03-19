@@ -18,7 +18,11 @@ public class MenuComponent {
      */
     public ResponseEntity<String> getMenus(String msg){
 
-        String menuData = "[{'name':'我的菜单','childs':[{'name':'子菜单','href':'http://www.baidu.com'}]},{'name':'我的菜单','childs':[{'name':'子菜单','href':'http://www.baidu.com'}]}]";
+        String menuData = "[{'id':1,'icon':'fa-desktop','name':'我的菜单','label':'HOT','childs':[" +
+                "{'name':'子菜单','href':'http://www.baidu.com'}]}," +
+                "{'id':2,'icon':'fa-flask','name':'我的菜单','childs':[],'href':'/doc'}," +
+                "{'id':3,'icon':'fa-globe','name':'我的菜单','childs':[{'name':'子菜单','href':'http://www.baidu.com'}]}" +
+                "]";
 
         JSONArray menus = JSONArray.parseArray(menuData);
 

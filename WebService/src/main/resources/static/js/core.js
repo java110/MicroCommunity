@@ -6,14 +6,17 @@
    var vc = window.vc || {};
     vc = {
         version:"v0.0.1",
-        name:"vue component"
+        name:"vue component",
+        author:'java110'
     };
+
+
    //通知window对象
    window.vc = vc;
 })(window);
 
 /**
-    异步请求后台
+    vc 函数初始化
     add by wuxw
 **/
 (function(vc){
@@ -22,11 +25,16 @@
         console.log(successCallback)
                 Vue.http.post('/callComponent/'+componentCode +"/"+componentMethod, param, options)
                 .then(function(res){
-                    successCallback(res.bodyText);
+                    successCallback(res.bodyText,res);
                 }, function(error){
-                    errorCallback(error);
+                    errorCallback(error.bodyText,error);
                 });
             }
 
     };
+
+    //绑定跳转函数
+    vc.jumpToPage = function(url){
+                                    window.location.href = url;
+                                };
 })(window.vc);

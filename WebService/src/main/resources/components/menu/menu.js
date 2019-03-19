@@ -22,11 +22,22 @@
                              {
                                 emulateJSON:true
                              },function(json){
-                                vm.menus = JSON.parse(json);
+                                vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                              },function(){
                                 console.log('请求失败处理');
                              }
                            );
+           },
+           refreshMenuActive:function(jsonArray,offset){
+                for(var menuIndex =0 ; menuIndex < jsonArray.length;menuIndex ++){
+                    if(offset == menuIndex){
+                        jsonArray[menuIndex].active=true;
+                        continue;
+                    }
+                    jsonArray[menuIndex].active=false;
+                }
+
+                return  jsonArray;
            }
        }
 

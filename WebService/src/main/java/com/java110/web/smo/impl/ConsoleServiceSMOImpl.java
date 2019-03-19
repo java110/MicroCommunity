@@ -16,7 +16,7 @@ import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.web.smo.IConsoleServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.service.PageData;
+import com.java110.core.context.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,21 +1,29 @@
 <!DOCTYPE html>
+
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:vc="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
-    <title>登录页面</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>请登录 | java110</title>
 
     <vc:create name="commonTop"></vc:create>
-</head>
-<body>
-<vc:create name="login"></vc:create>
 
-<vc:create name="vue_test"></vc:create>
-<vc:create name="menu"></vc:create>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <vc:create name="login"></vc:create>
+</div>
 
 
 <vc:create name="commonBottom"></vc:create>
 </body>
+
 </html>
