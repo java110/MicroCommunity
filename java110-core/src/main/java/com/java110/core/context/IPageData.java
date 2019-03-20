@@ -25,6 +25,8 @@ public interface IPageData {
 
     public String getResponseTime();
 
+    public String getRequestTime();
+
 
     public ResponseEntity getResponseEntity();
 

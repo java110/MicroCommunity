@@ -44,7 +44,7 @@ public class LoginServiceSMOImpl extends BaseServiceSMO implements ILoginService
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
         responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(),ServiceConstant.SERVICE_API_URL+"/api/user.service.login",HttpMethod.POST);
         if(responseEntity.getStatusCode() == HttpStatus.OK){
-            pd.setToken(responseEntity.getBody());
+            pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
         }
         return responseEntity;
     }

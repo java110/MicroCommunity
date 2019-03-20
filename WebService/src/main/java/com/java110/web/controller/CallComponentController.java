@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 @RestController
 public class CallComponentController extends BaseController {
 
-    private final static Logger logger = LoggerFactory.getLogger(LoginServiceSMOImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(CallComponentController.class);
 
     /**
      * 调用组件方法

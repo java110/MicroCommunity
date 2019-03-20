@@ -71,7 +71,7 @@ public class BaseServiceSMO extends AppBase {
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), CommonConstant.HC_WEB_APP_ID);
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
-        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getReqData());
+        header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         try{
