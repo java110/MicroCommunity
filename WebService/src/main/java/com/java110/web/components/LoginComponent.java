@@ -1,24 +1,35 @@
 package com.java110.web.components;
 
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.ServiceConstant;
+import com.java110.common.util.Assert;
+import com.java110.core.context.IPageData;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.web.smo.ILoginServiceSMO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Component("login")
 public class LoginComponent {
 
+
+
+    @Autowired
+    private ILoginServiceSMO loginServiceSMOImpl;
     /**
      * 用户登录
-     * @param userInfo
+     * @param pd
      * @return
      */
-    public ResponseEntity<String> doLogin(String userInfo){
-
+    public ResponseEntity<String> doLogin(IPageData pd){
         ResponseEntity<String> responseEntity = null;
-
         try{
-            responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
+            responseEntity =  loginServiceSMOImpl.doLogin(pd);
         }catch (Exception e){
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {
@@ -26,8 +37,12 @@ public class LoginComponent {
         }
     }
 
-    private void userLogin(){
 
+    public ILoginServiceSMO getLoginServiceSMOImpl() {
+        return loginServiceSMOImpl;
+    }
 
+    public void setLoginServiceSMOImpl(ILoginServiceSMO loginServiceSMOImpl) {
+        this.loginServiceSMOImpl = loginServiceSMOImpl;
     }
 }

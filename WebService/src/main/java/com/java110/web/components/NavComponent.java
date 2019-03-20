@@ -2,6 +2,7 @@ package com.java110.web.components;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.IPageData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class NavComponent {
 
 
-    public ResponseEntity<String> getNavData(String param){
+    public ResponseEntity<String> getNavData(IPageData pd){
 
         String result = "{'welcomeText':'欢迎访问HC小区管理系统，学文！','noticeSize':10," +
                 "'moreNoticeUrl':'/moreNotice','notices':[" +

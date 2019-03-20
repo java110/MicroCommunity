@@ -166,6 +166,11 @@ public class CommonConstant {
 
     public final static String HTTP_BUSINESS_DATAS = "datas";
 
+    /**
+     * 小区管理系统web端 APP_ID
+     */
+    public final static String HC_WEB_APP_ID = "8000418004";
+
 
 
 }

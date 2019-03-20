@@ -38,6 +38,16 @@ import java.util.*;
  */
 public class AuthenticationFactory {
 
+    private final static String PASSWD_SALT= "hc@java110";
+    /**
+     * 用户密码 md5签名
+     * @param inStr
+     * @return
+     */
+    public static String passwdMd5(String inStr) throws NoAuthorityException{
+        return md5(md5(inStr+PASSWD_SALT));
+    }
+
     /**
      * md5签名
      * @param inStr

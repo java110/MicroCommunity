@@ -6,6 +6,8 @@ import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -34,6 +36,8 @@ import java.nio.charset.Charset;
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
         basePackages = {"com.java110.order.listener"})
 public class OrderServiceApplicationStart {
+
+    private final static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
@@ -77,11 +81,14 @@ public class OrderServiceApplicationStart {
      * @param args
      */
     private static void flushMainCache(String []args) {
+
+        logger.debug("判断是否需要刷新日志，参数 args 为 {}",args);
         if (args == null || args.length == 0) {
             return;
         }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equalsIgnoreCase("-Dcache")) {
+                logger.debug("开始刷新日志，入参为：{}",args[i]);
                 ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
                 centerServiceCacheSMO.startFlush();
             }

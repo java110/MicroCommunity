@@ -1,8 +1,13 @@
 package com.java110.web.controller;
 
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.controller.BaseController;
+import com.java110.core.context.IPageData;
+import com.java110.web.smo.impl.LoginServiceSMOImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +19,18 @@ import java.lang.reflect.Method;
 @RestController
 public class CallComponentController extends BaseController {
 
+    private final static Logger logger = LoggerFactory.getLogger(LoginServiceSMOImpl.class);
+
     /**
      * 调用组件方法
      * @return
      */
 
-    @RequestMapping(path="/callComponent/{componentCode}/{componentMethod}",
-            method = RequestMethod.POST)
+    @RequestMapping(path="/callComponent/{componentCode}/{componentMethod}")
     public ResponseEntity<String> callComponent(
             @PathVariable String componentCode,
             @PathVariable String componentMethod,
-            @RequestBody String info,
+            //@RequestBody String info,
             HttpServletRequest request){
         ResponseEntity<String> responseEntity = null;
         try{
@@ -35,15 +41,21 @@ public class CallComponentController extends BaseController {
 
             Assert.notNull(componentInstance,"未找到组件对应的处理类，请确认 "+componentCode);
 
-            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod,String.class);
+            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod,IPageData.class);
 
             Assert.notNull(cMethod,"未找到组件对应处理类的方法，请确认 "+componentCode+"方法："+componentMethod);
 
-             responseEntity = (ResponseEntity<String>)cMethod.invoke(componentInstance,info);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+
+            logger.debug("组件编码{}，组件方法{}，pd 为{}",componentCode,componentMethod,pd.toString());
+
+             responseEntity = (ResponseEntity<String>)cMethod.invoke(componentInstance,pd);
+
 
         }catch (Exception e){
             responseEntity = new ResponseEntity<>("调用组件失败"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {
+            logger.debug("组件调用返回信息为{}",responseEntity);
             return responseEntity;
         }
     }

@@ -2,6 +2,9 @@ package com.java110.service.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.ResponseConstant;
+import com.java110.common.exception.FilterException;
+import com.java110.core.context.IPageData;
 import com.java110.core.factory.PageDataFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -50,7 +53,9 @@ public class PageProcessAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
-        PageData pd = null;
+        IPageData pd = null;
+        String reqData = "";
+        String userId = "";
         if("POST,PUT".contains(request.getMethod())){
             InputStream in = request.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -60,14 +65,11 @@ public class PageProcessAspect {
             while ((str = reader.readLine()) != null) {
                 sb.append(str);
             }
-            str = sb.toString();
-            if(Assert.isPageJsonObject(str)){
-                pd = PageDataFactory.newInstance().builder(str).setTransactionId(GenerateCodeFactory.getPageTransactionId());
-            }
+            reqData = sb.toString();
+
         }
         //对 get情况下的参数进行封装
-        if(pd == null){
-            pd = PageDataFactory.newInstance().setTransactionId(GenerateCodeFactory.getPageTransactionId());
+        else{
             Map<String,String[]> params = request.getParameterMap();
             if(params != null  && !params.isEmpty()) {
                 JSONObject paramObj = new JSONObject();
@@ -82,18 +84,31 @@ public class PageProcessAspect {
                     }
                     continue;
                 }
-                pd.setParam(paramObj);
+                reqData = paramObj.toJSONString();
             }
         }
-
+        // 获取 userId
         if(request.getAttribute("claims") != null && request.getAttribute("claims") instanceof Map){
             Map<String,String> userInfo = (Map<String,String>)request.getAttribute("claims");
             if(userInfo.containsKey(CommonConstant.LOGIN_USER_ID)){
-                pd.setUserId(userInfo.get(CommonConstant.LOGIN_USER_ID));
+                userId = userInfo.get(CommonConstant.LOGIN_USER_ID);
             }
-            pd.setUserInfo(userInfo);
-
         }
+
+        // 获取组件名称 和方法名称
+        String url = request.getRequestURL()!=null?request.getRequestURL().toString():"";
+        String componentCode = "";
+        String componentMethod = "";
+        if(url.contains("callComponent")){
+            String []urls = url.split("/");
+
+            if(urls.length == 6){
+                componentCode = urls[4];
+                componentMethod = urls[5];
+            }
+        }
+
+         pd = PageData.newInstance().builder(userId,this.getToken(request),reqData,componentCode,componentMethod,url);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
 
     }
@@ -142,5 +157,24 @@ public class PageProcessAspect {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    /**
+     * 获取TOKEN
+     * @param request
+     * @return
+     */
+    private String getToken(HttpServletRequest request) throws FilterException {
+        String token = "";
+        if(request.getCookies() == null || request.getCookies().length == 0){
+            return token;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
+                token = cookie.getValue();
+            }
+        }
+        return token;
     }
 }

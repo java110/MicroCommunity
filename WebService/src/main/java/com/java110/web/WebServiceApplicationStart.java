@@ -43,7 +43,7 @@ public class WebServiceApplicationStart {
      * @return restTemplate
      */
     @Bean
-    @LoadBalanced
+    //@LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();

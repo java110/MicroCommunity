@@ -1,6 +1,7 @@
 package com.java110.web.components;
 
 import com.alibaba.fastjson.JSONArray;
+import com.java110.core.context.IPageData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class MenuComponent {
      * 测试版本号
      * @return
      */
-    public ResponseEntity<String> getMenus(String msg){
+    public ResponseEntity<String> getMenus(IPageData pd){
 
         String menuData = "[{'id':1,'icon':'fa-desktop','name':'我的菜单','label':'HOT','childs':[" +
                 "{'name':'子菜单','href':'http://www.baidu.com'}]}," +

@@ -1,15 +1,26 @@
 package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.util.DateUtil;
+import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 页面请求数据封装
  * Created by wuxw on 2018/5/2.
  */
-public class PageData implements Serializable {
+public class PageData implements IPageData,Serializable {
+
+
+
+    public PageData(){
+
+        this.setTransactionId(UUID.randomUUID().toString());
+    }
+
 
     private String userId ;
 
@@ -17,114 +28,43 @@ public class PageData implements Serializable {
 
     private String requestTime;
 
-    private String method;
+    private String componentCode;
+
+    private String componentMethod;
 
     private String token;
 
-    private Object serviceSMOImpl;
-
-    private JSONObject param;
-
-    private JSONObject meta;
-
-    private JSONObject reqJson;
-
-    private JSONObject resJson;
-
-    private String code;
-
-    private String message;
+    private String reqData;
 
     private String responseTime;
 
-    private JSONObject data;
+    private String url;
 
-    private Map<String,String> userInfo;
-
+    private ResponseEntity responseEntity;
 
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getTransactionId() {
         return transactionId;
     }
 
-    public PageData setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-        return this;
+
+    public String getComponentCode() {
+        return componentCode;
     }
 
-    public String getRequestTime() {
-        return requestTime;
+    public String getComponentMethod() {
+        return componentMethod;
     }
 
-    public void setRequestTime(String requestTime) {
-        this.requestTime = requestTime;
+    public String getToken() {
+        return token;
     }
 
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public JSONObject getParam() {
-        return param;
-    }
-
-    public void setParam(JSONObject param) {
-        this.param = param;
-    }
-
-    public JSONObject getMeta() {
-        return meta;
-    }
-
-    public void setMeta(JSONObject meta) {
-        this.meta = meta;
-    }
-
-    public JSONObject getReqJson() {
-        return reqJson;
-    }
-
-    public void setReqJson(JSONObject reqJson) {
-        this.reqJson = reqJson;
-    }
-
-    public JSONObject getResJson() {
-        return resJson;
-    }
-
-    public void setResJson(JSONObject resJson) {
-        this.resJson = resJson;
-    }
-
-    public void setResJson(String resJsonString) {
-        this.resJson = JSONObject.parseObject(resJsonString);
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public String getReqData() {
+        return reqData;
     }
 
     public String getResponseTime() {
@@ -135,52 +75,83 @@ public class PageData implements Serializable {
         this.responseTime = responseTime;
     }
 
-    public JSONObject getData() {
-        return data;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setData(JSONObject data) {
-        this.data = data;
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
-    public String getToken() {
-        return token;
+    public void setRequestTime(String requestTime) {
+        this.requestTime = requestTime;
+    }
+
+    public void setComponentCode(String componentCode) {
+        this.componentCode = componentCode;
+    }
+
+    public void setComponentMethod(String componentMethod) {
+        this.componentMethod = componentMethod;
     }
 
     public void setToken(String token) {
         this.token = token;
     }
 
-
-    public Map<String, String> getUserInfo() {
-        return userInfo;
+    public void setReqData(String reqData) {
+        this.reqData = reqData;
     }
 
-    public void setUserInfo(Map<String, String> userInfo) {
-        this.userInfo = userInfo;
+    @Override
+    public ResponseEntity getResponseEntity() {
+        return responseEntity;
     }
 
-
-    public Object getServiceSMOImpl() {
-        return serviceSMOImpl;
+    public void setResponseEntity(ResponseEntity responseEntity) {
+        this.responseEntity = responseEntity;
     }
 
-    public void setServiceSMOImpl(Object serviceSMOImpl) {
-        this.serviceSMOImpl = serviceSMOImpl;
+    public String getRequestTime() {
+        return requestTime;
     }
 
-    public PageData builder(String requestJson) throws IllegalArgumentException{
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * 初始化 PageData
+     * @return
+     */
+    public static IPageData newInstance(){
+        return new PageData();
+    }
+
+    public IPageData builder(Map param) throws IllegalArgumentException{
         JSONObject reqJson = null;
-        try {
-            reqJson = JSONObject.parseObject(requestJson);
-        }catch (Exception e){
-            throw new IllegalArgumentException("请求参数错误",e);
-        }
-        this.setMeta(reqJson.getJSONObject("meta"));
-        this.setMethod(this.getMeta().getString("method"));
-        this.setRequestTime(this.getMeta().getString("requestTime"));
-        this.setParam(reqJson.getJSONObject("param"));
-        this.setReqJson(reqJson);
+
         return this;
+    }
+
+    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url)
+            throws IllegalArgumentException{
+        this.setComponentCode(componentCode);
+        this.setComponentMethod(componentMethod);
+        this.setReqData(reqData);
+        this.setRequestTime(DateUtil.getyyyyMMddhhmmssDateString());
+        this.setUserId(userId);
+        this.setToken(token);
+        this.setUrl(url);
+
+        return this;
+    }
+
+    public String toString(){
+        return JSONObject.toJSONString(this);
     }
 }
