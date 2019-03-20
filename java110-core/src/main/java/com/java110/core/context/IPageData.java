@@ -21,6 +21,8 @@ public interface IPageData {
 
     public void setToken(String token);
 
+    public String getSessionId();
+
     public String getReqData();
 
     public String getResponseTime();
@@ -33,6 +35,7 @@ public interface IPageData {
 
     public void setResponseEntity(ResponseEntity responseEntity);
 
-    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url) throws IllegalArgumentException;
+    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url,String sessionId)
+            throws IllegalArgumentException;
 
 }

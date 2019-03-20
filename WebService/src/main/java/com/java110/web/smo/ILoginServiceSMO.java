@@ -14,4 +14,12 @@ public interface ILoginServiceSMO {
      * @return
      */
     public ResponseEntity<String> doLogin(IPageData pd);
+
+
+    /**
+     * 生成验证码信息
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> generateValidateCode(IPageData pd);
 }

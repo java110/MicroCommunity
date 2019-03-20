@@ -24,6 +24,9 @@ public class PageData implements IPageData,Serializable {
 
     private String userId ;
 
+    //会话ID
+    private String sessionId;
+
     private String transactionId;
 
     private String requestTime;
@@ -99,6 +102,15 @@ public class PageData implements IPageData,Serializable {
         this.token = token;
     }
 
+    @Override
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     public void setReqData(String reqData) {
         this.reqData = reqData;
     }
@@ -138,7 +150,7 @@ public class PageData implements IPageData,Serializable {
         return this;
     }
 
-    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url)
+    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url,String sessionId)
             throws IllegalArgumentException{
         this.setComponentCode(componentCode);
         this.setComponentMethod(componentMethod);
@@ -147,6 +159,7 @@ public class PageData implements IPageData,Serializable {
         this.setUserId(userId);
         this.setToken(token);
         this.setUrl(url);
+        this.setSessionId(sessionId);
 
         return this;
     }

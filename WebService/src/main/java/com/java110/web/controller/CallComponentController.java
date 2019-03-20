@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 
+/**
+ * 组件调用处理类
+ */
 @RestController
 public class CallComponentController extends BaseController {
 
