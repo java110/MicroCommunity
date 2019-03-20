@@ -22,4 +22,11 @@ public interface ILoginServiceSMO {
      * @return
      */
     public ResponseEntity<String> generateValidateCode(IPageData pd);
+
+    /**
+     * 验证码校验
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd);
 }

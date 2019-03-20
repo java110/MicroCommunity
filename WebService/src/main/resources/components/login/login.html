@@ -11,6 +11,7 @@
         <div class="form-group">
             <input type="password" v-model="loginInfo.passwd" class="form-control" placeholder="密码" required="">
         </div>
+        <vc:create name="validate-code"></vc:create>
         <button type="submit" v-on:click="doLogin()" class="btn btn-primary block full-width m-b">登录</button>
 
         <a href="#"><small>忘记密码?</small></a>

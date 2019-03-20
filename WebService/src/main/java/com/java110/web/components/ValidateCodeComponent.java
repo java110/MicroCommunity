@@ -28,6 +28,22 @@ public class ValidateCodeComponent {
         }
     }
 
+    /**
+     * 校验验证码
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  loginServiceSMOImpl.validate(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
+
 
     public ILoginServiceSMO getLoginServiceSMOImpl() {
         return loginServiceSMOImpl;

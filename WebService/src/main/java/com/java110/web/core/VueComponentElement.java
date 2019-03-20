@@ -1,5 +1,9 @@
 package com.java110.web.core;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.web.smo.impl.LoginServiceSMOImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.*;
 import org.thymeleaf.processor.element.AbstractMarkupSubstitutionElementProcessor;
@@ -13,12 +17,17 @@ import java.util.List;
  */
 public class VueComponentElement extends AbstractMarkupSubstitutionElementProcessor {
 
+    private final static Logger logger = LoggerFactory.getLogger(VueComponentElement.class);
+
+
     protected VueComponentElement(String elementName) {
         super(elementName);
     }
 
     @Override
     protected List<Node> getMarkupSubstitutes(Arguments arguments, Element element) {
+
+        //logger.debug("arg:{},element:{}", JSONObject.toJSONString(arguments),element.getAttributeValue("name"));
         List<Node> nodes = new ArrayList<>();
         //获取模板名称
         String componentName = element.getAttributeValue("name");
@@ -27,6 +36,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
             throw new RuntimeException("在缓存中未找到组件【"+componentName+"】");
         }
         Node nodeHtml = new Macro(html);
+
         nodes.add(nodeHtml);
         //css
         String css = VueComponentTemplate.findTemplateByComponentCode(componentName+"."+VueComponentTemplate.COMPONENT_CSS);
@@ -43,6 +53,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
             Node nodeJs = new Macro(js);
             nodes.add(nodeJs);
         }
+
 
         return nodes;
     }

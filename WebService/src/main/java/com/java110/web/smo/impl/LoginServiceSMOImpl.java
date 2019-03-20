@@ -1,12 +1,14 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.cache.CommonCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.ValidateCodeFactory;
 import com.java110.web.smo.ILoginServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,28 +68,45 @@ public class LoginServiceSMOImpl extends BaseServiceSMO implements ILoginService
      */
     @Override
     public ResponseEntity<String> generateValidateCode(IPageData pd) {
+        int w = 200, h = 80;
+        String verifyCode = ValidateCodeFactory.generateVerifyCode(4);
+        ResponseEntity<String> verifyCodeImage = null;
+        try {
+            verifyCodeImage = new ResponseEntity<>(ValidateCodeFactory.outputImage(200, 80, verifyCode), HttpStatus.OK);
 
+            //将验证码存入Redis中
+            CommonCache.setValue(pd.getSessionId()+"_validateCode",verifyCode,CommonCache.defaultExpireTime);
 
-
-        BufferedImage image = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, BufferedImage.TYPE_INT_RGB);    // 实例化BufferedImage
-                    Graphics g = image.getGraphics();
-                    Color c = new Color(200, 200, 255);                                             // 验证码图片的背景颜色
-                    g.setColor(c);
-                    g.fillRect(0, 0, IMG_WIDTH, IMG_HEIGHT);                                        // 图片的边框
-
-                    StringBuffer sb = new StringBuffer();                                           // 用于保存验证码字符串
-                    int index;                                                                      // 数组的下标
-                    for (int i = 0; i < NUMBER_OF_CHS; i++) {
-                            index = r.nextInt(chs.length);                                              // 随机一个下标
-                            g.setColor(new Color(r.nextInt(88), r.nextInt(210), r.nextInt(150)));       // 随机一个颜色
-                            g.drawString(chs[index] + "", 15 * i + 3, 18);                              // 画出字符
-                            sb.append(chs[index]);                                                      // 验证码字符串
-                        }
-
-                    /*request.getSession().setAttribute("piccode", sb.toString());                    // 将验证码字符串保存到session中
-                    ImageIO.write(image, "jpg", response.getOutputStream());*/
-        return null;
+        }catch (Exception e){
+            logger.error("生成验证码失败，",e);
+            verifyCodeImage = new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return verifyCodeImage;
     }
+
+    /**
+     * 校验验证码
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd){
+
+        logger.debug("校验验证码参数:{}",pd.toString());
+        ResponseEntity<String> verifyResult = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"code","请求报文中未包含 code节点"+pd.toString());
+
+        String code = CommonCache.getValue(pd.getSessionId()+"_validateCode");
+
+        if(JSONObject.parseObject(pd.getReqData()).getString("code").equals(code)){
+            verifyResult = new ResponseEntity<>("成功", HttpStatus.OK);
+        }else{
+            verifyResult = new ResponseEntity<>("验证码错误", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+        return verifyResult;
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

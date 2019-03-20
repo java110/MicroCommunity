@@ -29,7 +29,11 @@
 
             }
         }
-
     });
+
+    vc.component.$on('errorInfoEvent',function(_errorInfo){
+        vm.loginInfo.errorInfo = _errorInfo;
+        console.log('errorInfoEvent 事件被监听',_errorInfo)
+    })
 
 })(window.vc);

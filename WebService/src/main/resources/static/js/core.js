@@ -7,10 +7,15 @@
     vc = {
         version:"v0.0.1",
         name:"vue component",
-        author:'java110'
+        author:'java110',
+        component:new Vue()
     };
 
+    var component = window.component || new Vue({
+        methods:{
 
+        }
+    });
    //通知window对象
    window.vc = vc;
 })(window);
