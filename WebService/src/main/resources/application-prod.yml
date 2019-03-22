@@ -73,7 +73,7 @@ spring:
     username: TT
 
   thymeleaf:
-    mode: HTML5
+    mode: LEGACYHTML5
     cache: false
     prefix: classpath:/views/
     encoding: UTF-8

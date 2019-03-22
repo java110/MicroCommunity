@@ -4,8 +4,18 @@
     @param vmOptions Vue参数
 **/
 (function(vc,vmOptions){
-
-    var vm = new Vue(vmOptions);
-
-    window.vc.component = vm;
+    console.log("vmOptions:",vmOptions);
+    vc.component = new Vue(vmOptions);
 })(window.vc,window.vc.vmOptions);
+
+/**
+ * vue对象 执行初始化方法
+ */
+(function(vc){
+    vc.initEvent.forEach(function(eventMethod){
+        eventMethod();
+   });
+   vc.initMethod.forEach(function(callback){
+        callback();
+   });
+})(window.vc);

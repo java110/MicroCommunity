@@ -33,11 +33,13 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         List<Node> nodes = new ArrayList<>();
         //获取模板名称
         String componentName = element.getAttributeValue("name");
+        logger.debug("正在解析组件{}",componentName);
         String html = VueComponentTemplate.findTemplateByComponentCode(componentName+"."+VueComponentTemplate.COMPONENT_HTML);
         if(html == null){
             throw new RuntimeException("在缓存中未找到组件【"+componentName+"】");
         }
-        List<Node> tmpNodes = DOMUtils.getHtml5DOMFor(new StringReader(html)).getChildren();
+        //List<Node> tmpNodes = DOMUtils.getHtml5DOMFor(new StringReader(html)).getChildren();
+        List<Node> tmpNodes = DOMUtils.getLegacyHTML5DOMFor(new StringReader(html)).getChildren();
         for(Node tmpNode : tmpNodes) {
             nodes.add(tmpNode);
         }
@@ -52,7 +54,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         //js
         String js = VueComponentTemplate.findTemplateByComponentCode(componentName+"."+VueComponentTemplate.COMPONENT_JS);
         if(js != null){
-            js = "<script type=\"text/javascript\">" + js +"</script>";
+            js = "<script type=\"text/javascript\">//<![CDATA[ \n" + js +"//]]>\n</script>";
             Node nodeJs = new Macro(js);
             nodes.add(nodeJs);
         }

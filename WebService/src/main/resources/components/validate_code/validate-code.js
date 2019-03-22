@@ -1,17 +1,24 @@
 (function(vc){
-    var vm = new Vue({
-        el:'#validatecode',
-            data:function(){
-                return {
-                   validateCode:'123',
-                   codeImage:'/callComponent/validate-code/generateValidateCode',
-                   errorInfo:''
+    vc.extends({
+            data:{
+               validateCode:'',
+               codeImage:'/callComponent/validate-code/generateValidateCode',
+            },
+            _initMethod:function(){
+                 vc.component.generateCode();
+
+            },
+            _initEvent:function(){
+
+            },
+            watch: {
+                validateCode:function(){
+                    var validateParam = {
+                        validateCode:vc.component.validateCode
+                    };
+                    vc.component.$emit('login_param_change_event',validateParam);
                 }
             },
-            mounted:function(){
-                       this.generateCode();
-                   },
-
             methods:{
                 generateCode(){
                     var param = {
@@ -24,14 +31,13 @@
                                  function(json,res){
                                     //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                                     if(res.status == 200){
-                                        vm.codeImage = json;
+                                        vc.component.codeImage = json;
                                         return ;
                                     }
                                     vc.component.$emit('errorInfoEvent',json);
                                  },function(errInfo,error){
                                     console.log('请求失败处理');
-
-                                    vm.errorInfo = errInfo;
+                                    vc.component.errorInfo = errInfo;
                                  });
 
                 }

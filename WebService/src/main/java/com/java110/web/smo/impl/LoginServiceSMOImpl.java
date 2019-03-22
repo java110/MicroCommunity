@@ -2,23 +2,22 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.CommonCache;
-import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
-import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.ValidateCodeFactory;
+import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ILoginServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Random;
  */
 
 @Service("loginServiceSMOImpl")
-public class LoginServiceSMOImpl extends BaseServiceSMO implements ILoginServiceSMO {
+public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServiceSMO {
     private final static Logger logger = LoggerFactory.getLogger(LoginServiceSMOImpl.class);
 
 
@@ -52,6 +51,13 @@ public class LoginServiceSMOImpl extends BaseServiceSMO implements ILoginService
 
         Assert.jsonObjectHaveKey(pd.getReqData(),"username","请求报文格式错误或未包含username信息");
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
+
+        //调用 验证码组件验证码是否正确
+        responseEntity = this.invokeComponent("validate-code","validate",pd);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
         responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(),ServiceConstant.SERVICE_API_URL+"/api/user.service.login",HttpMethod.POST);
         if(responseEntity.getStatusCode() == HttpStatus.OK){
@@ -93,11 +99,11 @@ public class LoginServiceSMOImpl extends BaseServiceSMO implements ILoginService
 
         logger.debug("校验验证码参数:{}",pd.toString());
         ResponseEntity<String> verifyResult = null;
-        Assert.jsonObjectHaveKey(pd.getReqData(),"code","请求报文中未包含 code节点"+pd.toString());
+        Assert.jsonObjectHaveKey(pd.getReqData(),"validateCode","请求报文中未包含 validateCode节点"+pd.toString());
 
         String code = CommonCache.getValue(pd.getSessionId()+"_validateCode");
 
-        if(JSONObject.parseObject(pd.getReqData()).getString("code").equals(code)){
+        if(JSONObject.parseObject(pd.getReqData()).getString("validateCode").equals(code)){
             verifyResult = new ResponseEntity<>("成功", HttpStatus.OK);
         }else{
             verifyResult = new ResponseEntity<>("验证码错误", HttpStatus.INTERNAL_SERVER_ERROR);
