@@ -17,12 +17,10 @@
                 };
 
                 //发送get请求
-               vc.http.call('nav',
+               vc.http.get('nav',
                             'getNavData',
                              param,
-                             {
-                                emulateJSON:true
-                             },function(json){
+                             function(json){
                                 vm.nav = JSON.parse(json);
                              },function(){
                                 console.log('请求失败处理');

@@ -41,15 +41,22 @@
 **/
 (function(vc){
     vc.http = {
-        call:function(componentCode,componentMethod,param,options,successCallback,errorCallback){
-        console.log(successCallback);
+        post:function(componentCode,componentMethod,param,options,successCallback,errorCallback){
                 Vue.http.post('/callComponent/'+componentCode +"/"+componentMethod, param, options)
                 .then(function(res){
                     successCallback(res.bodyText,res);
                 }, function(error){
                     errorCallback(error.bodyText,error);
                 });
-            }
+        },
+        get:function(componentCode,componentMethod,param,successCallback,errorCallback){
+                Vue.http.get('/callComponent/'+componentCode +"/"+componentMethod, param)
+                .then(function(res){
+                    successCallback(res.bodyText,res);
+                }, function(error){
+                    errorCallback(error.bodyText,error);
+                });
+        }
 
     };
 

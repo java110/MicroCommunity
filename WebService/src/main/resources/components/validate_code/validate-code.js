@@ -2,9 +2,10 @@
     vc.extends({
             data:{
                validateCode:'',
-               codeImage:'/callComponent/validate-code/generateValidateCode',
+               codeImage:'',
             },
             _initMethod:function(){
+                console.log("validate-code _initMethod 方法调用");
                  vc.component.generateCode();
 
             },
@@ -22,12 +23,13 @@
             methods:{
                 generateCode(){
                     var param = {
-                        _uId:'123'
-                    }
-                    vc.http.call('validate-code','generateValidateCode',param,
-                                {
-                                    emulateJSON:true
-                                 },
+                        params:{
+                            _uId:'123'
+                        }
+                    };
+                    console.log("validate-code generateCode",param);
+                    vc.http.get('validate-code','generateValidateCode',
+                                 param,
                                  function(json,res){
                                     //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                                     if(res.status == 200){

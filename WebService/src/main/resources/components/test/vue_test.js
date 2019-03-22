@@ -14,12 +14,10 @@
                            msg:this.message
                        }
                        //发送get请求
-                       vc.http.call('vue_test',
+                       vc.http.get('vue_test',
                                        'getTestVersion',
                                        param,
-                                       {
-                                           emulateJSON:true
-                                       },function(json){
+                                       function(json){
                                            vm.version = json;
                                        },function(){
                                            console.log('请求失败处理');

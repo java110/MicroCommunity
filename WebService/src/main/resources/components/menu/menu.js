@@ -13,17 +13,18 @@
        methods:{
            getMenus:function(){
                var param = {
-                   msg:this.message
+                    params:{
+                        msg:this.message
+                    }
+
                }
                //发送get请求
-               vc.http.call('menu',
+               vc.http.get('menu',
                             'getMenus',
                              param,
-                             {
-                                emulateJSON:true
-                             },function(json){
+                             function(json,res){
                                 vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                             },function(){
+                             },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
                            );

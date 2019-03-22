@@ -81,7 +81,7 @@ public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServi
             verifyCodeImage = new ResponseEntity<>(ValidateCodeFactory.outputImage(200, 80, verifyCode), HttpStatus.OK);
 
             //将验证码存入Redis中
-            CommonCache.setValue(pd.getSessionId()+"_validateCode",verifyCode,CommonCache.defaultExpireTime);
+            CommonCache.setValue(pd.getSessionId()+"_validateCode",verifyCode.toLowerCase(),CommonCache.defaultExpireTime);
 
         }catch (Exception e){
             logger.error("生成验证码失败，",e);
@@ -103,9 +103,10 @@ public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServi
 
         String code = CommonCache.getValue(pd.getSessionId()+"_validateCode");
 
-        if(JSONObject.parseObject(pd.getReqData()).getString("validateCode").equals(code)){
+        if(JSONObject.parseObject(pd.getReqData()).getString("validateCode").toLowerCase().equals(code)){
             verifyResult = new ResponseEntity<>("成功", HttpStatus.OK);
         }else{
+            pd.setToken("");
             verifyResult = new ResponseEntity<>("验证码错误", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

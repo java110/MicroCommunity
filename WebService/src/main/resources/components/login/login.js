@@ -25,7 +25,7 @@
         },
         methods:{
             doLogin(){
-                vc.http.call(
+                vc.http.post(
                             'login',
                             'doLogin',
                             JSON.stringify(vc.component.loginInfo),
