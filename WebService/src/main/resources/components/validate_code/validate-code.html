@@ -1,4 +1,4 @@
-<div class="form-group" id="validate-code">
-    <input type="text" v-model="code" class="form-control" placeholder="请输入验证码" required=""/>
-    <img v-bind:src="codeImage" v-on:click="testEvent()"/>
+<div class="form-group" id="validatecode">
+    <input type="text" v-model="validateCode" class="form-control" placeholder="请输入验证码" required=""/><slot></slot>
+    <img v-bind:src="codeImage" v-on:click="generateCode()"/>
 </div>

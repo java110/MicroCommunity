@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.*;
 import org.thymeleaf.processor.element.AbstractMarkupSubstitutionElementProcessor;
+import org.thymeleaf.util.DOMUtils;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +37,10 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         if(html == null){
             throw new RuntimeException("在缓存中未找到组件【"+componentName+"】");
         }
-        Node nodeHtml = new Macro(html);
-
-        nodes.add(nodeHtml);
+        List<Node> tmpNodes = DOMUtils.getHtml5DOMFor(new StringReader(html)).getChildren();
+        for(Node tmpNode : tmpNodes) {
+            nodes.add(tmpNode);
+        }
         //css
         String css = VueComponentTemplate.findTemplateByComponentCode(componentName+"."+VueComponentTemplate.COMPONENT_CSS);
         if(css != null){
@@ -46,7 +49,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
             nodes.add(nodeCss);
         }
 
-        //css
+        //js
         String js = VueComponentTemplate.findTemplateByComponentCode(componentName+"."+VueComponentTemplate.COMPONENT_JS);
         if(js != null){
             js = "<script type=\"text/javascript\">" + js +"</script>";

@@ -34,6 +34,13 @@
     vc.component.$on('errorInfoEvent',function(_errorInfo){
         vm.loginInfo.errorInfo = _errorInfo;
         console.log('errorInfoEvent 事件被监听',_errorInfo)
-    })
+    });
+
+    vc.component.$on('login_param_change_event',function(params){
+            for(var tmpAttr in params){
+                vm.loginInfo.loginInfo[tmpAttr] = params[tmpAttr];
+            }
+            console.log('errorInfoEvent 事件被监听',params)
+        })
 
 })(window.vc);

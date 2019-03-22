@@ -4,18 +4,27 @@
 (function(window, undefined){
     "use strict";
    var vc = window.vc || {};
+   var _vmOptions = window.vc.vmOptions || {};
+
+   _vmOptions = {
+        el:'#component',
+        data:{
+
+        },
+        methods:{
+
+        },
+
+   };
+
     vc = {
         version:"v0.0.1",
         name:"vue component",
         author:'java110',
-        component:new Vue()
+        vmOptions:_vmOptions
     };
 
-    var component = window.component || new Vue({
-        methods:{
 
-        }
-    });
    //通知window对象
    window.vc = vc;
 })(window);
@@ -36,6 +45,26 @@
                 });
             }
 
+    };
+
+    var vmOptions = vc.vmOptions;
+    //继承方法,合并 _vmOptions 的数据到 vmOptions中
+    vc.extends = function(_vmOptions){
+        if(typeof _vmOptions !== Object){
+            throw "_vmOptions is not Object"
+        }
+        //处理 data 对象
+        if(_vmOptions.hasOwnProperty('data')){
+            for(var dataAttr in _vmOptions.data){
+                vmOptions.data[dataAttr] = _vmOptions.data[dataAttr];
+            }
+        }
+        //处理methods 对象
+        if(_vmOptions.hasOwnProperty('methods')){
+            for(var dataAttr in _vmOptions.data){
+                vmOptions.data[dataAttr] = _vmOptions.data[dataAttr];
+            }
+        }
     };
 
     //绑定跳转函数
