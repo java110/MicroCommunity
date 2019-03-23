@@ -19,12 +19,12 @@ $(document).ready(function () {
         $('body').removeClass('body-small')
     }
 
-    // MetisMenu
-    var sideMenu = $('#side-menu').metisMenu();
-
-    sideMenu.on('shown.metisMenu', function (e) {
-        fix_height();
-    });
+//    // MetisMenu
+//    var sideMenu = $('#side-menu').metisMenu();
+//
+//    sideMenu.on('shown.metisMenu', function (e) {
+//        fix_height();
+//    });
 
     // Collapse ibox function
     $('.collapse-link').on('click', function (e) {
