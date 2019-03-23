@@ -1,9 +1,10 @@
 (function(vc){
       vc.extends({
         data:{
-            loginInfo:{
+            registerInfo:{
                 username:'',
                 passwd:'',
+                repasswd:'',
                 errorInfo:''
             }
         },
@@ -24,11 +25,11 @@
                      });
         },
         methods:{
-            doLogin(){
+            doRegister(){
                 vc.http.post(
-                            'login',
-                            'doLogin',
-                            JSON.stringify(vc.component.loginInfo),
+                            'register',
+                            'doRegister',
+                            JSON.stringify(vc.component.registerInfo),
                             {
                                 emulateJSON:true
                              },
@@ -38,12 +39,12 @@
                                     vc.jumpToPage("/");
                                     return ;
                                 }
-                                vc.component.loginInfo.errorInfo = json;
+                                vc.component.registerInfo.errorInfo = json;
                              },
                              function(errInfo,error){
                                 console.log('请求失败处理');
 
-                                vc.component.loginInfo.errorInfo = errInfo;
+                                vc.component.registerInfo.errorInfo = errInfo;
                              });
 
             }

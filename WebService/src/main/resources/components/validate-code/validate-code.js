@@ -17,7 +17,7 @@
                     var validateParam = {
                         validateCode:vc.component.validateCode
                     };
-                    vc.component.$emit('login_param_change_event',validateParam);
+                    vc.component.$emit('validate_code_component_param_change_event',validateParam);
                 }
             },
             methods:{

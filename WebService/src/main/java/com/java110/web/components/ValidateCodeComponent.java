@@ -16,6 +16,12 @@ public class ValidateCodeComponent {
 
     @Autowired
     private ILoginServiceSMO loginServiceSMOImpl;
+
+    /**
+     * 生成 验证码
+     * @param pd
+     * @return
+     */
     public ResponseEntity<String> generateValidateCode(IPageData pd){
 
         ResponseEntity<String> responseEntity = null;

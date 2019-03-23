@@ -18,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Random;
-
 /**
  * 登录信息实现类
  * Created by wuxw on 2019/3/20.
@@ -29,12 +27,6 @@ import java.util.Random;
 public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServiceSMO {
     private final static Logger logger = LoggerFactory.getLogger(LoginServiceSMOImpl.class);
 
-
-    private static char[] chs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
-    private static final int NUMBER_OF_CHS = 4;
-    private static final int IMG_WIDTH = 65;
-    private static final int IMG_HEIGHT = 25;
-    private static Random r = new Random();
     @Autowired
     private RestTemplate restTemplate;
 
