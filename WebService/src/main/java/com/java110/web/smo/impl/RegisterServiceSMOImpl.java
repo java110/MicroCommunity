@@ -89,4 +89,30 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
         return sendMessageResult;
 
     }
+
+    /**
+     * 校验验证码
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd){
+
+        logger.debug("校验验证码参数:{}",pd.toString());
+        ResponseEntity<String> verifyResult = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"messageCode","请求报文中未包含 验证码"+pd.toString());
+        Assert.jsonObjectHaveKey(pd.getReqData(),"tel","请求报文中未包含 手机号"+pd.toString());
+        JSONObject telInfo = JSONObject.parseObject(pd.getReqData());
+
+        String code = CommonCache.getValue(telInfo.getString("tel")+"_validateTel");
+
+        if(telInfo.getString("messageCode").toLowerCase().equals(code)){
+            verifyResult = new ResponseEntity<>("成功", HttpStatus.OK);
+        }else{
+            pd.setToken("");
+            verifyResult = new ResponseEntity<>("验证码错误", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+        return verifyResult;
+    }
 }

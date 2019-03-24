@@ -34,6 +34,22 @@ public class ValidateTelComponent {
         }
     }
 
+    /**
+     * 校验验证码
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  registerServiceSMOImpl.validate(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
+
 
     public IRegisterServiceSMO getRegisterServiceSMOImpl() {
         return registerServiceSMOImpl;

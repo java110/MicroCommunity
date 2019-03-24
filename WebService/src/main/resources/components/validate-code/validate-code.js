@@ -38,8 +38,8 @@
                                     }
                                     vc.component.$emit('errorInfoEvent',json);
                                  },function(errInfo,error){
-                                    console.log('请求失败处理');
-                                    vc.component.errorInfo = errInfo;
+                                    console.log('请求失败处理',errInfo,error);
+                                    vc.component.$emit('errorInfoEvent',errInfo);
                                  });
 
                 }

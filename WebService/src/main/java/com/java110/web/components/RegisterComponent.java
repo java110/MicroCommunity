@@ -17,6 +17,8 @@ public class RegisterComponent {
 
     @Autowired
     IRegisterServiceSMO registerServiceSMOImpl;
+
+
     /**
      * 用户注册
      * @param pd 页面封装数据

@@ -17,6 +17,8 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.feign.base.IPrimaryKeyService;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +34,7 @@ import java.util.Map;
  */
 public class BaseServiceSMO extends AppBase {
 
+    private final static Logger logger = LoggerFactory.getLogger(BaseServiceSMO.class);
 
     /**
      * 主键生成
@@ -74,6 +77,7 @@ public class BaseServiceSMO extends AppBase {
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
+        logger.debug("请求中心服务信息，{}",httpEntity);
         try{
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         }catch (HttpStatusCodeException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
@@ -81,6 +85,7 @@ public class BaseServiceSMO extends AppBase {
         }catch (Exception e){
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {
+            logger.debug("请求中心服务信息，{}",responseEntity);
             return responseEntity;
         }
 

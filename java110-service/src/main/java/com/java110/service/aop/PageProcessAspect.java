@@ -100,12 +100,18 @@ public class PageProcessAspect {
         String url = request.getRequestURL()!=null?request.getRequestURL().toString():"";
         String componentCode = "";
         String componentMethod = "";
-        if(url.contains("callComponent")){
+        if(url.contains("callComponent")){ //组件处理
             String []urls = url.split("/");
 
             if(urls.length == 6){
                 componentCode = urls[4];
                 componentMethod = urls[5];
+            }
+        }else if(url.contains("flow")){ //流程处理
+            String []urls = url.split("/");
+
+            if(urls.length == 5){
+                componentCode = urls[4];
             }
         }
 
@@ -137,14 +143,8 @@ public class PageProcessAspect {
             return ;
         }
 
-        if(!StringUtil.isNullOrNone(pd.getToken())) {
-            HttpServletResponse response = attributes.getResponse();
-            Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-            response.flushBuffer();
-        }
+        //写cookies信息
+        writeCookieInfo(pd,attributes);
 
     }
 
@@ -177,5 +177,25 @@ public class PageProcessAspect {
             }
         }
         return token;
+    }
+
+
+    /**
+     * 写cookie 信息
+     * @param pd 页面封装信息
+     * @param attributes
+     * @throws IOException
+     */
+    private void writeCookieInfo(IPageData pd,ServletRequestAttributes attributes) throws IOException {
+        // 这里目前只写到组件级别，如果需要 写成方法级别
+        if(!StringUtil.isNullOrNone(pd.getToken()) && "login".equals(pd.getComponentCode())) {
+            HttpServletResponse response = attributes.getResponse();
+            Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            response.flushBuffer();
+        }
+
     }
 }

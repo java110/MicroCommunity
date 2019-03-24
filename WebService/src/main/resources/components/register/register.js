@@ -13,15 +13,15 @@
         },
         _initEvent:function(){
              vc.component.$on('errorInfoEvent',function(_errorInfo){
-                    vc.component.loginInfo.errorInfo = _errorInfo;
+                    vc.component.registerInfo.errorInfo = _errorInfo;
                     console.log('errorInfoEvent 事件被监听',_errorInfo)
                 });
 
-             vc.component.$on('validate_code_component_param_change_event',function(params){
+             vc.component.$on('validate_tel_change_event',function(params){
                          for(var tmpAttr in params){
-                             vc.component.loginInfo[tmpAttr] = params[tmpAttr];
+                             vc.component.registerInfo[tmpAttr] = params[tmpAttr];
                          }
-                         console.log('errorInfoEvent 事件被监听',params)
+                         console.log('validate_tel_component_param_change_event 事件被监听',params)
                      });
         },
         methods:{

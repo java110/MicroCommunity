@@ -24,4 +24,12 @@ public interface IRegisterServiceSMO {
      * @return
      */
     public ResponseEntity<String> sendTelMessageCode(IPageData pd);
+
+
+    /**
+     * 验证码校验
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> validate(IPageData pd);
 }
