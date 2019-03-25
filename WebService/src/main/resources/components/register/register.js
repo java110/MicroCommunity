@@ -9,7 +9,7 @@
             }
         },
         _initMethod:function(){
-
+            //vc.component.validate();
         },
         _initEvent:function(){
              vc.component.$on('errorInfoEvent',function(_errorInfo){
@@ -25,7 +25,67 @@
                      });
         },
         methods:{
+            validate(){
+                return vc.validate.validate({
+                    registerInfo:vc.component.registerInfo
+                },{
+                    'registerInfo.username':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"用户名不能为空"
+                        },
+                        {
+                            limit:"maxin",
+                            param:"4,6",
+                            errInfo:"用户名长度必须在4位至6位"
+                        },
+                    ],
+                    'registerInfo.passwd':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"密码不能为空"
+                        },
+                        {
+                            limit:"maxin",
+                            param:"6,12",
+                            errInfo:"密码长度必须在6位至12位"
+                        },
+                    ],
+                    'registerInfo.tel':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"手机号不能为空"
+                        },
+                        {
+                            limit:"phone",
+                            param:"",
+                            errInfo:"不是有效的手机号"
+                        }
+                    ],
+                    'registerInfo.messageCode':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"验证码不能为空"
+                        },
+                        {
+                            limit:"num",
+                            param:"",
+                            errInfo:"验证码必须是数字"
+                        }
+                    ],
+
+                });
+            },
             doRegister(){
+
+                if(!vc.component.validate()){
+                    vc.component.registerInfo.errorInfo = vc.validate.errInfo;
+                    return ;
+                }
                 vc.http.post(
                             'register',
                             'doRegister',

@@ -22,11 +22,21 @@ vc 校验 工具类 -method
     var validate = {
 
         state:true,
+        errInfo:'',
+
+        setState:function(_state,_errInfo){
+            this.state = _state;
+            if(!this.state){
+                this.errInfo = _errInfo
+                throw "校验失败:"+_errInfo;
+            }
+        },
+
         /**
             校验手机号
         **/
         phone:function(text){
-             var reg =/^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+             var regPhone =/^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
              return regPhone.test(text);
         },
         /**
@@ -117,17 +127,81 @@ vc 校验 工具类 -method
      *
      * dataConfig:
      * {
-     *      "name":"required|maxin(1,10)",
-     *      "age":"required|num",
-     *      "emailInfo.email":"required|email"
+     *      "name":[
+                    {
+                       limit:"required",
+                       param:"",
+                       errInfo:'用户名为必填'
+                    },
+                    {
+                        limit:"maxin",
+                       param:"1,10",
+                       errInfo:'用户名必须为1到10个字之间'
+                    }]
      * }
      *
      */
     validate.validate = function(dataObj,dataConfig){
-        for(var key in dataConfig){
-            var keys = key.split(".");
-            dataConfig[key];
+
+        try{
+            // 循环配置（每个字段）
+            for(var key in dataConfig){
+                //配置信息
+                var tmpDataConfigValue = dataConfig[key];
+                //对key进行处理
+                var keys = key.split(".");
+                console.log("keys :",keys);
+                var tmpDataObj = dataObj;
+                //根据配置获取 数据值
+                keys.forEach(function(tmpKey){
+                     console.log('tmpDataObj:',tmpDataObj);
+                     tmpDataObj = tmpDataObj[tmpKey]
+                });
+//                for(var tmpKey in keys){
+//                    console.log('tmpDataObj:',tmpDataObj);
+//                    tmpDataObj = tmpDataObj[tmpKey]
+//                }
+
+                tmpDataConfigValue.forEach(function(configObj){
+                    if(configObj.limit == "required"){
+                        validate.setState(validate.required(tmpDataObj),configObj.errInfo);
+                    }
+
+                    if(configObj.limit == 'phone'){
+                        validate.setState(validate.phone(tmpDataObj),configObj.errInfo);
+                    }
+
+                    if(configObj.limit == 'email'){
+                        validate.setState(validate.email(tmpDataObj),configObj.errInfo);
+                    }
+
+                    if(configObj.limit == 'maxin'){
+                        var tmpParam = configObj.param.split(",")
+                        validate.setState(validate.maxin(tmpDataObj,tmpParam[0],tmpParam[1]),configObj.errInfo);
+                    }
+
+                    if(configObj.limit == 'maxLength'){
+                        validate.setState(validate.maxLength(tmpDataObj,configObj.param),configObj.errInfo);
+
+                    }
+
+                    if(configObj.limit == 'minLength'){
+                        validate.setState(validate.minLength(tmpDataObj,configObj.param),configObj.errInfo);
+
+                    }
+
+                    if(configObj.limit == 'num'){
+                        validate.setState(validate.num(tmpDataObj),configObj.errInfo);
+                    }
+                });
+
+            }
+        }catch(error){
+            console.log("数据校验失败",validate.state,validate.errInfo,error);
+            return false;
         }
+
+        return true;
     }
 
 })(window.vc.validate);
