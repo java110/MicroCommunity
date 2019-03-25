@@ -56,6 +56,9 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
         }
 
         registerInfo.put("passwd", AuthenticationFactory.passwdMd5(registerInfo.getString("passwd")));
+
+        registerInfo.put("name",registerInfo.getString("username"));
+        registerInfo.put("password",registerInfo.getString("passwd"));
         responseEntity = this.callCenterService(restTemplate,pd,registerInfo.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/user.service.register", HttpMethod.POST);
         return responseEntity;
     }
@@ -69,6 +72,9 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
     public ResponseEntity<String> sendTelMessageCode(IPageData pd) {
 
         Assert.jsonObjectHaveKey(pd.getReqData(),"tel","请求报文格式错误或未包含手机号信息");
+
+
+
         JSONObject telInfo = JSONObject.parseObject(pd.getReqData());
 
         String verifyCode = AliSendMessageFactory.generateMessageCode();

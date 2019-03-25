@@ -72,7 +72,7 @@ public class AliSendMessageFactory {
         request.putQueryParameter("PhoneNumbers", tel);
         try {
             CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response.getData());
+            logger.debug("发送验证码信息：{}",response.getData());
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {

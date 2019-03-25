@@ -36,7 +36,7 @@
                              function(json,res){
                                 //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                                 if(res.status == 200){
-                                    vc.jumpToPage("/");
+                                    vc.jumpToPage("/flow/login");
                                     return ;
                                 }
                                 vc.component.registerInfo.errorInfo = json;
