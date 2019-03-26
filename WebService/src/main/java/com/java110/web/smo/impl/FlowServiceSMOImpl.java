@@ -3,23 +3,18 @@ package com.java110.web.smo.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.MappingConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.*;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.DateUtil;
 import com.java110.core.context.IPageData;
 import com.java110.common.util.Assert;
+import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +26,7 @@ import java.util.Map;
  * Created by wuxw on 2018/4/28.
  */
 @Service("flowServiceSMOImpl")
-public class FlowServiceSMOImpl implements IFlowServiceSMO {
+public class FlowServiceSMOImpl extends BaseComponentSMO implements IFlowServiceSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(FlowServiceSMOImpl.class);
 
@@ -152,5 +147,32 @@ public class FlowServiceSMOImpl implements IFlowServiceSMO {
     @Override
     public void login(IPageData pd) throws SMOException {
 
+    }
+
+    /**
+     * 是否有商户信息
+     * @param pd 前台页面封装对象
+     * @return
+     * @throws SMOException
+     */
+    @Override
+    public boolean hasStoreInfos(IPageData pd) throws SMOException {
+        ResponseEntity<String> responseEntity = null;
+        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+
+        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/query.store.byuser?userId="+pd.getUserId(), HttpMethod.GET);
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+
+            return false;
+        }
+
+        String storeInfo = responseEntity.getBody();
+
+        if(Assert.isJsonObject(storeInfo) && JSONObject.parseObject(storeInfo).containsKey("storeId")){
+            return true;
+        }
+
+        return false;
     }
 }

@@ -23,4 +23,12 @@ public interface IFlowServiceSMO {
      */
     public void login(IPageData pd) throws SMOException;
 
+    /**
+     * 是否有商户信息
+     * @param pd 前台页面封装对象
+     * @return
+     * @throws SMOException
+     */
+    public boolean hasStoreInfos(IPageData pd) throws SMOException;
+
 }
