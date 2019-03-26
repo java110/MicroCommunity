@@ -47,6 +47,9 @@
                              });
 
             }
+        },
+        _destroyedMethod:function(){
+            console.log("登录页面销毁调用");
         }
     });
 

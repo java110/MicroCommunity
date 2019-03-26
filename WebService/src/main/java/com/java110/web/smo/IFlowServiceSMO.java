@@ -11,7 +11,7 @@ import java.util.Map;
  * 控制类业务接口
  * Created by wuxw on 2018/4/28.
  */
-public interface IConsoleServiceSMO {
+public interface IFlowServiceSMO {
 
 
 

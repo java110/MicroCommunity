@@ -1,13 +1,7 @@
 package com.java110.web.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.common.exception.NoAuthorityException;
-import com.java110.common.exception.SMOException;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
-import com.java110.web.smo.IConsoleServiceSMO;
+import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.context.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +22,22 @@ public class HomeController extends BaseController {
 
 
     @Autowired
-    private IConsoleServiceSMO consoleServiceSMOImpl;
+    private IFlowServiceSMO consoleServiceSMOImpl;
 
     @RequestMapping(path = "/")
     public String index(Model model, HttpServletRequest request) {
         String template = "index";
 
-            return template;
+        return template;
     }
 
 
 
-    public IConsoleServiceSMO getConsoleServiceSMOImpl() {
+    public IFlowServiceSMO getConsoleServiceSMOImpl() {
         return consoleServiceSMOImpl;
     }
 
-    public void setConsoleServiceSMOImpl(IConsoleServiceSMO consoleServiceSMOImpl) {
+    public void setConsoleServiceSMOImpl(IFlowServiceSMO consoleServiceSMOImpl) {
         this.consoleServiceSMOImpl = consoleServiceSMOImpl;
     }
 }

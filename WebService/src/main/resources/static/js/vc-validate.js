@@ -187,7 +187,7 @@ vc 校验 工具类 -method
 
                     if(configObj.limit == 'minLength'){
                         validate.setState(validate.minLength(tmpDataObj,configObj.param),configObj.errInfo);
-
+7
                     }
 
                     if(configObj.limit == 'num'){

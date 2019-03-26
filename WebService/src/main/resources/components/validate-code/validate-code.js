@@ -43,7 +43,10 @@
                                  });
 
                 }
-            }
+            },
+             _destroyedMethod:function(){
+                 console.log("登录验证码页面销毁调用");
+             }
 
     });
 

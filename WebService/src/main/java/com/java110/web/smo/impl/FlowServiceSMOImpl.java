@@ -10,14 +10,9 @@ import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.DateUtil;
 import com.java110.core.context.IPageData;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.factory.DataTransactionFactory;
-import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
-import com.java110.web.smo.IConsoleServiceSMO;
+import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.context.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +24,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * 业务服务类
  * Created by wuxw on 2018/4/28.
  */
-@Service("consoleServiceSMOImpl")
-public class ConsoleServiceSMOImpl  implements IConsoleServiceSMO {
+@Service("flowServiceSMOImpl")
+public class FlowServiceSMOImpl implements IFlowServiceSMO {
 
-    private final static Logger logger = LoggerFactory.getLogger(ConsoleServiceSMOImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(FlowServiceSMOImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;

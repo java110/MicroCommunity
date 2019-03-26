@@ -8,6 +8,8 @@
    var _initMethod = [];
    var _initEvent = [];
    var _component = {};
+   var _destroyedMethod = [];
+   var _timers = [];//定时器
 
    _vmOptions = {
         el:'#component',
@@ -20,6 +22,18 @@
         methods:{
 
         },
+        destroyed:function(){
+            window.vc.destroyedMethod.forEach(function(eventMethod){
+                 eventMethod();
+            });
+            //清理所有定时器
+
+            window.vc.timers.forEach(function(timer){
+                clearInterval(timer);
+            });
+
+            _timers = [];
+        }
 
    };
     vc = {
@@ -29,7 +43,9 @@
         vmOptions:_vmOptions,
         initMethod:_initMethod,
         initEvent:_initEvent,
-        component:_component
+        component:_component,
+        destroyedMethod:_destroyedMethod,
+        timers:_timers
     };
    //通知window对象
    window.vc = vc;
@@ -93,10 +109,40 @@
             vc.initEvent.push(_vmOptions._initEvent);
         }
 
+         //处理_initEvent_destroyedMethod
+        if(_vmOptions.hasOwnProperty('_destroyedMethod')){
+            vc.destroyedMethod.push(_vmOptions._destroyedMethod);
+        }
+
+
     };
+
+
 
     //绑定跳转函数
     vc.jumpToPage = function(url){
                                     window.location.href = url;
                                 };
 })(window.vc);
+
+/**
+    vc 定时器处理
+**/
+(function(w,vc){
+
+    /**
+        创建定时器
+    **/
+    vc.createTimer = function(func,sec){
+        var _timer = w.setInterval(func,sec);
+        vc.timers.push(_timer); //这里将所有的定时器保存起来，页面退出时清理
+
+        return _timer;
+    };
+    //清理定时器
+    vc.clearTimer = function(timer){
+        clearInterval(timer);
+    }
+
+
+})(window,window.vc);
