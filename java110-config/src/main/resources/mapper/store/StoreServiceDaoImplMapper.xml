@@ -372,4 +372,71 @@
         </if>
     </update>
 
+
+    <!-- 保存物业用户信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStoreUser" parameterType="Map">
+        insert into business_store_user(store_user_id,b_id,store_id,user_id,rel_cd,month,operate)
+        values(#{storeUserId},#{bId},#{storeId},#{userId},#{relCd},#{month},#{operate})
+    </insert>
+
+    <!-- 查询物业 用户信息 add by wuxw 2018-07-03 -->
+    <select id="getBusinessStoreUser" parameterType="Map" resultType="Map">
+        select sc.store_user_id,sc.b_id,sc.store_id,sc.user_id,sc.rel_cd,sc.operate
+        from business_store_user sc where 1 = 1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="operate != null and operate != ''">
+            and sc.operate = #{operate}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and sc.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 保存 商户用户信息 instance add by wuxw 2018-07-03 -->
+    <insert id="saveStoreUserInstance" parameterType="Map">
+        insert into p_store_user(store_user_id,b_id,store_id,user_id,rel_cd,status_cd)
+        select sc.store_user_id,sc.b_id,sc.store_id,sc.user_id,sc.rel_cd,'0'
+        from business_store_user sc
+        where sc.operate = 'ADD' and sc.b_id=#{bId}
+    </insert>
+
+    <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreUser" parameterType="Map" resultType="Map">
+        select sc.store_user_id,sc.b_id,sc.store_id,sc.user_id,sc.rel_cd,sc.status_cd
+        from p_store_user sc
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and sc.status_cd = #{statusCd}
+        </if>
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sc.store_id = #{storeId}
+        </if>
+    </select>
+
+    <!-- 修改商户用户信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreUserInstance" parameterType="Map">
+        update p_store_user sc set sc.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,sc.b_id = #{newBId}
+        </if>
+        <if test="relCd != null and relCd != ''">
+            ,sc.rel_cd = #{relCd}
+        </if>
+        where 1=1
+        <if test="bId != null and bId !=''">
+            and sc.b_id = #{bId}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and sc.store_id = #{storeId}
+        </if>
+        <if test="storeUserId != null and storeUserId !=''">
+            and sc.store_user_id = #{storeUserId}
+        </if>
+    </update>
+
 </mapper>

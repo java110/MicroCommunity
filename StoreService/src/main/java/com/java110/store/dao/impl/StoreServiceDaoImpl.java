@@ -425,4 +425,79 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户成员加入信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
+
+    /**
+     * 保存物业用户信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessStoreUser(Map info) throws DAOException{
+        info.put("month", DateUtil.getCurrentMonth());
+        logger.debug("保存物业用户信息入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveBusinessStoreUser",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户用户信息数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 查询物业用户信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessStoreUser(Map info) throws DAOException{
+        logger.debug("查询商户用户信息 入参 info : {}",info);
+
+        List<Map> businessPropertyUsers = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStoreUser",info);
+
+        return businessPropertyUsers;
+    }
+
+    /**
+     * 保存 物业用户信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void saveStoreUserInstance(Map info) throws DAOException{
+        logger.debug("保存商户用户信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("storeServiceDaoImpl.saveStoreUserInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存商户用户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
+
+    /**
+     * 查询物业用户信息（instance 过程）
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getStoreUser(Map info) throws DAOException{
+        logger.debug("查询商户用户信息 入参 info : {}",info);
+
+        List<Map> propertyUsers = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreUser",info);
+
+        return propertyUsers;
+    }
+
+    /**
+     * 修改物业用户信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateStoreUserInstance(Map info) throws DAOException{
+        logger.debug("修改商户用户信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("storeServiceDaoImpl.updateStoreUserInstance",info);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户用户信息Instance数据失败："+ JSONObject.toJSONString(info));
+        }
+    }
 }
