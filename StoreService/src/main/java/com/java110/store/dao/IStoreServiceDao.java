@@ -222,4 +222,46 @@ public interface IStoreServiceDao {
      */
     public void updateMemberStoreInstance(Map info) throws DAOException;
 
+
+    /**
+     * 保存商户用户信息
+     * @param info
+     * @throws DAOException
+     */
+    public void saveBusinessStoreUser(Map info) throws DAOException;
+
+
+    /**
+     * 查询物业用户信息
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getBusinessStoreUser(Map info) throws DAOException;
+
+
+    /**
+     * 保存 物业用户信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException
+     */
+    public void saveStoreUserInstance(Map info) throws DAOException;
+
+
+    /**
+     * 查询物业用户信息（instance 过程）
+     * @param info bId 信息
+     * @return 物业照片
+     * @throws DAOException
+     */
+    public List<Map> getStoreUser(Map info) throws DAOException;
+
+
+    /**
+     * 修改物业用户信息
+     * @param info 修改信息
+     * @throws DAOException
+     */
+    public void updateStoreUserInstance(Map info) throws DAOException;
+
 }

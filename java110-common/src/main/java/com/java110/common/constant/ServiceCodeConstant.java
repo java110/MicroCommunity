@@ -115,6 +115,17 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DELETE_STORE_INFO = "delete.store.info";
 
+    /**
+     * 添加商户员工
+     */
+    public static final String SERVICE_CODE_SAVE_STORE_USER = "save.store.user";
+
+
+    /**
+     * 删除商户员工
+     */
+    public static final String SERVICE_CODE_DELETE_STORE_USER = "delete.store.user";
+
 
     /**
      * 商户成员加入信息

@@ -88,6 +88,19 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 保存商户员工
+     */
+    public static final String BUSINESS_TYPE_SAVE_STORE_USER = "200100060001";
+
+
+
+    /**
+     * 删除商户员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_STORE_USER = "200100070001";
+
+
+    /**
      * 保存商品信息
      */
     public static final String BUSINESS_TYPE_SAVE_SHOP_INFO = "300100030001";

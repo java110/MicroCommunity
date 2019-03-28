@@ -1,0 +1,31 @@
+{
+  "orders": {
+    "appId": "外系统ID，分配得到",
+    "transactionId": "100000000020180409224736000001",
+    "userId": "用户ID",
+    "orderTypeCd": "订单类型,查询,受理",
+    "requestTime": "20180409224736",
+    "remark": "备注",
+    "sign": "这个服务是否要求MD5签名",
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  },
+  "business": [{
+    "serviceCode": "save.store.info",
+    "serviceName": "保存商户信息",
+    "remark": "备注",
+    "datas": {
+      "businessStoreUser": {
+        "storeId": "-1",
+        "userId": "用户ID",
+        "relCd": "齐天超时（王府井店）",
+      }
+    },
+    "attrs": [{
+      "specCd": "配置的字段ID",
+      "value": "具体值"
+    }]
+  }]
+}
