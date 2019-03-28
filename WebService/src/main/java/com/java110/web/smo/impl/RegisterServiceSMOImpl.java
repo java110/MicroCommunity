@@ -1,9 +1,11 @@
 package com.java110.web.smo.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.CommonCache;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AliSendMessageFactory;
 import com.java110.core.factory.AuthenticationFactory;
@@ -55,12 +57,49 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
             return responseEntity;
         }
 
+        responseEntity = this.checkNameAndTelExists(pd,registerInfo.getString("username"),"");
+        if(responseEntity.getStatusCode()!=HttpStatus.OK){
+            return responseEntity;
+        }
+
+        responseEntity = this.checkNameAndTelExists(pd,"",registerInfo.getString("tel"));
+        if(responseEntity.getStatusCode()!=HttpStatus.OK){
+            return responseEntity;
+        }
+
+
         registerInfo.put("passwd", AuthenticationFactory.passwdMd5(registerInfo.getString("passwd")));
 
         registerInfo.put("name",registerInfo.getString("username"));
         registerInfo.put("password",registerInfo.getString("passwd"));
         responseEntity = this.callCenterService(restTemplate,pd,registerInfo.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/user.service.register", HttpMethod.POST);
         return responseEntity;
+    }
+
+    private ResponseEntity<String> checkNameAndTelExists(IPageData pd,String name,String tel){
+        ResponseEntity<String> responseEntity = null;
+        //校验用户名或手机是否存在
+        responseEntity = this.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/check.hasUser.byNameOrTel?name="+name+"&tel="+tel,
+                HttpMethod.GET);
+
+        if(responseEntity.getStatusCode()!=HttpStatus.OK){
+            logger.error("调用后端服务异常：{}",responseEntity);
+            return new ResponseEntity<String>("调用中心服务异常",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        Assert.jsonObjectHaveKey(responseEntity.getBody(),"userCount","调用中心服务异常，报文中未包含userCount节点");
+
+        JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
+
+        if(userInfo.getIntValue("userCount") > 0){
+            return new ResponseEntity<String>(StringUtil.isNullOrNone(name)?"手机号已占用":"用户名已占用",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        responseEntity = new ResponseEntity<>("成功",HttpStatus.OK);
+
+        return responseEntity;
+
     }
 
     /**

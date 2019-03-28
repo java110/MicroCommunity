@@ -3,50 +3,44 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>Wizard with Validation</h5>
+                    <h5>公司信息</h5>
                     <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+
                     </div>
                 </div>
                 <div class="ibox-content">
                     <h2>
-                        Validation Wizard Form
+                        完善公司信息
                     </h2>
                     <p>
-                        This example show how to use Steps with jQuery Validation plugin.
+                        请仔细填写公司相关信息，有利于快速审核
                     </p>
 
                     <form id="form" action="#" class="wizard-big">
-                        <h1>Account</h1>
+                        <h1>基本信息</h1>
                         <fieldset>
-                            <h2>Account Information</h2>
+                            <h2>公司基本信息</h2>
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label>Username *</label>
-                                        <input id="userName" name="userName" type="text" class="form-control required">
+                                        <label>公司名称 *</label>
+                                        <input id="name" name="name" type="text" class="form-control required">
                                     </div>
                                     <div class="form-group">
-                                        <label>Password *</label>
-                                        <input id="password" name="password" type="text" class="form-control required">
+                                        <label>公司地址 *</label>
+                                        <input id="address" name="address" type="text" class="form-control required">
                                     </div>
                                     <div class="form-group">
-                                        <label>Confirm Password *</label>
-                                        <input id="confirm" name="confirm" type="text" class="form-control required">
+                                        <label>联系电话 *</label>
+                                        <input id="tel" name="tel" type="text" class="form-control required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>公司业务 *</label>
+                                        <input id="storeTypeCd" name="storeTypeCd" type="text" class="form-control required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>附近建筑 *</label>
+                                        <input id="nearbyLandmarks" name="nearbyLandmarks" type="text" class="form-control required">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -59,9 +53,9 @@
                             </div>
 
                         </fieldset>
-                        <h1>Profile</h1>
+                        <h1>证件信息</h1>
                         <fieldset>
-                            <h2>Profile Information</h2>
+                            <h2>公司证件信息</h2>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">

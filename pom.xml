@@ -14,7 +14,7 @@
         <module>java110-common</module>
         <module>UserService</module>
         <module>LogService</module>
-        <module>PayService</module>
+        <module>FeeService</module>
         <module>eureka</module>
         <module>java110-feign</module>
         <module>java110-core</module>
@@ -22,7 +22,6 @@
         <module>CodeService</module>
         <module>StoreService</module>
         <module>RuleService</module>
-        <module>SimpleListenerService</module>
         <module>java110-event</module>
         <module>OrderService</module>
         <module>java110-cacheAgent</module>
@@ -33,8 +32,6 @@
         <module>CommentService</module>
         <module>Api</module>
         <module>CommunityService</module>
-        <module>AgentService</module>
-        <module>PropertyService</module>
     </modules>
 
     <parent>

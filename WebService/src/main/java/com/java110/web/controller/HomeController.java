@@ -1,5 +1,7 @@
 package com.java110.web.controller;
 
+import com.java110.common.constant.CommonConstant;
+import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.base.controller.BaseController;
 import org.slf4j.Logger;
@@ -22,22 +24,28 @@ public class HomeController extends BaseController {
 
 
     @Autowired
-    private IFlowServiceSMO consoleServiceSMOImpl;
+    private IFlowServiceSMO flowServiceSMOImpl;
 
     @RequestMapping(path = "/")
     public String index(Model model, HttpServletRequest request) {
         String template = "index";
 
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+
+        if(!flowServiceSMOImpl.hasStoreInfos(pd)){
+            //初始化 商户信息
+            template = "init_company";
+        }
+
         return template;
     }
 
 
-
-    public IFlowServiceSMO getConsoleServiceSMOImpl() {
-        return consoleServiceSMOImpl;
+    public IFlowServiceSMO getFlowServiceSMOImpl() {
+        return flowServiceSMOImpl;
     }
 
-    public void setConsoleServiceSMOImpl(IFlowServiceSMO consoleServiceSMOImpl) {
-        this.consoleServiceSMOImpl = consoleServiceSMOImpl;
+    public void setFlowServiceSMOImpl(IFlowServiceSMO flowServiceSMOImpl) {
+        this.flowServiceSMOImpl = flowServiceSMOImpl;
     }
 }

@@ -60,12 +60,12 @@
                 },
                 //验证码定时
                 messageCodeTimer(){
-                      var num = 0;
+                      var num = 60;
 
                     var _timer = vc.createTimer(function(){
-                        num ++;
+                        num --;
                         vc.component.buttonInfo = num +" 秒后重试";
-                        if(num === 60){
+                        if(num === 1){
                             vc.clearTimer(_timer);
                             vc.component.buttonInfo = "验证码";
                         }
