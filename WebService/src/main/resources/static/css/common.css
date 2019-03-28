@@ -7,3 +7,16 @@
 .no_display{
     display:none
 }
+.fileinput>.file{
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        font-size: 23px;
+        height: 100%;
+        width: 100%;
+        direction: ltr;
+        cursor: pointer;
+}

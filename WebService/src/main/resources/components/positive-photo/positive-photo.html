@@ -1,0 +1,7 @@
+<div class="fileinput fileinput-new" data-provides="fileinput">
+    <span class="btn btn-default btn-file" v-bind:class="{no_display:positivePhotoInfo.chooseFlag==1}">
+        <span class="fileinput-new" >选择图片</span>
+    </span>
+    <input type="file" class="file" accept="images/*" name="..." v-on:change="choosePositivePhoto($event)">
+        <img v-bind:src="positivePhotoInfo.imgInfo" v-bind:class="{no_display:positivePhotoInfo.chooseFlag==0}" width="200px" height="200px">
+</div>

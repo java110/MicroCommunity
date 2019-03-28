@@ -26,101 +26,39 @@
                                 </li>
                                 <li role="tab" v-bind:class="{ current: step==2,disabled:step!=2 }">
                                     <a>
-                                        <span class="number">2.</span> 证件信息
+                                        <span class="number">2.</span> 扩展信息
                                     </a>
                                 </li>
                                 <li role="tab" v-bind:class="{ current: step==3,disabled:step!=3 }">
                                     <a>
-                                    <span class="number">3.</span> Warning
+                                    <span class="number">3.</span> 证件信息
                                     </a>
                                 </li>
                                 <li role="tab" v-bind:class="{ current: step==4,disabled:step!=4 }">
                                     <a>
-                                    <span class="number">4.</span> Finish
+                                    <span class="number">4.</span> 须知
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="content clearfix">
                             <h1 tabindex="-1" class="title current">基本信息</h1>
-                            <fieldset role="tabpanel" aria-labelledby="component-h-0" class="body current" v-bind:class="{no_display:step!=1}" aria-hidden="false">
-                                <h2>公司基本信息</h2>
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <div class="form-group">
-                                            <label>公司名称 *</label>
-                                            <input id="name" name="name" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>公司地址 *</label>
-                                            <input id="address" name="address" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>联系电话 *</label>
-                                            <input id="tel" name="tel" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>公司业务 *</label>
-                                            <select id="storeTypeCd" name="storeTypeCd" class="form-control  required" aria-required="true">
-                                                <option v-for="storeType in storeTypes" value="storeType.storeTypeCd">{{storeType.name}}</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>附近建筑 *</label>
-                                            <input id="nearbyLandmarks" name="nearbyLandmarks" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="text-center">
-                                            <div style="margin-top: 20px;">
-                                                <i class="fa fa-sign-in" style="font-size: 180px; color: rgb(229, 229, 229);"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
+                            <vc:create name="company-base"></vc:create>
+                            <h1 tabindex="-1" class="title">扩展信息</h1>
+                            <vc:create name="company-extend"></vc:create>
                             <h1 id="component-h-1" tabindex="-1" class="title">证件信息</h1>
-                            <fieldset id="component-p-1" role="tabpanel" aria-labelledby="component-h-1" class="body" aria-hidden="true"  v-bind:class="{no_display:step!=2}">
-                                <h2>公司证件信息</h2>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>First name *</label>
-                                            <input id="name" name="name" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Last name *</label>
-                                            <input id="surname" name="surname" type="text" class="form-control required" aria-required="true" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Email *</label>
-                                            <input id="email" name="email" type="text" class="form-control required email" aria-required="true" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Address *</label>
-                                            <input id="address" name="address" type="text" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                            <h1 id="component-h-2" tabindex="-1" class="title">Warning</h1>
-                            <fieldset id="component-p-2" role="tabpanel" aria-labelledby="component-h-2" class="body" aria-hidden="true"  v-bind:class="{no_display:step!=3}">
-                                <div class="text-center" style="margin-top: 120px;">
-                                    <h2>You did it Man :-)</h2>
-                                </div>
-                            </fieldset>
-                            <h1 id="component-h-3" tabindex="-1" class="title">Finish</h1>
-                            <fieldset id="component-p-3" role="tabpanel" aria-labelledby="component-h-3" class="body" aria-hidden="true"  v-bind:class="{no_display:step!=4}">
-                                <h2>Terms and Conditions</h2>
+                            <vc:create name="company-cerdentials"></vc:create>
+                            <h1 id="component-h-2" tabindex="-1" class="title">须知</h1>
+                            <fieldset id="component-p-2" role="tabpanel" aria-labelledby="component-h-2" class="body" aria-hidden="true"  v-bind:class="{no_display:step!=4}">
+                                <h4>这里是须知</h4>
                                 <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required" aria-required="true" />
-                                <label for="acceptTerms">I agree with the Terms and Conditions.</label>
+                                <label for="acceptTerms">我同意并遵守以上信息.</label>
                             </fieldset>
+
                         </div>
                         <div class="actions clearfix">
                             <ul role="menu" aria-label="Pagination">
-                                <li class="disabled" aria-disabled="true"><a v-on:click="previous()" role="menuitem">上一步</a></li>
+                                <li v-bind:class="{disabled:step == 1}" aria-disabled="true"><a v-on:click="previous()" role="menuitem">上一步</a></li>
                                 <li v-bind:class="{no_display:step==4}"><a v-on:click="next()" role="menuitem">下一步</a></li>
                                 <li v-bind:class="{no_display:step!=4}"><a v-on:click="finish()" role="menuitem">提交审核</a></li>
                             </ul>

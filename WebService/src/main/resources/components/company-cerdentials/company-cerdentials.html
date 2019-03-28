@@ -1,0 +1,24 @@
+<fieldset id="component-p-1" role="tabpanel" aria-labelledby="component-h-1" class="body" aria-hidden="true"  v-bind:class="{no_display:step!=3}">
+    <h2>营业执照信息</h2>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label>证件号码 *</label>
+                <input id="name" name="name" type="text" class="form-control required" aria-required="true" />
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label>有效期 *</label>
+                <input id="email" name="email" type="text" class="form-control required email" aria-required="true" />
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label>营业执照照片 *</label>
+                <vc:create name="positive-photo"></vc:create>
+            </div>
+        </div>
+    </div>
+</fieldset>
+

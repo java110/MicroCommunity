@@ -1,0 +1,36 @@
+<fieldset role="tabpanel" aria-labelledby="component-h-0" class="body current" v-bind:class="{no_display:step!=1}" aria-hidden="false">
+    <h2>公司基本信息</h2>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label>公司名称 *</label>
+                <input id="name" name="name" type="text" class="form-control required" aria-required="true" />
+            </div>
+            <div class="form-group">
+                <label>公司地址 *</label>
+                <input id="address" name="address" type="text" class="form-control required" aria-required="true" />
+            </div>
+            <div class="form-group">
+                <label>联系电话 *</label>
+                <input id="tel" name="tel" type="text" class="form-control required" aria-required="true" />
+            </div>
+            <div class="form-group">
+                <label>公司业务 *</label>
+                <select id="storeTypeCd" name="storeTypeCd" class="form-control  required" aria-required="true">
+                    <option v-for="storeType in storeTypes" value="storeType.storeTypeCd">{{storeType.name}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>附近建筑 *</label>
+                <input id="nearbyLandmarks" name="nearbyLandmarks" type="text" class="form-control required" aria-required="true" />
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="text-center">
+                <div style="margin-top: 20px;">
+                    <i class="fa fa-sign-in" style="font-size: 180px; color: rgb(229, 229, 229);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
