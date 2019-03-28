@@ -1,0 +1,19 @@
+package com.java110.web.smo;
+
+import com.java110.core.context.IPageData;
+import org.springframework.http.ResponseEntity;
+
+/**
+ *
+ * 初始化 公司接口类
+ * Created by Administrator on 2019/3/28.
+ */
+public interface ICompanyServiceSMO {
+
+    /**
+     * 查询商户类型
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> getStoreType(IPageData pd);
+}

@@ -378,3 +378,7 @@
 {
     display: list-item;
 }
+
+.wizard > .actions > ul > li.no_display{
+    display:none
+}

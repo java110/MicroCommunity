@@ -1,0 +1,44 @@
+package com.java110.web.components;
+
+import com.java110.core.context.IPageData;
+import com.java110.web.smo.ICompanyServiceSMO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+/**
+ * 初始化公司组件
+ * Created by Administrator on 2019/3/28.
+ */
+@Component("company")
+public class CompanyComponent {
+
+
+    @Autowired
+    ICompanyServiceSMO companyServiceSMOImpl;
+    /**
+     * 获取商户类型
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> getStoreType(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  companyServiceSMOImpl.getStoreType(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
+
+
+    public ICompanyServiceSMO getCompanyServiceSMOImpl() {
+        return companyServiceSMOImpl;
+    }
+
+    public void setCompanyServiceSMOImpl(ICompanyServiceSMO companyServiceSMOImpl) {
+        this.companyServiceSMOImpl = companyServiceSMOImpl;
+    }
+}

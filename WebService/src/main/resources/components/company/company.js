@@ -4,87 +4,71 @@
 **/
 
 (function(vc){
+    vc.extends({
+        data:{
+            storeTypes:[],
+            step:1,
+            companyInfo:{
+                tel:""
+            }
+        },
+         _initMethod:function(){
+             vc.component.initStoreType();
+         },
+         _initEvent:function(){
+//              vc.component.$on('errorInfoEvent',function(_errorInfo){
+//                     vc.component.registerInfo.errorInfo = _errorInfo;
+//                     console.log('errorInfoEvent 事件被监听',_errorInfo)
+//                 });
 
+         },
+        watch:{
+            'companyInfo':{
+                deep: true,
+                handler:function(){
+                    console.log('通知号码信息',vc.component.companyInfo.tel);
+                    vc.component.$emit('validate_tel_change_event',vc.component.companyInfo);
+                }
+            }
+        },
+        methods:{
+            initStoreType:function(){
+                var param = {
+                                    params:{
+                                        msg:"123"
+                                    }
+
+                               }
+                vc.http.get('company','getStoreType',
+                             JSON.stringify(param),
+                             function(json,res){
+                                if(res.status == 200){
+                                    vc.component.storeTypes = JSON.parse(json);
+                                    return ;
+                                }
+                                //vc.component.$emit('errorInfoEvent',json);
+                             },function(errInfo,error){
+                                console.log('请求失败处理',errInfo,error);
+                                vc.component.$emit('errorInfoEvent',errInfo);
+                             });
+            },
+            next:function(){
+                if(vc.component.step<4){
+                    vc.component.step = vc.component.step+1;
+                }
+            },
+            previous:function(){
+                if(vc.component.step>1){
+                    vc.component.step = vc.component.step-1;;
+                }
+            },
+            finish:function(){
+                //这里写提交代码
+                console.log("提交审核");
+            }
+        }
+
+    });
 
 })(window.vc);
 
-(function(){
-    $(document).ready(function(){
-                $("#wizard").steps();
-                $("#form").steps({
-                    bodyTag: "fieldset",
-                    onStepChanging: function (event, currentIndex, newIndex)
-                    {
-                        // Always allow going backward even if the current step contains invalid fields!
-                        if (currentIndex > newIndex)
-                        {
-                            return true;
-                        }
-
-                        // Forbid suppressing "Warning" step if the user is to young
-                        if (newIndex === 3 && Number($("#age").val()) < 18)
-                        {
-                            return false;
-                        }
-
-                        var form = $(this);
-
-                        // Clean up if user went backward before
-                        if (currentIndex < newIndex)
-                        {
-                            // To remove error styles
-                            $(".body:eq(" + newIndex + ") label.error", form).remove();
-                            $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
-                        }
-
-                        // Disable validation on fields that are disabled or hidden.
-                        form.validate().settings.ignore = ":disabled,:hidden";
-
-                        // Start validation; Prevent going forward if false
-                        return form.valid();
-                    },
-                    onStepChanged: function (event, currentIndex, priorIndex)
-                    {
-                        // Suppress (skip) "Warning" step if the user is old enough.
-                        if (currentIndex === 2 && Number($("#age").val()) >= 18)
-                        {
-                            $(this).steps("next");
-                        }
-
-                        // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
-                        if (currentIndex === 2 && priorIndex === 3)
-                        {
-                            $(this).steps("previous");
-                        }
-                    },
-                    onFinishing: function (event, currentIndex)
-                    {
-                        var form = $(this);
-
-                        // Disable validation on fields that are disabled.
-                        // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
-                        form.validate().settings.ignore = ":disabled";
-
-                        // Start validation; Prevent form submission if false
-                        return form.valid();
-                    },
-                    onFinished: function (event, currentIndex)
-                    {
-                        var form = $(this);
-
-                        // Submit form input
-                        form.submit();
-                    }
-                }).validate({
-                            errorPlacement: function (error, element)
-                            {
-                                element.before(error);
-                            },
-                            rules: {
-                                confirm: {
-                                    equalTo: "#password"
-                                }
-                            }
-                        });
-           });
-})();
