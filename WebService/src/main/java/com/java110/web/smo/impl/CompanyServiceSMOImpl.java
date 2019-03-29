@@ -52,7 +52,6 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
      * @param pd
      * @return
      */
-    @Autowired
     public ResponseEntity<String> saveCompanyInfo(IPageData pd){
         ResponseEntity<String> responseEntity = null;
         Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
