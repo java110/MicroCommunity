@@ -4,13 +4,13 @@
         <div class="col-lg-8">
             <div class="form-group">
                 <label>证件号码 *</label>
-                <input id="name" name="name" type="text" class="form-control required" aria-required="true" />
+                <input v-model="companyCerdentialsInfo.value" type="text" class="form-control required" aria-required="true" />
             </div>
         </div>
         <div class="col-lg-8">
             <div class="form-group">
                 <label>有效期 *</label>
-                <input id="email" name="email" type="text" class="form-control required email" aria-required="true" />
+                <input v-model="companyCerdentialsInfo.validityPeriod" type="text" class="form-control required email" aria-required="true" />
             </div>
         </div>
         <div class="col-lg-8">

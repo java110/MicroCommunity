@@ -43,6 +43,30 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         return responseEntity;
     }
 
+    /**
+     * 保存公司信息
+     * @param pd
+     * @return
+     */
+    @Autowired
+    public ResponseEntity<String> saveCompanyInfo(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+
+        validateCompanyInfo(pd.getReqData());
+        responseEntity = this.callCenterService(restTemplate,pd,pd.getReqData(), ServiceConstant.SERVICE_API_URL+"/api/query.store.type?type=all", HttpMethod.POST);
+
+        return responseEntity;
+    }
+
+    /**
+     * 校验公司信息
+     * @param param
+     */
+    private void validateCompanyInfo(String param){
+
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

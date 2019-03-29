@@ -33,6 +33,22 @@ public class CompanyComponent {
         }
     }
 
+    /**
+     * 保存公司信息
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> saveCompanyInfo(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  companyServiceSMOImpl.saveCompanyInfo(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
+
 
     public ICompanyServiceSMO getCompanyServiceSMOImpl() {
         return companyServiceSMOImpl;

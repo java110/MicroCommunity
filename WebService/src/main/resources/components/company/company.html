@@ -15,7 +15,9 @@
                     <p>
                         请仔细填写公司相关信息，有利于快速审核
                     </p>
+
                     <form id="component" class="wizard-big wizard clearfix" role="application" novalidate="novalidate">
+                        <p style="color: red;">{{companyInfo.errorInfo}}</p>
                         <div class="steps clearfix">
                             <ul role="tablist">
                                 <li role="tab" v-bind:class="{ current: step==1,disabled:step!=1 }" >

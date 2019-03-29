@@ -16,4 +16,11 @@ public interface ICompanyServiceSMO {
      * @return
      */
     public ResponseEntity<String> getStoreType(IPageData pd);
+
+    /**
+     * 保存公司信息
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> saveCompanyInfo(IPageData pd);
 }

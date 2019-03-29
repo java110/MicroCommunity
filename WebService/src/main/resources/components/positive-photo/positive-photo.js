@@ -18,7 +18,12 @@
 
          },
         watch:{
-
+            positivePhotoInfo:{
+                deep: true,
+                handler:function(){
+                    vc.component.$emit('positivePhotoEvent',vc.component.positivePhotoInfo);
+                }
+             }
         },
         methods:{
 
@@ -39,8 +44,21 @@
                             vc.component.positivePhotoInfo.chooseFlag = 1;
                         }
                     }
-            }
+            },
+            validatePositivePhoto:function(){
+                return vc.validate.validate({
+                                                   positivePhotoInfo:vc.component.positivePhotoInfo
+                                               },{
+                                                   'positivePhotoInfo.imgInfo':[
+                                                       {
+                                                           limit:"required",
+                                                           param:"",
+                                                           errInfo:"未上传证件照"
+                                                       }
+                                                   ],
 
+                                               });
+            }
         }
 
     });

@@ -4,24 +4,24 @@
         <div class="col-lg-8">
             <div class="form-group">
                 <label>公司法人 *</label>
-                <input  name="name" type="text" class="form-control required" aria-required="true" />
+                <input  v-model="companyExtendInfo.corporation" type="text" class="form-control required" aria-required="true" />
             </div>
             <div class="form-group">
                 <label>注册资本 *</label>
-                <input  name="address" type="text" class="form-control required" aria-required="true" />
+                <input  v-model="companyExtendInfo.registeredCapital" type="text" class="form-control required" aria-required="true" />
             </div>
             <div class="form-group">
                 <label>成立日期 *</label>
-                <input  name="tel" type="text" class="form-control required" aria-required="true" />
+                <input  v-model="companyExtendInfo.foundingTime" type="text" class="form-control required" aria-required="true" />
             </div>
             <div class="form-group">
                 <label>登记机关 *</label>
-                <input  name="tel" type="text" class="form-control required" aria-required="true" />
+                <input  v-model="companyExtendInfo.registrationAuthority" type="text" class="form-control required" aria-required="true" />
 
             </div>
             <div class="form-group">
                 <label>经营范围 *</label>
-                <input  name="nearbyLandmarks" type="text" class="form-control required" aria-required="true" />
+                <input  v-model="companyExtendInfo.scope" type="text" class="form-control required" aria-required="true" />
             </div>
         </div>
         <div class="col-lg-4">
