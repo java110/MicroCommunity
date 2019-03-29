@@ -19,6 +19,14 @@ public class AttrCdConstant {
 
 
 
+    public final static String SPEC_CD_STORE_CORPORATION = "100201903001";// 法人
+    public final static String SPEC_CD_STORE_REGISTEREDCAPITAL = "100201903002";// 注册资本
+    public final static String SPEC_CD_STORE_FOUNDINGTIME = "100201903003";// 成立日期
+    public final static String SPEC_CD_STORE_REGISTRATIONAUTHORITY = "100201903004";// 登记机关
+    public final static String SPEC_CD_STORE_SCOPE = "100201903005";// 经营范围
+
+
+
 
 
 

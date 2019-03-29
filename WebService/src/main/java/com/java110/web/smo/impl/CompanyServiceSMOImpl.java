@@ -1,6 +1,9 @@
 package com.java110.web.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.AttrCdConstant;
+import com.java110.common.constant.CredentialsConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.spring.web.json.Json;
 
 /**
  * 初始化公司实现类
@@ -54,10 +58,66 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
 
         validateCompanyInfo(pd.getReqData());
-        responseEntity = this.callCenterService(restTemplate,pd,pd.getReqData(), ServiceConstant.SERVICE_API_URL+"/api/query.store.type?type=all", HttpMethod.POST);
+
+
+        JSONObject reqJson = JSONObject.parseObject("{\"businessStore\":{}}");
+
+        JSONObject paramJson = JSONObject.parseObject(pd.getReqData());
+
+        //基本信息
+        JSONObject businessStore = reqJson.getJSONObject("businessStore");
+        businessStore.put("userId",pd.getUserId());
+        businessStore.put("name",paramJson.getString("name"));
+        businessStore.put("address",paramJson.getString("address"));
+        businessStore.put("tel",paramJson.getString("tel"));
+        businessStore.put("storeTypeCd",paramJson.getString("storeTypeCd"));
+        businessStore.put("nearbyLandmarks",paramJson.getString("nearbyLandmarks"));
+
+        JSONArray businessStoreAttr = new JSONArray();
+
+        JSONObject attr = new JSONObject();
+        attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_CORPORATION);
+        attr.put("value",paramJson.getString("corporation"));
+        businessStoreAttr.add(attr);
+
+         attr = new JSONObject();
+        attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_REGISTEREDCAPITAL);
+        attr.put("value",paramJson.getString("registeredCapital"));
+        businessStoreAttr.add(attr);
+
+         attr = new JSONObject();
+        attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_FOUNDINGTIME);
+        attr.put("value",paramJson.getString("foundingTime"));
+        businessStoreAttr.add(attr);
+
+        attr = new JSONObject();
+        attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_REGISTRATIONAUTHORITY);
+        attr.put("value",paramJson.getString("registrationAuthority"));
+        businessStoreAttr.add(attr);
+
+        attr = new JSONObject();
+        attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_SCOPE);
+        attr.put("value",paramJson.getString("scope"));
+        businessStoreAttr.add(attr);
+        reqJson.put("businessStoreAttr",businessStoreAttr);
+
+        JSONArray businessStoreCerdentials = new JSONArray();
+        JSONObject cerdentials = new JSONObject();
+
+        cerdentials.put("credentialsCd", CredentialsConstant.LICENCE);
+        cerdentials.put("value",paramJson.getString("value"));
+        cerdentials.put("validityPeriod",paramJson.getString("validityPeriod"));
+        cerdentials.put("positivePhoto","");
+        cerdentials.put("negativePhoto","");
+        businessStoreCerdentials.add(cerdentials);
+
+        reqJson.put("businessStoreCerdentials",businessStoreCerdentials);
+
+        responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/save.store.info", HttpMethod.POST);
 
         return responseEntity;
     }
+
 
     /**
      * 校验公司信息

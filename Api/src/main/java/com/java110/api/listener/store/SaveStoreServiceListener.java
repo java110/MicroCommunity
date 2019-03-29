@@ -1,10 +1,12 @@
 package com.java110.api.listener.store;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.*;
 import com.java110.common.util.Assert;
+import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpMethod;
  * 保存商户信息
  * Created by Administrator on 2019/3/29.
  */
+@Java110Listener("saveStoreServiceListener")
 public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener {
     @Override
     public int getOrder() {
@@ -131,6 +134,36 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
             if(!businessStoreObj.containsKey("mapY")){
                 businessStoreObj.put("mapY","");
+            }
+        }
+
+        if(paramObj.containsKey("businessStoreAttr")){
+            JSONArray attrs = paramObj.getJSONArray("businessStoreAttr");
+
+            for (int businessStoreAttrIndex = 0 ;businessStoreAttrIndex < attrs.size();businessStoreAttrIndex ++ ){
+                JSONObject attr = attrs.getJSONObject(businessStoreAttrIndex);
+                attr.put("storeId","-1");
+                attr.put("attrId","-"+(businessStoreAttrIndex+1));
+            }
+        }
+
+        if(paramObj.containsKey("businessStorePhoto")){
+            JSONArray photos = paramObj.getJSONArray("businessStorePhoto");
+
+            for (int businessStorePhotoIndex = 0 ;businessStorePhotoIndex < photos.size();businessStorePhotoIndex ++ ){
+                JSONObject attr = photos.getJSONObject(businessStorePhotoIndex);
+                attr.put("storeId","-1");
+                attr.put("storePhotoId","-"+(businessStorePhotoIndex+1));
+            }
+        }
+
+        if(paramObj.containsKey("businessStoreCerdentials")){
+            JSONArray cerdentials = paramObj.getJSONArray("businessStoreCerdentials");
+
+            for (int businessStoreCerdentialsIndex = 0 ;businessStoreCerdentialsIndex < cerdentials.size();businessStoreCerdentialsIndex ++ ){
+                JSONObject attr = cerdentials.getJSONObject(businessStoreCerdentialsIndex);
+                attr.put("storeId","-1");
+                attr.put("storeCerdentialsId","-"+(businessStoreCerdentialsIndex+1));
             }
         }
 
