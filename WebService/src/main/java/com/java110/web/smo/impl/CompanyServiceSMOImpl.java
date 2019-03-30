@@ -112,16 +112,21 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
         reqJson.put("businessStoreCerdentials",businessStoreCerdentials);
 
+
+
         responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/save.store.info", HttpMethod.POST);
 
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+       /* if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
         }
+
+        JSONObject resStoreInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         //将现用户添加为商户管理员
         JSONObject staffInfo = new JSONObject();
         staffInfo.put("userId",pd.getUserId());
-        staffInfo.put("storeId",pd.getUserId());
-
+        staffInfo.put("storeId",resStoreInfo.getString("storeId"));
+        responseEntity = this.callCenterService(restTemplate,pd,staffInfo.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/user.staff.add", HttpMethod.POST);
+*/
 
         return responseEntity;
     }

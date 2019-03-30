@@ -10,9 +10,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.*;
 
 /**
  * 保存商户信息
@@ -87,18 +85,18 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(paramIn,"businessStore","请求参数中未包含businessStore 节点，请确认");
-
-
-        JSONObject business = JSONObject.parseObject("{}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO);
-        business.put(CommonConstant.HTTP_SEQ,1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-
-        business.put(CommonConstant.HTTP_BUSINESS_DATAS,refreshParamIn(paramIn));
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
-        String paramInObj = super.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+        JSONArray businesses = new JSONArray();
+        //添加商户
+        businesses.add(addStore(paramObj));
+        //添加员工
+        businesses.add(addStaff(paramObj));
+
+
+        String paramInObj = super.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
 
         //将 rest header 信息传递到下层服务中去
         super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
@@ -107,18 +105,65 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);
 
-        super.doResponse(dataFlowContext);
+        //super.doResponse(dataFlowContext);
+
+        if(dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK){
+            return;
+        }
+        String resData = dataFlowContext.getResponseEntity().getBody().toString();
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONArray.parseArray(resData).get(0).toString(), HttpStatus.OK);
+        dataFlowContext.setResponseEntity(responseEntity);
+
 
     }
 
+    /**
+     * 添加商户
+     * @param paramInJson
+     * @return
+     */
+    private JSONObject addStore(JSONObject paramInJson){
+        JSONObject business = JSONObject.parseObject("{}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+
+        business.put(CommonConstant.HTTP_BUSINESS_DATAS,refreshParamIn(paramInJson));
+
+        return business;
+
+    }
+
+    /**
+     * 添加员工
+     * @param paramInJson
+     * @return
+     */
+    private JSONObject addStaff(JSONObject paramInJson){
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
+        business.put(CommonConstant.HTTP_SEQ,2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray businessStoreUsers = new JSONArray();
+        JSONObject businessStoreUser = new JSONObject();
+        businessStoreUser.put("storeId","-1");
+        businessStoreUser.put("storeUserId","-1");
+        businessStoreUser.put("userId",paramInJson.getJSONObject("businessStore").getString("userId"));
+        businessStoreUser.put("relCd",StoreUserRelConstant.REL_ADMIN);
+        businessStoreUsers.add(businessStoreUser);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser",businessStoreUsers);
+
+        return business;
+    }
 
     /**
      * 对请求报文处理
-     * @param paramIn
+     * @param paramObj
      * @return
      */
-    private JSONObject refreshParamIn(String paramIn){
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
+    private JSONObject refreshParamIn(JSONObject paramObj){
+
         if(paramObj.containsKey("businessStore")){
             JSONObject businessStoreObj = paramObj.getJSONObject("businessStore");
             businessStoreObj.put("storeId","-1");
