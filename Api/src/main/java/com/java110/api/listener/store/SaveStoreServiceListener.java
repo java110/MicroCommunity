@@ -125,7 +125,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
     private JSONObject addStore(JSONObject paramInJson){
         JSONObject business = JSONObject.parseObject("{}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO);
-        business.put(CommonConstant.HTTP_SEQ,2);
+        business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
         business.put(CommonConstant.HTTP_BUSINESS_DATAS,refreshParamIn(paramInJson));
@@ -143,7 +143,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
-        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_SEQ,2);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONArray businessStoreUsers = new JSONArray();
         JSONObject businessStoreUser = new JSONObject();

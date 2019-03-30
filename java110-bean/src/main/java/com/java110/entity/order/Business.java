@@ -78,7 +78,7 @@ public class Business extends BusinessPlus implements Comparable{
     @Override
     public int compareTo(Object o) {
         Business otherBusiness = (Business)o;
-        if(this.getSeq() > otherBusiness.getSeq()) {
+        if(this.getSeq() < otherBusiness.getSeq()) {
             return -1;
         }
         return 0;
