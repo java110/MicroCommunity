@@ -81,6 +81,9 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
         //构建返回头
         builderResHeaders();
 
+        //构建返回json 为{"msg":[]}
+        builderResJson();
+
         //构建 订单信息
         builderOrders();
 
@@ -212,6 +215,15 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
             businessAttrs.setValue(tmpBusinessAttrs.getJSONObject(tmpBusinessAttrsIndex).getString("value"));
             businessAttrsList.add(businessAttrs);
         }
+    }
+
+    /**
+     * 初始化构建返回报文
+     */
+    private void builderResJson(){
+        JSONObject resJson = new JSONObject();
+        resJson.put("msg",new JSONArray());
+        this.setResJson(resJson);
     }
 
 

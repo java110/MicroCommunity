@@ -1,5 +1,6 @@
 package com.java110.event.center;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.exception.BusinessException;
 import com.java110.common.factory.ApplicationContextFactory;
@@ -250,6 +251,16 @@ public class DataFlowEventPublishing extends LoggerEngine {
      */
     public static void invokeBusinessSystem(IOrderDataFlowContext dataFlow){
         multicastEvent(new InvokeBusinessSystemEvent("",dataFlow));
+    }
+
+
+    /**
+     * 调用业务系统成功后事件
+     * @param dataFlow
+     * @param business 成功的事件业务数据封装对象
+     */
+    public static void invokeBusinessBSuccess(IOrderDataFlowContext dataFlow, Business business, JSONObject businessResponseData){
+        multicastEvent(new InvokeBusinessBSuccessEvent("",dataFlow,business,businessResponseData));
     }
 
     /**

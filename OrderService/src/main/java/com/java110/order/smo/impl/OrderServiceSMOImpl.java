@@ -111,7 +111,7 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
         } finally {
 
             if(responseEntity == null){
-                responseEntity = new ResponseEntity<String>(dataFlow.getResJson().getString("msg"),OrderDataFlowContextFactory.hashMap2MultiValueMap(dataFlow.getResHeaders()),HttpStatus.OK);
+                responseEntity = new ResponseEntity<String>(dataFlow.getResJson().getJSONArray("msg").toJSONString(),OrderDataFlowContextFactory.hashMap2MultiValueMap(dataFlow.getResHeaders()),HttpStatus.OK);
             }
             if(dataFlow != null) {
                 //添加耗时
@@ -136,11 +136,11 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
      */
     private void refreshOrderDataFlowResJson(IOrderDataFlowContext dataFlow){
 
-        if(dataFlow.getResJson() == null || dataFlow.getResJson().isEmpty()){
-            JSONObject resJson = new JSONObject();
-            resJson.put("msg","成功");
-            dataFlow.setResJson(resJson);
-        }
+//        if(dataFlow.getResJson() == null || dataFlow.getResJson().isEmpty()){
+//            JSONObject resJson = new JSONObject();
+//            resJson.put("msg","成功");
+//            dataFlow.setResJson(resJson);
+//        }
 
     }
 
@@ -959,7 +959,7 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
             JSONObject responseJson = doRequestBusinessSystem(dataFlow, serviceBusiness, requestBusinessJson);
 
             //发布事件
-            DataFlowEventPublishing.invokeBusinessBSuccess(dataFlow,business);
+            DataFlowEventPublishing.invokeBusinessBSuccess(dataFlow,business,responseJson);
 
             responseBusinesses.add(responseJson);
 
