@@ -114,6 +114,15 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
         responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/save.store.info", HttpMethod.POST);
 
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        //将现用户添加为商户管理员
+        JSONObject staffInfo = new JSONObject();
+        staffInfo.put("userId",pd.getUserId());
+        staffInfo.put("storeId",pd.getUserId());
+
+
         return responseEntity;
     }
 

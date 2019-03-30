@@ -79,6 +79,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             responseEntity = new ResponseEntity<String>("请求下游系统异常，"+e.getResponseBodyAsString(),e.getStatusCode());
         }
 
+        logger.debug("API 服务调用下游服务请求：{}，返回为：{}",httpEntity,responseEntity);
+
         dataFlowContext.setResponseEntity(responseEntity);
     }
 

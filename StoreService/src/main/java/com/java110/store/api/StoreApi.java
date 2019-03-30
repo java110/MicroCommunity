@@ -64,6 +64,7 @@ public class StoreApi extends BaseController {
             responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e,
                     null);
         }finally {
+            logger.debug("storeApi 请求报文{},返回报文：{}",orderInfo,responseJson.toJSONString());
             return responseJson.toJSONString();
         }
     }

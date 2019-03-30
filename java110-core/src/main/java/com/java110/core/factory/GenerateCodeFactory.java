@@ -53,6 +53,7 @@ public class GenerateCodeFactory {
         prefixMap.put("storeCerdentialsId","42");
         prefixMap.put("memberStoreId","43");
         prefixMap.put("propertyStoreId","44");
+        prefixMap.put("storeUserId","45");
         prefixMap.put("shopId","50");
         prefixMap.put("shopAttrId","51");
         prefixMap.put("shopPhotoId","52");

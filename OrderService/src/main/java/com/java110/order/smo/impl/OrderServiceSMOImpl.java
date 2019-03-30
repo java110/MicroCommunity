@@ -900,6 +900,9 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
             throw new ConfigDataException(ResponseConstant.RESULT_CODE_CONFIG_ERROR,"配置错误：c_service_business配置url字段错误,当前无法识别"+serviceBusiness.getBusinessTypeCd());
         }
 
+
+        logger.debug("订单服务调用下游服务请求报文：{}，返回报文：{}",requestBusinessJson,responseMessage);
+
         if(StringUtil.isNullOrNone(responseMessage) || !Assert.isJsonObject(responseMessage)){
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"下游系统返回格式不正确，请按协议规范处理");
         }
