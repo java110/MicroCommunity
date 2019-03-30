@@ -17,11 +17,11 @@
     "serviceName": "添加员工",
     "remark": "备注",
     "datas": {
-      "businessStoreUser": {
+      "businessStoreUser": [{
         "storeId": "-1",
         "userId": "用户ID",
         "relCd": "齐天超时（王府井店）"
-      }
+      }]
     },
     "attrs": [{
       "specCd": "配置的字段ID",
