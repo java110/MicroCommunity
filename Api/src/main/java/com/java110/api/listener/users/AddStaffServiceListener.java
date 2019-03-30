@@ -112,6 +112,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         JSONArray businessStoreUsers = new JSONArray();
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("storeId",paramInJson.getString("storeId"));
+        businessStoreUser.put("storeUserId","-1");
         businessStoreUser.put("userId",paramInJson.getString("userId"));
         businessStoreUser.put("relCd",paramInJson.getString("relCd"));
         businessStoreUsers.add(businessStoreUser);

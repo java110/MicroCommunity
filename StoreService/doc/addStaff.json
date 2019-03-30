@@ -18,6 +18,7 @@
     "remark": "备注",
     "datas": {
       "businessStoreUser": [{
+        "storeUserId":"-1",
         "storeId": "-1",
         "userId": "用户ID",
         "relCd": "齐天超时（王府井店）"
