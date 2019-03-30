@@ -13,14 +13,14 @@
     }]
   },
   "business": [{
-    "serviceCode": "save.store.info",
-    "serviceName": "保存商户信息",
+    "serviceCode": "user.staff.add",
+    "serviceName": "添加员工",
     "remark": "备注",
     "datas": {
       "businessStoreUser": {
         "storeId": "-1",
         "userId": "用户ID",
-        "relCd": "齐天超时（王府井店）",
+        "relCd": "齐天超时（王府井店）"
       }
     },
     "attrs": [{

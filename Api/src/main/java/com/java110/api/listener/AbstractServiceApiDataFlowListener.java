@@ -1,5 +1,6 @@
 package com.java110.api.listener;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
@@ -167,6 +168,19 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         freshOrderProtocol(centerProtocol.getJSONObject("orders"),headers);
         centerProtocol.getJSONArray("business").add(business);
+        return centerProtocol;
+    }
+
+    /**
+     * 将rest 协议转为 订单协议
+     * @param businesses 多个业务
+     * @return
+     */
+    protected JSONObject restToCenterProtocol(JSONArray businesses, Map<String,String> headers){
+
+        JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
+        freshOrderProtocol(centerProtocol.getJSONObject("orders"),headers);
+        centerProtocol.put("business",businesses);
         return centerProtocol;
     }
 
