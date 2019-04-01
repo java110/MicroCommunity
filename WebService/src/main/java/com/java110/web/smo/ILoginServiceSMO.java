@@ -29,4 +29,6 @@ public interface ILoginServiceSMO {
      * @return
      */
     public ResponseEntity<String> validate(IPageData pd);
+
+
 }

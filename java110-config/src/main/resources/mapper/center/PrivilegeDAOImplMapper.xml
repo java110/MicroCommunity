@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="privilegeDAOImpl">
+    <select id="queryUserDefaultPrivilege" parameterType="map" resultType="map">
+        SELECT a.`p_id` pId,a.`privilege_flag` privilegeFlag,a.`user_id` userId FROM p_privilege_user a WHERE a.`p_id` = #{pId}
+        AND a.`user_id` = #{userId}
+        AND a.`privilege_flag` = '1'
+        AND a.`status_cd` = '0'
+    </select>
+
+    <!-- 保存属性信息 c_business_attrs -->
+    <insert id="saveBusinessAttrs" parameterType="Map">
+        <![CDATA[
+            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},'1',#{userId})
+        ]]>
+    </insert>
+</mapper>
