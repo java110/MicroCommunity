@@ -11,7 +11,7 @@
     </select>
 
     <!-- 保存属性信息 c_business_attrs -->
-    <insert id="saveBusinessAttrs" parameterType="Map">
+    <insert id="saveUserDefaultPrivilege" parameterType="Map">
         <![CDATA[
             INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},'1',#{userId})
         ]]>
