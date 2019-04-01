@@ -8,6 +8,7 @@ import com.java110.common.constant.*;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.*;
@@ -113,8 +114,44 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         String resData = dataFlowContext.getResponseEntity().getBody().toString();
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONArray.parseArray(resData).get(0).toString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+        //如果不成功直接返回
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return ;
+        }
+
+        //赋权
+        privilegeUserDefault(dataFlowContext,paramObj);
 
 
+
+    }
+
+    /**
+     * 用户赋权
+     * @return
+     */
+    private void privilegeUserDefault(DataFlowContext dataFlowContext,JSONObject paramObj){
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE,HttpStatus.UNAUTHORIZED);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
+        String requestUrl = appService.getUrl();
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        JSONObject paramInObj = new JSONObject();
+        paramInObj.put("userId",paramObj.getJSONObject("businessStore").getString("userId"));
+        paramInObj.put("storeTypeCd",paramObj.getJSONObject("businessStore").getString("storeTypeCd"));
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
+        doRequest(dataFlowContext,appService,httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
     }
 
     /**

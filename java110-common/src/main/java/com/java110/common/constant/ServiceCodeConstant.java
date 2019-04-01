@@ -101,6 +101,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_USER_CREDENTIALS = "save.user.credentials";
 
     /**
+     * 保存用户默认权限
+     */
+    public static final String SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE = "save.user.defaultPrivilege";
+
+    /**
      * 保存商户信息
      */
     public static final String SERVICE_CODE_SAVE_STORE_INFO = "save.store.info";
