@@ -9,12 +9,12 @@ public class ServiceCodeConstant {
     /**
      * 查询菜单编码
      */
-    public static final String SERVICE_CODE_QUERY_MENU_ITEM = "query.console.menu";
+    public static final String SERVICE_CODE_QUERY_MENU_INFO = "query.menu.info";
 
     /**
      * 查询菜单编码名称
      */
-    public static final String SERVICE_CODE_QUERY_MENU_ITEM_NAME = "查询菜单";
+    public static final String SERVICE_CODE_QUERY_MENU_INFO_NAME = "查询菜单";
 
     /**
      * 查询菜单编码
