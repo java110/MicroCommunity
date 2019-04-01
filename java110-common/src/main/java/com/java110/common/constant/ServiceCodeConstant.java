@@ -126,6 +126,11 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DELETE_STORE_USER = "delete.store.user";
 
+    /**
+     * 根据用户查询商户信息
+     */
+    public static final String SERVICE_CODE_QUERY_STORE_BYUSER = "query.store.byuser";
+
 
     /**
      * 商户成员加入信息

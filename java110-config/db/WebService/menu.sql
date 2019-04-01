@@ -38,11 +38,21 @@ create table p_privilege_group(
     UNIQUE KEY (pg_id)
 
 );
+-- 权限关系表
+create table p_privilege_rel(
+    rel_id INT NOT NULL AUTO_INCREMENT KEY comment '权限关系ID',
+    p_id varchar(12) not null comment '权限ID',
+    pg_id varchar(12) comment '权限组ID',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',
+    UNIQUE KEY (rel_id)
+);
+
 -- 权限表
 create table p_privilege(
     p_id varchar(12) not null comment '权限ID',
     name varchar(10) not null comment '权限名称',
-    pg_id varchar(12) comment '权限组ID',
+    domain varchar(12) not null comment '权限域 商户详见store_type store_type_cd',
     description VARCHAR(200) COMMENT '权限描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',

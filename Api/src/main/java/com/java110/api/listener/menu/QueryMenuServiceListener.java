@@ -6,8 +6,10 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.*;
@@ -48,9 +50,11 @@ public class QueryMenuServiceListener extends AbstractServiceApiDataFlowListener
         Assert.hasKey(requestHeaders,"userId","请求信息中未包含userId信息");
 
         String userId = requestHeaders.get("userId");
-        //
+        //根据用户查询 商户类
+        String domain = queryStoreTypeCd(dataFlowContext,userId);
+        domain = StringUtil.isEmpty(domain)?"-1":domain;
         ResponseEntity responseEntity= null;
-        String requestUrl = service.getUrl() + "?userId="+userId;
+        String requestUrl = service.getUrl() + "?userId="+userId+"&domain="+domain;
         dataFlowContext.getRequestHeaders().put("REQUEST_URL",requestUrl);
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_MENU_INFO);
@@ -70,6 +74,34 @@ public class QueryMenuServiceListener extends AbstractServiceApiDataFlowListener
 
         dataFlowContext.setResponseEntity(refreshMenusInfo(resultObj.getJSONArray("menus")));
 
+    }
+
+    /**
+     * 根据用户ID查询商户信息
+     * @param dataFlowContext
+     * @param userId
+     * @return
+     */
+    private String queryStoreTypeCd(DataFlowContext dataFlowContext,String userId){
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_BYUSER);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_USER_LOGIN,HttpStatus.UNAUTHORIZED);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return "";
+        }
+        String requestUrl = appService.getUrl() + "?userId="+userId;
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_BYUSER);
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
+        doRequest(dataFlowContext,appService,httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
+
+        return JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
     }
 
     /**
