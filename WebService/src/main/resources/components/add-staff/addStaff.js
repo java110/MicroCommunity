@@ -98,7 +98,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#addStaffModel').modal({show:false});
+                            $('#addStaffModel').modal('hide');
                             vc.component.clearAddStaffInfo();
                             vc.component.$emit('addStaff_reload_event',{});
                             return ;

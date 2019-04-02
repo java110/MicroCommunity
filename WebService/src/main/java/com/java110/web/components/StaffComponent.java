@@ -3,6 +3,8 @@ package com.java110.web.components;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.web.smo.IStaffServiceSMO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -14,16 +16,27 @@ import org.springframework.stereotype.Component;
 @Component("staff")
 public class StaffComponent {
 
+
+    @Autowired
+    IStaffServiceSMO staffServiceSMOImpl;
+
     public ResponseEntity<String> loadData(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  staffServiceSMOImpl.loadData(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
 
-        String result = "{'total':1,'page':1,'row':10,'data':[" +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安1','sex':'男','tel':'17797173944','statusCd':'0','createTime':'2019-03-19'}," +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安2','sex':'男','tel':'17797173945','statusCd':'0','createTime':'2019-03-19'}," +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安3','sex':'男','tel':'17797173946','statusCd':'0','createTime':'2019-03-19'}" +
-                "]}";
 
-        JSONObject resultObjs = JSONObject.parseObject(result);
+    public IStaffServiceSMO getStaffServiceSMOImpl() {
+        return staffServiceSMOImpl;
+    }
 
-        return new ResponseEntity<String>(resultObjs.toJSONString(), HttpStatus.OK);
+    public void setStaffServiceSMOImpl(IStaffServiceSMO staffServiceSMOImpl) {
+        this.staffServiceSMOImpl = staffServiceSMOImpl;
     }
 }

@@ -15,4 +15,12 @@ public interface IStaffServiceSMO {
      * @return
      */
     public ResponseEntity<String> saveStaff(IPageData pd);
+
+
+    /**
+     * 加载 员工信息
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> loadData(IPageData pd);
 }

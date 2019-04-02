@@ -56,6 +56,48 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         return responseEntity;
     }
 
+    /**
+     * 加载员工数据
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> loadData(IPageData pd) {
+
+
+        Assert.jsonObjectHaveKey(pd.getReqData(),"page","请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"rows","请求报文中未包含rows节点");
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.isInteger(paramIn.getString("page"),"page不是数字");
+        Assert.isInteger(paramIn.getString("rows"),"rows不是数字");
+        int page = Integer.parseInt(paramIn.getString("page"));
+        int rows = Integer.parseInt(paramIn.getString("rows"));
+        if(rows>50){
+            return new ResponseEntity<String>("rows 数量不能大于50",HttpStatus.BAD_REQUEST);
+        }
+        ResponseEntity responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        responseEntity = this.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/query.store.users?row="+rows+"&page="+page+"&storeId="+storeId, HttpMethod.GET);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+
+        String result = "{'total':1,'page':1,'row':10,'data':[" +
+                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安1','sex':'男','tel':'17797173944','statusCd':'0','createTime':'2019-03-19'}," +
+                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安2','sex':'男','tel':'17797173945','statusCd':'0','createTime':'2019-03-19'}," +
+                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安3','sex':'男','tel':'17797173946','statusCd':'0','createTime':'2019-03-19'}" +
+                "]}";
+
+        JSONObject resultObjs = JSONObject.parseObject(result);
+        return responseEntity;
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;
