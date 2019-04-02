@@ -49,11 +49,19 @@ public class NavServiceSMOImpl extends BaseComponentSMO implements INavServiceSM
     @Override
     public ResponseEntity<String> getUserInfo(IPageData pd) {
         Assert.hasLength(pd.getUserId(),"用户未登录请先登录");
-        ResponseEntity<String> responseEntity = null;
+        /*ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/query.user.userInfo?userId="+pd.getUserId(), HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
+        if(responseEntity.getStatusCode() == HttpStatus.OK){
+            JSONObject tmpUserInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+            JSONObject resultUserInfo = new JSONObject();
+            resultUserInfo.put("name",tmpUserInfo.getString("name"));
+            responseEntity = new ResponseEntity<String>(resultUserInfo.toJSONString(),HttpStatus.OK);
+        }*/
+        ResponseEntity<String> responseEntity = null;
+        responseEntity = super.getUserInfo(pd,restTemplate);
         if(responseEntity.getStatusCode() == HttpStatus.OK){
             JSONObject tmpUserInfo = JSONObject.parseObject(responseEntity.getBody().toString());
             JSONObject resultUserInfo = new JSONObject();

@@ -1,0 +1,11 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item" v-bind:class="{disabled:paginationInfo.currentPage == 1}">
+            <a class="page-link" v-on:click="previous()">上一页</a>
+        </li>
+        <li class="page-item" v-for="index in paginationInfo.total"><a class="page-link" v-on:click="current(index)">{{index}}</a></li>
+        <li class="page-item" v-bind:class="{disabled:paginationInfo.currentPage == paginationInfo.total}">
+            <a class="page-link" v-on:click="next()">下一页</a>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,49 @@
+<div class="row" >
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>员工管理</h5>
+                <div class="ibox-tools">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addStaffModel">添加员工</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>员工ID</th>
+                                <th>名称</th>
+                                <th>邮箱</th>
+                                <th>地址</th>
+                                <th>性别</th>
+                                <th>手机号</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="gradeX" v-for="staff in staffData">
+                                <td>{{staff.userId}}</td>
+                                <td>{{staff.name}}</td>
+                                <td>{{staff.email}}</td>
+                                <td>{{staff.address}}</td>
+                                <td>{{staff.sex}}</td>
+                                <td>{{staff.tel}}</td>
+                                <td>{{staff.statusCd}}</td>
+                                <td>{{staff.createTime}}</td>
+                                <td>
+                                    <i class="glyphicon glyphicon-edit" style="color: #17a2b8;"></i>
+                                    <i class="glyphicon glyphicon-remove-sign" style="color: #dc3545;margin-left:5px"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

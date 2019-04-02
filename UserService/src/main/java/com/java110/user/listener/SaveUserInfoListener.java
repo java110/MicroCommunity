@@ -61,7 +61,7 @@ public class SaveUserInfoListener  extends AbstractBusinessServiceDataFlowListen
 
         Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
 
-        if(businessUser.getInteger("userId") < 0){
+        if(businessUser.getString("userId").startsWith("-")){
             //生成userId
             String userId = GenerateCodeFactory.getUserId();
             businessUser.put("userId",userId);
