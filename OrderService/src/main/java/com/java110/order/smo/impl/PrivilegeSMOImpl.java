@@ -35,12 +35,17 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
 
         Assert.jsonObjectHaveKey(privilegeInfo,"storeTypeCd","请求报文中未包含storeTypeCd节点");
 
+        Assert.jsonObjectHaveKey(privilegeInfo,"userFlag","请求报文中未包含userFlag节点");
+
 
         JSONObject privilegeObj = JSONObject.parseObject(privilegeInfo);
 
         String storeTypeCd = privilegeObj.getString("storeTypeCd");
 
-        String defaultPrivilege = MappingCache.getValue(MappingConstant.DOMAIN_DEFAULT_PRIVILEGE_ADMIN,storeTypeCd);
+        String privilegeDomain = "admin".equals(privilegeObj.getString("userFlag"))
+                ?MappingConstant.DOMAIN_DEFAULT_PRIVILEGE_ADMIN:MappingConstant.DOMAIN_DEFAULT_PRIVILEGE;
+
+        String defaultPrivilege = MappingCache.getValue(privilegeDomain,storeTypeCd);
 
         Assert.hasLength(defaultPrivilege,"在c_mapping 表中未配置商户类型为"+storeTypeCd+" 的默认权限组");
         privilegeObj.put("pId",defaultPrivilege);

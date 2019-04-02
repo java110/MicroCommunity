@@ -99,5 +99,12 @@ public class MappingConstant {
     public final static String DOMAIN_DEFAULT_PRIVILEGE_ADMIN = "DEFAULT_PRIVILEGE_ADMIN";
 
 
+    /**
+     * 默认权限
+     */
+    public final static String DOMAIN_DEFAULT_PRIVILEGE = "DEFAULT_PRIVILEGE";
+
+
+
 
 }

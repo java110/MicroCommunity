@@ -189,6 +189,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         JSONObject paramInObj = new JSONObject();
         paramInObj.put("userId",paramObj.getString("userId"));
         paramInObj.put("storeTypeCd",paramObj.getString("storeTypeCd"));
+        paramInObj.put("userFlag","staff");
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext,appService,httpEntity);
         responseEntity = dataFlowContext.getResponseEntity();

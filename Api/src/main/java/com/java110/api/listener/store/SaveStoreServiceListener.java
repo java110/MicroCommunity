@@ -145,6 +145,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         JSONObject paramInObj = new JSONObject();
         paramInObj.put("userId",paramObj.getJSONObject("businessStore").getString("userId"));
         paramInObj.put("storeTypeCd",paramObj.getJSONObject("businessStore").getString("storeTypeCd"));
+        paramInObj.put("userFlag","admin");
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext,appService,httpEntity);
         responseEntity = dataFlowContext.getResponseEntity();
