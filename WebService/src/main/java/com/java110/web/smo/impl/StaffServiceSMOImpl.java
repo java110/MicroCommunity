@@ -49,6 +49,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        reqJson.put("name",reqJson.getString("username"));
         reqJson.put("storeId",storeId);
         reqJson.put("storeTypeCd",storeTypeCd);
         responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/user.staff.add", HttpMethod.POST);

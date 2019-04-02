@@ -105,6 +105,12 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE = "save.user.defaultPrivilege";
 
+
+    /**
+     * 保存用户默认权限
+     */
+    public static final String SERVICE_CODE_QUERY_USER_USERINFO = "query.user.userInfo";
+
     /**
      * 保存商户信息
      */
@@ -136,7 +142,10 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_QUERY_STORE_BYUSER = "query.store.byuser";
 
-
+    /**
+     * 根据商户用户信息
+     */
+    public static final String SERVICE_CODE_QUERY_STORE_USERS = "query.store.users";
     /**
      * 商户成员加入信息
      */
@@ -242,6 +251,12 @@ public class ServiceCodeConstant {
      * 启用员工服务
      */
     public static final String SERVICE_CODE_USER_STAFF_ENABLE = "user.staff.enable";
+
+
+    /**
+     * 查询 员工
+     */
+    public static final String SERVICE_CODE_QUERY_STAFF_INFOS = "query.staff.infos";
 
 
 
