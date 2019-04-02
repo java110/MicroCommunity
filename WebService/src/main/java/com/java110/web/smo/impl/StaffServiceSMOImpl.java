@@ -47,8 +47,10 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("storeId",storeId);
+        reqJson.put("storeTypeCd",storeTypeCd);
         responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/user.staff.add", HttpMethod.POST);
         return responseEntity;
     }

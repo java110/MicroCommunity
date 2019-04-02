@@ -10,6 +10,7 @@ import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
@@ -61,6 +62,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         Assert.isJsonObject(paramIn,"添加员工时请求参数有误，不是有效的json格式 "+paramIn);
         JSONObject paramInJson = JSONObject.parseObject(paramIn);
         Assert.jsonObjectHaveKey(paramInJson,"storeId","请求参数中未包含storeId 节点，请确认");
+        Assert.jsonObjectHaveKey(paramInJson,"storeTypeCd","请求参数中未包含storeTypeCd 节点，请确认");
         JSONArray businesses = new JSONArray();
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
         String userId = "";
@@ -96,6 +98,14 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         super.doRequest(dataFlowContext, service, httpEntity);
 
         super.doResponse(dataFlowContext);
+
+        //如果不成功直接返回
+        if(dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK){
+            return ;
+        }
+
+        //赋权
+        privilegeUserDefault(dataFlowContext,paramInJson);
     }
 
     /**
@@ -157,6 +167,35 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
 
         paramObj.put("password",staffDefaultPassword);
         return paramObj;
+    }
+
+
+    /**
+     * 用户赋权
+     * @return
+     */
+    private void privilegeUserDefault(DataFlowContext dataFlowContext,JSONObject paramObj){
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE,HttpStatus.UNAUTHORIZED);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
+        String requestUrl = appService.getUrl();
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        JSONObject paramInObj = new JSONObject();
+        paramInObj.put("userId",paramObj.getString("userId"));
+        paramInObj.put("storeTypeCd",paramObj.getString("storeTypeCd"));
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
+        doRequest(dataFlowContext,appService,httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
     }
 
 
