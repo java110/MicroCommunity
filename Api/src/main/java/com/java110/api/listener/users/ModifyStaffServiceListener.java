@@ -1,0 +1,235 @@
+package com.java110.api.listener.users;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.*;
+import com.java110.common.exception.ListenerExecuteException;
+import com.java110.common.util.Assert;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.entity.center.AppService;
+import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.*;
+
+/**
+ * 修改员工 2018年12月6日
+ * Created by wuxw on 2018/5/18.
+ */
+@Java110Listener("modifyStaffServiceListener")
+public class ModifyStaffServiceListener extends AbstractServiceApiDataFlowListener{
+
+    private final static Logger logger = LoggerFactory.getLogger(ModifyStaffServiceListener.class);
+
+
+
+    @Override
+    public String getServiceCode() {
+        return ServiceCodeConstant.SERVICE_CODE_USER_STAFF_MODIFY;
+    }
+
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.POST;
+    }
+
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+
+
+    /**
+     * 添加员工信息
+     *
+     *
+     *
+     * @param event
+     */
+    @Override
+    public void soService(ServiceDataFlowEvent event) {
+        //获取数据上下文对象
+        DataFlowContext dataFlowContext = event.getDataFlowContext();
+        AppService service = event.getAppService();
+        String paramIn = dataFlowContext.getReqData();
+        Assert.isJsonObject(paramIn,"添加员工时请求参数有误，不是有效的json格式 "+paramIn);
+        JSONObject paramInJson = JSONObject.parseObject(paramIn);
+        Assert.jsonObjectHaveKey(paramInJson,"userId","请求参数中未包含userId 节点，请确认");
+        JSONArray businesses = new JSONArray();
+        //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
+        JSONObject staffBusiness = modifyStaff(paramInJson,dataFlowContext);
+        businesses.add(staffBusiness);
+
+        HttpHeaders header = new HttpHeaders();
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,paramInJson.getString("userId"));
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
+
+        String paramInObj = super.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+
+        //将 rest header 信息传递到下层服务中去
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
+        //http://user-service/test/sayHello
+        super.doRequest(dataFlowContext, service, httpEntity);
+
+        super.doResponse(dataFlowContext);
+
+        //如果不成功直接返回
+        if(dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK){
+            return ;
+        }
+
+        //赋权
+        privilegeUserDefault(dataFlowContext,paramInJson);
+    }
+
+    /**
+     * 添加员工
+     * @param paramInJson
+     * @return
+     */
+    private JSONObject addStaff(JSONObject paramInJson){
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONArray businessStoreUsers = new JSONArray();
+        JSONObject businessStoreUser = new JSONObject();
+        businessStoreUser.put("storeId",paramInJson.getString("storeId"));
+        businessStoreUser.put("storeUserId","-1");
+        businessStoreUser.put("userId",paramInJson.getString("userId"));
+        businessStoreUser.put("relCd",paramInJson.getString("relCd"));
+        businessStoreUsers.add(businessStoreUser);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser",businessStoreUsers);
+
+        return business;
+    }
+
+    /**
+     * 添加用户
+     * @param paramObj
+     */
+    private JSONObject addUser(JSONObject paramObj,DataFlowContext dataFlowContext){
+
+        //校验json 格式中是否包含 name,email,levelCd,tel
+        Assert.jsonObjectHaveKey(paramObj,"name","请求参数中未包含name 节点，请确认");
+        Assert.jsonObjectHaveKey(paramObj,"email","请求参数中未包含email 节点，请确认");
+        Assert.jsonObjectHaveKey(paramObj,"tel","请求参数中未包含tel 节点，请确认");
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramObj));
+
+        return business;
+    }
+
+    private JSONObject modifyStaff(JSONObject paramObj,DataFlowContext dataFlowContext){
+        //校验json 格式中是否包含 name,email,levelCd,tel
+        Assert.jsonObjectHaveKey(paramObj,"name","请求参数中未包含name 节点，请确认");
+        Assert.jsonObjectHaveKey(paramObj,"tel","请求参数中未包含tel 节点，请确认");
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
+        business.put(CommonConstant.HTTP_SEQ,1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",builderStaffInfo(paramObj,dataFlowContext));
+
+        return business;
+    }
+
+    /**
+     *  构建员工信息
+     * @param paramObj
+     * @param dataFlowContext
+     * @return
+     */
+    private JSONObject builderStaffInfo(JSONObject paramObj, DataFlowContext dataFlowContext) {
+
+        //首先根据员工ID查询员工信息，根据员工信息修改相应的数据
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+        if(appService == null){
+            throw new ListenerExecuteException(1999,"当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+
+        }
+        String requestUrl = appService.getUrl() + "?userId="+paramObj.getString("userId");
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+        dataFlowContext.getRequestHeaders().put("REQUEST_URL",requestUrl);
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
+        doRequest(dataFlowContext,appService,httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
+
+        JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        userInfo.putAll(paramObj);
+
+        return userInfo;
+    }
+
+    /**
+     * 对请求报文处理
+     * @param paramObj
+     * @return
+     */
+    private JSONObject refreshParamIn(JSONObject paramObj){
+        //paramObj.put("userId","-1");
+        paramObj.put("levelCd", UserLevelConstant.USER_LEVEL_STAFF);
+        //设置默认密码
+        String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
+        Assert.hasLength(staffDefaultPassword,"映射表中未设置员工默认密码，请检查"+MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
+        staffDefaultPassword = AuthenticationFactory.passwdMd5(staffDefaultPassword);
+        paramObj.put("password",staffDefaultPassword);
+        return paramObj;
+    }
+
+
+    /**
+     * 用户赋权
+     * @return
+     */
+    private void privilegeUserDefault(DataFlowContext dataFlowContext,JSONObject paramObj){
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE,HttpStatus.UNAUTHORIZED);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
+        String requestUrl = appService.getUrl();
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
+        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        JSONObject paramInObj = new JSONObject();
+        paramInObj.put("userId",paramObj.getString("userId"));
+        paramInObj.put("storeTypeCd",paramObj.getString("storeTypeCd"));
+        paramInObj.put("userFlag","staff");
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
+        doRequest(dataFlowContext,appService,httpEntity);
+        responseEntity = dataFlowContext.getResponseEntity();
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
+    }
+
+
+}

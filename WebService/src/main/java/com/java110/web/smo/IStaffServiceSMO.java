@@ -23,4 +23,12 @@ public interface IStaffServiceSMO {
      * @return
      */
     public ResponseEntity<String> loadData(IPageData pd);
+
+
+    /**
+     * 修改员工信息
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> modifyStaff(IPageData pd);
 }

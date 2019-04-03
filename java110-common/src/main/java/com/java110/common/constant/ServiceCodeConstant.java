@@ -243,6 +243,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_USER_STAFF_ADD = "user.staff.add";
 
     /**
+     * 添加员工 服务
+     */
+    public static final String SERVICE_CODE_USER_STAFF_MODIFY = "user.staff.modify";
+
+    /**
      * 停用员工服务
      */
     public static final String SERVICE_CODE_USER_STAFF_DISABLE = "user.staff.disable";

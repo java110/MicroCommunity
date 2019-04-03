@@ -95,6 +95,36 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         return responseEntity;
     }
 
+    /**
+     * 修改员工信息
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> modifyStaff(IPageData pd) {
+
+        ResponseEntity<String> responseEntity = null;
+        //校验 前台数据
+        modifyStaffValidate(pd);
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/user.staff.modify", HttpMethod.POST);
+        return responseEntity;
+    }
+
+    /**
+     * 修改员工 数据校验
+     * @param pd
+     */
+    private void modifyStaffValidate(IPageData pd){
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"username","请求报文格式错误或未包含用户名信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"email","请求报文格式错误或未包含邮箱信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"tel","请求报文格式错误或未包含手机信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"sex","请求报文格式错误或未包含性别信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"address","请求报文格式错误或未包含地址信息");
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

@@ -34,7 +34,7 @@
                                 <td>{{staff.statusCd}}</td>
                                 <td>{{staff.createTime}}</td>
                                 <td>
-                                    <i class="glyphicon glyphicon-edit" style="color: #17a2b8;"></i>
+                                    <i class="glyphicon glyphicon-edit" style="color: #17a2b8;" v-on:click="openEditStaff(staff)"></i>
                                     <i v-if="staff.relCd != 600311000001" class="glyphicon glyphicon-remove-sign" style="color: #dc3545;margin-left:5px"></i>
                                 </td>
                             </tr>
