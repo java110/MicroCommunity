@@ -27,7 +27,7 @@
                                  param,
                                  function(json){
                                     var _staffInfo = JSON.parse(json);
-                                    vc.component.staffData = _staffInfo.data;
+                                    vc.component.staffData = _staffInfo.datas;
                                     vc.component.$emit('pagination_info_event',{
                                         total:_staffInfo.total,
                                         currentPage:_staffInfo.page

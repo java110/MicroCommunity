@@ -79,7 +79,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiDataFlowListene
         //然后根据userId 在用户服务查询用户信息
         JSONObject staffs = JSONObject.parseObject(responseEntity.getBody().toString());
 
-        JSONArray rows = staffs.getJSONArray("rows");
+        JSONArray rows = staffs.getJSONArray("datas");
 
         appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
         if(appService == null){
