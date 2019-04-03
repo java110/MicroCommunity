@@ -93,6 +93,8 @@ public class QueryStaffServiceListener extends AbstractServiceApiDataFlowListene
             queryUserInfoByUserId(dataFlowContext,tmpObj,appService);
         }
 
+        dataFlowContext.setResponseEntity(new ResponseEntity(staffs.toJSONString(),HttpStatus.OK));
+
     }
 
     /**
