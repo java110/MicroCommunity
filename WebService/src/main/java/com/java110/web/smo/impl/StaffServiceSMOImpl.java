@@ -84,18 +84,12 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         responseEntity = this.callCenterService(restTemplate,pd,"",
-                ServiceConstant.SERVICE_API_URL+"/api/query.store.users?row="+rows+"&page="+page+"&storeId="+storeId, HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL+"/api/query.staff.infos?rows="+rows+"&page="+page+"&storeId="+storeId, HttpMethod.GET);
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
         }
 
-        String result = "{'total':1,'page':1,'row':10,'datas':[" +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安1','sex':'男','tel':'17797173944','statusCd':'0','createTime':'2019-03-19'}," +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安2','sex':'男','tel':'17797173945','statusCd':'0','createTime':'2019-03-19'}," +
-                "{'userId':'111','name':'123','email':'928255095@qq.com','address':'张安3','sex':'男','tel':'17797173946','statusCd':'0','createTime':'2019-03-19'}" +
-                "]}";
-
-        JSONObject resultObjs = JSONObject.parseObject(result);
+        JSONObject resultObjs = JSONObject.parseObject(responseEntity.getBody().toString());
         resultObjs.put("row",rows);
         resultObjs.put("page",page);
         return responseEntity;

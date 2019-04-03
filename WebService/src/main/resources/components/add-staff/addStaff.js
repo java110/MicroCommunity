@@ -30,8 +30,8 @@
                         },
                         {
                             limit:"maxin",
-                            param:"4,6",
-                            errInfo:"用户名长度必须在4位至6位"
+                            param:"2,10",
+                            errInfo:"用户名长度必须在2位至10位"
                         },
                     ],
                     'addStaffInfo.email':[

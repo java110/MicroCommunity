@@ -18,7 +18,10 @@
             methods:{
                 loadData:function(){
                     var param = {
-                        msg:'123',
+                        params:{
+                            page:1,
+                            rows:10
+                        }
                     };
 
                     //发送get请求
@@ -44,7 +47,10 @@
                 },
                 addStaff:function(){
                     var param = {
-                        msg:123
+                        params:{
+                            page:1,
+                            rows:10
+                        }
                     };
                       //发送get请求
                    vc.http.post('nav',

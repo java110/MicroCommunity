@@ -164,7 +164,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         //设置默认密码
         String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
         Assert.hasLength(staffDefaultPassword,"映射表中未设置员工默认密码，请检查"+MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
-
+        staffDefaultPassword = AuthenticationFactory.passwdMd5(staffDefaultPassword);
         paramObj.put("password",staffDefaultPassword);
         return paramObj;
     }
