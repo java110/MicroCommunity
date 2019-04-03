@@ -5,27 +5,27 @@
 
             },
             _initMethod:function(){
-                vc.component.loadData();
+                vc.component.loadData(1,10);
             },
             _initEvent:function(){
                  vc.component.$on('pagination_page_event',function(_currentPage){
                         vc.component.currentPage(_currentPage);
                     });
                  vc.component.$on('addStaff_reload_event',function(){
-                     vc.component.loadData();
+                     vc.component.loadData(1,10);
                  });
                  vc.component.$on('editStaff_reload_event',function(){
-                      vc.component.loadData();
+                      vc.component.loadData(1,10);
                   });
 
 
             },
             methods:{
-                loadData:function(){
+                loadData:function(_page,_rows){
                     var param = {
                         params:{
-                            page:1,
-                            rows:10
+                            page:_page,
+                            rows:_rows
                         }
                     };
 
@@ -37,7 +37,7 @@
                                     var _staffInfo = JSON.parse(json);
                                     vc.component.staffData = _staffInfo.datas;
                                     vc.component.$emit('pagination_info_event',{
-                                        total:_staffInfo.total,
+                                        total:_staffInfo.records,
                                         currentPage:_staffInfo.page
                                     });
 
@@ -48,7 +48,7 @@
 
                 },
                 currentPage:function(_currentPage){
-
+                    vc.component.loadData(_currentPage,10);
                 },
                 openEditStaff:function(_staffInfo){
                      vc.component.$emit('edit_staff_event',_staffInfo);

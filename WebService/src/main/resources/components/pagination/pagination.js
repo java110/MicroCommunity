@@ -12,7 +12,7 @@
         _initEvent:function(){
              vc.component.$on('pagination_info_event',function(_paginationInfo){
                     vc.component.paginationInfo.total = _paginationInfo.total;
-                    vc.component.paginationInfo.total = _paginationInfo.currentPage;
+                    vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
                 });
         },
         methods:{
@@ -33,7 +33,7 @@
 
             },
             current:function(_page){
-                if(_page > vc.component.paginationInfo.currentPage){
+                if(_page > vc.component.paginationInfo.total){
                     return ;
                 }
                 vc.component.paginationInfo.currentPage = _page;
