@@ -106,8 +106,10 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         ResponseEntity<String> responseEntity = null;
         //校验 前台数据
         modifyStaffValidate(pd);
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("name",paramIn.getString("username"));
         //修改用户信息
-        responseEntity = this.callCenterService(restTemplate,pd,"",
+        responseEntity = this.callCenterService(restTemplate,pd,paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL+"/api/user.staff.modify", HttpMethod.POST);
         return responseEntity;
     }
