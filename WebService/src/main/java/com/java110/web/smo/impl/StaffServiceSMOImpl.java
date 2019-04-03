@@ -75,6 +75,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         if(rows>50){
             return new ResponseEntity<String>("rows 数量不能大于50",HttpStatus.BAD_REQUEST);
         }
+        page = (page-1)*rows;
         ResponseEntity responseEntity = super.getStoreInfo(pd,restTemplate);
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
@@ -95,6 +96,8 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
                 "]}";
 
         JSONObject resultObjs = JSONObject.parseObject(result);
+        resultObjs.put("row",rows);
+        resultObjs.put("page",page);
         return responseEntity;
     }
 

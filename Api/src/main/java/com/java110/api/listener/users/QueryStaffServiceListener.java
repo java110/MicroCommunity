@@ -7,6 +7,7 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
@@ -50,7 +51,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiDataFlowListene
         Map<String,String> headers = dataFlowContext.getRequestHeaders();
 
         Assert.hasKeyAndValue(headers,"page","请求报文中未包含page节点");
-        Assert.hasKeyAndValue(headers,"rows","请求报文中未包含rows节点");
+        Assert.hasKeyAndValue(headers,"row","请求报文中未包含rows节点");
         Assert.hasKeyAndValue(headers,"storeId","请求报文中未包含storeId节点");
 
         ResponseEntity responseEntity= null;
@@ -65,7 +66,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiDataFlowListene
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_USERS);
 
         //先查询商户服务查询员工userId
-        requestUrl = requestUrl + "?page="+headers.get("page")+"&rows="+headers.get("rows")+"&storeId="+headers.get("storeId");
+        requestUrl = requestUrl + "?page="+headers.get("page")+"&row="+headers.get("row")+"&storeId="+headers.get("storeId");
         dataFlowContext.getRequestHeaders().put("REQUEST_URL",requestUrl);
         HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
         doRequest(dataFlowContext,appService,httpEntity);
@@ -101,6 +102,10 @@ public class QueryStaffServiceListener extends AbstractServiceApiDataFlowListene
     private void queryUserInfoByUserId( DataFlowContext dataFlowContext,JSONObject tmpObj,AppService appService){
 
         String userId = tmpObj.getString("userId");
+
+        if(StringUtil.isEmpty(userId)){
+            return ;
+        }
 
         ResponseEntity responseEntity= null;
 
