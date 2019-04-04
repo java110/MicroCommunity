@@ -121,10 +121,17 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
      */
     @Override
     public ResponseEntity<String> delete(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
         Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
         Assert.jsonObjectHaveKey(pd.getReqData(),"storeId","请求报文格式错误或未包含商户ID信息");
-
-        return null;
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        JSONObject newParam = new JSONObject();
+        newParam.put("userId",paramIn.getString("userId"));
+        newParam.put("storeId",paramIn.getString("storeId"));
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,newParam.toJSONString(),
+                ServiceConstant.SERVICE_API_URL+"/api/user.staff.delete", HttpMethod.POST);
+        return responseEntity;
     }
 
     /**

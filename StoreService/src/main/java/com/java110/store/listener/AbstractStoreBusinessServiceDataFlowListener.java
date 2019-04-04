@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IStoreServiceDao;
@@ -219,4 +220,44 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentMemberStore.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStoreInfo(currentMemberStore);
     }
+
+    /**
+     * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     * @param businessStoreUser 商户信息
+     */
+    protected void autoSaveDelBusinessStoreUser(Business business, JSONObject businessStoreUser){
+        //自动插入DEL
+        Map info = new HashMap();
+        info.put("storeId",businessStoreUser.getString("storeId"));
+        info.put("userId",businessStoreUser.getString("userId"));
+        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        Map currentStoreUser = getStoreServiceDaoImpl().getStoreUser(info).get(0);
+        if(currentStoreUser == null || currentStoreUser.isEmpty()){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        }
+        currentStoreUser.put("bId",business.getbId());
+        currentStoreUser.put("storeUserId", currentStoreUser.get("store_user_id"));
+        currentStoreUser.put("storeId",currentStoreUser.get("store_id"));
+        currentStoreUser.put("userId",currentStoreUser.get("user_id"));
+        currentStoreUser.put("relCd",currentStoreUser.get("rel_cd"));
+        currentStoreUser.put("operate",StatusConstant.OPERATE_DEL);
+        getStoreServiceDaoImpl().saveBusinessStoreUser(currentStoreUser);
+    }
+
+    /**
+     * 刷新 businessMemberStore 数据
+     * 主要将 数据库 中字段和 接口传递字段建立关系
+     * @param businessMemberStore
+     */
+    protected void flushBusinessStoreUser(Map businessMemberStore,String statusCd){
+        businessMemberStore.put("newBId",businessMemberStore.get("b_id"));
+        businessMemberStore.put("storeUserId", businessMemberStore.get("store_user_id"));
+        businessMemberStore.put("storeId",businessMemberStore.get("store_id"));
+        businessMemberStore.put("userId",businessMemberStore.get("user_id"));
+        businessMemberStore.put("relCd",businessMemberStore.get("rel_cd"));
+        businessMemberStore.put("statusCd", statusCd);
+    }
+
+
+
 }

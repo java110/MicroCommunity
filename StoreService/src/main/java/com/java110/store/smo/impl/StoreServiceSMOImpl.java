@@ -54,7 +54,7 @@ public class StoreServiceSMOImpl extends BaseServiceSMO implements IStoreService
                 Assert.hasLength(businessServiceDataFlow.getbId(),"bId 不能为空");
 
                 BusinessServiceDataFlowEventPublishing.multicastEvent(businessServiceDataFlow);
-                Assert.notEmpty(businessServiceDataFlow.getResJson(),"用户服务["+businessServiceDataFlow.getCurrentBusiness().getServiceCode()+"]没有返回内容");
+                Assert.notEmpty(businessServiceDataFlow.getResJson(),"用户服务["+businessServiceDataFlow.getBusinessType()+"]没有返回内容");
             } catch (Exception e) {
                 logger.error("用户信息处理异常",e);
                 throw new SMOException(ResponseConstant.RESULT_PARAM_ERROR,"用户信息处理异常"+e.getMessage());
