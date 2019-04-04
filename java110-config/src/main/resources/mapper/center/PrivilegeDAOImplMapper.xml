@@ -16,4 +16,9 @@
             INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},'1',#{userId})
         ]]>
     </insert>
+
+    <!-- 删除用户所有权限-->
+    <update id="deleteUserAllPrivilege" parameterType="Map">
+        UPDATE s_store_user a SET a.`status_cd` = '1' WHERE a.`user_id` = #{userId}
+    </update>
 </mapper>

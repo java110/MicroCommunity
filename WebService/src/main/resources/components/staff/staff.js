@@ -17,6 +17,9 @@
                  vc.component.$on('editStaff_reload_event',function(){
                       vc.component.loadData(1,10);
                   });
+                  vc.component.$on('deleteStaff_reload_event',function(){
+                     vc.component.loadData(1,10);
+                  });
 
 
             },
@@ -52,6 +55,9 @@
                 },
                 openEditStaff:function(_staffInfo){
                      vc.component.$emit('edit_staff_event',_staffInfo);
+                },
+                openDeleteStaff:function(_staffInfo){
+                     vc.component.$emit('delete_staff_event',_staffInfo);
                 }
 
             }

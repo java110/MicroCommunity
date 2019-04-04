@@ -31,4 +31,12 @@ public interface IStaffServiceSMO {
      * @return
      */
     public ResponseEntity<String> modifyStaff(IPageData pd);
+
+
+    /**
+     * 删除员工
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> delete(IPageData pd);
 }

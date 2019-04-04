@@ -14,4 +14,12 @@ public interface IPrivilegeSMO {
      * @return
      */
     public ResponseEntity<String> saveUserDefaultPrivilege(String privilegeInfo);
+
+
+    /**
+     * 删除所有权限
+     * @param privilegeInfo
+     * @return
+     */
+    public ResponseEntity<String> deleteUserAllPrivilege(String privilegeInfo);
 }

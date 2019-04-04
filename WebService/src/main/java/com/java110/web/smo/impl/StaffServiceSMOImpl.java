@@ -115,6 +115,19 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     }
 
     /**
+     * 删除工号
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> delete(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"storeId","请求报文格式错误或未包含商户ID信息");
+
+        return null;
+    }
+
+    /**
      * 修改员工 数据校验
      * @param pd
      */
