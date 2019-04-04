@@ -143,11 +143,9 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
         business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessStoreUsers = new JSONArray();
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("userId",paramInJson.getString("userId"));
-        businessStoreUsers.add(businessStoreUser);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",businessStoreUsers);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",businessStoreUser);
 
         return business;
 
