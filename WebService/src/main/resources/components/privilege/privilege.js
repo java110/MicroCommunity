@@ -1,0 +1,5 @@
+(function(vc){
+
+
+
+})(window.vc);
