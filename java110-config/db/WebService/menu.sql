@@ -34,6 +34,7 @@ create table p_privilege_group(
     name varchar(10) not null comment '权限组名称',
     description VARCHAR(200) COMMENT '权限组描述',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    store_id varchar(30) not null comment '商户ID',
     status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效',
     UNIQUE KEY (pg_id)
 

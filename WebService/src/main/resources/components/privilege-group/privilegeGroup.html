@@ -7,11 +7,11 @@
 
                 <h5>权限组</h5>
                 <ul class="category-list" style="padding: 0">
-                    <li><a href="#"> <i class="fa fa-circle text-navy"></i> 员工管理组 </a></li>
-                    <li><a href="#"> <i class="fa fa-circle text-danger"></i> Documents</a></li>
-                    <li><a href="#"> <i class="fa fa-circle text-primary"></i> Social</a></li>
-                    <li><a href="#"> <i class="fa fa-circle text-info"></i> Advertising</a></li>
-                    <li><a href="#"> <i class="fa fa-circle text-warning"></i> Clients</a></li>
+                    <li v-for="pGroup in privilegeGroupInfo.groups">
+                        <a v-on:click="notifyQueryPrivilege(pGroup)">
+                            <i class="glyphicon glyphicon-chevron-right text-navy"></i>
+                            {{pGroup.name}} </a>
+                    </li>
                 </ul>
 
                 <div class="clearfix"></div>
