@@ -49,4 +49,8 @@ public interface IPrivilegeDAO {
 
 
     public List<Map> queryPrivilegeRel(Map info);
+
+    public List<Map> queryPrivilegeGroup(Map info);
+
+    public boolean addPrivilegeRel(Map info);
 }

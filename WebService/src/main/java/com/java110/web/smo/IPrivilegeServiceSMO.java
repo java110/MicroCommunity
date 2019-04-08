@@ -36,4 +36,18 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> deletePrivilegeGroup(IPageData pd);
+
+    /**
+     * 查询未被绑定的权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listNoAddPrivilege(IPageData pd);
+
+    /**
+     * 添加权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> addPrivilegeToPrivilegeGroup(IPageData pd);
 }

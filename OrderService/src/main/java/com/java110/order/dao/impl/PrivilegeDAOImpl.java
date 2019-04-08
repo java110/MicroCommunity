@@ -106,5 +106,20 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
         return sqlSessionTemplate.selectList("privilegeDAOImpl.queryPrivilegeRel",info);
     }
 
+    public List<Map> queryPrivilegeGroup(Map info){
+        logger.debug("查询权限组下权限信息入参：{}",info);
+        return sqlSessionTemplate.selectList("privilegeDAOImpl.queryPrivilegeGroup",info);
+    }
+
+    @Override
+    public boolean addPrivilegeRel(Map info) {
+        logger.debug("添加权限组下权限信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.addPrivilegeRel",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"添加权限组下权限信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
+
 
 }

@@ -97,9 +97,9 @@ public class Assert extends org.springframework.util.Assert{
      * @param targetList
      * @param message
      */
-    public static void isNull(List<?> targetList , String message){
+    public static void isNotNull(List<?> targetList , String message){
 
-        Assert.isNull(targetList,message);
+        Assert.notNull(targetList,message);
 
         if(targetList.size()< 1){
             throw new IllegalArgumentException(message) ;

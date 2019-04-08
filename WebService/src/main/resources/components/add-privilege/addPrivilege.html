@@ -44,7 +44,7 @@
                                                 <td>{{noAddPrivilege.description}}</td>
                                                 <td>{{vc.dateFormat(noAddPrivilege.createTime)}}</td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-xs">添加</button>
+                                                    <button class="btn btn-primary btn-xs" v-on:click="addPrivilegeToPrivilegeGroup(noAddPrivilege)">添加</button>
                                                 </td>
                                             </tr>
                                         </tbody>

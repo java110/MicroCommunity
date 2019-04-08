@@ -41,7 +41,9 @@
                            );
             },
             openAddPrivilegeModel:function(){
-                vc.component.$emit('addPrivilege_openPrivilegeModel',{});
+                vc.component.$emit('addPrivilege_openPrivilegeModel',{
+                            pgId:vc.component.privilegeInfo._currentPgId
+                });
             }
         }
     });

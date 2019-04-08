@@ -62,4 +62,26 @@
             AND ppr.`pg_id` = #{pgId}
 
     </select>
+
+    <select id="queryPrivilegeGroup" parameterType="Map" resultType="Map">
+        select ppg.pg_id pgId,ppg.name,ppg.description,ppg.create_time createTime,ppg.store_id storeId,ppg.domain
+        from p_privilege_group ppg
+        where 1=1
+        <if test="pgId !=null and pgId !=''">
+            and ppg.pg_id = #{pgId}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            and ppg.store_id = #{storeId}
+        </if>
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and ppg.domain = #{storeTypeCd}
+        </if>
+        and ppg.status_cd = '0'
+
+    </select>
+
+    <insert id="addPrivilegeRel" parameterType="Map">
+        insert into p_privilege_rel(p_id,pg_id)
+        values(#{pId},#{pgId})
+    </insert>
 </mapper>
