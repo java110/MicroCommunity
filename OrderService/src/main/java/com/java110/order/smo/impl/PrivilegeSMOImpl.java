@@ -98,6 +98,31 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         return new ResponseEntity<String>("未知异常", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * 删除权限组
+     * @param privilegeGroupInfo
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> deletePrivilegeGroup(String privilegeGroupInfo) {
+
+        Assert.isJsonObject(privilegeGroupInfo,"请求报文不是有效的json格式");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"pgId","请求报文中未包含pgId节点");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"storeId","请求报文中未包含storeId节点");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"storeTypeCd","请求报文中未包含storeTypeCd节点");
+        JSONObject privilegeGroupObj = JSONObject.parseObject(privilegeGroupInfo);
+        //删除权限组
+        privilegeDAOImpl.deletePrivilegeGroup(privilegeGroupObj);
+        //删除权限组和权限关系
+        privilegeDAOImpl.deletePrivilegeRel(privilegeGroupObj);
+
+        return new ResponseEntity<String>("成功", HttpStatus.OK);
+
+    }
+
 
     public IPrivilegeDAO getPrivilegeDAOImpl() {
         return privilegeDAOImpl;

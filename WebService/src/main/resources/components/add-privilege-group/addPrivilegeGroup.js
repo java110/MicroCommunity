@@ -57,7 +57,7 @@
                 vc.http.post(
                     'addPrivilegeGroup',
                     'savePrivilegeGroupInfo',
-                    JSON.stringify(vc.component.addPrivilegeGroupValidate),
+                    JSON.stringify(vc.component.addPrivilegeGroupInfo),
                     {
                         emulateJSON:true
                      },
@@ -67,15 +67,15 @@
                             //关闭model
                             $('#addPrivilegeGroupModel').modal('hide');
                             vc.component.clearAddPrivilegeGroupInfo();
-                            vc.component.$emit('addStaff_reload_event',{});
+                            vc.component.$emit('privilegeGroup_loadPrivilegeGroup',{});
                             return ;
                         }
-                        vc.component.addStaffInfo.errorInfo = json;
+                        vc.component.addPrivilegeGroupInfo.errorInfo = json;
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
 
-                        vc.component.addStaffInfo.errorInfo = errInfo;
+                        vc.component.addPrivilegeGroupInfo.errorInfo = errInfo;
                      });
             },
             clearAddPrivilegeGroupInfo:function(){

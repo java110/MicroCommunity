@@ -86,6 +86,23 @@ public class PrivilegeApi extends BaseController {
         }
     }
 
+    @RequestMapping(path = "/deletePrivilegeGroup",method= RequestMethod.POST)
+    @ApiOperation(value="删除权限组", notes="test: 返回 200 表示服务受理成功，其他表示失败")
+    @ApiImplicitParam(paramType="query", name = "privilegeGroupInfo", value = "权限信息", required = true, dataType = "String")
+    public ResponseEntity<String> deletePrivilegeGroup(@RequestBody String privilegeGroupInfo,HttpServletRequest request){
+        ResponseEntity<String> responseEntity = null;
+
+        try {
+            responseEntity = privilegeSMOImpl.deletePrivilegeGroup(privilegeGroupInfo);
+        }catch (Exception e){
+            logger.error("请求订单异常",e);
+            responseEntity =  new ResponseEntity<String>("请求中心服务发生异常，"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            logger.debug("订单服务返回报文为: {}",responseEntity);
+            return responseEntity;
+        }
+    }
+
 
     public IPrivilegeSMO getPrivilegeSMOImpl() {
         return privilegeSMOImpl;

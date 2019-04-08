@@ -20,3 +20,6 @@
         direction: ltr;
         cursor: pointer;
 }
+.delete_button{
+    color: #dc3545;
+}

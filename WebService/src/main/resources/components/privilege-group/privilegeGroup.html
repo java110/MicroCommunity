@@ -2,7 +2,7 @@
     <div class="ibox ">
         <div class="ibox-content mailbox-content">
             <div class="file-manager">
-                <a class="btn btn-block btn-primary compose-mail" v-on:click="openPrivilegeGroupModel()">添加权限组</a>
+                <a class="btn btn-block btn-primary compose-mail" href="javascript:void(0);" v-on:click="openPrivilegeGroupModel()">添加权限组</a>
                 <div class="space-25"></div>
 
                 <h5>权限组</h5>
@@ -10,7 +10,11 @@
                     <li v-for="pGroup in privilegeGroupInfo.groups">
                         <a v-on:click="notifyQueryPrivilege(pGroup)">
                             <i class="glyphicon glyphicon-chevron-right text-navy"></i>
-                            {{pGroup.name}} </a>
+                            {{pGroup.name}}
+                            <i v-if="pGroup.storeId != '9999'" class="glyphicon glyphicon-remove-sign float-right"
+                               style="color:#dc3545"
+                               v-on:click.stop="openDeletePrivilegeGroupModel(pGroup)"></i>
+                        </a>
                     </li>
                 </ul>
 
@@ -18,6 +22,7 @@
             </div>
 
             <vc:create name="addPrivilegeGroup"></vc:create>
+            <vc:create name="deletePrivilegeGroup"></vc:create>
         </div>
     </div>
 </div>

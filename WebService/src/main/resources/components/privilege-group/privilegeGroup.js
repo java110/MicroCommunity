@@ -12,6 +12,11 @@
         _initMethod:function(){
             vc.component.loadPrivilegeGroup();
         },
+        _initEvent:function(){
+             vc.component.$on('privilegeGroup_loadPrivilegeGroup',function(_params){
+                vc.component.loadPrivilegeGroup();
+            });
+        },
         methods:{
             loadPrivilegeGroup:function(){
                 var param = {
@@ -46,6 +51,9 @@
             },
             openPrivilegeGroupModel:function(){
                 vc.component.$emit('addPrivilegeGroup_openPrivilegeGroupModel',{});
+            },
+            openDeletePrivilegeGroupModel:function(_pGroup){
+                vc.component.$emit('deletePrivilegeGroup_openDeletePrivilegeGroupModel',_pGroup);
             }
         }
     });

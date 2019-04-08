@@ -64,4 +64,36 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
         }
         return true;
     }
+
+    /**
+     * 删除权限组
+     * @param info
+     * @return
+     */
+    @Override
+    public boolean deletePrivilegeGroup(Map info) {
+        logger.debug("删除权限组信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.deletePrivilegeGroup",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"删除权限组信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
+
+    /**
+     * 删除权限组下权限
+     * @param info
+     * @return
+     */
+    @Override
+    public boolean deletePrivilegeRel(Map info) {
+        logger.debug("删除权限组下权限信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.deletePrivilegeRel",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"删除权限组下权限信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
+
+
 }

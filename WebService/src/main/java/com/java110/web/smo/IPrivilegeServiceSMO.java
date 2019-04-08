@@ -29,4 +29,11 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> savePrivilegeGroup(IPageData pd);
+
+    /**
+     * 删除权限组
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> deletePrivilegeGroup(IPageData pd);
 }

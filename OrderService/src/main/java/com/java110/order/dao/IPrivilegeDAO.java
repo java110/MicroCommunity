@@ -30,4 +30,19 @@ public interface IPrivilegeDAO {
      * @return
      */
     public boolean savePrivilegeGroup(Map info);
+
+    /**
+     * 删除权限组
+     * @param info
+     * @return
+     */
+    public boolean deletePrivilegeGroup(Map info);
+
+
+    /**
+     * 删除权限组下权限
+     * @param info
+     * @return
+     */
+    public boolean deletePrivilegeRel(Map info);
 }
