@@ -5,6 +5,7 @@
             privilegeInfo:{
                 _currentPgId:"",
                 _currentPgName:"",
+                _currentStoreId:"9999",
                 _privileges:[]
             }
         },
@@ -15,13 +16,14 @@
             vc.component.$on('privilege_group_event',function(_pgObj){
                 vc.component.privilegeInfo._currentPgId = _pgObj._pgId;
                 vc.component.privilegeInfo._currentPgName = _pgObj._pgName;
-
+                vc.component.privilegeInfo._currentStoreId = _pgObj._storeId;
                 //调用接口查询权限
                 vc.component._loadPrivilege(_pgObj._pgId);
             });
         },
         methods:{
             _loadPrivilege:function(_pgId){
+                vc.component.privilegeInfo._privileges=[];
                 var param = {
                                     params:{pgId:_pgId}
                                 };
@@ -37,6 +39,9 @@
                                 console.log('请求失败处理');
                              }
                            );
+            },
+            openAddPrivilegeModel:function(){
+                vc.component.$emit('addPrivilege_openPrivilegeModel',{});
             }
         }
     });

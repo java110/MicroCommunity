@@ -33,7 +33,8 @@
                                 if(_groupsInfo.length > 0){
                                     vc.component.$emit('privilege_group_event',{
                                                                     _pgId:_groupsInfo[0].pgId,
-                                                                    _pgName:_groupsInfo[0].name
+                                                                    _pgName:_groupsInfo[0].name,
+                                                                    _storeId:_groupsInfo[0].storeId
                                                                 });
                                 }
 
@@ -46,7 +47,8 @@
             notifyQueryPrivilege:function(_pGroup){
                 vc.component.$emit('privilege_group_event',{
                     _pgId:_pGroup.pgId,
-                    _pgName:_pGroup.name
+                    _pgName:_pGroup.name,
+                    _storeId:_pGroup.storeId
                 });
             },
             openPrivilegeGroupModel:function(){

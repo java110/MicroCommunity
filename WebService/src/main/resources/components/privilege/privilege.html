@@ -2,7 +2,12 @@
     <vc:create name="privilegeGroup"></vc:create>
     <div class="col-lg-9 animated fadeInRight">
         <div class="mail-box-header">
-            <button class="btn btn-primary btn-sm float-right" data-toggle="tooltip"  title="Refresh inbox"><i class="fa fa-plus"></i> 添加权限</button>
+            <button v-if="privilegeInfo._currentStoreId != '9999'"
+                    class="btn btn-primary btn-sm float-right"
+                    data-toggle="tooltip"
+                    title="Refresh inbox"
+                    v-on:click="openAddPrivilegeModel()"
+            ><i class="fa fa-plus"></i> 添加权限</button>
             <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
                 <div class="input-group">
                     <input type="text" class="form-control form-control-sm" name="search" placeholder="请输入权限名称">
@@ -37,7 +42,7 @@
                     <td class="mail-ontact">{{privilege.name}}</td>
                     <td class="mail-subject">{{privilege.description}}</td>
                     <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
+                    <td class="text-right mail-date"><i  v-if="privilegeInfo._currentStoreId != '9999'" class="glyphicon glyphicon-remove"></i></td>
                 </tr>
 
                 </tbody>
@@ -46,4 +51,6 @@
 
         </div>
     </div>
+
+    <vc:create name="addPrivilege"></vc:create>
 </div>
