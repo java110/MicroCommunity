@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 用户权限处理类
  * Created by Administrator on 2019/4/1.
@@ -116,8 +119,13 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         JSONObject privilegeGroupObj = JSONObject.parseObject(privilegeGroupInfo);
         //删除权限组
         privilegeDAOImpl.deletePrivilegeGroup(privilegeGroupObj);
-        //删除权限组和权限关系
-        privilegeDAOImpl.deletePrivilegeRel(privilegeGroupObj);
+
+        List<Map> privileges = privilegeDAOImpl.queryPrivilegeRel(privilegeGroupObj);
+
+        if(privileges !=null && privileges.size()>0) {
+            //删除权限组和权限关系
+            privilegeDAOImpl.deletePrivilegeRel(privilegeGroupObj);
+        }
 
         return new ResponseEntity<String>("成功", HttpStatus.OK);
 

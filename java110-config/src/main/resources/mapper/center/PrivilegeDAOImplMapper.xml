@@ -45,4 +45,21 @@
         UPDATE p_privilege_rel a SET a.`status_cd` = '1'
         WHERE a.`pg_id` = #{pgId}
     </update>
+
+    <select id="queryPrivilegeRel" parameterType="Map" resultType="Map">
+        SELECT
+            pp.`name`,
+            pp.`domain`,
+            pp.`p_id` pId,
+            pp.`description`,
+            pp.`create_time` createTime
+        FROM
+            p_privilege pp,
+            p_privilege_rel ppr
+        WHERE ppr.`p_id` = pp.`p_id`
+            AND ppr.`status_cd` = '0'
+            AND pp.`status_cd` = '0'
+            AND ppr.`pg_id` = #{pgId}
+
+    </select>
 </mapper>

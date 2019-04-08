@@ -95,5 +95,16 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
         return true;
     }
 
+    /**
+     * 查询权限组下权限
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryPrivilegeRel(Map info) {
+        logger.debug("查询权限组下权限信息入参：{}",info);
+        return sqlSessionTemplate.selectList("privilegeDAOImpl.queryPrivilegeRel",info);
+    }
+
 
 }

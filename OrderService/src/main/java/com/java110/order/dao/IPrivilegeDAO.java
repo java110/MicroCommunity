@@ -1,5 +1,6 @@
 package com.java110.order.dao;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,4 +46,7 @@ public interface IPrivilegeDAO {
      * @return
      */
     public boolean deletePrivilegeRel(Map info);
+
+
+    public List<Map> queryPrivilegeRel(Map info);
 }
