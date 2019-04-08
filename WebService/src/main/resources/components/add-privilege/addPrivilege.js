@@ -63,6 +63,7 @@
                         if(res.status == 200){
                             //关闭model
                             vc.component.listNoAddPrivilege();
+                            vc.component.$emit('privilege_loadPrivilege',vc.component.addPrivilegeInfo._currentPgId);
                             return ;
                         }
                         vc.component.addPrivilegeInfo.errorInfo = json;

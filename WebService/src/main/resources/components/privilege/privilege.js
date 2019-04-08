@@ -20,6 +20,9 @@
                 //调用接口查询权限
                 vc.component._loadPrivilege(_pgObj._pgId);
             });
+            vc.component.$on('privilege_loadPrivilege',function(_pgId){
+                vc.component._loadPrivilege(_pgId);
+            });
         },
         methods:{
             _loadPrivilege:function(_pgId){
