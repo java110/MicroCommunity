@@ -21,4 +21,9 @@
     <update id="deleteUserAllPrivilege" parameterType="Map">
         UPDATE p_privilege_user a SET a.`status_cd` = '1' WHERE a.`user_id` = #{userId}
     </update>
+
+    <insert id="savePrivilegeGroup" parameterType="map">
+        INSERT INTO p_privilege_group(pg_id,`name`,description,store_id,domain)
+        VALUES(#{pgId},#{name},#{description},#{storeId},#{storeTypeCd})
+    </insert>
 </mapper>

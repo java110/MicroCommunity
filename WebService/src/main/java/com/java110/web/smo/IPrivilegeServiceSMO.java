@@ -21,4 +21,12 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> loadListPrivilege(IPageData pd);
+
+
+    /**
+     * 保存权限组
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> savePrivilegeGroup(IPageData pd);
 }

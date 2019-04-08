@@ -49,4 +49,19 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
         }
         return true;
     }
+
+    /**
+     * 保存权限组
+     * @param info
+     * @return
+     */
+    @Override
+    public boolean savePrivilegeGroup(Map info) {
+        logger.debug("保存权限组信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.savePrivilegeGroup",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"保存权限组信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
 }

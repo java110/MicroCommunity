@@ -12,32 +12,32 @@
 
          },
          _initEvent:function(){
-             vc.component.$on('add_privilege_group_event',function(){
+             vc.component.$on('addPrivilegeGroup_openPrivilegeGroupModel',function(_params){
                 $('#addPrivilegeGroupModel').modal('show');
             });
         },
         methods:{
             addPrivilegeGroupValidate(){
                 return vc.validate.validate({
-                    addStaffInfo:vc.component.addStaffInfo
+                    addPrivilegeGroupInfo:vc.component.addPrivilegeGroupInfo
                 },{
                     'addPrivilegeGroupInfo.name':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"用户名不能为空"
+                            errInfo:"权限组名不能为空"
                         },
                         {
                             limit:"maxin",
                             param:"2,10",
-                            errInfo:"权限组长度必须在2位至10位"
+                            errInfo:"权限组名长度必须在2位至10位"
                         },
                     ],
                     'addPrivilegeGroupInfo.description':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"地址不能为空"
+                            errInfo:"权限组描述不能为空"
                         },
                         {
                             limit:"maxLength",
@@ -53,12 +53,11 @@
                     vc.component.addPrivilegeGroupInfo.errorInfo = vc.validate.errInfo;
                     return ;
                 }
-
                 vc.component.addPrivilegeGroupInfo.errorInfo = "";
                 vc.http.post(
                     'addPrivilegeGroup',
-                    'saveStaff',
-                    JSON.stringify(vc.component.addStaffInfo),
+                    'savePrivilegeGroupInfo',
+                    JSON.stringify(vc.component.addPrivilegeGroupValidate),
                     {
                         emulateJSON:true
                      },

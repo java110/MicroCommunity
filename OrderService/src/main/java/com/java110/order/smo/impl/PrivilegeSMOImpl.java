@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.util.Assert;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.order.dao.IPrivilegeDAO;
 import com.java110.order.smo.IPrivilegeSMO;
 import org.slf4j.Logger;
@@ -70,6 +71,27 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
 
         JSONObject privilegeObj = JSONObject.parseObject(privilegeInfo);
         if(privilegeDAOImpl.deleteUserAllPrivilege(privilegeObj)){
+            return new ResponseEntity<String>("成功", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<String>("未知异常", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> savePrivilegeGroup(String privilegeGroupInfo) {
+
+        Assert.isJsonObject(privilegeGroupInfo,"请求报文不是有效的json格式");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"name","请求报文中未包含name节点");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"storeId","请求报文中未包含storeId节点");
+
+        Assert.jsonObjectHaveKey(privilegeGroupInfo,"storeTypeCd","请求报文中未包含storeTypeCd节点");
+        JSONObject privilegeGroupObj = JSONObject.parseObject(privilegeGroupInfo);
+
+        privilegeGroupObj.put("pgId",GenerateCodeFactory.getPgId());
+
+        if(privilegeDAOImpl.savePrivilegeGroup(privilegeGroupObj)){
             return new ResponseEntity<String>("成功", HttpStatus.OK);
         }
 

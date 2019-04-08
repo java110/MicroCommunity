@@ -22,4 +22,12 @@ public interface IPrivilegeDAO {
      * @return
      */
     public boolean deleteUserAllPrivilege(Map info);
+
+
+    /**
+     * 保存权限组
+     * @param info
+     * @return
+     */
+    public boolean savePrivilegeGroup(Map info);
 }

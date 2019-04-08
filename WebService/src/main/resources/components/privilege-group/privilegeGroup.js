@@ -44,8 +44,8 @@
                     _pgName:_pGroup.name
                 });
             },
-            openPrivilegeGroup:function(){
-
+            openPrivilegeGroupModel:function(){
+                vc.component.$emit('addPrivilegeGroup_openPrivilegeGroupModel',{});
             }
         }
     });

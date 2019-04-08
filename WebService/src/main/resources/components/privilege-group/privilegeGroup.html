@@ -2,7 +2,7 @@
     <div class="ibox ">
         <div class="ibox-content mailbox-content">
             <div class="file-manager">
-                <a class="btn btn-block btn-primary compose-mail" v-on:click="openPrivilegeGroup()">添加权限组</a>
+                <a class="btn btn-block btn-primary compose-mail" v-on:click="openPrivilegeGroupModel()">添加权限组</a>
                 <div class="space-25"></div>
 
                 <h5>权限组</h5>
@@ -16,6 +16,8 @@
 
                 <div class="clearfix"></div>
             </div>
+
+            <vc:create name="addPrivilegeGroup"></vc:create>
         </div>
     </div>
 </div>
