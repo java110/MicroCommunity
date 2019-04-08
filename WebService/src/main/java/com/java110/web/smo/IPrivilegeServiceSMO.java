@@ -14,4 +14,11 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> listPrivilegeGroup(IPageData pd);
+
+    /**
+     * 查下权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> loadListPrivilege(IPageData pd);
 }

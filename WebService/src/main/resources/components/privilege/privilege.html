@@ -2,8 +2,6 @@
     <vc:create name="privilegeGroup"></vc:create>
     <div class="col-lg-9 animated fadeInRight">
         <div class="mail-box-header">
-
-
             <button class="btn btn-primary btn-sm float-right" data-toggle="tooltip"  title="Refresh inbox"><i class="fa fa-plus"></i> 添加权限</button>
             <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
                 <div class="input-group">
@@ -16,7 +14,7 @@
                 </div>
             </form>
             <h2>
-                员工管理组
+                {{privilegeInfo._currentPgName}}
             </h2>
         </div>
         <div class="mail-box">
@@ -32,96 +30,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr class="read">
+                <tr v-for="privilege in privilegeInfo._privileges" class="read">
                     <td class="check-mail">
-                        500201904001
+                        {{privilege.pId}}
                     </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
+                    <td class="mail-ontact">{{privilege.name}}</td>
+                    <td class="mail-subject">{{privilege.description}}</td>
+                    <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
                     <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
                 </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
-                <tr class="read">
-                    <td class="check-mail">
-                        500201904001
-                    </td>
-                    <td class="mail-ontact">添加员工</td>
-                    <td class="mail-subject">添加员工</td>
-                    <td class="">2019-04-01 02:24:53</td>
-                    <td class="text-right mail-date"><i class="glyphicon glyphicon-remove"></i></td>
-                </tr>
+
                 </tbody>
             </table>
 

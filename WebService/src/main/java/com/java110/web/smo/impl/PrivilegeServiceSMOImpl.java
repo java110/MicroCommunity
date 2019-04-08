@@ -59,6 +59,34 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         return new ResponseEntity<String>(privilegeGroups.toJSONString(),HttpStatus.OK);
     }
 
+    /**
+     * 查询权限
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> loadListPrivilege(IPageData pd) {
+        JSONObject privilegeInfoObj = JSONObject.parseObject(pd.getReqData());
+        Assert.jsonObjectHaveKey(privilegeInfoObj,"pgId","请求报文中未包含pgId 节点");
+
+        String pgId = privilegeInfoObj.getString("pgId");
+
+        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/query.privilege.byPgId?pgId="+pgId , HttpMethod.GET);
+        if(privilegeGroup.getStatusCode() != HttpStatus.OK){
+            return privilegeGroup;
+        }
+
+        JSONObject privilegeObj = JSONObject.parseObject(privilegeGroup.getBody().toString());
+
+        Assert.jsonObjectHaveKey(privilegeObj,"privileges","查询菜单未返回privileges节点");
+
+        JSONArray privileges = privilegeObj.getJSONArray("privileges");
+
+        return new ResponseEntity<String>(privileges.toJSONString(),HttpStatus.OK);
+
+    }
+
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }

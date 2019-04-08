@@ -25,10 +25,13 @@
                              function(json){
                                 var _groupsInfo = JSON.parse(json);
                                 vc.component.privilegeGroupInfo.groups = _groupsInfo;
-//                                vc.component.$emit('pagination_info_event',{
-//                                    total:_staffInfo.records,
-//                                    currentPage:_staffInfo.page
-//                                });
+                                if(_groupsInfo.length > 0){
+                                    vc.component.$emit('privilege_group_event',{
+                                                                    _pgId:_groupsInfo[0].pgId,
+                                                                    _pgName:_groupsInfo[0].name
+                                                                });
+                                }
+
 
                              },function(){
                                 console.log('请求失败处理');
@@ -36,7 +39,13 @@
                            );
             },
             notifyQueryPrivilege:function(_pGroup){
-                console.log("当前点击权限组",_pGroup)
+                vc.component.$emit('privilege_group_event',{
+                    _pgId:_pGroup.pgId,
+                    _pgName:_pGroup.name
+                });
+            },
+            openPrivilegeGroup:function(){
+
             }
         }
     });
