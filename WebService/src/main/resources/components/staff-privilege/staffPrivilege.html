@@ -1,61 +1,86 @@
-<div id="component" class="row">
-    <vc:create name="privilegeGroup"></vc:create>
-    <div class="col-lg-9 animated fadeInRight">
-        <div class="mail-box-header">
-            <button v-if="privilegeInfo._currentStoreId != '9999'"
-                    class="btn btn-primary btn-sm float-right"
-                    data-toggle="tooltip"
-                    title="Refresh inbox"
-                    v-on:click="openAddPrivilegeModel()"
-            ><i class="fa fa-plus"></i> 添加权限</button>
-            <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" name="search" placeholder="请输入权限名称">
-                    <div class="input-group-btn">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            查询
-                        </button>
-                    </div>
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <vc:create name="privilegeStaffInfo"></vc:create>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th>权限ID</th>
+                            <th data-hide="phone">权限名称</th>
+                            <th data-hide="phone">权限描述</th>
+                            <th data-hide="phone">隶属权限组ID</th>
+                            <th data-hide="phone,tablet" >隶属权限组名称</th>
+                            <th data-hide="phone">状态</th>
+                            <th class="text-right">操作</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                1231313
+                            </td>
+                            <td>
+                                添加员工
+                            </td>
+                            <td>
+                                添加员工
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>
+                                <span class="label label-primary">在用</span>
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                1231313
+                            </td>
+                            <td>
+                                物业费权限
+                            </td>
+                            <td>
+                                物业费权限
+                            </td>
+                            <td>
+                                89898797979
+                            </td>
+                            <td>
+                                缴费管理
+                            </td>
+                            <td>
+                                <span class="label label-primary">在用</span>
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
                 </div>
-            </form>
-            <h2>
-                {{privilegeInfo._currentPgName}}
-            </h2>
-        </div>
-        <div class="mail-box">
-
-            <table class="table table-hover table-mail">
-                <thead>
-                <tr>
-                    <th>权限编码</th>
-                    <th>权限名称</th>
-                    <th>权限描述</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="privilege in privilegeInfo._privileges" class="read">
-                    <td class="check-mail">
-                        {{privilege.pId}}
-                    </td>
-                    <td class="mail-ontact">{{privilege.name}}</td>
-                    <td class="mail-subject">{{privilege.description}}</td>
-                    <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
-                    <td class="text-right mail-date">
-                        <i  v-if="privilegeInfo._currentStoreId != '9999'"
-                            v-on:click="openDeletePrivilegeModel(privilege)"
-                            class="glyphicon glyphicon-remove"></i>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-
-
+            </div>
         </div>
     </div>
-
-    <vc:create name="addPrivilege"></vc:create>
-    <vc:create name="deletePrivilege"></vc:create>
 </div>
