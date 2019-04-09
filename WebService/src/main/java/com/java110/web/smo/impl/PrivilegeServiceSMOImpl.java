@@ -213,6 +213,36 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         return privilegeGroup;
     }
 
+    /**
+     * 删除权限
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> deletePrivilegeFromPrivilegeGroup(IPageData pd) {
+        Assert.hasLength(pd.getUserId(),"用户未登录请先登录");
+
+        JSONObject privilegeInfoObj = JSONObject.parseObject(pd.getReqData());
+
+        Assert.jsonObjectHaveKey(privilegeInfoObj,"pgId","请求报文中未包含权限组ID 节点");
+        Assert.jsonObjectHaveKey(privilegeInfoObj,"pId","请求报文中未包含权限ID 节点");
+
+        ResponseEntity<String> storeInfo = super.getStoreInfo(pd,restTemplate);
+
+        if(storeInfo.getStatusCode() != HttpStatus.OK){
+            return storeInfo;
+        }
+        // 商户返回信息
+        JSONObject storeInfoObj = JSONObject.parseObject(storeInfo.getBody());
+
+        String  storeId = storeInfoObj.getString("storeId");
+        privilegeInfoObj.put("storeId",storeId);
+
+        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate,pd,privilegeInfoObj.toJSONString(),
+                ServiceConstant.SERVICE_API_URL+"/api/delete.privilege.PrivilegeGroup" , HttpMethod.POST);
+        return privilegeGroup;
+    }
+
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }

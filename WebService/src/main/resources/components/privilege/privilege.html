@@ -42,7 +42,11 @@
                     <td class="mail-ontact">{{privilege.name}}</td>
                     <td class="mail-subject">{{privilege.description}}</td>
                     <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
-                    <td class="text-right mail-date"><i  v-if="privilegeInfo._currentStoreId != '9999'" class="glyphicon glyphicon-remove"></i></td>
+                    <td class="text-right mail-date">
+                        <i  v-if="privilegeInfo._currentStoreId != '9999'"
+                                                         v-on:click="openDeletePrivilegeModel(privilege)"
+                                                         class="glyphicon glyphicon-remove"></i>
+                    </td>
                 </tr>
 
                 </tbody>
@@ -53,4 +57,5 @@
     </div>
 
     <vc:create name="addPrivilege"></vc:create>
+    <vc:create name="deletePrivilege"></vc:create>
 </div>

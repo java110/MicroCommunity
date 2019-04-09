@@ -47,6 +47,10 @@
                 vc.component.$emit('addPrivilege_openPrivilegeModel',{
                             pgId:vc.component.privilegeInfo._currentPgId
                 });
+            },
+            openDeletePrivilegeModel:function(_p){
+                _p.pgId = vc.component.privilegeInfo._currentPgId;
+                vc.emit('deletePrivilege','openDeletePrivilegeModel',_p);
             }
         }
     });

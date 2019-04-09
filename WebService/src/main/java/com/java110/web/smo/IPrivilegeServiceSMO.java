@@ -50,4 +50,12 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> addPrivilegeToPrivilegeGroup(IPageData pd);
+
+
+    /**
+     * 删除权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> deletePrivilegeFromPrivilegeGroup(IPageData pd);
 }

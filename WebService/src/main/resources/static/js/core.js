@@ -118,7 +118,6 @@
     };
 
 
-
     //绑定跳转函数
     vc.jumpToPage = function(url){
                                     window.location.href = url;
