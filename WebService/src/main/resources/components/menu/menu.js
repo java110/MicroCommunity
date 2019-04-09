@@ -24,7 +24,8 @@
                              param,
                              function(json,res){
                                 var _menus = JSON.parse(json);
-                                vm.menus = vm.refreshMenuActive(_menus,_menus[0].id);
+                                var _currentMenusId = vc.getCurrentMenu() == null?_menus[0].id:vc.getCurrentMenu();
+                                vm.menus = vm.refreshMenuActive(_menus,_currentMenusId);
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
@@ -47,6 +48,8 @@
                 return  jsonArray;
            },
            switchMenu:function(_id){
+                //设置菜单ID
+                vc.setCurrentMenu(_id);
                 vm.menus = vm.refreshMenuActive(vm.menus,_id);
            }
        },

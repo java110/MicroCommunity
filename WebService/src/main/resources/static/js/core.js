@@ -122,6 +122,14 @@
     vc.jumpToPage = function(url){
                                     window.location.href = url;
                                 };
+    //保存菜单
+    vc.setCurrentMenu = function(_menuId){
+        window.localStorage.setItem('hc_menuId',_menuId);
+    }
+    //获取菜单
+    vc.getCurrentMenu = function(){
+        return window.localStorage.getItem('hc_menuId');
+    }
 })(window.vc);
 
 /**

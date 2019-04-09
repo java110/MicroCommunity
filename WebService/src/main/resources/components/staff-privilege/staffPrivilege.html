@@ -1,0 +1,61 @@
+<div id="component" class="row">
+    <vc:create name="privilegeGroup"></vc:create>
+    <div class="col-lg-9 animated fadeInRight">
+        <div class="mail-box-header">
+            <button v-if="privilegeInfo._currentStoreId != '9999'"
+                    class="btn btn-primary btn-sm float-right"
+                    data-toggle="tooltip"
+                    title="Refresh inbox"
+                    v-on:click="openAddPrivilegeModel()"
+            ><i class="fa fa-plus"></i> 添加权限</button>
+            <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" name="search" placeholder="请输入权限名称">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <h2>
+                {{privilegeInfo._currentPgName}}
+            </h2>
+        </div>
+        <div class="mail-box">
+
+            <table class="table table-hover table-mail">
+                <thead>
+                <tr>
+                    <th>权限编码</th>
+                    <th>权限名称</th>
+                    <th>权限描述</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="privilege in privilegeInfo._privileges" class="read">
+                    <td class="check-mail">
+                        {{privilege.pId}}
+                    </td>
+                    <td class="mail-ontact">{{privilege.name}}</td>
+                    <td class="mail-subject">{{privilege.description}}</td>
+                    <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
+                    <td class="text-right mail-date">
+                        <i  v-if="privilegeInfo._currentStoreId != '9999'"
+                            v-on:click="openDeletePrivilegeModel(privilege)"
+                            class="glyphicon glyphicon-remove"></i>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+    <vc:create name="addPrivilege"></vc:create>
+    <vc:create name="deletePrivilege"></vc:create>
+</div>

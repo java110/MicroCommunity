@@ -26,8 +26,8 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#deletePrivilegeGroupModel').modal('hide');
-                            vc.emit('privilege','loadPrivilege',_p.pgId);
+                            $('#deletePrivilegeModel').modal('hide');
+                            vc.emit('privilege','loadPrivilege',vc.component.deletePrivilegeInfo.pgId);
                             return ;
                         }
                         vc.component.deletePrivilegeInfo.errorInfo = json;
