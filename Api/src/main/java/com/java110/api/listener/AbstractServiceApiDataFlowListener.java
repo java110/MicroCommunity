@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
+import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
+import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.event.service.api.ServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by wuxw on 2018/11/15.
@@ -34,6 +38,89 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
 
     @Autowired
     private RestTemplate restTemplateNoLoadBalanced;
+
+    /**
+     * 调用下游服务
+     * @param event
+     * @return
+     */
+    protected ResponseEntity<String> callService(ServiceDataFlowEvent event){
+
+        DataFlowContext dataFlowContext = event.getDataFlowContext();
+        AppService service = event.getAppService();
+        return callService(dataFlowContext,service,dataFlowContext.getReqJson());
+    }
+
+
+    /**
+     * 调用下游服务
+     * @param context
+     * @param serviceCode 下游服务
+     * @return
+     */
+    protected ResponseEntity<String> callService(DataFlowContext context,String serviceCode,Map paramIn){
+
+        ResponseEntity responseEntity= null;
+        AppService appService = DataFlowFactory.getService(context.getAppId(), serviceCode);
+        if(appService == null){
+            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_USERS, HttpStatus.UNAUTHORIZED);
+            context.setResponseEntity(responseEntity);
+            return responseEntity;
+        }
+        return callService(context,appService,paramIn);
+    }
+
+    /**
+     * 调用下游服务
+     * @param context
+     * @param appService 下游服务
+     * @return
+     */
+    protected ResponseEntity<String> callService(DataFlowContext context,AppService appService,Map paramIn){
+
+        ResponseEntity responseEntity= null;
+        if(paramIn == null || paramIn.isEmpty()){
+            paramIn = context.getReqJson();
+        }
+
+        RestTemplate tmpRestTemplate = appService.getServiceCode().startsWith("out.")?restTemplateNoLoadBalanced:restTemplate;
+
+        String serviceUrl = appService.getUrl();
+        HttpEntity<String> httpEntity = null;
+        HttpHeaders header = new HttpHeaders();
+        for(String key : context.getRequestCurrentHeaders().keySet()){
+            header.add(key,context.getRequestCurrentHeaders().get(key));
+        }
+        try {
+            if (CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
+                serviceUrl +="?";
+                for(Object key : paramIn.keySet()){
+                    serviceUrl +=( key+"="+paramIn.get(key)+"&");
+                }
+
+                if(serviceUrl.endsWith("&")){
+                    serviceUrl = serviceUrl.substring(0,serviceUrl.lastIndexOf("&"));
+                }
+                httpEntity = new HttpEntity<String>("", header);
+                responseEntity = tmpRestTemplate.exchange(serviceUrl, HttpMethod.GET, httpEntity, String.class);
+            } else if (CommonConstant.HTTP_METHOD_PUT.equals(appService.getMethod())) {
+                httpEntity = new HttpEntity<String>(JSONObject.toJSONString(paramIn), header);
+                responseEntity = tmpRestTemplate.exchange(serviceUrl, HttpMethod.PUT, httpEntity, String.class);
+            } else if (CommonConstant.HTTP_METHOD_DELETE.equals(appService.getMethod())) {
+                httpEntity = new HttpEntity<String>(JSONObject.toJSONString(paramIn), header);
+                responseEntity = tmpRestTemplate.exchange(serviceUrl, HttpMethod.DELETE, httpEntity, String.class);
+            } else {
+                httpEntity = new HttpEntity<String>(JSONObject.toJSONString(paramIn), header);
+                responseEntity = tmpRestTemplate.exchange(serviceUrl, HttpMethod.POST, httpEntity, String.class);
+            }
+        }catch (HttpStatusCodeException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>("请求下游系统异常，"+e.getResponseBodyAsString(),e.getStatusCode());
+        }
+        return responseEntity;
+    }
+
+
+
 
     /**
      * 请求落地方

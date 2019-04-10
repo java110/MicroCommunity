@@ -60,7 +60,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             List<String> sysParams = currentServiceSql.getParamList();
             for(String param : sysParams) {
                 if(!dataQuery.getRequestParams().containsKey(param)){
-                    throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,"请求参数错误，请求报文中未包含参数 " + param + " 信息");
+                    //2019-04-10 这里修改为不抛出异常而是写为空字符串
+                    //throw new BusinessException(ResponseConstant.RESULT_PARAM_ERROR,"请求参数错误，请求报文中未包含参数 " + param + " 信息");
+                    dataQuery.getRequestParams().put(param,"");
                 }
             }
             dataQuery.setServiceSql(currentServiceSql);

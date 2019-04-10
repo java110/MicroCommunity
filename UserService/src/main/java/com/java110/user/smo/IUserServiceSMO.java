@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.exception.SMOException;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.entity.user.Cust;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -98,5 +99,6 @@ public interface IUserServiceSMO {
 
 
     public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException;
+
 
 }

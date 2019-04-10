@@ -236,6 +236,12 @@ public class ServiceCodeConstant {
      * 检查用户登录服务处理
      */
     public static final String SERVICE_CODE_CHECK_SERVICE_LOGIN = "check.service.login";
+
+    /**
+     * 检查用户登录服务处理
+     */
+    public static final String SERVICE_CODE_QUERY_USER_BY_NAME = "query.user.byName";
+
     /**
      * 刷新缓存
      */
@@ -272,7 +278,10 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_QUERY_STAFF_INFOS = "query.staff.infos";
 
-
+    /**
+     * 查询 员工
+     */
+    public static final String SERVICE_CODE_QUERY_STAFF_BY_NAME = "query.staff.byName";
 
     /**
      * 保存商户信息

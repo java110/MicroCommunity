@@ -3,6 +3,7 @@ package com.java110.web.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IStaffServiceSMO;
@@ -72,6 +73,8 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         Assert.isInteger(paramIn.getString("rows"),"rows不是数字");
         int page = Integer.parseInt(paramIn.getString("page"));
         int rows = Integer.parseInt(paramIn.getString("rows"));
+        String  staffName = paramIn.getString("staffName");
+
         if(rows>50){
             return new ResponseEntity<String>("rows 数量不能大于50",HttpStatus.BAD_REQUEST);
         }
@@ -83,8 +86,13 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        responseEntity = this.callCenterService(restTemplate,pd,"",
-                ServiceConstant.SERVICE_API_URL+"/api/query.staff.infos?rows="+rows+"&page="+page+"&storeId="+storeId, HttpMethod.GET);
+        if(StringUtil.isEmpty(staffName)) {
+            responseEntity = this.callCenterService(restTemplate, pd, "",
+                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos?rows=" + rows + "&page=" + page + "&storeId=" + storeId, HttpMethod.GET);
+        }else {
+            responseEntity = this.callCenterService(restTemplate, pd, "",
+                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.byStaffName?rows=" + rows + "&page=" + page + "&storeId=" + storeId+"&name="+staffName, HttpMethod.GET);
+        }
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
         }

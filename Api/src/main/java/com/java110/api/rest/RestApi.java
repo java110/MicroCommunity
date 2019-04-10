@@ -1,5 +1,6 @@
 package com.java110.api.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.common.constant.CommonConstant;
 import com.java110.core.base.controller.BaseController;
@@ -150,7 +151,8 @@ public class RestApi extends BaseController {
             headers.put(CommonConstant.HTTP_SERVICE,service);
             headers.put(CommonConstant.HTTP_METHOD,CommonConstant.HTTP_METHOD_DELETE);
             logger.debug("api：{} 请求报文为：{},header信息为：{}",service,"",headers);
-            responseEntity = apiServiceSMOImpl.service("",headers);
+
+            responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)),headers);
         }catch (Throwable e){
             logger.error("请求delete 方法["+service+"]失败：",e);
             responseEntity = new ResponseEntity<String>("请求发生异常，"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
