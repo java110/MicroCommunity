@@ -89,7 +89,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         HttpEntity<String> httpEntity = null;
         HttpHeaders header = new HttpHeaders();
         for(String key : context.getRequestCurrentHeaders().keySet()){
-            if(CommonConstant.HTTP_SERVICE.toLowerCase().equals(key)){
+            if(CommonConstant.HTTP_SERVICE.toLowerCase().equals(key.toLowerCase())){
                 continue;
             }
             header.add(key,context.getRequestCurrentHeaders().get(key));
