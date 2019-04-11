@@ -13,6 +13,7 @@
             vc.on('searchStaff','openSearchStaffModel',function(_param){
                 console.log("打开定位员工界面")
                 $('#searchStaffModel').modal('show');
+                vc.component._refreshSearchStaffData();
                 vc.component._loadAllStaffInfo(1,10);
             });
         },
@@ -40,10 +41,16 @@
             },
             chooseStaff:function(_staff){
                 vc.emit('privilegeStaffInfo','chooseStaff',_staff);
+                vc.emit('staffPrivilege','_loadStaffPrivileges',{
+                    staffId:_staff.userId
+                });
                 $('#searchStaffModel').modal('hide');
             },
             searchStaffs:function(){
                 vc.component._loadAllStaffInfo(1,10,vc.component.searchStaffInfo._currentStaffName);
+            },
+            _refreshSearchStaffData:function(){
+                vc.component.searchStaffInfo._currentStaffName = "";
             }
         }
 

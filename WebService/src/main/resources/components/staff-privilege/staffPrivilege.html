@@ -19,56 +19,31 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                1231313
-                            </td>
-                            <td>
-                                添加员工
-                            </td>
-                            <td>
-                                添加员工
-                            </td>
-                            <td>
-                                -
-                            </td>
-                            <td>
-                                -
-                            </td>
-                            <td>
-                                <span class="label label-primary">在用</span>
-                            </td>
-                            <td class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs">删除</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                1231313
-                            </td>
-                            <td>
-                                物业费权限
-                            </td>
-                            <td>
-                                物业费权限
-                            </td>
-                            <td>
-                                89898797979
-                            </td>
-                            <td>
-                                缴费管理
-                            </td>
-                            <td>
-                                <span class="label label-primary">在用</span>
-                            </td>
-                            <td class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs">删除</button>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr v-for="privilege in staffPrivilegeInfo.privileges">
+                                <td>
+                                    {{privilege.pId}}
+                                </td>
+                                <td>
+                                    {{privilege.name}}
+                                </td>
+                                <td>
+                                    {{privilege.description}}
+                                </td>
+                                <td>
+                                    {{privilege.pgId}}
+                                </td>
+                                <td>
+                                    {{privilege.pgName}}
+                                </td>
+                                <td>
+                                    <span class="label label-primary">在用</span>
+                                </td>
+                                <td      class="text-right">
+                                    <div class="btn-group">
+                                        <button class="btn-white btn btn-xs" v-on:click="_openDeleteStaffPrivilegeModel(privilege)">删除</button>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                         <tfoot>
                         <tr>

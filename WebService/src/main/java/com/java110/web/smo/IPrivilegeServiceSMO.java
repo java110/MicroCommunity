@@ -58,4 +58,11 @@ public interface IPrivilegeServiceSMO {
      * @return
      */
     public ResponseEntity<String> deletePrivilegeFromPrivilegeGroup(IPageData pd);
+
+    /**
+     * 查询员工权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listStaffPrivileges(IPageData pd);
 }

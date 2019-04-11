@@ -243,6 +243,44 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         return privilegeGroup;
     }
 
+    /**
+     *
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> listStaffPrivileges(IPageData pd) {
+        Assert.hasLength(pd.getUserId(),"用户未登录请先登录");
+
+        JSONObject privilegeInfoObj = JSONObject.parseObject(pd.getReqData());
+        Assert.jsonObjectHaveKey(privilegeInfoObj,"staffId","请求报文中未包含员工ID 节点");
+
+        ResponseEntity<String> storeInfo = super.getStoreInfo(pd,restTemplate);
+
+        if(storeInfo.getStatusCode() != HttpStatus.OK){
+            return storeInfo;
+        }
+        // 商户返回信息
+        JSONObject storeInfoObj = JSONObject.parseObject(storeInfo.getBody());
+
+        String  storeId = storeInfoObj.getString("storeId");
+        privilegeInfoObj.put("storeId",storeId);
+
+        ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/query.user.privilege?userId="+privilegeInfoObj.getString("staffId")+"&domain="+storeInfoObj.getString("storeTypeCd") , HttpMethod.GET);
+        if(privilegeGroup.getStatusCode() != HttpStatus.OK){
+            return privilegeGroup;
+        }
+        JSONObject resultObj = JSONObject.parseObject(privilegeGroup.getBody().toString());
+
+        JSONArray privileges = resultObj.getJSONArray("privileges");
+
+        JSONObject resObj = new JSONObject();
+        resObj.put("datas",privileges);
+
+        return new ResponseEntity<String>(resObj.toJSONString(),HttpStatus.OK);
+    }
+
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }

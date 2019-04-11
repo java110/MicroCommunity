@@ -29,6 +29,9 @@
             },
             openSearchStaffModel(){
                 vc.emit('searchStaff','openSearchStaffModel',{});
+            },
+            openAddStaffPrivilegeModel:function(){
+                vc.emit('addStaffPrivilege','addStaffPrivilegeModel',{});
             }
         }
     });
