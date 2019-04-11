@@ -141,7 +141,7 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
 
         for(int userIndex = 0 ;userIndex < resultInfo.size();userIndex++){
             userInfo = resultInfo.getJSONObject(userIndex);
-            userId += (userInfo.getString("user_id") +",");
+            userId += (userInfo.getString("userId") +",");
         }
 
         userId = userId.length()>0?userId.substring(0,userId.lastIndexOf(",")):userId;
