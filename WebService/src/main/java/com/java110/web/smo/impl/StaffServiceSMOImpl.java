@@ -91,7 +91,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
                     ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos?rows=" + rows + "&page=" + page + "&storeId=" + storeId, HttpMethod.GET);
         }else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.byStaffName?rows=" + rows + "&page=" + page + "&storeId=" + storeId+"&name="+staffName, HttpMethod.GET);
+                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId+"&name="+staffName, HttpMethod.GET);
         }
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;

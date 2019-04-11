@@ -43,7 +43,7 @@
                 $('#searchStaffModel').modal('hide');
             },
             searchStaffs:function(){
-                _loadAllStaffInfo(1,10,vc.component.searchStaffInfo._currentStaffName);
+                vc.component._loadAllStaffInfo(1,10,vc.component.searchStaffInfo._currentStaffName);
             }
         }
 
