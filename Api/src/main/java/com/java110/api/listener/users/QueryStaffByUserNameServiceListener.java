@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 查询员工信息
+ * 查询员工信息query.staff.byName
  * Created by Administrator on 2019/4/2.
  */
 @Java110Listener("queryStaffByUserNameServiceListener")

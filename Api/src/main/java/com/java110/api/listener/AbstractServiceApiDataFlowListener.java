@@ -91,6 +91,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         for(String key : context.getRequestCurrentHeaders().keySet()){
             header.add(key,context.getRequestCurrentHeaders().get(key));
         }
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),appService.getServiceCode());
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
                 serviceUrl +="?";
