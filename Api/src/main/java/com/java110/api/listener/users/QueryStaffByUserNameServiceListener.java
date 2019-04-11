@@ -59,6 +59,8 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
         Assert.hasKeyAndValue(data,"storeId","请求报文中未包含storeId节点");
         Assert.hasKeyAndValue(data,"name","请求报文中未包含name节点");
         ResponseEntity<String> responseEntity = null;
+
+        JSONObject resultJson = JSONObject.parseObject("{\"total:\":10,\"datas\":[]}");
         //根据名称查询用户信息
         responseEntity = super.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_USER_BY_NAME,data);
 
@@ -70,7 +72,7 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
 
         String useIds = getUserIds(responseEntity,dataFlowContext);
         if(StringUtil.isEmpty(useIds)){
-            responseEntity = new ResponseEntity<String>(new JSONArray().toJSONString(),HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>(resultJson.toJSONString(),HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
             return ;
         }
@@ -85,8 +87,8 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return ;
         }
-
-        responseEntity = new ResponseEntity<String>(getStaffUsers(userInfos,responseEntity).toJSONString(),HttpStatus.OK);
+        resultJson.put("datas",getStaffUsers(userInfos,responseEntity));
+        responseEntity = new ResponseEntity<String>(resultJson.toJSONString(),HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
