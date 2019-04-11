@@ -242,6 +242,12 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_QUERY_USER_BY_NAME = "query.user.byName";
 
+
+    /**
+     * 查询出userIds 是商户员工ID的userId
+     */
+    public static final String SERVICE_CODE_QUERY_STOREUSER_BYUSERIDS = "query.storeUser.byUserIds";
+
     /**
      * 刷新缓存
      */

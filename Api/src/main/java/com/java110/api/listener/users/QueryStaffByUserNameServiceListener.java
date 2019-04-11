@@ -16,6 +16,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -44,15 +45,12 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
      * @param event
      */
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    public void soService(ServiceDataFlowEvent event) throws ListenerExecuteException{
 
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         JSONObject data = dataFlowContext.getReqJson();
-
-        Assert.hasKeyAndValue(data,"page","请求报文中未包含page节点");
-        Assert.hasKeyAndValue(data,"rows","请求报文中未包含rows节点");
         Assert.hasKeyAndValue(data,"storeId","请求报文中未包含storeId节点");
         Assert.hasKeyAndValue(data,"name","请求报文中未包含name节点");
         ResponseEntity<String> responseEntity = null;
@@ -64,15 +62,99 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
             return ;
         }
 
-        JSONArray resultInfo = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("users");
 
-        if(resultInfo != null || resultInfo.size() < 1){
+        String useIds = getUserIds(responseEntity,dataFlowContext);
+        if(StringUtil.isEmpty(useIds)){
             responseEntity = new ResponseEntity<String>(new JSONArray().toJSONString(),HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
             return ;
         }
 
+        JSONArray userInfos = getUserInfos(responseEntity);
+        Map<String,String> paramIn = new HashMap<>();
+        paramIn.put("userIds",useIds);
+        paramIn.put("storeId",data.getString("storeId"));
+        //查询是商户员工的userId
+        responseEntity = super.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_STOREUSER_BYUSERIDS,paramIn);
 
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return ;
+        }
+
+        responseEntity = new ResponseEntity<String>(getStaffUsers(userInfos,responseEntity).toJSONString(),HttpStatus.OK);
+        dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询商户员工
+     * @param userInfos 用户信息
+     * @param responseEntity 商户返回的用户ID信息
+     * @return
+     */
+    private JSONArray getStaffUsers(JSONArray userInfos,ResponseEntity<String> responseEntity ){
+
+
+        JSONObject storeUserInfo = null;
+        JSONArray newStaffUsers = new JSONArray();
+        JSONArray storeUsers = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("storeUsers");
+        if(storeUsers == null || storeUsers.size() < 1){
+            return newStaffUsers;
+        }
+
+        for(int storeUserIndex = 0 ;storeUserIndex < storeUsers.size();storeUserIndex++){
+            storeUserInfo = storeUsers.getJSONObject(storeUserIndex);
+
+            for(int userIndex = 0; userIndex < userInfos.size();userIndex ++){
+                if(userInfos.getJSONObject(userIndex).getString("userId").equals(storeUserInfo.getString("userId"))){
+                    newStaffUsers.add(userInfos.getJSONObject(userIndex));
+                }
+            }
+        }
+
+
+        return newStaffUsers;
+    }
+
+
+    /**
+     * 获取用ID
+     * 如：
+     *     123,456,567
+     * @param responseEntity
+     * @param dataFlowContext
+     * @return
+     */
+    private String getUserIds(ResponseEntity<String> responseEntity,DataFlowContext dataFlowContext){
+        JSONObject userInfo = null;
+        String userId = "";
+        JSONArray resultInfo = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("users");
+        if(resultInfo == null || resultInfo.size() < 1){
+            return userId;
+        }
+
+        for(int userIndex = 0 ;userIndex < resultInfo.size();userIndex++){
+            userInfo = resultInfo.getJSONObject(userIndex);
+            userId += (userInfo.getString("user_id") +",");
+        }
+
+        userId = userId.length()>0?userId.substring(0,userId.lastIndexOf(",")):userId;
+
+        return userId;
+    }
+
+
+    /**
+     * 获取用户
+     * @param responseEntity
+     * @return
+     */
+    private JSONArray getUserInfos(ResponseEntity<String> responseEntity){
+        JSONArray resultInfo = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("users");
+        if(resultInfo == null || resultInfo.size() < 1){
+            return null;
+        }
+
+        return resultInfo;
     }
 
     /**
