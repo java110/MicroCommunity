@@ -4,27 +4,28 @@
   * [快速开始](home.md)
   * [安装部署](install.md)
 
+* api接口
+
+  * [用户注册](api/user/register.md)
+  * [用户登录](api/user/login.md)
+  * [用户校验登录](api/user/checkLogin.md)
+  * [保存商户](api/user/saveStore.md)
+
 * 服务端接口协议
 
   * [字典规格说明](dictionary)
-  * [中心服务接口协议](center)
-  * [中心服务配置文档](center_config)
-  * [用户服务接口协议](user)
-  * [用户服务接口测试文档](user_test)
-  * [商品服务接口协议](shop)
-  * [商品服务接口测试文档](shop_test)
-  * [商户服务接口协议](store)
-  * [商户服务接口测试文档](store_test)
-  * [评论服务接口协议](comment)
-  * [评论服务接口测试文档](comment_test)
-  * [编码生成服务接口协议](code)
-  * [编码生成服务接口测试文档](code_test)
-
-* api接口
-
-  * [用户注册](api/user/register)
-  * [用户登录](api/user/login)
-  * [用户校验登录](api/user/checkLogin)
+  * [中心服务接口协议](services/order/order.md)
+  * [中心服务配置文档](services/order/order_config.md)
+  * [用户服务接口协议](services/user/user.md)
+  * [用户服务接口测试文档](services/user/user_test.md)
+  * [商品服务接口协议](services/shop/shop.md)
+  * [商品服务接口测试文档](services/shop/shop_test.md)
+  * [商户服务接口协议](services/store/store.md)
+  * [商户服务接口测试文档](services/store/store_test.md)
+  * [评论服务接口协议](services/comment/comment.md)
+  * [评论服务接口测试文档](services/comment/comment_test.md)
+  * [编码生成服务接口协议](services/code/code)
+  * [编码生成服务接口测试文档](services/code/code_test)
 
 * 工具类接口
 
