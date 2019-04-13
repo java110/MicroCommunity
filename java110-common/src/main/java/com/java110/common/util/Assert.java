@@ -83,7 +83,7 @@ public class Assert extends org.springframework.util.Assert{
      * @param jsonArray
      * @param message
      */
-    public static void isNull(JSONArray jsonArray,String message){
+    public static void listIsNull(List jsonArray,String message){
 
         if(jsonArray != null && jsonArray.size() > 0 ){
             throw new IllegalArgumentException(message) ;
