@@ -9,6 +9,7 @@
   * [用户注册](api/user/register.md)
   * [用户登录](api/user/login.md)
   * [用户校验登录](api/user/checkLogin.md)
+  * [用户退出登录](api/user/logout.md)
   * [保存商户](api/store/saveStore.md)
 
 * 服务端接口协议
