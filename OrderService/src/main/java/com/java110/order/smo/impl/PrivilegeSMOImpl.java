@@ -194,7 +194,7 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         String pFlag = privilegeObj.getString("pFlag");//权限组
         privilegeObj.put("privilegeFlag","1".equals(pFlag)?"1":"0");
         List<Map> privilegeGroups = privilegeDAOImpl.queryUserPrivilege(privilegeObj);
-        Assert.isNotNull(privilegeGroups, "当前没有权限操作权限组" + privilegeInfo);
+        Assert.isNull(privilegeGroups, "已经存在该权限无需多次添加" + privilegeInfo);
 
         if (!privilegeDAOImpl.addUserPrivilege(privilegeObj)) {
             return new ResponseEntity<String>("添加权限失败", HttpStatus.INTERNAL_SERVER_ERROR);
