@@ -1,17 +1,17 @@
 
 
-**1\. 刷新缓存**
+**1\. 用户校验登录**
 ###### 接口功能
-> 当修改数据库配置后需要手工调用接口刷新缓存
+> 用户通过web端或APP校验是否登录系统
 
 ###### URL
-> [http://api.java110.com:8008/api/flush.center.cache?cache=All](http://api.java110.com:8008/api/flush.center.cache?cache=All)
+> [http://api.java110.com:8008/api/check.service.login](http://api.java110.com:8008/api/check.service.login)
 
 ###### 支持格式
 > JSON
 
 ###### HTTP请求方式
-> GET
+> POST
 
 ###### 请求参数(header部分)
 |参数名称|约束|类型|长度|描述|取值说明|
@@ -24,7 +24,7 @@
 ###### 请求参数(body部分)
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|cache|1|String|50|缓存类别|-|
+|token|1|String|50|鉴权码|-|
 
 ###### 返回协议
 
@@ -32,11 +32,14 @@
 
 当http返回状态为200时请求处理成功，body内容为返回内容，
 
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|userId|1|String|30|用户ID|用户ID|
 
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/flush.center.cache?cache=All](http://api.java110.com:8008/api/flush.center.cache?cache=All)
+> 地址：[http://api.java110.com:8008/api/check.service.login](http://api.java110.com:8008/api/check.service.login)
 
 ``` javascript
 请求头信息：
@@ -47,8 +50,9 @@ TRANSACTION_ID:10029082726
 REQ_TIME:20181113225612
 SIGN:aabdncdhdbd878sbdudn898
 请求报文：
-无
+{
+	"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqYXZhMTEwIiwianRpIjoiOGU1ZGY4NjBhYTUyNDgyNzk3MjBjZDFjNzg3ZDk4OTkifQ.PGwR_YjIDwn8sQFKr7CDmUk87MYt1lgi1s7a5OrE_Jg"
+}
 返回报文：
-刷新缓存成功
-
+{"userId":"10001"}
 ```

@@ -23,6 +23,8 @@
 * api接口
 
   * [用户注册](api/user/register)
+  * [用户登录](api/user/login)
+  * [用户校验登录](api/user/checkLogin)
 
 * 工具类接口
 

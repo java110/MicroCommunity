@@ -22,7 +22,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何开始（how to start）
 
-[从这里开始](docs/Readme.md)
+[从这里开始](http://www.java110.com/MicroCommunity)
 
 ### 如何安装（how to install）
 
