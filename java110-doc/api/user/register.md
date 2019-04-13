@@ -46,8 +46,14 @@
 ###### 举例
 > 地址：[http://api.java110.com:8008/api/user.service.register](http://api.java110.com:8008/api/user.service.register)
 ``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
 请求报文：
-
 {
      "name": "张三",
      "email": "928255095@qq.com",
@@ -55,9 +61,7 @@
      "sex": "0",
      "tel": "17797173943"
 }
-
 返回报文：
-
 {"responseTime":"20181125230634","userId":"30516389265349820416"}
 
 ```
