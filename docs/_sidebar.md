@@ -17,3 +17,5 @@
   ## [编码生成服务接口测试文档](code_test)
 # api接口
   ## [用户注册](api/user/register)
+# 工具类接口
+  ## [刷新缓存](api/utils/clearCache)
