@@ -1,7 +1,7 @@
 
 * 入门
 
-  * [快速开始](home.md)
+  * [快速开始](README.md)
   * [安装部署](install.md)
 
 * api接口
