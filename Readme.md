@@ -22,17 +22,17 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何开始（how to start）
 
-[从这里开始](java110-doc/Readme.md)
+[从这里开始](docs/Readme.md)
 
 ### 如何安装（how to install）
 
-[从这里安装](java110-doc/install.md)
+[从这里安装](docs/install.md)
 
 ### 接口接口协议
 
-1. [openApi协议](java110-doc/api/Readme.md)
+1. [openApi协议](docs/api/Readme.md)
 
-2. [后台协议](java110-doc/services/Readme.md)
+2. [后台协议](docs/services/Readme.md)
 
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
