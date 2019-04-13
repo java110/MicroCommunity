@@ -143,6 +143,100 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     }
 
     /**
+     * 查询 员工没有绑定的权限组
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> listNoAddPrivilegeGroup(IPageData pd) {
+
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/query.privilegeGroup.noAddPrivilegeGroup?userId="
+                        +_paramObj.getString("userId")+"&storeId="+storeId+"&storeTypeCd="+storeTypeCd,
+                HttpMethod.GET);
+        if(responseEntity.getStatusCode() !=  HttpStatus.OK){
+            return responseEntity;
+        }
+
+        JSONObject outDataObj = JSONObject.parseObject(responseEntity.getBody());
+        return new ResponseEntity<String>(outDataObj.getJSONArray("privilgeGroups").toJSONString(),HttpStatus.OK);
+    }
+
+    /**
+     * 查询 员工没有绑定的权限
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> listNoAddPrivilege(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,"",
+                ServiceConstant.SERVICE_API_URL+"/api/query.privilege.noAddPrivilege?userId="
+                        +_paramObj.getString("userId")+"&storeId="+storeId+"&storeTypeCd="+storeTypeCd,
+                HttpMethod.GET);
+        if(responseEntity.getStatusCode() !=  HttpStatus.OK){
+            return responseEntity;
+        }
+
+        JSONObject outDataObj = JSONObject.parseObject(responseEntity.getBody());
+        return new ResponseEntity<String>(outDataObj.getJSONArray("privilges").toJSONString(),HttpStatus.OK);
+    }
+
+    /**
+     * 添加权限 或权限组
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"pId","请求报文格式错误或未包含权限ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"pFlag","请求报文格式错误");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        _paramObj.put("storeId",storeId);
+        _paramObj.put("storeTypeCd",storeTypeCd);
+
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,_paramObj.toJSONString(),
+                ServiceConstant.SERVICE_API_URL+"/api/add.privilege.userPrivilege",
+                HttpMethod.POST);
+
+        return responseEntity;
+    }
+
+    /**
      * 修改员工 数据校验
      * @param pd
      */

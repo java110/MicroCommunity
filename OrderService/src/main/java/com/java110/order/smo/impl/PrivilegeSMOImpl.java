@@ -3,6 +3,7 @@ package com.java110.order.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.MappingConstant;
+import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.order.dao.IPrivilegeDAO;
@@ -178,6 +179,79 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         }
 
         return new ResponseEntity<String>("成功", HttpStatus.OK);
+    }
+
+    /**
+     * 员工添加权限或权限组
+     * @param privilegeInfo
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(String privilegeInfo) {
+
+        JSONObject privilegeObj = validateData(privilegeInfo);
+        //根据权限组ID和商户ID查询是否有数据
+        String pFlag = privilegeObj.getString("pFlag");//权限组
+        privilegeObj.put("privilegeFlag","1".equals(pFlag)?"1":"0");
+        List<Map> privilegeGroups = privilegeDAOImpl.queryUserPrivilege(privilegeObj);
+        Assert.isNotNull(privilegeGroups, "当前没有权限操作权限组" + privilegeInfo);
+
+        if (!privilegeDAOImpl.addUserPrivilege(privilegeObj)) {
+            return new ResponseEntity<String>("添加权限失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<String>("成功", HttpStatus.OK);
+    }
+
+    private JSONObject validateData(String privilegeInfo) {
+
+        Assert.isJsonObject(privilegeInfo, "请求报文不是有效的json格式");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "pId", "请求报文中未包含pId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "pFlag", "请求报文中未包含pFlag节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "userId", "请求报文中未包含userId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "storeId", "请求报文中未包含storeId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "storeTypeCd", "请求报文中未包含storeTypeCd节点");
+
+        JSONObject privilegeObj = JSONObject.parseObject(privilegeInfo);
+        String pFlag = privilegeObj.getString("pFlag");//权限组
+        if("1".equals(pFlag)){
+            validatePrivilegeGroup(privilegeObj);
+            return privilegeObj;
+        }
+        validatePrivilege(privilegeObj);
+        return privilegeObj;
+    }
+
+    /**
+     * 权限组数据校验
+     * @param privilegeObj
+     */
+    private void validatePrivilegeGroup(JSONObject privilegeObj){
+
+        //判断当前权限组是否隶属于 当前商户
+        privilegeObj.put("pgId",privilegeObj.getString("pId"));
+        List<Map> privilegeGroups = privilegeDAOImpl.queryPrivilegeGroup(privilegeObj);
+        if(privilegeGroups == null || privilegeGroups.size() == 0){
+            throw new SMOException(1999,"当前没有权限操作该权限组"+privilegeGroups.toString());
+        }
+    }
+
+    /**
+     * 权限数据校验
+     * @param privilegeObj
+     */
+    private void validatePrivilege(JSONObject privilegeObj){
+
+        privilegeObj.put("domain",privilegeObj.getString("storeTypeCd"));
+        List<Map> privileges = privilegeDAOImpl.queryPrivilege(privilegeObj);
+        if(privileges == null || privileges.size() == 0){
+            throw new SMOException(1999,"当前没有权限操作该权限"+privileges.toString());
+        }
     }
 
 

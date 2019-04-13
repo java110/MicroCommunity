@@ -39,4 +39,26 @@ public interface IStaffServiceSMO {
      * @return
      */
     public ResponseEntity<String> delete(IPageData pd);
+
+    /**
+     * 查询员工没有绑定的权限组
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listNoAddPrivilegeGroup(IPageData pd);
+
+
+    /**
+     * 查询员工没有绑定的权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listNoAddPrivilege(IPageData pd);
+
+    /**
+     * 添加权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(IPageData pd);
 }

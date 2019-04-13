@@ -121,5 +121,42 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
         return true;
     }
 
+    /**
+     * 查询权限
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryPrivilege(Map info) {
+        logger.debug("查询权限信息入参：{}",info);
+        return sqlSessionTemplate.selectList("privilegeDAOImpl.queryPrivilege",info);
+    }
+
+    /**
+     * 查询用户默认权限
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryUserPrivilege(Map info) {
+        logger.debug("查询用户权限信息入参：{}",info);
+        return sqlSessionTemplate.selectList("privilegeDAOImpl.queryUserPrivilege",info);
+    }
+
+    /**
+     * 添加用户权限
+     * @param info
+     * @return
+     */
+    @Override
+    public boolean addUserPrivilege(Map info) {
+        logger.debug("添加用户权限信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.addUserPrivilege",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"添加用户权限信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
+
 
 }

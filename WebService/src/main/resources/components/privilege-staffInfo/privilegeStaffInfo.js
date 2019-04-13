@@ -30,8 +30,11 @@
             openSearchStaffModel(){
                 vc.emit('searchStaff','openSearchStaffModel',{});
             },
-            openAddStaffPrivilegeModel:function(){
-                vc.emit('addStaffPrivilege','addStaffPrivilegeModel',{});
+            openAddStaffPrivilegeModel(){
+                console.log("点击openAddStaffPrivilegeModel")
+                vc.emit('addStaffPrivilege','addStaffPrivilegeModel',{
+                    userId:vc.component.privilegeStaffInfo.userId
+                });
             }
         }
     });

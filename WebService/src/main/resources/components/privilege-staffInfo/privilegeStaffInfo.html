@@ -6,8 +6,10 @@
                 <div class="ibox-tools" style="top:10px;">
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchStaffModel()">
                         <i class="glyphicon glyphicon-search"></i> 定位员工</button>
-                    <button type="button" class="btn btn-primary btn-sm" style="margin-left:10px">
-                        <i class="glyphicon glyphicon-plus" v-on:click="openAddStaffPrivilegeModel()"></i> 添加权限</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            v-if="privilegeStaffInfo.userId != null && privilegeStaffInfo.userId != ''"
+                            style="margin-left:10px" v-on:click="openAddStaffPrivilegeModel()">
+                        <i class="glyphicon glyphicon-plus" ></i> 添加权限</button>
                 </div>
             </div>
             <div class="ibox-content">

@@ -54,4 +54,11 @@ public interface IPrivilegeSMO {
      */
     public ResponseEntity<String> deletePrivilegeToPrivilegeGroup(String privilegeInfo);
 
+    /**
+     * 员工添加权限
+     * @param privilegeInfo
+     * @return
+     */
+    public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(String privilegeInfo);
+
 }

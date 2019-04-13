@@ -53,4 +53,25 @@ public interface IPrivilegeDAO {
     public List<Map> queryPrivilegeGroup(Map info);
 
     public boolean addPrivilegeRel(Map info);
+
+    /**
+     * 查询权限
+     * @param info
+     * @return
+     */
+    public List<Map> queryPrivilege(Map info);
+
+    /**
+     * 查询用户权限
+     * @param info
+     * @return
+     */
+    public List<Map> queryUserPrivilege(Map info);
+
+    /**
+     * 添加用户权限
+     * @param info
+     * @return
+     */
+    public boolean addUserPrivilege(Map info);
 }

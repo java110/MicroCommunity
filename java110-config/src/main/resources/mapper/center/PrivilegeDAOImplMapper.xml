@@ -90,4 +90,46 @@
         insert into p_privilege_rel(p_id,pg_id)
         values(#{pId},#{pgId})
     </insert>
+    <!-- 查询权限 -->
+    <select id="queryPrivilege" parameterType="Map" resultType="Map">
+        SELECT
+            pp.`p_id` pId,pp.`name`,pp.`description`,pp.`create_time` createTime,pp.`domain`
+        FROM p_privilege pp
+        WHERE 1= 1
+        <if test="pId != null and pId != ''">
+            and pp.p_id = #{pId}
+        </if>
+        <if test="pId != null and pId != ''">
+            AND pp.domain = '800900000003'
+        </if>
+            AND pp.`status_cd` = '0'
+    </select>
+    <!-- 查询用户权限 -->
+    <select id="queryUserPrivilege" parameterType="Map" resultType="Map">
+        SELECT
+            ppu.`pu_id` puId,
+            ppu.`p_id` pId,
+            ppu.`privilege_flag` privilegeFlag,
+            ppu.`user_id` userId
+        FROM
+            p_privilege_user ppu
+        WHERE 1 = 1
+        <if test="privilegeFlag != null and privilegeFlag != ''">
+            AND ppu.`privilege_flag` = #{privilegeFlag}
+        </if>
+        <if test="pId != null and pId != ''">
+            AND ppu.`p_id` = #{pId}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND ppu.`user_id` = #{userId}
+        </if>
+            AND ppu.`status_cd` = '0'
+    </select>
+    <!-- 保存属性信息 c_business_attrs -->
+    <insert id="addUserPrivilege" parameterType="Map">
+        <![CDATA[
+            INSERT INTO p_privilege_user(p_id,privilege_flag,user_id) VALUES(#{pId},#{privilegeFlag},#{userId})
+        ]]>
+    </insert>
+
 </mapper>
