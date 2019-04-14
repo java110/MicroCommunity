@@ -7,6 +7,7 @@
                 _currentPId:'',
                 _currentPFlag:'',
                 deleteMessage:'',
+                errorInfo:''
             }
         },
          _initMethod:function(){
@@ -16,7 +17,7 @@
              vc.on('deleteStaffPrivilege','openStaffPrivilegeModel',function(_params){
 
                 vc.component.deleteStaffPrivilegeInfo._currentStaffId = _params.staffId;
-                vc.component.deleteStaffPrivilegeInfo._currentPId = _params._pId;
+                vc.component.deleteStaffPrivilegeInfo._currentPId = _params.pId;
                 if(_params.pgId == '-1'){
 
                    vc.component.deleteStaffPrivilegeInfo._currentPFlag = '0';
@@ -41,7 +42,7 @@
                 vc.http.post(
                     'deleteStaffPrivilege',
                     'delete',
-                    JSON.stringify(vc.component.deleteStaffInfo),
+                    JSON.stringify(param),
                     {
                         emulateJSON:true
                      },
@@ -49,8 +50,10 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#deleteStaffModel').modal('hide');
-                            vc.component.$emit('deleteStaff_reload_event',{});
+                            $('#deleteStaffPrivilegeModel').modal('hide');
+                            vc.emit('staffPrivilege','_loadStaffPrivileges',{
+                                staffId:vc.component.deleteStaffPrivilegeInfo._currentStaffId
+                            });
                             return ;
                         }
                         vc.component.deleteStaffInfo.errorInfo = json;
