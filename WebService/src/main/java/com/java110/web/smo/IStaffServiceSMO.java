@@ -61,4 +61,11 @@ public interface IStaffServiceSMO {
      * @return
      */
     public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(IPageData pd);
+
+    /**
+     * 删除权限
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> deleteStaffPrivilege(IPageData pd);
 }

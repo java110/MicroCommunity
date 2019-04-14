@@ -132,4 +132,20 @@
         ]]>
     </insert>
 
+    <!-- 删除权限组 -->
+    <update id="deleteUserPrivilege" parameterType="Map">
+        update p_privilege_user ppu set ppu.status_cd = '1'
+        where 1=1
+        <if test="pId != null and pId != ''">
+            and ppu.p_id= #{pId}
+        </if>
+        <if test="privilegeFlag != null and privilegeFlag != ''">
+            and ppu.privilege_flag = #{privilegeFlag}
+        </if>
+        <if test="userId != null and userId != ''">
+            and ppu.user_id = #{userId}
+        </if>
+        and ppu.status_cd = '0'
+    </update>
+
 </mapper>

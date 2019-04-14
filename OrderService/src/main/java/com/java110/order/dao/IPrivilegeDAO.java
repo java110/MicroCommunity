@@ -74,4 +74,11 @@ public interface IPrivilegeDAO {
      * @return
      */
     public boolean addUserPrivilege(Map info);
+
+    /**
+     * 删除用户权限
+     * @param info
+     * @return
+     */
+    public boolean deleteUserPrivilege(Map info);
 }

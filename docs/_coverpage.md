@@ -1,6 +1,6 @@
 ![logo](favicon.ico)
 
-# HC小区管理系统<small>0.0.6</small>
+# HC小区管理系统<small>0.0.6基础稳定版</small>
 
 > hc小区管理系统是为物业企业打造的智慧物业综合管理平台.
 

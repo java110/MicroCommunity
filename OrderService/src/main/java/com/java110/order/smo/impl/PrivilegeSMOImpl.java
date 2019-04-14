@@ -203,6 +203,56 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         return new ResponseEntity<String>("成功", HttpStatus.OK);
     }
 
+    /**
+     * 删除员工权限
+     * @param privilegeInfo
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> deleteStaffPrivilegeOrPrivilegeGroup(String privilegeInfo) {
+        JSONObject privilegeObj = validateDeleteStaffPrivilegeData(privilegeInfo);
+        //根据权限组ID和商户ID查询是否有数据
+        String pFlag = privilegeObj.getString("pFlag");//权限组
+        privilegeObj.put("privilegeFlag","1".equals(pFlag)?"1":"0");
+        List<Map> privilegeGroups = privilegeDAOImpl.queryUserPrivilege(privilegeObj);
+        Assert.isNotNull(privilegeGroups, "不存在该权限" + privilegeInfo);
+
+        if (!privilegeDAOImpl.deleteUserPrivilege(privilegeObj)) {
+            return new ResponseEntity<String>("添加权限失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<String>("成功", HttpStatus.OK);
+    }
+
+    /**
+     * 数据校验
+     * @param privilegeInfo
+     * @return
+     */
+    private JSONObject validateDeleteStaffPrivilegeData(String privilegeInfo) {
+
+        Assert.isJsonObject(privilegeInfo, "请求报文不是有效的json格式");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "pId", "请求报文中未包含pId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "pFlag", "请求报文中未包含pFlag节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "userId", "请求报文中未包含userId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "storeId", "请求报文中未包含storeId节点");
+
+        Assert.jsonObjectHaveKey(privilegeInfo, "storeTypeCd", "请求报文中未包含storeTypeCd节点");
+
+        JSONObject privilegeObj = JSONObject.parseObject(privilegeInfo);
+        String pFlag = privilegeObj.getString("pFlag");//权限组
+        if("1".equals(pFlag)){
+            validatePrivilegeGroup(privilegeObj);
+            return privilegeObj;
+        }
+        validatePrivilege(privilegeObj);
+        return privilegeObj;
+    }
+
     private JSONObject validateData(String privilegeInfo) {
 
         Assert.isJsonObject(privilegeInfo, "请求报文不是有效的json格式");

@@ -11,6 +11,7 @@
   * [用户校验登录](api/user/checkLogin.md)
   * [用户退出登录](api/user/logout.md)
   * [保存商户](api/store/saveStore.md)
+  * [删除用户权限](api/privilege/deleteStaffPrivilege.md)
 
 * 服务端接口协议
 
@@ -31,3 +32,7 @@
 * 工具类接口
 
   * [刷新缓存](api/utils/clearCache)
+
+* 二次开发教程
+
+  * [添加服务](develop/addService)

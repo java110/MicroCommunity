@@ -3,7 +3,8 @@
     vc.extends({
         data:{
             staffPrivilegeInfo:{
-                privileges:[]
+                privileges:[],
+                _currentStaffId:'',
             }
         },
         _initMethod:function(){
@@ -16,6 +17,7 @@
         },
         methods:{
             _loadStaffPrivileges:function(_param){
+                vc.component.staffPrivilegeInfo._currentStaffId=_param.staffId;
                 var param = {
                     params:{
                         staffId:_param.staffId
@@ -34,7 +36,8 @@
                           });
             },
             _openDeleteStaffPrivilegeModel:function(_staffPrivilege){
-
+                _staffPrivilege.staffId = vc.component.staffPrivilegeInfo._currentStaffId;
+                vc.emit('deleteStaffPrivilege','openStaffPrivilegeModel',_staffPrivilege);
             }
         }
     });

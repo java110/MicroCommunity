@@ -236,6 +236,31 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> deleteStaffPrivilege(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"userId","请求报文格式错误或未包含用户ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"pId","请求报文格式错误或未包含权限ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"pFlag","请求报文格式错误");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        _paramObj.put("storeId",storeId);
+        _paramObj.put("storeTypeCd",storeTypeCd);
+
+        //修改用户信息
+        responseEntity = this.callCenterService(restTemplate,pd,_paramObj.toJSONString(),
+                ServiceConstant.SERVICE_API_URL+"/api/delete.privilege.userPrivilege",
+                HttpMethod.POST);
+
+        return responseEntity;    }
+
     /**
      * 修改员工 数据校验
      * @param pd
