@@ -5,7 +5,7 @@
                 <div class="ibox-title">
                     <h5>已入驻小区</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addStaffModel">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openEnterCommunityModal()">
                             <i class="glyphicon glyphicon-plus"></i>
                             入驻小区
                         </button>
@@ -18,6 +18,7 @@
                         <tr>
                             <th>小区ID</th>
                             <th data-hide="phone">名称</th>
+                            <th data-hide="phone">联系方式</th>
                             <th data-hide="phone">地址</th>
                             <th data-hide="phone">地标</th>
                             <th data-hide="phone,tablet" >城市编码</th>
@@ -33,6 +34,9 @@
                             </td>
                             <td>
                                 {{community.name}}
+                            </td>
+                            <td>
+                                {{community.tel}}
                             </td>
                             <td>
                                 {{community.address}}
@@ -66,4 +70,5 @@
             </div>
         </div>
     </div>
+    <vc:create name="storeEnterCommunity"></vc:create>
 </div>

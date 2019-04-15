@@ -12,7 +12,9 @@
             vc.component.listMyCommunity();
         },
         _initEvent:function(){
-
+            vc.on('enterCommunity','listMyCommunity',function(_param){
+                  vc.component.listMyCommunity();
+            });
         },
         methods:{
             listMyCommunity:function(){
@@ -33,8 +35,8 @@
                              }
                            );
             },
-            openEnterCommunity:function(){
-
+            _openEnterCommunityModal:function(){
+                vc.emit('storeEnterCommunity','openStoreEnterCommunity',{});
             },
             _openDeleteStaffPrivilegeModel:function(_community){
 

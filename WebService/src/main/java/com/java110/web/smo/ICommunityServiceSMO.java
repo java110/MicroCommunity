@@ -14,4 +14,12 @@ public interface ICommunityServiceSMO {
      * @return
      */
     public ResponseEntity<String> listMyCommunity(IPageData pd);
+
+
+    /**
+     * 查询未入驻的小区
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listNoEnterCommunity(IPageData pd);
 }

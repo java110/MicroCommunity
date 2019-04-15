@@ -12,6 +12,8 @@
   * [用户退出登录](api/user/logout.md)
   * [保存商户](api/store/saveStore.md)
   * [删除用户权限](api/privilege/deleteStaffPrivilege.md)
+  * [查询已入驻的小区](api/community/queryMyCommunity.md)
+  * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
 
 * 服务端接口协议
 

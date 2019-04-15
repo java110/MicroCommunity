@@ -26,6 +26,13 @@ public class AttrCdConstant {
     public final static String SPEC_CD_STORE_SCOPE = "100201903005";// 经营范围
 
 
+    public final static String SPEC_CD_COMMUNITY_TEL = "100201904006";// 小区联系电话
+
+
+
+
+
+
 
 
 
