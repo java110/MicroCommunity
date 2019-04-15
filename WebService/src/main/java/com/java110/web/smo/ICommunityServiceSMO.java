@@ -1,0 +1,17 @@
+package com.java110.web.smo;
+
+import com.java110.core.context.IPageData;
+import org.springframework.http.ResponseEntity;
+
+/**
+ * 小区服务类
+ */
+public interface ICommunityServiceSMO {
+
+    /**
+     * 我入驻的小区
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> listMyCommunity(IPageData pd);
+}

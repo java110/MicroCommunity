@@ -105,6 +105,12 @@ public class MappingConstant {
     public final static String DOMAIN_DEFAULT_PRIVILEGE = "DEFAULT_PRIVILEGE";
 
 
+    /**
+     * 商户类型转 小区成员角色
+     */
+    public final static String DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE = "STORE_TYPE_2_COMMUNITY_MEMBER_TYPE";
+
+
 
 
 }
