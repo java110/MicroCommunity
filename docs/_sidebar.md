@@ -14,6 +14,7 @@
   * [删除用户权限](api/privilege/deleteStaffPrivilege.md)
   * [查询已入驻的小区](api/community/queryMyCommunity.md)
   * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
+  * [检查用户权限](api/user/checkUserHasPrivilege.md)
 
 * 服务端接口协议
 
