@@ -352,4 +352,9 @@ public class ServiceCodeConstant {
 
 
 
+    //检查用户是否有权限
+    public static final String SERVICE_CODE_CHECK_USER_HAS_PRIVILEGE = "check.user.hasPrivilege";
+
+
+
 }

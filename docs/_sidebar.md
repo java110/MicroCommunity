@@ -38,3 +38,4 @@
 * 二次开发教程
 
   * [添加服务](develop/addService)
+  * [用户权限校验](develop/checkPrivilege.md)

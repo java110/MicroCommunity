@@ -3,6 +3,7 @@ package com.java110.web.core;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceConstant;
+import com.java110.common.exception.SMOException;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -86,5 +87,19 @@ public class BaseComponentSMO extends BaseServiceSMO {
         responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/query.store.byuser?userId="+pd.getUserId(), HttpMethod.GET);
 
         return responseEntity;
+    }
+
+    /**
+     * 检查用户是否有权限
+     * @param pd
+     * @param restTemplate
+     * @param privilegeCode
+     */
+    protected void checkUserHasPrivilege(IPageData pd,RestTemplate restTemplate,String privilegeCode){
+        ResponseEntity<String> responseEntity = null;
+        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/check.user.hasPrivilege?userId="+pd.getUserId()+"&pId="+privilegeCode, HttpMethod.GET);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            throw new SMOException(1999,"用户没有权限操作权限"+privilegeCode);
+        }
     }
 }

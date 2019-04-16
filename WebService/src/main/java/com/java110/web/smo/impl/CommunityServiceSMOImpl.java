@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.AttrCdConstant;
 import com.java110.common.constant.MappingConstant;
+import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
@@ -35,6 +36,8 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
     public ResponseEntity<String> listMyCommunity(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        //权限校验
+        checkUserHasPrivilege(pd,restTemplate, PrivilegeCodeConstant.PRIVILEGE_ENTER_COMMUNITY);
         responseEntity = super.getStoreInfo(pd,restTemplate);
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
@@ -69,6 +72,8 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
     public ResponseEntity<String> listNoEnterCommunity(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+        //权限校验
+        checkUserHasPrivilege(pd,restTemplate, PrivilegeCodeConstant.PRIVILEGE_ENTER_COMMUNITY);
         responseEntity = super.getStoreInfo(pd,restTemplate);
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
