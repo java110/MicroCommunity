@@ -3,6 +3,7 @@
 前台服务开发时必须要校验当前用户是否有权限操作数据，只需在SMO实现类方法中加入如下代码：
 
 > //权限校验
+
 > checkUserHasPrivilege(pd,restTemplate, PrivilegeCodeConstant.PRIVILEGE_ENTER_COMMUNITY);
 
 

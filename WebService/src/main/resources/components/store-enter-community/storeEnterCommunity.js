@@ -45,6 +45,7 @@
                      });
             },
             listNoEnterCommunity:function(){
+                    vc.loading('open');
                             var param = {
                                 params:{
                                     msg:'123'
@@ -57,11 +58,37 @@
                                          param,
                                          function(json,res){
                                             vc.component.storeEnterCommunityInfo.communityInfo=JSON.parse(json);
+                                            vc.loading('close');
                                          },function(errInfo,error){
                                             console.log('请求失败处理');
+                                            vc.loading('close');
                                          }
                                        );
                         },
+            _saveEnterCommunity:function(_communityInfo){
+                var _param = {
+                    communityId:_communityInfo.communityId
+                };
+                //发送get请求
+               vc.http.post('storeEnterCommunity',
+                            '_saveEnterCommunity',
+                             JSON.stringify(vc.component.registerInfo),
+                             {
+                                 emulateJSON:true
+                              },
+                             function(json,res){
+                                if(res.status == 200){
+                                    vc.jumpToPage("/flow/login");
+                                    return ;
+                                }
+                                vc.component.storeEnterCommunityInfo.errorInfo = json;
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                                vc.component.storeEnterCommunityInfo.errorInfo = json;
+                             }
+                           );
+
+            }
 
         }
     });

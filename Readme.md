@@ -28,6 +28,10 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 [从这里安装](docs/install.md)
 
+### 解决方案
+
+    [解决方案](https://docs.qq.com/doc/DQW9XWW50R3NjWmN6) 不断完善中
+
 ### 接口接口协议
 
 1. [openApi协议](docs/api/Readme.md)
