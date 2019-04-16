@@ -43,7 +43,7 @@ public class CheckUserHasPrivilegeListener extends AbstractServiceApiDataFlowLis
         AppService service = event.getAppService();
         JSONObject data = dataFlowContext.getReqJson();
         logger.debug("请求信息：{}",JSONObject.toJSONString(dataFlowContext));
-        Assert.hasKeyAndValue(data,"storeId","请求报文中未包含userId节点");
+        Assert.hasKeyAndValue(data,"userId","请求报文中未包含userId节点");
         Assert.hasKeyAndValue(data,"pId","请求报文中未包含pId节点");
         ResponseEntity<String> responseEntity = null;
 
