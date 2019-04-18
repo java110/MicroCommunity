@@ -16,6 +16,7 @@
   * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
   * [检查用户权限](api/user/checkUserHasPrivilege.md)
   * [小区成员入驻](api/community/communityMemberJoined.md)
+  * [小区成员退出](api/community/communityMemberQuit.md)
 
 * 服务端接口协议
 
