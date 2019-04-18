@@ -33,6 +33,22 @@ public class StoreEnterCommunityComponent {
             }
     }
 
+    /**
+     * 入驻小区
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> _saveEnterCommunity(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  communityServiceSMOImpl._saveEnterCommunity(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
+
     public ICommunityServiceSMO getCommunityServiceSMOImpl() {
         return communityServiceSMOImpl;
     }

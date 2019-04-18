@@ -22,4 +22,12 @@ public interface ICommunityServiceSMO {
      * @return
      */
     public ResponseEntity<String> listNoEnterCommunity(IPageData pd);
+
+
+    /**
+     * 入驻小区
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> _saveEnterCommunity(IPageData pd);
 }

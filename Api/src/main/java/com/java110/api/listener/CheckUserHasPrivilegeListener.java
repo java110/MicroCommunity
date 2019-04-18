@@ -2,10 +2,8 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.users.QueryStaffByUserNameServiceListener;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -15,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 检查用户是否有权限

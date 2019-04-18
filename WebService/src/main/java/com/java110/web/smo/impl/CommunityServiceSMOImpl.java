@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * 小区服务类
@@ -82,12 +83,20 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
-
+        String communityName = !_paramObj.containsKey("communityName")?"":_paramObj.getString("communityName");
         //修改用户信息
-        responseEntity = this.callCenterService(restTemplate,pd,"",
-                ServiceConstant.SERVICE_API_URL+"/api/query.noEnterCommunity.byMember?memberId="+storeId+
-                        "&memberTypeCd="+MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE,storeTypeCd),
-                HttpMethod.GET);
+        if(StringUtils.isEmpty(communityName)) {
+            responseEntity = this.callCenterService(restTemplate, pd, "",
+                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMember?memberId=" + storeId +
+                            "&memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd),
+                    HttpMethod.GET);
+        }else{
+            responseEntity = this.callCenterService(restTemplate, pd, "",
+                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMemberAndName?memberId=" + storeId +
+                            "&memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd)
+                    +"&name="+communityName,
+                    HttpMethod.GET);
+        }
 
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
@@ -97,6 +106,41 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
         freshCommunityAttr(tmpCommunitys);
         responseEntity = new ResponseEntity<String>(tmpCommunitys.toJSONString(),
                 HttpStatus.OK);
+        return responseEntity;
+    }
+
+
+    /**
+     * 商户入驻申请接口
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> _saveEnterCommunity(IPageData pd) {
+
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"communityId","请求信息中未包含communityId");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+
+        String communityId = _paramObj.getString("communityId");
+
+        //权限校验
+        checkUserHasPrivilege(pd,restTemplate, PrivilegeCodeConstant.PRIVILEGE_ENTER_COMMUNITY);
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        _paramObj.put("memberId",storeId);
+        _paramObj.put("memberTypeCd",MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE,storeTypeCd));
+
+        responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/member.join.community",
+                HttpMethod.POST);
+
         return responseEntity;
     }
 

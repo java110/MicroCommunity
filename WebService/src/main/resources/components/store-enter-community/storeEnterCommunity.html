@@ -19,9 +19,9 @@
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input placeholder="输入小区名称" type="text" class="form-control form-control-sm">
+                                        <input placeholder="输入小区名称" v-model="storeEnterCommunityInfo.searchCommunityName" type="text" class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="listNoEnterCommunity()">查询</button>
                                             </span>
                                     </div>
                                 </div>
