@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.InitDataFlowContextException;
 import com.java110.entity.center.Business;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.Map;
  * Created by wuxw on 2018/5/18.
  */
 public class BusinessServiceDataFlow extends AbstractDataFlowContext {
+    private final static Logger logger = LoggerFactory.getLogger(BusinessServiceDataFlow.class);
 
 
     private String bId;
@@ -54,6 +57,7 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
                 this.requestHeaders.putAll(headerAll);
             }
         }catch (Exception e){
+            logger.error("初始化对象 BusinessServiceDataFlow 失败",e);
             throw new InitDataFlowContextException(ResponseConstant.RESULT_PARAM_ERROR,"初始化对象 BusinessServiceDataFlow 失败 "+reqInfo);
         }
         return this;

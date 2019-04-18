@@ -15,6 +15,7 @@
   * [查询已入驻的小区](api/community/queryMyCommunity.md)
   * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
   * [检查用户权限](api/user/checkUserHasPrivilege.md)
+  * [小区成员入驻](api/community/communityMemberJoined.md)
 
 * 服务端接口协议
 
@@ -31,6 +32,7 @@
   * [评论服务接口测试文档](services/comment/comment_test.md)
   * [编码生成服务接口协议](services/code/code)
   * [编码生成服务接口测试文档](services/code/code_test)
+  * [小区成员入驻](services/community/community.md)
 
 * 工具类接口
 
