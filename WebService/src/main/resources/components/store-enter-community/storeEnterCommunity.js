@@ -79,7 +79,8 @@
                               },
                              function(json,res){
                                 if(res.status == 200){
-                                    vc.jumpToPage("/flow/login");
+                                    vc.emit('enterCommunity','listMyCommunity',{
+                                    })
                                     return ;
                                 }
                                 vc.component.storeEnterCommunityInfo.errorInfo = json;

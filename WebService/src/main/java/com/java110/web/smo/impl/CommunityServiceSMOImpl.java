@@ -144,6 +144,43 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
         return responseEntity;
     }
 
+    /**
+     * 退出小区
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> exitCommunity(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        Assert.jsonObjectHaveKey(pd.getReqData(),"communityId","请求信息中未包含communityId");
+        JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
+
+        String communityId = _paramObj.getString("communityId");
+
+        Assert.hasLength(communityId,"请求报文中communityId为空");
+
+        //权限校验
+        checkUserHasPrivilege(pd,restTemplate, PrivilegeCodeConstant.PRIVILEGE_ENTER_COMMUNITY);
+        responseEntity = super.getStoreInfo(pd,restTemplate);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(),"storeId","根据用户ID查询商户ID失败，未包含storeId节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        JSONObject paramInObj = new JSONObject();
+        paramInObj.put("communityId",communityId);
+        paramInObj.put("memberId",storeId);
+        paramInObj.put("memberTypeCd",MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE,storeTypeCd));
+
+        responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/member.quit.community",
+                HttpMethod.POST);
+
+        return responseEntity;
+    }
+
 
     private void freshCommunityAttr(JSONArray community){
         for(int _communityIndex = 0 ;_communityIndex < community.size();_communityIndex++){

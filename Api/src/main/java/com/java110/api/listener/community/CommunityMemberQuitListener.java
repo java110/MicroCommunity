@@ -15,19 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
- * 小区成员加入
+ * 小区成员退出
  */
-@Java110Listener("communityMemberJoinedListener")
-public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowListener {
-    private final static Logger logger = LoggerFactory.getLogger(CommunityMemberJoinedListener.class);
-
+@Java110Listener("communityMemberQuitListener")
+public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListener {
+    private final static Logger logger = LoggerFactory.getLogger(CommunityMemberQuitListener.class);
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_MEMBER_JOINED_COMMUNITY;
+        return ServiceCodeConstant.SERVICE_CODE_MEMBER_QUIT_COMMUNITY;
     }
 
     @Override
@@ -48,42 +48,44 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         validate(paramIn);
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
+        //根据 memberId communityId memberTypeCd  query.myCommunity.byMember
+
+        ResponseEntity<String> responseEntity = super.callService(dataFlowContext,"query.myCommunity.byMember",paramObj);
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
+
+        JSONArray communityMemberInfos = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("communitys");
+        Assert.listIsNull(communityMemberInfos,"当前没有任何小区信息"+paramIn);
+        String communityMemberId = "";
+        for(int _communityMemberIndex = 0 ;_communityMemberIndex < communityMemberInfos.size();_communityMemberIndex++){
+
+            if(communityMemberInfos.getJSONObject(_communityMemberIndex).getString("communityId").equals(paramObj.getString("communityId"))){
+                communityMemberId = communityMemberInfos.getJSONObject(_communityMemberIndex).getString("communityMemberId");
+                break;
+            }
+        }
+
+        Assert.hasLength(communityMemberId,"不存在当前数据"+paramIn);
+
+        paramObj.put("communityMemberId",communityMemberId);
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
         JSONArray businesses = new JSONArray();
         //添加商户
-        businesses.add(addCommunityMember(paramObj));
+        businesses.add(deleteCommunityMember(paramObj));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders());
 
         //将 rest header 信息传递到下层服务中去
         super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
 
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext,service.getServiceCode(),paramInObj);
+         responseEntity = this.callService(dataFlowContext,service.getServiceCode(),paramInObj);
 
         dataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    /**
-     * 添加小区成员
-     * @param paramInJson
-     * @return
-     */
-    private JSONObject addCommunityMember(JSONObject paramInJson){
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ,2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId","-1");
-        businessCommunityMember.put("communityId",paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId",paramInJson.getString("memberId"));
-        businessCommunityMember.put("memberTypeCd", paramInJson.getString("memberTypeCd"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember",businessCommunityMember);
-
-        return business;
     }
 
     /**
@@ -98,6 +100,24 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         Assert.jsonObjectHaveKey(paramIn,"communityId","请求报文中未包含communityId");
         Assert.jsonObjectHaveKey(paramIn,"memberId","请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(paramIn,"memberTypeCd","请求报文中未包含memberTypeCd");
+    }
+
+    /**
+     * 添加小区成员
+     * @param paramInJson
+     * @return
+     */
+    private JSONObject deleteCommunityMember(JSONObject paramInJson){
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
+        business.put(CommonConstant.HTTP_SEQ,2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessCommunityMember = new JSONObject();
+        businessCommunityMember.put("communityMemberId",paramInJson.getString("communityMemberId"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember",businessCommunityMember);
+
+        return business;
     }
 
     @Override

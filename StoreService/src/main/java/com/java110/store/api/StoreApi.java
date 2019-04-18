@@ -37,7 +37,7 @@ public class StoreApi extends BaseController {
     }
 
     /**
-     * 用户服务统一处理接口
+     * 商户服务统一处理接口
      * @param orderInfo
      * @param request
      * @return

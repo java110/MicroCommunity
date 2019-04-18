@@ -82,7 +82,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         //小区信息
         Map businessCommunityMember = communityServiceDaoImpl.getBusinessCommunityMember(info);
         if( businessCommunityMember != null && !businessCommunityMember.isEmpty()) {
-            flushBusinessCommunityMember(businessCommunityMember,StatusConstant.STATUS_CD_INVALID);
+            flushBusinessCommunityMember(businessCommunityMember,StatusConstant.STATUS_CD_AUDIT_INVALID);
             communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
             dataFlowContext.addParamOut("communityMemberId",businessCommunityMember.get("member_community_id"));
         }

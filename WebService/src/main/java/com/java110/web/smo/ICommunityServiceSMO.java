@@ -30,4 +30,11 @@ public interface ICommunityServiceSMO {
      * @return
      */
     public ResponseEntity<String> _saveEnterCommunity(IPageData pd);
+
+    /**
+     * 退出小区
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> exitCommunity(IPageData pd);
 }

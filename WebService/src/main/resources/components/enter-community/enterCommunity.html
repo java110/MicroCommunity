@@ -51,8 +51,8 @@
                                 {{community.statusCd == 0 ? '在用': '审核中'}}
                             </td>
                             <td class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openExitCommunityModel(community)">退出</button>
+                                <div class="btn-group" v-if="community.statusCd == 0">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openExitCommunityModel(community)">申请退出</button>
                                 </div>
                             </td>
                         </tr>
@@ -71,5 +71,6 @@
         </div>
     </div>
     <vc:create name="storeEnterCommunity"></vc:create>
+    <vc:create name="storeExitCommunity"></vc:create>
 
 </div>

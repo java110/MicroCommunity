@@ -38,8 +38,8 @@
             _openEnterCommunityModal:function(){
                 vc.emit('storeEnterCommunity','openStoreEnterCommunity',{});
             },
-            _openDeleteStaffPrivilegeModel:function(_community){
-
+            _openExitCommunityModel:function(_community){
+                vc.emit('storeExitCommunity','openStoreExitCommunityModal',_community);
             }
         }
     });
