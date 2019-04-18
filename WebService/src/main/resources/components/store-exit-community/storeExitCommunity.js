@@ -2,7 +2,8 @@
     vc.extends({
         data:{
             storeExitCommunityInfo:{
-                communityInfo:{}
+                communityInfo:{},
+                errorInfo:''
             }
         },
         _initEvent:function(){
@@ -28,18 +29,19 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#deleteStaffModel').modal('hide');
-                            vc.component.$emit('deleteStaff_reload_event',{});
+                            $('#storeExitCommunityModal').modal('hide');
+                            vc.emit('enterCommunity','listMyCommunity',{});
                             return ;
                         }
-                        vc.component.deleteStaffInfo.errorInfo = json;
+                        vc.component.storeExitCommunityInfo.errorInfo = json;
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
 
-                        vc.component.deleteStaffInfo.errorInfo = errInfo;
+                        vc.component.storeExitCommunityInfo.errorInfo = errInfo;
                      });
             }
+
         }
     });
 })(window.vc);

@@ -40,6 +40,15 @@
             },
             _openExitCommunityModel:function(_community){
                 vc.emit('storeExitCommunity','openStoreExitCommunityModal',_community);
+            },
+            _showCommunityStatus(_statusCd){
+                if(_statusCd == '1000'){
+                    return "入驻审核";
+                }else if(_statusCd == '1001'){
+                    return "退出审核";
+                }
+
+                return "在用";
             }
         }
     });

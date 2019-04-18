@@ -48,7 +48,7 @@
                                 {{community.cityCode}}
                             </td>
                             <td>
-                                {{community.statusCd == 0 ? '在用': '审核中'}}
+                                {{_showCommunityStatus(community.statusCd)}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group" v-if="community.statusCd == 0">
