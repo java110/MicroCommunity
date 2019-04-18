@@ -58,7 +58,7 @@ public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListe
         }
 
         JSONArray communityMemberInfos = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("communitys");
-        Assert.listIsNull(communityMemberInfos,"当前没有任何小区信息"+paramIn);
+        Assert.listNotNull(communityMemberInfos,"当前没有任何小区信息"+paramIn);
         String communityMemberId = "";
         for(int _communityMemberIndex = 0 ;_communityMemberIndex < communityMemberInfos.size();_communityMemberIndex++){
 

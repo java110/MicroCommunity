@@ -174,7 +174,7 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
         paramInObj.put("memberId",storeId);
         paramInObj.put("memberTypeCd",MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE,storeTypeCd));
 
-        responseEntity = this.callCenterService(restTemplate, pd, _paramObj.toJSONString(),
+        responseEntity = this.callCenterService(restTemplate, pd, paramInObj.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/member.quit.community",
                 HttpMethod.POST);
 
