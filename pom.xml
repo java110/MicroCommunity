@@ -32,6 +32,7 @@
         <module>CommentService</module>
         <module>Api</module>
         <module>CommunityService</module>
+        <module>java110-code-generator</module>
     </modules>
 
     <parent>
