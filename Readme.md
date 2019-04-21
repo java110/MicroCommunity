@@ -30,7 +30,11 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 解决方案
 
-    [解决方案](https://docs.qq.com/doc/DQW9XWW50R3NjWmN6) 不断完善中
+[解决方案](https://docs.qq.com/doc/DQW9XWW50R3NjWmN6) 不断完善中
+
+### 二次开发视频
+
+[视频](https://pan.baidu.com/s/1hnw5u-rnsZrLJjzMVrhI6A)
 
 ### 接口接口协议
 
