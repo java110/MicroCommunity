@@ -20,6 +20,9 @@ public class CodeGeneratorApp
         data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_FLOOR_INFO");
         data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_FLOOR_INFO");
         data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_FLOOR_INFO");
+        data.setNewBusinessTypeCdValue("510100030001");
+        data.setUpdateBusinessTypeCdValue("510100040001");
+        data.setDeleteBusinessTypeCdValue("510100050001");
         data.setBusinessTableName("business_floor");
         data.setTableName("f_floor");
         Map<String,String> param = new HashMap<String,String>();

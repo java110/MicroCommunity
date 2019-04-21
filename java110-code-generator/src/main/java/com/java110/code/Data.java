@@ -19,6 +19,12 @@ public class Data {
 
     private String deleteBusinessTypeCd;
 
+    private String newBusinessTypeCdValue;
+
+    private String updateBusinessTypeCdValue;
+
+    private String deleteBusinessTypeCdValue;
+
     private String businessTableName;
 
     private String tableName;
@@ -104,5 +110,29 @@ public class Data {
 
     public void setDeleteBusinessTypeCd(String deleteBusinessTypeCd) {
         this.deleteBusinessTypeCd = deleteBusinessTypeCd;
+    }
+
+    public String getNewBusinessTypeCdValue() {
+        return newBusinessTypeCdValue;
+    }
+
+    public void setNewBusinessTypeCdValue(String newBusinessTypeCdValue) {
+        this.newBusinessTypeCdValue = newBusinessTypeCdValue;
+    }
+
+    public String getUpdateBusinessTypeCdValue() {
+        return updateBusinessTypeCdValue;
+    }
+
+    public void setUpdateBusinessTypeCdValue(String updateBusinessTypeCdValue) {
+        this.updateBusinessTypeCdValue = updateBusinessTypeCdValue;
+    }
+
+    public String getDeleteBusinessTypeCdValue() {
+        return deleteBusinessTypeCdValue;
+    }
+
+    public void setDeleteBusinessTypeCdValue(String deleteBusinessTypeCdValue) {
+        this.deleteBusinessTypeCdValue = deleteBusinessTypeCdValue;
     }
 }
