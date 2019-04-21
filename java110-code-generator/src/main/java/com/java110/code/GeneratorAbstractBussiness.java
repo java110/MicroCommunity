@@ -17,13 +17,18 @@ public class GeneratorAbstractBussiness extends BaseGenerator {
                 ;
         Map<String,String> param = data.getParams();
         String mappingContext="";
+        String autoMappingContext ="";
         for(String key : param.keySet()){
-            if("statusCd".equals(key)){
+            if("statusCd".equals(key) || "bId".equals(key)){
                 continue;
             }
             mappingContext += "business"+toUpperCaseFirstOne(data.getName())+"Info.put(\""+key+"\",business"+toUpperCaseFirstOne(data.getName())+"Info.get(\""+param.get(key)+"\"));\n";
+            autoMappingContext += "current"+toUpperCaseFirstOne(data.getName())+"Info.put(\""+key+"\",current"+toUpperCaseFirstOne(data.getName())+"Info.get(\""+param.get(key)+"\"));\n";
+
         }
+
         fileContext = fileContext.replace("$flushBusinessInfo$",mappingContext);
+        fileContext = fileContext.replace("$autoSaveDelBusiness$",autoMappingContext);
         System.out.println(this.getClass().getResource("/listener").getPath());
         String writePath = this.getClass().getResource("/listener").getPath()+"/Abstract"+toUpperCaseFirstOne(data.getName())+"BusinessServiceDataFlowListener.java";
         writeFile(writePath,

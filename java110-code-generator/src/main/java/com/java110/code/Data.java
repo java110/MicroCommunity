@@ -13,7 +13,11 @@ public class Data {
 
     private String desc;
 
-    private String businessTypeCd;
+    private String newBusinessTypeCd;
+
+    private String updateBusinessTypeCd;
+
+    private String deleteBusinessTypeCd;
 
     private String businessTableName;
 
@@ -61,13 +65,6 @@ public class Data {
         this.desc = desc;
     }
 
-    public String getBusinessTypeCd() {
-        return businessTypeCd;
-    }
-
-    public void setBusinessTypeCd(String businessTypeCd) {
-        this.businessTypeCd = businessTypeCd;
-    }
 
     public String getBusinessTableName() {
         return businessTableName;
@@ -83,5 +80,29 @@ public class Data {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getNewBusinessTypeCd() {
+        return newBusinessTypeCd;
+    }
+
+    public void setNewBusinessTypeCd(String newBusinessTypeCd) {
+        this.newBusinessTypeCd = newBusinessTypeCd;
+    }
+
+    public String getUpdateBusinessTypeCd() {
+        return updateBusinessTypeCd;
+    }
+
+    public void setUpdateBusinessTypeCd(String updateBusinessTypeCd) {
+        this.updateBusinessTypeCd = updateBusinessTypeCd;
+    }
+
+    public String getDeleteBusinessTypeCd() {
+        return deleteBusinessTypeCd;
+    }
+
+    public void setDeleteBusinessTypeCd(String deleteBusinessTypeCd) {
+        this.deleteBusinessTypeCd = deleteBusinessTypeCd;
     }
 }

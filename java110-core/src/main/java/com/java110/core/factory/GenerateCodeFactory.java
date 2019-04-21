@@ -30,6 +30,50 @@ public class GenerateCodeFactory {
     private static short lastCount = 1;
     private static int count = 0;
     private static final String first = "10";
+    //10+yyyymmdd+八位序列
+    public static final String CODE_PREFIX_oId = "10";
+    public static final String CODE_PREFIX_bId = "20";
+    public static final String CODE_PREFIX_attrId = "11";
+    public static final String CODE_PREFIX_transactionId = "1000001";
+    public static final String CODE_PREFIX_pageTransactionId = "1000002";
+    public static final String CODE_PREFIX_dataFlowId = "2000";
+    public static final String CODE_PREFIX_userId = "30";
+    public static final String CODE_PREFIX_storeId = "40";
+    public static final String CODE_PREFIX_storePhotoId = "41";
+    public static final String CODE_PREFIX_storeCerdentialsId = "42";
+    public static final String CODE_PREFIX_memberStoreId = "43";
+    public static final String CODE_PREFIX_propertyStoreId = "44";
+    public static final String CODE_PREFIX_storeUserId = "45";
+    public static final String CODE_PREFIX_shopId = "50";
+    public static final String CODE_PREFIX_shopAttrId = "51";
+    public static final String CODE_PREFIX_shopPhotoId = "52";
+    public static final String CODE_PREFIX_shopAttrParamId = "53";
+    public static final String CODE_PREFIX_shopPreferentialId = "54";
+    public static final String CODE_PREFIX_shopDescId = "55";
+    public static final String CODE_PREFIX_shopCatalogId = "56";
+    public static final String CODE_PREFIX_buyId = "57";
+    public static final String CODE_PREFIX_buyAttrId = "58";
+    public static final String CODE_PREFIX_commentId = "60";
+    public static final String CODE_PREFIX_subCommentId = "61";
+    public static final String CODE_PREFIX_subCommentAttrId = "62";
+    public static final String CODE_PREFIX_commentPhotoId = "63";
+    public static final String CODE_PREFIX_commentScoreId = "64";
+    public static final String CODE_PREFIX_communityId = "70";
+    public static final String CODE_PREFIX_communityPhotoId = "71";
+    public static final String CODE_PREFIX_communityMemberId = "72";
+    public static final String CODE_PREFIX_agentId = "80";
+    public static final String CODE_PREFIX_agentPhotoId = "81";
+    public static final String CODE_PREFIX_agentCerdentialsId = "82";
+    public static final String CODE_PREFIX_agentUserId = "83";
+    public static final String CODE_PREFIX_propertyId = "90";
+    public static final String CODE_PREFIX_propertyPhotoId = "91";
+    public static final String CODE_PREFIX_propertyCerdentialsId = "92";
+    public static final String CODE_PREFIX_propertyUserId = "93";
+    public static final String CODE_PREFIX_propertyFeeId = "94";
+    public static final String CODE_PREFIX_houseId = "95";
+    public static final String CODE_PREFIX_pgId = "600";
+
+    public static final String CODE_PREFIX_floorId = "73";
 
     /**
      *
@@ -135,6 +179,19 @@ public class GenerateCodeFactory {
         //从内存中获取平台随机码
 
         return prefixMap.get("pageTransactionId") + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId();
+    }
+
+    /**
+     * pgId生成
+     * @return
+     * @throws GenerateCodeException
+     */
+    public static String getGeneratorId(String prefix)  throws GenerateCodeException{
+        if(!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))){
+            return prefix +DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H)+ nextId("%04d");
+        }
+        //调用服务
+        return getCode(prefix);
     }
 
     public static String getOId() throws GenerateCodeException{

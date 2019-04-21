@@ -174,6 +174,21 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_COMMUNITY_INFO = "500100050001";
 
+    /**
+     * 增加小区楼
+     */
+    public static final String BUSINESS_TYPE_SAVE_FLOOR_INFO = "510100030001";
+
+    /**
+     * 修改小区楼
+     */
+    public static final String BUSINESS_TYPE_UPDATE_FLOOR_INFO = "510100040001";
+
+
+    /**
+     * 删除小区楼
+     */
+    public static final String BUSINESS_TYPE_DELETE_FLOOR_INFO = "510100050001";
 
     /**
      * 保存物业信息

@@ -1,4 +1,4 @@
-package com.java110.store.listener;
+package com.java110.community.listener.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +14,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
-import com.java110.store.dao.IStoreServiceDao;
+import com.java110.community.dao.IFloorServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +27,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 保存 商户信息 侦听
+ * 保存 小区楼信息 侦听
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("saveStoreInfoListener")
+@Java110Listener("saveFloorInfoListener")
 @Transactional
-public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowListener{
+public class SaveFloorInfoListener extends AbstractFloorBusinessServiceDataFlowListener{
 
-    private final static Logger logger = LoggerFactory.getLogger(SaveStoreInfoListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(SaveFloorInfoListener.class);
 
     @Autowired
-    IStoreServiceDao storeServiceDaoImpl;
+    IFloorServiceDao floorServiceDaoImpl;
 
     @Override
     public int getOrder() {
@@ -46,11 +46,11 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
 
     @Override
     public String getBusinessTypeCd() {
-        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO;
+        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO;
     }
 
     /**
-     * 保存商户信息 business 表中
+     * 保存小区楼信息 business 表中
      * @param dataFlowContext 数据对象
      * @param business 当前业务对象
      */
@@ -59,11 +59,11 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessStore 节点
-        if(data.containsKey("businessStore")){
-            JSONObject businessStore = data.getJSONObject("businessStore");
-            doBusinessStore(business,businessStore);
-            dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
+        //处理 businessFloor 节点
+        if(data.containsKey("businessFloor")){
+            JSONObject businessFloor = data.getJSONObject("businessFloor");
+            doBusinessFloor(business,businessFloor);
+            dataFlowContext.addParamOut("floorId",businessFloor.getString("floorId"));
         }
     }
 
@@ -80,11 +80,11 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_ADD);
 
-        //商户信息
-        Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
-        if( businessStoreInfo != null && !businessStoreInfo.isEmpty()) {
-            storeServiceDaoImpl.saveStoreInfoInstance(info);
-            dataFlowContext.addParamOut("storeId",businessStoreInfo.get("store_id"));
+        //小区楼信息
+        Map businessFloorInfo = floorServiceDaoImpl.getBusinessFloorInfo(info);
+        if( businessFloorInfo != null && !businessFloorInfo.isEmpty()) {
+            floorServiceDaoImpl.saveFloorInfoInstance(info);
+            dataFlowContext.addParamOut("floorId",businessFloorInfo.get("floor_id"));
         }
     }
 
@@ -103,46 +103,46 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         Map paramIn = new HashMap();
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
-        //商户信息
-        Map storeInfo = storeServiceDaoImpl.getStoreInfo(info);
-        if(storeInfo != null && !storeInfo.isEmpty()){
-            paramIn.put("storeId",storeInfo.get("store_id").toString());
-            storeServiceDaoImpl.updateStoreInfoInstance(paramIn);
-            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
+        //小区楼信息
+        Map floorInfo = floorServiceDaoImpl.getFloorInfo(info);
+        if(floorInfo != null && !floorInfo.isEmpty()){
+            paramIn.put("floorId",floorInfo.get("floor_id").toString());
+            floorServiceDaoImpl.updateFloorInfoInstance(paramIn);
+            dataFlowContext.addParamOut("floorId",floorInfo.get("floor_id"));
         }
     }
 
 
 
     /**
-     * 处理 businessStore 节点
+     * 处理 businessFloor 节点
      * @param business 总的数据节点
-     * @param businessStore 商户节点
+     * @param businessFloor 小区楼节点
      */
-    private void doBusinessStore(Business business,JSONObject businessStore){
+    private void doBusinessFloor(Business business,JSONObject businessFloor){
 
-        Assert.jsonObjectHaveKey(businessStore,"storeId","businessStore 节点下没有包含 storeId 节点");
+        Assert.jsonObjectHaveKey(businessFloor,"floorId","businessFloor 节点下没有包含 floorId 节点");
 
-        if(businessStore.getString("storeId").startsWith("-")){
+        if(businessFloor.getString("floorId").startsWith("-")){
             //刷新缓存
-            //flushStoreId(business.getDatas());
+            //flushFloorId(business.getDatas());
 
-            businessStore.put("storeId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_storeId));
+            businessFloor.put("floorId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
 
         }
 
-        businessStore.put("bId",business.getbId());
-        businessStore.put("operate", StatusConstant.OPERATE_ADD);
-        //保存商户信息
-        storeServiceDaoImpl.saveBusinessStoreInfo(businessStore);
+        businessFloor.put("bId",business.getbId());
+        businessFloor.put("operate", StatusConstant.OPERATE_ADD);
+        //保存小区楼信息
+        floorServiceDaoImpl.saveBusinessFloorInfo(businessFloor);
 
     }
 
-    public IStoreServiceDao getStoreServiceDaoImpl() {
-        return storeServiceDaoImpl;
+    public IFloorServiceDao getFloorServiceDaoImpl() {
+        return floorServiceDaoImpl;
     }
 
-    public void setStoreServiceDaoImpl(IStoreServiceDao storeServiceDaoImpl) {
-        this.storeServiceDaoImpl = storeServiceDaoImpl;
+    public void setFloorServiceDaoImpl(IFloorServiceDao floorServiceDaoImpl) {
+        this.floorServiceDaoImpl = floorServiceDaoImpl;
     }
 }

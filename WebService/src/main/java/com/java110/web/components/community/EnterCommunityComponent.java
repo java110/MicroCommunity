@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
  * 入驻小区组件处理类
  *
  * add by wuxw 2019-04-15
+ *
+ *
+ *
  */
 @Component("enterCommunity")
 public class EnterCommunityComponent {

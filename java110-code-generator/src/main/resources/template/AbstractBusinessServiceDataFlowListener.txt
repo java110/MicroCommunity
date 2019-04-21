@@ -57,7 +57,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         }
         currentStoreInfo.put("bId",business.getbId());
 
-        $flushBusinessInfo$
+        $autoSaveDelBusiness$
 
         currentStoreInfo.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStoreInfo(currentStoreInfo);

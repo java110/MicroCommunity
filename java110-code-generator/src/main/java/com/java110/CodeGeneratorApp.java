@@ -14,9 +14,12 @@ public class CodeGeneratorApp
     public static void main( String[] args )
     {
         Data data = new Data();
+        data.setId("floorId");
         data.setName("floor");
         data.setDesc("小区楼");
-        data.setBusinessTypeCd("sdddfff");
+        data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_FLOOR_INFO");
+        data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_FLOOR_INFO");
+        data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_FLOOR_INFO");
         data.setBusinessTableName("business_floor");
         data.setTableName("f_floor");
         Map<String,String> param = new HashMap<String,String>();
@@ -43,5 +46,11 @@ public class CodeGeneratorApp
 
         GeneratorServiceDaoImplMapperListener generatorServiceDaoImplMapperListener = new GeneratorServiceDaoImplMapperListener();
         generatorServiceDaoImplMapperListener.generator(data);
+
+        GeneratorUpdateInfoListener generatorUpdateInfoListener = new GeneratorUpdateInfoListener();
+        generatorUpdateInfoListener.generator(data);
+
+        GeneratorDeleteInfoListener generatorDeleteInfoListener = new GeneratorDeleteInfoListener();
+        generatorDeleteInfoListener.generator(data);
     }
 }
