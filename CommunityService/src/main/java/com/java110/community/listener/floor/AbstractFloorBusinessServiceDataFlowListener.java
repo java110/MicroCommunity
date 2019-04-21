@@ -5,7 +5,6 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.community.dao.IFloorServiceDao;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
@@ -39,6 +38,7 @@ public abstract class AbstractFloorBusinessServiceDataFlowListener extends Abstr
         businessFloorInfo.put("newBId",businessFloorInfo.get("b_id"));
         businessFloorInfo.put("floorId",businessFloorInfo.get("floor_id"));
 businessFloorInfo.put("operate",businessFloorInfo.get("operate"));
+businessFloorInfo.put("name",businessFloorInfo.get("name"));
 businessFloorInfo.put("remark",businessFloorInfo.get("remark"));
 businessFloorInfo.put("userId",businessFloorInfo.get("user_id"));
 businessFloorInfo.put("floorNum",businessFloorInfo.get("floor_num"));
@@ -56,14 +56,18 @@ businessFloorInfo.put("floorNum",businessFloorInfo.get("floor_num"));
         Map info = new HashMap();
         info.put("floorId",businessFloor.getString("floorId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        Map currentFloorInfo = getFloorServiceDaoImpl().getFloorInfo(info);
-        if(currentFloorInfo == null || currentFloorInfo.isEmpty()){
+        List<Map> currentFloorInfos = getFloorServiceDaoImpl().getFloorInfo(info);
+        if(currentFloorInfos == null || currentFloorInfos.size() != 1){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
+
+        Map currentFloorInfo = currentFloorInfos.get(0);
+
         currentFloorInfo.put("bId",business.getbId());
 
         currentFloorInfo.put("floorId",currentFloorInfo.get("floor_id"));
 currentFloorInfo.put("operate",currentFloorInfo.get("operate"));
+currentFloorInfo.put("name",currentFloorInfo.get("name"));
 currentFloorInfo.put("remark",currentFloorInfo.get("remark"));
 currentFloorInfo.put("userId",currentFloorInfo.get("user_id"));
 currentFloorInfo.put("floorNum",currentFloorInfo.get("floor_num"));

@@ -51,10 +51,13 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         Map info = new HashMap();
         info.put("storeId",businessStore.getString("storeId"));
         info.put("statusCd",StatusConstant.STATUS_CD_VALID);
-        Map currentStoreInfo = getStoreServiceDaoImpl().getStoreInfo(info);
-        if(currentStoreInfo == null || currentStoreInfo.isEmpty()){
+        List<Map> currentStoreInfos = getStoreServiceDaoImpl().getStoreInfo(info);
+        if(currentStoreInfos == null || currentStoreInfos.size() != 1){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
         }
+
+        Map currentStoreInfo = currentStoreInfos.get(0);
+
         currentStoreInfo.put("bId",business.getbId());
 
         $autoSaveDelBusiness$

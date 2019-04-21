@@ -29,7 +29,7 @@ public class CodeGeneratorApp
         param.put("floorId","floor_id");
         param.put("bId","b_id");
         param.put("floorNum","floor_num");
-        param.put("userId","user_id");
+        param.put("name","name");
         param.put("statusCd","status_cd");
         param.put("userId","user_id");
         param.put("remark","remark");

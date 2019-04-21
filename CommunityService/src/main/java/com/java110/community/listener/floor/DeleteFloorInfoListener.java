@@ -7,10 +7,10 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.community.dao.IFloorServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
-import com.java110.community.dao.IFloorServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +60,27 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessFloor 节点 按理这里不应该处理，程序上支持，以防真有这种业务
+        //处理 businessFloor 节点
         if(data.containsKey("businessFloor")){
-            JSONObject businessFloor = data.getJSONObject("businessFloor");
-            doBusinessFloor(business,businessFloor);
-            dataFlowContext.addParamOut("floorId",businessFloor.getString("floorId"));
+            //处理 businessFloor 节点
+            if(data.containsKey("businessFloor")){
+                Object _obj = data.get("businessFloor");
+                JSONArray businessFloors = null;
+                if(_obj instanceof JSONObject){
+                    businessFloors = new JSONArray();
+                    businessFloors.add(_obj);
+                }else {
+                    businessFloors = (JSONArray)_obj;
+                }
+                //JSONObject businessFloor = data.getJSONObject("businessFloor");
+                for (int _floorIndex = 0; _floorIndex < businessFloors.size();_floorIndex++) {
+                    JSONObject businessFloor = businessFloors.getJSONObject(_floorIndex);
+                    doBusinessFloor(business, businessFloor);
+                    if(_obj instanceof JSONObject) {
+                        dataFlowContext.addParamOut("floorId", businessFloor.getString("floorId"));
+                    }
+                }
+            }
         }
 
 
@@ -86,11 +102,14 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
         info.put("operate",StatusConstant.OPERATE_DEL);
 
         //小区楼信息
-        Map businessFloorInfo = floorServiceDaoImpl.getBusinessFloorInfo(info);
-        if( businessFloorInfo != null && !businessFloorInfo.isEmpty()) {
-            flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_INVALID);
-            floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
-            dataFlowContext.addParamOut("floorId",businessFloorInfo.get("floor_id"));
+        List<Map> businessFloorInfos = floorServiceDaoImpl.getBusinessFloorInfo(info);
+        if( businessFloorInfos != null && businessFloorInfos.size() >0) {
+            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size();_floorIndex++) {
+                Map businessFloorInfo = businessFloorInfos.get(_floorIndex);
+                flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_INVALID);
+                floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
+                dataFlowContext.addParamOut("floorId",businessFloorInfo.get("floor_id"));
+            }
         }
 
     }
@@ -113,19 +132,20 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
         delInfo.put("bId",business.getbId());
         delInfo.put("operate",StatusConstant.OPERATE_DEL);
         //小区楼信息
-        Map floorInfo = floorServiceDaoImpl.getFloorInfo(info);
-        if(floorInfo != null && !floorInfo.isEmpty()){
+        List<Map> floorInfo = floorServiceDaoImpl.getFloorInfo(info);
+        if(floorInfo != null && floorInfo.size() > 0){
 
             //小区楼信息
-            Map businessFloorInfo = floorServiceDaoImpl.getBusinessFloorInfo(delInfo);
+            List<Map> businessFloorInfos = floorServiceDaoImpl.getBusinessFloorInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessFloorInfo == null || businessFloorInfo.isEmpty()){
+            if(businessFloorInfos == null ||  businessFloorInfos.size() == 0){
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（floor），程序内部异常,请检查！ "+delInfo);
             }
-
-            flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_VALID);
-            floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
-            dataFlowContext.addParamOut("floorId",floorInfo.get("floor_id"));
+            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size();_floorIndex++) {
+                Map businessFloorInfo = businessFloorInfos.get(_floorIndex);
+                flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_VALID);
+                floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
+            }
         }
     }
 

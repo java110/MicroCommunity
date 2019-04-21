@@ -36,7 +36,7 @@ public interface IFloorServiceDao {
      * @return 小区楼信息
      * @throws DAOException
      */
-    public Map getBusinessFloorInfo(Map info) throws DAOException;
+    public List<Map> getBusinessFloorInfo(Map info) throws DAOException;
 
 
 
@@ -58,7 +58,7 @@ public interface IFloorServiceDao {
      * @return 小区楼信息
      * @throws DAOException
      */
-    public Map getFloorInfo(Map info) throws DAOException;
+    public List<Map> getFloorInfo(Map info) throws DAOException;
 
 
 

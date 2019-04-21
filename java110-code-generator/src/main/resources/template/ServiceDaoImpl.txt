@@ -49,19 +49,13 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      * @throws DAOException
      */
     @Override
-    public Map getBusinessStoreInfo(Map info) throws DAOException {
+    public List<Map> getBusinessStoreInfo(Map info) throws DAOException {
 
         logger.debug("查询商户信息 入参 info : {}",info);
 
         List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getBusinessStoreInfo",info);
-        if(businessStoreInfos == null){
-            return null;
-        }
-        if(businessStoreInfos.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessStoreInfos，"+ JSONObject.toJSONString(info));
-        }
 
-        return businessStoreInfos.get(0);
+        return businessStoreInfos;
     }
 
 
@@ -90,18 +84,12 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      * @throws DAOException
      */
     @Override
-    public Map getStoreInfo(Map info) throws DAOException {
+    public List<Map> getStoreInfo(Map info) throws DAOException {
         logger.debug("查询商户信息 入参 info : {}",info);
 
         List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreInfo",info);
-        if(businessStoreInfos == null || businessStoreInfos.size() == 0){
-            return null;
-        }
-        if(businessStoreInfos.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getStoreInfo，"+ JSONObject.toJSONString(info));
-        }
 
-        return businessStoreInfos.get(0);
+        return businessStoreInfos;
     }
 
 

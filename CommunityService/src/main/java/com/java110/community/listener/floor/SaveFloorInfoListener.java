@@ -3,25 +3,18 @@ package com.java110.community.listener.floor;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
-import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
-import com.java110.common.util.DateUtil;
-import com.java110.common.util.StringUtil;
+import com.java110.community.dao.IFloorServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
-import com.java110.community.dao.IFloorServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +54,22 @@ public class SaveFloorInfoListener extends AbstractFloorBusinessServiceDataFlowL
 
         //处理 businessFloor 节点
         if(data.containsKey("businessFloor")){
-            JSONObject businessFloor = data.getJSONObject("businessFloor");
-            doBusinessFloor(business,businessFloor);
-            dataFlowContext.addParamOut("floorId",businessFloor.getString("floorId"));
+            Object _obj = data.get("businessFloor");
+            JSONArray businessFloors = null;
+            if(_obj instanceof JSONObject){
+                businessFloors = new JSONArray();
+                businessFloors.add(_obj);
+            }else {
+                businessFloors = (JSONArray)_obj;
+            }
+            //JSONObject businessFloor = data.getJSONObject("businessFloor");
+            for (int _floorIndex = 0; _floorIndex < businessFloors.size();_floorIndex++) {
+                JSONObject businessFloor = businessFloors.getJSONObject(_floorIndex);
+                doBusinessFloor(business, businessFloor);
+                if(_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("floorId", businessFloor.getString("floorId"));
+                }
+            }
         }
     }
 
@@ -81,10 +87,12 @@ public class SaveFloorInfoListener extends AbstractFloorBusinessServiceDataFlowL
         info.put("operate",StatusConstant.OPERATE_ADD);
 
         //小区楼信息
-        Map businessFloorInfo = floorServiceDaoImpl.getBusinessFloorInfo(info);
-        if( businessFloorInfo != null && !businessFloorInfo.isEmpty()) {
+        List<Map> businessFloorInfo = floorServiceDaoImpl.getBusinessFloorInfo(info);
+        if( businessFloorInfo != null && businessFloorInfo.size() >0) {
             floorServiceDaoImpl.saveFloorInfoInstance(info);
-            dataFlowContext.addParamOut("floorId",businessFloorInfo.get("floor_id"));
+            if(businessFloorInfo.size() == 1) {
+                dataFlowContext.addParamOut("floorId", businessFloorInfo.get(0).get("floor_id"));
+            }
         }
     }
 
@@ -104,11 +112,9 @@ public class SaveFloorInfoListener extends AbstractFloorBusinessServiceDataFlowL
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
         //小区楼信息
-        Map floorInfo = floorServiceDaoImpl.getFloorInfo(info);
-        if(floorInfo != null && !floorInfo.isEmpty()){
-            paramIn.put("floorId",floorInfo.get("floor_id").toString());
+        List<Map> floorInfo = floorServiceDaoImpl.getFloorInfo(info);
+        if(floorInfo != null && floorInfo.size() > 0){
             floorServiceDaoImpl.updateFloorInfoInstance(paramIn);
-            dataFlowContext.addParamOut("floorId",floorInfo.get("floor_id"));
         }
     }
 

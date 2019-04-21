@@ -36,7 +36,7 @@ public interface IStoreServiceDao {
      * @return 商户信息
      * @throws DAOException
      */
-    public Map getBusinessStoreInfo(Map info) throws DAOException;
+    public List<Map> getBusinessStoreInfo(Map info) throws DAOException;
 
 
 
@@ -58,7 +58,7 @@ public interface IStoreServiceDao {
      * @return 商户信息
      * @throws DAOException
      */
-    public Map getStoreInfo(Map info) throws DAOException;
+    public List<Map> getStoreInfo(Map info) throws DAOException;
 
 
 

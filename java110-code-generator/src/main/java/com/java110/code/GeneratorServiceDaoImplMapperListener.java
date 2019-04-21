@@ -15,7 +15,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
     //        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
 
     private String dealSaveBusinessInfo(Data data,String fileContext){
-        String sql = "insert info "+ data.getBusinessTableName() + "(\n";
+        String sql = "insert into "+ data.getBusinessTableName() + "(\n";
         String sqlValue = "\n) values (\n";
 
         Map<String,String> params = data.getParams();
@@ -89,7 +89,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
      *         s.operate = 'ADD' and s.b_id=#{bId}
      */
     private String dealSaveInfoInstance(Data data,String fileContext){
-        String sql = "insert info "+ data.getTableName() + "(\n";
+        String sql = "insert into "+ data.getTableName() + "(\n";
         String sqlValue = "select ";
         String sqlWhere = " from "+ data.getBusinessTableName() +" t where 1=1\n";
 
@@ -127,7 +127,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         sql = sql.endsWith(",")?sql.substring(0,sql.length()-1):sql;
         sqlValue = sqlValue.endsWith(",")?sqlValue.substring(0,sqlValue.length()-1):sqlValue;
 
-        sql += (sqlValue +"\n)" + sqlWhere);
+        sql += ("\n) "+ sqlValue + sqlWhere);
 
         fileContext = fileContext.replace("$saveInfoInstance$",sql);
 

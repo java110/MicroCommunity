@@ -63,9 +63,25 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
 
         //处理 businessStore 节点
         if(data.containsKey("businessStore")){
-            JSONObject businessStore = data.getJSONObject("businessStore");
-            doBusinessStore(business,businessStore);
-            dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
+            //处理 businessStore 节点
+            if(data.containsKey("businessStore")){
+                Object _obj = data.get("businessStore");
+                JSONArray businessStores = null;
+                if(_obj instanceof JSONObject){
+                    businessStores = new JSONArray();
+                    businessStores.add(_obj);
+                }else {
+                    businessStores = (JSONArray)_obj;
+                }
+                //JSONObject businessStore = data.getJSONObject("businessStore");
+                for (int _storeIndex = 0; _storeIndex < businessStores.size();_storeIndex++) {
+                    JSONObject businessStore = businessStores.getJSONObject(_storeIndex);
+                    doBusinessStore(business, businessStore);
+                    if(_obj instanceof JSONObject) {
+                        dataFlowContext.addParamOut("storeId", businessStore.getString("storeId"));
+                    }
+                }
+            }
         }
     }
 
@@ -85,11 +101,16 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         info.put("operate",StatusConstant.OPERATE_ADD);
 
         //商户信息
-        Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
-        if( businessStoreInfo != null && !businessStoreInfo.isEmpty()) {
-            flushBusinessStoreInfo(businessStoreInfo,StatusConstant.STATUS_CD_VALID);
-            storeServiceDaoImpl.updateStoreInfoInstance(businessStoreInfo);
-            dataFlowContext.addParamOut("storeId",businessStoreInfo.get("store_id"));
+        List<Map> businessStoreInfos = storeServiceDaoImpl.getBusinessStoreInfo(info);
+        if( businessStoreInfos != null && businessStoreInfos.size() >0) {
+            for (int _storeIndex = 0; _storeIndex < businessStoreInfos.size();_storeIndex++) {
+                Map businessStoreInfo = businessStoreInfos.get(_storeIndex);
+                flushBusinessStoreInfo(businessStoreInfo,StatusConstant.STATUS_CD_VALID);
+                storeServiceDaoImpl.updateStoreInfoInstance(businessStoreInfo);
+                if(businessStoreInfo.size() == 1) {
+                    dataFlowContext.addParamOut("storeId", businessStoreInfo.get("store_id"));
+                }
+            }
         }
 
     }
@@ -111,19 +132,20 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         delInfo.put("bId",business.getbId());
         delInfo.put("operate",StatusConstant.OPERATE_DEL);
         //商户信息
-        Map storeInfo = storeServiceDaoImpl.getStoreInfo(info);
-        if(storeInfo != null && !storeInfo.isEmpty()){
+        List<Map> storeInfo = storeServiceDaoImpl.getStoreInfo(info);
+        if(storeInfo != null && storeInfo.size() > 0){
 
             //商户信息
-            Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(delInfo);
+            List<Map> businessStoreInfos = storeServiceDaoImpl.getBusinessStoreInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessStoreInfo == null || businessStoreInfo.isEmpty()){
+            if(businessStoreInfos == null || businessStoreInfos.size() == 0){
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（store），程序内部异常,请检查！ "+delInfo);
             }
-
-            flushBusinessStoreInfo(businessStoreInfo,StatusConstant.STATUS_CD_VALID);
-            storeServiceDaoImpl.updateStoreInfoInstance(businessStoreInfo);
-            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
+            for (int _storeIndex = 0; _storeIndex < businessStoreInfos.size();_storeIndex++) {
+                Map businessStoreInfo = businessStoreInfos.get(_storeIndex);
+                flushBusinessStoreInfo(businessStoreInfo,StatusConstant.STATUS_CD_VALID);
+                storeServiceDaoImpl.updateStoreInfoInstance(businessStoreInfo);
+            }
         }
 
     }

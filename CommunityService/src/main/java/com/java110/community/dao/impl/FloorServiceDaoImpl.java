@@ -9,7 +9,6 @@ import com.java110.core.base.dao.BaseServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -49,19 +48,13 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
      * @throws DAOException
      */
     @Override
-    public Map getBusinessFloorInfo(Map info) throws DAOException {
+    public List<Map> getBusinessFloorInfo(Map info) throws DAOException {
 
         logger.debug("查询小区楼信息 入参 info : {}",info);
 
         List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.getBusinessFloorInfo",info);
-        if(businessFloorInfos == null){
-            return null;
-        }
-        if(businessFloorInfos.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：businessFloorInfos，"+ JSONObject.toJSONString(info));
-        }
 
-        return businessFloorInfos.get(0);
+        return businessFloorInfos;
     }
 
 
@@ -90,18 +83,12 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
      * @throws DAOException
      */
     @Override
-    public Map getFloorInfo(Map info) throws DAOException {
+    public List<Map> getFloorInfo(Map info) throws DAOException {
         logger.debug("查询小区楼信息 入参 info : {}",info);
 
         List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.getFloorInfo",info);
-        if(businessFloorInfos == null || businessFloorInfos.size() == 0){
-            return null;
-        }
-        if(businessFloorInfos.size() >1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"根据条件查询有多条数据,数据异常，请检查：getFloorInfo，"+ JSONObject.toJSONString(info));
-        }
 
-        return businessFloorInfos.get(0);
+        return businessFloorInfos;
     }
 
 

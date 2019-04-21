@@ -1,27 +1,20 @@
-package com.java110.store.listener;
+package com.java110.community.listener.store;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.StatusConstant;
-import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
-import com.java110.common.util.DateUtil;
-import com.java110.common.util.StringUtil;
+import com.java110.community.dao.IStoreServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
-import com.java110.store.dao.IStoreServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +54,22 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
 
         //处理 businessStore 节点
         if(data.containsKey("businessStore")){
-            JSONObject businessStore = data.getJSONObject("businessStore");
-            doBusinessStore(business,businessStore);
-            dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
+            Object _obj = data.get("businessStore");
+            JSONArray businessStores = null;
+            if(_obj instanceof JSONObject){
+                businessStores = new JSONArray();
+                businessStores.add(_obj);
+            }else {
+                businessStores = (JSONArray)_obj;
+            }
+            //JSONObject businessStore = data.getJSONObject("businessStore");
+            for (int _storeIndex = 0; _storeIndex < businessStores.size();_storeIndex++) {
+                JSONObject businessStore = businessStores.getJSONObject(_storeIndex);
+                doBusinessStore(business, businessStore);
+                if(_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("storeId", businessStore.getString("storeId"));
+                }
+            }
         }
     }
 
@@ -81,10 +87,12 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         info.put("operate",StatusConstant.OPERATE_ADD);
 
         //商户信息
-        Map businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
-        if( businessStoreInfo != null && !businessStoreInfo.isEmpty()) {
+        List<Map> businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
+        if( businessStoreInfo != null && businessStoreInfo.size() >0) {
             storeServiceDaoImpl.saveStoreInfoInstance(info);
-            dataFlowContext.addParamOut("storeId",businessStoreInfo.get("store_id"));
+            if(businessStoreInfo.size() == 1) {
+                dataFlowContext.addParamOut("storeId", businessStoreInfo.get(0).get("store_id"));
+            }
         }
     }
 
@@ -104,11 +112,9 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         paramIn.put("bId",bId);
         paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
         //商户信息
-        Map storeInfo = storeServiceDaoImpl.getStoreInfo(info);
-        if(storeInfo != null && !storeInfo.isEmpty()){
-            paramIn.put("storeId",storeInfo.get("store_id").toString());
+        List<Map> storeInfo = storeServiceDaoImpl.getStoreInfo(info);
+        if(storeInfo != null && storeInfo.size() > 0){
             storeServiceDaoImpl.updateStoreInfoInstance(paramIn);
-            dataFlowContext.addParamOut("storeId",storeInfo.get("store_id"));
         }
     }
 
