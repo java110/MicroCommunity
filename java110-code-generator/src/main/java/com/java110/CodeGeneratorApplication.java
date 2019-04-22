@@ -1,6 +1,15 @@
 package com.java110;
 
-import com.java110.code.*;
+
+
+import com.java110.code.Data;
+import com.java110.code.GeneratorAbstractBussiness;
+import com.java110.code.GeneratorDeleteInfoListener;
+import com.java110.code.GeneratorIServiceDaoListener;
+import com.java110.code.GeneratorSaveInfoListener;
+import com.java110.code.GeneratorServiceDaoImplListener;
+import com.java110.code.GeneratorServiceDaoImplMapperListener;
+import com.java110.code.GeneratorUpdateInfoListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +18,17 @@ import java.util.Map;
  * Hello world!
  *
  */
-public class CodeGeneratorApp
-{
-    public static void main( String[] args )
-    {
+public class CodeGeneratorApplication {
+
+    protected CodeGeneratorApplication() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
+    }
+    /**
+     *  代码生成器 入口方法
+     * @param args 参数
+     */
+    public static void main(String[] args) {
         Data data = new Data();
         data.setId("floorId");
         data.setName("floor");
@@ -25,17 +41,17 @@ public class CodeGeneratorApp
         data.setDeleteBusinessTypeCdValue("510100050001");
         data.setBusinessTableName("business_floor");
         data.setTableName("f_floor");
-        Map<String,String> param = new HashMap<String,String>();
-        param.put("floorId","floor_id");
-        param.put("bId","b_id");
-        param.put("floorNum","floor_num");
-        param.put("name","name");
-        param.put("statusCd","status_cd");
-        param.put("userId","user_id");
-        param.put("remark","remark");
-        param.put("operate","operate");
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("floorId", "floor_id");
+        param.put("bId", "b_id");
+        param.put("floorNum", "floor_num");
+        param.put("name", "name");
+        param.put("statusCd", "status_cd");
+        param.put("userId", "user_id");
+        param.put("remark", "remark");
+        param.put("operate", "operate");
         data.setParams(param);
-        GeneratorSaveInfoListener  generatorSaveInfoListener = new GeneratorSaveInfoListener();
+        GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
         generatorSaveInfoListener.generator(data);
 
         GeneratorAbstractBussiness generatorAbstractBussiness = new GeneratorAbstractBussiness();
@@ -47,7 +63,8 @@ public class CodeGeneratorApp
         GeneratorServiceDaoImplListener generatorServiceDaoImplListener = new GeneratorServiceDaoImplListener();
         generatorServiceDaoImplListener.generator(data);
 
-        GeneratorServiceDaoImplMapperListener generatorServiceDaoImplMapperListener = new GeneratorServiceDaoImplMapperListener();
+        GeneratorServiceDaoImplMapperListener generatorServiceDaoImplMapperListener = null;
+        generatorServiceDaoImplMapperListener = new GeneratorServiceDaoImplMapperListener();
         generatorServiceDaoImplMapperListener.generator(data);
 
         GeneratorUpdateInfoListener generatorUpdateInfoListener = new GeneratorUpdateInfoListener();
