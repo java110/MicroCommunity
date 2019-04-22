@@ -3,6 +3,7 @@
 
   * [快速开始](README.md)
   * [安装部署](install.md)
+  * [编码规范](CodeStandards.md)
 
 * api接口
 
