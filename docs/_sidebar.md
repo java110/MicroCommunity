@@ -36,6 +36,8 @@
   * [小区成员入驻](services/community/communityMemberJoined.md)
   * [小区成员退出](services/community/communityMemberQuit.md)
   * [保存小区楼](services/floor/SaveFloorInfo.md)
+  * [修改小区楼](services/floor/UpdateFloorInfo.md)
+  * [删除小区楼](services/floor/DeleteFloorInfo.md)
 
 * 工具类接口
 

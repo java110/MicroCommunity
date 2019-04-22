@@ -1,8 +1,8 @@
 
 
-**1\. 保存小区楼**
+**1\. 修改小区楼**
 ###### 接口功能
-> API服务做保存小区楼时调用该接口
+> API服务做修改小区楼时调用该接口
 
 ###### URL
 > [http://floor-service/floorApi/service](http://floor-service/floorApi/service)
@@ -86,7 +86,7 @@ Content-Type:application/json
     }]
   },
   "business": {
-    "businessTypeCd": "510100030001",
+    "businessTypeCd": "510100040001",
     "bId":"1234567892",
     "remark": "备注",
     "datas": {

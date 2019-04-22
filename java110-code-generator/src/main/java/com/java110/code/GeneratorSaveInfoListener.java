@@ -42,6 +42,9 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
         String tmpLine = "";
         String _tmpLine ="";
         for(String key : tmpParams.keySet()){
+            if("operate".equals(key) || "statusCd".equals(key) || "bId".equals(key)){
+                continue;
+            }
             tmpLine += "|business"+toUpperCaseFirstOne(data.getName())+"Info|"+key+"|1|String|30|-|-|\n";
             _tmpLine += "        \""+key+"\":\"填写具体值\",\n";
         }

@@ -1,8 +1,8 @@
 
 
-**1\. 保存小区楼**
+**1\. 删除小区楼**
 ###### 接口功能
-> API服务做保存小区楼时调用该接口
+> API服务做删除小区楼时调用该接口
 
 ###### URL
 > [http://floor-service/floorApi/service](http://floor-service/floorApi/service)
@@ -45,10 +45,6 @@
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
 |datas|businessFloorInfo|1|Object|-|小区成员|小区成员|
 |businessFloorInfo|floorId|1|String|30|-|-|
-|businessFloorInfo|name|1|String|30|-|-|
-|businessFloorInfo|remark|1|String|30|-|-|
-|businessFloorInfo|userId|1|String|30|-|-|
-|businessFloorInfo|floorNum|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -86,16 +82,12 @@ Content-Type:application/json
     }]
   },
   "business": {
-    "businessTypeCd": "510100030001",
+    "businessTypeCd": "510100050001",
     "bId":"1234567892",
     "remark": "备注",
     "datas": {
       "businessFloorInfo": {
-                "floorId":"填写具体值",
-        "name":"填写具体值",
-        "remark":"填写具体值",
-        "userId":"填写具体值",
-        "floorNum":"填写具体值"
+                "floorId":"填写存在的值"
       }
     },
     "attrs": [{
