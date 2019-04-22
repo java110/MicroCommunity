@@ -1,6 +1,7 @@
 package com.java110.web.controller;
 
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.exception.SMOException;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.controller.BaseController;
@@ -8,8 +9,10 @@ import com.java110.core.context.IPageData;
 import com.java110.web.smo.impl.LoginServiceSMOImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,27 +39,30 @@ public class CallComponentController extends BaseController {
             //@RequestBody String info,
             HttpServletRequest request){
         ResponseEntity<String> responseEntity = null;
-        try{
-            Assert.hasLength(componentCode,"参数错误，未传入组件编码");
-            Assert.hasLength(componentMethod,"参数错误，未传入调用组件方法");
+        try {
+            Assert.hasLength(componentCode, "参数错误，未传入组件编码");
+            Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
-            Assert.notNull(componentInstance,"未找到组件对应的处理类，请确认 "+componentCode);
+            Assert.notNull(componentInstance, "未找到组件对应的处理类，请确认 " + componentCode);
 
-            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod,IPageData.class);
+            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class);
 
-            Assert.notNull(cMethod,"未找到组件对应处理类的方法，请确认 "+componentCode+"方法："+componentMethod);
+            Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
 
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
-            logger.debug("组件编码{}，组件方法{}，pd 为{}",componentCode,componentMethod,pd.toString());
+            logger.debug("组件编码{}，组件方法{}，pd 为{}", componentCode, componentMethod, pd.toString());
 
-             responseEntity = (ResponseEntity<String>)cMethod.invoke(componentInstance,pd);
+            responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd);
 
-
+        }catch (SMOException e){
+            MultiValueMap<String, String> headers = new HttpHeaders();
+            headers.add("code",e.getResult().getCode());
+            responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e){
-            responseEntity = new ResponseEntity<>("调用组件失败"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {
             logger.debug("组件调用返回信息为{}",responseEntity);
             return responseEntity;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.common.constant.CommonConstant;
 import com.java110.core.base.controller.BaseController;
+import com.java110.core.smo.user.IUserInnerServiceSMO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,8 @@ public class RestApi extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(RestApi.class);
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
+
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
     /**
      * 健康检查 服务
      * @return
@@ -39,6 +42,16 @@ public class RestApi extends BaseController {
     @ApiOperation(value="服务健康检查", notes="test: 返回 2XX 表示服务正常")
     public String health(){
         return "";
+    }
+
+    /**
+     * 健康检查 服务
+     * @return
+     */
+    @RequestMapping(path = "/checkUserServiceVersion",method = RequestMethod.GET)
+    @ApiOperation(value="检查用服务版本", notes="test: 返回 2XX 表示服务正常")
+    public String checkUserServiceVersion(){
+        return userInnerServiceSMOImpl.getUserServiceVersion("test");
     }
 
 
