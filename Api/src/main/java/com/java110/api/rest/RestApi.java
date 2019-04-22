@@ -33,6 +33,7 @@ public class RestApi extends BaseController {
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
 
+    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
     /**
      * 健康检查 服务
@@ -200,5 +201,13 @@ public class RestApi extends BaseController {
 
     public void setApiServiceSMOImpl(IApiServiceSMO apiServiceSMOImpl) {
         this.apiServiceSMOImpl = apiServiceSMOImpl;
+    }
+
+    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
+        return userInnerServiceSMOImpl;
+    }
+
+    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
+        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
     }
 }

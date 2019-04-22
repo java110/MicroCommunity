@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -42,6 +43,7 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
+@EnableFeignClients(basePackages={"com.java110.core.smo"})
 public class ApiApplicationStart {
 
     private final static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
