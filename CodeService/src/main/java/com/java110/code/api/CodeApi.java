@@ -10,11 +10,15 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.CodeDataFlow;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.feign.code.ICodeApi;
+import com.java110.core.smo.code.ICodeApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -28,25 +32,37 @@ import java.util.UUID;
 @RestController
 public class CodeApi extends BaseController implements ICodeApi {
 
-    protected final static Logger logger = LoggerFactory.getLogger(CodeApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CodeApi.class);
 
 
     @Autowired
     IPrimaryKeyServiceSMO primaryKeyServiceSMOImpl;
 
+    /**
+     * 生成编码服务器 不支持Get方法请求
+     * @param request http 请求对象
+     * @return 不支持Get方法请求
+     */
+    @Deprecated
     @RequestMapping(path = "/codeApi/generate", method = RequestMethod.GET)
     public String generateGet(HttpServletRequest request) {
         return DataTransactionFactory.createCodeResponseJson(ResponseConstant.NO_TRANSACTION_ID, "-1",
                 ResponseConstant.RESULT_CODE_ERROR, "不支持Get方法请求").toJSONString();
     }
 
+    /**
+     * 生成编码服务器 不支持Get方法请求
+     * @param orderInfo 请求信息
+     * @param request http 请求对象
+     * @return 不支持Get方法请求
+     */
     @RequestMapping(path = "/codeApi/generate", method = RequestMethod.POST)
     public String generatePost(@RequestBody String orderInfo, HttpServletRequest request) {
         Map<String, String> headers = new HashMap<String, String>();
         try {
             getRequestInfo(request, headers);
             //预校验
-            preValiateOrderInfo(orderInfo, headers);
+            preValidateOrderInfo(orderInfo, headers);
             CodeDataFlow dataFlow = DataFlowFactory.newInstance(CodeDataFlow.class).builder(orderInfo, null);
             primaryKeyServiceSMOImpl.generateCode(dataFlow);
             return dataFlow.getResJson().toJSONString();
@@ -59,9 +75,9 @@ public class CodeApi extends BaseController implements ICodeApi {
     /**
      * 获取请求信息
      *
-     * @param request
-     * @param headers
-     * @throws RuntimeException
+     * @param request 请求信息封装
+     * @param headers 请求头信息
+     * @throws Exception 处理数据失败会返回Exception异常
      */
     private void getRequestInfo(HttpServletRequest request, Map headers) throws Exception {
         try {
@@ -76,9 +92,10 @@ public class CodeApi extends BaseController implements ICodeApi {
     /**
      * 这里预校验，请求报文中不能有 dataFlowId
      *
-     * @param orderInfo
+     * @param orderInfo 请求信息封装
+     * @param headers  请求头信息
      */
-    private void preValiateOrderInfo(String orderInfo, Map<String, String> headers) {
+    private void preValidateOrderInfo(String orderInfo, Map<String, String> headers) {
 
         Assert.jsonObjectHaveKey(orderInfo, "prefix", "没有包含prefix");
 
@@ -102,7 +119,7 @@ public class CodeApi extends BaseController implements ICodeApi {
      * @return
      */
     @Override
-    @RequestMapping(value = "/codeApi/generateCode",method = RequestMethod.POST)
+    @RequestMapping(value = "/codeApi/generateCode", method = RequestMethod.POST)
     public String generateCode(@RequestParam("prefix") String prefix) {
 
         try {

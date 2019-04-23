@@ -7,5 +7,5 @@ package com.java110.common.constant;
 public class PrivilegeCodeConstant {
 
     //入驻小区
-    public final static String PRIVILEGE_ENTER_COMMUNITY = "500201904008";
+    public static final  String PRIVILEGE_ENTER_COMMUNITY = "500201904008";
 }

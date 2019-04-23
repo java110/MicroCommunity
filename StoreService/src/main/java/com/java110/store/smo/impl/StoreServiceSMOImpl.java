@@ -2,41 +2,28 @@ package com.java110.store.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.KafkaConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.StateConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.kafka.KafkaFactory;
-import com.java110.common.log.LoggerEngine;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
-import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.DataFlowLinksCost;
 import com.java110.entity.center.DataFlowLog;
-import com.java110.entity.merchant.BoMerchant;
-import com.java110.entity.merchant.BoMerchantAttr;
-import com.java110.entity.merchant.Merchant;
-import com.java110.entity.merchant.MerchantAttr;
-import com.java110.entity.order.BusiOrder;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
-import com.java110.feign.base.IPrimaryKeyService;
-import com.java110.store.dao.IStoreServiceDao;
 import com.java110.store.smo.IStoreServiceSMO;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户服务信息管理业务信息实现
@@ -46,78 +33,80 @@ import java.util.*;
 @Transactional
 public class StoreServiceSMOImpl extends BaseServiceSMO implements IStoreServiceSMO {
 
-    private final static Logger logger = LoggerFactory.getLogger(StoreServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StoreServiceSMOImpl.class);
 
-        @Override
-        public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException {
-            try {
-                Assert.hasLength(businessServiceDataFlow.getbId(),"bId 不能为空");
+    @Override
+    public JSONObject service(BusinessServiceDataFlow businessServiceDataFlow) throws SMOException {
+        try {
+            Assert.hasLength(businessServiceDataFlow.getbId(), "bId 不能为空");
 
-                BusinessServiceDataFlowEventPublishing.multicastEvent(businessServiceDataFlow);
-                Assert.notEmpty(businessServiceDataFlow.getResJson(),"用户服务["+businessServiceDataFlow.getBusinessType()+"]没有返回内容");
-            } catch (Exception e) {
-                logger.error("用户信息处理异常",e);
-                throw new SMOException(ResponseConstant.RESULT_PARAM_ERROR,"用户信息处理异常"+e.getMessage());
-            }finally {
-                if(businessServiceDataFlow == null){
-                    return null;
-                }
-
-                //这里记录日志
-                Date endDate = DateUtil.getCurrentDate();
-
-                businessServiceDataFlow.setEndDate(endDate);
-                //添加耗时
-                DataFlowFactory.addCostTime(businessServiceDataFlow, "service", "业务处理总耗时",
-                        businessServiceDataFlow.getStartDate(), businessServiceDataFlow.getEndDate());
-                //保存耗时
-                saveCostTimeLogMessage(businessServiceDataFlow);
-                //保存日志
-                saveLogMessage(businessServiceDataFlow);
+            BusinessServiceDataFlowEventPublishing.multicastEvent(businessServiceDataFlow);
+            Assert.notEmpty(businessServiceDataFlow.getResJson(), "用户服务[" + businessServiceDataFlow.getBusinessType() + "]没有返回内容");
+        } catch (Exception e) {
+            logger.error("用户信息处理异常", e);
+            throw new SMOException(ResponseConstant.RESULT_PARAM_ERROR, "用户信息处理异常" + e.getMessage());
+        } finally {
+            if (businessServiceDataFlow == null) {
+                return null;
             }
-            return businessServiceDataFlow.getResJson();
+
+            //这里记录日志
+            Date endDate = DateUtil.getCurrentDate();
+
+            businessServiceDataFlow.setEndDate(endDate);
+            //添加耗时
+            DataFlowFactory.addCostTime(businessServiceDataFlow, "service", "业务处理总耗时",
+                    businessServiceDataFlow.getStartDate(), businessServiceDataFlow.getEndDate());
+            //保存耗时
+            saveCostTimeLogMessage(businessServiceDataFlow);
+            //保存日志
+            saveLogMessage(businessServiceDataFlow);
+        }
+        return businessServiceDataFlow.getResJson();
     }
 
     /**
      * 保存日志信息
-     * @param businessServiceDataFlow
+     *
+     * @param businessServiceDataFlow 保存日志对象
      */
-    private void saveLogMessage(BusinessServiceDataFlow businessServiceDataFlow){
+    private void saveLogMessage(BusinessServiceDataFlow businessServiceDataFlow) {
 
-        try{
-            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))){
-                for(DataFlowLog dataFlowLog :businessServiceDataFlow.getLogDatas()) {
+        try {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_LOG_ON_OFF))) {
+                for (DataFlowLog dataFlowLog : businessServiceDataFlow.getLogDatas()) {
                     KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_LOG_NAME, "", JSONObject.toJSONString(dataFlowLog));
                 }
             }
-        }catch (Exception e){
-            logger.error("报错日志出错了，",e);
+        } catch (Exception e) {
+            logger.error("报错日志出错了，", e);
         }
     }
 
     /**
      * 保存耗时信息
-     * @param businessServiceDataFlow
+     *
+     * @param businessServiceDataFlow 保存耗时对象
      */
-    private void saveCostTimeLogMessage(BusinessServiceDataFlow businessServiceDataFlow){
-        try{
-            if(MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))){
+    private void saveCostTimeLogMessage(BusinessServiceDataFlow businessServiceDataFlow) {
+        try {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_COST_TIME_ON_OFF))) {
                 List<DataFlowLinksCost> dataFlowLinksCosts = businessServiceDataFlow.getLinksCostDates();
                 JSONObject costDate = new JSONObject();
                 JSONArray costDates = new JSONArray();
                 JSONObject newObj = null;
-                for(DataFlowLinksCost dataFlowLinksCost : dataFlowLinksCosts){
+                for (DataFlowLinksCost dataFlowLinksCost : dataFlowLinksCosts) {
                     newObj = JSONObject.parseObject(JSONObject.toJSONString(dataFlowLinksCost));
-                    newObj.put("dataFlowId",businessServiceDataFlow.getDataFlowId());
-                    newObj.put("transactionId",businessServiceDataFlow.getTransactionId());
+                    newObj.put("dataFlowId", businessServiceDataFlow.getDataFlowId());
+                    newObj.put("transactionId", businessServiceDataFlow.getTransactionId());
                     costDates.add(newObj);
                 }
-                costDate.put("costDates",costDates);
+                costDate.put("costDates", costDates);
 
-                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_COST_TIME_LOG_NAME,"",costDate.toJSONString());
+                KafkaFactory.sendKafkaMessage(KafkaConstant.TOPIC_COST_TIME_LOG_NAME, "", costDate.toJSONString());
             }
-        }catch (Exception e){
-            logger.error("报错日志出错了，",e);
+        } catch (Exception e) {
+            logger.error("报错日志出错了，", e);
         }
     }
 }

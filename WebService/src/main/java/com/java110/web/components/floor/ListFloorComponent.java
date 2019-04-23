@@ -15,7 +15,12 @@ public class ListFloorComponent {
     @Autowired
     private IFloorServiceSMO floorServiceSMOImpl;
 
-    public ResponseEntity<String> list(IPageData pd){
+    /**
+     * 查询小区楼信息
+     * @param pd 页面封装对象 包含页面请求数据
+     * @return ResponseEntity对象返回给页面
+     */
+    public ResponseEntity<String> list(IPageData pd) {
         return floorServiceSMOImpl.listFloor(pd);
     }
 

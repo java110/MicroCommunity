@@ -1,30 +1,22 @@
 package com.java110.core.base.smo;
 
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.log.LoggerEngine;
-import com.java110.common.util.Assert;
 import com.java110.common.util.ProtocolUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
-import com.java110.core.context.BusinessServiceDataFlow;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.IPageData;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.feign.base.IPrimaryKeyService;
-import org.apache.commons.lang3.math.NumberUtils;
+import com.java110.core.smo.code.IPrimaryKeyInnerServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 所有服务端的基类
@@ -34,7 +26,7 @@ import java.util.Map;
  */
 public class BaseServiceSMO extends AppBase {
 
-    private final static Logger logger = LoggerFactory.getLogger(BaseServiceSMO.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseServiceSMO.class);
 
     /**
      * 主键生成
@@ -43,9 +35,9 @@ public class BaseServiceSMO extends AppBase {
      * @return
      * @throws Exception
      */
-    protected String queryPrimaryKey(IPrimaryKeyService iPrimaryKeyService,String type) throws Exception{
+    protected String queryPrimaryKey(IPrimaryKeyInnerServiceSMO iPrimaryKeyService, String type) throws Exception {
         JSONObject data = new JSONObject();
-        data.put("type",type);
+        data.put("type", type);
         //生成的ID
         String targetId = "-1";
         //要求接口返回 {"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}

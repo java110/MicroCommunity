@@ -1,6 +1,5 @@
 package com.java110.log;
 
-import com.java110.feign.code.ICodeApi;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

@@ -16,7 +16,6 @@
         <module>LogService</module>
         <module>FeeService</module>
         <module>eureka</module>
-        <module>java110-feign</module>
         <module>java110-core</module>
         <module>java110-service</module>
         <module>CodeService</module>
@@ -150,11 +149,6 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>java110-core</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>java110-feign</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
 
