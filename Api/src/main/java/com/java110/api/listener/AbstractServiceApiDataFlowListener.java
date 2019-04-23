@@ -33,6 +33,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
 
     private final static Logger logger = LoggerFactory.getLogger(AbstractServiceApiDataFlowListener.class);
 
+    protected final static int DEFAULT_ORDER = 1;
+
     @Autowired
     private RestTemplate restTemplate;
 

@@ -21,6 +21,7 @@ public class ListFloorComponent {
      * @return ResponseEntity对象返回给页面
      */
     public ResponseEntity<String> list(IPageData pd) {
+
         return floorServiceSMOImpl.listFloor(pd);
     }
 

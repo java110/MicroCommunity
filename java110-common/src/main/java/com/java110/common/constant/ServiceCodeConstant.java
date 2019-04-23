@@ -356,5 +356,9 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_CHECK_USER_HAS_PRIVILEGE = "check.user.hasPrivilege";
 
 
+    //查询小区楼
+    public static final String SERVICE_CODE_QUERY_FLOOR="floor.queryFloors";
+
+
 
 }
