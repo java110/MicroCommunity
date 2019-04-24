@@ -150,7 +150,7 @@ and t.b_id= #{bId}
         SELECT
             f.`floor_id` floorId,
             f.`floor_num` floorNum,
-            f.`name`,
+            f.`name` floorName,
             f.`remark`,
             f.`user_id` userId,
             cm.`community_id` communityId
