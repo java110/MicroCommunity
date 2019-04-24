@@ -1,5 +1,6 @@
 package com.java110.core.smo.user;
 
+import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UserDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * 用户服务接口类（供服务间调用）
  */
-@FeignClient("user-service")
+@FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/userApi")
 public interface IUserInnerServiceSMO {
 

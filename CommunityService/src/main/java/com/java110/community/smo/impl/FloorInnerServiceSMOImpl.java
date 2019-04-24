@@ -91,12 +91,12 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
      * @return 批量userIds 信息
      */
     private String[] getUserIds(List<FloorDto> floors) {
-        List<String> userIds = new ArrayList<>();
+        List<String> userIds = new ArrayList<String>();
         for (FloorDto floor : floors) {
             userIds.add(floor.getUserId());
         }
 
-        return (String[]) userIds.toArray();
+        return  userIds.toArray(new String[userIds.size()]);
     }
 
     public IFloorServiceDao getFloorServiceDaoImpl() {
