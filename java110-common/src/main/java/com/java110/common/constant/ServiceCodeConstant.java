@@ -108,7 +108,7 @@ public class ServiceCodeConstant {
     /**
      * 删除用户全部权限
      */
-    public static final String SERVICE_CODE_DELETE_USER_ALL_PRIVILEGE= "delete.user.allPrivilege";
+    public static final String SERVICE_CODE_DELETE_USER_ALL_PRIVILEGE = "delete.user.allPrivilege";
 
 
     /**
@@ -351,14 +351,12 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_AGENT_USER = "delete.agent.user";
 
 
-
     //检查用户是否有权限
     public static final String SERVICE_CODE_CHECK_USER_HAS_PRIVILEGE = "check.user.hasPrivilege";
 
 
     //查询小区楼
-    public static final String SERVICE_CODE_QUERY_FLOOR="floor.queryFloors";
-
+    public static final String SERVICE_CODE_QUERY_FLOOR = "floor.queryFloors";
 
 
 }

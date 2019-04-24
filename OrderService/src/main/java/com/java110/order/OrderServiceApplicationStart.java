@@ -1,10 +1,10 @@
 package com.java110.order;
 
-import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
 import com.java110.event.center.DataFlowEventPublishing;
+import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +13,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
-
 
 import java.nio.charset.Charset;
 
@@ -30,17 +30,19 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.order","com.java110.core","com.java110.event.order","com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order", "com.java110.core", "com.java110.event.order", "com.java110.cache"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
         basePackages = {"com.java110.order.listener"})
+@EnableFeignClients(basePackages = {"com.java110.core.smo"})
 public class OrderServiceApplicationStart {
 
-    private final static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
+    private  static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+     *
      * @return restTemplate
      */
     @Bean
@@ -53,6 +55,7 @@ public class OrderServiceApplicationStart {
 
     /**
      * 实例化RestTemplate
+     *
      * @return restTemplate
      */
     @Bean
@@ -62,7 +65,7 @@ public class OrderServiceApplicationStart {
         return restTemplate;
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
 
         //服务启动加载
@@ -78,17 +81,18 @@ public class OrderServiceApplicationStart {
 
     /**
      * 刷新主要的缓存
+     *
      * @param args
      */
-    private static void flushMainCache(String []args) {
+    private static void flushMainCache(String[] args) {
 
-        logger.debug("判断是否需要刷新日志，参数 args 为 {}",args);
+        logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
         if (args == null || args.length == 0) {
             return;
         }
         for (int i = 0; i < args.length; i++) {
             if (args[i].equalsIgnoreCase("-Dcache")) {
-                logger.debug("开始刷新日志，入参为：{}",args[i]);
+                logger.debug("开始刷新日志，入参为：{}", args[i]);
                 ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
                 centerServiceCacheSMO.startFlush();
             }

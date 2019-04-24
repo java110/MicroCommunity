@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.log",
 "com.java110.feign.code","com.java110.core","com.java110.cache"})
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"com.java110.feign.code"})
+@EnableFeignClients(basePackages = {"com.java110.core.smo"})
 public class LogServiceApplicationStart {
 
 
