@@ -36,11 +36,14 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.cache"})
+@SpringBootApplication(
+        scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.cache"},
+        excludeName = {"com.java110.core.smo.user"}
+        )
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+//@EnableFeignClients(basePackages = {"com.java110.core.smo"})
 public class UserServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceApplicationStart.class);

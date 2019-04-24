@@ -37,19 +37,20 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.api","com.java110.core","com.java110.event.service.api","com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.api", "com.java110.core", "com.java110.event.service.api", "com.java110.cache"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
-@EnableFeignClients(basePackages={"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.core.smo"})
 public class ApiApplicationStart {
 
-    private final static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
+    private static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+     *
      * @return restTemplate
      */
     @Bean
@@ -62,6 +63,7 @@ public class ApiApplicationStart {
 
     /**
      * 实例化RestTemplate
+     *
      * @return restTemplate
      */
     @Bean
@@ -83,6 +85,7 @@ public class ApiApplicationStart {
     /**
      * 创建该API的基本信息（这些基本信息会展现在文档页面中）
      * 访问地址：http://项目实际地址/swagger-ui.html
+     *
      * @return
      */
     private ApiInfo apiInfo() {
@@ -96,7 +99,7 @@ public class ApiApplicationStart {
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
 
         //服务启动加载
