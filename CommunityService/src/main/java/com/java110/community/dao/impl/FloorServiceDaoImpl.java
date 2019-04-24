@@ -121,7 +121,7 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
             return 0;
         }
 
-        return Integer.parseInt((String) businessFloorInfos.get(0).get("count"));
+        return Integer.parseInt(businessFloorInfos.get(0).get("count").toString());
     }
 
     @Override
