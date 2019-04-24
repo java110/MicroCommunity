@@ -1,5 +1,6 @@
 package com.java110.core.smo.floor;
 
+import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.FloorDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient("community-service")
+@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/floorApi")
 public interface IFloorInnerServiceSMO {
 
