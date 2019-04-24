@@ -271,6 +271,12 @@
         <if test="statusCd !=null and statusCd != ''">
             and u.status_cd = #{statusCd}
         </if>
+        <if test="userIds != null and userIds != null">
+            and u.user_id in
+                <foreach collection="userIds" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+        </if>
     </select>
 
 

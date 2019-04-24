@@ -132,4 +132,38 @@ and t.b_id= #{bId}
 
     </update>
 
+    <select id="queryFloorsCount" parameterType="String" resultType="Map">
+        SELECT
+            COUNT(1) count
+        FROM
+            f_floor f,
+            s_community_member cm
+        WHERE f.`floor_id` = cm.`member_id`
+            AND cm.`member_type_cd` = '390001200004'
+            AND cm.`community_id` = #{communityId}
+            AND f.`status_cd` = '0'
+            AND cm.`status_cd` = '0'
+    </select>
+    <!-- 查询小区 内的楼 -->
+    <select id="queryFloors" parameterType="Map" resultType="Map">
+
+        SELECT
+            f.`floor_id` floorId,
+            f.`floor_num` floorNum,
+            f.`name`,
+            f.`remark`,
+            f.`user_id` userId,
+            cm.`community_id` communityId
+        FROM
+            f_floor f,
+            s_community_member cm
+        WHERE f.`floor_id` = cm.`member_id`
+            AND cm.`member_type_cd` = '390001200004'
+            AND cm.`community_id` = #{communityId}
+            AND f.`status_cd` = '0'
+            AND cm.`status_cd` = '0'
+            LIMIT #{page}, #{row}
+    </select>
+
+
 </mapper>

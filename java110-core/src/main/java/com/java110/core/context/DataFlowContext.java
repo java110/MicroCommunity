@@ -19,60 +19,60 @@ public interface DataFlowContext {
      * 请求报文
      * @return
      */
-    public String getReqData();
+     String getReqData();
 
     //AppId
-    public String getAppId();
+     String getAppId();
 
-    public JSONObject getReqJson();
+     JSONObject getReqJson();
     /**
      * 返回报文
      * @return
      */
-    public JSONObject getResJson();
+     JSONObject getResJson();
 
 
     /**
      * 添加各个环节的耗时
      * @param dataFlowLinksCost
      */
-    public void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost);
+     void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost);
 
     /**
      * 添加日志信息
      * @param dataFlowLog
      */
-    public void addLogDatas(DataFlowLog dataFlowLog);
+     void addLogDatas(DataFlowLog dataFlowLog);
 
-    public List<DataFlowLinksCost> getLinksCostDates();
+     List<DataFlowLinksCost> getLinksCostDates();
 
-    public List<Business> getBusinesses();
+     List<Business> getBusinesses();
 
     /**
      * 源请求头信息
      * @return
      */
-    public Map<String, String> getRequestHeaders();
+     Map<String, String> getRequestHeaders();
     /**
      * 终返回头信息
      * @return
      */
-    public Map<String, String> getResponseHeaders();
+     Map<String, String> getResponseHeaders();
 
     /**
      * 当前请求头信息
      * @return
      */
-    public Map<String, String> getRequestCurrentHeaders();
+     Map<String, String> getRequestCurrentHeaders();
 
     /**
      * 当前返回头信息
      * @return
      */
-    public Map<String, String> getResponseCurrentHeaders();
+     Map<String, String> getResponseCurrentHeaders();
 
 
-    public IOrders getOrder();
+     IOrders getOrder();
 
 
     /**

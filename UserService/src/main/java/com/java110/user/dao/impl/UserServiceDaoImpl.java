@@ -37,22 +37,23 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 保存用户基本信息
      * 功能只用与保存用户处理
+     *
      * @param boCust 用户基本信息
      * @return
      */
     @Override
-    public int saveDataToBoCust(BoCust boCust) throws RuntimeException{
+    public int saveDataToBoCust(BoCust boCust) throws RuntimeException {
 
         logger.debug("----【userServiceDaoImpl.saveDataToBoCust】保存数据入参 : " + boCust);
         int saveFlag = 0;
         try {
 
-            saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToBoCust",boCust);
+            saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToBoCust", boCust);
 
-        }catch(RuntimeException e){
-            logger.error("----【userServiceDaoImpl.saveDataToBoCust】保存数据异常 : " ,e);
+        } catch (RuntimeException e) {
+            logger.error("----【userServiceDaoImpl.saveDataToBoCust】保存数据异常 : ", e);
             return saveFlag;
-        }finally {
+        } finally {
             logger.debug("----【userServiceDaoImpl.saveDataToBoCust】保存数据出参 : saveFlag:" + saveFlag);
             return saveFlag;
         }
@@ -71,13 +72,13 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         logger.debug("----【userServiceDaoImpl.saveDataToBoCustAttr】保存数据入参 : " + boCustAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(boCustAttr == null){
+        if (boCustAttr == null) {
             logger.debug("----【userServiceDaoImpl.saveDataToBoCustAttr】保存数据出错 : " + boCustAttr);
             return 0;
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToBoCustAttr",boCustAttr);
+        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToBoCustAttr", boCustAttr);
         logger.debug("----【userServiceDaoImpl.saveDataToBoCustAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
@@ -86,6 +87,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 保存实例数据 客户信息至Cust表中
+     *
      * @param cust
      * @return
      * @throws RuntimeException
@@ -94,13 +96,13 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public int saveDataToCust(Cust cust) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据入参 : " + cust);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
+        if (cust == null) {
             logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据出错 : " + cust);
             throw new IllegalArgumentException("请求参数错误，cust : " + cust);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToCust",cust);
+        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToCust", cust);
         logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
@@ -108,6 +110,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 保存实例数据 客户属性信息至CustAttr表中
+     *
      * @param custAttr
      * @return
      * @throws RuntimeException
@@ -116,13 +119,13 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public int saveDataToCustAttr(CustAttr custAttr) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据入参 : " + custAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(custAttr == null){
+        if (custAttr == null) {
             logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据出错 : " + custAttr);
             throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToCustAttr",custAttr);
+        saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveDataToCustAttr", custAttr);
         logger.debug("----【userServiceDaoImpl.saveDataToCust】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
@@ -130,41 +133,43 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 删除用户基本信息（实例数据）
+     *
      * @param cust
      * @return
      * @throws RuntimeException
      */
-    public int deleteDataToCust(Cust cust) throws RuntimeException{
+    public int deleteDataToCust(Cust cust) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.deleteDataToCust】保存数据入参 : " + cust);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
+        if (cust == null) {
             logger.debug("----【userServiceDaoImpl.deleteDataToCust】保存数据出错 : " + cust);
             throw new IllegalArgumentException("请求参数错误，cust : " + cust);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.deleteDataToCust",cust);
+        saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.deleteDataToCust", cust);
         logger.debug("----【userServiceDaoImpl.deleteDataToCust】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
     }
 
     /**
-     *  删除用户属性（实例数据）
+     * 删除用户属性（实例数据）
+     *
      * @param custAttr
      * @return
      * @throws RuntimeException
      */
-    public int deleteDataToCustAttr(CustAttr custAttr) throws RuntimeException{
+    public int deleteDataToCustAttr(CustAttr custAttr) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.deleteDataToCustAttr】保存数据入参 : " + custAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(custAttr == null){
+        if (custAttr == null) {
             logger.debug("----【userServiceDaoImpl.deleteDataToCustAttr】保存数据出错 : " + custAttr);
             throw new IllegalArgumentException("请求参数错误，custAttr : " + custAttr);
         }
         int saveFlag = 0;
 
-        saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.deleteDataToCustAttr",custAttr);
+        saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.deleteDataToCustAttr", custAttr);
         logger.debug("----【userServiceDaoImpl.deleteDataToCustAttr】保存数据出参 :saveFlag " + saveFlag);
 
         return saveFlag;
@@ -181,7 +186,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     @Override
     public String saveDataToBoCustAndBoCustAttr(String boCustInfo) throws RuntimeException {
 
-        logger.debug("----【userServiceDaoImpl.saveDataToBoCustAndBoCustAttr】保存数据入参"+boCustInfo);
+        logger.debug("----【userServiceDaoImpl.saveDataToBoCustAndBoCustAttr】保存数据入参" + boCustInfo);
 
         return null;
     }
@@ -208,6 +213,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 根据客户ID查询客户信息，包括基本信息和属性信息
+     *
      * @param cust
      * @return
      * @throws RuntimeException
@@ -216,12 +222,12 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public Cust queryDataToCust(Cust cust) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.queryDataToCust】保存数据入参 : " + cust);
         //为了保险起见，再测检测reqList 是否有值
-        if(cust == null){
+        if (cust == null) {
             logger.debug("----【userServiceDaoImpl.queryDataToCust】保存数据出错 : " + cust);
             throw new IllegalArgumentException("请求参数错误，cust : " + cust);
         }
 
-        Cust newCust  = sqlSessionTemplate.selectOne("userServiceDaoImpl.queryDataToCust",cust);
+        Cust newCust = sqlSessionTemplate.selectOne("userServiceDaoImpl.queryDataToCust", cust);
 
         logger.debug("----【userServiceDaoImpl.queryDataToCust】保存数据出参 :newCust " + newCust);
 
@@ -239,12 +245,12 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public List<CustAttr> queryDataToCustAttr(CustAttr custAttr) throws RuntimeException {
         logger.debug("----【userServiceDaoImpl.queryDataToCustAttr】保存数据入参 : " + custAttr);
         //为了保险起见，再测检测reqList 是否有值
-        if(custAttr == null){
+        if (custAttr == null) {
             logger.debug("----【userServiceDaoImpl.queryDataToCust】保存数据出错 : " + custAttr);
             throw new IllegalArgumentException("请求参数错误，CustAttr : " + custAttr);
         }
 
-        List<CustAttr> custAttrs  = sqlSessionTemplate.selectList("userServiceDaoImpl.queryDataToCustAttr",custAttr);
+        List<CustAttr> custAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryDataToCustAttr", custAttr);
 
         logger.debug("----【userServiceDaoImpl.queryDataToCust】保存数据出参 :custAttrs " + custAttrs);
 
@@ -257,41 +263,40 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     }
 
     /**
-     *
      * 查询 客户基本信息（过程表bo_cust）
      *
      * @param boCust
      * @return
      * @throws Exception
      */
-    public List<BoCust> queryBoCust(BoCust boCust) throws Exception{
-        logger.debug("----【userServiceDaoImpl.queryBoCustAttr】:"+boCust);
+    public List<BoCust> queryBoCust(BoCust boCust) throws Exception {
+        logger.debug("----【userServiceDaoImpl.queryBoCustAttr】:" + boCust);
 
-        Assert.isNull(boCust,"查询bo_cust 入参为空");
+        Assert.isNull(boCust, "查询bo_cust 入参为空");
 
-        return sqlSessionTemplate.selectList("userServiceDaoImpl.queryBoCust",boCust);
+        return sqlSessionTemplate.selectList("userServiceDaoImpl.queryBoCust", boCust);
     }
 
     /**
-     *
      * 查询 客户属性信息（过程表 bo_cust_attr）
      *
      * @param boCustAttr
      * @return
      * @throws Exception
      */
-    public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception{
+    public List<BoCustAttr> queryBoCustAttr(BoCustAttr boCustAttr) throws Exception {
 
-        logger.debug("【userServiceDaoImpl.queryBoCustAttr】:"+boCustAttr);
+        logger.debug("【userServiceDaoImpl.queryBoCustAttr】:" + boCustAttr);
 
-        Assert.isNull(boCustAttr,"查询bo_cust_attr 入参为空");
+        Assert.isNull(boCustAttr, "查询bo_cust_attr 入参为空");
 
-        return sqlSessionTemplate.selectList("userServiceDaoImpl.queryBoCustAttr",boCustAttr);
+        return sqlSessionTemplate.selectList("userServiceDaoImpl.queryBoCustAttr", boCustAttr);
 
     }
 
     /**
      * 保存用户信息
+     *
      * @param userInfo
      * @throws DAOException
      */
@@ -301,14 +306,16 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         // 查询business_user 数据是否已经存在
 
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserInfo",userInfo);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserInfo", userInfo);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户数据失败："+JSONObject.toJSONString(userInfo));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户数据失败：" + JSONObject.toJSONString(userInfo));
         }
     }
+
     /**
      * 保存用户属性
+     *
      * @param userAttr
      * @throws DAOException
      */
@@ -316,66 +323,66 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     public void saveBusinessUserAttr(Map userAttr) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveBusinessUserAttr】保存数据入参 : " + JSONObject.toJSONString(userAttr));
 
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserAttr",userAttr);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserAttr", userAttr);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户属性数据失败："+JSONObject.toJSONString(userAttr));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户属性数据失败：" + JSONObject.toJSONString(userAttr));
         }
     }
 
     @Override
     public void saveUserInfoInstance(Map businessUser) {
         logger.debug("----【userServiceDaoImpl.saveUserInfoInstance】保存数据入参 : " + JSONObject.toJSONString(businessUser));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserInfoInstance",businessUser);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserInfoInstance", businessUser);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户Instance数据失败："+JSONObject.toJSONString(businessUser));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户Instance数据失败：" + JSONObject.toJSONString(businessUser));
         }
     }
 
     @Override
     public void saveUserAttrInstance(Map attrInstance) {
         logger.debug("----【userServiceDaoImpl.saveUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(attrInstance));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserAttrInstance",attrInstance);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserAttrInstance", attrInstance);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户Instance数据失败："+JSONObject.toJSONString(attrInstance));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户Instance数据失败：" + JSONObject.toJSONString(attrInstance));
         }
     }
 
     @Override
     public void updateUserInfoInstance(Map businessUser) {
         logger.debug("----【userServiceDaoImpl.updateUserInfoInstance】保存数据入参 : " + JSONObject.toJSONString(businessUser));
-        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserInfoInstance",businessUser);
+        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserInfoInstance", businessUser);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUser));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(businessUser));
         }
     }
 
     @Override
     public void updateUserAttrInstance(Map attrInstance) {
         logger.debug("----【userServiceDaoImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(attrInstance));
-        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserAttrInstance",attrInstance);
+        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserAttrInstance", attrInstance);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(attrInstance));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(attrInstance));
         }
     }
 
 
-
     /**
      * 查询用户信息
+     *
      * @param info
      * @return
      * @throws DAOException
      */
-    public Map queryBusinessUserInfo(Map info) throws DAOException{
-        Assert.notNull(info,"queryBusinessUserInfo 的参数不能为空");
+    public Map queryBusinessUserInfo(Map info) throws DAOException {
+        Assert.notNull(info, "queryBusinessUserInfo 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryBusinessUserInfo】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserInfo",info);
-        if(users == null || users.size() == 0){
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserInfo", info);
+        if (users == null || users.size() == 0) {
             return null;
         }
         return users.get(0);
@@ -383,29 +390,31 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 查询用户信息
+     *
      * @param info
      * @return
      * @throws DAOException
      */
-    public List<Map> queryBusinessUserInfoAttrs(Map info) throws DAOException{
-        Assert.notNull(info,"queryBusinessUserInfoAttrs 的参数不能为空");
+    public List<Map> queryBusinessUserInfoAttrs(Map info) throws DAOException {
+        Assert.notNull(info, "queryBusinessUserInfoAttrs 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryBusinessUserInfoAttrs】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserInfoAttrs",info);
+        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserInfoAttrs", info);
         return userAttrs;
     }
 
     /**
      * 查询用户信息
+     *
      * @param info
      * @return
      * @throws DAOException
      */
     @Override
-    public Map queryUserInfo(Map info) throws DAOException{
-        Assert.notNull(info,"queryUserInfo 的参数不能为空");
+    public Map queryUserInfo(Map info) throws DAOException {
+        Assert.notNull(info, "queryUserInfo 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryUserInfo】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfo",info);
-        if(users == null || users.size() == 0){
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfo", info);
+        if (users == null || users.size() == 0) {
             return null;
         }
         return users.get(0);
@@ -413,45 +422,64 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 查询用户信息
+     *
      * @param info
      * @return
      * @throws DAOException
      */
     @Override
-    public List<Map> queryUserInfoAttrs(Map info) throws DAOException{
-        Assert.notNull(info,"queryUserInfo 的参数不能为空");
+    public List<Map> queryUsersInfo(Map info) throws DAOException {
+        Assert.notNull(info, "queryUserInfo 的参数不能为空");
+        logger.debug("----【userServiceDaoImpl.queryUserInfo】保存数据入参 : " + JSONObject.toJSONString(info));
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfo", info);
+
+        return users;
+    }
+
+    /**
+     * 查询用户信息
+     *
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> queryUserInfoAttrs(Map info) throws DAOException {
+        Assert.notNull(info, "queryUserInfo 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfoAttrs",info);
+        List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfoAttrs", info);
         return userAttrs;
     }
 
     /**
      * 保存用户地址信息
      * Business 过程
+     *
      * @param userAddress 用户地址信息
      * @throws DAOException
      */
-    public void saveBusinessUserAddress(Map userAddress) throws DAOException{
+    public void saveBusinessUserAddress(Map userAddress) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(userAddress));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserAddress",userAddress);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserAddress", userAddress);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址数据失败："+JSONObject.toJSONString(userAddress));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户地址数据失败：" + JSONObject.toJSONString(userAddress));
         }
     }
 
     /**
      * 查询用户地址信息
      * business 过程
+     *
      * @param info b_id
      * @return 查询到的用户地址信息
      * @throws DAOException
      */
-    public Map queryBusinessUserAddress(Map info) throws DAOException{
-        Assert.notNull(info,"queryBusinessUserAddress 的参数不能为空");
+    public Map queryBusinessUserAddress(Map info) throws DAOException {
+        Assert.notNull(info, "queryBusinessUserAddress 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryBusinessUserAddress】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserAddress",info);
-        if(users == null || users.size() == 0){
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserAddress", info);
+        if (users == null || users.size() == 0) {
             return null;
         }
         return users.get(0);
@@ -459,29 +487,31 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 保存用户地址 Business 数据到 Instance
+     *
      * @param businessUserAddress 从business 中查出的数据
      * @throws DAOException 数据处理异常
      */
-    public void saveUserAddressInstance(Map businessUserAddress) throws DAOException{
+    public void saveUserAddressInstance(Map businessUserAddress) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveUserAddressInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserAddress));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserAddressInstance",businessUserAddress);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserAddressInstance", businessUserAddress);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户地址Instance数据失败："+JSONObject.toJSONString(businessUserAddress));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户地址Instance数据失败：" + JSONObject.toJSONString(businessUserAddress));
         }
     }
 
     /**
      * 作废用户地址信息数据
+     *
      * @param businessUserAddress 用户地址信息 b_id
      * @throws DAOException 数据处理异常
      */
-    public void updateUserAddressInstance(Map businessUserAddress) throws DAOException{
+    public void updateUserAddressInstance(Map businessUserAddress) throws DAOException {
         logger.debug("----【userServiceDaoImpl.updateUserAddressInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserAddress));
-        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserAddressInstance",businessUserAddress);
+        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserAddressInstance", businessUserAddress);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserAddress));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(businessUserAddress));
         }
     }
 
@@ -489,15 +519,16 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 保存用户打标信息
      * Business 过程
+     *
      * @param userTag 用户打标信息
      * @throws DAOException
      */
-    public void saveBusinessUserTag(Map userTag) throws DAOException{
+    public void saveBusinessUserTag(Map userTag) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveBusinessUserTag】保存数据入参 : " + JSONObject.toJSONString(userTag));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserTag",userTag);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserTag", userTag);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标数据失败："+JSONObject.toJSONString(userTag));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户打标数据失败：" + JSONObject.toJSONString(userTag));
         }
     }
 
@@ -505,15 +536,16 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 查询用户打标信息
      * business 过程
+     *
      * @param info b_id
      * @return 查询到的用户打标信息
      * @throws DAOException
      */
-    public Map queryBusinessUserTag(Map info) throws DAOException{
-        Assert.notNull(info,"queryBusinessUserTag 的参数不能为空");
+    public Map queryBusinessUserTag(Map info) throws DAOException {
+        Assert.notNull(info, "queryBusinessUserTag 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryBusinessUserTag】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserTag",info);
-        if(users == null || users.size() == 0){
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserTag", info);
+        if (users == null || users.size() == 0) {
             return null;
         }
         return users.get(0);
@@ -521,30 +553,32 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 保存Business 数据到 Instance
+     *
      * @param businessUserTag 从business 中查出的数据
      * @throws DAOException 数据处理异常
      */
-    public void saveUserTagInstance(Map businessUserTag) throws DAOException{
+    public void saveUserTagInstance(Map businessUserTag) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveUserTagInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserTag));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserTagInstance",businessUserTag);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserTagInstance", businessUserTag);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标Instance数据失败："+JSONObject.toJSONString(businessUserTag));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户打标Instance数据失败：" + JSONObject.toJSONString(businessUserTag));
         }
     }
 
 
     /**
      * 作废用户打标数据
+     *
      * @param businessUserTag 用户地址信息 b_id
      * @throws DAOException 数据处理异常
      */
-    public void updateUserTagInstance(Map businessUserTag) throws DAOException{
+    public void updateUserTagInstance(Map businessUserTag) throws DAOException {
         logger.debug("----【userServiceDaoImpl.updateUserTagInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserTag));
-        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserTagInstance",businessUserTag);
+        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserTagInstance", businessUserTag);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserTag));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(businessUserTag));
         }
     }
 
@@ -552,15 +586,16 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 保存用户证件信息
      * Business 过程
+     *
      * @param userCredentials 用户证件信息
      * @throws DAOException
      */
-    public void saveBusinessUserCredentials(Map userCredentials) throws DAOException{
+    public void saveBusinessUserCredentials(Map userCredentials) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveBusinessUserCredentials】保存数据入参 : " + JSONObject.toJSONString(userCredentials));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserCredentials",userCredentials);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveBusinessUserCredentials", userCredentials);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标数据失败："+JSONObject.toJSONString(userCredentials));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户打标数据失败：" + JSONObject.toJSONString(userCredentials));
         }
     }
 
@@ -568,15 +603,16 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     /**
      * 查询用户证件信息
      * business 过程
+     *
      * @param info b_id
      * @return 查询到的用户打标信息
      * @throws DAOException
      */
-    public Map queryBusinessUserCredentials(Map info) throws DAOException{
-        Assert.notNull(info,"queryBusinessUserCredentials 的参数不能为空");
+    public Map queryBusinessUserCredentials(Map info) throws DAOException {
+        Assert.notNull(info, "queryBusinessUserCredentials 的参数不能为空");
         logger.debug("----【userServiceDaoImpl.queryBusinessUserCredentials】保存数据入参 : " + JSONObject.toJSONString(info));
-        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserCredentials",info);
-        if(users == null || users.size() == 0){
+        List<Map> users = sqlSessionTemplate.selectList("userServiceDaoImpl.queryBusinessUserCredentials", info);
+        if (users == null || users.size() == 0) {
             return null;
         }
         return users.get(0);
@@ -584,30 +620,32 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
     /**
      * 保存Business 数据到 Instance
+     *
      * @param businessUserCredentials 从business 中查出的数据
      * @throws DAOException 数据处理异常
      */
-    public void saveUserCredentialsInstance(Map businessUserCredentials) throws DAOException{
+    public void saveUserCredentialsInstance(Map businessUserCredentials) throws DAOException {
         logger.debug("----【userServiceDaoImpl.saveUserCredentialsInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserCredentials));
-        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserCredentialsInstance",businessUserCredentials);
+        int saveFlag = sqlSessionTemplate.insert("userServiceDaoImpl.saveUserCredentialsInstance", businessUserCredentials);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存用户打标Instance数据失败："+JSONObject.toJSONString(businessUserCredentials));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存用户打标Instance数据失败：" + JSONObject.toJSONString(businessUserCredentials));
         }
     }
 
 
     /**
      * 作废用户证件数据
+     *
      * @param businessUserCredentials 用户地址信息 b_id
      * @throws DAOException 数据处理异常
      */
-    public void updateUserCredentialsInstance(Map businessUserCredentials) throws DAOException{
+    public void updateUserCredentialsInstance(Map businessUserCredentials) throws DAOException {
         logger.debug("----【userServiceDaoImpl.updateUserCredentialsInstance】保存数据入参 : " + JSONObject.toJSONString(businessUserCredentials));
-        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserCredentialsInstance",businessUserCredentials);
+        int saveFlag = sqlSessionTemplate.update("userServiceDaoImpl.updateUserCredentialsInstance", businessUserCredentials);
 
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改用户Instance数据失败："+JSONObject.toJSONString(businessUserCredentials));
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(businessUserCredentials));
         }
     }
 }
