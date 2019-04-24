@@ -66,7 +66,7 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
      * @return 小区对应的楼总记录数
      */
     @Override
-    public int queryFloorsCount(String communityId) {
+    public int queryFloorsCount(@RequestParam("communityId") String communityId) {
         return floorServiceDaoImpl.queryFloorsCount(communityId);
     }
 
