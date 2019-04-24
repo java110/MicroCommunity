@@ -26,7 +26,7 @@ public class UserErrorDecoder implements ErrorDecoder {
             logger.error(ex.getMessage(), ex);
         }
         // 这里只封装4开头的请求异常ß
-        if (400 <= response.status() && response.status() < 600){
+        if (400 <= response.status() && response.status() < 500){
             exception = new HystrixBadRequestException("request exception wrapper", exception);
         }else{
             logger.error(exception.getMessage(), exception);

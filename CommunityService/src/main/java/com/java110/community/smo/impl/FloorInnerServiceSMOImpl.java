@@ -44,10 +44,15 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
     @Override
     public List<FloorDto> queryFloors(@RequestParam("page") int page, @RequestParam("row") int row, @RequestParam("communityId") String communityId) {
         Map<String, Object> floorInfo = new HashMap<String, Object>();
-        floorInfo.put("page", page);
-        floorInfo.put("row", row);
+        floorInfo.put("page", (page-1)*row);
+        floorInfo.put("row", row*page);
         floorInfo.put("communityId", communityId);
         List<FloorDto> floors = BeanConvertUtil.covertBeanList(floorServiceDaoImpl.queryFloors(floorInfo), FloorDto.class);
+
+
+        if(floors == null || floors.size() == 0){
+            return floors;
+        }
 
         String[] userIds = getUserIds(floors);
         //根据 userId 查询用户信息
