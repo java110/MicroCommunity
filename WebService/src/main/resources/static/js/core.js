@@ -125,11 +125,50 @@
     //保存菜单
     vc.setCurrentMenu = function(_menuId){
         window.localStorage.setItem('hc_menuId',_menuId);
-    }
+    };
     //获取菜单
     vc.getCurrentMenu = function(){
         return window.localStorage.getItem('hc_menuId');
-    }
+    };
+
+    //保存用户菜单
+    vc.setMenus = function(_menus){
+        window.localStorage.setItem('hc_menus',JSON.stringify(_menus));
+    };
+    //获取用户菜单
+    vc.getMenus = function(){
+        return JSON.parse(window.localStorage.getItem('hc_menus'));
+    };
+
+    //保存当前小区信息 _communityInfo : {"communityId":"123213","name":"测试小区"}
+    vc.setCurrentCommunity = function(_currentCommunityInfo){
+        window.localStorage.setItem('hc_currentCommunityInfo',JSON.stringify(_currentCommunityInfo));
+    };
+
+    //获取当前小区信息
+    // @return   {"communityId":"123213","name":"测试小区"}
+    vc.getCurrentCommunity = function(){
+        return JSON.parse(window.localStorage.getItem('hc_currentCommunityInfo'));
+    };
+
+    //保存当前小区信息 _communityInfos : [{"communityId":"123213","name":"测试小区"}]
+    vc.setCommunitys = function(_communityInfos){
+        window.localStorage.setItem('hc_communityInfos',JSON.stringify(_communityInfos));
+    };
+
+    //获取当前小区信息
+    // @return   {"communityId":"123213","name":"测试小区"}
+    vc.getCommunitys = function(){
+        return JSON.parse(window.localStorage.getItem('hc_communityInfos'));
+    };
+
+    //删除缓存数据
+    vc.clearCacheData = function(){
+        window.localStorage.clear();
+    };
+
+
+
 })(window.vc);
 
 /**

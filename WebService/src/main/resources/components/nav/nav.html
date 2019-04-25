@@ -8,12 +8,26 @@
         </form>
     </div>
     <ul class="nav navbar-top-links navbar-right">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               data-toggle="dropdown"
+               href="#"
+               role="button"
+               aria-haspopup="true"
+               aria-expanded="false">
+                {{navCommunityInfo._currentCommunity.name}}
+                <span class="caret"></span>
+            </a>
+            <div class="dropdown-menu" v-for="currentCommunity in navCommunityInfo.communityInfos">
+                <a class="dropdown-item" href="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
+            </div>
+        </li>
         <li style="padding: 20px">
             <span class="m-r-sm text-muted welcome-message">欢迎访问HC小区管理系统，{{userName}}！</span>
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                <i class="fa fa-bell"></i>  <span class="label label-primary">{{nav.noticeSize}}</span>
+                <i class="fa fa-bell"></i> <span class="label label-primary">{{nav.noticeSize}}</span>
             </a>
             <ul class="dropdown-menu dropdown-alerts">
                 <li v-for="notice in nav.notices">

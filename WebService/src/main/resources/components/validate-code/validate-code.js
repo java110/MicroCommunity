@@ -21,7 +21,7 @@
                 }
             },
             methods:{
-                generateCode(){
+                generateCode:function(){
                     var param = {
                         params:{
                             _uId:'123'

@@ -28,7 +28,7 @@ import org.thymeleaf.util.StringUtils;
 @Service("communityServiceSMOImpl")
 public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommunityServiceSMO {
 
-    private final static Logger logger = LoggerFactory.getLogger(CommunityServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(CommunityServiceSMOImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;

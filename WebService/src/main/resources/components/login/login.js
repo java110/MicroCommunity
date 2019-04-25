@@ -8,7 +8,7 @@
             }
         },
         _initMethod:function(){
-
+            vc.component.clearCacheData();
         },
         _initEvent:function(){
              vc.component.$on('errorInfoEvent',function(_errorInfo){
@@ -24,7 +24,10 @@
                      });
         },
         methods:{
-            doLogin(){
+            clearCacheData:function(){
+                vc.clearCacheData();
+            },
+            doLogin:function(){
                 vc.http.post(
                             'login',
                             'doLogin',

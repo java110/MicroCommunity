@@ -12,6 +12,14 @@
        },
        methods:{
            getMenus:function(){
+
+                var _tmpMenus = vc.getMenus();
+                //浏览器缓存中能获取到
+                if(_tmpMenus != null && _tmpMenus != undefined){
+                    this.menus = _tmpMenus;
+                    return ;
+                }
+
                var param = {
                     params:{
                         msg:this.message
@@ -26,6 +34,7 @@
                                 var _menus = JSON.parse(json);
                                 var _currentMenusId = vc.getCurrentMenu() == null?_menus[0].id:vc.getCurrentMenu();
                                 vm.menus = vm.refreshMenuActive(_menus,_currentMenusId);
+                                vc.setMenus(vm.menus);
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

@@ -12,15 +12,25 @@ public interface INavServiceSMO {
 
     /**
      * 用户退出
-     * @param pd
-     * @return
+     *
+     * @param pd 页面封装数据
+     * @return ResponseEntity对象
      */
-    public ResponseEntity<String> doExit(IPageData pd);
+    ResponseEntity<String> doExit(IPageData pd);
 
     /**
      * 获取用户信息
-     * @param pd
-     * @return
+     *
+     * @param pd 页面封装数据
+     * @return ResponseEntity对象
      */
-    public ResponseEntity<String> getUserInfo(IPageData pd);
+    ResponseEntity<String> getUserInfo(IPageData pd);
+
+    /**
+     * 查询入驻小区
+     *
+     * @param pd 页面封装数据
+     * @return ResponseEntity对象
+     */
+    ResponseEntity<String> listMyCommunity(IPageData pd);
 }
