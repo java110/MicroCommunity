@@ -15,11 +15,12 @@
 
         },
         methods:{
-            _listFloorData(){
+            _listFloorData:function(){
                 var param = {
                     params:{
                         page:DEFAULT_PAGE,
-                        rows:DEFAULT_ROWS
+                        rows:DEFAULT_ROWS,
+                        communityId:vc.getCurrentCommunity().communityId
                     }
                 }
 

@@ -60,6 +60,7 @@
                 //设置菜单ID
                 vc.setCurrentMenu(_id);
                 vm.menus = vm.refreshMenuActive(vm.menus,_id);
+                vc.setMenus(vm.menus);
            }
        },
 

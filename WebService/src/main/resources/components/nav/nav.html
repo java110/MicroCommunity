@@ -19,7 +19,7 @@
                 <span class="caret"></span>
             </a>
             <div class="dropdown-menu" v-for="currentCommunity in navCommunityInfo.communityInfos">
-                <a class="dropdown-item" href="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
+                <a class="dropdown-item" v-on:click="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
             </div>
         </li>
         <li style="padding: 20px">
