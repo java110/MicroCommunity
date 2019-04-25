@@ -1,6 +1,7 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
@@ -45,22 +46,27 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         int page = Integer.parseInt(paramIn.getString("page"));
         int rows = Integer.parseInt(paramIn.getString("rows"));
-        String floorName = paramIn.getString("floorName");
-        page = (page - 1) * rows;
+        String communityId = paramIn.getString("communityId");
+
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
+
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        if (StringUtil.isEmpty(floorName)) {
-            responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos?rows=" + rows + "&page=" + page + "&storeId=" + storeId, HttpMethod.GET);
-        } else {
-            responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId + "&name=" + floorName, HttpMethod.GET);
-        }
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd,storeId,storeTypeCd,communityId,restTemplate);
+
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                    ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId=" + communityId , HttpMethod.GET);
+
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
@@ -71,6 +77,41 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> saveFloor(IPageData pd) {
+
+        validateSaveFloor(pd);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("paramIn");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd,storeId,storeTypeCd,communityId,restTemplate);
+
+
+
+        return null;
+    }
+
+    /**
+     * 校验保存小区楼 信息
+     * @param pd
+     */
+    private void validateSaveFloor(IPageData pd){
+        Assert.jsonObjectHaveKey(pd.getReqData(),"communityId","未包含小区ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"name","未包含小区名称");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"floorNum","未包含小区编码");
+        Assert.jsonObjectHaveKey(pd.getReqData(),"remark","未包含小区备注");
+    }
+
     /**
      * 校验查询小区楼信息
      *
@@ -79,10 +120,14 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
     private void validateListFloor(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
+        Assert.hasLength(paramIn.getString("communityId"),"小区ID不能为空");
         int rows = Integer.parseInt(paramIn.getString("rows"));
+
+
 
         if (rows > 50) {
             throw new SMOException(1999, "rows 数量不能大于50");

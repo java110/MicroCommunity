@@ -5,6 +5,7 @@
         data:{
             listFloorInfo:{
                 floors:[],
+                total:0,
                 errorInfo:""
             }
         },
@@ -29,7 +30,10 @@
                             'list',
                              param,
                              function(json,res){
-                                vc.component.listFloorInfo.floors=JSON.parse(json);
+                                var listFloorData =JSON.parse(json);
+
+                                vc.component.listFloorInfo.total = listFloorData.total;
+                                vc.component.listFloorInfo.floors = listFloorData.apiFloorDataVoList;
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
@@ -37,7 +41,7 @@
 
             },
             _openAddFloorModal:function(){ //打开添加框
-
+                vc.emit('addFloor','openAddFloorModal',{});
             },
             _openDelFloorModel:function(_floor){ // 打开删除对话框
 

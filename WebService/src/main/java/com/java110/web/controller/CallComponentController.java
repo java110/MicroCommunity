@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -62,7 +63,16 @@ public class CallComponentController extends BaseController {
             headers.add("code",e.getResult().getCode());
             responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e){
-            responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            String msg = "";
+            if (e instanceof InvocationTargetException) {
+                Throwable targetEx =((InvocationTargetException)e).getTargetException();
+                if (targetEx != null) {
+                    msg = targetEx.getMessage();
+                }
+            } else {
+                msg = e.getMessage();
+            }
+            responseEntity = new ResponseEntity<>(msg,HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {
             logger.debug("组件调用返回信息为{}",responseEntity);
             return responseEntity;

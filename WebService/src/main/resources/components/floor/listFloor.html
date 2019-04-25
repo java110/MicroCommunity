@@ -21,7 +21,6 @@
                             <th data-hide="phone">编号</th>
                             <th data-hide="phone">创建员工</th>
                             <th data-hide="phone">备注</th>
-                            <th data-hide="phone">创建时间</th>
                             <th class="text-right">操作</th>
 
                         </tr>
@@ -31,17 +30,18 @@
                             <td>
                                 {{floor.floorId}}
                             </td>
+
                             <td>
-                                {{floor.name}}
+                                {{floor.floorName}}
+                            </td>
+                            <td>
+                                {{floor.floorNum}}
                             </td>
                             <td>
                                 {{floor.userName}}
                             </td>
                             <td>
                                 {{floor.remark}}
-                            </td>
-                            <td>
-                                {{vc.dateFormat(floor.createTime)}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
@@ -63,5 +63,7 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="addFloor"></vc:create>
 
 </div>
