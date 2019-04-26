@@ -44,11 +44,11 @@
 |business|businessTypeCd|1|String|12|业务类型编码|500100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
 |datas|businessFloorInfo|1|Object|-|小区成员|小区成员|
-|businessFloorInfo|floorId|1|String|30|-|-|
-|businessFloorInfo|name|1|String|30|-|-|
-|businessFloorInfo|remark|1|String|30|-|-|
-|businessFloorInfo|userId|1|String|30|-|-|
-|businessFloorInfo|floorNum|1|String|30|-|-|
+|businessFloor|floorId|1|String|30|-|-|
+|businessFloor|name|1|String|30|-|-|
+|businessFloor|remark|1|String|30|-|-|
+|businessFloor|userId|1|String|30|-|-|
+|businessFloor|floorNum|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -90,7 +90,7 @@ Content-Type:application/json
     "bId":"1234567892",
     "remark": "备注",
     "datas": {
-      "businessFloorInfo": {
+      "businessFloor": {
                 "floorId":"填写具体值",
         "name":"填写具体值",
         "remark":"填写具体值",

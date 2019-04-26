@@ -118,7 +118,7 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
         businessFloor.put("remark", paramInJson.getString("remark"));
         businessFloor.put("userId", paramInJson.getString("userId"));
         businessFloor.put("floorNum", paramInJson.getString("floorNum"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloorInfo", businessFloor);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
 
         return business;
     }
