@@ -29,6 +29,7 @@
 |floorNum|1|String|12|小区楼编码|如 001 002|
 |remark|?|String|200|备注|-|
 |userId|1|String|30|创建员工ID|-|
+|communityId|1|String|30|小区ID|-|
 
 ###### 返回协议
 
@@ -58,7 +59,8 @@ SIGN:aabdncdhdbd878sbdudn898
     "name": "3号楼01",
     "floorNum": "003",
     "userId": "123213213",
-    "remark":"备注"
+    "remark":"备注",
+    "communityId":"小区ID"
 
 }
 

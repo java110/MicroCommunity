@@ -98,9 +98,12 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        paramIn.put("userId", pd.getUserId());
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor",
+                HttpMethod.POST);
 
-
-        return null;
+        return responseEntity;
     }
 
     /**
