@@ -27,6 +27,7 @@
 |memberId|1|String|30|小区成员ID|-|
 |communityId|1|String|30|小区ID|-|
 |memberTypeCd|1|String|12|成员角色|-|
+|auditStatusCd|1|String|4|审核状态|不需要审核时写0000|
 
 ###### 返回协议
 
@@ -49,13 +50,14 @@ REQ_TIME:20181113225612
 SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
-无
-
-返回报文：
 {
 	"memberId": "390001200001",
 	"communityId": "1234444",
 	"memberTypeCd": "12221222"
 }
+
+返回报文：
+
+成功
 
 ```

@@ -47,6 +47,7 @@
 |businessCommunityMember|communityId|1|String|30|小区ID|小区ID|
 |businessCommunityMember|memberId|1|String|30|成员ID|成员ID|
 |businessCommunityMember|memberTypeCd|1|String|30|成员类型|成员类型|
+|businessCommunityMember|auditStatusCd|1|String|4|审核状态|不需要审核的时直接写成0000|
 
 ###### 返回协议
 
@@ -91,7 +92,8 @@ Content-Type:application/json
         "communityMemberId": "-1",
         "communityId": "7020181217000001",
         "memberId": "3456789",
-        "memberTypeCd": "390001200001"
+        "memberTypeCd": "390001200001",
+        "auditStatusCd":"0000"
       }
     },
     "attrs": [{

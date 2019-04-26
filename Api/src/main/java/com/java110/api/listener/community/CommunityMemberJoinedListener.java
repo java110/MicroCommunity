@@ -3,8 +3,10 @@ package com.java110.api.listener.community;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
@@ -68,8 +70,8 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
     /**
      * 添加小区成员
      *
-     * @param paramInJson
-     * @return
+     * @param paramInJson 接口请求数据封装
+     * @return 封装好的 data数据
      */
     private JSONObject addCommunityMember(JSONObject paramInJson) {
 
@@ -82,6 +84,7 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("memberId"));
         businessCommunityMember.put("memberTypeCd", paramInJson.getString("memberTypeCd"));
+        businessCommunityMember.put("auditStatusCd", MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd")));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
         return business;

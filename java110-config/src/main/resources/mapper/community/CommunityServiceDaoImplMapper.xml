@@ -237,21 +237,21 @@
 
     <!--小区成员加入 add by wuxw 2018-10-27 saveBusinessCommunityMember-->
     <insert id="saveBusinessCommunityMember" parameterType="Map">
-        insert into business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate)
-        values(#{communityMemberId},#{bId},#{communityId},#{memberId},#{memberTypeCd},#{month},#{operate})
+        insert into business_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,month,operate,audit_status_cd)
+        values(#{communityMemberId},#{bId},#{communityId},#{memberId},#{memberTypeCd},#{month},#{operate},#{auditStatusCd})
     </insert>
 
     <!-- 小区成员加入 instance表中 add by wuxw 2018-10-27 -->
     <insert id="saveCommunityMemberInstance" parameterType="Map">
-        insert into s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd)
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'1000'
+        insert into s_community_member(community_member_id,b_id,community_id,member_id,member_type_cd,status_cd,audit_status_cd)
+        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0',ms.audit_status_cd
         from business_community_member ms where
         ms.operate = 'ADD' and ms.b_id=#{bId}
     </insert>
 
     <!-- 查询小区成员 add by wuxw 2018-10-27 getBusinessCommunityMember-->
     <select id="getBusinessCommunityMember" parameterType="Map" resultType="Map">
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate
+        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.operate,ms.audit_status_cd
         from business_community_member ms where 1 = 1
         <if test="operate != null and operate != ''">
             and ms.operate = #{operate}
@@ -267,7 +267,7 @@
 
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMember" parameterType="Map" resultType="Map">
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd
+        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd
         from s_community_member ms
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -287,6 +287,9 @@
         update s_community_member ms set ms.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,ms.b_id = #{newBId}
+        </if>
+        <if test="auditStatusCd !=null and auditStatusCd !=''">
+            ,ms.audit_status_cd = #{auditStatusCd}
         </if>
         where 1=1
         <if test="bId != null and bId !=''">
