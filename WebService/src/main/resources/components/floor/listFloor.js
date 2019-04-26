@@ -13,7 +13,9 @@
             vc.component._listFloorData();
         },
         _initEvent:function(){
-
+            vc.on('listFloor','listFloorData',function(){
+                vc.component._listFloorData();
+            });
         },
         methods:{
             _listFloorData:function(){
