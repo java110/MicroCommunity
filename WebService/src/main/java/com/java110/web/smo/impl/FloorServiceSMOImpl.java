@@ -2,10 +2,10 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFloorServiceSMO;
@@ -27,7 +27,9 @@ import org.springframework.web.client.RestTemplate;
 @Service("floorServiceSMOImpl")
 public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServiceSMO {
 
-    private  static Logger logger = LoggerFactory.getLogger(FloorServiceSMOImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(FloorServiceSMOImpl.class);
+
+    private static final int MAX_ROW = 50;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -62,10 +64,11 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
-        super.checkStoreEnterCommunity(pd,storeId,storeTypeCd,communityId,restTemplate);
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId=" + communityId , HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId=" + communityId,
+                HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -94,8 +97,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
-        super.checkStoreEnterCommunity(pd,storeId,storeTypeCd,communityId,restTemplate);
-
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
 
         return null;
@@ -103,13 +105,14 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
 
     /**
      * 校验保存小区楼 信息
-     * @param pd
+     *
+     * @param pd 页面数据封装
      */
-    private void validateSaveFloor(IPageData pd){
-        Assert.jsonObjectHaveKey(pd.getReqData(),"communityId","未包含小区ID");
-        Assert.jsonObjectHaveKey(pd.getReqData(),"name","未包含小区名称");
-        Assert.jsonObjectHaveKey(pd.getReqData(),"floorNum","未包含小区编码");
-        Assert.jsonObjectHaveKey(pd.getReqData(),"remark","未包含小区备注");
+    private void validateSaveFloor(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "name", "未包含小区名称");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区编码");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区备注");
     }
 
     /**
@@ -124,13 +127,12 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
-        Assert.hasLength(paramIn.getString("communityId"),"小区ID不能为空");
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
         int rows = Integer.parseInt(paramIn.getString("rows"));
 
 
-
-        if (rows > 50) {
-            throw new SMOException(1999, "rows 数量不能大于50");
+        if (rows > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "rows 数量不能大于50");
         }
 
     }

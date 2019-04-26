@@ -358,5 +358,8 @@ public class ServiceCodeConstant {
     //查询小区楼
     public static final String SERVICE_CODE_QUERY_FLOOR = "floor.queryFloors";
 
+    // 保存小区楼信息
+    public static final String SERVICE_CODE_SAVE_FLOOR = "floor.saveFloor";
+
 
 }

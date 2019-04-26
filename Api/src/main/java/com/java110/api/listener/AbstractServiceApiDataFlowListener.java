@@ -274,6 +274,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
      * 将rest 协议转为 订单协议
      *
      * @param businesses 多个业务
+     * @param headers 订单头信息
      * @return
      */
     protected JSONObject restToCenterProtocol(JSONArray businesses, Map<String, String> headers) {

@@ -28,7 +28,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@Java110Listener("QueryFloorsListener")
+@Java110Listener("queryFloorsListener")
 public class QueryFloorsListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired

@@ -19,6 +19,7 @@
   * [小区成员入驻](api/community/communityMemberJoined.md)
   * [小区成员退出](api/community/communityMemberQuit.md)
   * [查询小区楼信息](api/floor/queryFloors.md)
+  * [添加小区楼信息](api/floor/saveFloor.md)
 
 * 服务端接口协议
 

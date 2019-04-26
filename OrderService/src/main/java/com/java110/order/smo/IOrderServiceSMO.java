@@ -16,12 +16,12 @@ public interface IOrderServiceSMO {
      * @param reqJson 请求报文json
      * @return
      */
-    public ResponseEntity<String> service(String reqJson, Map<String, String> headers) throws SMOException;
+     ResponseEntity<String> service(String reqJson, Map<String, String> headers) throws SMOException;
 
     /**
      * 接受业务系统通知消息
      * @param receiveJson 接受报文
      * @throws SMOException
      */
-    public void receiveBusinessSystemNotifyMessage(String receiveJson) throws SMOException;
+     void receiveBusinessSystemNotifyMessage(String receiveJson) throws SMOException;
 }
