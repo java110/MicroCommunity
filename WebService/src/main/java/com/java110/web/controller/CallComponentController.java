@@ -30,15 +30,16 @@ public class CallComponentController extends BaseController {
 
     /**
      * 调用组件方法
+     *
      * @return
      */
 
-    @RequestMapping(path="/callComponent/{componentCode}/{componentMethod}")
+    @RequestMapping(path = "/callComponent/{componentCode}/{componentMethod}")
     public ResponseEntity<String> callComponent(
             @PathVariable String componentCode,
             @PathVariable String componentMethod,
             //@RequestBody String info,
-            HttpServletRequest request){
+            HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
@@ -58,23 +59,23 @@ public class CallComponentController extends BaseController {
 
             responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd);
 
-        }catch (SMOException e){
+        } catch (SMOException e) {
             MultiValueMap<String, String> headers = new HttpHeaders();
-            headers.add("code",e.getResult().getCode());
-            responseEntity = new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }catch (Exception e){
+            headers.add("code", e.getResult().getCode());
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
             String msg = "";
             if (e instanceof InvocationTargetException) {
-                Throwable targetEx =((InvocationTargetException)e).getTargetException();
+                Throwable targetEx = ((InvocationTargetException) e).getTargetException();
                 if (targetEx != null) {
                     msg = targetEx.getMessage();
                 }
             } else {
                 msg = e.getMessage();
             }
-            responseEntity = new ResponseEntity<>(msg,HttpStatus.INTERNAL_SERVER_ERROR);
-        }finally {
-            logger.debug("组件调用返回信息为{}",responseEntity);
+            responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("组件调用返回信息为{}", responseEntity);
             return responseEntity;
         }
     }

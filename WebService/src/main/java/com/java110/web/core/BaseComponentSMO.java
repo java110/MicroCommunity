@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.factory.ApplicationContextFactory;
@@ -105,9 +106,9 @@ public class BaseComponentSMO extends BaseServiceSMO {
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/query.myCommunity.byMember?memberId=" + storeId + "&memberTypeCd="
-                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE,storeTypeCd), HttpMethod.GET);
+                        + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd), HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException(1999, "还未入驻小区，请先入驻小区");
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
         }
 
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "communitys", "还未入驻小区，请先入驻小区");
@@ -117,20 +118,20 @@ public class BaseComponentSMO extends BaseServiceSMO {
         JSONArray communitys = community.getJSONArray("communitys");
 
         if (communitys == null || communitys.size() == 0) {
-            throw new SMOException(1999, "还未入驻小区，请先入驻小区");
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
         }
 
-        JSONObject currentCommunity = getCurrentCommunity(communitys,communityId);
+        JSONObject currentCommunity = getCurrentCommunity(communitys, communityId);
 
-        if(currentCommunity == null){
-            throw new SMOException(1999, "传入小区ID非法，请正常操作");
+        if (currentCommunity == null) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "传入小区ID非法，请正常操作");
         }
 
     }
 
-    private JSONObject getCurrentCommunity(JSONArray communitys,String communityId){
+    private JSONObject getCurrentCommunity(JSONArray communitys, String communityId) {
         for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
-            if(communityId.equals(communitys.getJSONObject(communityIndex).getString("communityId"))){
+            if (communityId.equals(communitys.getJSONObject(communityIndex).getString("communityId"))) {
                 return communitys.getJSONObject(communityIndex);
             }
         }

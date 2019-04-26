@@ -86,7 +86,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         validateSaveFloor(pd);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        String communityId = paramIn.getString("paramIn");
+        String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
