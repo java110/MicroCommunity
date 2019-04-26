@@ -51,6 +51,11 @@ public class StatusConstant {
      */
     public final static String STATUS_CD_AUDIT_INVALID = "1001";
 
+    /**
+     * 入驻成功
+     */
+    public final static String STATUS_CD_AUDIT_COMPLETE = "0000";
+
     public final static String REQUEST_BUSINESS_TYPE = "Q";
     public final static String REQUEST_BUSINESS_TYPE_BUSINESS = "B";
     public final static String REQUEST_BUSINESS_TYPE_INSTANCE = "I";

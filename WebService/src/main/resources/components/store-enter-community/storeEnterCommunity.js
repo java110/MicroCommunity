@@ -67,6 +67,7 @@
                    );
              },
             _saveEnterCommunity:function(_communityInfo){
+                vc.loading('open');
                 var _param = {
                     communityId:_communityInfo.communityId
                 };
@@ -80,13 +81,18 @@
                              function(json,res){
                                 if(res.status == 200){
                                     vc.emit('enterCommunity','listMyCommunity',{
-                                    })
+                                    });
+                                    $('#storeEnterCommunityModel').modal('hide');
+
+                                    vc.loading('close');
                                     return ;
                                 }
                                 vc.component.storeEnterCommunityInfo.errorInfo = json;
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                                 vc.component.storeEnterCommunityInfo.errorInfo = json;
+                                vc.loading('close');
+
                              }
                            );
 

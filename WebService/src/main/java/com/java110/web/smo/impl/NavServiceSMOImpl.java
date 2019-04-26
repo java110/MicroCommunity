@@ -102,7 +102,7 @@ public class NavServiceSMOImpl extends BaseComponentSMO implements INavServiceSM
         for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
             tempCommunity = communitys.getJSONObject(communityIndex);
 
-            if (!StatusConstant.STATUS_CD_VALID.equals(tempCommunity.getString("statusCd"))) {
+            if (!StatusConstant.STATUS_CD_AUDIT_COMPLETE.equals(tempCommunity.getString("auditStatusCd"))) {
                 continue;
             }
             newCommunity = new JSONObject();
