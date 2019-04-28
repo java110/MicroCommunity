@@ -89,11 +89,11 @@ public final class BeanConvertUtil {
      * @param orgBean 原始bean
      * @return map对象
      */
-    public static  Map<String, Object> beanCovertMap(Object orgBean) {
-        Map<String, Object> newMap = new HashMap<String, Object>();
+    public static  Map beanCovertMap(Object orgBean) {
+        Map newMap = null;
 
         try {
-            BeanUtils.populate(orgBean, newMap);
+            newMap = BeanUtils.describe(orgBean);
         } catch (Exception e) {
             throw new RuntimeException("bean转换Map失败", e);
         }

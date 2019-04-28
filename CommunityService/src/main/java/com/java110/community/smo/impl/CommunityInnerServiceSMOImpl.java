@@ -33,8 +33,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         logger.debug("communityMemberDto：{}", JSONObject.toJSONString(communityMemberDto));
 
-        Map info = new HashMap();
-        List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.covertBean(communityMemberDto, info));
+        List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.beanCovertMap(communityMemberDto));
         return BeanConvertUtil.covertBeanList(communityMembers, CommunityMemberDto.class);
     }
 
