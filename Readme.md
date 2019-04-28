@@ -67,8 +67,16 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 4.数据模型图
 ![image](dataModel.png)
 
+### 加入我们（join）
+
 加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685，邮箱：928255095@qq.com
 
 ![image](MicroCommunity_qq.png)
+
+### 成为开发者
+
+如果您对小区 物业 有较深的理解，也致力于开发一套系统方便与物业，业主沟通交流，如果您还有空闲的时间，不怕吃苦，hc小区开发团队欢迎您的加入！
+
+![image](join_me.JPG)
 
 
