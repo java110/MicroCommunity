@@ -108,7 +108,7 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
+        JSONObject businessCommunityMember = new JSONObject();
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberId(paramInJson.getString("floorId"));
         communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
@@ -121,8 +121,8 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         }
 
 
-        businessFloor.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessFloor);
+        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
         return business;
     }

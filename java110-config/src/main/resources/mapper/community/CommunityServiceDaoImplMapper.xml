@@ -267,7 +267,9 @@
 
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMember" parameterType="Map" resultType="Map">
-        select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd
+        select ms.community_member_id ,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd,
+        ms.community_member_id communityMemberId ,ms.b_id bId,ms.community_id communityId,ms.member_id memberId,ms.member_type_cd memberTypeCd,ms.status_cd statusCd,
+        ms.audit_status_cd auditStatusCd
         from s_community_member ms
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -288,6 +290,10 @@
         </if>
         <if test="auditStatusCd != null and auditStatusCd != ''">
             and ms.audit_status_cd = #{auditStatusCd}
+        </if>
+
+        <if test="communityId != null and communityId != ''">
+            and ms.community_id = #{communityId}
         </if>
     </select>
 
