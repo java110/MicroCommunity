@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 删除小区楼信息
  */
-@Java110Listener("editFloorListener")
+@Java110Listener("deleteFloorListener")
 public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(DeleteFloorListener.class);

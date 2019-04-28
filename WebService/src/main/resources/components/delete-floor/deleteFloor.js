@@ -14,6 +14,8 @@
                 $('#deleteFloorModel').modal('hide');
             },
             deleteFloor:function(){
+
+                vc.component.deleteFloorInfo.communityId = vc.getCurrentCommunity().communityId;
                 vc.http.post(
                     'deleteFloor',
                     'delete',
