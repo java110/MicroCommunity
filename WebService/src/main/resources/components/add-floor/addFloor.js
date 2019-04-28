@@ -58,8 +58,11 @@
                 });
             },
             saveFloorInfo:function(){
+                vc.loading('open');
                 if(!vc.component.addFloorValidate()){
                     vc.component.addFloorInfo.errorInfo = vc.validate.errInfo;
+                    vc.loading('close');
+
                     return ;
                 }
 
@@ -79,15 +82,21 @@
                             //关闭model
                             $('#addFloorModel').modal('hide');
                             vc.component.clearAddFloorInfo();
-                            vc.component.$emit('addFloor_reload_event',{});
+                            vc.emit('listFloor','listFloorData',{});
+                            vc.loading('close');
+
                             return ;
                         }
                         vc.component.addFloorInfo.errorInfo = json;
+                             vc.loading('close');
+
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
 
                         vc.component.addFloorInfo.errorInfo = errInfo;
+                             vc.loading('close');
+
                      });
             },
             clearAddFloorInfo:function(){

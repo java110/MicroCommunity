@@ -46,9 +46,11 @@
                     return "入驻审核";
                 }else if(_statusCd == '1001'){
                     return "退出审核";
+                }else if(_statusCd == '0000'){
+                    return "入驻成功";
                 }
 
-                return "在用";
+                return "未知";
             }
         }
     });

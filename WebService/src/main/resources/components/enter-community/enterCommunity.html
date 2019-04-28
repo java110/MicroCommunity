@@ -48,10 +48,10 @@
                                 {{community.cityCode}}
                             </td>
                             <td>
-                                {{_showCommunityStatus(community.statusCd)}}
+                                {{_showCommunityStatus(community.auditStatusCd)}}
                             </td>
                             <td class="text-right">
-                                <div class="btn-group" v-if="community.statusCd == 0">
+                                <div class="btn-group" v-if="community.auditStatusCd == '0000'">
                                     <button class="btn-white btn btn-xs" v-on:click="_openExitCommunityModel(community)">申请退出</button>
                                 </div>
                             </td>

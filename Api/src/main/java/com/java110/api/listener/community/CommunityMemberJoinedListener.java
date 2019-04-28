@@ -3,14 +3,14 @@ package com.java110.api.listener.community;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.*;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -68,8 +68,8 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
     /**
      * 添加小区成员
      *
-     * @param paramInJson
-     * @return
+     * @param paramInJson 接口请求数据封装
+     * @return 封装好的 data数据
      */
     private JSONObject addCommunityMember(JSONObject paramInJson) {
 
@@ -82,6 +82,9 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("memberId"));
         businessCommunityMember.put("memberTypeCd", paramInJson.getString("memberTypeCd"));
+        String auditStatusCd = MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd"));
+        auditStatusCd = StringUtils.isEmpty(auditStatusCd) ? StatusConstant.STATUS_CD_AUDIT_COMPLETE : auditStatusCd;
+        businessCommunityMember.put("auditStatusCd", auditStatusCd);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
         return business;
