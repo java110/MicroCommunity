@@ -45,26 +45,15 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
 
-![image](WebService/doc/img/20180507230124.jpg)
+![image](WebService/doc/img/login.png)
 
-    点击高级，继续前往。
-
-2.登录系统，用户名为 wuxw 密码为 admin  如下图
-
-![image](WebService/doc/img/20180507230330.jpg)
+    用户名为 wuxw 密码为 admin  如下图
 
     点击登录，进入如下图：
     
-  ![image](WebService/doc/img/20180507231045.jpg)
-  
-  ![image](WebService/doc/img/20180509223107.jpg)
-  
-  ![image](WebService/doc/img/20180511010848.jpg)
+![image](WebService/doc/img/staff.png)
 
-
-3.统一接口地址：http://ip:8001/httpApi/service
-
-4.数据模型图
+2.数据模型图
 ![image](dataModel.png)
 
 ### 加入我们（join）
