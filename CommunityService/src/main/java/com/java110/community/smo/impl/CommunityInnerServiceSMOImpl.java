@@ -8,6 +8,7 @@ import com.java110.dto.CommunityMemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,8 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
     @Override
     public List<CommunityMemberDto> getCommunityMembers(CommunityMemberDto communityMemberDto) {
-        List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.covertBean(communityMemberDto, Map.class));
+        Map info = new HashMap();
+        List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.covertBean(communityMemberDto, info));
         return BeanConvertUtil.covertBeanList(communityMembers, CommunityMemberDto.class);
     }
 
