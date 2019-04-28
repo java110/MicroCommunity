@@ -118,7 +118,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
     @Override
     public ResponseEntity<String> editFloor(IPageData pd) {
 
-        validateSaveFloor(pd);
+        validateEditFloor(pd);
 
         //校验员工是否有权限操作
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
@@ -150,9 +150,21 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      *
      * @param pd 页面数据封装
      */
-    private void validateSaveFloor(IPageData pd) {
+    private void validateEditFloor(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(pd.getReqData(), "floorName", "未包含小区楼名称");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区楼编码");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区楼备注");
+    }
+
+    /**
+     * 校验保存小区楼 信息
+     *
+     * @param pd 页面数据封装
+     */
+    private void validateSaveFloor(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "name", "未包含小区楼名称");
         Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区楼编码");
         Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区楼备注");
     }
