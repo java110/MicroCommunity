@@ -15,7 +15,8 @@
          },
          _initEvent:function(){
             vc.on('editFloor','openEditFloorModal',function(_floor){
-                vc.component.editFloorInfo = _floor;
+                vc.component.editFloorInfo.errorInfo="";
+                vc.copyObject(_floor,vc.component.editFloorInfo);
                 $('#editFloorModel').modal('show');
             });
         },
@@ -59,7 +60,7 @@
 
                 });
             },
-            saveFloorInfo:function(){
+            editFloorMethod:function(){
 
                 if(!vc.component.editFloorValidate()){
                     vc.component.editFloorInfo.errorInfo = vc.validate.errInfo;

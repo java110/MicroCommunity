@@ -36,11 +36,11 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 [视频](https://pan.baidu.com/s/1hnw5u-rnsZrLJjzMVrhI6A)
 
-### 接口接口协议
+### 接口协议
 
-1. [openApi协议](docs/api/Readme.md)
+1. [Api协议](https://www.java110.com/#/api/user/register)
 
-2. [后台协议](docs/services/Readme.md)
+2. [后台协议](https://www.java110.com/#/dictionary)
 
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
@@ -52,6 +52,8 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     点击登录，进入如下图：
     
 ![image](WebService/doc/img/staff.png)
+
+![image](WebService/doc/img/community.png)
 
 2.数据模型图
 ![image](dataModel.png)

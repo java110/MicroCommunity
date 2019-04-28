@@ -173,6 +173,16 @@
         window.localStorage.clear();
     };
 
+    //将org 对象的属性值赋值给dst 属性名为一直的属性
+    vc.copyObject = function(org,dst){
+        //for(key in Object.getOwnPropertyNames(dst)){
+        for(var key in dst){
+            if (org.hasOwnProperty(key)){
+                dst[key] = org[key]
+            }
+        }
+    }
+
 
 
 })(window.vc);

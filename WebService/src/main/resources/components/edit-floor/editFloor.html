@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <h3 class="m-t-none m-b ">添加小区楼</h3>
+                <h3 class="m-t-none m-b ">修改小区楼</h3>
                 <div class="ibox-content">
                     <div>
                         <p style="color:red;">{{editFloorInfo.errorInfo}}</p>
@@ -20,7 +20,7 @@
                                 <div class="col-sm-10"><input v-model="editFloorInfo.remark" type="tel" placeholder="可填，请填写备注" class="form-control"></div>
                             </div>
                             <div class="ibox-content">
-                                <button class="btn btn-primary float-right" type="button" v-on:click="editFloorInfo()" ><i class="fa fa-check"></i>&nbsp;修改</button>
+                                <button class="btn btn-primary float-right" type="button" v-on:click="editFloorMethod()" ><i class="fa fa-check"></i>&nbsp;修改</button>
                                 <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
                             </div>
                         </div>

@@ -137,6 +137,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
+        paramIn.put("name", paramIn.getString("floorName"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/floor.editFloor",
                 HttpMethod.POST);
@@ -151,9 +152,9 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      */
     private void validateSaveFloor(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "name", "未包含小区名称");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区编码");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区备注");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorName", "未包含小区楼名称");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区楼编码");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区楼备注");
     }
 
     /**

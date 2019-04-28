@@ -84,7 +84,7 @@ public class EditFloorListener extends AbstractServiceApiDataFlowListener {
      */
     private void validate(String paramIn) {
         Assert.jsonObjectHaveKey(paramIn, "floorId", "请求报文中未包含floorId");
-        Assert.jsonObjectHaveKey(paramIn, "floorName", "请求报文中未包含floorName");
+        Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
         Assert.jsonObjectHaveKey(paramIn, "floorNum", "请求报文中未包含floorNum");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
