@@ -361,5 +361,6 @@ public class ServiceCodeConstant {
     // 保存小区楼信息
     public static final String SERVICE_CODE_SAVE_FLOOR = "floor.saveFloor";
 
-
+    // 编辑小区楼信息
+    public static final String SERVICE_CODE_EDIT_FLOOR = "floor.editFloor";
 }

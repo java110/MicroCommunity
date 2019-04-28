@@ -58,19 +58,25 @@
 (function(vc){
     vc.http = {
         post:function(componentCode,componentMethod,param,options,successCallback,errorCallback){
+                vc.loading('open');
                 Vue.http.post('/callComponent/'+componentCode +"/"+componentMethod, param, options)
                 .then(function(res){
                     successCallback(res.bodyText,res);
+                    vc.loading('close');
                 }, function(error){
                     errorCallback(error.bodyText,error);
+                    vc.loading('close');
                 });
         },
         get:function(componentCode,componentMethod,param,successCallback,errorCallback){
+                vc.loading('open');
                 Vue.http.get('/callComponent/'+componentCode +"/"+componentMethod, param)
                 .then(function(res){
                     successCallback(res.bodyText,res);
+                    vc.loading('close');
                 }, function(error){
                     errorCallback(error.bodyText,error);
+                    vc.loading('close');
                 });
         }
 

@@ -23,4 +23,12 @@ public interface IFloorServiceSMO {
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
     ResponseEntity<String> saveFloor(IPageData pd);
+
+    /**
+     * 编辑小区楼信息
+     *
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> editFloor(IPageData pd);
 }

@@ -46,7 +46,6 @@
 //                     });
 //            },
             listNoEnterCommunity:function(){
-                    vc.loading('open');
                     var param = {
                         params:{
                             communityName:vc.component.storeEnterCommunityInfo.searchCommunityName
@@ -59,15 +58,12 @@
                                  param,
                                  function(json,res){
                                     vc.component.storeEnterCommunityInfo.communityInfo=JSON.parse(json);
-                                    vc.loading('close');
                                  },function(errInfo,error){
                                     console.log('请求失败处理');
-                                    vc.loading('close');
                                  }
                    );
              },
             _saveEnterCommunity:function(_communityInfo){
-                vc.loading('open');
                 var _param = {
                     communityId:_communityInfo.communityId
                 };
@@ -84,14 +80,12 @@
                                     });
                                     $('#storeEnterCommunityModel').modal('hide');
 
-                                    vc.loading('close');
                                     return ;
                                 }
                                 vc.component.storeEnterCommunityInfo.errorInfo = json;
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                                 vc.component.storeEnterCommunityInfo.errorInfo = json;
-                                vc.loading('close');
 
                              }
                            );

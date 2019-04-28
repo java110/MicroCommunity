@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 修改小区楼信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessFloor:{} 小区楼基本信息节点
  * 2、businessFloorAttr:[{}] 小区楼属性信息节点
@@ -35,7 +35,7 @@ import java.util.Map;
 @Transactional
 public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(UpdateFloorInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateFloorInfoListener.class);
     @Autowired
     IFloorServiceDao floorServiceDaoImpl;
 
@@ -51,6 +51,7 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
     /**
      * business过程
+     *
      * @param dataFlowContext
      * @param business
      */
@@ -59,25 +60,25 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFloor 节点
-        if(data.containsKey("businessFloor")){
+        if (data.containsKey("businessFloor")) {
             //处理 businessFloor 节点
-            if(data.containsKey("businessFloor")){
+            if (data.containsKey("businessFloor")) {
                 Object _obj = data.get("businessFloor");
                 JSONArray businessFloors = null;
-                if(_obj instanceof JSONObject){
+                if (_obj instanceof JSONObject) {
                     businessFloors = new JSONArray();
                     businessFloors.add(_obj);
-                }else {
-                    businessFloors = (JSONArray)_obj;
+                } else {
+                    businessFloors = (JSONArray) _obj;
                 }
                 //JSONObject businessFloor = data.getJSONObject("businessFloor");
-                for (int _floorIndex = 0; _floorIndex < businessFloors.size();_floorIndex++) {
+                for (int _floorIndex = 0; _floorIndex < businessFloors.size(); _floorIndex++) {
                     JSONObject businessFloor = businessFloors.getJSONObject(_floorIndex);
                     doBusinessFloor(business, businessFloor);
-                    if(_obj instanceof JSONObject) {
+                    if (_obj instanceof JSONObject) {
                         dataFlowContext.addParamOut("floorId", businessFloor.getString("floorId"));
                     }
                 }
@@ -88,8 +89,9 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
     /**
      * business to instance 过程
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -97,17 +99,17 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_ADD);
 
         //小区楼信息
         List<Map> businessFloorInfos = floorServiceDaoImpl.getBusinessFloorInfo(info);
-        if( businessFloorInfos != null && businessFloorInfos.size() >0) {
-            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size();_floorIndex++) {
+        if (businessFloorInfos != null && businessFloorInfos.size() > 0) {
+            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size(); _floorIndex++) {
                 Map businessFloorInfo = businessFloorInfos.get(_floorIndex);
-                flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessFloorInfo(businessFloorInfo, StatusConstant.STATUS_CD_VALID);
                 floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
-                if(businessFloorInfo.size() == 1) {
+                if (businessFloorInfo.size() == 1) {
                     dataFlowContext.addParamOut("floorId", businessFloorInfo.get("floor_id"));
                 }
             }
@@ -117,8 +119,9 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
     /**
      * 撤单
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
@@ -126,24 +129,24 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //小区楼信息
         List<Map> floorInfo = floorServiceDaoImpl.getFloorInfo(info);
-        if(floorInfo != null && floorInfo.size() > 0){
+        if (floorInfo != null && floorInfo.size() > 0) {
 
             //小区楼信息
             List<Map> businessFloorInfos = floorServiceDaoImpl.getBusinessFloorInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessFloorInfos == null || businessFloorInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（floor），程序内部异常,请检查！ "+delInfo);
+            if (businessFloorInfos == null || businessFloorInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（floor），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size();_floorIndex++) {
+            for (int _floorIndex = 0; _floorIndex < businessFloorInfos.size(); _floorIndex++) {
                 Map businessFloorInfo = businessFloorInfos.get(_floorIndex);
-                flushBusinessFloorInfo(businessFloorInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessFloorInfo(businessFloorInfo, StatusConstant.STATUS_CD_VALID);
                 floorServiceDaoImpl.updateFloorInfoInstance(businessFloorInfo);
             }
         }
@@ -151,30 +154,28 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
     }
 
 
-
     /**
      * 处理 businessFloor 节点
-     * @param business 总的数据节点
+     *
+     * @param business      总的数据节点
      * @param businessFloor 小区楼节点
      */
-    private void doBusinessFloor(Business business,JSONObject businessFloor){
+    private void doBusinessFloor(Business business, JSONObject businessFloor) {
 
-        Assert.jsonObjectHaveKey(businessFloor,"floorId","businessFloor 节点下没有包含 floorId 节点");
+        Assert.jsonObjectHaveKey(businessFloor, "floorId", "businessFloor 节点下没有包含 floorId 节点");
 
-        if(businessFloor.getString("floorId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"floorId 错误，不能自动生成（必须已经存在的floorId）"+businessFloor);
+        if (businessFloor.getString("floorId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "floorId 错误，不能自动生成（必须已经存在的floorId）" + businessFloor);
         }
         //自动保存DEL
-        autoSaveDelBusinessFloor(business,businessFloor);
+        autoSaveDelBusinessFloor(business, businessFloor);
 
-        businessFloor.put("bId",business.getbId());
+        businessFloor.put("bId", business.getbId());
         businessFloor.put("operate", StatusConstant.OPERATE_ADD);
         //保存小区楼信息
         floorServiceDaoImpl.saveBusinessFloorInfo(businessFloor);
 
     }
-
-
 
 
     public IFloorServiceDao getFloorServiceDaoImpl() {
@@ -184,7 +185,6 @@ public class UpdateFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
     public void setFloorServiceDaoImpl(IFloorServiceDao floorServiceDaoImpl) {
         this.floorServiceDaoImpl = floorServiceDaoImpl;
     }
-
 
 
 }

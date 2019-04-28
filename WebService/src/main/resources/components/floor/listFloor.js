@@ -47,6 +47,9 @@
             },
             _openDelFloorModel:function(_floor){ // 打开删除对话框
 
+            },
+            _openEditFloorModel:function(_floor){
+                vc.emit('editFloor','openEditFloorModal',_floor);
             }
         }
     })

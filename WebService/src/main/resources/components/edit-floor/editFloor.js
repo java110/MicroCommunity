@@ -2,8 +2,9 @@
 
     vc.extends({
         data:{
-            addFloorInfo:{
-                name:'',
+            editFloorInfo:{
+                floorId:'',
+                floorName:'',
                 floorNum:'',
                 remark:'',
                 errorInfo:''
@@ -13,16 +14,17 @@
 
          },
          _initEvent:function(){
-            vc.on('addFloor','openAddFloorModal',function(){
-                $('#addFloorModel').modal('show');
+            vc.on('editFloor','openEditFloorModal',function(_floor){
+                vc.component.editFloorInfo = _floor;
+                $('#editFloorModel').modal('show');
             });
         },
         methods:{
-            addFloorValidate(){
+            editFloorValidate(){
                 return vc.validate.validate({
-                    addFloorInfo:vc.component.addFloorInfo
+                    editFloorInfo:vc.component.editFloorInfo
                 },{
-                    'addFloorInfo.name':[
+                    'editFloorInfo.floorName':[
                         {
                             limit:"required",
                             param:"",
@@ -34,7 +36,7 @@
                             errInfo:"楼名称长度必须在2位至10位"
                         },
                     ],
-                    'addFloorInfo.floorNum':[
+                    'editFloorInfo.floorNum':[
                         {
                             limit:"required",
                             param:"",
@@ -46,7 +48,7 @@
                             errInfo:"不是有效的数字"
                         },
                     ],
-                    'addFloorInfo.remark':[
+                    'editFloorInfo.remark':[
 
                         {
                             limit:"maxLength",
@@ -58,19 +60,19 @@
                 });
             },
             saveFloorInfo:function(){
-                if(!vc.component.addFloorValidate()){
-                    vc.component.addFloorInfo.errorInfo = vc.validate.errInfo;
 
+                if(!vc.component.editFloorValidate()){
+                    vc.component.editFloorInfo.errorInfo = vc.validate.errInfo;
                     return ;
                 }
 
-                vc.component.addFloorInfo.errorInfo = "";
+                vc.component.editFloorInfo.errorInfo = "";
 
-                vc.component.addFloorInfo.communityId = vc.getCurrentCommunity().communityId;
+                vc.component.editFloorInfo.communityId = vc.getCurrentCommunity().communityId;
                 vc.http.post(
-                    'addFloor',
-                    'saveFloor',
-                    JSON.stringify(vc.component.addFloorInfo),
+                    'editFloor',
+                    'changeFloor',
+                    JSON.stringify(vc.component.editFloorInfo),
                     {
                         emulateJSON:true
                      },
@@ -78,25 +80,26 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#addFloorModel').modal('hide');
-                            vc.component.clearAddFloorInfo();
+                            $('#editFloorModel').modal('hide');
+                            vc.component.clearEditFloorInfo();
                             vc.emit('listFloor','listFloorData',{});
 
                             return ;
                         }
-                        vc.component.addFloorInfo.errorInfo = json;
+                        vc.component.editFloorInfo.errorInfo = json;
 
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
 
-                        vc.component.addFloorInfo.errorInfo = errInfo;
+                        vc.component.editFloorInfo.errorInfo = errInfo;
 
                      });
             },
-            clearAddFloorInfo:function(){
-                vc.component.addFloorInfo = {
-                                            name:'',
+            clearEditFloorInfo:function(){
+                vc.component.editFloorInfo = {
+                                            floorId:'',
+                                            floorName:'',
                                             floorNum:'',
                                             remark:'',
                                             errorInfo:''

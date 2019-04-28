@@ -15,16 +15,15 @@ import com.java110.event.service.api.ServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by wuxw on 2018/11/15.
@@ -34,6 +33,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
     private static Logger logger = LoggerFactory.getLogger(AbstractServiceApiDataFlowListener.class);
 
     protected static final int DEFAULT_ORDER = 1;
+    //默认序列
+    protected static final int DEFAULT_SEQ = 1;
 
     @Autowired
     private RestTemplate restTemplate;

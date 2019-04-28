@@ -4,6 +4,7 @@ package com.java110.core.base.smo;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.util.ProtocolUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
 import com.java110.core.context.IPageData;
@@ -30,8 +31,9 @@ public class BaseServiceSMO extends AppBase {
 
     /**
      * 主键生成
+     *
      * @param iPrimaryKeyService 主键生成服务对象
-     * @param type 主键类型 如 OL_ID , CUST_ID
+     * @param type               主键类型 如 OL_ID , CUST_ID
      * @return
      * @throws Exception
      */
@@ -43,13 +45,13 @@ public class BaseServiceSMO extends AppBase {
         //要求接口返回 {"RESULT_CODE":"0000","RESULT_INFO":{"user_id":"7020170411000041"},"RESULT_MSG":"成功"}
         String custIdJSONStr = iPrimaryKeyService.queryPrimaryKey(data.toJSONString());
         JSONObject custIdJSONTmp = JSONObject.parseObject(custIdJSONStr);
-        if(custIdJSONTmp.containsKey("RESULT_CODE")
+        if (custIdJSONTmp.containsKey("RESULT_CODE")
                 && ProtocolUtil.RETURN_MSG_SUCCESS.equals(custIdJSONTmp.getString("RESULT_CODE"))
-                && custIdJSONTmp.containsKey("RESULT_INFO")){
+                && custIdJSONTmp.containsKey("RESULT_INFO")) {
             //从接口生成olId
-            targetId =  custIdJSONTmp.getJSONObject("RESULT_INFO").getString(type);
+            targetId = custIdJSONTmp.getJSONObject("RESULT_INFO").getString(type);
         }
-        if("-1".equals(targetId)) {
+        if ("-1".equals(targetId)) {
             throw new RuntimeException("调用主键生成服务服务失败，" + custIdJSONStr);
         }
 
@@ -58,26 +60,27 @@ public class BaseServiceSMO extends AppBase {
 
     /**
      * 调用中心服务
+     *
      * @return
      */
-    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate,IPageData pd, String param, String url, HttpMethod httpMethod){
+    protected ResponseEntity<String> callCenterService(RestTemplate restTemplate, IPageData pd, String param, String url, HttpMethod httpMethod) {
         ResponseEntity<String> responseEntity = null;
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_APP_ID.toLowerCase(), CommonConstant.HC_WEB_APP_ID);
-        header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
+        header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
-        logger.debug("请求中心服务信息，{}",httpEntity);
-        try{
+        logger.debug("请求中心服务信息，{}", httpEntity);
+        try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
-        }catch (HttpStatusCodeException e){ //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>("请求下游系统异常，"+e.getResponseBodyAsString(),e.getStatusCode());
-        }catch (Exception e){
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>("请求下游系统异常，" + e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }finally {
-            logger.debug("请求中心服务信息，{}",responseEntity);
+        } finally {
+            logger.debug("请求中心服务信息，{}", responseEntity);
             return responseEntity;
         }
 
@@ -86,9 +89,10 @@ public class BaseServiceSMO extends AppBase {
 
     /**
      * 创建上下文对象
+     *
      * @return
      */
-    protected AppContext createApplicationContext(){
+    protected AppContext createApplicationContext() {
         return AppContext.newInstance();
     }
 
