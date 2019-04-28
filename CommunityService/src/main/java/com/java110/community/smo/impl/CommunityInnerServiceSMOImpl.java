@@ -1,10 +1,13 @@
 package com.java110.community.smo.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +20,8 @@ import java.util.Map;
  */
 @RestController
 public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICommunityInnerServiceSMO {
+    private static Logger logger = LoggerFactory.getLogger(CommunityServiceSMOImpl.class);
+
 
     @Autowired
     private ICommunityServiceDao communityServiceDaoImpl;
@@ -24,6 +29,9 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
     @Override
     public List<CommunityMemberDto> getCommunityMembers(CommunityMemberDto communityMemberDto) {
+
+        logger.debug("communityMemberDto：{}", JSONObject.toJSONString(communityMemberDto));
+
         Map info = new HashMap();
         List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.covertBean(communityMemberDto, info));
         return BeanConvertUtil.covertBeanList(communityMembers, CommunityMemberDto.class);
