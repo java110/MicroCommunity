@@ -28,7 +28,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#deleteFloorModel').modal('hide');
-                            vc.component.$emit('deleteFloor_reload_event',{});
+                            vc.emit('listFloor','listFloorData',{});
                             return ;
                         }
                         vc.component.deleteFloornfo.errorInfo = json;
