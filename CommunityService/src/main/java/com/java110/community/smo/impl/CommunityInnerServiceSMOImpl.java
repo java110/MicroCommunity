@@ -9,6 +9,7 @@ import com.java110.dto.CommunityMemberDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
 
     @Override
-    public List<CommunityMemberDto> getCommunityMembers(CommunityMemberDto communityMemberDto) {
+    public List<CommunityMemberDto> getCommunityMembers(@RequestBody CommunityMemberDto communityMemberDto) {
 
         logger.debug("communityMemberDto：{}", JSONObject.toJSONString(communityMemberDto));
 
