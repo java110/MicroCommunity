@@ -145,6 +145,44 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> deleteFloor(IPageData pd) {
+        validateDeleteFloor(pd);
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/floor.deleteFloor",
+                HttpMethod.POST);
+
+        return responseEntity;
+    }
+
+    /**
+     * 删除小区楼 校验
+     *
+     * @param pd 页面数据封装
+     */
+    private void validateDeleteFloor(IPageData pd) {
+
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "未包含小区楼ID");
+
+    }
+
     /**
      * 校验保存小区楼 信息
      *
@@ -152,6 +190,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      */
     private void validateEditFloor(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "未包含小区楼ID");
         Assert.jsonObjectHaveKey(pd.getReqData(), "floorName", "未包含小区楼名称");
         Assert.jsonObjectHaveKey(pd.getReqData(), "floorNum", "未包含小区楼编码");
         Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区楼备注");

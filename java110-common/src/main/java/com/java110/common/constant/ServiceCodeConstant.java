@@ -363,4 +363,7 @@ public class ServiceCodeConstant {
 
     // 编辑小区楼信息
     public static final String SERVICE_CODE_EDIT_FLOOR = "floor.editFloor";
+
+    //删除小区楼信息
+    public static final String SERVICE_CODE_DELETE_FLOOR = "floor.deleteFloor";
 }

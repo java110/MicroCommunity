@@ -46,7 +46,7 @@
                 vc.emit('addFloor','openAddFloorModal',{});
             },
             _openDelFloorModel:function(_floor){ // 打开删除对话框
-
+                vc.emit('deleteFloor','openFloorModel',_floor);
             },
             _openEditFloorModel:function(_floor){
                 vc.emit('editFloor','openEditFloorModal',_floor);

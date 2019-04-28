@@ -21,7 +21,7 @@ import java.util.Map;
 //@Transactional
 public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunityServiceDao {
 
-    private final static Logger logger = LoggerFactory.getLogger(CommunityServiceDaoImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(CommunityServiceDaoImpl.class);
 
     /**
      * 小区信息封装
@@ -405,5 +405,20 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改小区成员加入信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
+    }
+
+    /**
+     *
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getCommunityMembers(Map info) throws DAOException {
+        logger.debug("查询小区成员加入信息 入参 info : {}", info);
+
+        List<Map> memberCommunitys = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityMember", info);
+
+        return memberCommunitys;
     }
 }

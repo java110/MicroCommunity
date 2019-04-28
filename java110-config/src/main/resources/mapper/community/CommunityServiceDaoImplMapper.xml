@@ -280,6 +280,15 @@
         <if test="communityMemberId != null and communityMemberId !=''">
             and ms.community_member_id = #{communityMemberId}
         </if>
+        <if test="memberId != null and memberId != ''">
+            and ms.member_id = #{memberId}
+        </if>
+        <if test="memberTypeCd != null and memberTypeCd != ''">
+            and ms.member_type_cd = #{memberTypeCd}
+        </if>
+        <if test="auditStatusCd != null and auditStatusCd != ''">
+            and ms.audit_status_cd = #{auditStatusCd}
+        </if>
     </select>
 
     <!-- 修改小区成员 add by wuxw 2018-07-03 -->
