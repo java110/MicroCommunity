@@ -28,3 +28,40 @@ CREATE TABLE f_floor(
 );
 CREATE INDEX idx_floor_b_id ON f_floor(b_id);
 CREATE UNIQUE INDEX idx_floor_id ON f_floor(floor_id);
+
+
+-- 单元信息 building 楼宇管理
+CREATE TABLE business_building_unit(
+  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
+  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+  unit_num VARCHAR(12) NOT NULL COMMENT '单元编号',
+  floor_id VARCHAR(30) NOT NULL COMMENT '楼ID',
+  layer_count int NOT NULL COMMENT '总层数',
+  lift varchar(4) NOT NULL COMMENT '是否有电梯 1010有 2020 无',
+  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+  remark VARCHAR(200) NOT NULL COMMENT '备注',
+  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+);
+
+
+CREATE INDEX idx_business_unit_id ON business_building_unit(unit_id);
+CREATE INDEX idx_business_unit_b_id ON business_building_unit(b_id);
+
+
+CREATE TABLE building_unit(
+  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
+  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+  unit_num VARCHAR(12) NOT NULL COMMENT '单元编号',
+  floor_id VARCHAR(30) NOT NULL COMMENT '楼ID',
+  layer_count int NOT NULL COMMENT '总层数',
+  lift varchar(4) NOT NULL COMMENT '是否有电梯 1010有 2020 无',
+  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+  remark VARCHAR(200) NOT NULL COMMENT '备注',
+  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
+  UNIQUE KEY (unit_id)
+);
+CREATE INDEX idx_unit_b_id ON building_unit(b_id);
+CREATE UNIQUE INDEX idx_unit_id ON building_unit(unit_id);
+

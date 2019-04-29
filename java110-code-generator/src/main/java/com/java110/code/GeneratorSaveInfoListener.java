@@ -1,28 +1,24 @@
 package com.java110.code;
 
-import java.io.*;
-import java.util.Date;
 import java.util.Map;
 
 public class GeneratorSaveInfoListener extends BaseGenerator {
 
 
-
-
-
     /**
      * 生成代码
+     *
      * @param data
      */
-    public void generator(Data data){
+    public void generator(Data data) {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
-        fileContext = fileContext.replace("store",toLowerCaseFirstOne(data.getName()))
-                .replace("Store",toUpperCaseFirstOne(data.getName()))
-                .replace("商户",data.getDesc())
-                .replace("BUSINESS_TYPE_SAVE_STORE_INFO",data.getNewBusinessTypeCd());
+        fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
+                .replace("Store", toUpperCaseFirstOne(data.getName()))
+                .replace("商户", data.getDesc())
+                .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd());
         System.out.println(this.getClass().getResource("/listener").getPath());
-        String writePath = this.getClass().getResource("/listener").getPath()+"/Save"+toUpperCaseFirstOne(data.getName())+"InfoListener.java";
+        String writePath = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         writeFile(writePath,
                 fileContext);
 
@@ -33,26 +29,26 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
          */
         StringBuffer sbDoc = readFile(this.getClass().getResource("/template/serviceDoc.txt").getFile());
         String fileContextDoc = sbDoc.toString();
-        fileContextDoc = fileContextDoc.replace("store",toLowerCaseFirstOne(data.getName()))
-                .replace("Store",toUpperCaseFirstOne(data.getName()))
-                .replace("商户",data.getDesc())
-                .replace("$businessTypeCd$",data.getNewBusinessTypeCdValue());
+        fileContextDoc = fileContextDoc.replace("store", toLowerCaseFirstOne(data.getName()))
+                .replace("Store", toUpperCaseFirstOne(data.getName()))
+                .replace("商户", data.getDesc())
+                .replace("$businessTypeCd$", data.getNewBusinessTypeCdValue());
 
-        Map<String,String> tmpParams = data.getParams();
+        Map<String, String> tmpParams = data.getParams();
         String tmpLine = "";
-        String _tmpLine ="";
-        for(String key : tmpParams.keySet()){
-            if("operate".equals(key) || "statusCd".equals(key) || "bId".equals(key)){
+        String _tmpLine = "";
+        for (String key : tmpParams.keySet()) {
+            if ("operate".equals(key) || "statusCd".equals(key) || "bId".equals(key)) {
                 continue;
             }
-            tmpLine += "|business"+toUpperCaseFirstOne(data.getName())+"Info|"+key+"|1|String|30|-|-|\n";
-            _tmpLine += "        \""+key+"\":\"填写具体值\",\n";
+            tmpLine += "|business" + toUpperCaseFirstOne(data.getName()) + "Info|" + key + "|1|String|30|-|-|\n";
+            _tmpLine += "        \"" + key + "\":\"填写具体值\",\n";
         }
-        _tmpLine = _tmpLine.substring(0,_tmpLine.lastIndexOf(","));
-        fileContextDoc = fileContextDoc.replace("$busienssInfo$",tmpLine);
-        fileContextDoc = fileContextDoc.replace("$businessInfoJson$",_tmpLine);
+        _tmpLine = _tmpLine.substring(0, _tmpLine.lastIndexOf(","));
+        fileContextDoc = fileContextDoc.replace("$busienssInfo$", tmpLine);
+        fileContextDoc = fileContextDoc.replace("$businessInfoJson$", _tmpLine);
         System.out.println(this.getClass().getResource("/listener").getPath());
-        String writePathDoc = this.getClass().getResource("/listener").getPath()+"/Save"+toUpperCaseFirstOne(data.getName())+"Info.md";
+        String writePathDoc = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md";
         writeFile(writePathDoc,
                 fileContextDoc);
     }

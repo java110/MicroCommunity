@@ -75,6 +75,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_pgId = "600";
 
     public static final String CODE_PREFIX_floorId = "73";
+    public static final String CODE_PREFIX_unitId = "74";
 
     /**
      * 只有在不调用服务生成ID时有用
