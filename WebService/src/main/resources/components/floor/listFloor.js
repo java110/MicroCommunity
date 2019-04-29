@@ -6,23 +6,27 @@
             listFloorInfo:{
                 floors:[],
                 total:0,
+                records:1,
                 errorInfo:""
             }
         },
         _initMethod:function(){
-            vc.component._listFloorData();
+            vc.component._listFloorData(DEFAULT_PAGE,DEFAULT_ROWS);
         },
         _initEvent:function(){
             vc.on('listFloor','listFloorData',function(){
-                vc.component._listFloorData();
+                vc.component._listFloorData(DEFAULT_PAGE,DEFAULT_ROWS);
+            });
+            vc.on('pagination','page_event',function(_currentPage){
+                vc.component._listFloorData(_currentPage,DEFAULT_ROWS);
             });
         },
         methods:{
-            _listFloorData:function(){
+            _listFloorData:function(_page,_rows){
                 var param = {
                     params:{
-                        page:DEFAULT_PAGE,
-                        rows:DEFAULT_ROWS,
+                        page:_page,
+                        rows:_rows,
                         communityId:vc.getCurrentCommunity().communityId
                     }
                 }
@@ -35,7 +39,13 @@
                                 var listFloorData =JSON.parse(json);
 
                                 vc.component.listFloorInfo.total = listFloorData.total;
+                                vc.component.listFloorInfo.records = listFloorData.records;
                                 vc.component.listFloorInfo.floors = listFloorData.apiFloorDataVoList;
+
+                                vc.emit('pagination','init',{
+                                    total:vc.component.listFloorInfo.records,
+                                    currentPage:_page
+                                });
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

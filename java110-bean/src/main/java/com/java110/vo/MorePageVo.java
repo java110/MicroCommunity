@@ -18,6 +18,9 @@ public class MorePageVo extends Vo implements Serializable {
     // 行数
     private int rows;
 
+    //页数
+    private int records;
+
     // 总记录数
     private int total;
 
@@ -44,5 +47,13 @@ public class MorePageVo extends Vo implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public int getRecords() {
+        return records;
+    }
+
+    public void setRecords(int records) {
+        this.records = records;
     }
 }

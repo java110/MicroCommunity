@@ -69,6 +69,8 @@ public class QueryFloorsListener extends AbstractServiceApiDataFlowListener {
             apiFloorVo.setApiFloorDataVoList(BeanConvertUtil.covertBeanList(floorDtoList, ApiFloorDataVo.class));
         }
 
+        apiFloorVo.setRecords(total / row + 1);
+
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFloorVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }

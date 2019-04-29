@@ -14,6 +14,11 @@
                     vc.component.paginationInfo.total = _paginationInfo.total;
                     vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
                 });
+
+             vc.on('pagination','init',function(_paginationInfo){
+                 vc.component.paginationInfo.total = _paginationInfo.total;
+                 vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
+             });
         },
         methods:{
             previous:function(){
