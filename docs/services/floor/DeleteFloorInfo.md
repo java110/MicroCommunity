@@ -5,7 +5,7 @@
 > API服务做删除小区楼时调用该接口
 
 ###### URL
-> [http://floor-service/floorApi/service](http://floor-service/floorApi/service)
+> [http://community-service/floorApi/service](http://community-service/floorApi/service)
 
 ###### 支持格式
 > JSON
@@ -58,7 +58,7 @@
 
 
 ###### 举例
-> 地址：[http://floor-service/floorApi/service](http://floor-service/floorApi/service)
+> 地址：[http://community-service/floorApi/service](http://community-service/floorApi/service)
 
 ``` javascript
 请求头信息：

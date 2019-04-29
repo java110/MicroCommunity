@@ -7,18 +7,21 @@
     <!-- 保存小区单元信息 add by wuxw 2018-07-03 -->
        <insert id="saveBusinessUnitInfo" parameterType="Map">
            insert into business_building_unit(
-operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id
+floor_id,operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id
 ) values (
-#{operate},#{layerCount},#{unitId},#{unitNum},#{lift},#{remark},#{bId},#{userId}
+#{floorId},#{operate},#{layerCount},#{unitId},#{unitNum},#{lift},#{remark},#{bId},#{userId}
 )
        </insert>
 
 
        <!-- 查询小区单元信息（Business） add by wuxw 2018-07-03 -->
        <select id="getBusinessUnitInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+           select  t.floor_id,t.floor_id floorId,t.operate,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
 from business_building_unit t 
 where 1 =1 
+<if test="floorId !=null and floorId != ''">
+   and t.floor_id= #{floorId}
+</if> 
 <if test="operate !=null and operate != ''">
    and t.operate= #{operate}
 </if> 
@@ -53,8 +56,11 @@ where 1 =1
     <!-- 保存小区单元信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveUnitInfoInstance" parameterType="Map">
         insert into building_unit(
-layer_count,unit_id,unit_num,lift,status_cd,remark,b_id,user_id
-) select t.layer_count,t.unit_id,t.unit_num,t.lift,'0',t.remark,t.b_id,t.user_id from business_building_unit t where 1=1
+floor_id,layer_count,unit_id,unit_num,lift,status_cd,remark,b_id,user_id
+) select t.floor_id,t.layer_count,t.unit_id,t.unit_num,t.lift,'0',t.remark,t.b_id,t.user_id from business_building_unit t where 1=1
+<if test="floorId !=null and floorId != ''">
+   and t.floor_id= #{floorId}
+</if> 
    and t.operate= 'ADD'
 <if test="layerCount !=null and layerCount != ''">
    and t.layer_count= #{layerCount}
@@ -84,9 +90,83 @@ layer_count,unit_id,unit_num,lift,status_cd,remark,b_id,user_id
 
     <!-- 查询小区单元信息 add by wuxw 2018-07-03 -->
     <select id="getUnitInfo" parameterType="Map" resultType="Map">
-        select  t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+        select  t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
 from building_unit t 
 where 1 =1 
+<if test="floorId !=null and floorId != ''">
+   and t.floor_id= #{floorId}
+</if> 
+<if test="layerCount !=null and layerCount != ''">
+   and t.layer_count= #{layerCount}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="unitNum !=null and unitNum != ''">
+   and t.unit_num= #{unitNum}
+</if> 
+<if test="lift !=null and lift != ''">
+   and t.lift= #{lift}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="page != -1">
+   limit page,row
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改小区单元信息 add by wuxw 2018-07-03 -->
+    <update id="updateUnitInfoInstance" parameterType="Map">
+        update  building_unit t set t.status_cd = #{statusCd}
+<if test="floorId !=null and floorId != ''">
+, t.floor_id= #{floorId}
+</if> 
+<if test="layerCount !=null and layerCount != ''">
+, t.layer_count= #{layerCount}
+</if> 
+<if test="unitNum !=null and unitNum != ''">
+, t.unit_num= #{unitNum}
+</if> 
+<if test="lift !=null and lift != ''">
+, t.lift= #{lift}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="unitId !=null and unitId != ''">
+and t.unit_id= #{unitId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区单元数量 add by wuxw 2018-07-03 -->
+     <select id="queryUnitsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from building_unit t 
+where 1 =1 
+<if test="floorId !=null and floorId != ''">
+   and t.floor_id= #{floorId}
+</if> 
 <if test="layerCount !=null and layerCount != ''">
    and t.layer_count= #{layerCount}
 </if> 
@@ -112,36 +192,7 @@ where 1 =1
    and t.user_id= #{userId}
 </if> 
 
-    </select>
 
-
-
-
-    <!-- 修改小区单元信息 add by wuxw 2018-07-03 -->
-    <update id="updateUnitInfoInstance" parameterType="Map">
-        update  building_unit t set t.status_cd = #{statusCd}
-<if test="layerCount !=null and layerCount != ''">
-, t.layer_count= #{layerCount}
-</if> 
-<if test="unitNum !=null and unitNum != ''">
-, t.unit_num= #{unitNum}
-</if> 
-<if test="lift !=null and lift != ''">
-, t.lift= #{lift}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
- where 1=1 <if test="unitId !=null and unitId != ''">
-and t.unit_id= #{unitId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
-
-    </update>
+     </select>
 
 </mapper>

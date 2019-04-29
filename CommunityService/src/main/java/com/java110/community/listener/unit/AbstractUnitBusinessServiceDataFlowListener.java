@@ -37,6 +37,7 @@ public abstract class AbstractUnitBusinessServiceDataFlowListener extends Abstra
      */
     protected void flushBusinessUnitInfo(Map businessUnitInfo, String statusCd) {
         businessUnitInfo.put("newBId", businessUnitInfo.get("b_id"));
+        businessUnitInfo.put("floorId", businessUnitInfo.get("floor_id"));
         businessUnitInfo.put("operate", businessUnitInfo.get("operate"));
         businessUnitInfo.put("layerCount", businessUnitInfo.get("layer_count"));
         businessUnitInfo.put("unitId", businessUnitInfo.get("unit_id"));
@@ -68,6 +69,7 @@ public abstract class AbstractUnitBusinessServiceDataFlowListener extends Abstra
 
         currentUnitInfo.put("bId", business.getbId());
 
+        currentUnitInfo.put("floorId", currentUnitInfo.get("floor_id"));
         currentUnitInfo.put("operate", currentUnitInfo.get("operate"));
         currentUnitInfo.put("layerCount", currentUnitInfo.get("layer_count"));
         currentUnitInfo.put("unitId", currentUnitInfo.get("unit_id"));

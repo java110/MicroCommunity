@@ -122,4 +122,22 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
     }
 
 
+    /**
+     * 查询商户数量
+     * @param info 商户信息
+     * @return 商户数量
+     */
+    @Override
+    public int queryStoresCount(Map info) {
+        logger.debug("查询商户数据 入参 info : {}",info);
+
+        List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeServiceDaoImpl.queryStoresCount", info);
+        if (businessStoreInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessStoreInfos.get(0).get("count").toString());
+    }
+
+
 }

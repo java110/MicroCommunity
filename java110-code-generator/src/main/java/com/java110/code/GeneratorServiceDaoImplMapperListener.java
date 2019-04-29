@@ -174,7 +174,15 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
             sqlValue += "   and t." + params.get(key) + "= #{" + key + "}\n";
             sqlValue += "</if> \n";
 
+
         }
+
+        //加入分页功能<if test="page != -1">
+        //            limit page,row
+        //        </if>
+        sqlValue += "<if test=\"page != -1\">\n";
+        sqlValue += "   limit page,row\n";
+        sqlValue += "</if> \n";
 
         sql = sql.endsWith(",") ? sql.substring(0, sql.length() - 1) : sql;
 
@@ -257,6 +265,38 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
 
     }
 
+    /**
+     * 拼装 查询数量
+     * @param data 数据
+     * @param fileContext 文件内容
+     * @return
+     */
+    private String dealGetCount(Data data, String fileContext) {
+        String sql = "select  count(1) count";
+        String sqlValue = " \nfrom " + data.getTableName() + " t \nwhere 1 =1 \n";
+
+        Map<String, String> params = data.getParams();
+
+        for (String key : params.keySet()) {
+            if ("operate".equals(key)) {
+                continue;
+            }
+            sqlValue += "<if test=\"" + key + " !=null and " + key + " != ''\">\n";
+            sqlValue += "   and t." + params.get(key) + "= #{" + key + "}\n";
+            sqlValue += "</if> \n";
+
+
+        }
+
+        sql = sql.endsWith(",") ? sql.substring(0, sql.length() - 1) : sql;
+
+        sql += sqlValue;
+
+        fileContext = fileContext.replace("$queryCount$", sql);
+
+        return fileContext;
+    }
+
 
     /**
      * 生成代码
@@ -274,6 +314,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         fileContext = dealSaveInfoInstance(data, fileContext);
         fileContext = dealGetInfo(data, fileContext);
         fileContext = dealUpdateInfoInstance(data, fileContext);
+        fileContext = dealGetCount(data, fileContext);
 
         System.out.println(this.getClass().getResource("/listener").getPath());
         String writePath = this.getClass().getResource("/listener").getPath() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml";

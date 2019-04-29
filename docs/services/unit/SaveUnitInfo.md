@@ -44,6 +44,7 @@
 |business|businessTypeCd|1|String|12|业务类型编码|500100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
 |datas|businessUnitInfo|1|Object|-|小区成员|小区成员|
+|businessUnitInfo|floorId|1|String|30|-|-|
 |businessUnitInfo|layerCount|1|String|30|-|-|
 |businessUnitInfo|unitId|1|String|30|-|-|
 |businessUnitInfo|unitNum|1|String|30|-|-|
@@ -92,7 +93,8 @@ Content-Type:application/json
     "remark": "备注",
     "datas": {
       "businessUnitInfo": {
-                "layerCount":"填写具体值",
+                "floorId":"填写具体值",
+        "layerCount":"填写具体值",
         "unitId":"填写具体值",
         "unitNum":"填写具体值",
         "lift":"填写具体值",

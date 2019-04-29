@@ -37,6 +37,7 @@ public class UnitGeneratorApplication {
         param.put("unitId", "unit_id");
         param.put("bId", "b_id");
         param.put("unitNum", "unit_num");
+        param.put("floorId", "floor_id");
         param.put("layerCount", "layer_count");
         param.put("lift", "lift");
         param.put("statusCd", "status_cd");

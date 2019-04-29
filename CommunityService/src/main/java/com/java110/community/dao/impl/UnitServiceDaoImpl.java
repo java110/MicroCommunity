@@ -21,7 +21,7 @@ import java.util.Map;
 //@Transactional
 public class UnitServiceDaoImpl extends BaseServiceDao implements IUnitServiceDao {
 
-    private static Logger logger = LoggerFactory.getLogger(UnitServiceDaoImpl.class);
+    private  static Logger logger = LoggerFactory.getLogger(UnitServiceDaoImpl.class);
 
     /**
      * 小区单元信息封装
@@ -110,6 +110,24 @@ public class UnitServiceDaoImpl extends BaseServiceDao implements IUnitServiceDa
         if (saveFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改小区单元信息Instance数据失败：" + JSONObject.toJSONString(info));
         }
+    }
+
+    /**
+     * 查询小区单元数量
+     *
+     * @param info 小区单元信息
+     * @return 小区单元数量
+     */
+    @Override
+    public int queryUnitsCount(Map info) {
+        logger.debug("查询小区单元数据 入参 info : {}", info);
+
+        List<Map> businessUnitInfos = sqlSessionTemplate.selectList("unitServiceDaoImpl.queryUnitsCount", info);
+        if (businessUnitInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessUnitInfos.get(0).get("count").toString());
     }
 
 

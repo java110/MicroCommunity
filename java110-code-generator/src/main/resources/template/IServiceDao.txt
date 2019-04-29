@@ -69,4 +69,13 @@ public interface IStoreServiceDao {
      */
     public void updateStoreInfoInstance(Map info) throws DAOException;
 
+
+    /**
+     * 查询商户总数
+     *
+     * @param info 商户信息
+     * @return 商户数量
+     */
+    int queryStoresCount(Map info);
+
 }

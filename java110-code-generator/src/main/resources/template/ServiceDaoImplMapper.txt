@@ -39,4 +39,10 @@
         $updateInfoInstance$
     </update>
 
+    <!-- 查询商户数量 add by wuxw 2018-07-03 -->
+     <select id="queryStoresCount" parameterType="Map" resultType="Map">
+        $queryCount$
+
+     </select>
+
 </mapper>

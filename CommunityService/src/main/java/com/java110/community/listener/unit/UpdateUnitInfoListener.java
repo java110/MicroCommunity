@@ -35,7 +35,7 @@ import java.util.Map;
 @Transactional
 public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowListener {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateUnitInfoListener.class);
+    private  static Logger logger = LoggerFactory.getLogger(UpdateUnitInfoListener.class);
     @Autowired
     IUnitServiceDao unitServiceDaoImpl;
 
