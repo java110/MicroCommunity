@@ -2,9 +2,9 @@ package com.java110.common.util;
 
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +93,7 @@ public final class BeanConvertUtil {
         Map newMap = null;
 
         try {
-            newMap = BeanUtils.describe(orgBean);
+            newMap = PropertyUtils.describe(orgBean);
         } catch (Exception e) {
             throw new RuntimeException("bean转换Map失败", e);
         }

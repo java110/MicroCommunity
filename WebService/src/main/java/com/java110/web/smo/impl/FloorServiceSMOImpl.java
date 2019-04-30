@@ -6,6 +6,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFloorServiceSMO;
@@ -68,10 +69,15 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId="
+                + communityId;
+
+        if (!StringUtil.isEmpty(floorNum)) {
+            apiUrl += "&floorNum=" + floorNum;
+        }
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId="
-                        + communityId + "&floorNum=" + floorNum,
+                apiUrl,
                 HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
