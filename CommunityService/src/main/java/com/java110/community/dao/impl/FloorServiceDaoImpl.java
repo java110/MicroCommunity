@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,8 +116,9 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
     @Override
     public int queryFloorsCount(String communityId) throws DAOException {
         logger.debug("查询小区楼信息 入参 communityId : {}", communityId);
-
-        List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.queryFloorsCount", communityId);
+        Map info = new HashMap();
+        info.put("communityId", communityId);
+        List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.queryFloorsCount", info);
         if (businessFloorInfos.size() < 1) {
             return 0;
         }
@@ -131,6 +133,18 @@ public class FloorServiceDaoImpl extends BaseServiceDao implements IFloorService
         List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.queryFloors", floorMap);
 
         return businessFloorInfos;
+    }
+
+    @Override
+    public int queryFloorsCount(Map info) throws DAOException {
+        logger.debug("查询小区楼信息 入参 info : {}", info);
+
+        List<Map> businessFloorInfos = sqlSessionTemplate.selectList("floorServiceDaoImpl.queryFloorsCount", info);
+        if (businessFloorInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessFloorInfos.get(0).get("count").toString());
     }
 
 

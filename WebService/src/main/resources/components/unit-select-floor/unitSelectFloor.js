@@ -8,10 +8,7 @@
             floorInfo:{
                 floorId:"",
                 name:"",
-                tel:"",
-                email:"",
-                sex:"",
-                address:"",
+                floorNum:""
             }
         },
         _initMethod:function(){

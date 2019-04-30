@@ -6,8 +6,11 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.floor.IFloorInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.FloorDto;
+import com.java110.dto.PageDto;
+import com.java110.dto.UnitDto;
 import com.java110.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -74,6 +77,43 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
     public int queryFloorsCount(String communityId) {
         return floorServiceDaoImpl.queryFloorsCount(communityId);
     }
+
+    @Override
+    public List<FloorDto> queryFloors(@RequestBody  FloorDto floorDto) {
+
+        //校验是否传了 分页信息
+
+        int page = floorDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            floorDto.setPage((page - 1) * floorDto.getRow());
+            floorDto.setRow(page * floorDto.getRow());
+        }
+
+
+        List<FloorDto> floors = BeanConvertUtil.covertBeanList(
+                floorServiceDaoImpl.queryFloors(BeanConvertUtil.beanCovertMap(floorDto)), FloorDto.class);
+
+
+        if (floors == null || floors.size() == 0) {
+            return floors;
+        }
+
+        String[] userIds = getUserIds(floors);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (FloorDto floor : floors) {
+            refreshFloor(floor, users);
+        }
+        return floors;
+    }
+
+    @Override
+    public int queryFloorsCount(@RequestBody FloorDto floorDto) {
+        return floorServiceDaoImpl.queryFloorsCount(BeanConvertUtil.beanCovertMap(floorDto));
+    }
+
 
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中

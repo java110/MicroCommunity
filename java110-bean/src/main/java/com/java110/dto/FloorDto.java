@@ -11,13 +11,15 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class FloorDto implements Serializable {
+public class FloorDto extends PageDto implements Serializable {
 
 
     /**
      * floorId
      */
     private String floorId;
+
+    private String communityId;
 
     /**
      * 编号
@@ -92,5 +94,13 @@ public class FloorDto implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

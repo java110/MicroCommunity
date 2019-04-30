@@ -29,20 +29,18 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>员工编码</th>
-                                        <th>员工名称</th>
-                                        <th>手机号</th>
-                                        <th>性别</th>
+                                        <th>楼ID</th>
+                                        <th>名称</th>
+                                        <th>编号</th>
                                         <th>创建时间</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="floor in searchFloorInfo.floors">
-                                        <td>{{floor.userId}}</td>
+                                        <td>{{floor.floorId}}</td>
                                         <td>{{floor.name}}</td>
-                                        <td>{{floor.tel}}</td>
-                                        <td>{{floor.sex == 0 ? '男' : (staff.sex == 1 ?'女':'')}}</td>
+                                        <td>{{floor.floorNum}}</td>
                                         <td>{{vc.dateFormat(floor.createTime)}}</td>
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseFloor(floor)">选择</button>

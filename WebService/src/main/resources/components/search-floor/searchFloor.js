@@ -18,12 +18,13 @@
             });
         },
         methods:{
-            _loadAllFloorInfo:function(_page,_rows,_staffName){
+            _loadAllFloorInfo:function(_page,_rows,_floorNum){
                 var param = {
                     params:{
                         page:_page,
                         rows:_rows,
-                        staffName:_staffName
+                        communityId:vc.getCurrentCommunity().communityId,
+                        floorNum:_floorNum
                     }
                 };
 
@@ -39,7 +40,7 @@
                              }
                            );
             },
-            chooseStaff:function(_floor){
+            chooseFloor:function(_floor){
                 vc.emit('floorInfo','chooseFloor',_floor);
                 vc.emit('unit','_loadUnits',{
                     floorId:_floor.floorId
@@ -50,7 +51,7 @@
                 vc.component._loadAllFloorInfo(1,10,vc.component.searchFloorInfo._currentFloorNum);
             },
             _refreshSearchFloorData:function(){
-                vc.component.searchFloorInfo._currentFloorName = "";
+                vc.component.searchFloorInfo._currentFloorNum = "";
             }
         }
 

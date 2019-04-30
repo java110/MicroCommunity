@@ -88,6 +88,15 @@ public interface IFloorServiceDao {
      */
     List<Map> queryFloors(Map floorMap) throws DAOException;
 
+    /**
+     * 根据小区ID查询 小区楼数量
+     *
+     * @param info 小区ID
+     * @return 小区楼数量
+     * @throws DAOException 数据库异常信息
+     */
+    int queryFloorsCount(Map info) throws DAOException;
+
 
 
 }

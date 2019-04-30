@@ -78,30 +78,34 @@ floor_id,name,status_cd,remark,b_id,user_id,floor_num
 
     <!-- 查询小区楼信息 add by wuxw 2018-07-03 -->
     <select id="getFloorInfo" parameterType="Map" resultType="Map">
-        select  t.floor_id,t.name,t.status_cd,t.remark,t.b_id,t.user_id,t.floor_num 
-from f_floor t 
-where 1 =1 
-<if test="floorId !=null and floorId != ''">
-   and t.floor_id= #{floorId}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="floorNum !=null and floorNum != ''">
-   and t.floor_num= #{floorNum}
-</if> 
+        select  t.floor_id,t.floor_id floorId,t.name,t.status_cd, t.status_cd statusCd,t.remark,t.b_id,
+        t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum
+        from f_floor t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+           and t.floor_id= #{floorId}
+        </if>
+        <if test="name !=null and name != ''">
+           and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+           and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+           and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+           and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+           and t.user_id= #{userId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+           and t.floor_num= #{floorNum}
+        </if>
+        <if test="page != -1">
+            limit page,row
+        </if>
 
     </select>
 
@@ -141,6 +145,27 @@ and t.b_id= #{bId}
         WHERE f.`floor_id` = cm.`member_id`
             AND cm.`member_type_cd` = '390001200004'
             AND cm.`community_id` = #{communityId}
+            <if test="floorId !=null and floorId != ''">
+                and f.floor_id= #{floorId}
+            </if>
+            <if test="name !=null and name != ''">
+                and f.name= #{name}
+            </if>
+            <if test="statusCd !=null and statusCd != ''">
+                and f.status_cd= #{statusCd}
+            </if>
+            <if test="remark !=null and remark != ''">
+                and f.remark= #{remark}
+            </if>
+            <if test="bId !=null and bId != ''">
+                and f.b_id= #{bId}
+            </if>
+            <if test="userId !=null and userId != ''">
+                and f.user_id= #{userId}
+            </if>
+            <if test="floorNum !=null and floorNum != ''">
+                and f.floor_num= #{floorNum}
+            </if>
             AND f.`status_cd` = '0'
             AND cm.`status_cd` = '0'
     </select>
@@ -160,6 +185,27 @@ and t.b_id= #{bId}
         WHERE f.`floor_id` = cm.`member_id`
             AND cm.`member_type_cd` = '390001200004'
             AND cm.`community_id` = #{communityId}
+            <if test="floorId !=null and floorId != ''">
+                and f.floor_id= #{floorId}
+            </if>
+            <if test="name !=null and name != ''">
+                and f.name= #{name}
+            </if>
+            <if test="statusCd !=null and statusCd != ''">
+                and f.status_cd= #{statusCd}
+            </if>
+            <if test="remark !=null and remark != ''">
+                and f.remark= #{remark}
+            </if>
+            <if test="bId !=null and bId != ''">
+                and f.b_id= #{bId}
+            </if>
+            <if test="userId !=null and userId != ''">
+                and f.user_id= #{userId}
+            </if>
+            <if test="floorNum !=null and floorNum != ''">
+                and f.floor_num= #{floorNum}
+            </if>
             AND f.`status_cd` = '0'
             AND cm.`status_cd` = '0'
             LIMIT #{page}, #{row}

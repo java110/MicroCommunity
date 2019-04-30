@@ -61,11 +61,12 @@ public class QueryFloorsListener extends AbstractServiceApiDataFlowListener {
         String communityId = reqJson.getString("communityId");
 
         ApiFloorVo apiFloorVo = new ApiFloorVo();
+
         //查询总记录数
-        int total = floorInnerServiceSMOImpl.queryFloorsCount(communityId);
+        int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
         apiFloorVo.setTotal(total);
         if (total > 0) {
-            List<FloorDto> floorDtoList = floorInnerServiceSMOImpl.queryFloors(page, row, communityId);
+            List<FloorDto> floorDtoList = floorInnerServiceSMOImpl.queryFloors(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
             apiFloorVo.setApiFloorDataVoList(BeanConvertUtil.covertBeanList(floorDtoList, ApiFloorDataVo.class));
         }
 

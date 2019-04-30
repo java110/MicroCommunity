@@ -50,6 +50,9 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         int rows = Integer.parseInt(paramIn.getString("rows"));
         String communityId = paramIn.getString("communityId");
 
+        //小区楼编号
+        String floorNum = paramIn.getString("floorNum");
+
 
         //校验用户是否有权限
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
@@ -67,7 +70,8 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId=" + communityId,
+                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId="
+                        + communityId + "&floorNum=" + floorNum,
                 HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
