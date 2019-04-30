@@ -136,7 +136,7 @@ and t.b_id= #{bId}
 
     </update>
 
-    <select id="queryFloorsCount" parameterType="String" resultType="Map">
+    <select id="queryFloorsCount" parameterType="Map" resultType="Map">
         SELECT
             COUNT(1) count
         FROM
