@@ -368,5 +368,5 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_FLOOR = "floor.deleteFloor";
 
     //查询小区单元
-    public static final String SERVICE_CODE_QUERY_UNITS = "floor.queryUnits";
+    public static final String SERVICE_CODE_QUERY_UNITS = "unit.queryUnits";
 }

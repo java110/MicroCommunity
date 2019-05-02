@@ -21,7 +21,7 @@
                 var param = {
                     params:{
                         floorId:_param.floorId,
-                        communityId:communityId:vc.getCurrentCommunity().communityId
+                        communityId:vc.getCurrentCommunity().communityId
                     }
                 };
              //发送get请求
