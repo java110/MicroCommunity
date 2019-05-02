@@ -8,12 +8,12 @@
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                         <thead>
                         <tr>
-                            <th>权限ID</th>
-                            <th data-hide="phone">权限名称</th>
-                            <th data-hide="phone">权限描述</th>
-                            <th data-hide="phone">隶属权限组ID</th>
-                            <th data-hide="phone,tablet" >隶属权限组名称</th>
-                            <th data-hide="phone">状态</th>
+                            <th>单元ID</th>
+                            <th data-hide="phone">单元编号</th>
+                            <th data-hide="phone">总层数</th>
+                            <th data-hide="phone">是否有电梯</th>
+                            <th data-hide="phone,tablet" >创建人</th>
+                            <th data-hide="phone">备注</th>
                             <th class="text-right">操作</th>
 
                         </tr>
@@ -21,24 +21,24 @@
                         <tbody>
                         <tr v-for="unit in unitInfo.units">
                             <td>
-                                {{unit.pId}}
+                                {{unit.unitId}}
                             </td>
                             <td>
-                                {{unit.name}}
+                                {{unit.unitNum}}
                             </td>
                             <td>
-                                {{unit.description}}
+                                {{unit.layerCount}}
                             </td>
                             <td>
-                                {{unit.pgId}}
+                                {{unit.lift}}
                             </td>
                             <td>
-                                {{unit.pgName}}
+                                {{unit.userName}}
                             </td>
                             <td>
-                                <span class="label label-primary">在用</span>
+                                {{unit.remark}}
                             </td>
-                            <td      class="text-right">
+                            <td class="text-right">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteUnitModel(unit)">删除</button>
                                 </div>

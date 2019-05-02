@@ -32,16 +32,16 @@
                                         <th>楼ID</th>
                                         <th>名称</th>
                                         <th>编号</th>
-                                        <th>创建时间</th>
+                                        <th>创建人</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="floor in searchFloorInfo.floors">
                                         <td>{{floor.floorId}}</td>
-                                        <td>{{floor.name}}</td>
+                                        <td>{{floor.floorName}}</td>
                                         <td>{{floor.floorNum}}</td>
-                                        <td>{{vc.dateFormat(floor.createTime)}}</td>
+                                        <td>{{floor.userName}}</td>
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseFloor(floor)">选择</button>
                                         </td>

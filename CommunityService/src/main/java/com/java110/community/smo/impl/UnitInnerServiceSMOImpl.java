@@ -2,12 +2,10 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.common.util.BeanConvertUtil;
-import com.java110.community.dao.IFloorServiceDao;
 import com.java110.community.dao.IUnitServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.dto.FloorDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.UserDto;
@@ -58,7 +56,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (UnitDto unit : units) {
-            refreshFloor(unit, users);
+            refreshUnit(unit, users);
         }
         return units;
     }
@@ -69,7 +67,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
      * @param unit 小区楼单元信息
      * @param users 用户列表
      */
-    private void refreshFloor(UnitDto unit, List<UserDto> users) {
+    private void refreshUnit(UnitDto unit, List<UserDto> users) {
         for (UserDto user : users) {
             if (unit.getUserId().equals(user.getUserId())) {
                 BeanConvertUtil.covertBean(user, unit);

@@ -7,7 +7,7 @@
         data:{
             floorInfo:{
                 floorId:"",
-                name:"",
+                floorName:"",
                 floorNum:""
             }
         },

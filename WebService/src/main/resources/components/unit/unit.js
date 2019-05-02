@@ -17,19 +17,20 @@
         },
         methods:{
             _loadUnits:function(_param){
-                vc.component.staffPrivilegeInfo._currentFloorId=_param.floorId;
+                vc.component.unitInfo._currentFloorId=_param.floorId;
                 var param = {
                     params:{
-                        floorId:_param.floorId
+                        floorId:_param.floorId,
+                        communityId:communityId:vc.getCurrentCommunity().communityId
                     }
                 };
              //发送get请求
             vc.http.get('unit',
-                         'loadUnit',
+                         'loadUnits',
                           param,
                           function(json){
                              var _unitInfo = JSON.parse(json);
-                             vc.component.unitInfo.units = _unitInfo.datas;
+                             vc.component.unitInfo.units = _unitInfo;
 
                           },function(){
                              console.log('请求失败处理');

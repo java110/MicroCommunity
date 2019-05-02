@@ -11,7 +11,7 @@
         },
         _initEvent:function(){
             vc.on('searchFloor','openSearchFloorModel',function(_param){
-                console.log("打开定位员工界面")
+                console.log("打开定位小区楼界面")
                 $('#searchFloorModel').modal('show');
                 vc.component._refreshSearchFloorData();
                 vc.component._loadAllFloorInfo(1,10);
@@ -34,15 +34,15 @@
                              param,
                              function(json){
                                 var _floorInfo = JSON.parse(json);
-                                vc.component.searchFloorInfo.floors = _floorInfo.datas;
+                                vc.component.searchFloorInfo.floors = _floorInfo.apiFloorDataVoList;
                              },function(){
                                 console.log('请求失败处理');
                              }
                            );
             },
             chooseFloor:function(_floor){
-                vc.emit('floorInfo','chooseFloor',_floor);
-                vc.emit('unit','_loadUnits',{
+                vc.emit('unitSelectFloor','chooseFloor',_floor);
+                vc.emit('unit','loadUnit',{
                     floorId:_floor.floorId
                 });
                 $('#searchFloorModel').modal('hide');
