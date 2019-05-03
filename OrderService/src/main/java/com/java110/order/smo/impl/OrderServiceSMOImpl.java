@@ -916,6 +916,8 @@ public class OrderServiceSMOImpl implements IOrderServiceSMO {
     private JSONObject doRequestBusinessSystem(IOrderDataFlowContext dataFlow, ServiceBusiness serviceBusiness, JSONObject requestBusinessJson) {
         String responseMessage;
 
+        Assert.notNull(serviceBusiness, "在表c_service_business中未配置当前业务类型");
+
         Assert.hasLength(serviceBusiness.getInvokeType(), "c_service_business表配置出错，invoke_type 不能为空" + serviceBusiness.getBusinessTypeCd());
         String httpUrl = "";
         if (ServiceBusinessConstant.INVOKE_TYPE_WEBSERVICE.equals(serviceBusiness.getInvokeType())) {//webservice方式

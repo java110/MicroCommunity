@@ -94,15 +94,15 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("layerCount", paramInJson.getString("layerCount"));
-        businessFloor.put("unitId", paramInJson.getString("-1"));
-        businessFloor.put("unitNum", paramInJson.getString("unitNum"));
-        businessFloor.put("lift", paramInJson.getString("lift"));
-        businessFloor.put("remark", paramInJson.getString("remark"));
-        businessFloor.put("userId", paramInJson.getString(dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID)));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessFloor);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("floorId", paramInJson.getString("floorId"));
+        businessUnit.put("layerCount", paramInJson.getString("layerCount"));
+        businessUnit.put("unitId", "-1");
+        businessUnit.put("unitNum", paramInJson.getString("unitNum"));
+        businessUnit.put("lift", paramInJson.getString("lift"));
+        businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
 
         return business;
     }
