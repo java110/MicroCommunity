@@ -21,4 +21,13 @@ public interface IUnitServiceSMO {
      * @return ResponseEntity 对象给前段页面
      */
     ResponseEntity<String> listUnits(IPageData pd);
+
+
+    /**
+     * 保存小区单元信息
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity对象
+     */
+    ResponseEntity<String> saveUnit(IPageData pd);
 }

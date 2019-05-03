@@ -369,4 +369,7 @@ public class ServiceCodeConstant {
 
     //查询小区单元
     public static final String SERVICE_CODE_QUERY_UNITS = "unit.queryUnits";
+
+    //保存小区单元
+    public static final String SERVICE_CODE_SAVE_UNIT = "unit.saveUnit";
 }
