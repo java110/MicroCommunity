@@ -115,6 +115,9 @@ floor_id,name,status_cd,remark,b_id,user_id,floor_num
     <!-- 修改小区楼信息 add by wuxw 2018-07-03 -->
     <update id="updateFloorInfoInstance" parameterType="Map">
         update  f_floor t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
 <if test="name !=null and name != ''">
 , t.name= #{name}
 </if> 
