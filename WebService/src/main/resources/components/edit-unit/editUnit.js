@@ -4,6 +4,7 @@
         data:{
             editUnitInfo:{
                 floorId:'',
+                unitId:'',
                 unitNum:'',
                 layerCount:'',
                 lift:'',
@@ -109,6 +110,7 @@
             refreshEditUnitInfo:function(){
                 vc.component.editUnitInfo= {
                   floorId:'',
+                  unitId:'',
                   unitNum:'',
                   layerCount:'',
                   lift:'',

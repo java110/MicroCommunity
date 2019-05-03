@@ -120,7 +120,7 @@ where 1 =1
 <if test="userId !=null and userId != ''">
    and t.user_id= #{userId}
 </if> 
-<if test="page != -1">
+<if test="page != -1 and page != null and page != ''">
    limit page,row
 </if> 
 
