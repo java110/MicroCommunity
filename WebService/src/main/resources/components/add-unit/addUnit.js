@@ -37,7 +37,7 @@
                                 {
                                     limit:"required",
                                     param:"",
-                                    errInfo:"单元不能为空"
+                                    errInfo:"单元编号不能为空"
                                 },
                                 {
                                     limit:"maxLength",
@@ -75,7 +75,7 @@
                         });
              },
             addUnit:function(){
-                if(!vc.component.addStaffValidate()){
+                if(!vc.component.addUnitValidate()){
                     vc.message(vc.validate.errInfo);
                     return ;
                 }

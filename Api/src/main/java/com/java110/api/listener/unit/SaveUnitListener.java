@@ -127,8 +127,11 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
             throw new IllegalArgumentException("是否有电梯 传入数据错误");
         }
 
+        FloorDto floorDto = new FloorDto();
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+        floorDto.setFloorId(reqJson.getString("floorId"));
         //校验小区楼ID和小区是否有对应关系
-        int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
+        int total = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
 
         if (total < 1) {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
