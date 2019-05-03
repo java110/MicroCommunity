@@ -27,6 +27,8 @@ public class GeneratorAbstractBussiness extends BaseGenerator {
 
         }
 
+        mappingContext += "business" + toUpperCaseFirstOne(data.getName()) + "Info.remove(\"bId\");";
+
         fileContext = fileContext.replace("$flushBusinessInfo$", mappingContext);
         fileContext = fileContext.replace("$autoSaveDelBusiness$", autoMappingContext);
         System.out.println(this.getClass().getResource("/listener").getPath());

@@ -16,7 +16,7 @@ floor_id,operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id
 
        <!-- 查询小区单元信息（Business） add by wuxw 2018-07-03 -->
        <select id="getBusinessUnitInfo" parameterType="Map" resultType="Map">
-           select  t.floor_id,t.floor_id floorId,t.operate,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+           select  t.floor_id,t.floor_id floorId,t.operate,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId
 from business_building_unit t 
 where 1 =1 
 <if test="floorId !=null and floorId != ''">
@@ -132,30 +132,33 @@ where 1 =1
     <!-- 修改小区单元信息 add by wuxw 2018-07-03 -->
     <update id="updateUnitInfoInstance" parameterType="Map">
         update  building_unit t set t.status_cd = #{statusCd}
-<if test="floorId !=null and floorId != ''">
-, t.floor_id= #{floorId}
-</if> 
-<if test="layerCount !=null and layerCount != ''">
-, t.layer_count= #{layerCount}
-</if> 
-<if test="unitNum !=null and unitNum != ''">
-, t.unit_num= #{unitNum}
-</if> 
-<if test="lift !=null and lift != ''">
-, t.lift= #{lift}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
- where 1=1 <if test="unitId !=null and unitId != ''">
-and t.unit_id= #{unitId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            , t.floor_id= #{floorId}
+        </if>
+        <if test="layerCount !=null and layerCount != ''">
+            , t.layer_count= #{layerCount}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            , t.unit_num= #{unitNum}
+        </if>
+        <if test="lift !=null and lift != ''">
+            , t.lift= #{lift}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1 <if test="unitId !=null and unitId != ''">
+        and t.unit_id= #{unitId}
+    </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 

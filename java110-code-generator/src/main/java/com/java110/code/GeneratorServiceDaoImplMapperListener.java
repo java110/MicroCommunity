@@ -236,6 +236,10 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
 
         Map<String, String> params = data.getParams();
 
+        sql += "<if test=\"newBId != null and newBId != ''\">\n";
+        sql += ",t.b_id = #{newBId}\n";
+        sql += "</if> \n";
+
         for (String key : params.keySet()) {
             if ("operate".equals(key)) {
                 continue;
@@ -249,6 +253,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
                 sql += ", t." + params.get(key) + "= #{" + key + "}\n";
                 sql += "</if> \n";
             }
+
             if ("bId".equals(key) || data.getId().equals(key)) {
                 sqlWhere += "<if test=\"" + key + " !=null and " + key + " != ''\">\n";
                 sqlWhere += "and t." + params.get(key) + "= #{" + key + "}\n";
