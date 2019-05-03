@@ -10,7 +10,9 @@ import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.floor.IFloorInnerServiceSMO;
+import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.FloorDto;
+import com.java110.dto.UnitDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
@@ -21,24 +23,27 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 /**
- * @ClassName SaveUnitListener
- * @Description TODO 保存小区单元信息
+ * @ClassName UpdateUnitListener
+ * @Description TODO 修改小区单元信息
  * @Author wuxw
- * @Date 2019/5/3 11:54
+ * @Date 2019/5/3 18:19
  * @Version 1.0
  * add by wuxw 2019/5/3
  **/
-@Java110Listener("saveUnitListener")
-public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(SaveUnitListener.class);
+@Java110Listener("updateUnitListener")
+public class UpdateUnitListener extends AbstractServiceApiDataFlowListener {
 
+    private static Logger logger = LoggerFactory.getLogger(UpdateUnitListener.class);
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
+    @Autowired
+    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_UNIT;
+        return ServiceCodeConstant.SERVICE_CODE_UPDATE_UNIT;
     }
 
     @Override
@@ -48,7 +53,6 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
 
     @Override
     public void soService(ServiceDataFlowEvent event) {
-
         logger.debug("ServiceDataFlowEvent : {}", event);
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
@@ -66,7 +70,7 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(addUnit(paramObj, dataFlowContext));
+        businesses.add(editUnit(paramObj, dataFlowContext));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -76,35 +80,8 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
 
         dataFlowContext.setResponseEntity(responseEntity);
-
     }
 
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("floorId", paramInJson.getString("floorId"));
-        businessUnit.put("layerCount", paramInJson.getString("layerCount"));
-        businessUnit.put("unitId", "-1");
-        businessUnit.put("unitNum", paramInJson.getString("unitNum"));
-        businessUnit.put("lift", paramInJson.getString("lift"));
-        businessUnit.put("remark", paramInJson.getString("remark"));
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
-
-        return business;
-    }
 
     /**
      * 数据校验
@@ -116,6 +93,7 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
     private void validate(String paramIn) {
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(paramIn, "floorId", "请求报文中未包含floorId节点");
+        Assert.jsonObjectHaveKey(paramIn, "unitId", "请求报文中未包含unitId节点");
         Assert.jsonObjectHaveKey(paramIn, "unitNum", "请求报文中未包含unitNum节点");
         Assert.jsonObjectHaveKey(paramIn, "layerCount", "请求报文中未包含layerCount节点");
         Assert.jsonObjectHaveKey(paramIn, "lift", "请求报文中未包含lift节点");
@@ -136,6 +114,42 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
         }
 
+        //校验 小区楼ID 和单元ID是否有关系
+        UnitDto unitDto = new UnitDto();
+        unitDto.setFloorId(reqJson.getString("floorId"));
+        unitDto.setUnitId(reqJson.getString("unitId"));
+        total = unitInnerServiceSMOImpl.queryUnitsCount(unitDto);
+        if (total < 1) {
+            throw new IllegalArgumentException("传入单元不是该小区的楼的单元");
+        }
+    }
+
+
+    /**
+     * 修改小区楼信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject editUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_UNIT_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("floorId", paramInJson.getString("floorId"));
+        businessUnit.put("layerCount", paramInJson.getString("layerCount"));
+        businessUnit.put("unitId", paramInJson.getString("unitId"));
+        businessUnit.put("unitNum", paramInJson.getString("unitNum"));
+        businessUnit.put("lift", paramInJson.getString("lift"));
+        businessUnit.put("remark", paramInJson.getString("remark"));
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
+
+        return business;
     }
 
     @Override
@@ -143,11 +157,20 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         return DEFAULT_ORDER;
     }
 
+
     public IFloorInnerServiceSMO getFloorInnerServiceSMOImpl() {
         return floorInnerServiceSMOImpl;
     }
 
     public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
         this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        UpdateUnitListener.logger = logger;
     }
 }

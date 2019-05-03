@@ -372,4 +372,7 @@ public class ServiceCodeConstant {
 
     //保存小区单元
     public static final String SERVICE_CODE_SAVE_UNIT = "unit.saveUnit";
+
+    //修改小区单元
+    public static final String SERVICE_CODE_UPDATE_UNIT = "unit.updateUnit";
 }

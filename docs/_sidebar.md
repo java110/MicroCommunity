@@ -24,6 +24,7 @@
   * [编辑小区楼信息](api/floor/deleteFloor.md)
   * [查询单元信息](api/unit/queryUnits.md)
   * [保存单元信息](api/unit/saveUnit.md)
+  * [修改单元信息](api/unit/updateUnit.md)
 
 * 服务端接口协议
 

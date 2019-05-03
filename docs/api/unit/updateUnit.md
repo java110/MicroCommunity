@@ -1,11 +1,11 @@
 
 
-**1\. 保存小区单元信息**
+**1\. 修改小区单元信息**
 ###### 接口功能
-> 用户通过web端或APP保存单元信息接口
+> 用户通过web端或APP修改单元信息接口
 
 ###### URL
-> [http://api.java110.com:8008/api/unit.saveUnit](http://api.java110.com:8008/api/unit.saveUnit)
+> [http://api.java110.com:8008/api/unit.updateUnit](http://api.java110.com:8008/api/unit.updateUnit)
 
 ###### 支持格式
 > JSON
@@ -26,6 +26,7 @@
 | :-: | :-: | :-: | :-: | :-: | :-: |
 |floorId|1|String|30|小区楼ID|-|
 |communityId|1|String|30|小区ID|-|
+|unitId|1|String|30|单元ID|-|
 |unitNum|1|String|12|单元编号|-|
 |layerCount|1|int|-|楼总层数|-|
 |lift|1|String|4|是否有楼梯|1010 有 2020 无|
@@ -42,7 +43,7 @@
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/unit.saveUnit](http://api.java110.com:8008/api/unit.saveUnit)
+> 地址：[http://api.java110.com:8008/api/unit.updateUnit](http://api.java110.com:8008/api/unit.updateUnit)
 
 ``` javascript
 请求头信息：
@@ -57,6 +58,7 @@ SIGN:aabdncdhdbd878sbdudn898
 {
     "floorId":"填写具体值",
      "layerCount":"填写具体值",
+     "unitId":"填写具体值",
      "unitNum":"填写具体值",
      "lift":"填写具体值",
      "remark":"填写具体值"

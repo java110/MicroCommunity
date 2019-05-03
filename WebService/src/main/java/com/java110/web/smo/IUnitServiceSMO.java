@@ -30,4 +30,12 @@ public interface IUnitServiceSMO {
      * @return ResponseEntity对象
      */
     ResponseEntity<String> saveUnit(IPageData pd);
+
+    /**
+     * 修改小区单元信息
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity对象
+     */
+    ResponseEntity<String> updateUnit(IPageData pd);
 }

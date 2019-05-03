@@ -39,6 +39,10 @@
             _openDeleteUnitModel:function(_unit){
                 _unit.floorId = vc.component.unitInfo._currentFloorId;
                 vc.emit('deleteUnit','openUnitModel',_unit);
+            },
+            _openEditUnitModel:function(_unit){
+                _unit.floorId = vc.component.unitInfo._currentFloorId;
+                vc.emit('editUnit','openUnitModel',_unit);
             }
         }
     });

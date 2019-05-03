@@ -2,7 +2,7 @@
 
     vc.extends({
         data:{
-            addUnitInfo:{
+            editUnitInfo:{
                 floorId:'',
                 unitNum:'',
                 layerCount:'',
@@ -15,26 +15,26 @@
 
          },
          _initEvent:function(){
-             vc.on('addUnit','addUnitModel',function(_params){
-                vc.component.refreshAddUnitInfo();
-                $('#addUnitModel').modal('show');
-                vc.component.addUnitInfo.floorId = _params.floorId;
-                vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
+             vc.on('editUnit','openUnitModel',function(_params){
+                vc.component.refreshEditUnitInfo();
+                $('#editUnitModel').modal('show');
+                vc.component.editUnitInfo = _params;
+                vc.component.editUnitInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
-            addUnitValidate:function(){
+            editUnitValidate:function(){
                         return vc.validate.validate({
-                            addUnitInfo:vc.component.addUnitInfo
+                            editUnitInfo:vc.component.editUnitInfo
                         },{
-                            'addUnitInfo.floorId':[
+                            'editUnitInfo.floorId':[
                                 {
                                     limit:"required",
                                     param:"",
                                     errInfo:"小区楼不能为空"
                                 }
                             ],
-                            'addUnitInfo.unitNum':[
+                            'editUnitInfo.unitNum':[
                                 {
                                     limit:"required",
                                     param:"",
@@ -46,7 +46,7 @@
                                     errInfo:"单元编号长度不能超过12位"
                                 },
                             ],
-                            'addUnitInfo.layerCount':[
+                            'editUnitInfo.layerCount':[
                                 {
                                     limit:"required",
                                     param:"",
@@ -58,14 +58,14 @@
                                     errInfo:"单元楼层高度必须为数字"
                                 }
                             ],
-                            'addUnitInfo.lift':[
+                            'editUnitInfo.lift':[
                                 {
                                     limit:"required",
                                     param:"",
                                     errInfo:"必须选择单元是否电梯"
                                 }
                             ],
-                            'addUnitInfo.remark':[
+                            'editUnitInfo.remark':[
                                 {
                                     limit:"maxLength",
                                     param:"200",
@@ -75,16 +75,16 @@
 
                         });
              },
-            addUnit:function(){
-                if(!vc.component.addUnitValidate()){
+            editUnit:function(){
+                if(!vc.component.editUnitValidate()){
                     vc.message(vc.validate.errInfo);
                     return ;
                 }
 
                 vc.http.post(
-                    'addUnit',
-                    'save',
-                    JSON.stringify(vc.component.addUnitInfo),
+                    'editUnit',
+                    'update',
+                    JSON.stringify(vc.component.editUnitInfo),
                     {
                         emulateJSON:true
                      },
@@ -92,9 +92,9 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#addUnitModel').modal('hide');
+                            $('#editUnitModel').modal('hide');
                             vc.emit('unit','loadUnit',{
-                                floorId:vc.component.addUnitInfo.floorId
+                                floorId:vc.component.editUnitInfo.floorId
                             });
                             return ;
                         }
@@ -106,8 +106,8 @@
                         vc.message(errInfo);
                      });
             },
-            refreshAddUnitInfo:function(){
-                vc.component.addUnitInfo= {
+            refreshEditUnitInfo:function(){
+                vc.component.editUnitInfo= {
                   floorId:'',
                   unitNum:'',
                   layerCount:'',
