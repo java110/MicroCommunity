@@ -1,0 +1,112 @@
+package com.java110.commstorey.smo.impl;
+
+
+import com.java110.common.util.BeanConvertUtil;
+import com.java110.commstorey.dao.IStoreServiceDao;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.PageDto;
+import com.java110.dto.StoreDto;
+import com.java110.dto.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @ClassName FloorInnerServiceSMOImpl
+ * @Description 商户内部服务实现类
+ * @Author wuxw
+ * @Date 2019/4/24 9:20
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+@RestController
+public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreInnerServiceSMO {
+
+    @Autowired
+    private IStoreServiceDao storeServiceDaoImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Override
+    public List<StoreDto> queryStores(@RequestBody  StoreDto storeDto) {
+
+        //校验是否传了 分页信息
+
+        int page = storeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            storeDto.setPage((page - 1) * storeDto.getRow());
+            storeDto.setRow(page * storeDto.getRow());
+        }
+
+        List<StoreDto> stores = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStoreInfo(BeanConvertUtil.beanCovertMap(storeDto)), StoreDto.class);
+
+        if (stores == null || stores.size() == 0) {
+            return stores;
+        }
+
+        String[] userIds = getUserIds(stores);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (StoreDto store : stores) {
+            refreshStore(store, users);
+        }
+        return stores;
+    }
+
+    /**
+     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
+     *
+     * @param store 小区商户信息
+     * @param users 用户列表
+     */
+    private void refreshStore(StoreDto store, List<UserDto> users) {
+        for (UserDto user : users) {
+            if (store.getUserId().equals(user.getUserId())) {
+                BeanConvertUtil.covertBean(user, store);
+            }
+        }
+    }
+
+    /**
+     * 获取批量userId
+     *
+     * @param stores 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getUserIds(List<StoreDto> stores) {
+        List<String> userIds = new ArrayList<String>();
+        for (StoreDto store : stores) {
+            userIds.add(store.getUserId());
+        }
+
+        return userIds.toArray(new String[userIds.size()]);
+    }
+
+    @Override
+    public int queryStoresCount(@RequestBody StoreDto storeDto) {
+        return storeServiceDaoImpl.queryStoresCount(BeanConvertUtil.beanCovertMap(storeDto));    }
+
+    public IStoreServiceDao getStoreServiceDaoImpl() {
+        return storeServiceDaoImpl;
+    }
+
+    public void setStoreServiceDaoImpl(IStoreServiceDao storeServiceDaoImpl) {
+        this.storeServiceDaoImpl = storeServiceDaoImpl;
+    }
+
+    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
+        return userInnerServiceSMOImpl;
+    }
+
+    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
+        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+}

@@ -50,6 +50,9 @@
   * [保存小区单元](services/unit/SaveUnitInfo.md)
   * [修改小区单元](services/unit/UpdateUnitInfo.md)
   * [删除小区单元](services/unit/DeleteUnitInfo.md)
+  * [保存房屋](services/room/SaveRoomInfo.md)
+  * [修改房屋](services/room/UpdateRoomInfo.md)
+  * [删除房屋](services/room/DeleteRoomInfo.md)
 
 * 工具类接口
 
