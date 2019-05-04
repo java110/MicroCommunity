@@ -138,6 +138,49 @@ public class UnitServiceSMOImpl extends BaseComponentSMO implements IUnitService
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> deleteUnit(IPageData pd) {
+        //校验入参
+        validateDeleteUnit(pd);
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_UNIT);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.deleteUnit";
+
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                apiUrl,
+                HttpMethod.POST);
+        return responseEntity;
+    }
+
+    /**
+     * 删除单元信息校验
+     *
+     * @param pd 页面数据封装
+     */
+    private void validateDeleteUnit(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "请求报文中未包含floorId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "unitId", "请求报文中未包含unitId节点");
+
+    }
+
     /**
      * 校验 保存小区单元参数信息
      *

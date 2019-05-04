@@ -38,4 +38,12 @@ public interface IUnitServiceSMO {
      * @return ResponseEntity对象
      */
     ResponseEntity<String> updateUnit(IPageData pd);
+
+    /**
+     * 删除小区单元
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity对象
+     */
+    ResponseEntity<String> deleteUnit(IPageData pd);
 }

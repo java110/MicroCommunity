@@ -22,8 +22,9 @@
         methods:{
             deleteUnit:function(){
                 var param = {
-                    userId:vc.component.deleteUnitInfo._currentFloorId,
-                    pId:vc.component.deleteUnitInfo._currentUnitId
+                    floorId:vc.component.deleteUnitInfo._currentFloorId,
+                    unitId:vc.component.deleteUnitInfo._currentUnitId,
+                    communityId:vc.getCurrentCommunity().communityId
                 }
                 vc.http.post(
                     'deleteUnit',

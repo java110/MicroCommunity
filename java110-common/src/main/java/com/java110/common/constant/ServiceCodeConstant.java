@@ -375,4 +375,8 @@ public class ServiceCodeConstant {
 
     //修改小区单元
     public static final String SERVICE_CODE_UPDATE_UNIT = "unit.updateUnit";
+
+
+    //删除小区单元
+    public static final String SERVICE_CODE_DELETE_UNIT = "unit.deleteUnit";
 }
