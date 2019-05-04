@@ -39,6 +39,8 @@ public class UnitDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private String statusCd = "0";
+
 
     public String getUnitId() {
         return unitId;
@@ -110,5 +112,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

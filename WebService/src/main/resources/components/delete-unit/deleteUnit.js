@@ -39,7 +39,7 @@
                             //关闭model
                             $('#deleteUnitModel').modal('hide');
                             vc.emit('unit','loadUnit',{
-                                unitId:vc.component.deleteUnitInfo._currentUnitId
+                                floorId:vc.component.deleteUnitInfo._currentFloorId
                             });
                             return ;
                         }
