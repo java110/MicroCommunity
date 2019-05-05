@@ -26,6 +26,7 @@
     vc.emit = function(_componentName,_value,_param){
         vc.component.$emit(_componentName+'_'+_value,_param);
     };
+
 })(window.vc);
 
 /**

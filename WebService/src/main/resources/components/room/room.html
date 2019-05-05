@@ -1,19 +1,10 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
     <vc:create name="roomSelectFloor"
-               @OpenAddUnitModelName="AddRoom"
+               @OpenAddRoomModelName="addRoom"
     ></vc:create>
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>房屋信息</h5>
-                    <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddRoomModal()">
-                            <i class="glyphicon glyphicon-plus"></i>
-                            添加房屋
-                        </button>
-                    </div>
-                </div>
                 <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">

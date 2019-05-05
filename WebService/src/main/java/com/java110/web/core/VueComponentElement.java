@@ -1,6 +1,5 @@
 package com.java110.web.core;
 
-import com.java110.common.util.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +8,13 @@ import org.thymeleaf.dom.Document;
 import org.thymeleaf.dom.Element;
 import org.thymeleaf.dom.Macro;
 import org.thymeleaf.dom.Node;
+import org.thymeleaf.exceptions.TemplateProcessingException;
 import org.thymeleaf.processor.element.AbstractMarkupSubstitutionElementProcessor;
 import org.thymeleaf.util.DOMUtils;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 组件 自定义标签功能类
@@ -69,6 +67,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         if (js != null) {
 
             js = dealJs(js, element);
+            js = dealJsAddComponentCode(js, element);
             js = "<script type=\"text/javascript\">//<![CDATA[ \n" + js + "//]]>\n</script>";
             Node nodeJs = new Macro(js);
             nodes.add(nodeJs);
@@ -106,11 +105,14 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
                 continue;
             }
             String[] types = type.split(":");
-            if (!element.hasAttribute(types[0].trim())) {
-                throw new RuntimeException("未配置组件属性" + types[0]);
+            String attrKey = types[0].replace(" ", "").replace("\n", "");
+            if (!element.hasAttribute(attrKey)) {
+                String componentName = element.getAttributeValue("name");
+                logger.error("组件[%s]未配置组件属性 %s", componentName, attrKey);
+                throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
-            String vcType = element.getAttributeValue(types[0]);
-            js = js.replace(types[0], vcType);
+            String vcType = element.getAttributeValue(attrKey);
+            js = js.replace(attrKey, "'" + vcType + "'");
 
         }
         return js;
@@ -125,7 +127,13 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
      */
     private String dealJsAddComponentCode(String js, Element element) {
 
-        return "";
+        if (!element.hasAttribute("code")) {
+            return js;
+        }
+
+        String code = element.getAttributeValue("code");
+
+        return js.replace("@vc_", code);
     }
 
     /**

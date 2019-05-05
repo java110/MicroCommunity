@@ -9,11 +9,14 @@
             }
         },
         _initMethod:function(){
-            vc.component.listRoom();
+
         },
         _initEvent:function(){
             vc.on('room','listRoom',function(_param){
                   vc.component.listRoom();
+            });
+            vc.on('room','loadData',function(_param){
+                vc.component.listRoom(_param);
             });
         },
         methods:{

@@ -1,5 +1,9 @@
 (function(vc){
     vc.extends({
+        propTypes: {
+           @emitChooseFloor:'string',
+           @emitLoadData:'string'
+        },
         data:{
             searchFloorInfo:{
                 floors:[],
@@ -41,8 +45,8 @@
                            );
             },
             chooseFloor:function(_floor){
-                vc.emit('unitSelectFloor','chooseFloor',_floor);
-                vc.emit('unit','loadUnit',{
+                vc.emit(@emitChooseFloor,'chooseFloor',_floor);
+                vc.emit(@emitLoadData,'loadData',{
                     floorId:_floor.floorId
                 });
                 $('#searchFloorModel').modal('hide');

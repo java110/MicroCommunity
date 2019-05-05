@@ -5,7 +5,7 @@
 
     vc.extends({
         propTypes: {
-            @OpenAddUnitModelName:string
+            @OpenAddRoomModelName:'string'
         },
         data:{
             floorInfo:{
@@ -18,7 +18,7 @@
 
         },
         _initEvent:function(){
-            vc.on('unitSelectFloor','chooseFloor',function(_floor){
+            vc.on('roomSelectFloor','chooseFloor',function(_floor){
                 vc.component.floorInfo = _floor;
             });
 
@@ -28,8 +28,8 @@
             openSearchFloorModel:function(){
                 vc.emit('searchFloor','openSearchFloorModel',{});
             },
-            openAddUnitModel:function(){
-                vc.emit(@OpenAddUnitModelName,'addUnitModel',{
+            openAddRoomModel:function(){
+                vc.emit(@OpenAddRoomModelName,'addRoomModel',{
                     floorId:vc.component.floorInfo.floorId
                 });
             },

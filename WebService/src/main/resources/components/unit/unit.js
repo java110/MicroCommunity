@@ -11,7 +11,11 @@
 
         },
         _initEvent:function(){
+
             vc.on('unit','loadUnit',function(_param){
+                vc.component._loadUnits(_param);
+            });
+            vc.on('unit','loadData',function(_param){
                 vc.component._loadUnits(_param);
             });
         },
