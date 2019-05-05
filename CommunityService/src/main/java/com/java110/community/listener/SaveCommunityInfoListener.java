@@ -44,29 +44,30 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     /**
      * 保存小区信息 business 表中
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点
-        if(data.containsKey("businessCommunity")){
+        if (data.containsKey("businessCommunity")) {
             JSONObject businessCommunity = data.getJSONObject("businessCommunity");
-            doBusinessCommunity(business,businessCommunity);
-            dataFlowContext.addParamOut("communityId",businessCommunity.getString("communityId"));
+            doBusinessCommunity(business, businessCommunity);
+            dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
         }
 
-        if(data.containsKey("businessCommunityAttr")){
+        if (data.containsKey("businessCommunityAttr")) {
             JSONArray businessCommunityAttrs = data.getJSONArray("businessCommunityAttr");
-            doSaveBusinessCommunityAttrs(business,businessCommunityAttrs);
+            doSaveBusinessCommunityAttrs(business, businessCommunityAttrs);
         }
 
-        if(data.containsKey("businessCommunityPhoto")){
+        if (data.containsKey("businessCommunityPhoto")) {
             JSONArray businessCommunityPhotos = data.getJSONArray("businessCommunityPhoto");
-            doBusinessCommunityPhoto(business,businessCommunityPhotos);
+            doBusinessCommunityPhoto(business, businessCommunityPhotos);
         }
 
 
@@ -74,31 +75,32 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     /**
      * business 数据转移到 instance
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_ADD);
 
         //小区信息
         Map businessCommunityInfo = communityServiceDaoImpl.getBusinessCommunityInfo(info);
-        if( businessCommunityInfo != null && !businessCommunityInfo.isEmpty()) {
+        if (businessCommunityInfo != null && !businessCommunityInfo.isEmpty()) {
             communityServiceDaoImpl.saveCommunityInfoInstance(info);
-            dataFlowContext.addParamOut("communityId",businessCommunityInfo.get("community_id"));
+            dataFlowContext.addParamOut("communityId", businessCommunityInfo.get("community_id"));
         }
         //小区属性
         List<Map> businessCommunityAttrs = communityServiceDaoImpl.getBusinessCommunityAttrs(info);
-        if(businessCommunityAttrs != null && businessCommunityAttrs.size() > 0) {
+        if (businessCommunityAttrs != null && businessCommunityAttrs.size() > 0) {
             communityServiceDaoImpl.saveCommunityAttrsInstance(info);
         }
         //小区照片
         List<Map> businessCommunityPhotos = communityServiceDaoImpl.getBusinessCommunityPhoto(info);
-        if(businessCommunityPhotos != null && businessCommunityPhotos.size() >0){
+        if (businessCommunityPhotos != null && businessCommunityPhotos.size() > 0) {
             communityServiceDaoImpl.saveCommunityPhotoInstance(info);
         }
 
@@ -106,36 +108,37 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     /**
      * 撤单
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         Map paramIn = new HashMap();
-        paramIn.put("bId",bId);
-        paramIn.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+        paramIn.put("bId", bId);
+        paramIn.put("statusCd", StatusConstant.STATUS_CD_INVALID);
         //小区信息
         Map communityInfo = communityServiceDaoImpl.getCommunityInfo(info);
-        if(communityInfo != null && !communityInfo.isEmpty()){
-            paramIn.put("communityId",communityInfo.get("community_id").toString());
+        if (communityInfo != null && !communityInfo.isEmpty()) {
+            paramIn.put("communityId", communityInfo.get("community_id").toString());
             communityServiceDaoImpl.updateCommunityInfoInstance(paramIn);
-            dataFlowContext.addParamOut("communityId",communityInfo.get("community_id"));
+            dataFlowContext.addParamOut("communityId", communityInfo.get("community_id"));
         }
 
         //小区属性
         List<Map> communityAttrs = communityServiceDaoImpl.getCommunityAttrs(info);
-        if(communityAttrs != null && communityAttrs.size()>0){
+        if (communityAttrs != null && communityAttrs.size() > 0) {
             communityServiceDaoImpl.updateCommunityAttrInstance(paramIn);
         }
 
         //小区照片
         List<Map> communityPhotos = communityServiceDaoImpl.getCommunityPhoto(info);
-        if(communityPhotos != null && communityPhotos.size()>0){
+        if (communityPhotos != null && communityPhotos.size() > 0) {
             communityServiceDaoImpl.updateCommunityPhotoInstance(paramIn);
         }
 
@@ -144,12 +147,13 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     /**
      * 保存小区照片
-     * @param business 业务对象
+     *
+     * @param business                业务对象
      * @param businessCommunityPhotos 小区照片
      */
     private void doBusinessCommunityPhoto(Business business, JSONArray businessCommunityPhotos) {
 
-        for(int businessCommunityPhotoIndex = 0 ;businessCommunityPhotoIndex < businessCommunityPhotos.size();businessCommunityPhotoIndex++) {
+        for (int businessCommunityPhotoIndex = 0; businessCommunityPhotoIndex < businessCommunityPhotos.size(); businessCommunityPhotoIndex++) {
             JSONObject businessCommunityPhoto = businessCommunityPhotos.getJSONObject(businessCommunityPhotoIndex);
             Assert.jsonObjectHaveKey(businessCommunityPhoto, "communityId", "businessCommunityPhoto 节点下没有包含 communityId 节点");
 
@@ -166,19 +170,20 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
     /**
      * 处理 businessCommunity 节点
-     * @param business 总的数据节点
+     *
+     * @param business          总的数据节点
      * @param businessCommunity 小区节点
      */
-    private void doBusinessCommunity(Business business,JSONObject businessCommunity){
+    private void doBusinessCommunity(Business business, JSONObject businessCommunity) {
 
-        Assert.jsonObjectHaveKey(businessCommunity,"communityId","businessCommunity 节点下没有包含 communityId 节点");
+        Assert.jsonObjectHaveKey(businessCommunity, "communityId", "businessCommunity 节点下没有包含 communityId 节点");
 
-        if(businessCommunity.getString("communityId").startsWith("-")){
+        if (businessCommunity.getString("communityId").startsWith("-")) {
             //刷新缓存
             flushCommunityId(business.getDatas());
         }
 
-        businessCommunity.put("bId",business.getbId());
+        businessCommunity.put("bId", business.getbId());
         businessCommunity.put("operate", StatusConstant.OPERATE_ADD);
         //保存小区信息
         communityServiceDaoImpl.saveBusinessCommunityInfo(businessCommunity);
@@ -186,26 +191,26 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
     }
 
 
-
     /**
      * 保存小区属性信息
-     * @param business 当前业务
+     *
+     * @param business               当前业务
      * @param businessCommunityAttrs 小区属性
      */
-    private void doSaveBusinessCommunityAttrs(Business business,JSONArray businessCommunityAttrs){
+    private void doSaveBusinessCommunityAttrs(Business business, JSONArray businessCommunityAttrs) {
         JSONObject data = business.getDatas();
         JSONObject businessCommunity = data.getJSONObject("businessCommunity");
-        for(int communityAttrIndex = 0 ; communityAttrIndex < businessCommunityAttrs.size();communityAttrIndex ++){
+        for (int communityAttrIndex = 0; communityAttrIndex < businessCommunityAttrs.size(); communityAttrIndex++) {
             JSONObject communityAttr = businessCommunityAttrs.getJSONObject(communityAttrIndex);
-            Assert.jsonObjectHaveKey(communityAttr,"attrId","businessCommunityAttr 节点下没有包含 attrId 节点");
+            Assert.jsonObjectHaveKey(communityAttr, "attrId", "businessCommunityAttr 节点下没有包含 attrId 节点");
 
-            if(communityAttr.getString("attrId").startsWith("-")){
+            if (communityAttr.getString("attrId").startsWith("-")) {
                 String attrId = GenerateCodeFactory.getAttrId();
-                communityAttr.put("attrId",attrId);
+                communityAttr.put("attrId", attrId);
             }
 
-            communityAttr.put("bId",business.getbId());
-            communityAttr.put("communityId",businessCommunity.getString("communityId"));
+            communityAttr.put("bId", business.getbId());
+            communityAttr.put("communityId", businessCommunity.getString("communityId"));
             communityAttr.put("operate", StatusConstant.OPERATE_ADD);
 
             communityServiceDaoImpl.saveBusinessCommunityAttr(communityAttr);
@@ -213,29 +218,28 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
     }
 
 
-
-
     /**
      * 刷新 小区ID
+     *
      * @param data
      */
     private void flushCommunityId(JSONObject data) {
 
         String communityId = GenerateCodeFactory.getCommunityId();
         JSONObject businessCommunity = data.getJSONObject("businessCommunity");
-        businessCommunity.put("communityId",communityId);
+        businessCommunity.put("communityId", communityId);
         //刷小区属性
-        if(data.containsKey("businessCommunityAttr")) {
+        if (data.containsKey("businessCommunityAttr")) {
             JSONArray businessCommunityAttrs = data.getJSONArray("businessCommunityAttr");
-            for(int businessCommunityAttrIndex = 0;businessCommunityAttrIndex < businessCommunityAttrs.size();businessCommunityAttrIndex++) {
+            for (int businessCommunityAttrIndex = 0; businessCommunityAttrIndex < businessCommunityAttrs.size(); businessCommunityAttrIndex++) {
                 JSONObject businessCommunityAttr = businessCommunityAttrs.getJSONObject(businessCommunityAttrIndex);
                 businessCommunityAttr.put("communityId", communityId);
             }
         }
         //刷 是小区照片 的 communityId
-        if(data.containsKey("businessCommunityPhoto")) {
+        if (data.containsKey("businessCommunityPhoto")) {
             JSONArray businessCommunityPhotos = data.getJSONArray("businessCommunityPhoto");
-            for(int businessCommunityPhotoIndex = 0;businessCommunityPhotoIndex < businessCommunityPhotos.size();businessCommunityPhotoIndex++) {
+            for (int businessCommunityPhotoIndex = 0; businessCommunityPhotoIndex < businessCommunityPhotos.size(); businessCommunityPhotoIndex++) {
                 JSONObject businessCommunityPhoto = businessCommunityPhotos.getJSONObject(businessCommunityPhotoIndex);
                 businessCommunityPhoto.put("communityId", communityId);
             }

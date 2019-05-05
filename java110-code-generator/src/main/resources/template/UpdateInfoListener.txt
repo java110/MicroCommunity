@@ -35,9 +35,9 @@ import java.util.Map;
 @Transactional
 public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(UpdateStoreInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateStoreInfoListener.class);
     @Autowired
-    IStoreServiceDao storeServiceDaoImpl;
+    private IStoreServiceDao storeServiceDaoImpl;
 
     @Override
     public int getOrder() {
@@ -51,8 +51,8 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
 
     /**
      * business过程
-     * @param dataFlowContext
-     * @param business
+     * @param dataFlowContext 上下文对象
+     * @param business 业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {

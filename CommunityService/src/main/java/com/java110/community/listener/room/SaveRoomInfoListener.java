@@ -134,9 +134,9 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
 
         if (businessRoom.getString("roomId").startsWith("-")) {
             //刷新缓存
-            //flushRoomId(business.getDatas());
+            flushRoomId(business.getDatas());
 
-            businessRoom.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
+            //businessRoom.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
 
         }
 
@@ -145,6 +145,26 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
         //保存小区房屋信息
         roomServiceDaoImpl.saveBusinessRoomInfo(businessRoom);
 
+    }
+
+    /**
+     * 刷新 小区ID
+     *
+     * @param data 数据
+     */
+    private void flushRoomId(JSONObject data) {
+
+        String roomId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId);
+        JSONObject businessRoom = data.getJSONObject("businessRoom");
+        businessRoom.put("roomId", roomId);
+        //刷小区属性
+        if (data.containsKey("businessRoomAttr")) {
+            JSONArray businessRoomAttrs = data.getJSONArray("businessRoomAttr");
+            for (int businessRoomAttrIndex = 0; businessRoomAttrIndex < businessRoomAttrs.size(); businessRoomAttrIndex++) {
+                JSONObject businessRoomAttr = businessRoomAttrs.getJSONObject(businessRoomAttrIndex);
+                businessRoomAttr.put("roomId", roomId);
+            }
+        }
     }
 
     public IRoomServiceDao getRoomServiceDaoImpl() {

@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by wuxw on 2018/7/4.
  */
 public abstract class AbstractStoreBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener{
-    private final static Logger logger = LoggerFactory.getLogger(AbstractStoreBusinessServiceDataFlowListener.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractStoreBusinessServiceDataFlowListener.class);
 
 
     /**
@@ -36,7 +36,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * @param businessStoreInfo
      */
     protected void flushBusinessStoreInfo(Map businessStoreInfo,String statusCd){
-        businessStoreInfo.put("newBId",businessStoreInfo.get("b_id"));
+        businessStoreInfo.put("newBId", businessStoreInfo.get("b_id"));
         $flushBusinessInfo$
         businessStoreInfo.put("statusCd", statusCd);
     }

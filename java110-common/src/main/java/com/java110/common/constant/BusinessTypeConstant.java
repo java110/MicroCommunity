@@ -208,18 +208,18 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_UNIT_INFO = "520100050001";
 
     /**
-     * 增加小区单元
+     * 增加房屋
      */
     public static final String BUSINESS_TYPE_SAVE_ROOM_INFO = "530100030001";
 
     /**
-     * 修改小区单元
+     * 修改房屋
      */
     public static final String BUSINESS_TYPE_UPDATE_ROOM_INFO = "530100040001";
 
 
     /**
-     * 删除小区单元
+     * 删除房屋
      */
     public static final String BUSINESS_TYPE_DELETE_ROOM_INFO = "530100050001";
 

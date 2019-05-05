@@ -27,10 +27,10 @@ import java.util.Map;
 @Transactional
 public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowListener{
 
-    private final static Logger logger = LoggerFactory.getLogger(SaveStoreInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(SaveStoreInfoListener.class);
 
     @Autowired
-    IStoreServiceDao storeServiceDaoImpl;
+    private IStoreServiceDao storeServiceDaoImpl;
 
     @Override
     public int getOrder() {
@@ -54,19 +54,19 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
 
         //处理 businessStore 节点
         if(data.containsKey("businessStore")){
-            Object _obj = data.get("businessStore");
+            Object bObj = data.get("businessStore");
             JSONArray businessStores = null;
-            if(_obj instanceof JSONObject){
+            if(bObj instanceof JSONObject){
                 businessStores = new JSONArray();
-                businessStores.add(_obj);
+                businessStores.add(bObj);
             }else {
-                businessStores = (JSONArray)_obj;
+                businessStores = (JSONArray)bObj;
             }
             //JSONObject businessStore = data.getJSONObject("businessStore");
-            for (int _storeIndex = 0; _storeIndex < businessStores.size();_storeIndex++) {
-                JSONObject businessStore = businessStores.getJSONObject(_storeIndex);
+            for (int bStoreIndex = 0; bStoreIndex < businessStores.size();bStoreIndex++) {
+                JSONObject businessStore = businessStores.getJSONObject(bStoreIndex);
                 doBusinessStore(business, businessStore);
-                if(_obj instanceof JSONObject) {
+                if(bObj instanceof JSONObject) {
                     dataFlowContext.addParamOut("storeId", businessStore.getString("storeId"));
                 }
             }

@@ -35,7 +35,7 @@ import java.util.Map;
 @Transactional
 public class DeleteRoomInfoListener extends AbstractRoomBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(DeleteRoomInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteRoomInfoListener.class);
     @Autowired
     IRoomServiceDao roomServiceDaoImpl;
 

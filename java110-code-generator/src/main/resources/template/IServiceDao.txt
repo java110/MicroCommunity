@@ -25,7 +25,7 @@ public interface IStoreServiceDao {
      * @param businessStoreInfo 商户信息 封装
      * @throws DAOException 操作数据库异常
      */
-    public void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException;
+    void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException;
 
 
 
@@ -34,9 +34,9 @@ public interface IStoreServiceDao {
      * 根据bId 查询商户信息
      * @param info bId 信息
      * @return 商户信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
-    public List<Map> getBusinessStoreInfo(Map info) throws DAOException;
+    List<Map> getBusinessStoreInfo(Map info) throws DAOException;
 
 
 
@@ -44,9 +44,9 @@ public interface IStoreServiceDao {
     /**
      * 保存 商户信息 Business数据到 Instance中
      * @param info
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
-    public void saveStoreInfoInstance(Map info) throws DAOException;
+    void saveStoreInfoInstance(Map info) throws DAOException;
 
 
 
@@ -56,18 +56,18 @@ public interface IStoreServiceDao {
      * 根据bId 查询商户信息
      * @param info bId 信息
      * @return 商户信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
-    public List<Map> getStoreInfo(Map info) throws DAOException;
+    List<Map> getStoreInfo(Map info) throws DAOException;
 
 
 
     /**
      * 修改商户信息
      * @param info 修改信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
-    public void updateStoreInfoInstance(Map info) throws DAOException;
+    void updateStoreInfoInstance(Map info) throws DAOException;
 
 
     /**

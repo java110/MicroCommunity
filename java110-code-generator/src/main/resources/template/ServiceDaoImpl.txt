@@ -22,12 +22,12 @@ import java.util.Map;
 //@Transactional
 public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreServiceDao {
 
-    private final static Logger logger = LoggerFactory.getLogger(StoreServiceDaoImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StoreServiceDaoImpl.class);
 
     /**
      * 商户信息封装
      * @param businessStoreInfo 商户信息 封装
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
     @Override
     public void saveBusinessStoreInfo(Map businessStoreInfo) throws DAOException {
@@ -46,7 +46,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
      * 查询商户信息
      * @param info bId 信息
      * @return 商户信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getBusinessStoreInfo(Map info) throws DAOException {
@@ -63,7 +63,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
     /**
      * 保存商户信息 到 instance
      * @param info   bId 信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
     @Override
     public void saveStoreInfoInstance(Map info) throws DAOException {
@@ -80,8 +80,8 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
     /**
      * 查询商户信息（instance）
      * @param info bId 信息
-     * @return
-     * @throws DAOException
+     * @return List<Map>
+     * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getStoreInfo(Map info) throws DAOException {
@@ -96,7 +96,7 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
     /**
      * 修改商户信息
      * @param info 修改信息
-     * @throws DAOException
+     * @throws DAOException DAO异常
      */
     @Override
     public void updateStoreInfoInstance(Map info) throws DAOException {

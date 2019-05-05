@@ -108,3 +108,29 @@ CREATE TABLE building_room(
 CREATE INDEX idx_room_b_id ON building_room(b_id);
 CREATE UNIQUE INDEX idx_room_id ON building_room(room_id);
 
+create table business_building_room_attr(
+    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
+    room_id VARCHAR(30) NOT NULL COMMENT '用户ID',
+    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
+    `value` VARCHAR(50) NOT NULL COMMENT '属性值',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+);
+
+CREATE INDEX idx_business_b_room_attr ON business_building_room_attr(room_id);
+CREATE INDEX idx_business_b_room_attr_b_id ON business_building_room_attr(b_id);
+
+
+CREATE TABLE building_room_attr(
+    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
+    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
+    room_id VARCHAR(30) NOT NULL COMMENT '房屋ID',
+    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
+    `value` VARCHAR(50) NOT NULL COMMENT '属性值',
+    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
+    UNIQUE KEY (attr_id)
+);
+CREATE INDEX idx_b_attr_b_id ON building_room_attr(b_id);
+CREATE INDEX idx_attr_room_id ON building_room_attr(room_id);
