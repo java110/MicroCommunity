@@ -1,8 +1,13 @@
 package com.java110.web.core;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,6 +62,7 @@ public class VueComponentTemplate extends PackageScanner {
      * @return
      */
     public static String findTemplateByComponentCode(String componentCode) {
+        System.out.println("componentTemplate" + componentTemplate);
         if (componentTemplate.containsKey(componentCode)) {
             return componentTemplate.get(componentCode);
         }
@@ -74,7 +80,8 @@ public class VueComponentTemplate extends PackageScanner {
         Reader reader = null;
         String sb = "";
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(File.separator + filePath);
+            InputStream inputStream = new ClassPathResource(filePath).getInputStream();
+            //InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(File.separator + filePath);
             reader = new InputStreamReader(inputStream, "UTF-8");
             int tempChar;
             StringBuffer b = new StringBuffer();

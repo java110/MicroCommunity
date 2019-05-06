@@ -1,8 +1,11 @@
+
 package com.java110.web.core;
 
 import org.springframework.util.StringUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,11 +19,11 @@ import java.util.jar.JarFile;
 
 public abstract class PackageScanner {
 
-    public void packageScanner(Class<?> klass,String suffix) {
+    public void packageScanner(Class<?> klass, String suffix) {
         packageScanner(klass.getPackage().getName(), suffix);
     }
 
-    public void packageScanner(String packageName,String suffix) {
+    public void packageScanner(String packageName, String suffix) {
         String packagePath = packageName.replace(".", File.separator);
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -28,14 +31,15 @@ public abstract class PackageScanner {
             Enumeration<URL> resources = classLoader.getResources(packagePath);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
+                System.out.println("一层循环" + url);
                 if (url.getProtocol().equals("jar")) {
-                    scanPackage(url,suffix);
+                    scanPackage(packageName, url, suffix);
                 } else {
                     File file = new File(url.toURI());
                     if (!file.exists()) {
                         continue;
                     }
-                    scanPackage(packageName, file,suffix);
+                    scanPackage(packageName, file, suffix);
                 }
             }
         } catch (IOException e) {
@@ -45,23 +49,28 @@ public abstract class PackageScanner {
         }
     }
 
-    private void scanPackage(URL url,String suffix) throws IOException {
-        JarURLConnection jarUrlConnection =  (JarURLConnection) url.openConnection();
+    private void scanPackage(String packageName, URL url, String suffix) throws IOException {
+        JarURLConnection jarUrlConnection = (JarURLConnection) url.openConnection();
         JarFile jarFile = jarUrlConnection.getJarFile();
         Enumeration<JarEntry> jarEntries = jarFile.entries();
+        System.out.println("二层循环" + url + " : " + jarUrlConnection.getJarFileURL());
+
 
         while (jarEntries.hasMoreElements()) {
+
             JarEntry jarEntry = jarEntries.nextElement();
             String jarName = jarEntry.getName();
-            if (jarEntry.isDirectory() || !jarName.endsWith(suffix)) {
+            if (jarEntry.isDirectory() || !jarName.endsWith(suffix) || !jarName.startsWith(packageName)) {
                 continue;
             }
-            String className = jarName.replace(suffix, "");
-            handleResource(className);
+            //String className = jarName.replace(suffix, "");
+            System.out.println("二层循环" + jarName);
+
+            handleResource(jarName);
         }
     }
 
-    private void scanPackage(String packageName, final File currentfile,final String suffix) {
+    private void scanPackage(String packageName, final File currentfile, final String suffix) {
         File[] files = currentfile.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -73,11 +82,11 @@ public abstract class PackageScanner {
         });
         for (File file : files) {
             if (file.isDirectory()) {
-                scanPackage(packageName + "." + file.getName(), file,suffix);
+                scanPackage(packageName + "." + file.getName(), file, suffix);
             } else {
-                packageName = packageName.replace(".",File.separator);
-                String fileName = packageName + File.separator +  file.getName();
-                if(StringUtils.isEmpty(fileName) || !fileName.endsWith(suffix)){
+                packageName = packageName.replace(".", File.separator);
+                String fileName = packageName + File.separator + file.getName();
+                if (StringUtils.isEmpty(fileName) || !fileName.endsWith(suffix)) {
                     continue;
                 }
                 handleResource(fileName);
@@ -94,7 +103,7 @@ public abstract class PackageScanner {
             protected void handleResource(String filePath) {
 
             }
-        }.packageScanner("components","js");
+        }.packageScanner("components", "js");
     }
 
 }
