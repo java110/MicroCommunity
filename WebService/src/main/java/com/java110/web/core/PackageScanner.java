@@ -31,7 +31,6 @@ public abstract class PackageScanner {
             Enumeration<URL> resources = classLoader.getResources(packagePath);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
-                System.out.println("一层循环" + url);
                 if (url.getProtocol().equals("jar")) {
                     scanPackage(packageName, url, suffix);
                 } else {
@@ -53,7 +52,6 @@ public abstract class PackageScanner {
         JarURLConnection jarUrlConnection = (JarURLConnection) url.openConnection();
         JarFile jarFile = jarUrlConnection.getJarFile();
         Enumeration<JarEntry> jarEntries = jarFile.entries();
-        System.out.println("二层循环" + url + " : " + jarUrlConnection.getJarFileURL());
 
 
         while (jarEntries.hasMoreElements()) {

@@ -62,7 +62,6 @@ public class VueComponentTemplate extends PackageScanner {
      * @return
      */
     public static String findTemplateByComponentCode(String componentCode) {
-        System.out.println("componentTemplate" + componentTemplate);
         if (componentTemplate.containsKey(componentCode)) {
             return componentTemplate.get(componentCode);
         }
