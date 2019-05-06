@@ -74,7 +74,7 @@ public class VueComponentTemplate extends PackageScanner {
         Reader reader = null;
         String sb = "";
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(File.separator + filePath);
             reader = new InputStreamReader(inputStream, "UTF-8");
             int tempChar;
             StringBuffer b = new StringBuffer();
