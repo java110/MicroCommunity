@@ -1,6 +1,6 @@
 version: '2'
 services:
-   communityserivce:
+   webserivce:
        container_name: webserivce-1
        build:
           context: .
