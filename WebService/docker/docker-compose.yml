@@ -1,0 +1,12 @@
+version: '2'
+services:
+   communityserivce:
+       container_name: webserivce-1
+       build:
+          context: .
+          dockerfile: Dockerfile
+       restart: always
+       ports:
+       - "8443:443"
+       volumes:
+       - ../target/WebService.jar:/root/target/WebService.jar

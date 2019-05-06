@@ -40,7 +40,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: console-service
+    name: web-service
   redis:
     database: 0
     host: test.redis.java110.com

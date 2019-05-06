@@ -2,11 +2,15 @@
 
     vc.extends({
         data:{
+            addRoomUnits:[],
             addRoomInfo:{
-                floorId:'',
+                unitId:'',
                 roomNum:'',
-                layerCount:'',
-                lift:'',
+                layer:'',
+                section:'',
+                apartment:'',
+                builtUpArea:'',
+                unitPrice:'',
                 remark:'',
                 communityId:''
             }
@@ -17,12 +21,49 @@
          _initEvent:function(){
              vc.on('addRoom','addRoomModel',function(_params){
                 vc.component.refreshAddRoomInfo();
+                vc.component.loadUnits(_params.floorId);
                 $('#addRoomModel').modal('show');
                 vc.component.addRoomInfo.floorId = _params.floorId;
                 vc.component.addRoomInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
+            /**
+                根据楼ID加载单元
+            **/
+            loadUnits:function(_floorId){
+                vc.component.addRoomUnits = [];
+                var param = {
+                    params:{
+                        floorId:_floorId,
+                        communityId:vc.getCurrentCommunity().communityId
+                    }
+                }
+                vc.http.get(
+                    'addRoom',
+                    'loadUnits',
+                     param,
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            var tmpUnits = JSON.parse(json);
+                            vc.component.addRoomUnits = tmpUnits;
+                            /*if(tmpUnits == null || tmpUnits.length == 0){
+                                return ;
+                            }
+                            for(var unitIndex = 0; unitIndex < tmpUnits.length;unitIndex++){
+                               vc.component.addRoomInfo.units[unitIndex] = tmpUnits[unitIndex];
+                            }*/
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+            },
             addRoomValidate:function(){
                         return vc.validate.validate({
                             addRoomInfo:vc.component.addRoomInfo
@@ -108,10 +149,13 @@
             },
             refreshAddRoomInfo:function(){
                 vc.component.addRoomInfo= {
-                  floorId:'',
+                  unitId:'',
                   roomNum:'',
-                  layerCount:'',
-                  lift:'',
+                  layer:'',
+                  section:'',
+                  apartment:'',
+                  builtUpArea:'',
+                  unitPrice:'',
                   remark:'',
                   communityId:''
                 }
