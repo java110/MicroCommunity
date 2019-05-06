@@ -63,7 +63,7 @@
     <logger name="org.springframework" level="error"/>
     <logger name="com.java110.api" level="DEBUG"/>
     <logger name="com.java110.order" level="DEBUG"/>
-    <logger name="com.java110" level="DEBUG"/>
+    <!--<logger name="com.java110" level="DEBUG"/>-->
 
     <!--myibatis log configure-->
     <logger name="com.apache.ibatis" level="ERROR"/>
@@ -73,10 +73,9 @@
     <logger name="druid.sql.ResultSet" level="DEBUG"></logger>
 
 
-    <!--
     <logger name="com.java110" level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
-    </logger>-->
+    </logger>
 
     <!-- 日志输出级别
     <root level="DEBUG">

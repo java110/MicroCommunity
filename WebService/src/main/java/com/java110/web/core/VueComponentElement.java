@@ -105,10 +105,12 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
                 continue;
             }
             String[] types = type.split(":");
-            String attrKey = types[0].replace(" ", "").replace("\n", "");
+            String attrKey = types[0].replace(" ", "")
+                    .replace("\n", "")
+                    .replace("\r", "");
             if (!element.hasAttribute(attrKey)) {
                 String componentName = element.getAttributeValue("name");
-                logger.error("组件[%s]未配置组件属性 %s", componentName, attrKey);
+                logger.error("组件" + componentName + "未配置组件属性 " + attrKey);
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = element.getAttributeValue(attrKey);
