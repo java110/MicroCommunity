@@ -226,3 +226,15 @@
       return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
     }
 })(window.vc);
+
+
+(function(vc){
+
+    vc.propTypes = {
+        string:"string",//字符串类型
+        array:"array",
+        object:"object",
+        number:"number"
+    }
+
+})(window.vc)

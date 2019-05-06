@@ -5,7 +5,7 @@
 
     vc.extends({
         propTypes: {
-            @OpenAddRoomModelName:'string'
+            openAddRoomModelName:vc.propTypes.string
         },
         data:{
             floorInfo:{
@@ -29,7 +29,7 @@
                 vc.emit('searchFloor','openSearchFloorModel',{});
             },
             openAddRoomModel:function(){
-                vc.emit(@OpenAddRoomModelName,'addRoomModel',{
+                vc.emit($props.openAddRoomModelName,'addRoomModel',{
                     floorId:vc.component.floorInfo.floorId
                 });
             },

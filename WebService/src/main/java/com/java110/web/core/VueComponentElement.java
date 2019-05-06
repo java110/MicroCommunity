@@ -100,6 +100,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         }
 
         String[] tmpType = tmpProTypes.split(",");
+        StringBuffer propsJs = new StringBuffer("\nvar $props = {};\n");
         for (String type : tmpType) {
             if (StringUtils.isEmpty(type) || !type.contains(":")) {
                 continue;
@@ -114,9 +115,20 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = element.getAttributeValue(attrKey);
-            js = js.replace(attrKey, "'" + vcType + "'");
-
+            if (types[1].equals("vc.propTypes.string")) {
+                vcType = "'" + vcType + "'";
+            }
+            propsJs.append("$props." + attrKey + "=" + vcType + ";\n");
         }
+
+        //将propsJs 插入到 第一个 { 之后
+        int position = js.indexOf("{");
+        if (position < 0) {
+            String componentName = element.getAttributeValue("name");
+            logger.error("组件" + componentName + "对应js 未包含 {}  ");
+            throw new TemplateProcessingException("组件" + componentName + "对应js 未包含 {}  ");
+        }
+        js = new StringBuffer(js).insert(position + 1, propsJs).toString();
         return js;
     }
 
