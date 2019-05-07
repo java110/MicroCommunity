@@ -36,10 +36,11 @@ import java.util.Map;
 @Component
 public class PageProcessAspect {
 
-    private final static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
+    private  static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
 
     @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
-    public void dataProcess(){}
+    public void dataProcess() {
+    }
 
     /**
      * 初始化数据
@@ -57,7 +58,7 @@ public class PageProcessAspect {
         String reqData = "";
         String userId = "";
         String sessionId = request.getSession().getId();
-        if("POST,PUT".contains(request.getMethod())){
+        if ("POST,PUT".contains(request.getMethod())) {
             InputStream in = request.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             //reader.
@@ -70,18 +71,18 @@ public class PageProcessAspect {
 
         }
         //对 get情况下的参数进行封装
-        else{
-            Map<String,String[]> params = request.getParameterMap();
-            if(params != null  && !params.isEmpty()) {
+        else {
+            Map<String, String[]> params = request.getParameterMap();
+            if (params != null && !params.isEmpty()) {
                 JSONObject paramObj = new JSONObject();
-                for(String key : params.keySet()) {
-                    if(params.get(key).length>0){
+                for (String key : params.keySet()) {
+                    if (params.get(key).length > 0) {
                         String value = "";
-                        for(int paramIndex = 0 ; paramIndex < params.get(key).length;paramIndex++) {
+                        for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
                             value = params.get(key)[paramIndex] + ",";
                         }
-                        value = value.endsWith(",")?value.substring(0,value.length()-1):value;
-                        paramObj.put(key,value);
+                        value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
+                        paramObj.put(key, value);
                     }
                     continue;
                 }
@@ -89,34 +90,34 @@ public class PageProcessAspect {
             }
         }
         // 获取 userId
-        if(request.getAttribute("claims") != null && request.getAttribute("claims") instanceof Map){
-            Map<String,String> userInfo = (Map<String,String>)request.getAttribute("claims");
-            if(userInfo.containsKey(CommonConstant.LOGIN_USER_ID)){
+        if (request.getAttribute("claims") != null && request.getAttribute("claims") instanceof Map) {
+            Map<String, String> userInfo = (Map<String, String>) request.getAttribute("claims");
+            if (userInfo.containsKey(CommonConstant.LOGIN_USER_ID)) {
                 userId = userInfo.get(CommonConstant.LOGIN_USER_ID);
             }
         }
 
         // 获取组件名称 和方法名称
-        String url = request.getRequestURL()!=null?request.getRequestURL().toString():"";
+        String url = request.getRequestURL() != null ? request.getRequestURL().toString() : "";
         String componentCode = "";
         String componentMethod = "";
-        if(url.contains("callComponent")){ //组件处理
-            String []urls = url.split("/");
+        if (url.contains("callComponent")) { //组件处理
+            String[] urls = url.split("/");
 
-            if(urls.length == 6){
+            if (urls.length == 6) {
                 componentCode = urls[4];
                 componentMethod = urls[5];
             }
-        }else if(url.contains("flow")){ //流程处理
-            String []urls = url.split("/");
+        } else if (url.contains("flow")) { //流程处理
+            String[] urls = url.split("/");
 
-            if(urls.length == 5){
+            if (urls.length == 5) {
                 componentCode = urls[4];
             }
         }
 
-         pd = PageData.newInstance().builder(userId,this.getToken(request),reqData,componentCode,componentMethod,url,sessionId);
-        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
+        pd = PageData.newInstance().builder(userId, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId);
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
 
     }
 
@@ -127,7 +128,7 @@ public class PageProcessAspect {
 
     //后置异常通知
     @AfterThrowing("dataProcess()")
-    public void throwException(JoinPoint jp){
+    public void throwException(JoinPoint jp) {
     }
 
     //后置最终通知,final增强，不管是抛出异常或者正常退出都会执行
@@ -137,14 +138,14 @@ public class PageProcessAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         HttpServletRequest request = attributes.getRequest();
-        PageData pd =request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) != null ?(PageData)request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA):null ;
+        PageData pd = request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) != null ? (PageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) : null;
         //保存日志处理
-        if(pd == null){
-            return ;
+        if (pd == null) {
+            return;
         }
 
         //写cookies信息
-        writeCookieInfo(pd,attributes);
+        writeCookieInfo(pd, attributes);
 
     }
 
@@ -152,7 +153,7 @@ public class PageProcessAspect {
     @Around("dataProcess()")
     public Object around(ProceedingJoinPoint pjp) {
         try {
-            Object o =  pjp.proceed();
+            Object o = pjp.proceed();
             return o;
         } catch (Throwable e) {
             e.printStackTrace();
@@ -163,12 +164,13 @@ public class PageProcessAspect {
 
     /**
      * 获取TOKEN
+     *
      * @param request
      * @return
      */
     private String getToken(HttpServletRequest request) throws FilterException {
         String token = "";
-        if(request.getCookies() == null || request.getCookies().length == 0){
+        if (request.getCookies() == null || request.getCookies().length == 0) {
             return token;
         }
         for (Cookie cookie : request.getCookies()) {
@@ -182,13 +184,14 @@ public class PageProcessAspect {
 
     /**
      * 写cookie 信息
-     * @param pd 页面封装信息
+     *
+     * @param pd         页面封装信息
      * @param attributes
      * @throws IOException
      */
-    private void writeCookieInfo(IPageData pd,ServletRequestAttributes attributes) throws IOException {
+    private void writeCookieInfo(IPageData pd, ServletRequestAttributes attributes) throws IOException {
         // 这里目前只写到组件级别，如果需要 写成方法级别
-        if(!StringUtil.isNullOrNone(pd.getToken()) && "login".equals(pd.getComponentCode())) {
+        if (!StringUtil.isNullOrNone(pd.getToken()) && "login".equals(pd.getComponentCode())) {
             HttpServletResponse response = attributes.getResponse();
             Cookie cookie = new Cookie(CommonConstant.COOKIE_AUTH_TOKEN, pd.getToken());
             cookie.setHttpOnly(true);

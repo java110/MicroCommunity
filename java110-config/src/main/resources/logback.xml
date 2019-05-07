@@ -60,7 +60,9 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework" level="error"/>
+    <logger name="org.springframework" level="DEBUG">
+        <appender-ref ref="STDOUT_FILE" />
+    </logger>
     <logger name="com.java110.api" level="DEBUG"/>
     <logger name="com.java110.order" level="DEBUG"/>
     <!--<logger name="com.java110" level="DEBUG"/>-->
@@ -74,6 +76,10 @@
 
 
     <logger name="com.java110" level="DEBUG">
+        <appender-ref ref="STDOUT_FILE" />
+    </logger>
+
+    <logger name="org.thymeleaf" level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
     </logger>
 

@@ -62,7 +62,6 @@ public abstract class PackageScanner {
                 continue;
             }
             //String className = jarName.replace(suffix, "");
-            System.out.println("二层循环" + jarName);
 
             handleResource(jarName);
         }

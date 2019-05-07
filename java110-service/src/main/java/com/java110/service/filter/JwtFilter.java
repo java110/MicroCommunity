@@ -3,19 +3,24 @@ package com.java110.service.filter;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.FilterException;
+import com.java110.common.util.StringUtil;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.filter.GenericFilterBean;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -23,9 +28,9 @@ import java.util.Map;
  */
 public class JwtFilter implements Filter {
 
-    private final static Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
-    private  String[] excludedUris;
+    private String[] excludedUris;
 
     @Override
     public void destroy() {
@@ -45,16 +50,18 @@ public class JwtFilter implements Filter {
         final HttpServletResponse response = (HttpServletResponse) res;
         String uri = request.getServletPath();
         //如果是 不能过滤的地址选择跳过
-        if(isExcludedUri(uri)){
+        if (isExcludedUri(uri)) {
             chain.doFilter(request, response);
-            return ;
+            return;
         }
         String token = "";
         try {
             //获取token
             token = this.getToken(request);
             try {
+                long tokenStartTime = new Date().getTime();
                 Map<String, String> claims = AuthenticationFactory.verifyToken(token);
+                logger.debug("校验token 耗时：{}", new Date().getTime() - tokenStartTime);
                 request.setAttribute("claims", claims);
 
             } catch (Exception e) {
@@ -64,26 +71,27 @@ public class JwtFilter implements Filter {
             }
 
             chain.doFilter(req, res);
-        }catch (FilterException e){
-            if("POST".equals(request.getMethod())){
+        } catch (FilterException e) {
+            if ("POST".equals(request.getMethod())) {
                 writeJson(response,
-                        DataTransactionFactory.pageResponseJson(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,e.getMessage(),null),
+                        DataTransactionFactory.pageResponseJson(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, e.getMessage(), null),
                         "UTF-8");
-            }else{
+            } else {
                 response.sendRedirect("/flow/login");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             response.sendRedirect("/flow/login");
         }
     }
 
     /**
      * 获取TOKEN
+     *
      * @param request
      * @return
      */
-    private String getToken(HttpServletRequest request) throws FilterException{
+    private String getToken(HttpServletRequest request) throws FilterException {
         String token = "";
         for (Cookie cookie : request.getCookies()) {
             if (CommonConstant.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
@@ -97,17 +105,17 @@ public class JwtFilter implements Filter {
         return token;
     }
 
-    private void writeJson(HttpServletResponse response, String data, String encoding){
+    private void writeJson(HttpServletResponse response, String data, String encoding) {
         //设置编码格式
         response.setContentType("text/plain;charset=" + encoding);
         response.setCharacterEncoding(encoding);
 
         PrintWriter out = null;
-        try{
+        try {
             out = response.getWriter();
             out.write(data);
             out.flush();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -119,7 +127,7 @@ public class JwtFilter implements Filter {
         for (String ex : excludedUris) {
             uri = uri.trim();
             ex = ex.trim();
-            if (uri.toLowerCase().matches(ex.toLowerCase().replace("*",".*")))
+            if (uri.toLowerCase().matches(ex.toLowerCase().replace("*", ".*")))
                 return true;
         }
         return false;

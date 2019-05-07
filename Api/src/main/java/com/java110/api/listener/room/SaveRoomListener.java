@@ -98,7 +98,7 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         businessUnit.putAll(paramInJson);
         businessUnit.put("room_id", "-1");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRoom", businessUnit);
 
         return business;
     }

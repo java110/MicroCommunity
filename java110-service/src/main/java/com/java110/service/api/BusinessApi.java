@@ -29,6 +29,7 @@ import java.util.Map;
  * 查询服务
  * add by wuxw on 2018/4/20.
  * modify by wuxw on 2019/4/20.
+ *
  * @version 1.1
  */
 @RestController
@@ -41,49 +42,50 @@ public class BusinessApi extends BaseController {
     private IQueryServiceSMO queryServiceSMOImpl;
 
 
-    @RequestMapping(path = "/businessApi/query",method= RequestMethod.GET)
-    @ApiOperation(value="业务查询get请求", notes="test: 返回 2XX 表示服务正常")
-    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @RequestMapping(path = "/businessApi/query", method = RequestMethod.GET)
+    @ApiOperation(value = "业务查询get请求", notes = "test: 返回 2XX 表示服务正常")
+    @ApiImplicitParam(paramType = "query", name = "method", value = "用户编号", required = true, dataType = "String")
     @Deprecated
     public ResponseEntity<String> service(HttpServletRequest request) {
         try {
             Map<String, Object> headers = new HashMap<String, Object>();
             this.getRequestInfo(request, headers);
-            Assert.isNotNull(headers, CommonConstant.HTTP_SERVICE.toLowerCase(),"请求信息中没有包含service信息");
+            Assert.isNotNull(headers, CommonConstant.HTTP_SERVICE.toLowerCase(), "请求信息中没有包含service信息");
             //Assert.isNotNull(headers, CommonConstant.HTTP_PARAM,"请求信息中没有包含参数（params）信息");
             Map readOnlyMap = super.getParameterStringMap(request);
-            headers.put("params",readOnlyMap);
+            headers.put("params", readOnlyMap);
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(headers);
             initConfig(dataQuery);
             queryServiceSMOImpl.commonQueryService(dataQuery);
             return dataQuery.getResponseEntity();
-        }catch (Exception e){
-            logger.error("请求订单异常",e);
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
             //DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage()+e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("请求发生异常，" + e.getMessage() + e, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
 
     /**
      * {
-     "bId":"12345678",
-     "serviceCode": "querycustinfo",
-     "serviceName": "查询客户",
-     "remark": "备注",
-     "datas": {
-     "params": {
-     //这个做查询时的参数
-     }
-     //这里是具体业务
-     }
-     }
+     * "bId":"12345678",
+     * "serviceCode": "querycustinfo",
+     * "serviceName": "查询客户",
+     * "remark": "备注",
+     * "datas": {
+     * "params": {
+     * //这个做查询时的参数
+     * }
+     * //这里是具体业务
+     * }
+     * }
+     *
      * @param businessInfo
      * @return
      */
-    @RequestMapping(path = "/businessApi/query",method= RequestMethod.POST)
-    @ApiOperation(value="业务查询post请求", notes="test: 返回 2XX 表示服务正常")
-    @ApiImplicitParam(paramType="query", name = "method", value = "用户编号", required = true, dataType = "String")
+    @RequestMapping(path = "/businessApi/query", method = RequestMethod.POST)
+    @ApiOperation(value = "业务查询post请求", notes = "test: 返回 2XX 表示服务正常")
+    @ApiImplicitParam(paramType = "query", name = "method", value = "用户编号", required = true, dataType = "String")
     @Deprecated
     public ResponseEntity<String> queryPost(@RequestBody String businessInfo) {
         try {
@@ -91,37 +93,39 @@ public class BusinessApi extends BaseController {
             initConfig(dataQuery);
             queryServiceSMOImpl.commonQueryService(dataQuery);
             return dataQuery.getResponseEntity();
-        }catch (Exception e){
-            logger.error("请求订单异常",e);
-             //DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
-            return new ResponseEntity<String>("请求发生异常，"+e.getMessage()+e, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
+            //DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+            return new ResponseEntity<String>("请求发生异常，" + e.getMessage() + e, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
+
     @Deprecated
-    @RequestMapping(path = "/businessApi/do",method= RequestMethod.GET)
+    @RequestMapping(path = "/businessApi/do", method = RequestMethod.GET)
     public String doGet(HttpServletRequest request) {
-        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR, "不支持Get方法请求").toJSONString();
     }
 
     /**
      * {
-     "bId":"12345678",
-     "serviceCode": "querycustinfo",
-     "serviceName": "查询客户",
-     "remark": "备注",
-     "datas": {
-     "params": {
-     //这个做查询时的参数
-     }
-     //这里是具体业务
-     }
-     }
+     * "bId":"12345678",
+     * "serviceCode": "querycustinfo",
+     * "serviceName": "查询客户",
+     * "remark": "备注",
+     * "datas": {
+     * "params": {
+     * //这个做查询时的参数
+     * }
+     * //这里是具体业务
+     * }
+     * }
+     *
      * @param businessInfo
      * @return
      */
     @Deprecated
-    @RequestMapping(path = "/businessApi/do",method= RequestMethod.POST)
+    @RequestMapping(path = "/businessApi/do", method = RequestMethod.POST)
     public String doPost(@RequestBody String businessInfo) {
         try {
             DataQuery dataQuery = DataQueryFactory.newInstance().builder(businessInfo);
@@ -129,33 +133,35 @@ public class BusinessApi extends BaseController {
             //这里应该添加 只有配置类数据才能处理数据，业务类数据不能操作 逻辑
             queryServiceSMOImpl.commonDoService(dataQuery);
             return dataQuery.getResponseInfo().toJSONString();
-        }catch (Exception e){
-            logger.error("请求订单异常",e);
-            return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e).toJSONString();
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
+            return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + e).toJSONString();
         }
     }
 
     /**
      * 初始化配置
+     *
      * @param dataQuery
      */
-    private void initConfig(DataQuery dataQuery){
+    private void initConfig(DataQuery dataQuery) {
         dataQuery.setServiceSql(DataQueryFactory.getServiceSql(dataQuery));
     }
 
 
     /**
      * 获取请求信息
+     *
      * @param request
      * @param headers
      * @throws RuntimeException
      */
-    private void getRequestInfo(HttpServletRequest request,Map headers) throws Exception{
-        try{
-            super.initHeadParam(request,headers);
-            super.initUrlParam(request,headers);
-        }catch (Exception e){
-            logger.error("加载头信息失败",e);
+    private void getRequestInfo(HttpServletRequest request, Map headers) throws Exception {
+        try {
+            super.initHeadParam(request, headers);
+            super.initUrlParam(request, headers);
+        } catch (Exception e) {
+            logger.error("加载头信息失败", e);
             throw e;
         }
     }
