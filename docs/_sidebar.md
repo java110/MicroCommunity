@@ -26,6 +26,7 @@
   * [保存单元信息](api/unit/saveUnit.md)
   * [修改单元信息](api/unit/updateUnit.md)
   * [删除单元信息](api/unit/deleteUnit.md)
+  * [保存房屋信息](api/room/saveRoom.md)
 
 * 服务端接口协议
 

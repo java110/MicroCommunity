@@ -19,6 +19,8 @@ public class UnitDto extends PageDto implements Serializable {
      */
     private String unitId;
 
+    private String communityId;
+
     /**
      * 编号
      */
@@ -120,5 +122,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

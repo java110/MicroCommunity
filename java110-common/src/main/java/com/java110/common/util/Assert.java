@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 自定义 断言
@@ -211,4 +213,21 @@ public class Assert extends org.springframework.util.Assert {
             throw new IllegalArgumentException(msg);
         }
     }
+
+
+    /**
+     * 判断字符串是否是金额
+     *
+     * @param str 金额字符串
+     * @param msg 异常时信息
+     */
+    public static void isMoney(String str, String msg) {
+        Pattern pattern = java.util.regex.Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$"); // 判断小数点后2位的数字的正则表达式
+        Matcher match = pattern.matcher(str);
+        if (!match.matches()) {
+            throw new IllegalArgumentException(msg);
+
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.java110.web.components.room;
 
 import com.java110.core.context.IPageData;
+import com.java110.web.smo.IRoomServiceSMO;
 import com.java110.web.smo.IUnitServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class AddRoomComponent {
     @Autowired
     private IUnitServiceSMO unitServiceSMOImpl;
 
+    @Autowired
+    private IRoomServiceSMO roomServiceSMOImpl;
+
     /**
      * 根据 floorId 查询单元信息
      *
@@ -30,6 +34,16 @@ public class AddRoomComponent {
         return unitServiceSMOImpl.listUnits(pd);
     }
 
+    /**
+     * 保存房屋信息
+     *
+     * @param pd 房屋信息
+     * @return 单元信息
+     */
+    public ResponseEntity<String> save(IPageData pd) {
+        return roomServiceSMOImpl.saveRoom(pd);
+    }
+
 
     public IUnitServiceSMO getUnitServiceSMOImpl() {
         return unitServiceSMOImpl;
@@ -37,5 +51,13 @@ public class AddRoomComponent {
 
     public void setUnitServiceSMOImpl(IUnitServiceSMO unitServiceSMOImpl) {
         this.unitServiceSMOImpl = unitServiceSMOImpl;
+    }
+
+    public IRoomServiceSMO getRoomServiceSMOImpl() {
+        return roomServiceSMOImpl;
+    }
+
+    public void setRoomServiceSMOImpl(IRoomServiceSMO roomServiceSMOImpl) {
+        this.roomServiceSMOImpl = roomServiceSMOImpl;
     }
 }

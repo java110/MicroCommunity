@@ -34,7 +34,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<UnitDto> queryUnits(@RequestBody  UnitDto unitDto) {
+    public List<UnitDto> queryUnits(@RequestBody UnitDto unitDto) {
 
         //校验是否传了 分页信息
 
@@ -64,7 +64,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
-     * @param unit 小区楼单元信息
+     * @param unit  小区楼单元信息
      * @param users 用户列表
      */
     private void refreshUnit(UnitDto unit, List<UserDto> users) {
@@ -92,7 +92,15 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
 
     @Override
     public int queryUnitsCount(@RequestBody UnitDto unitDto) {
-        return unitServiceDaoImpl.queryUnitsCount(BeanConvertUtil.beanCovertMap(unitDto));    }
+        return unitServiceDaoImpl.queryUnitsCount(BeanConvertUtil.beanCovertMap(unitDto));
+    }
+
+    @Override
+    public List<UnitDto> queryUnitsByCommunityId(UnitDto unitDto) {
+        List<UnitDto> units = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.queryUnitsByCommunityId(BeanConvertUtil.beanCovertMap(unitDto)), UnitDto.class);
+        return units;
+    }
+
 
     public IUnitServiceDao getUnitServiceDaoImpl() {
         return unitServiceDaoImpl;

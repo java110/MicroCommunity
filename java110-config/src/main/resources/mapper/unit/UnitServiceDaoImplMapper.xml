@@ -198,4 +198,48 @@ where 1 =1
 
      </select>
 
+    <select id="queryUnitsByCommunityId" parameterType="Map" resultType="Map">
+        select  t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        from building_unit t,s_community sc,s_community_member scm,f_floor f
+        where 1 =1
+        and t.floor_id = f.floor_id
+        and f.floor_id = scm.member_id
+        and scm.community_id = sc.community_id
+        and scm.member_type_cd = '390001200004'
+        and sc.community_id = #{communityId}
+        and sc.status_cd = '0'
+        and scm.status_cd = '0'
+        and f.status_cd = '0'
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="layerCount !=null and layerCount != ''">
+            and t.layer_count= #{layerCount}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="unitNum !=null and unitNum != ''">
+            and t.unit_num= #{unitNum}
+        </if>
+        <if test="lift !=null and lift != ''">
+            and t.lift= #{lift}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="page != -1 and page != null and page != ''">
+            limit page,row
+        </if>
+    </select>
+
 </mapper>

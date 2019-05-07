@@ -104,6 +104,13 @@ vc 校验 工具类 -method
         date:function(str) {
             var regDate = /^(\d{4})-(\d{2})-(\d{2})$/;
             return regDate.test(str);
+        },
+        /**
+            金额校验
+        **/
+        money:function(text){
+            var regMoney = /^\d+\.?\d{0,2}$/;
+            return regMoney.test(text);
         }
 
     };
@@ -200,6 +207,10 @@ vc 校验 工具类 -method
 
                     if(configObj.limit == 'date'){
                         validate.setState(validate.date(tmpDataObj),configObj.errInfo);
+                    }
+
+                    if(configObj.limit == 'money'){
+                        validate.setState(validate.money(tmpDataObj),configObj.errInfo);
                     }
                 });
 

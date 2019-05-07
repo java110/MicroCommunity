@@ -6,6 +6,7 @@ import com.java110.common.exception.DAOException;
 import com.java110.common.util.DateUtil;
 import com.java110.community.dao.IUnitServiceDao;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.UnitDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -128,6 +129,16 @@ public class UnitServiceDaoImpl extends BaseServiceDao implements IUnitServiceDa
         }
 
         return Integer.parseInt(businessUnitInfos.get(0).get("count").toString());
+    }
+
+
+    @Override
+    public List<Map> queryUnitsByCommunityId(Map info) {
+        logger.debug("查询queryUnitsByCommunityId数据 入参 info : {}", info);
+
+        List<Map> units = sqlSessionTemplate.selectList("unitServiceDaoImpl.queryUnitsByCommunityId", info);
+
+        return units;
     }
 
 

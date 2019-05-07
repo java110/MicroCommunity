@@ -3,7 +3,6 @@ package com.java110.web.core;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,28 +19,28 @@ public class VueComponentTemplate extends PackageScanner {
     /**
      * 默认扫描路径
      */
-    public final static String DEFAULT_COMPONENT_PACKAGE_PATH = "components";
+    public static final String DEFAULT_COMPONENT_PACKAGE_PATH = "components";
 
     /**
      * js 文件
      */
-    public final static String COMPONENT_JS = "js";
+    public static final String COMPONENT_JS = "js";
 
     /**
      * css 文件
      */
-    public final static String COMPONENT_CSS = "css";
+    public static final String COMPONENT_CSS = "css";
 
     /**
      * html 文件
      */
-    public final static String COMPONENT_HTML = "html";
+    public static final String COMPONENT_HTML = "html";
 
 
     /**
      * HTML 文件缓存器
      */
-    private final static Map<String, String> componentTemplate = new HashMap<>();
+    private static final Map<String, String> componentTemplate = new HashMap<>();
 
 
     /**
@@ -88,9 +87,18 @@ public class VueComponentTemplate extends PackageScanner {
                 b.append((char) tempChar);
             }
             sb = b.toString();
-            if (!StringUtils.isEmpty(sb)) {
-                componentTemplate.put(filePath.substring(filePath.lastIndexOf(File.separator) + 1, filePath.length()), sb);
+            if (StringUtils.isEmpty(sb)) {
+                return;
             }
+            String componentKey = "";
+            //这里在window 读取jar包中文件时，也是 / 但是直接启动时 为\这个 所以不能用 File.separator 
+            if (filePath.contains("/")) {
+                componentKey = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length());
+            } else {
+                componentKey = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.length());
+            }
+            componentTemplate.put(componentKey, sb);
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

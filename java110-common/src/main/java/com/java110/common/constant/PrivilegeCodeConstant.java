@@ -20,4 +20,8 @@ public final class PrivilegeCodeConstant {
 
     //初始化小区楼单元
     public static final String PRIVILEGE_UNIT = "500201904012";
+
+
+    //初始化房屋楼单元
+    public static final String PRIVILEGE_ROOM = "500201904006";
 }

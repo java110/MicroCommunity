@@ -29,7 +29,7 @@
         },
         methods:{
             /**
-                根据楼ID加载单元
+                根据楼ID加载房屋
             **/
             loadUnits:function(_floorId){
                 vc.component.addRoomUnits = [];
@@ -68,42 +68,78 @@
                         return vc.validate.validate({
                             addRoomInfo:vc.component.addRoomInfo
                         },{
-                            'addRoomInfo.floorId':[
+                            'addRoomInfo.unitId':[
                                 {
                                     limit:"required",
                                     param:"",
-                                    errInfo:"小区楼不能为空"
+                                    errInfo:"小区楼房屋不能为空"
                                 }
                             ],
                             'addRoomInfo.roomNum':[
                                 {
                                     limit:"required",
                                     param:"",
-                                    errInfo:"单元编号不能为空"
+                                    errInfo:"房屋编号不能为空"
                                 },
                                 {
                                     limit:"maxLength",
                                     param:"12",
-                                    errInfo:"单元编号长度不能超过12位"
+                                    errInfo:"房屋编号长度不能超过12位"
                                 },
                             ],
-                            'addRoomInfo.layerCount':[
+                            'addRoomInfo.layer':[
                                 {
                                     limit:"required",
                                     param:"",
-                                    errInfo:"单元楼层高度不能为空"
+                                    errInfo:"房屋楼层高度不能为空"
                                 },
                                 {
                                     limit:"num",
                                     param:"",
-                                    errInfo:"单元楼层高度必须为数字"
+                                    errInfo:"房屋楼层高度必须为数字"
                                 }
                             ],
-                            'addRoomInfo.lift':[
+                            'addRoomInfo.section':[
                                 {
                                     limit:"required",
                                     param:"",
-                                    errInfo:"必须选择单元是否电梯"
+                                    errInfo:"房间数不能为空"
+                                },
+                                {
+                                    limit:"num",
+                                    param:"",
+                                    errInfo:"房间数必须为数字"
+                                }
+                            ],
+                            'addRoomInfo.apartment':[
+                                {
+                                    limit:"required",
+                                    param:"",
+                                    errInfo:"户型不能为空"
+                                }
+                            ],
+                            'addRoomInfo.builtUpArea':[
+                                {
+                                    limit:"required",
+                                    param:"",
+                                    errInfo:"建筑面积不能为空"
+                                },
+                                {
+                                    limit:"money",
+                                    param:"",
+                                    errInfo:"建筑面积错误，如 300.00"
+                                }
+                            ],
+                            'addRoomInfo.unitPrice':[
+                                {
+                                    limit:"required",
+                                    param:"",
+                                    errInfo:"房屋单价不能为空"
+                                },
+                                {
+                                    limit:"money",
+                                    param:"",
+                                    errInfo:"房屋单价错误 如 300.00"
                                 }
                             ],
                             'addRoomInfo.remark':[

@@ -3,6 +3,7 @@ package com.java110.core.smo.unit;
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UnitDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,6 @@ public interface IUnitInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param unitDto 数据对象分享
      * @return UnitDto 对象数据
      */
@@ -39,4 +39,13 @@ public interface IUnitInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUnitsCount", method = RequestMethod.POST)
     int queryUnitsCount(@RequestBody UnitDto unitDto);
+
+    /**
+     * 根据小区ID查询单元信息
+     *
+     * @param unitDto 单元数据封装信息
+     * @return 单元信息
+     */
+    @RequestMapping(value = "/queryUnitsByCommunityId", method = RequestMethod.POST)
+    List<UnitDto> queryUnitsByCommunityId(@RequestBody UnitDto unitDto);
 }
