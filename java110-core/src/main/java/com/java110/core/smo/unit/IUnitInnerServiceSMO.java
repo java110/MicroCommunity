@@ -3,7 +3,6 @@ package com.java110.core.smo.unit;
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UnitDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -96,7 +96,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
     }
 
     @Override
-    public List<UnitDto> queryUnitsByCommunityId(UnitDto unitDto) {
+    public List<UnitDto> queryUnitsByCommunityId(@RequestBody UnitDto unitDto) {
         List<UnitDto> units = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.queryUnitsByCommunityId(BeanConvertUtil.beanCovertMap(unitDto)), UnitDto.class);
         return units;
     }
