@@ -96,7 +96,7 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(paramInJson);
-        businessUnit.put("room_id", "-1");
+        businessUnit.put("roomId", "-1");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRoom", businessUnit);
 
