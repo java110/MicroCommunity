@@ -14,6 +14,7 @@ import org.thymeleaf.util.DOMUtils;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
         //获取模板名称
         String componentName = element.getAttributeValue("name");
 
-        logger.debug("正在解析组件{}", componentName);
+        logger.debug("正在解析组件{},{}", componentName, new Date().getTime());
         String html = VueComponentTemplate.findTemplateByComponentCode(componentName + "." + VueComponentTemplate.COMPONENT_HTML);
         if (html == null) {
             throw new RuntimeException("在缓存中未找到组件【" + componentName + "】");
@@ -73,6 +74,7 @@ public class VueComponentElement extends AbstractMarkupSubstitutionElementProces
             nodes.add(nodeJs);
         }
 
+        logger.debug("解析完成组件{},{}", componentName, new Date().getTime());
 
         return nodes;
     }
