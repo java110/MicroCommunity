@@ -114,4 +114,12 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
     public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
         this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
     }
+
+    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
+        return roomInnerServiceSMOImpl;
+    }
+
+    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
+        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
+    }
 }
