@@ -7,42 +7,54 @@
             <div class="ibox">
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
                         <thead>
                         <tr>
                             <th>房屋ID</th>
-                            <th data-hide="phone">名称</th>
-                            <th data-hide="phone">联系方式</th>
-                            <th data-hide="phone">地址</th>
-                            <th data-hide="phone">地标</th>
-                            <th data-hide="phone,tablet" >城市编码</th>
-                            <th data-hide="phone">状态</th>
+                            <th data-hide="phone">房屋编号</th>
+                            <th data-hide="phone">单元</th>
+                            <th data-hide="phone">楼层</th>
+                            <th data-hide="phone">房间数</th>
+                            <th data-hide="phone" >户型</th>
+                            <th data-hide="phone">建筑面积</th>
+                            <th data-hide="phone">单价</th>
+                            <th data-hide="phone">创建员工</th>
+                            <th data-hide="phone">备注</th>
                             <th class="text-right">操作</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="room in roomInfo.roomDataInfo">
+                        <tr v-for="room in roomInfo.rooms">
                             <td>
-                                {{room.communityId}}
+                                {{room.roomId}}
                             </td>
                             <td>
-                                {{room.name}}
+                                {{room.roomNum}}
                             </td>
                             <td>
-                                {{room.tel}}
+                                {{room.unitName}}
                             </td>
                             <td>
-                                {{room.address}}
+                                {{room.layer}}
                             </td>
                             <td>
-                                {{room.nearbyLandmarks}}
+                                {{room.section}}
                             </td>
                             <td>
-                                {{room.cityCode}}
+                                {{room.apartment}}
                             </td>
                             <td>
-                                {{room.statusCd}}
+                                {{room.builtUpArea}}
+                            </td>
+                            <td>
+                                {{room.unitPrice}}
+                            </td>
+                            <td>
+                                {{room.userName}}
+                            </td>
+                            <td>
+                                {{room.remark}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
@@ -59,6 +71,8 @@
                         </tr>
                         </tfoot>
                     </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
 
                 </div>
             </div>

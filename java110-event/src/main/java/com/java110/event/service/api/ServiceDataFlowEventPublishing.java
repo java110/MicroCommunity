@@ -31,17 +31,17 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
     private static Executor taskExecutor;
 
     //默认 线程数 100
-    private final static int DEFAULT_THREAD_NUM = 100;
+    private static final int DEFAULT_THREAD_NUM = 100;
 
     /**
      * 保存侦听实例信息，一般启动时加载
      */
-    private final static List<String> listeners = new ArrayList<String>();
+    private static final List<String> listeners = new ArrayList<String>();
 
     /**
      * 根据 事件类型查询侦听
      */
-    private final static Map<String, List<ServiceDataFlowListener>> cacheListenersMap = new HashMap<String, List<ServiceDataFlowListener>>();
+    private static final Map<String, List<ServiceDataFlowListener>> cacheListenersMap = new HashMap<String, List<ServiceDataFlowListener>>();
 
     /**
      * 添加 侦听，这个只有启动时，单线程 处理，所以是线程安全的
@@ -95,8 +95,11 @@ public class ServiceDataFlowEventPublishing extends LoggerEngine {
         //这里排序
         DataFlowListenerOrderComparator.sort(dataFlowListeners);
 
+
         //将数据放入缓存中
-        cacheListenersMap.put(needCachedServiceCode, dataFlowListeners);
+        if (dataFlowListeners.size() > 0) {
+            cacheListenersMap.put(needCachedServiceCode, dataFlowListeners);
+        }
         return dataFlowListeners;
     }
 
