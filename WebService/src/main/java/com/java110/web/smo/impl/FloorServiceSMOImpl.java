@@ -30,7 +30,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
 
     private static Logger logger = LoggerFactory.getLogger(FloorServiceSMOImpl.class);
 
-    private static final int MAX_ROW = 50;
+
 
     @Autowired
     private RestTemplate restTemplate;

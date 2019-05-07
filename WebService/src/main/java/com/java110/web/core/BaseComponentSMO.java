@@ -3,7 +3,6 @@ package com.java110.web.core;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.MappingConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
@@ -12,7 +11,7 @@ import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
-import com.java110.web.smo.impl.LoginServiceSMOImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -21,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * Created by wuxw on 2019/3/22.
@@ -28,6 +28,8 @@ import java.lang.reflect.Method;
 public class BaseComponentSMO extends BaseServiceSMO {
 
     private static Logger logger = LoggerFactory.getLogger(BaseComponentSMO.class);
+
+    protected static final int MAX_ROW = 50;
 
     /**
      * 调用组件
@@ -150,7 +152,34 @@ public class BaseComponentSMO extends BaseServiceSMO {
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException(1999, "用户没有权限操作权限" + privilegeCode);
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCode);
         }
+    }
+
+    /**
+     * map 参数转 url get 参数 非空值转为get参数 空值忽略
+     *
+     * @param info map数据
+     * @return url get 参数 带？
+     */
+    protected String mapToUrlParam(Map info) {
+        String urlParam = "";
+        if (info == null || info.isEmpty()) {
+            return urlParam;
+        }
+
+        urlParam += "?";
+
+        for (Object key : info.keySet()) {
+            if (StringUtils.isEmpty(info.get(key) + "")) {
+                continue;
+            }
+
+            urlParam += (key + "=" + info.get(key) + "&");
+        }
+
+        urlParam = urlParam.endsWith("&") ? urlParam.substring(0, urlParam.length() - 1) : urlParam;
+
+        return urlParam;
     }
 }

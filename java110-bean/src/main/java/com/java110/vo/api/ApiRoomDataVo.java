@@ -1,36 +1,29 @@
-package com.java110.dto;
+package com.java110.vo.api;
+
+import com.java110.vo.MorePageVo;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
- * @ClassName FloorDto
- * @Description 小区房屋数据层封装
+ * @ClassName ApiRoomVo
+ * @Description TODO
  * @Author wuxw
- * @Date 2019/4/24 8:52
+ * @Date 2019/5/8 0:26
  * @Version 1.0
- * add by wuxw 2019/4/24
+ * add by wuxw 2019/5/8
  **/
-public class RoomDto extends PageDto implements Serializable {
+public class ApiRoomDataVo implements Serializable {
 
     private String unitPrice;
     private String section;
     private String remark;
-    private String userId;
+    private String userName;
     private String roomId;
     private String layer;
     private String builtUpArea;
     private String roomNum;
     private String unitId;
     private String apartment;
-
-    private List<RoomAttrDto> roomAttrDto;
-
-
-    private Date createTime;
-
-    private String statusCd = "0";
 
 
     public String getUnitPrice() {
@@ -57,12 +50,12 @@ public class RoomDto extends PageDto implements Serializable {
         this.remark = remark;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getRoomId() {
@@ -111,30 +104,5 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setApartment(String apartment) {
         this.apartment = apartment;
-    }
-
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
-    }
-
-    public List<RoomAttrDto> getRoomAttrDto() {
-        return roomAttrDto;
-    }
-
-    public void setRoomAttrDto(List<RoomAttrDto> roomAttrDto) {
-        this.roomAttrDto = roomAttrDto;
     }
 }

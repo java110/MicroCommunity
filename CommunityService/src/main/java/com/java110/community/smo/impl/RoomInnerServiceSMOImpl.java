@@ -1,12 +1,15 @@
 package com.java110.community.smo.impl;
 
 
+import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.community.dao.IRoomAttrServiceDao;
 import com.java110.community.dao.IRoomServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -29,6 +34,9 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
     @Autowired
     private IRoomServiceDao roomServiceDaoImpl;
+
+    @Autowired
+    private IRoomAttrServiceDao roomAttrServiceDaoImpl;
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
@@ -51,12 +59,18 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             return rooms;
         }
 
+        String[] roomIds = getRoomIds(rooms);
+        Map attrParamInfo = new HashMap();
+        attrParamInfo.put("roomIds", roomIds);
+        attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
+
         String[] userIds = getUserIds(rooms);
         //根据 userId 查询用户信息
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (RoomDto room : rooms) {
-            refreshRoom(room, users);
+            refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
     }
@@ -64,14 +78,33 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
-     * @param room  小区小区房屋信息
-     * @param users 用户列表
+     * @param room         小区小区房屋信息
+     * @param users        用户列表
+     * @param roomAttrDtos 房屋属性信息
      */
-    private void refreshRoom(RoomDto room, List<UserDto> users) {
+    private void refreshRoom(RoomDto room, List<UserDto> users, List<RoomAttrDto> roomAttrDtos) {
         for (UserDto user : users) {
             if (room.getUserId().equals(user.getUserId())) {
                 BeanConvertUtil.covertBean(user, room);
             }
+        }
+
+        if (roomAttrDtos == null || roomAttrDtos.size() == 0) {
+            return;
+        }
+
+        for (RoomAttrDto roomAttrDto : roomAttrDtos) {
+            if (!roomAttrDto.getRoomId().equals(room.getRoomId())) {
+                continue;
+            }
+
+            List<RoomAttrDto> tmpRoomAttrDtos = room.getRoomAttrDto();
+
+            if (tmpRoomAttrDtos == null) {
+                tmpRoomAttrDtos = new ArrayList<>();
+            }
+
+            tmpRoomAttrDtos.add(roomAttrDto);
         }
     }
 
@@ -88,6 +121,21 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         }
 
         return userIds.toArray(new String[userIds.size()]);
+    }
+
+    /**
+     * 获取roomId 信息
+     *
+     * @param rooms 房屋信息
+     * @return roomIds
+     */
+    private String[] getRoomIds(List<RoomDto> rooms) {
+        List<String> roomIds = new ArrayList<String>();
+        for (RoomDto room : rooms) {
+            roomIds.add(room.getRoomId());
+        }
+
+        return roomIds.toArray(new String[roomIds.size()]);
     }
 
     @Override
@@ -109,5 +157,13 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
     public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
         this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+    public IRoomAttrServiceDao getRoomAttrServiceDaoImpl() {
+        return roomAttrServiceDaoImpl;
+    }
+
+    public void setRoomAttrServiceDaoImpl(IRoomAttrServiceDao roomAttrServiceDaoImpl) {
+        this.roomAttrServiceDaoImpl = roomAttrServiceDaoImpl;
     }
 }

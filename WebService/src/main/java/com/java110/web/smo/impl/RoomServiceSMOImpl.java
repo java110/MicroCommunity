@@ -2,7 +2,9 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
+import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
@@ -56,6 +58,61 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> listRoom(IPageData pd) {
+        validateListRoom(pd);
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+
+
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms" + mapToUrlParam(paramIn);
+
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+        return responseEntity;
+    }
+
+
+    /**
+     * 小区房屋查询数据校验
+     *
+     * @param pd 页面数据封装对象
+     */
+    private void validateListRoom(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "请求报文中未包含floorId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.isInteger(paramIn.getString("page"), "page不是数字");
+        Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        int rows = Integer.parseInt(paramIn.getString("rows"));
+
+
+        if (rows > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "rows 数量不能大于50");
+        }
+
+    }
     /**
      * 校验前台传入房屋信息
      * @param pd 页面数据封装
@@ -71,6 +128,8 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         Assert.jsonObjectHaveKey(pd.getReqData(), "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "unitPrice", "请求报文中未包含unitPrice节点");
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+
+        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");

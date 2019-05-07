@@ -128,6 +128,11 @@
                                     limit:"money",
                                     param:"",
                                     errInfo:"建筑面积错误，如 300.00"
+                                },
+                                {
+                                  limit:"maxLength",
+                                  param:"12",
+                                  errInfo:"建筑面积数字长度不能超过6位"
                                 }
                             ],
                             'addRoomInfo.unitPrice':[
@@ -140,7 +145,12 @@
                                     limit:"money",
                                     param:"",
                                     errInfo:"房屋单价错误 如 300.00"
-                                }
+                                },
+                                 {
+                                   limit:"maxLength",
+                                   param:"12",
+                                   errInfo:"房屋单价数字长度不能超过12位"
+                                 }
                             ],
                             'addRoomInfo.remark':[
                                 {
@@ -170,7 +180,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#addRoomModel').modal('hide');
-                            vc.emit('room','loadRoom',{
+                            vc.emit('room','loadData',{
                                 floorId:vc.component.addRoomInfo.floorId
                             });
                             return ;

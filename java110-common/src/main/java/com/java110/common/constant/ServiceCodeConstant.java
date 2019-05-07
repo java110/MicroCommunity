@@ -381,6 +381,10 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_UNIT = "unit.deleteUnit";
 
 
-    //保存小区单元
+    //保存房屋
     public static final String SERVICE_CODE_SAVE_ROOM = "room.saveRoom";
+
+
+    //查询房屋信息
+    public static final String SERVICE_CODE_QUERY_ROOMS = "room.queryRooms";
 }
