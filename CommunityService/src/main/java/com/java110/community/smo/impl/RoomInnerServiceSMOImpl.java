@@ -140,7 +140,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
     @Override
     public int queryRoomsCount(@RequestBody RoomDto roomDto) {
-        return roomServiceDaoImpl.queryRoomsCount(BeanConvertUtil.beanCovertMap(roomDto));
+        return roomServiceDaoImpl.queryRoomsByCommunityIdCount(BeanConvertUtil.beanCovertMap(roomDto));
     }
 
     public IRoomServiceDao getRoomServiceDaoImpl() {
