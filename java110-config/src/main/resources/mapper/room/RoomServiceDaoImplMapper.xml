@@ -148,7 +148,7 @@ where 1 =1
    and t.apartment= #{apartment}
 </if> 
 <if test="page != -1 and page != null">
-   limit page,row
+   limit #{page},#{row}
 </if> 
 
     </select>
@@ -358,7 +358,7 @@ where 1 =1
             and t.apartment= #{apartment}
         </if>
         <if test="page != -1 and page != null">
-            limit page,row
+            limit #{page},#{row}
         </if>
 
     </select>

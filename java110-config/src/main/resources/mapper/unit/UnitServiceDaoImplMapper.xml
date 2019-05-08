@@ -120,8 +120,8 @@ where 1 =1
 <if test="userId !=null and userId != ''">
    and t.user_id= #{userId}
 </if> 
-<if test="page != -1 and page != null and page != ''">
-   limit page,row
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
 </if> 
 
     </select>
@@ -237,8 +237,8 @@ where 1 =1
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="page != -1 and page != null and page != ''">
-            limit page,row
+        <if test="page != -1 and page != null">
+            limit #{page}, #{row}
         </if>
     </select>
 

@@ -104,7 +104,7 @@ floor_id,name,status_cd,remark,b_id,user_id,floor_num
            and t.floor_num= #{floorNum}
         </if>
         <if test="page != -1">
-            limit page,row
+            limit #{page}, #{row}
         </if>
 
     </select>
