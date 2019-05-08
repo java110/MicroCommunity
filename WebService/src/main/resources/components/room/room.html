@@ -5,9 +5,41 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
+                <div class="ibox-title">
+                    <h5>房屋信息</h5>
+                </div>
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
+                    <div class="row">
+                        <div class="col-sm-4 m-b-xs">
+                            <select class="form-control-sm form-control input-s-sm inline">
+                                <option selected  disabled value="">请选择单元</option>
+                                <option >1单元</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 m-b-xs">
+                            <select class="form-control-sm form-control input-s-sm inline">
+                                <option selected  disabled value="">请选择状态</option>
+                                <option>出售</option>
+                                <option>未出售</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" placeholder="请填写房屋编号" class="form-control form-control-sm">
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchFloorModel()">
+                                <i class="glyphicon glyphicon-search"></i> 马上查询</button>
+                        </div>
+
+                        </div>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" style="margin-top:10px" data-page-size="10">
                         <thead>
                         <tr>
                             <th>房屋ID</th>

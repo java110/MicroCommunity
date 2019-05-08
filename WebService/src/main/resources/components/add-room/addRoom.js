@@ -21,7 +21,7 @@
          _initEvent:function(){
              vc.on('addRoom','addRoomModel',function(_params){
                 vc.component.refreshAddRoomInfo();
-                vc.component.loadUnits(_params.floorId);
+                vc.component.loadUnitsFromAddRoom(_params.floorId);
                 $('#addRoomModel').modal('show');
                 vc.component.addRoomInfo.floorId = _params.floorId;
                 vc.component.addRoomInfo.communityId = vc.getCurrentCommunity().communityId;
@@ -31,7 +31,7 @@
             /**
                 根据楼ID加载房屋
             **/
-            loadUnits:function(_floorId){
+            loadUnitsFromAddRoom:function(_floorId){
                 vc.component.addRoomUnits = [];
                 var param = {
                     params:{

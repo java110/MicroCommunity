@@ -29,7 +29,7 @@
                             //关闭model
                             $('#deleteRoomModel').modal('hide');
                             vc.emit('room','loadData',{
-                                floorId:vc.component.editRoomInfo.floorId
+                                floorId:vc.component.deleteRoomInfo.floorId
                             });
                             return ;
                         }
