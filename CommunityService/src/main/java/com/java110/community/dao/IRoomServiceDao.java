@@ -72,4 +72,14 @@ public interface IRoomServiceDao {
      */
     int queryRoomsCount(Map info);
 
+
+    /**
+     * 查询小区房屋信息
+     * 根据bId 查询小区房屋信息
+     *
+     * @param info bId 信息
+     * @return 小区房屋信息
+     */
+    List<Map> getRoomInfoByCommunityId(Map info) ;
+
 }

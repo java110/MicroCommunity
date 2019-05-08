@@ -3,7 +3,7 @@
 **/
 (function(vc){
     var DEFAULT_PAGE = 1;
-    var DEFAULT_ROWS = 10;
+    var DEFAULT_ROW = 10;
     vc.extends({
         data:{
             roomInfo:{
@@ -22,18 +22,18 @@
             });
             vc.on('room','loadData',function(_param){
                 vc.component.roomInfo.floorId = _param.floorId;
-                vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROWS);
+                vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             });
             vc.on('pagination','page_event',function(_currentPage){
-                vc.component.listRoom(_currentPage,DEFAULT_ROWS);
+                vc.component.listRoom(_currentPage,DEFAULT_ROW);
             });
         },
         methods:{
-            listRoom:function(_page,_rows){
+            listRoom:function(_page,_row){
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
+                        row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
                         floorId:vc.component.roomInfo.floorId
                     }

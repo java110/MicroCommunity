@@ -67,6 +67,8 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         }
+        int row = reqJson.getInteger("row");
+        apiRoomVo.setRecords((int) Math.ceil((double) total / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
@@ -81,16 +83,16 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(reqJson, "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
 
         Assert.isInteger(reqJson.getString("page"), "page不是数字");
-        Assert.isInteger(reqJson.getString("rows"), "rows不是数字");
+        Assert.isInteger(reqJson.getString("row"), "row不是数字");
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
-        int rows = Integer.parseInt(reqJson.getString("rows"));
+        int row = Integer.parseInt(reqJson.getString("row"));
 
 
-        if (rows > MAX_ROW) {
-            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "rows 数量不能大于50");
+        if (row > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "row 数量不能大于50");
         }
         //校验小区楼ID和小区是否有对应关系
         int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));

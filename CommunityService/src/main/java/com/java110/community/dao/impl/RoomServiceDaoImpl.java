@@ -130,5 +130,14 @@ public class RoomServiceDaoImpl extends BaseServiceDao implements IRoomServiceDa
         return Integer.parseInt(businessRoomInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> getRoomInfoByCommunityId(Map info) {
+        logger.debug("查询小区房屋信息 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.getRoomInfoByCommunityId", info);
+
+        return businessRoomInfos;
+    }
+
 
 }

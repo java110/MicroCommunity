@@ -53,7 +53,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             roomDto.setRow(page * roomDto.getRow());
         }
 
-        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfo(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
 
         if (rooms == null || rooms.size() == 0) {
             return rooms;
