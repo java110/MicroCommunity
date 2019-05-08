@@ -32,7 +32,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
 
     @Override
     public ResponseEntity<String> saveRoom(IPageData pd) {
-       validateSaveRoom(pd);
+        validateSaveRoom(pd);
 
         //校验员工是否有权限操作
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_ROOM);
@@ -89,6 +89,34 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> updateRoom(IPageData pd) {
+        validateUpdateRoom(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        paramIn.put("userId", pd.getUserId());
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/room.updateRoom",
+                HttpMethod.POST);
+
+        return responseEntity;
+    }
+
 
     /**
      * 小区房屋查询数据校验
@@ -113,8 +141,10 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         }
 
     }
+
     /**
      * 校验前台传入房屋信息
+     *
      * @param pd 页面数据封装
      */
     private void validateSaveRoom(IPageData pd) {
@@ -137,6 +167,24 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
         }
+
+    }
+
+    /**
+     * 校验前台传入房屋信息
+     *
+     * @param pd 页面数据封装
+     */
+    private void validateUpdateRoom(IPageData pd) {
+
+        validateSaveRoom(pd);
+
+        Assert.jsonObjectHaveKey(pd.getReqData(), "roomId", "请求报文中未包含roomId节点");
+
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+
+        Assert.hasLength(reqJson.getString("roomId"), "房屋roomId不能为空");
+
 
     }
 

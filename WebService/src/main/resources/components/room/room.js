@@ -58,8 +58,13 @@
                              }
                            );
             },
-            _openDelRoomModel:function(_community){
-                //vc.emit('storeExitCommunity','openStoreExitCommunityModal',_community);
+            _openEditRoomModel:function(_room){
+                _room.floorId = vc.component.roomInfo.floorId;
+                vc.emit('editRoom','openEditRoomModal',_room);
+            },
+            _openDelRoomModel:function(_room){
+                 _room.floorId = vc.component.roomInfo.floorId;
+                 vc.emit('editRoom','openDeleteRoomModal',_room);
             }
         }
     });

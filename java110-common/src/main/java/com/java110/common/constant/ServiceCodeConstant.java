@@ -387,4 +387,7 @@ public class ServiceCodeConstant {
 
     //查询房屋信息
     public static final String SERVICE_CODE_QUERY_ROOMS = "room.queryRooms";
+
+    //修改房屋信息
+    public static final String SERVICE_CODE_UPDATE_ROOMS = "room.updateRoom";
 }

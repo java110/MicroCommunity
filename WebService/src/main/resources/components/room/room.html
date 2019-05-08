@@ -33,7 +33,7 @@
                                 {{room.roomNum}}
                             </td>
                             <td>
-                                {{room.unitName}}
+                                {{room.unitNum}}
                             </td>
                             <td>
                                 {{room.layer}}
@@ -58,6 +58,9 @@
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openEditRoomModel(room)">修改</button>
+                                </div>
+                                <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDelRoomModel(room)">删除</button>
                                 </div>
                             </td>
@@ -78,5 +81,7 @@
             </div>
         </div>
     </div>
-
+    <!-- 删除员工权限 -->
+    <vc:create name="editRoom"></vc:create>
+    <!--<vc:create name="deleteRoom"></vc:create>-->
 </div>
