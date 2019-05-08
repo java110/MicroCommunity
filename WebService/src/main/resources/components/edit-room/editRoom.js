@@ -4,6 +4,7 @@
         data:{
             editRoomUnits:[],
             editRoomInfo:{
+                roomId:'',
                 unitId:'',
                 roomNum:'',
                 layer:'',

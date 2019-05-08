@@ -64,7 +64,7 @@
             },
             _openDelRoomModel:function(_room){
                  _room.floorId = vc.component.roomInfo.floorId;
-                 vc.emit('editRoom','openDeleteRoomModal',_room);
+                 vc.emit('deleteRoom','openRoomModel',_room);
             }
         }
     });

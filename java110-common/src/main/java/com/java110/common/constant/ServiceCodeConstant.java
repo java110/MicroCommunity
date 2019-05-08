@@ -390,4 +390,7 @@ public class ServiceCodeConstant {
 
     //修改房屋信息
     public static final String SERVICE_CODE_UPDATE_ROOMS = "room.updateRoom";
+
+    //修改房屋信息
+    public static final String SERVICE_CODE_DELETE_ROOMS = "room.deleteRoom";
 }
