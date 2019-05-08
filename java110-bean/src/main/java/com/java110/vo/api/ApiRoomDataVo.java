@@ -1,7 +1,5 @@
 package com.java110.vo.api;
 
-import com.java110.vo.MorePageVo;
-
 import java.io.Serializable;
 
 /**
@@ -23,6 +21,7 @@ public class ApiRoomDataVo implements Serializable {
     private String builtUpArea;
     private String roomNum;
     private String unitId;
+    private String unitNum;
     private String apartment;
 
 
@@ -104,5 +103,14 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setApartment(String apartment) {
         this.apartment = apartment;
+    }
+
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
     }
 }
