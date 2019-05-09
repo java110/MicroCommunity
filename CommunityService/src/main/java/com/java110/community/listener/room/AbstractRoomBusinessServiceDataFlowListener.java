@@ -45,6 +45,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         businessRoomInfo.put("layer", businessRoomInfo.get("layer"));
         businessRoomInfo.put("builtUpArea", businessRoomInfo.get("built_up_area"));
         businessRoomInfo.put("operate", businessRoomInfo.get("operate"));
+        businessRoomInfo.put("state", businessRoomInfo.get("state"));
         businessRoomInfo.put("roomNum", businessRoomInfo.get("room_num"));
         businessRoomInfo.put("unitId", businessRoomInfo.get("unit_id"));
         businessRoomInfo.put("apartment", businessRoomInfo.get("apartment"));
@@ -80,6 +81,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         currentRoomInfo.put("layer", currentRoomInfo.get("layer"));
         currentRoomInfo.put("builtUpArea", currentRoomInfo.get("built_up_area"));
         currentRoomInfo.put("operate", currentRoomInfo.get("operate"));
+        currentRoomInfo.put("state", currentRoomInfo.get("state"));
         currentRoomInfo.put("roomNum", currentRoomInfo.get("room_num"));
         currentRoomInfo.put("unitId", currentRoomInfo.get("unit_id"));
         currentRoomInfo.put("apartment", currentRoomInfo.get("apartment"));

@@ -47,6 +47,18 @@
                                 <div class="col-sm-10"><input v-model="editRoomInfo.unitPrice" type="number" placeholder="必填，请填写房屋美平米单价" class="form-control"></div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">房屋状态</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="addRoomInfo.state">
+                                        <option selected disabled value="">必填，请选择房屋状态</option>
+                                        <option value="2001">已出售</option>
+                                        <option value="2002">未出售</option>
+                                        <option value="2003">已交定金</option>
+                                        <option value="2004">已出租</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">备注</label>
                                 <div class="col-sm-10"><input v-model="editRoomInfo.remark" type="text" placeholder="请填写备注信息" class="form-control"></div>
                             </div>

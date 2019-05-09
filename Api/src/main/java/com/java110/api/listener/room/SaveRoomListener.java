@@ -117,6 +117,7 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "layer", "请求报文中未包含layer节点");
         Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");
         Assert.jsonObjectHaveKey(paramIn, "apartment", "请求报文中未包含apartment节点");
+        Assert.jsonObjectHaveKey(paramIn, "state", "请求报文中未包含state节点");
         Assert.jsonObjectHaveKey(paramIn, "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(paramIn, "unitPrice", "请求报文中未包含unitPrice节点");
         JSONObject reqJson = JSONObject.parseObject(paramIn);
@@ -126,6 +127,13 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
 
         if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
+        }
+
+        if (!"2001".equals(reqJson.getString("state"))
+                && !"2002".equals(reqJson.getString("state"))
+                && !"2003".equals(reqJson.getString("state"))
+                && !"2004".equals(reqJson.getString("state"))) {
+            throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
         }
 
         UnitDto unitDto = new UnitDto();

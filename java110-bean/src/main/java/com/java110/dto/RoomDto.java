@@ -28,6 +28,8 @@ public class RoomDto extends PageDto implements Serializable {
     private String floorId;
     private String userName;
 
+    private String state;
+
     private String unitNum;
 
     private List<RoomAttrDto> roomAttrDto;
@@ -174,5 +176,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

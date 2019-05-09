@@ -6,11 +6,15 @@
     var DEFAULT_ROW = 10;
     vc.extends({
         data:{
+            roomUnits:[],
             roomInfo:{
                 rooms:[],
                 total:0,
                 records:1,
                 floorId:'',
+                unitId:'',
+                roomState:'',
+                roomNum:''
             }
         },
         _initMethod:function(){
@@ -22,7 +26,12 @@
             });
             vc.on('room','loadData',function(_param){
                 vc.component.roomInfo.floorId = _param.floorId;
+                vc.component.roomInfo.unitId = '';
+                vc.component.roomInfo.roomState = '';
+                vc.component.roomInfo.roomNum = '';
+
                 vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
+                vc.component.loadUnits(_param.floorId);
             });
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component.listRoom(_currentPage,DEFAULT_ROW);
@@ -35,7 +44,11 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        floorId:vc.component.roomInfo.floorId
+                        floorId:vc.component.roomInfo.floorId,
+                        unitId:vc.component.roomInfo.unitId,
+                        roomState:vc.component.roomInfo.roomState,
+                        roomNum:vc.component.roomInfo.roomNum
+
                     }
                 }
                //发送get请求
@@ -65,6 +78,45 @@
             _openDelRoomModel:function(_room){
                  _room.floorId = vc.component.roomInfo.floorId;
                  vc.emit('deleteRoom','openRoomModel',_room);
+            },
+            /**
+                根据楼ID加载房屋
+            **/
+            loadUnits:function(_floorId){
+                vc.component.addRoomUnits = [];
+                var param = {
+                    params:{
+                        floorId:_floorId,
+                        communityId:vc.getCurrentCommunity().communityId
+                    }
+                }
+                vc.http.get(
+                    'room',
+                    'loadUnits',
+                     param,
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            var tmpUnits = JSON.parse(json);
+                            vc.component.roomUnits = tmpUnits;
+                            /*if(tmpUnits == null || tmpUnits.length == 0){
+                                return ;
+                            }
+                            for(var unitIndex = 0; unitIndex < tmpUnits.length;unitIndex++){
+                               vc.component.addRoomInfo.units[unitIndex] = tmpUnits[unitIndex];
+                            }*/
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+            },
+            queryRoomMethod:function(){
+                vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             }
         }
     });

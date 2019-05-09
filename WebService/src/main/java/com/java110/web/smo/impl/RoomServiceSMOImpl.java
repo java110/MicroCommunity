@@ -184,6 +184,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         Assert.jsonObjectHaveKey(pd.getReqData(), "section", "请求报文中未包含section节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "builtUpArea", "请求报文中未包含builtUpArea节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "state", "请求报文中未包含state节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "unitPrice", "请求报文中未包含unitPrice节点");
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
 
@@ -194,6 +195,13 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
 
         if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
+        }
+
+        if (!"2001".equals(reqJson.getString("state"))
+                && !"2002".equals(reqJson.getString("state"))
+                && !"2003".equals(reqJson.getString("state"))
+                && !"2004".equals(reqJson.getString("state"))) {
+            throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
         }
 
     }

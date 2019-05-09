@@ -11,6 +11,7 @@
                 apartment:'',
                 builtUpArea:'',
                 unitPrice:'',
+                state:'',
                 remark:'',
                 communityId:''
             }
@@ -116,6 +117,13 @@
                                     limit:"required",
                                     param:"",
                                     errInfo:"户型不能为空"
+                                }
+                            ],
+                            'addRoomInfo.state':[
+                                {
+                                    limit:"required",
+                                    param:"",
+                                    errInfo:"房间状态不能为空"
                                 }
                             ],
                             'addRoomInfo.builtUpArea':[

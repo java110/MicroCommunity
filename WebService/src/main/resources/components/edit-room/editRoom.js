@@ -12,6 +12,7 @@
                 apartment:'',
                 builtUpArea:'',
                 unitPrice:'',
+                state:'',
                 remark:'',
                 communityId:''
             }
@@ -22,7 +23,7 @@
          _initEvent:function(){
              vc.on('editRoom','openEditRoomModal',function(_room){
                  vc.copyObject(_room,vc.component.editRoomInfo);
-                 vc.component.loadUnits(_room.floorId);
+                 vc.component.loadUnitsFromEditRoom(_room.floorId);
                  $('#editRoomModel').modal('show');
 
                 vc.component.editRoomInfo.floorId = _room.floorId;
@@ -34,7 +35,7 @@
             /**
                 根据楼ID加载房屋
             **/
-            loadUnits:function(_floorId){
+            loadUnitsFromEditRoom:function(_floorId){
                 vc.component.editRoomUnits = [];
                 var param = {
                     params:{
@@ -112,6 +113,13 @@
                                     limit:"num",
                                     param:"",
                                     errInfo:"房间数必须为数字"
+                                }
+                            ],
+                            'addRoomInfo.state':[
+                                {
+                                    limit:"required",
+                                    param:"",
+                                    errInfo:"房间状态不能为空"
                                 }
                             ],
                             'editRoomInfo.apartment':[

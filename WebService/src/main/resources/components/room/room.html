@@ -12,28 +12,30 @@
 
                     <div class="row">
                         <div class="col-sm-4 m-b-xs">
-                            <select class="form-control-sm form-control input-s-sm inline">
-                                <option selected  disabled value="">请选择单元</option>
-                                <option >1单元</option>
+                            <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.unitId">
+                                <option selected  value="">请选择单元</option>
+                                <option v-for="(unit,index) in roomUnits" :key="index" v-bind:value="unit.unitId">{{unit.unitNum}}单元</option>
                             </select>
                         </div>
                         <div class="col-sm-3 m-b-xs">
-                            <select class="form-control-sm form-control input-s-sm inline">
-                                <option selected  disabled value="">请选择状态</option>
-                                <option>出售</option>
-                                <option>未出售</option>
+                            <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.roomState">
+                                <option selected  value="">请选择状态</option>
+                                <option value="2001">已出售</option>
+                                <option value="2002">未出售</option>
+                                <option value="2003">已交定金</option>
+                                <option value="2004">已出租</option>
                             </select>
                         </div>
 
                         <div class="col-sm-3">
                             <div class="input-group">
-                                <input type="text" placeholder="请填写房屋编号" class="form-control form-control-sm">
+                                <input type="text" placeholder="请填写房屋编号" class="form-control form-control-sm" v-model="roomInfo.roomNum">
                             </div>
 
                         </div>
 
                         <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchFloorModel()">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="queryRoomMethod()">
                                 <i class="glyphicon glyphicon-search"></i> 马上查询</button>
                         </div>
 
@@ -50,6 +52,7 @@
                             <th data-hide="phone" >户型</th>
                             <th data-hide="phone">建筑面积</th>
                             <th data-hide="phone">单价</th>
+                            <th data-hide="phone">房屋状态</th>
                             <th data-hide="phone">创建员工</th>
                             <th data-hide="phone">备注</th>
                             <th class="text-right">操作</th>
@@ -81,6 +84,9 @@
                             </td>
                             <td>
                                 {{room.unitPrice}}
+                            </td>
+                            <td>
+                                {{room.state}}
                             </td>
                             <td>
                                 {{room.userName}}

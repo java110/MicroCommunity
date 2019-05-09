@@ -22,6 +22,8 @@ public class ApiRoomDataVo implements Serializable {
     private String roomNum;
     private String unitId;
     private String unitNum;
+
+    private String state;
     private String apartment;
 
 
@@ -112,5 +114,13 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setUnitNum(String unitNum) {
         this.unitNum = unitNum;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

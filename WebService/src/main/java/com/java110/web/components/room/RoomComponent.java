@@ -2,6 +2,7 @@ package com.java110.web.components.room;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IRoomServiceSMO;
+import com.java110.web.smo.IUnitServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,10 @@ public class RoomComponent {
 
 
     @Autowired
+    private IUnitServiceSMO unitServiceSMOImpl;
+
+
+    @Autowired
     private IRoomServiceSMO roomServiceSMOImpl;
 
     /**
@@ -31,11 +36,29 @@ public class RoomComponent {
         return roomServiceSMOImpl.listRoom(pd);
     }
 
+    /**
+     * 根据 floorId 查询单元信息
+     *
+     * @param pd 包含floorId 和小区ID 页面封装对象
+     * @return 单元信息
+     */
+    public ResponseEntity<String> loadUnits(IPageData pd) {
+        return unitServiceSMOImpl.listUnits(pd);
+    }
+
     public IRoomServiceSMO getRoomServiceSMOImpl() {
         return roomServiceSMOImpl;
     }
 
     public void setRoomServiceSMOImpl(IRoomServiceSMO roomServiceSMOImpl) {
         this.roomServiceSMOImpl = roomServiceSMOImpl;
+    }
+
+    public IUnitServiceSMO getUnitServiceSMOImpl() {
+        return unitServiceSMOImpl;
+    }
+
+    public void setUnitServiceSMOImpl(IUnitServiceSMO unitServiceSMOImpl) {
+        this.unitServiceSMOImpl = unitServiceSMOImpl;
     }
 }
