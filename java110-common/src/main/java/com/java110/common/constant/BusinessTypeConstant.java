@@ -225,6 +225,25 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 增加业主
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "540100030001";
+
+    /**
+     * 修改业主
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_INFO = "540100040001";
+
+
+    /**
+     * 删除业主
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_INFO = "540100050001";
+
+
+
+
+    /**
      * 保存物业信息
      */
     public static final String BUSINESS_TYPE_SAVE_PROPERTY_INFO = "600100030001";

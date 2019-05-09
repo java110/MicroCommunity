@@ -56,6 +56,9 @@
   * [保存房屋](services/room/SaveRoomInfo.md)
   * [修改房屋](services/room/UpdateRoomInfo.md)
   * [删除房屋](services/room/DeleteRoomInfo.md)
+  * [保存业主](services/owner/SaveOwnerInfo.md)
+  * [修改业主](services/owner/UpdateOwnerInfo.md)
+  * [删除业主](services/owner/DeleteOwnerInfo.md)
 
 * 工具类接口
 
