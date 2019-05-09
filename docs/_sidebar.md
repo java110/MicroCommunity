@@ -2,8 +2,8 @@
 * 入门
 
   * [快速开始](README.md)
-  * [安装部署](install.md)
-  * [编码规范](CodeStandards.md)
+  * [安装部署](start/install.md)
+  * [编码规范](start/CodeStandards.md)
 
 * api接口
 
@@ -27,6 +27,8 @@
   * [修改单元信息](api/unit/updateUnit.md)
   * [删除单元信息](api/unit/deleteUnit.md)
   * [保存房屋信息](api/room/saveRoom.md)
+  * [修改房屋信息](api/room/updateRoom.md)
+  * [删除房屋信息](api/room/deleteRoom.md)
 
 * 服务端接口协议
 
