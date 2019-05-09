@@ -18,10 +18,10 @@
                             </select>
                         </div>
                         <div class="col-sm-3 m-b-xs">
-                            <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.roomState">
+                            <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.state">
                                 <option selected  value="">请选择状态</option>
-                                <option value="2001">已出售</option>
-                                <option value="2002">未出售</option>
+                                <option value="2001">房屋已售</option>
+                                <option value="2002">房屋未售</option>
                                 <option value="2003">已交定金</option>
                                 <option value="2004">已出租</option>
                             </select>
@@ -86,7 +86,7 @@
                                 {{room.unitPrice}}
                             </td>
                             <td>
-                                {{room.state}}
+                                {{vc.component.showState(room.state)}}
                             </td>
                             <td>
                                 {{room.userName}}

@@ -211,6 +211,7 @@
                   builtUpArea:'',
                   unitPrice:'',
                   remark:'',
+                  state:'',
                   communityId:''
                 }
             }

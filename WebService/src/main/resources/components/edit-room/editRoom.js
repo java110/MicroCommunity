@@ -115,7 +115,7 @@
                                     errInfo:"房间数必须为数字"
                                 }
                             ],
-                            'addRoomInfo.state':[
+                            'editRoomInfo.state':[
                                 {
                                     limit:"required",
                                     param:"",
@@ -213,6 +213,7 @@
                   apartment:'',
                   builtUpArea:'',
                   unitPrice:'',
+                  state:'',
                   remark:'',
                   communityId:''
                 }

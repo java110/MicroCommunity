@@ -13,7 +13,7 @@
                 records:1,
                 floorId:'',
                 unitId:'',
-                roomState:'',
+                state:'',
                 roomNum:''
             }
         },
@@ -27,7 +27,7 @@
             vc.on('room','loadData',function(_param){
                 vc.component.roomInfo.floorId = _param.floorId;
                 vc.component.roomInfo.unitId = '';
-                vc.component.roomInfo.roomState = '';
+                vc.component.roomInfo.state = '';
                 vc.component.roomInfo.roomNum = '';
 
                 vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
@@ -46,7 +46,7 @@
                         communityId:vc.getCurrentCommunity().communityId,
                         floorId:vc.component.roomInfo.floorId,
                         unitId:vc.component.roomInfo.unitId,
-                        roomState:vc.component.roomInfo.roomState,
+                        state:vc.component.roomInfo.state,
                         roomNum:vc.component.roomInfo.roomNum
 
                     }
@@ -117,6 +117,20 @@
             },
             queryRoomMethod:function(){
                 vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
+            },
+            showState:function(_state){
+                if(_state == '2001'){
+                    return "房屋已售";
+                }else if(_state == '2002'){
+                    return "房屋未售";
+                }else if(_state == '2003'){
+                    return "已交定金";
+                }
+                else if(_state == '2004'){
+                    return "已出租";
+                }else{
+                    return "未知";
+                }
             }
         }
     });
