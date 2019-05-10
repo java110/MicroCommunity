@@ -4,6 +4,8 @@
   * [快速开始](README.md)
   * [安装部署](start/install.md)
   * [编码规范](start/CodeStandards.md)
+  * [视频](start/vedio.md)
+
 
 * api接口
 
