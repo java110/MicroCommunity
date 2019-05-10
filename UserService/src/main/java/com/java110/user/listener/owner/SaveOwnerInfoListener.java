@@ -1,15 +1,15 @@
-package com.java110.community.listener.owner;
+package com.java110.user.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.Assert;
-import com.java110.community.dao.IOwnerServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.user.dao.IOwnerServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

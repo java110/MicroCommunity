@@ -5,7 +5,7 @@
 > API服务做删除业主时调用该接口
 
 ###### URL
-> [http://community-service/ownerApi/service](http://community-service/ownerApi/service)
+> [http://user-service/ownerApi/service](http://user-service/ownerApi/service)
 
 ###### 支持格式
 > JSON
@@ -41,7 +41,7 @@
 |父元素名称|参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 |-|business|?|Array|-|业务节点|-|
-|business|businessTypeCd|1|String|12|业务类型编码|500100030002|
+|business|businessTypeCd|1|String|12|业务类型编码|110100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
 |datas|businessOwnerInfo|1|Object|-|小区成员|小区成员|
 |businessOwnerInfo|ownerId|1|String|30|-|-|
@@ -58,7 +58,7 @@
 
 
 ###### 举例
-> 地址：[http://community-service/ownerApi/service](http://community-service/ownerApi/service)
+> 地址：[http://user-service/ownerApi/service](http://user-service/ownerApi/service)
 
 ``` javascript
 请求头信息：
@@ -82,7 +82,7 @@ Content-Type:application/json
     }]
   },
   "business": {
-    "businessTypeCd": "540100050001",
+    "businessTypeCd": "110100050001",
     "bId":"1234567892",
     "remark": "备注",
     "datas": {

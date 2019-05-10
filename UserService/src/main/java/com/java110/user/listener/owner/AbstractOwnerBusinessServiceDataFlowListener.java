@@ -1,12 +1,12 @@
-package com.java110.community.listener.owner;
+package com.java110.user.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
-import com.java110.community.dao.IOwnerServiceDao;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.user.dao.IOwnerServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

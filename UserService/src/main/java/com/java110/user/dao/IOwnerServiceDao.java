@@ -1,12 +1,7 @@
-package com.java110.community.dao;
+package com.java110.user.dao;
 
 
 import com.java110.common.exception.DAOException;
-import com.java110.entity.merchant.BoMerchant;
-import com.java110.entity.merchant.BoMerchantAttr;
-import com.java110.entity.merchant.Merchant;
-import com.java110.entity.merchant.MerchantAttr;
-
 
 import java.util.List;
 import java.util.Map;

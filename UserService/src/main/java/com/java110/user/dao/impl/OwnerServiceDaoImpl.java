@@ -1,11 +1,11 @@
-package com.java110.community.dao.impl;
+package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.DAOException;
 import com.java110.common.util.DateUtil;
-import com.java110.community.dao.IOwnerServiceDao;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.user.dao.IOwnerServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

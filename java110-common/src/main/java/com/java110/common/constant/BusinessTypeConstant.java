@@ -57,6 +57,22 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_RECOVER_USER_INFO = "100100040003";
 
+    /**
+     * 增加业主
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "110100030001";
+
+    /**
+     * 修改业主
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_INFO = "110100040001";
+
+
+    /**
+     * 删除业主
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_INFO = "110100050001";
+
 
 
 
@@ -222,23 +238,6 @@ public class BusinessTypeConstant {
      * 删除房屋
      */
     public static final String BUSINESS_TYPE_DELETE_ROOM_INFO = "530100050001";
-
-
-    /**
-     * 增加业主
-     */
-    public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "540100030001";
-
-    /**
-     * 修改业主
-     */
-    public static final String BUSINESS_TYPE_UPDATE_OWNER_INFO = "540100040001";
-
-
-    /**
-     * 删除业主
-     */
-    public static final String BUSINESS_TYPE_DELETE_OWNER_INFO = "540100050001";
 
 
 
