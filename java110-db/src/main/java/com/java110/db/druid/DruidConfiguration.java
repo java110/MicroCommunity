@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
 
 /**
  * druid 配置.
@@ -20,9 +19,9 @@ public class DruidConfiguration {
     /**
      * 注册一个StatViewServlet
      *
-     * @return
+     * @return ServletRegistrationBean
      */
-    @Bean
+    //@Bean
     public ServletRegistrationBean DruidStatViewServle2() {
         //org.springframework.boot.context.embedded.ServletRegistrationBean提供类的进行注册.
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid2/*");
@@ -46,7 +45,7 @@ public class DruidConfiguration {
      *
      * @return
      */
-    @Bean
+    //@Bean
     public FilterRegistrationBean druidStatFilter2() {
 
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new WebStatFilter());

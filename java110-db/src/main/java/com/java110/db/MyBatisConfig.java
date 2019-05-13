@@ -29,13 +29,13 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
 
     @Autowired
     DataSource dataSource;
-
-    @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        DruidDataSource druidDataSource = new DruidDataSource();
-        return druidDataSource;
-    }
+//
+//    @Bean(name = "dataSource")
+//    @ConfigurationProperties(prefix = "spring.datasource")
+//    public DataSource dataSource() {
+//        DruidDataSource druidDataSource = new DruidDataSource();
+//        return druidDataSource;
+//    }
 
 
     @Bean(name = "sqlSessionFactory")
