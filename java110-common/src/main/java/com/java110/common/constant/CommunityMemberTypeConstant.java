@@ -17,6 +17,9 @@ public final class CommunityMemberTypeConstant {
     //小区楼
     public static final String FLOOR = "390001200004";
 
+    //业主
+    public static final String OWNER = "390001200005";
+
     //物业
     public static final String PROPERTY = "390001200002";
 

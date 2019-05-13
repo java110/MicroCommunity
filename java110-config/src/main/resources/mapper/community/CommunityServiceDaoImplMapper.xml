@@ -315,4 +315,35 @@
         </if>
     </update>
 
+
+    <!-- 查询小区成员  add by wuxw 2018-07-03 -->
+    <select id="getCommunityMemberCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_community_member ms
+        where 1=1
+        <if test="statusCd != null and statusCd != ''">
+            and ms.status_cd = #{statusCd}
+        </if>
+
+        <if test="bId != null and bId !=''">
+            and ms.b_id = #{bId}
+        </if>
+        <if test="communityMemberId != null and communityMemberId !=''">
+            and ms.community_member_id = #{communityMemberId}
+        </if>
+        <if test="memberId != null and memberId != ''">
+            and ms.member_id = #{memberId}
+        </if>
+        <if test="memberTypeCd != null and memberTypeCd != ''">
+            and ms.member_type_cd = #{memberTypeCd}
+        </if>
+        <if test="auditStatusCd != null and auditStatusCd != ''">
+            and ms.audit_status_cd = #{auditStatusCd}
+        </if>
+
+        <if test="communityId != null and communityId != ''">
+            and ms.community_id = #{communityId}
+        </if>
+    </select>
+
 </mapper>
