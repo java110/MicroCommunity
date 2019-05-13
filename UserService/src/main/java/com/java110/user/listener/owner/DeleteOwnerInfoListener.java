@@ -35,7 +35,7 @@ import java.util.Map;
 @Transactional
 public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowListener {
 
-    private  static Logger logger = LoggerFactory.getLogger(DeleteOwnerInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteOwnerInfoListener.class);
     @Autowired
     IOwnerServiceDao ownerServiceDaoImpl;
 
@@ -78,7 +78,7 @@ public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
                     JSONObject businessOwner = businessOwners.getJSONObject(_ownerIndex);
                     doBusinessOwner(business, businessOwner);
                     if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("ownerId", businessOwner.getString("ownerId"));
+                        dataFlowContext.addParamOut("memberId", businessOwner.getString("member_id"));
                     }
                 }
             }
@@ -110,7 +110,7 @@ public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
                 Map businessOwnerInfo = businessOwnerInfos.get(_ownerIndex);
                 flushBusinessOwnerInfo(businessOwnerInfo, StatusConstant.STATUS_CD_INVALID);
                 ownerServiceDaoImpl.updateOwnerInfoInstance(businessOwnerInfo);
-                dataFlowContext.addParamOut("ownerId", businessOwnerInfo.get("owner_id"));
+                dataFlowContext.addParamOut("memberId", businessOwnerInfo.get("member_id"));
             }
         }
 
@@ -161,10 +161,10 @@ public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
      */
     private void doBusinessOwner(Business business, JSONObject businessOwner) {
 
-        Assert.jsonObjectHaveKey(businessOwner, "ownerId", "businessOwner 节点下没有包含 ownerId 节点");
+        Assert.jsonObjectHaveKey(businessOwner, "memberId", "businessOwner 节点下没有包含 memberId 节点");
 
-        if (businessOwner.getString("ownerId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "ownerId 错误，不能自动生成（必须已经存在的ownerId）" + businessOwner);
+        if (businessOwner.getString("memberId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "memberId 错误，不能自动生成（必须已经存在的ownerId）" + businessOwner);
         }
         //自动插入DEL
         autoSaveDelBusinessOwner(business, businessOwner);

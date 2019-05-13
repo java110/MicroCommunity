@@ -44,7 +44,7 @@
 |business|businessTypeCd|1|String|12|业务类型编码|110100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
 |datas|businessOwnerInfo|1|Object|-|小区成员|小区成员|
-|businessOwnerInfo|ownerId|1|String|30|-|-|
+|businessOwnerInfo|memberId|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -87,7 +87,7 @@ Content-Type:application/json
     "remark": "备注",
     "datas": {
       "businessOwnerInfo": {
-                "ownerId":"填写存在的值"
+                "memberId":"填写存在的值"
       }
     },
     "attrs": [{

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +34,13 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.beanCovertMap(communityMemberDto));
         return BeanConvertUtil.covertBeanList(communityMembers, CommunityMemberDto.class);
+    }
+
+    @Override
+    public int getCommunityMemberCount(CommunityMemberDto communityMemberDto) {
+         logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
+
+        return communityServiceDaoImpl.getCommunityMemberCount(BeanConvertUtil.beanCovertMap(communityMemberDto));
     }
 
     public ICommunityServiceDao getCommunityServiceDaoImpl() {

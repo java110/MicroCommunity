@@ -13,6 +13,10 @@ import java.util.Date;
  **/
 public class OwnerDto extends PageDto implements Serializable {
 
+
+    private String communityId;
+
+    private String roomId;
     private String sex;
 private String name;
 private String link;
@@ -20,6 +24,7 @@ private String remark;
 private String ownerId;
 private String userId;
 private String age;
+private String memberId;
 
 
     private Date createTime;
@@ -69,6 +74,12 @@ public String getAge() {
 public void setAge(String age) {
         this.age = age;
     }
+public String getMemberId() {
+        return memberId;
+    }
+public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 
 
     public Date getCreateTime() {
@@ -85,5 +96,21 @@ public void setAge(String age) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

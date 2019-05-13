@@ -51,6 +51,7 @@
 |businessOwnerInfo|ownerId|1|String|30|-|-|
 |businessOwnerInfo|userId|1|String|30|-|-|
 |businessOwnerInfo|age|1|String|30|-|-|
+|businessOwnerInfo|memberId|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -93,6 +94,7 @@ Content-Type:application/json
     "datas": {
       "businessOwnerInfo": {
                 "sex":"填写具体值",
+                "memberId":"成员ID",
         "name":"填写具体值",
         "link":"填写具体值",
         "remark":"填写具体值",

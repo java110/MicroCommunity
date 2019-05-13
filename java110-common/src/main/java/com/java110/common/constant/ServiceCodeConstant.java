@@ -393,4 +393,17 @@ public class ServiceCodeConstant {
 
     //修改房屋信息
     public static final String SERVICE_CODE_DELETE_ROOMS = "room.deleteRoom";
+
+
+    //查询业主
+    public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
+
+    // 保存业主信息
+    public static final String SERVICE_CODE_SAVE_OWNER = "floor.saveOwner";
+
+    // 编辑业主信息
+    public static final String SERVICE_CODE_EDIT_OWNER = "floor.editOwner";
+
+    //删除业主信息
+    public static final String SERVICE_CODE_DELETE_OWNER = "floor.deleteOwner";
 }

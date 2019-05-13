@@ -51,6 +51,7 @@
 |businessOwnerInfo|ownerId|1|String|30|-|-|
 |businessOwnerInfo|userId|1|String|30|-|-|
 |businessOwnerInfo|age|1|String|30|-|-|
+|businessOwnerInfo|memberId|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -99,7 +100,8 @@ Content-Type:application/json
         "remark":"填写具体值",
         "ownerId":"填写具体值",
         "userId":"填写具体值",
-        "age":"填写具体值"
+        "age":"填写具体值",
+        "memberId":"成员ID"
       }
     },
     "attrs": [{

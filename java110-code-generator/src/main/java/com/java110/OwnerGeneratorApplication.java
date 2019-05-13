@@ -22,18 +22,19 @@ public class OwnerGeneratorApplication {
      */
     public static void main(String[] args) {
         Data data = new Data();
-        data.setId("ownerId");
+        data.setId("memberId");
         data.setName("owner");
         data.setDesc("业主");
         data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_OWNER_INFO");
         data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_OWNER_INFO");
         data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_OWNER_INFO");
-        data.setNewBusinessTypeCdValue("540100030001");
-        data.setUpdateBusinessTypeCdValue("540100040001");
-        data.setDeleteBusinessTypeCdValue("540100050001");
+        data.setNewBusinessTypeCdValue("110100030001");
+        data.setUpdateBusinessTypeCdValue("110100040001");
+        data.setDeleteBusinessTypeCdValue("110100050001");
         data.setBusinessTableName("business_building_owner");
         data.setTableName("building_owner");
         Map<String, String> param = new HashMap<String, String>();
+        param.put("memberId", "member_id");
         param.put("ownerId", "owner_id");
         param.put("bId", "b_id");
         param.put("name", "name");

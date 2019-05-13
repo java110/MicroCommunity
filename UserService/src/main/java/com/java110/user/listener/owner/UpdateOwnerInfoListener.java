@@ -110,7 +110,7 @@ public class UpdateOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
                 flushBusinessOwnerInfo(businessOwnerInfo, StatusConstant.STATUS_CD_VALID);
                 ownerServiceDaoImpl.updateOwnerInfoInstance(businessOwnerInfo);
                 if (businessOwnerInfo.size() == 1) {
-                    dataFlowContext.addParamOut("ownerId", businessOwnerInfo.get("owner_id"));
+                    dataFlowContext.addParamOut("memberId", businessOwnerInfo.get("member_id"));
                 }
             }
         }
@@ -162,10 +162,10 @@ public class UpdateOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
      */
     private void doBusinessOwner(Business business, JSONObject businessOwner) {
 
-        Assert.jsonObjectHaveKey(businessOwner, "ownerId", "businessOwner 节点下没有包含 ownerId 节点");
+        Assert.jsonObjectHaveKey(businessOwner, "memberId", "businessOwner 节点下没有包含 memberId 节点");
 
-        if (businessOwner.getString("ownerId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "ownerId 错误，不能自动生成（必须已经存在的ownerId）" + businessOwner);
+        if (businessOwner.getString("memberId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "memberId 错误，不能自动生成（必须已经存在的memberId）" + businessOwner);
         }
         //自动保存DEL
         autoSaveDelBusinessOwner(business, businessOwner);

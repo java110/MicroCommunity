@@ -68,7 +68,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
                 JSONObject businessOwner = businessOwners.getJSONObject(bOwnerIndex);
                 doBusinessOwner(business, businessOwner);
                 if (bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("ownerId", businessOwner.getString("ownerId"));
+                    dataFlowContext.addParamOut("memberId", businessOwner.getString("memberId"));
                 }
             }
         }
@@ -130,13 +130,22 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
      */
     private void doBusinessOwner(Business business, JSONObject businessOwner) {
 
+        Assert.jsonObjectHaveKey(businessOwner, "memberId", "businessOwner 节点下没有包含 memberId 节点");
         Assert.jsonObjectHaveKey(businessOwner, "ownerId", "businessOwner 节点下没有包含 ownerId 节点");
 
-        if (businessOwner.getString("ownerId").startsWith("-")) {
+        String tmpMemberId = "";
+        if (businessOwner.getString("memberId").startsWith("-")) {
             //刷新缓存
             //flushOwnerId(business.getDatas());
 
-            businessOwner.put("ownerId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
+            tmpMemberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
+
+            businessOwner.put("memberId", tmpMemberId);
+
+        }
+
+        if (businessOwner.getString("ownerId").startsWith("-")) {
+            businessOwner.put("ownerId", tmpMemberId);
 
         }
 

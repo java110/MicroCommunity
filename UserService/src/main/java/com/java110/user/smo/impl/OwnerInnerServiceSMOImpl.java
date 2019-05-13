@@ -1,10 +1,13 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.common.constant.CommunityMemberTypeConstant;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.OwnerDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.UserDto;
@@ -30,8 +33,11 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Autowired
     private IOwnerServiceDao ownerServiceDaoImpl;
 
-    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
     public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
@@ -44,6 +50,8 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             ownerDto.setPage((page - 1) * ownerDto.getRow());
             ownerDto.setRow(page * ownerDto.getRow());
         }
+
+        //communityInnerServiceSMOImpl.getCommunityMembers()
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
 
@@ -92,7 +100,29 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
     @Override
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
-        return ownerServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));
+
+        //调用 小区服务查询 小区成员业主信息
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(ownerDto.getCommunityId());
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
+        return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
+
+    }
+
+    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
+        return userInnerServiceSMOImpl;
+    }
+
+    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
+        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
+        return communityInnerServiceSMOImpl;
+    }
+
+    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
+        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
     }
 
     public IOwnerServiceDao getOwnerServiceDaoImpl() {
@@ -103,11 +133,4 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         this.ownerServiceDaoImpl = ownerServiceDaoImpl;
     }
 
-    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
-        return userInnerServiceSMOImpl;
-    }
-
-    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
-        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
-    }
 }

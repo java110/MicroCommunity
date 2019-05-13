@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.DAOException;
 import com.java110.common.util.DateUtil;
-import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.community.dao.ICommunityServiceDao;
+import com.java110.core.base.dao.BaseServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -408,7 +408,6 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
     }
 
     /**
-     *
      * @param info bId 信息
      * @return
      * @throws DAOException
@@ -421,4 +420,16 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
 
         return memberCommunitys;
     }
+
+    @Override
+    public int getCommunityMemberCount(Map info) {
+        logger.debug("查询小区成员加入信息 入参 info : {}", info);
+
+        List<Map> memberCommunitys = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityMemberCount", info);
+
+        if (memberCommunitys.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(memberCommunitys.get(0).get("count").toString());    }
 }

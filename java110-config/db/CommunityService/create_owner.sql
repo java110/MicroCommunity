@@ -1,6 +1,7 @@
 
 -- 单元信息 building 楼宇管理
 CREATE TABLE business_building_owner(
+  member_id VARCHAR(30) NOT NULL COMMENT '业主成员ID',
   owner_id VARCHAR(30) NOT NULL COMMENT '业主ID',
   b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
   name VARCHAR(12) NOT NULL COMMENT '业主名称',
@@ -14,11 +15,12 @@ CREATE TABLE business_building_owner(
 );
 
 
-CREATE INDEX idx_business_owner_id ON business_building_owner(owner_id);
+CREATE INDEX idx_business_owner_id ON business_building_owner(member_id);
 CREATE INDEX idx_business_owner_b_id ON business_building_owner(b_id);
 
 
 CREATE TABLE building_owner(
+  member_id VARCHAR(30) NOT NULL COMMENT '业主成员ID',
   owner_id VARCHAR(30) NOT NULL COMMENT '业主ID',
   b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
   name VARCHAR(12) NOT NULL COMMENT '业主名称',
@@ -29,7 +31,7 @@ CREATE TABLE building_owner(
   remark VARCHAR(200) NOT NULL COMMENT '备注',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，0, 在用 1失效',
-  UNIQUE KEY (owner_id)
+  UNIQUE KEY (member_id)
 );
 CREATE INDEX idx_owner_b_id ON building_owner(b_id);
-CREATE UNIQUE INDEX idx_owner_id ON building_owner(room_id);
+CREATE UNIQUE INDEX idx_owner_id ON building_owner(member_id);
