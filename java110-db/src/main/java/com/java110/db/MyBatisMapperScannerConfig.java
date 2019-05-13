@@ -1,4 +1,4 @@
-package com.java110.service;
+package com.java110.db;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

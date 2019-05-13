@@ -10,8 +10,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by wuxw on 2018/4/20.
@@ -23,35 +31,36 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
     private final static Logger logger = LoggerFactory.getLogger(QueryServiceDAOImpl.class);
 
     /**
-     *  防止sql注入 改造成直接用prepareStatement 预处理sql
+     * 防止sql注入 改造成直接用prepareStatement 预处理sql
+     *
      * @param sql
      * @param params
      * @return
      */
     @Override
-    public List<Map<String,Object>> executeSql(String sql,Object[] params) {
-        logger.debug("----【queryServiceDAOImpl.executeSql】入参 : "+sql+" params= "+params);
+    public List<Map<String, Object>> executeSql(String sql, Object[] params) {
+        logger.debug("----【queryServiceDAOImpl.executeSql】入参 : " + sql + " params= " + params);
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
         try {
             conn = sqlSessionTemplate.getConnection();
             ps = conn.prepareStatement(sql);
-            if(params != null){
-                for(int i = 0 ; i < params.length ; i++){
-                    ps.setObject(i+1, params[i]);
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    ps.setObject(i + 1, params[i]);
                 }
             }
             rs = ps.executeQuery();
             //精髓的地方就在这里，类ResultSet有getMetaData()会返回数据的列和对应的值的信息，然后我们将列名和对应的值作为map的键值存入map对象之中...
             ResultSetMetaData rsmd = rs.getMetaData();
-            while(rs.next()){
-                Map<String,Object> map = new HashMap<String,Object>();
-                for(int i = 0 ; i < rsmd.getColumnCount() ; i++){
-                    String col_name = rsmd.getColumnLabel(i+1);
+            while (rs.next()) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    String col_name = rsmd.getColumnLabel(i + 1);
                     Object col_value = rs.getObject(col_name);
-                    if(col_value == null){
+                    if (col_value == null) {
                         col_value = "";
                     }
                     map.put(col_name, col_value);
@@ -60,15 +69,15 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
             }
             return mapList;
         } catch (SQLException e) {
-            logger.error("执行sql异常：" + sql +params,e);
+            logger.error("执行sql异常：" + sql + params, e);
             return null;
-        }finally{
+        } finally {
             try {
                 //conn.close();
-                if( ps!=null) {
+                if (ps != null) {
                     ps.close();
                 }
-                if(rs != null) {
+                if (rs != null) {
                     rs.close();
                 }
             } catch (SQLException e) {
@@ -80,28 +89,29 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
 
     /**
      * 防止sql注入 改造成直接用prepareStatement 预处理sql
+     *
      * @param sql
      * @param params
      * @return
      */
-    public int updateSql(String sql,Object[] params){
-        logger.debug("----【queryServiceDAOImpl.updateSql】入参 : "+sql+" params= "+params);
+    public int updateSql(String sql, Object[] params) {
+        logger.debug("----【queryServiceDAOImpl.updateSql】入参 : " + sql + " params= " + params);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = sqlSessionTemplate.getConnection();
             ps = conn.prepareStatement(sql);
-            if(params != null){
-                for(int i = 0 ; i < params.length ; i++){
-                    ps.setObject(i+1, params[i]);
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    ps.setObject(i + 1, params[i]);
                 }
             }
             return ps.executeUpdate();
             //精髓的地方就在这里，类ResultSet有getMetaData()会返回数据的列和对应的值的信息，然后我们将列名和对应的值作为map的键值存入map对象之中...
         } catch (SQLException e) {
-            logger.error("执行sql异常：" + sql +params,e);
+            logger.error("执行sql异常：" + sql + params, e);
             return 0;
-        }finally{
+        } finally {
             try {
                 //conn.close();
                 ps.close();
@@ -113,51 +123,52 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
     }
 
     @Override
-    public String executeProc(Map<String,Object> paramsInfo) {
+    public String executeProc(Map<String, Object> paramsInfo) {
         String paramsInfoStr = "";
-        for (String key : paramsInfo.keySet()){
-            if("procName".equals(key)){
+        for (String key : paramsInfo.keySet()) {
+            if ("procName".equals(key)) {
                 paramsInfoStr += (paramsInfo.get("procName") + "(");
-            }else{
-                if(StringUtil.isNullOrNone(paramsInfo.get(key))){
+            } else {
+                if (StringUtil.isNullOrNone(paramsInfo.get(key))) {
                     paramsInfoStr += "'',";
-                }else{
-                    paramsInfoStr += "'"+paramsInfo.get(key)+"',";
+                } else {
+                    paramsInfoStr += "'" + paramsInfo.get(key) + "',";
                 }
             }
         }
 
-        paramsInfo.put("paramsInfo",paramsInfoStr);
+        paramsInfo.put("paramsInfo", paramsInfoStr);
 
-        sqlSessionTemplate.selectOne("queryServiceDAOImpl.executeProc",paramsInfo);
+        sqlSessionTemplate.selectOne("queryServiceDAOImpl.executeProc", paramsInfo);
 
-        return paramsInfo.get("resMsg") ==null ?"" :paramsInfo.get("resMsg").toString();
+        return paramsInfo.get("resMsg") == null ? "" : paramsInfo.get("resMsg").toString();
     }
 
     @Override
-    public String updateProc(Map<String,Object> paramsInfo) {
+    public String updateProc(Map<String, Object> paramsInfo) {
         String paramsInfoStr = "";
-        for (String key : paramsInfo.keySet()){
-            if("procName".equals(key)){
+        for (String key : paramsInfo.keySet()) {
+            if ("procName".equals(key)) {
                 paramsInfoStr += (paramsInfo.get("procName") + "(");
-            }else{
-                if(StringUtil.isNullOrNone(paramsInfo.get(key))){
+            } else {
+                if (StringUtil.isNullOrNone(paramsInfo.get(key))) {
                     paramsInfoStr += "'',";
-                }else{
-                    paramsInfoStr += "'"+paramsInfo.get(key)+"',";
+                } else {
+                    paramsInfoStr += "'" + paramsInfo.get(key) + "',";
                 }
             }
         }
 
-        paramsInfo.put("paramsInfo",paramsInfoStr);
+        paramsInfo.put("paramsInfo", paramsInfoStr);
 
-        sqlSessionTemplate.update("queryServiceDAOImpl.updateProc",paramsInfo);
+        sqlSessionTemplate.update("queryServiceDAOImpl.updateProc", paramsInfo);
 
-        return paramsInfo.get("resMsg") ==null ?"" :paramsInfo.get("resMsg").toString();
+        return paramsInfo.get("resMsg") == null ? "" : paramsInfo.get("resMsg").toString();
     }
 
     /**
      * 查询 ServiceSql
+     *
      * @return
      */
     @Override
@@ -168,9 +179,10 @@ public class QueryServiceDAOImpl extends BaseServiceDao implements IQueryService
 
     /**
      * 查询服务业务信息
+     *
      * @return
      */
-    public List<ServiceBusiness> qureyServiceBusiness(){
+    public List<ServiceBusiness> qureyServiceBusiness() {
         return sqlSessionTemplate.selectList("queryServiceDAOImpl.queryServiceBusiness");
     }
 }

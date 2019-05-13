@@ -1,3 +1,4 @@
+
 package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
@@ -8,7 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -37,13 +40,18 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.api", "com.java110.core", "com.java110.event.service.api", "com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service.aop",
+        "com.java110.service.configuration",
+        "com.java110.service.controller",
+        "com.java110.service.filter",
+        "com.java110.service.init", "com.java110.api", "com.java110.core", "com.java110.event.service.api", "com.java110.cache"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.api.listener"})
 @EnableSwagger2
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class ApiApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(ApiApplicationStart.class);
@@ -73,6 +81,10 @@ public class ApiApplicationStart {
         return restTemplate;
     }
 
+    /**
+     * swagger 插件
+     * @return Docket 对象
+     */
     @Bean
     public Docket swaggerSpringMvcPlugin() {
         return new Docket(DocumentationType.SWAGGER_2)

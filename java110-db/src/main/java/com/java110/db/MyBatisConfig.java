@@ -1,4 +1,4 @@
-package com.java110.service;
+package com.java110.db;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -32,11 +32,10 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
 
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DruidDataSource druidDataSource = new DruidDataSource();
         return druidDataSource;
     }
-
 
 
     @Bean(name = "sqlSessionFactory")

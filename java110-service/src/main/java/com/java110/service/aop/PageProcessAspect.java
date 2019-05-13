@@ -36,7 +36,7 @@ import java.util.Map;
 @Component
 public class PageProcessAspect {
 
-    private  static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
+    private static Logger logger = LoggerFactory.getLogger(PageProcessAspect.class);
 
     @Pointcut("execution(public * com.java110..*.*Controller.*(..)) || execution(public * com.java110..*.*Rest.*(..))")
     public void dataProcess() {

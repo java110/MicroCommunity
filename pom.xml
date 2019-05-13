@@ -32,6 +32,7 @@
         <module>Api</module>
         <module>CommunityService</module>
         <module>java110-code-generator</module>
+        <module>java110-db</module>
     </modules>
 
     <parent>
@@ -173,6 +174,11 @@
                 <artifactId>java110-logAgent</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-db</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
             <!-- logback 日志组件支持  -->
 
             <dependency>
@@ -297,6 +303,12 @@
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${httpclient.verion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc</artifactId>
+                <version>3.0.0.M3</version>
             </dependency>
 
 
