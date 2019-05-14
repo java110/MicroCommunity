@@ -43,9 +43,13 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>io.shardingsphere</groupId>
             <artifactId>sharding-jdbc</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>io.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
         </dependency>
     </dependencies>
 </project>

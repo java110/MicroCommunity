@@ -46,16 +46,16 @@ shardingRule:
   tables:
     business_community:
       actualDataNodes: ds${0..1}.business_community
-      tableStrategy:
+      databaseStrategy:
         inline:
           shardingColumn: community_id
-          algorithmExpression: business_community${business_community % 2}
+          algorithmExpression: ds${Integer.parseInt(community_id) % 2}
     community:
       actualDataNodes: ds${0..1}.community
-      tableStrategy:
+      databaseStrategy:
         inline:
           shardingColumn: community_id
-          algorithmExpression: community${community_id % 2}
+          algorithmExpression: ds${Integer.parseInt(community_id) % 2}
   bindingTables:
     - business_community,community
 
@@ -76,5 +76,5 @@ shardingRule:
 #     slaveDataSourceNames:
 #       - ds1_slave0
 #     loadBalanceAlgorithmType: ROUND_ROBIN
-#props:
-#  sql.show: true
+props:
+  sql.show: true

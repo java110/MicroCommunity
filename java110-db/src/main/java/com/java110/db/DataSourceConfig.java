@@ -3,9 +3,9 @@ package com.java110.db;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.collect.Lists;
-import io.shardingsphere.core.api.ShardingDataSourceFactory;
 import io.shardingsphere.core.yaml.sharding.YamlShardingConfiguration;
 import io.shardingsphere.core.yaml.sharding.YamlShardingRuleConfiguration;
+import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +51,7 @@ public class DataSourceConfig {
             d.setProxyFilters(Lists.newArrayList(statFilter));
         }
         return ShardingDataSourceFactory.createDataSource(config.getDataSources(),
-                rule.getShardingRuleConfiguration(), rule.getConfigMap(), rule.getProps());
+                rule.getShardingRuleConfiguration(), config.getConfigMap(), config.getProps());
     }
 
     /**
