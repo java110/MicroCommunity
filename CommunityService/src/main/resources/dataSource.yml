@@ -49,13 +49,13 @@ shardingRule:
       databaseStrategy:
         inline:
           shardingColumn: community_id
-          algorithmExpression: ds${Integer.parseInt(community_id) % 2}
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
     community:
       actualDataNodes: ds${0..1}.community
       databaseStrategy:
         inline:
           shardingColumn: community_id
-          algorithmExpression: ds${Integer.parseInt(community_id) % 2}
+          algorithmExpression: ds${Long.parseLong(community_id) % 2}
   bindingTables:
     - business_community,community
 

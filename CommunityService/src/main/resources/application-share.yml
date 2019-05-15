@@ -1,14 +1,14 @@
 spring:
   shardingsphere:
     datasource:
-      #      names: ds_master_0,ds_master_1,ds_master_0_slave_0,ds_master_0_slave_1,ds_master_1_slave_0,ds_master_1_slave_1
+#      names: ds_master_0,ds_master_1,ds_master_0_slave_0,ds_master_0_slave_1,ds_master_1_slave_0,ds_master_1_slave_1
       names: ds_master_0,ds_master_1
-      #      ds_master_0_slave_0:
-      #        jdbc-url: jdbc:mysql://localhost:3306/demo_ds_master_0_slave_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
-      #        password:
-      #        type: com.zaxxer.hikari.HikariDataSource
-      #        driver-class-name: com.mysql.jdbc.Driver
-      #        username: root
+#      ds_master_0_slave_0:
+#        jdbc-url: jdbc:mysql://localhost:3306/demo_ds_master_0_slave_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#        password:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        username: root
       ds_master_0:
         driver-class-name: com.mysql.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
@@ -59,5 +59,3 @@ spring:
 #        ds_0:
 #          slave-data-source-names: ds_master_0_slave_0, ds_master_0_slave_1
 #          master-data-source-name: ds_master_0
-  profiles:
-    active: dev

@@ -11,7 +11,7 @@ import com.alibaba.druid.support.http.StatViewServlet;
 /**
  * durid 配置类
  */
-@Configuration
+//@Configuration
 public class DuridConfig {
 
 
@@ -23,7 +23,7 @@ public class DuridConfig {
      * 新建Filter
      * @return Filter
      */
-    @Bean
+    //@Bean
     public Filter statFilter() {
         StatFilter filter = new StatFilter();
         filter.setSlowSqlMillis(DEFAULT_SHOW_SQL_MILLIS);
@@ -37,7 +37,7 @@ public class DuridConfig {
      *  servlet注册
      * @return ServletRegistrationBean
      */
-    @Bean
+    //@Bean
     public ServletRegistrationBean statViewServlet() {
         //创建servlet注册实体
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");

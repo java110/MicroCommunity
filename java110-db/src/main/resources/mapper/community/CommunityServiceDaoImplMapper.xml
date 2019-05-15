@@ -74,9 +74,7 @@
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
         insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd)
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,'0'
-        from business_community s where 
-        s.operate = 'ADD' and s.b_id=#{bId}
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0')
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -85,6 +83,9 @@
         select sa.b_id,sa.attr_id,sa.community_id,sa.spec_cd,sa.value,'0'
         from business_community_attr sa
         where sa.operate = 'ADD' and sa.b_id=#{bId}
+        <if test="communityId != null and communityId != ''">
+            and sa.community_id = #{communityId}
+        </if>
     </insert>
     
     <!-- 保存 小区照片信息 instance add by wuxw 2018-07-03 -->
@@ -93,6 +94,9 @@
         select sp.community_photo_id,sp.b_id,sp.community_id,sp.community_photo_type_cd,sp.photo,'0'
         from business_community_photo sp
         where  sp.operate = 'ADD' and sp.b_id=#{bId}
+        <if test="communityId != null and communityId != ''">
+            and sp.community_id = #{communityId}
+        </if>
     </insert>
 
 
@@ -247,6 +251,9 @@
         select ms.community_member_id,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,'0',ms.audit_status_cd
         from business_community_member ms where
         ms.operate = 'ADD' and ms.b_id=#{bId}
+        <if test="communityId != null and communityId != ''">
+            and ms.community_id = #{communityId}
+        </if>
     </insert>
 
     <!-- 查询小区成员 add by wuxw 2018-10-27 getBusinessCommunityMember-->

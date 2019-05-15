@@ -17,4 +17,12 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+
+    @Test
+    public void parseInteger(){
+        String communityId = "702019051443120001";
+
+        System.out.println(Long.parseLong(communityId));
+    }
 }

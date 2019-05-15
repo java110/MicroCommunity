@@ -79,6 +79,10 @@
         <appender-ref ref="STDOUT_FILE" />
     </logger>
 
+    <logger name="io.shardingsphere" level="DEBUG">
+        <appender-ref ref="STDOUT_FILE" />
+    </logger>
+
     <!--<logger name="org.thymeleaf" level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
     </logger>-->

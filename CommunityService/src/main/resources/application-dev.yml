@@ -23,6 +23,8 @@ server:
     uri-encoding: UTF-8
 
 spring:
+  profiles:
+    active: share
   http:
     encoding:
       charset: UTF-8
