@@ -4,9 +4,10 @@
         data:{
             addOwnerInfo:{
                 name:'',
-                ownerNum:'',
-                remark:'',
-                errorInfo:''
+                age:'',
+                link:'',
+                sex:'',
+                remark:''
             }
         },
          _initMethod:function(){
@@ -26,25 +27,44 @@
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"楼名称不能为空"
+                            errInfo:"名称不能为空"
                         },
                         {
                             limit:"maxin",
                             param:"2,10",
-                            errInfo:"楼名称长度必须在2位至10位"
+                            errInfo:"名称长度必须在2位至10位"
                         },
                     ],
-                    'addOwnerInfo.ownerNum':[
+                    'addOwnerInfo.age':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"楼编号不能为空"
+                            errInfo:"年龄不能为空"
                         },
                         {
                             limit:"num",
                             param:"",
-                            errInfo:"不是有效的数字"
+                            errInfo:"年龄不是有效的数字"
                         },
+                    ],
+                    'addOwnerInfo.sex':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"性别不能为空"
+                        }
+                    ],
+                    'addOwnerInfo.link':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"手机号不能为空"
+                        },
+                        {
+                            limit:"phone",
+                            param:"",
+                            errInfo:"不是有效的手机号"
+                        }
                     ],
                     'addOwnerInfo.remark':[
 
@@ -59,12 +79,10 @@
             },
             saveOwnerInfo:function(){
                 if(!vc.component.addOwnerValidate()){
-                    vc.component.addOwnerInfo.errorInfo = vc.validate.errInfo;
+                    vc.message(vc.validate.errInfo);
 
                     return ;
                 }
-
-                vc.component.addOwnerInfo.errorInfo = "";
 
                 vc.component.addOwnerInfo.communityId = vc.getCurrentCommunity().communityId;
                 vc.http.post(
@@ -84,22 +102,23 @@
 
                             return ;
                         }
-                        vc.component.addOwnerInfo.errorInfo = json;
+                        vc.message(json);
 
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
 
-                        vc.component.addOwnerInfo.errorInfo = errInfo;
+                        vc.message(errInfo);
 
                      });
             },
             clearAddOwnerInfo:function(){
                 vc.component.addOwnerInfo = {
                                             name:'',
-                                            ownerNum:'',
-                                            remark:'',
-                                            errorInfo:''
+                                            age:'',
+                                            link:'',
+                                            sex:'',
+                                            remark:''
                                         };
             }
         }
