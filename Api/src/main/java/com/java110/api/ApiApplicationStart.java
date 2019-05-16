@@ -44,7 +44,11 @@ import java.nio.charset.Charset;
         "com.java110.service.configuration",
         "com.java110.service.controller",
         "com.java110.service.filter",
-        "com.java110.service.init", "com.java110.api", "com.java110.core", "com.java110.event.service.api", "com.java110.cache"})
+        "com.java110.service.init",
+        "com.java110.api",
+        "com.java110.core",
+        "com.java110.event.service.api",
+        "com.java110.cache"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.api.listener"})
