@@ -28,6 +28,10 @@ public class Data {
     private String businessTableName;
 
     private String tableName;
+    //分片数据库字段 如community_id
+    private String shareColumn;
+    //分片传入参数 如communityId
+    private String shareParam;
 
     private Map params;
 
@@ -134,5 +138,21 @@ public class Data {
 
     public void setDeleteBusinessTypeCdValue(String deleteBusinessTypeCdValue) {
         this.deleteBusinessTypeCdValue = deleteBusinessTypeCdValue;
+    }
+
+    public String getShareColumn() {
+        return shareColumn;
+    }
+
+    public void setShareColumn(String shareColumn) {
+        this.shareColumn = shareColumn;
+    }
+
+    public String getShareParam() {
+        return shareParam;
+    }
+
+    public void setShareParam(String shareParam) {
+        this.shareParam = shareParam;
     }
 }

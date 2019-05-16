@@ -1,14 +1,22 @@
 package com.java110;
 
 
-import com.java110.code.*;
+
+
+import com.java110.code.Data;
+import com.java110.code.GeneratorAbstractBussiness;
+import com.java110.code.GeneratorDeleteInfoListener;
+import com.java110.code.GeneratorIServiceDaoListener;
+import com.java110.code.GeneratorSaveInfoListener;
+import com.java110.code.GeneratorServiceDaoImplListener;
+import com.java110.code.GeneratorServiceDaoImplMapperListener;
+import com.java110.code.GeneratorUpdateInfoListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Hello world!
- *
  */
 public class UnitGeneratorApplication {
 
@@ -16,8 +24,10 @@ public class UnitGeneratorApplication {
         // prevents calls from subclass
         throw new UnsupportedOperationException();
     }
+
     /**
-     *  代码生成器 入口方法
+     * 代码生成器 入口方法
+     *
      * @param args 参数
      */
     public static void main(String[] args) {
@@ -25,6 +35,8 @@ public class UnitGeneratorApplication {
         data.setId("unitId");
         data.setName("unit");
         data.setDesc("小区单元");
+        data.setShareParam("unitId");
+        data.setShareColumn("unit_id");
         data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_UNIT_INFO");
         data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_UNIT_INFO");
         data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_UNIT_INFO");

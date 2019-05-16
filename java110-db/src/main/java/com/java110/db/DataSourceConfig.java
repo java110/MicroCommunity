@@ -1,8 +1,6 @@
 package com.java110.db;
 
-import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlMasterSlaveDataSourceFactory;
 import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlShardingDataSourceFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -10,9 +8,11 @@ import org.springframework.core.io.Resource;
 
 import javax.servlet.Filter;
 import javax.sql.DataSource;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
@@ -59,8 +59,29 @@ public class DataSourceConfig {
      * @throws FileNotFoundException        文件未发现异常
      * @throws UnsupportedEncodingException 不支持编码异常
      */
-    private File getYmlFile() throws IOException {
-        Resource certResource = new ClassPathResource(SHARDING_YML_PATH);
-        return certResource.getFile();
+    private byte[] getYmlFile() throws IOException {
+        Reader reader = null;
+        InputStream inputStream = null;
+        ByteArrayOutputStream swapStream = null;
+        try {
+            Resource resource = new ClassPathResource(SHARDING_YML_PATH);
+
+            inputStream = resource.getInputStream();
+            swapStream = new ByteArrayOutputStream();
+            byte[] buff = new byte[100];
+            int rc = 0;
+            while ((rc = inputStream.read(buff, 0, 100)) > 0) {
+                swapStream.write(buff, 0, rc);
+            }
+            byte[] in2b = swapStream.toByteArray();
+            return in2b;
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (swapStream != null) {
+                swapStream.close();
+            }
+        }
     }
 }
