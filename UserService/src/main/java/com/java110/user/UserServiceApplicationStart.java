@@ -43,7 +43,7 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.user.listener"})
-//@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.core.smo.community"})
 public class UserServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceApplicationStart.class);
