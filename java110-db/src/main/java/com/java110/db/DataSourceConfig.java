@@ -1,8 +1,19 @@
 package com.java110.db;
 
+import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlMasterSlaveDataSourceFactory;
+import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlShardingDataSourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
+import javax.servlet.Filter;
+import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 /**
@@ -11,10 +22,10 @@ import java.sql.SQLException;
 @Configuration
 public class DataSourceConfig {
 
-//    @Autowired
-//    private Filter statFilter;
-//
-//    private static final String SHARDING_YML_PATH = "dataSource.yml";
+    //@Autowired
+    private Filter statFilter;
+
+    private static final String SHARDING_YML_PATH = "dataSource.yml";
 
     /**
      * 构建dataSource
@@ -26,8 +37,8 @@ public class DataSourceConfig {
      * @throws IOException  IO 异常
      * @since 1.8
      */
-//    @Bean
-//    public DataSource dataSource() throws SQLException, IOException {
+    @Bean
+    public DataSource dataSource() throws SQLException, IOException {
 //        YamlShardingConfiguration config = parse();
 //        YamlShardingRuleConfiguration rule = config.getShardingRule();
 //        for (String key : config.getDataSources().keySet()) {
@@ -36,22 +47,20 @@ public class DataSourceConfig {
 //        }
 //        return ShardingDataSourceFactory.createDataSource(config.getDataSources(),
 //                rule.getShardingRuleConfiguration(), config.getConfigMap(), config.getProps());
-//    }
-//
-//    /**
-//     * 解析yml
-//     *
-//     * @return yaml 配置文件
-//     * @throws IOException                  IO 异常
-//     * @throws FileNotFoundException        文件未发现异常
-//     * @throws UnsupportedEncodingException 不支持编码异常
-//     */
-//    private MasterSlaveDataSourceFactory parse() throws IOException, FileNotFoundException, UnsupportedEncodingException {
-//        Resource certResource = new ClassPathResource(SHARDING_YML_PATH);
-//        try (
-//                InputStreamReader inputStreamReader = new InputStreamReader(certResource.getInputStream(), "UTF-8")
-//        ) {
-//            return YamlMasterSlaveDataSourceFactory;
-//        }
-//    }
+
+        return YamlShardingDataSourceFactory.createDataSource(getYmlFile());
+    }
+
+    /**
+     * 解析yml
+     *
+     * @return yaml 配置文件
+     * @throws IOException                  IO 异常
+     * @throws FileNotFoundException        文件未发现异常
+     * @throws UnsupportedEncodingException 不支持编码异常
+     */
+    private File getYmlFile() throws IOException {
+        Resource certResource = new ClassPathResource(SHARDING_YML_PATH);
+        return certResource.getFile();
+    }
 }

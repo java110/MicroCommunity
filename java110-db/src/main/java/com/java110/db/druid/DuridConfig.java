@@ -37,7 +37,7 @@ public class DuridConfig {
      *  servlet注册
      * @return ServletRegistrationBean
      */
-    //@Bean
+    @Bean
     public ServletRegistrationBean statViewServlet() {
         //创建servlet注册实体
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");

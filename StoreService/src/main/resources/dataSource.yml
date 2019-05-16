@@ -44,69 +44,19 @@ dataSources:
 
 shardingRule:
   tables:
-    business_community:
+    business_xxx:
       actualDataNodes: ds${0..1}.business_community
       databaseStrategy:
         inline:
           shardingColumn: community_id
           algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    s_community:
-      actualDataNodes: ds${0..1}.s_community
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    business_community_attr:
-      actualDataNodes: ds${0..1}.business_community_attr
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    s_community_attr:
-      actualDataNodes: ds${0..1}.s_community_attr
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    business_community_member:
-      actualDataNodes: ds${0..1}.business_community_member
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    business_community_photo:
-      actualDataNodes: ds${0..1}.business_community_photo
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    s_community_member:
-      actualDataNodes: ds${0..1}.s_community_member
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-    s_community_photo:
-      actualDataNodes: ds${0..1}.s_community_photo
-      databaseStrategy:
-        inline:
-          shardingColumn: community_id
-          algorithmExpression: ds${Long.parseLong(community_id) % 2}
-  bindingTables:
-    - business_community
-    - s_community
-    - business_community_member
-    - business_community_photo
-    - s_community_member
-    - s_community_photo
-    - business_community_attr
-    - s_community_attr
 
-  defaultDataSourceName: ds0
+  bindingTables:
+    - business_xxx
+
+  defaultDataSourceName: ds1
   defaultDatabaseStrategy:
-    inline:
-      shardingColumn: community_id
-      algorithmExpression: ds${community_id % 2}
+    none:
   defaultTableStrategy:
     none:
 
