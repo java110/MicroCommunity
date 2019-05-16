@@ -47,7 +47,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         int page = Integer.parseInt(paramIn.getString("page"));
-        int rows = Integer.parseInt(paramIn.getString("rows"));
+        int row = Integer.parseInt(paramIn.getString("row"));
         String communityId = paramIn.getString("communityId");
 
 
@@ -77,7 +77,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
         }
 
         JSONObject resultObjs = JSONObject.parseObject(responseEntity.getBody().toString());
-        resultObjs.put("row", rows);
+        resultObjs.put("row", row);
         resultObjs.put("page", page);
         return responseEntity;
     }
@@ -217,17 +217,17 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
      */
     private void validateListOwner(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
-        Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
+        Assert.isInteger(paramIn.getString("row"), "rows不是数字");
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
-        int rows = Integer.parseInt(paramIn.getString("rows"));
+        int row = Integer.parseInt(paramIn.getString("row"));
 
 
-        if (rows > MAX_ROW) {
-            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "rows 数量不能大于50");
+        if (row > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "row 数量不能大于50");
         }
 
     }

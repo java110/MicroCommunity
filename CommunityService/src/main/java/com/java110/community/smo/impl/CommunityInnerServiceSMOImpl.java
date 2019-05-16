@@ -47,7 +47,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     }
 
     @Override
-    public int getCommunityMemberCount(CommunityMemberDto communityMemberDto) {
+    public int getCommunityMemberCount(@RequestBody CommunityMemberDto communityMemberDto) {
          logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
 
         return communityServiceDaoImpl.getCommunityMemberCount(BeanConvertUtil.beanCovertMap(communityMemberDto));

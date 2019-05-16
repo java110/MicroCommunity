@@ -51,6 +51,10 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
         List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
+        if (communityMemberDtos == null || communityMemberDtos.size() < 1) {
+            return null;
+        }
+
         Map ownerInfo = new HashMap();
         ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
         ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
@@ -127,7 +131,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     }
 
     @Override
-    public int queryOwnerCountByCondition(OwnerDto ownerDto) {
+    public int queryOwnerCountByCondition(@RequestBody OwnerDto ownerDto) {
 
         //校验是否传了 分页信息
 
@@ -141,7 +145,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     }
 
     @Override
-    public List<OwnerDto> queryOwnersByCondition(OwnerDto ownerDto) {
+    public List<OwnerDto> queryOwnersByCondition(@RequestBody OwnerDto ownerDto) {
 //校验是否传了 分页信息
 
         int page = ownerDto.getPage();
@@ -150,7 +154,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             ownerDto.setPage((page - 1) * ownerDto.getRow());
             ownerDto.setRow(page * ownerDto.getRow());
         }
-        List<OwnerDto> owners =  BeanConvertUtil.covertBeanList(
+        List<OwnerDto> owners = BeanConvertUtil.covertBeanList(
                 ownerServiceDaoImpl.getOwnerInfoByCondition(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
         if (owners == null || owners.size() == 0) {
             return owners;

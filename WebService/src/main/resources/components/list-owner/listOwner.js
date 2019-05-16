@@ -22,11 +22,11 @@
             });
         },
         methods:{
-            _listOwnerData:function(_page,_rows){
+            _listOwnerData:function(_page,_row){
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
+                        row:_row,
                         communityId:vc.getCurrentCommunity().communityId
                     }
                 }
