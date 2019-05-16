@@ -56,6 +56,12 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateOwnerData(reqJson);
 
+
+        if (reqJson.containsKey("name")) {
+            queryByCondition(reqJson, dataFlowContext);
+            return;
+        }
+
         int row = reqJson.getInteger("row");
 
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
@@ -65,6 +71,29 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         apiOwnerVo.setTotal(total);
         if (total > 0) {
             List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
+        }
+
+        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
+        dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 根据条件查询
+     *
+     * @param reqJson         查询信息
+     * @param dataFlowContext 上下文
+     */
+    private void queryByCondition(JSONObject reqJson, DataFlowContext dataFlowContext) {
+
+        int row = reqJson.getInteger("row");
+        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
+        int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+        apiOwnerVo.setTotal(total);
+        if (total > 0) {
+            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
         }
 

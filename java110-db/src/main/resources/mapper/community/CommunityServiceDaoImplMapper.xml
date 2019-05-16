@@ -302,6 +302,9 @@
         <if test="communityId != null and communityId != ''">
             and ms.community_id = #{communityId}
         </if>
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
     </select>
 
     <!-- 修改小区成员 add by wuxw 2018-07-03 -->

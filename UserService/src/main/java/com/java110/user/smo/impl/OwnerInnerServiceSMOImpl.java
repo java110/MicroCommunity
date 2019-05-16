@@ -2,6 +2,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.common.constant.CommunityMemberTypeConstant;
+import com.java110.common.constant.StatusConstant;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -42,18 +45,17 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Override
     public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
 
-        //校验是否传了 分页信息
-
-        int page = ownerDto.getPage();
-
-        if (page != PageDto.DEFAULT_PAGE) {
-            ownerDto.setPage((page - 1) * ownerDto.getRow());
-            ownerDto.setRow(page * ownerDto.getRow());
-        }
-
         //communityInnerServiceSMOImpl.getCommunityMembers()
+        //调用 小区服务查询 小区成员业主信息
+        CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(ownerDto, CommunityMemberDto.class);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
-        List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+        Map ownerInfo = new HashMap();
+        ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
+        ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+
+        List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(ownerInfo), OwnerDto.class);
 
         if (owners == null || owners.size() == 0) {
             return owners;
@@ -86,6 +88,21 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     /**
      * 获取批量userId
      *
+     * @param communityMemberDtos 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getOwnerIds(List<CommunityMemberDto> communityMemberDtos) {
+        List<String> ownerIds = new ArrayList<String>();
+        for (CommunityMemberDto communityMemberDto : communityMemberDtos) {
+            ownerIds.add(communityMemberDto.getMemberId());
+        }
+
+        return ownerIds.toArray(new String[ownerIds.size()]);
+    }
+
+    /**
+     * 获取批量userId
+     *
      * @param owners 小区楼信息
      * @return 批量userIds 信息
      */
@@ -107,6 +124,46 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
         return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
 
+    }
+
+    @Override
+    public int queryOwnerCountByCondition(OwnerDto ownerDto) {
+
+        //校验是否传了 分页信息
+
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+            ownerDto.setRow(page * ownerDto.getRow());
+        }
+        return ownerServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
+    @Override
+    public List<OwnerDto> queryOwnersByCondition(OwnerDto ownerDto) {
+//校验是否传了 分页信息
+
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+            ownerDto.setRow(page * ownerDto.getRow());
+        }
+        List<OwnerDto> owners =  BeanConvertUtil.covertBeanList(
+                ownerServiceDaoImpl.getOwnerInfoByCondition(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+        if (owners == null || owners.size() == 0) {
+            return owners;
+        }
+
+        String[] userIds = getUserIds(owners);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (OwnerDto owner : owners) {
+            refreshOwner(owner, users);
+        }
+        return owners;
     }
 
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {

@@ -152,13 +152,14 @@ where 1 =1
 </if> 
 <if test="apartment !=null and apartment != ''">
    and t.apartment= #{apartment}
-</if> 
-<if test="page != -1 and page != null">
-   limit #{page},#{row}
 </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+<if test="page != -1 and page != null">
+   limit #{page},#{row}
+</if>
+
 
     </select>
 

@@ -18,13 +18,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String roomId;
     private String sex;
-private String name;
-private String link;
-private String remark;
-private String ownerId;
-private String userId;
-private String age;
-private String memberId;
+    private String name;
+    private String link;
+    private String remark;
+    private String ownerId;
+    private String userId;
+    private String age;
+    private String memberId;
 
 
     private Date createTime;

@@ -6,6 +6,7 @@ import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.PageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,15 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     public List<CommunityMemberDto> getCommunityMembers(@RequestBody CommunityMemberDto communityMemberDto) {
 
         logger.debug("communityMemberDto：{}", JSONObject.toJSONString(communityMemberDto));
+
+        //校验是否传了 分页信息
+
+        int page = communityMemberDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            communityMemberDto.setPage((page - 1) * communityMemberDto.getRow());
+            communityMemberDto.setRow(page * communityMemberDto.getRow());
+        }
 
         List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.beanCovertMap(communityMemberDto));
         return BeanConvertUtil.covertBeanList(communityMembers, CommunityMemberDto.class);
