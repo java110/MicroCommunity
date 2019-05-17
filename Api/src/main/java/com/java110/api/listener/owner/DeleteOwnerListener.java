@@ -113,11 +113,11 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
         communityMemberDto.setMemberId(paramInJson.getString("ownerId"));
         communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
         communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.FLOOR);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
         List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
         if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区楼和小区存在关系存在异常，请检查");
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "业主和小区存在关系存在异常，请检查");
         }
 
 
