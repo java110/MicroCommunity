@@ -36,6 +36,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Autowired
     private IOwnerServiceDao ownerServiceDaoImpl;
 
+    @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
