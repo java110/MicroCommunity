@@ -59,7 +59,9 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-
+        if (!paramObj.containsKey("memberId")) {
+            paramObj.put("memberId", paramObj.getString("ownerId"));
+        }
         //添加小区楼
         businesses.add(editOwner(paramObj));
 
@@ -106,6 +108,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
+
         businessOwner.putAll(paramInJson);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
