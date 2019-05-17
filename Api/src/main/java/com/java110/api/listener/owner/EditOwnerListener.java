@@ -104,11 +104,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
-        businessOwner.put("ownerId", paramInJson.getString("ownerId"));
-        businessOwner.put("name", paramInJson.getString("name"));
-        businessOwner.put("remark", paramInJson.getString("remark"));
-        businessOwner.put("userId", paramInJson.getString("userId"));
-        businessOwner.put("ownerNum", paramInJson.getString("ownerNum"));
+        businessOwner.putAll(paramInJson);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;

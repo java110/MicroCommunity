@@ -85,7 +85,8 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     private void refreshOwner(OwnerDto owner, List<UserDto> users) {
         for (UserDto user : users) {
             if (owner.getUserId().equals(user.getUserId())) {
-                BeanConvertUtil.covertBean(user, owner);
+                //BeanConvertUtil.covertBean(user, owner);
+                owner.setUserName(user.getUserName());
             }
         }
     }

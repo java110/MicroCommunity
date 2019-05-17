@@ -96,7 +96,9 @@ sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id
 
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
-        select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId 
+        select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
+        t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId
 from building_owner t 
 where 1 =1 
 <if test="sex !=null and sex != ''">

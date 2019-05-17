@@ -26,6 +26,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String age;
     private String memberId;
 
+    private String userName;
+
 
     private Date createTime;
 
@@ -112,5 +114,13 @@ public void setMemberId(String memberId) {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

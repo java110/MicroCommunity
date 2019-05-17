@@ -139,7 +139,6 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
-        paramIn.put("name", paramIn.getString("ownerName"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/owner.editOwner",
                 HttpMethod.POST);
@@ -193,6 +192,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
     private void validateEditOwner(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "未包含小区楼ID");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(pd.getReqData(), "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(pd.getReqData(), "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(pd.getReqData(), "sex", "请求报文中未包含sex");
@@ -207,6 +207,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
     private void validateSaveOwner(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(pd.getReqData(), "age", "请求报文中未包含age");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(pd.getReqData(), "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(pd.getReqData(), "sex", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(pd.getReqData(), "remark", "未包含小区楼备注");

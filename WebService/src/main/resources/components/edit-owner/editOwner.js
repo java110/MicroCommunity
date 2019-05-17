@@ -4,10 +4,11 @@
         data:{
             editOwnerInfo:{
                 ownerId:'',
-                ownerName:'',
-                ownerNum:'',
-                remark:'',
-                errorInfo:''
+                name:'',
+                age:'',
+                link:'',
+                sex:'',
+                remark:''
             }
         },
          _initMethod:function(){
@@ -15,7 +16,6 @@
          },
          _initEvent:function(){
             vc.on('editOwner','openEditOwnerModal',function(_owner){
-                vc.component.editOwnerInfo.errorInfo="";
                 vc.copyObject(_owner,vc.component.editOwnerInfo);
                 $('#editOwnerModel').modal('show');
             });
@@ -25,31 +25,50 @@
                 return vc.validate.validate({
                     editOwnerInfo:vc.component.editOwnerInfo
                 },{
-                    'editOwnerInfo.ownerName':[
+                   'addOwnerInfo.name':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"楼名称不能为空"
+                            errInfo:"名称不能为空"
                         },
                         {
                             limit:"maxin",
                             param:"2,10",
-                            errInfo:"楼名称长度必须在2位至10位"
+                            errInfo:"名称长度必须在2位至10位"
                         },
                     ],
-                    'editOwnerInfo.ownerNum':[
+                    'addOwnerInfo.age':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"楼编号不能为空"
+                            errInfo:"年龄不能为空"
                         },
                         {
                             limit:"num",
                             param:"",
-                            errInfo:"不是有效的数字"
+                            errInfo:"年龄不是有效的数字"
                         },
                     ],
-                    'editOwnerInfo.remark':[
+                    'addOwnerInfo.sex':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"性别不能为空"
+                        }
+                    ],
+                    'addOwnerInfo.link':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"手机号不能为空"
+                        },
+                        {
+                            limit:"phone",
+                            param:"",
+                            errInfo:"不是有效的手机号"
+                        }
+                    ],
+                    'addOwnerInfo.remark':[
 
                         {
                             limit:"maxLength",
@@ -63,7 +82,8 @@
             editOwnerMethod:function(){
 
                 if(!vc.component.editOwnerValidate()){
-                    vc.component.editOwnerInfo.errorInfo = vc.validate.errInfo;
+                    vc.message(vc.validate.errInfo);
+
                     return ;
                 }
 
@@ -87,24 +107,23 @@
 
                             return ;
                         }
-                        vc.component.editOwnerInfo.errorInfo = json;
+                        vc.message(json);
 
                      },
                      function(errInfo,error){
                         console.log('请求失败处理');
-
-                        vc.component.editOwnerInfo.errorInfo = errInfo;
-
+                        vc.message(errInfo);
                      });
             },
             clearEditOwnerInfo:function(){
                 vc.component.editOwnerInfo = {
-                                            ownerId:'',
-                                            ownerName:'',
-                                            ownerNum:'',
-                                            remark:'',
-                                            errorInfo:''
-                                        };
+                    ownerId:'',
+                    name:'',
+                    age:'',
+                    link:'',
+                    sex:'',
+                    remark:''
+                };
             }
         }
     });
