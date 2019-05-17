@@ -399,11 +399,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
 
     // 保存业主信息
-    public static final String SERVICE_CODE_SAVE_OWNER = "floor.saveOwner";
+    public static final String SERVICE_CODE_SAVE_OWNER = "owner.saveOwner";
 
     // 编辑业主信息
-    public static final String SERVICE_CODE_EDIT_OWNER = "floor.editOwner";
+    public static final String SERVICE_CODE_EDIT_OWNER = "owner.editOwner";
 
     //删除业主信息
-    public static final String SERVICE_CODE_DELETE_OWNER = "floor.deleteOwner";
+    public static final String SERVICE_CODE_DELETE_OWNER = "owner.deleteOwner";
 }

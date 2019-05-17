@@ -431,5 +431,6 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
             return 0;
         }
 
-        return Integer.parseInt(memberCommunitys.get(0).get("count").toString());    }
+        return Integer.parseInt(memberCommunitys.get(0).get("count").toString());
+    }
 }
