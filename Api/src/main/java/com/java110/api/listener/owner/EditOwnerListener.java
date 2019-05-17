@@ -86,7 +86,9 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId");
         Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "ownerNum", "请求报文中未包含ownerNum");
+        Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
+        Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 

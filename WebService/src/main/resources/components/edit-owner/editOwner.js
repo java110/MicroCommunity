@@ -25,7 +25,7 @@
                 return vc.validate.validate({
                     editOwnerInfo:vc.component.editOwnerInfo
                 },{
-                   'addOwnerInfo.name':[
+                   'editOwnerInfo.name':[
                         {
                             limit:"required",
                             param:"",
@@ -37,7 +37,7 @@
                             errInfo:"名称长度必须在2位至10位"
                         },
                     ],
-                    'addOwnerInfo.age':[
+                    'editOwnerInfo.age':[
                         {
                             limit:"required",
                             param:"",
@@ -49,14 +49,14 @@
                             errInfo:"年龄不是有效的数字"
                         },
                     ],
-                    'addOwnerInfo.sex':[
+                    'editOwnerInfo.sex':[
                         {
                             limit:"required",
                             param:"",
                             errInfo:"性别不能为空"
                         }
                     ],
-                    'addOwnerInfo.link':[
+                    'editOwnerInfo.link':[
                         {
                             limit:"required",
                             param:"",
@@ -68,7 +68,7 @@
                             errInfo:"不是有效的手机号"
                         }
                     ],
-                    'addOwnerInfo.remark':[
+                    'editOwnerInfo.remark':[
 
                         {
                             limit:"maxLength",
