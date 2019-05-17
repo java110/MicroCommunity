@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
 
-
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
 
 
@@ -91,17 +90,20 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
     private void generateOwnerId(JSONObject paramObj) {
         String ownerId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
         paramObj.put("ownerId", ownerId);
+        if (!paramObj.containsKey("memberId")) {
+            paramObj.put("memberId", ownerId);
+        }
     }
 
 
     /**
      * 添加小区楼信息
-     *
-     *  * name:'',
-     *      *                 age:'',
-     *      *                 link:'',
-     *      *                 sex:'',
-     *      *                 remark:''
+     * <p>
+     * * name:'',
+     * *                 age:'',
+     * *                 link:'',
+     * *                 sex:'',
+     * *                 remark:''
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
@@ -147,12 +149,12 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
     /**
      * 数据校验
-     *
+     * <p>
      * name:'',
-     *                 age:'',
-     *                 link:'',
-     *                 sex:'',
-     *                 remark:''
+     * age:'',
+     * link:'',
+     * sex:'',
+     * remark:''
      *
      * @param paramIn "communityId": "7020181217000001",
      *                "memberId": "3456789",
