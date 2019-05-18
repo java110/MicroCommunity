@@ -54,7 +54,7 @@
 
             },
             _openAddOwnerModal:function(){ //打开添加框
-                vc.emit('addOwner','openAddOwnerModal',{});
+                vc.emit('addOwner','openAddOwnerModal',-1);
             },
             _openDelOwnerModel:function(_owner){ // 打开删除对话框
                 vc.emit('deleteOwner','openOwnerModel',_owner);

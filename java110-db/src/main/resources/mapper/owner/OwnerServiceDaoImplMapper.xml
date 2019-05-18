@@ -63,7 +63,7 @@ where 1 =1
     <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfoInstance" parameterType="Map">
         insert into building_owner(
-sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id
+sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
 ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd
         from business_building_owner t where 1=1
    and t.operate= 'ADD'
