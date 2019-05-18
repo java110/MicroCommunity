@@ -62,14 +62,16 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        //生成ownerId
-        generateOwnerId(paramObj);
+        //生成memberId
+        generateMemberId(paramObj);
 
         //添加小区楼
         businesses.add(addOwner(paramObj));
 
-        //小区楼添加到小区中
-        businesses.add(addCommunityMember(paramObj));
+        if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
+            //小区楼添加到小区中
+            businesses.add(addCommunityMember(paramObj));
+        }
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -87,11 +89,11 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
      *
      * @param paramObj 请求入参数据
      */
-    private void generateOwnerId(JSONObject paramObj) {
-        String ownerId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
-        paramObj.put("ownerId", ownerId);
-        if (!paramObj.containsKey("memberId")) {
-            paramObj.put("memberId", ownerId);
+    private void generateMemberId(JSONObject paramObj) {
+        String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
+        paramObj.put("memberId", memberId);
+        if (!paramObj.containsKey("ownerId") || "1001".equals(paramObj.getString("ownerTypeCd"))) {
+            paramObj.put("ownerId", memberId);
         }
     }
 
@@ -166,6 +168,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 

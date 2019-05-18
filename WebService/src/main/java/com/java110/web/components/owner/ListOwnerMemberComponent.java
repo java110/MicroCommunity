@@ -7,25 +7,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
- * 查询楼列表组件
+ * 查询业主成员组件
  */
-@Component("listOwner")
-public class ListOwnerComponent {
+@Component("listOwnerMember")
+public class ListOwnerMemberComponent {
 
     @Autowired
     private IOwnerServiceSMO ownerServiceSMOImpl;
 
     /**
      * 查询小区楼信息
-     *
      * @param pd 页面封装对象 包含页面请求数据
      * @return ResponseEntity对象返回给页面
      */
     public ResponseEntity<String> list(IPageData pd) {
 
-        return ownerServiceSMOImpl.listOwner(pd);
+        return ownerServiceSMOImpl.listOwnerMember(pd);
     }
-
 
     public IOwnerServiceSMO getOwnerServiceSMOImpl() {
         return ownerServiceSMOImpl;

@@ -398,6 +398,9 @@ public class ServiceCodeConstant {
     //查询业主
     public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
 
+    //查询业主成员
+    public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
+
     // 保存业主信息
     public static final String SERVICE_CODE_SAVE_OWNER = "owner.saveOwner";
 

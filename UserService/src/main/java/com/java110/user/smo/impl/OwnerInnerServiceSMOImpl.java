@@ -76,6 +76,23 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         return owners;
     }
 
+    @Override
+    public List<OwnerDto> queryOwnerMembers(@RequestBody OwnerDto ownerDto) {
+        List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+        if (owners == null || owners.size() == 0) {
+            return owners;
+        }
+
+        String[] userIds = getUserIds(owners);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (OwnerDto owner : owners) {
+            refreshOwner(owner, users);
+        }
+        return owners;
+    }
+
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *

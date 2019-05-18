@@ -4,6 +4,7 @@
         data:{
             editOwnerInfo:{
                 ownerId:'',
+                memberId:'',
                 name:'',
                 age:'',
                 link:'',
@@ -87,8 +88,6 @@
                     return ;
                 }
 
-                vc.component.editOwnerInfo.errorInfo = "";
-
                 vc.component.editOwnerInfo.communityId = vc.getCurrentCommunity().communityId;
                 vc.http.post(
                     'editOwner',
@@ -118,6 +117,7 @@
             clearEditOwnerInfo:function(){
                 vc.component.editOwnerInfo = {
                     ownerId:'',
+                    memberId:'',
                     name:'',
                     age:'',
                     link:'',

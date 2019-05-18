@@ -7,14 +7,18 @@
                 age:'',
                 link:'',
                 sex:'',
-                remark:''
+                remark:'',
+                ownerId:''
             }
         },
          _initMethod:function(){
 
          },
          _initEvent:function(){
-            vc.on('addOwner','openAddOwnerModal',function(){
+            vc.on('addOwner','openAddOwnerModal',function(_ownerId){
+                if(_ownerId != null || _ownerId != -1){
+                    vc.component.addOwnerInfo.ownerId = _ownerId;
+                }
                 $('#addOwnerModel').modal('show');
             });
         },

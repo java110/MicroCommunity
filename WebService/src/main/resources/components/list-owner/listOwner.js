@@ -27,7 +27,8 @@
                     params:{
                         page:_page,
                         row:_row,
-                        communityId:vc.getCurrentCommunity().communityId
+                        communityId:vc.getCurrentCommunity().communityId,
+                        ownerTypeCd:'1001'
                     }
                 }
 

@@ -1,16 +1,8 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <vc:create name="memberSelectOwner"></vc:create>
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>业主信息</h5>
-                    <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOwnerModal(-1)">
-                            <i class="glyphicon glyphicon-plus"></i>
-                            添加业主
-                        </button>
-                    </div>
-                </div>
                 <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
@@ -28,7 +20,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="owner in listOwnerInfo.owners">
+                        <tr v-for="owner in memberInfo.members">
                             <td>
                                 {{owner.memberId}}
                             </td>
@@ -69,15 +61,12 @@
                         </tr>
                         </tfoot>
                     </table>
-                    <!-- 分页 -->
-                    <vc:create name="pagination"></vc:create>
+
                 </div>
             </div>
         </div>
     </div>
-
-    <vc:create name="addOwner"></vc:create>
+    <!-- 删除员工权限 -->
     <vc:create name="editOwner"></vc:create>
     <vc:create name="deleteOwner"></vc:create>
-
 </div>

@@ -93,7 +93,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
         if (businessOwnerInfo != null && businessOwnerInfo.size() > 0) {
             ownerServiceDaoImpl.saveOwnerInfoInstance(info);
             if (businessOwnerInfo.size() == 1) {
-                dataFlowContext.addParamOut("ownerId", businessOwnerInfo.get(0).get("owner_id"));
+                dataFlowContext.addParamOut("memberId", businessOwnerInfo.get(0).get("member_id"));
             }
         }
     }
@@ -144,7 +144,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
 
         }
 
-        if (businessOwner.getString("ownerId").startsWith("-")) {
+        if ("1001".equals(businessOwner.getString("ownerTypeCd"))) {
             businessOwner.put("ownerId", tmpMemberId);
 
         }

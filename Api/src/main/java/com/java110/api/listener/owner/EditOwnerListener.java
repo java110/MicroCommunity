@@ -59,8 +59,8 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        if (!paramObj.containsKey("memberId")) {
-            paramObj.put("memberId", paramObj.getString("ownerId"));
+        if (!paramObj.containsKey("ownerId") || "1001".equals(paramObj.getString("ownerTypeCd"))) {
+            paramObj.put("ownerId", paramObj.getString("memberId"));
         }
         //添加小区楼
         businesses.add(editOwner(paramObj));
@@ -85,12 +85,13 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
      *                "memberTypeCd": "390001200001"
      */
     private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId");
+        Assert.jsonObjectHaveKey(paramIn, "memberId", "请求报文中未包含ownerId");
         Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
         Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 
