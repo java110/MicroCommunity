@@ -17,7 +17,7 @@ operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
        <!-- 查询业主信息（Business） add by wuxw 2018-07-03 -->
        <select id="getBusinessOwnerInfo" parameterType="Map" resultType="Map">
            select  t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-           t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd t.ownerTypeCd
+           t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
 from business_building_owner t 
 where 1 =1 
 <if test="operate !=null and operate != ''">
@@ -106,7 +106,7 @@ sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
         select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd t.ownerTypeCd
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
 from building_owner t 
 where 1 =1 
 <if test="sex !=null and sex != ''">
@@ -284,7 +284,7 @@ and t.member_id= #{memberId}
     <!-- 查询业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerInfoByCondition" parameterType="Map" resultType="Map">
     select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd t.ownerTypeCd
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
         FROM building_owner t , s_community_member cm
         WHERE t.`member_id` = cm.`member_id`
         AND cm.`community_id` = #{communityId}
