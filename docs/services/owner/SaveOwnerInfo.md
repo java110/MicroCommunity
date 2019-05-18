@@ -50,6 +50,7 @@
 |businessOwnerInfo|remark|1|String|30|-|-|
 |businessOwnerInfo|ownerId|1|String|30|-|-|
 |businessOwnerInfo|userId|1|String|30|-|-|
+|businessOwnerInfo|ownerTypeCd|1|String|4|业主类型|1001 业主 1002 家庭成员|
 |businessOwnerInfo|age|1|String|30|-|-|
 |businessOwnerInfo|memberId|1|String|30|-|-|
 

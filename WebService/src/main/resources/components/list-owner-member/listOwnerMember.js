@@ -26,7 +26,7 @@
                     params:{
                         page:1,
                         row:15,
-                        ownerId:_param.memberId,
+                        ownerId:_param.ownerId,
                         communityId:vc.getCurrentCommunity().communityId,
                         ownerTypeCd:'1002'
                     }
@@ -37,7 +37,7 @@
                           param,
                           function(json){
                              var _memberInfo = JSON.parse(json);
-                             vc.component.memberInfo.members = _memberInfo;
+                             vc.component.memberInfo.members = _memberInfo.owners;
 
                           },function(){
                              console.log('请求失败处理');

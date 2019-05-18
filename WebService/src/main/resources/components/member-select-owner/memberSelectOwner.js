@@ -19,7 +19,7 @@
 
         },
         _initEvent:function(){
-            vc.on('ownerSelectOwner','chooseOwner',function(_owner){
+            vc.on('memberSelectOwner','chooseOwner',function(_owner){
                 vc.component.ownerInfo = _owner;
             });
 
@@ -29,10 +29,9 @@
             openSearchOwnerModel(){
                 vc.emit('searchOwner','openSearchOwnerModel',{});
             },
-            openAddOwnerModel(){
-                vc.emit('addOwner','addOwnerModel',{
-                    ownerId:vc.component.ownerInfo.ownerId
-                });
+            openAddMemberModel(){
+                vc.emit('addOwner','openAddOwnerModal',vc.component.ownerInfo.ownerId
+                );
             }
         }
     });

@@ -28,7 +28,8 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        name:_name
+                        name:_name,
+                        ownerTypeCd:'1001'
                     }
                 };
 

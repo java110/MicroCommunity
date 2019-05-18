@@ -23,7 +23,7 @@ where 1 =1
 <if test="operate !=null and operate != ''">
    and t.operate= #{operate}
 </if> 
-<if test="sex !=null and sex != ''">
+<if test="sex !=null ">
    and t.sex= #{sex}
 </if> 
 <if test="name !=null and name != ''">
@@ -67,7 +67,7 @@ sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
 ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd
         from business_building_owner t where 1=1
    and t.operate= 'ADD'
-<if test="sex !=null and sex != ''">
+<if test="sex !=null">
    and t.sex= #{sex}
 </if> 
 <if test="name !=null and name != ''">
@@ -109,7 +109,7 @@ sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
 from building_owner t 
 where 1 =1 
-<if test="sex !=null and sex != ''">
+<if test="sex !=null">
    and t.sex= #{sex}
 </if> 
 <if test="name !=null and name != ''">
@@ -163,7 +163,7 @@ where 1 =1
 <if test="newBId != null and newBId != ''">
 ,t.b_id = #{newBId}
 </if> 
-<if test="sex !=null and sex != ''">
+<if test="sex !=null ">
 , t.sex= #{sex}
 </if> 
 <if test="name !=null and name != ''">
@@ -197,7 +197,7 @@ and t.member_id= #{memberId}
      <select id="queryOwnersCount" parameterType="Map" resultType="Map">
         select  count(1) count
          FROM building_owner t
-<if test="sex !=null and sex != ''">
+<if test="sex !=null ">
    and t.sex= #{sex}
 </if> 
 <if test="name !=null and name != ''">
@@ -243,7 +243,7 @@ and t.member_id= #{memberId}
         AND cm.`community_id` = #{communityId}
         AND cm.`status_cd` = '0'
         AND t.`status_cd` = '0'
-        <if test="sex !=null and sex != ''">
+        <if test="sex !=null ">
             and t.sex= #{sex}
         </if>
         <if test="name !=null and name != ''">
@@ -290,7 +290,7 @@ and t.member_id= #{memberId}
         AND cm.`community_id` = #{communityId}
         AND cm.`status_cd` = '0'
         AND t.`status_cd` = '0'
-    <if test="sex !=null and sex != ''">
+    <if test="sex !=null ">
         and t.sex= #{sex}
     </if>
     <if test="name !=null and name != ''">
