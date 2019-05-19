@@ -67,7 +67,10 @@
     </div>
     <vc:create name="searchOwner"
                emitChooseOwner="memberSelectOwner"
-               emitLoadData="member"
+               emitLoadData="listOwnerMember"
     ></vc:create>
-    <vc:create name="addOwner"></vc:create>
+    <vc:create
+            name="addOwner"
+            notifyLoadDataComponentName="listOwnerMember"
+    ></vc:create>
 </div>

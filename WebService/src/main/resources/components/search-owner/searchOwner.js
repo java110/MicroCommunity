@@ -47,7 +47,7 @@
             },
             chooseOwner:function(_owner){
                 vc.emit($props.emitChooseOwner,'chooseOwner',_owner);
-                vc.emit($props.emitLoadData,'loadData',{
+                vc.emit($props.emitLoadData,'listOwnerData',{
                     ownerId:_owner.ownerId
                 });
                 $('#searchOwnerModel').modal('hide');

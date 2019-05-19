@@ -48,7 +48,7 @@
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditOwnerModel(owner)">修改</button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDelOwnerModel(owner)">删除</button>
+                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteOwnerModel(owner)">删除</button>
                                 </div>
                             </td>
                         </tr>
@@ -67,6 +67,10 @@
         </div>
     </div>
     <!-- 删除员工权限 -->
-    <vc:create name="editOwner"></vc:create>
-    <vc:create name="deleteOwner"></vc:create>
+    <vc:create name="editOwner"
+               notifyLoadDataComponentName="listOwnerMember"
+    ></vc:create>
+    <vc:create name="deleteOwner"
+               notifyLoadDataComponentName="listOwnerMember"
+    ></vc:create>
 </div>

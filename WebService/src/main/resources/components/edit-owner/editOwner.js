@@ -1,6 +1,9 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+            notifyLoadDataComponentName:vc.propTypes.string
+        },
         data:{
             editOwnerInfo:{
                 ownerId:'',
@@ -102,7 +105,7 @@
                             //关闭model
                             $('#editOwnerModel').modal('hide');
                             vc.component.clearEditOwnerInfo();
-                            vc.emit('listOwner','listOwnerData',{});
+                            vc.emit($props.notifyLoadDataComponentName,'listOwnerData',{});
 
                             return ;
                         }

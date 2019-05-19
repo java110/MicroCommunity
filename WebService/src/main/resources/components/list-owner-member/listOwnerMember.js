@@ -12,21 +12,21 @@
         },
         _initEvent:function(){
 
-            vc.on('member','loadOwner',function(_param){
+            vc.on('listOwnerMember','loadOwner',function(_param){
                 vc.component._loadOwners(_param);
             });
-            vc.on('member','loadData',function(_param){
+            vc.on('listOwnerMember','listOwnerData',function(_param){
                 vc.component._loadOwners(_param);
             });
         },
         methods:{
             _loadOwners:function(_param){
-                vc.component.memberInfo._currentOwnerId=_param.ownerId;
+                if(_param.hasOwnProperty('ownerId')){
+                    vc.component.memberInfo._currentOwnerId=_param.ownerId;
+                }
                 var param = {
                     params:{
-                        page:1,
-                        row:15,
-                        ownerId:_param.ownerId,
+                        ownerId:vc.component.memberInfo._currentOwnerId,
                         communityId:vc.getCurrentCommunity().communityId,
                         ownerTypeCd:'1002'
                     }
@@ -49,7 +49,7 @@
             },
             _openEditOwnerModel:function(_member){
                 _member.ownerId = vc.component.memberInfo._currentOwnerId;
-                vc.emit('editOwner','openOwnerModel',_member);
+                vc.emit('editOwner','openEditOwnerModal',_member);
             }
         }
     });

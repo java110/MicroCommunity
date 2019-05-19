@@ -76,8 +76,17 @@
         </div>
     </div>
 
-    <vc:create name="addOwner"></vc:create>
-    <vc:create name="editOwner"></vc:create>
-    <vc:create name="deleteOwner"></vc:create>
+    <vc:create
+            name="addOwner"
+            notifyLoadDataComponentName="listOwner"
+    ></vc:create>
+    <vc:create
+            name="editOwner"
+            notifyLoadDataComponentName="listOwner"
+
+    ></vc:create>
+    <vc:create name="deleteOwner"
+               notifyLoadDataComponentName="listOwner"
+    ></vc:create>
 
 </div>

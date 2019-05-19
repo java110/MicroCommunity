@@ -60,7 +60,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
     protected void autoSaveDelBusinessOwner(Business business, JSONObject businessOwner) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("ownerId", businessOwner.getString("ownerId"));
+        info.put("memberId", businessOwner.getString("memberId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentOwnerInfos = getOwnerServiceDaoImpl().getOwnerInfo(info);
         if (currentOwnerInfos == null || currentOwnerInfos.size() != 1) {
