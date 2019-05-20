@@ -15,12 +15,12 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
     public void generator(Data data) {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
-        if(StringUtils.isEmpty(data.getShareParam())){
+        if (StringUtils.isEmpty(data.getShareParam())) {
             data.setShareParam(data.getId());
         }
 
-        if(StringUtils.isEmpty(data.getShareColumn())){
-           data.setShareColumn(data.getParams().get(data.getShareColumn()).toString());
+        if (StringUtils.isEmpty(data.getShareColumn())) {
+            data.setShareColumn(data.getParams().get(data.getShareColumn()).toString());
         }
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))

@@ -74,6 +74,24 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_OWNER_INFO = "110100050001";
 
 
+    /**
+     * 房屋购买
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_ROOM_REL = "111100030001";
+
+    /**
+     * 房屋状态变更
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_ROOM_REL = "111100040001";
+
+
+    /**
+     * 房屋转售
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_ROOM_REL = "111100050001";
+
+
+
 
 
     /**

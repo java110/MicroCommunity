@@ -1,0 +1,42 @@
+package com.java110.core.smo.owner;
+
+import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.OwnerRoomRelDto;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
+
+/**
+ * @ClassName IOwnerRoomRelInnerServiceSMO
+ * @Description 业主房屋接口类
+ * @Author wuxw
+ * @Date 2019/4/24 9:04
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+@FeignClient(name = "community-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/ownerRoomRelApi")
+public interface IOwnerRoomRelInnerServiceSMO {
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param ownerRoomRelDto 数据对象分享
+     * @return OwnerRoomRelDto 对象数据
+     */
+    @RequestMapping(value = "/queryOwnerRoomRels", method = RequestMethod.POST)
+    List<OwnerRoomRelDto> queryOwnerRoomRels(@RequestBody OwnerRoomRelDto ownerRoomRelDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param ownerRoomRelDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryOwnerRoomRelsCount", method = RequestMethod.POST)
+    int queryOwnerRoomRelsCount(@RequestBody OwnerRoomRelDto ownerRoomRelDto);
+}

@@ -5,7 +5,7 @@
 > 用户通过web端或APP保存单元信息接口
 
 ###### URL
-> [http://api.java110.com:8008/api/unit.saveUnit](http://api.java110.com:8008/api/unit.saveUnit)
+> [http://api.java110.com:8008/api/owner.saveOwner](http://api.java110.com:8008/api/owner.saveOwner)
 
 ###### 支持格式
 > JSON
@@ -45,7 +45,7 @@
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/unit.saveUnit](http://api.java110.com:8008/api/unit.saveUnit)
+> 地址：[http://api.java110.com:8008/api/owner.saveOwner](http://api.java110.com:8008/api/owner.saveOwner)
 
 ``` javascript
 请求头信息：
@@ -58,11 +58,13 @@ SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 {
-    "floorId":"填写具体值",
-     "layerCount":"填写具体值",
-     "unitNum":"填写具体值",
-     "lift":"填写具体值",
-     "remark":"填写具体值"
+    "sex":"填写具体值",
+            "name":"填写具体值",
+            "link":"填写具体值",
+            "remark":"填写具体值",
+            "userId":"填写具体值",
+            "ownerTypeCd":"1001",
+            "age":"填写具体值"
 }
 
 返回报文：

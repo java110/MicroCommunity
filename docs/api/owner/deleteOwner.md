@@ -1,11 +1,11 @@
 
 
-**1\. 修改小区单元信息**
+**1\. 删除业主信息**
 ###### 接口功能
-> 用户通过web端或APP修改单元信息接口
+> 用户通过web端或APP删除业主信息接口
 
 ###### URL
-> [http://api.java110.com:8008/api/unit.updateUnit](http://api.java110.com:8008/api/unit.updateUnit)
+> [http://api.java110.com:8008/api/owner.deleteOwner](http://api.java110.com:8008/api/owner.deleteOwner)
 
 ###### 支持格式
 > JSON
@@ -24,14 +24,7 @@
 ###### 请求参数
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|floorId|1|String|30|小区楼ID|-|
-|communityId|1|String|30|小区ID|-|
-|unitId|1|String|30|单元ID|-|
-|unitNum|1|String|12|单元编号|-|
-|layerCount|1|int|-|楼总层数|-|
-|lift|1|String|4|是否有楼梯|1010 有 2020 无|
-|layerCount|1|int|-|楼总层数|-|
-|remark|?|string|200|备注|-|
+|memberId|1|String|30|业主ID|-|
 
 ###### 返回协议
 
@@ -43,7 +36,7 @@
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/unit.updateUnit](http://api.java110.com:8008/api/unit.updateUnit)
+> 地址：[http://api.java110.com:8008/api/owner.deleteOwner](http://api.java110.com:8008/api/owner.deleteOwner)
 
 ``` javascript
 请求头信息：
@@ -56,12 +49,8 @@ SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 {
-    "floorId":"填写具体值",
-     "layerCount":"填写具体值",
-     "unitId":"填写具体值",
-     "unitNum":"填写具体值",
-     "lift":"填写具体值",
-     "remark":"填写具体值"
+    "memberId":"填写具体值",
+    "ownerTypeCd":"1001"
 }
 
 返回报文：

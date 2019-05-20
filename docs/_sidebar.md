@@ -31,6 +31,9 @@
   * [保存房屋信息](api/room/saveRoom.md)
   * [修改房屋信息](api/room/updateRoom.md)
   * [删除房屋信息](api/room/deleteRoom.md)
+  * [添加业主](api/owner/saveOwner.md)
+  * [修改业主](api/owner/updateOwner.md)
+  * [删除业主](api/owner/deleteOwner.md)
 
 * 服务端接口协议
 
@@ -61,6 +64,9 @@
   * [保存业主](services/owner/SaveOwnerInfo.md)
   * [修改业主](services/owner/UpdateOwnerInfo.md)
   * [删除业主](services/owner/DeleteOwnerInfo.md)
+  * [房屋售卖](services/owner/SaveOwnerRoomRelInfo.md)
+  * [修改业主](services/owner/UpdateOwnerRoomRelInfo.md)
+  * [删除业主](services/owner/DeleteOwnerRoomRelInfo.md)
 
 * 工具类接口
 
