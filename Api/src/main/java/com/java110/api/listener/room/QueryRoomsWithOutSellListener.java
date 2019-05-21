@@ -123,12 +123,12 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
         if (row > MAX_ROW) {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "row 数量不能大于50");
         }
-        //校验小区楼ID和小区是否有对应关系
+       /* //校验小区楼ID和小区是否有对应关系
         int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
 
         if (total < 1) {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
-        }
+        }*/
 
     }
 
