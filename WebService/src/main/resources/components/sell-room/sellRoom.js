@@ -75,7 +75,7 @@
                     return ;
                 }
 
-                vc.component.sellRoomInfo.communityId:vc.getCurrentCommunity().communityId;
+                vc.component.sellRoomInfo.communityId=vc.getCurrentCommunity().communityId;
             vc.http.post(
                     'sellRoom',
                     'sell',
@@ -87,7 +87,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-
+                            vc.jumpToPage("/")
                             return ;
                         }
                         vc.message(json);

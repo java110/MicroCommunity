@@ -24,4 +24,9 @@ public final class PrivilegeCodeConstant {
 
     //初始化房屋楼单元
     public static final String PRIVILEGE_ROOM = "500201904006";
+
+
+
+    //出售房屋权限
+    public static final String PRIVILEGE_SELL_ROOM = "500201904014";
 }
