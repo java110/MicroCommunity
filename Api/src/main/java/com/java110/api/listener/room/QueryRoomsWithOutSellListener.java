@@ -89,7 +89,7 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
         String floorId = "";
         //检查 请求报文中是否有floorNum 小区楼编号，如果没有就随机选一个
         try {
-            if (!reqJson.containsKey("floorNum") || StringUtils.isEmpty(reqJson.getString("floorNum"))) {
+            //if (!reqJson.containsKey("floorNum") || StringUtils.isEmpty(reqJson.getString("floorNum"))) {
 
                 List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
 
@@ -98,7 +98,7 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
                 }
 
                 floorId = floorDtos.get(0).getFloorId();
-            }
+            //}
         } finally {
             reqJson.put("floorId", floorId);
         }
