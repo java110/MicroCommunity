@@ -13,12 +13,14 @@
                         <div class="ibox ">
                             <div class="row">
 
-                                <div class="col-sm-7 m-b-xs">
-
-                                </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-6 m-b-xs">
                                     <div class="input-group">
-                                        <input placeholder="输入房屋名称" type="text" v-model="searchRoomInfo._currentRoomNum" class="form-control form-control-sm">
+                                        <input placeholder="输入小区楼编号，必填" type="text" v-model="searchRoomInfo._currentFloorNum" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input placeholder="输入房屋编号" type="text" v-model="searchRoomInfo._currentRoomNum" class="form-control form-control-sm">
                                         <span class="input-group-append">
                                                 <button type="button" class="btn btn-sm btn-primary" v-on:click="searchRooms()">查询</button>
                                             </span>

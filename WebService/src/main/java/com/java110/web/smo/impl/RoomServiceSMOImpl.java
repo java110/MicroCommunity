@@ -185,7 +185,6 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
      */
     private void validateListRoom(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "请求报文中未包含floorId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含rows节点");
 

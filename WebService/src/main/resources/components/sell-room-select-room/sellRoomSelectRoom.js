@@ -21,15 +21,15 @@
 
         },
         _initEvent:function(){
-            vc.on('memberSelectOwner','chooseOwner',function(_owner){
-                vc.component.ownerInfo = _owner;
+            vc.on('memberSelectRoom','chooseRoom',function(_room){
+                vc.component.roomInfo = _room;
             });
 
         },
         methods:{
 
-            openSearchOwnerModel(){
-                vc.emit('searchOwner','openSearchOwnerModel',{});
+            openSearchRoomModel(){
+                vc.emit('searchRoom','openSearchRoomModel',{});
             }
         }
     });

@@ -211,7 +211,9 @@ and t.b_id= #{bId}
             </if>
             AND f.`status_cd` = '0'
             AND cm.`status_cd` = '0'
-            LIMIT #{page}, #{row}
+            <if test="page != -1">
+                LIMIT #{page}, #{row}
+            </if>
     </select>
 
 

@@ -17,7 +17,7 @@
         _initEvent:function(){
             vc.on('sellRoomOther','listOwnerData',function(_owner){
                 //vc.component.ownerInfo = _owner;
-                vc.component.otherInfo.ownerId = ownerId;
+                vc.component.otherInfo.ownerId = _owner.ownerId;
             });
 
         },

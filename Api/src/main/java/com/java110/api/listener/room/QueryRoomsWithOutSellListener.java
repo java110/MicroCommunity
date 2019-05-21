@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -57,6 +58,9 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateRoomData(reqJson);
 
+        //将小区楼ID刷入到 请求参数中
+        freshFloorIdToParam(reqJson);
+
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
         ApiRoomVo apiRoomVo = new ApiRoomVo();
@@ -75,13 +79,38 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
     }
 
     /**
+     * 将floorNum 转化为 floorId 刷入到入参对象中
+     *
+     * @param reqJson 入参对象
+     */
+    private void freshFloorIdToParam(JSONObject reqJson) {
+
+        FloorDto floorDto = BeanConvertUtil.covertBean(reqJson, FloorDto.class);
+        String floorId = "";
+        //检查 请求报文中是否有floorNum 小区楼编号，如果没有就随机选一个
+        try {
+            if (!reqJson.containsKey("floorNum") || StringUtils.isEmpty(reqJson.getString("floorNum"))) {
+
+                List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+
+                if (floorDtos.size() == 0) {
+                    return;
+                }
+
+                floorId = floorDtos.get(0).getFloorId();
+            }
+        } finally {
+            reqJson.put("floorId", floorId);
+        }
+    }
+
+    /**
      * 校验小区房屋查询入参信息
      *
      * @param reqJson 请求入参信息
      */
     private void validateRoomData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
 

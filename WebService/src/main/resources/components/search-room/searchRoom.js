@@ -8,6 +8,7 @@
             searchRoomInfo:{
                 rooms:[],
                 _currentRoomNum:'',
+                _currentFloorNum:'',
             }
         },
         _initMethod:function(){
@@ -23,12 +24,19 @@
         },
         methods:{
             _loadAllRoomInfo:function(_page,_row,_roomNum){
+
+                if(vc.component.searchRoomInfo._currentFloorNum == ''){
+                    vc.message("未填写小区楼编号");
+                    return ;
+                }
+
                 var param = {
                     params:{
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        roomNum:_roomNum
+                        roomNum:_roomNum,
+                        floorNum:vc.component.searchRoomInfo._currentFloorNum
                     }
                 };
 
