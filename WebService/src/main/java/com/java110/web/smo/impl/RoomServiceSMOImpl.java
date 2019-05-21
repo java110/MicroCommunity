@@ -177,6 +177,33 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> sellRoom(IPageData pd) {
+
+        validateSellRoom(pd);
+
+        return null;
+    }
+
+    /**
+     * 小区房屋查询数据校验
+     *
+     * @param pd 页面数据封装对象
+     */
+    private void validateSellRoom(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "请求报文中未包含ownerId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "roomId", "请求报文中未包含roomId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "state", "请求报文中未包含state节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(paramIn.getString("roomId"), "roomId不能为空");
+        Assert.hasLength(paramIn.getString("state"), "state不能为空");
+
+    }
+
 
     /**
      * 小区房屋查询数据校验

@@ -86,7 +86,7 @@ public class QueryRoomsWithOutSellListener extends AbstractServiceApiDataFlowLis
     private void freshFloorIdToParam(JSONObject reqJson) {
 
         FloorDto floorDto = BeanConvertUtil.covertBean(reqJson, FloorDto.class);
-        String floorId = "";
+        String floorId = "001";
         //检查 请求报文中是否有floorNum 小区楼编号，如果没有就随机选一个
         try {
             //if (!reqJson.containsKey("floorNum") || StringUtils.isEmpty(reqJson.getString("floorNum"))) {

@@ -21,6 +21,7 @@
         _initEvent:function(){
             vc.on('sellRoomSelectOwner','chooseOwner',function(_owner){
                 vc.component.ownerInfo = _owner;
+                vc.emit('sellRoom','notify',_owner);
             });
 
         },

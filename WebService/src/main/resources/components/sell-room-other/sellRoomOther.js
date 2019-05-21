@@ -6,10 +6,18 @@
     vc.extends({
         data:{
             otherInfo:{
-                ownerId:"",
-                state:"",
-                remark:""
+                otherState:"",
+                otherRemark:""
             }
+        },
+        watch:{
+            otherInfo:{
+                deep: true,
+                handler:function(){
+                    vc.emit('sellRoom','notify',vc.component.otherInfo);
+
+                }
+             }
         },
         _initMethod:function(){
 

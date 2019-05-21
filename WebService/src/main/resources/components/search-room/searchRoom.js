@@ -19,7 +19,7 @@
                 console.log("打开业主成员界面")
                 $('#searchRoomModel').modal('show');
                 vc.component._refreshSearchRoomData();
-                vc.component._loadAllRoomInfo(1,10);
+                //vc.component._loadAllRoomInfo(1,10);
             });
         },
         methods:{
@@ -60,7 +60,7 @@
                 $('#searchRoomModel').modal('hide');
             },
             searchRooms:function(){
-                vc.component._loadAllRoomInfo(1,10,vc.component.searchRoomInfo._currentRoomNum);
+                vc.component._loadAllRoomInfo(1,15,vc.component.searchRoomInfo._currentRoomNum);
             },
             _refreshSearchRoomData:function(){
                 vc.component.searchRoomInfo._currentRoomNum = "";

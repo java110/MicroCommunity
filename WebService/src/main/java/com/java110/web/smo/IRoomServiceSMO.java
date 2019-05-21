@@ -48,4 +48,11 @@ public interface IRoomServiceSMO {
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
     ResponseEntity<String> deleteRoom(IPageData pd);
+
+    /**
+     * 销售房屋信息
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> sellRoom(IPageData pd);
 }
