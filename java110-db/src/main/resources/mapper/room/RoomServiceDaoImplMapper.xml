@@ -548,6 +548,7 @@ where 1 =1
             AND borr.`status_cd` = '0'
             AND t.`status_cd` = '0'
             AND bo.`status_cd` = '0'
+            AND bo.`owner_type_cd` = '1001'
         <if test="sex !=null ">
             and bo.sex= #{sex}
         </if>
