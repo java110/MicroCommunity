@@ -102,11 +102,11 @@ shardingRule:
     - business_community_attr
     - s_community_attr
 
-  defaultDataSourceName: ds0
+  defaultDataSourceName: ds1
   defaultDatabaseStrategy:
     inline:
       shardingColumn: community_id
-      algorithmExpression: ds${community_id % 2}
+      algorithmExpression: ds${Long.parseLong(community_id) % 2}
   defaultTableStrategy:
     none:
 
