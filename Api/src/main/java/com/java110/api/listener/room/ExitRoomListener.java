@@ -3,14 +3,16 @@ package com.java110.api.listener.room;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.*;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.unit.IUnitInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
+import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.OwnerRoomRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
@@ -20,28 +22,31 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 /**
  * @ClassName SaveUnitListener
- * @Description TODO 售卖房屋信息
+ * @Description TODO 退屋信息
  * @Author wuxw
  * @Date 2019/5/3 11:54
  * @Version 1.0
  * add by wuxw 2019/5/3
  **/
-@Java110Listener("sellRoomListener")
-public class SellRoomListener extends AbstractServiceApiDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(SellRoomListener.class);
+@Java110Listener("exitRoomListener")
+public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
+    private static Logger logger = LoggerFactory.getLogger(ExitRoomListener.class);
 
 
     @Autowired
-    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SELL_ROOM;
+        return ServiceCodeConstant.SERVICE_CODE_EXIT_ROOM;
     }
 
     @Override
@@ -68,7 +73,7 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(sellRoom(paramObj, dataFlowContext));
+        businesses.add(exitRoom(paramObj, dataFlowContext));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -88,17 +93,25 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject exitRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        //根据ownerId 和 roomId 查询relId 删除
+        OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(paramInJson, OwnerRoomRelDto.class);
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
+        }
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
-        businessUnit.putAll(paramInJson);
-        businessUnit.put("relId", "-1");
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        //businessUnit.putAll(paramInJson);
+        businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
+        //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
 
         return business;
@@ -115,17 +128,17 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId节点");
         Assert.jsonObjectHaveKey(paramIn, "roomId", "请求报文中未包含roomId节点");
-        Assert.jsonObjectHaveKey(paramIn, "state", "请求报文中未包含state节点");
 
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         Assert.hasLength(paramObj.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramObj.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(paramObj.getString("roomId"), "roomId不能为空");
-        Assert.hasLength(paramObj.getString("state"), "state不能为空");
+        //
 
         super.communityHasOwner(paramObj, communityInnerServiceSMOImpl);
-    }
 
+
+    }
 
     public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
         return communityInnerServiceSMOImpl;
@@ -140,11 +153,11 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         return DEFAULT_ORDER;
     }
 
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
+    public IOwnerRoomRelInnerServiceSMO getOwnerRoomRelInnerServiceSMOImpl() {
+        return ownerRoomRelInnerServiceSMOImpl;
     }
 
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
+    public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
+        this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
     }
 }

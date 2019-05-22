@@ -45,6 +45,13 @@
                            );
             },
 
+            ownerExitRoomModel:function(_roomId){
+                vc.emit('ownerExitRoom','openExitRoomModel',{
+                    ownerId:vc.component.showOwnerRoomInfo.ownerId,
+                    roomId:_roomId
+                });
+            },
+
             showState:function(_state){
                 if(_state == '2001'){
                     return "房屋已售";

@@ -68,4 +68,5 @@ public interface IOwnerInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwnersByCondition", method = RequestMethod.POST)
     List<OwnerDto> queryOwnersByCondition(@RequestBody OwnerDto ownerDto);
+
 }

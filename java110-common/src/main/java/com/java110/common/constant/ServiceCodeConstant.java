@@ -387,6 +387,8 @@ public class ServiceCodeConstant {
 
     //售卖房屋
     public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
+    //退房
+    public static final String SERVICE_CODE_EXIT_ROOM = "room.exitRoom";
 
 
     //查询房屋信息
