@@ -28,7 +28,7 @@
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        ownerId:showOwnerRoomInfo.ownerId
+                        ownerId:vc.component.showOwnerRoomInfo.ownerId
                     }
                 };
 
@@ -37,13 +37,13 @@
                             'list',
                              param,
                              function(json){
-                                var _ownerInfo = JSON.parse(json);
-                                vc.component.searchOwnerInfo.owners = _ownerInfo.owners;
+                                var _roomInfo = JSON.parse(json);
+                                vc.component.showOwnerRoomInfo.rooms = _roomInfo.rooms;
                              },function(){
                                 console.log('请求失败处理');
                              }
                            );
-            }
+            },
 
             showState:function(_state){
                 if(_state == '2001'){

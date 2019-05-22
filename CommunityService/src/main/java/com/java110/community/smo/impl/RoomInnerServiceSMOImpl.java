@@ -185,7 +185,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     @Override
     public List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto) {
 
-        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)),
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByOwner(BeanConvertUtil.beanCovertMap(roomDto)),
                 RoomDto.class);
         String[] roomIds = getRoomIds(rooms);
         Map attrParamInfo = new HashMap();

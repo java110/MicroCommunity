@@ -60,7 +60,7 @@ public class QueryRoomsByOwnerListener extends AbstractServiceApiDataFlowListene
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
         ApiRoomVo apiRoomVo = new ApiRoomVo();
-        List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
         apiRoomVo.setTotal(roomDtoList.size());
         apiRoomVo.setRooms(BeanConvertUtil.covertBeanList(roomDtoList, ApiRoomDataVo.class));
         apiRoomVo.setRecords(1);
