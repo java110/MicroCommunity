@@ -27,6 +27,7 @@ public class RoomDto extends PageDto implements Serializable {
     private String communityId;
     private String floorId;
     private String userName;
+    private String ownerId;
 
     private String state;
 
@@ -184,5 +185,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

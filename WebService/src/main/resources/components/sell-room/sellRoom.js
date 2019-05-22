@@ -8,7 +8,16 @@
                 ownerId:'',
                 roomId:'',
                 state:'',
-                remark:''
+                remark:'',
+                ownerInfo:{
+                    ownerId:"",
+                    name:"",
+                    age:"",
+                    sex:"",
+                    userName:"",
+                    remark:"",
+                    link:"",
+                },
             }
         },
         _initMethod:function(){
@@ -16,7 +25,7 @@
         },
         _initEvent:function(){
             vc.on('sellRoom','notify',function(_param){
-                  //vc.copyObject(_param,vc.component.sellRoomInfo);
+                  vc.copyObject(_param,vc.component.sellRoomInfo.ownerInfo);
 
                   if(_param.hasOwnProperty("ownerId")){
                     vc.component.sellRoomInfo.ownerId = _param.ownerId;
@@ -87,7 +96,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            vc.jumpToPage("/")
+                            vc.jumpToPage("/flow/ownerRoomFlow?" + vc.objToGetParam(vc.component.sellRoomInfo.ownerInfo));
                             return ;
                         }
                         vc.message(json);
