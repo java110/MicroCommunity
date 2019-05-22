@@ -22,7 +22,7 @@ public class ShowOwnerRoomComponent {
      * @return 单元信息
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return roomServiceSMOImpl.listRoom(pd);
+        return roomServiceSMOImpl.listRoomByOwner(pd);
     }
 
 

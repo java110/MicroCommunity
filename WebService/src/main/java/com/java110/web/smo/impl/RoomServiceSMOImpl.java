@@ -258,7 +258,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
 
     /**
      * 校验根据业主查询房屋信息
-     * @param pd
+     * @param pd 页面数据封装
      */
     private void validateListRoomByOwner(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
