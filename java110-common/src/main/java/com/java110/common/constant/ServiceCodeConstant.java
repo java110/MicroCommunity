@@ -389,10 +389,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
 
 
-
-
     //查询房屋信息
     public static final String SERVICE_CODE_QUERY_ROOMS = "room.queryRooms";
+
+    //查询房屋信息
+    public static final String SERVICE_CODE_QUERY_ROOMS_BY_OWNER = "room.queryRoomsByOwner";
 
     //查询房屋信息
     public static final String SERVICE_CODE_QUERY_ROOMS_WITHOUT_SELL = "room.queryRoomsWithOutSell";

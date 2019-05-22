@@ -58,4 +58,15 @@ public interface IRoomInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoomsWithOutSell", method = RequestMethod.POST)
     List<RoomDto> queryRoomsWithOutSell(@RequestBody RoomDto roomDto);
+
+
+    /**
+     * <p>根据业主查询房屋信息</p>
+     *
+     *
+     * @param roomDto 数据对象分享
+     * @return RoomDto 对象数据
+     */
+    @RequestMapping(value = "/queryRoomsByOwner", method = RequestMethod.POST)
+    List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto);
 }

@@ -529,4 +529,57 @@ where 1 =1
         </if>
 
     </select>
+
+    <!-- 根据业主查询房屋信息 -->
+    <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
+        SELECT
+            t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+            t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
+            t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,f.`floor_num` floorNum
+        FROM
+            building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
+        WHERE
+            bo.`owner_id` = borr.`owner_id`
+            AND borr.`room_id` = t.`room_id`
+            AND t.`unit_id` = u.`unit_id`
+            AND u.`floor_id` = f.`floor_id`
+            AND u.`status_cd` = '0'
+            AND f.`status_cd` = '0'
+            AND borr.`status_cd` = '0'
+            AND t.`status_cd` = '0'
+            AND bo.`status_cd` = '0'
+        <if test="sex !=null ">
+            and bo.sex= #{sex}
+        </if>
+        <if test="name !=null and name != ''">
+            and bo.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and bo.link= #{link}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and bo.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and bo.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and bo.owner_id= #{ownerId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and bo.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and bo.user_id= #{userId}
+        </if>
+        <if test="age !=null and age != ''">
+            and bo.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and bo.member_id= #{memberId}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and bo.owner_type_cd= #{ownerTypeCd}
+        </if>
+    </select>
 </mapper>

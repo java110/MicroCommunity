@@ -164,6 +164,15 @@ public class RoomServiceDaoImpl extends BaseServiceDao implements IRoomServiceDa
     }
 
     @Override
+    public List<Map> getRoomInfoByOwner(Map info) {
+        logger.debug("查询小区房屋信息 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.getRoomInfoByOwner", info);
+
+        return businessRoomInfos;
+    }
+
+    @Override
     public List<Map> getRoomInfoWithOutSellByCommunityId(Map info) {
         logger.debug("查询小区房屋信息 入参 info : {}", info);
 

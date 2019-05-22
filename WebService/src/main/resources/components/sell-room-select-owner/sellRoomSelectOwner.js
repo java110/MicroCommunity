@@ -4,6 +4,9 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+            callBackComponent:vc.propTypes.string
+        },
         data:{
             ownerInfo:{
                 ownerId:"",
@@ -21,7 +24,7 @@
         _initEvent:function(){
             vc.on('sellRoomSelectOwner','chooseOwner',function(_owner){
                 vc.component.ownerInfo = _owner;
-                vc.emit('sellRoom','notify',_owner);
+                vc.emit($props.callBackComponent,'notify',_owner);
             });
 
         },

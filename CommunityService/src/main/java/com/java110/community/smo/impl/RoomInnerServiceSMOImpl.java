@@ -182,6 +182,27 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         return rooms;
     }
 
+    @Override
+    public List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto) {
+
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)),
+                RoomDto.class);
+        String[] roomIds = getRoomIds(rooms);
+        Map attrParamInfo = new HashMap();
+        attrParamInfo.put("roomIds", roomIds);
+        attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
+
+        String[] userIds = getUserIds(rooms);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (RoomDto room : rooms) {
+            refreshRoom(room, users, roomAttrDtos);
+        }
+        return rooms;
+    }
+
     public IRoomServiceDao getRoomServiceDaoImpl() {
         return roomServiceDaoImpl;
     }
