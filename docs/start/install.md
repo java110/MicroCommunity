@@ -16,7 +16,7 @@ v0.01|初稿|2018-07-24|wuxw
   git clone https://github.com/java110/MicroCommunity.git
 ```
 
-![下载代码](../images/git_code.jpg)
+![下载代码](/images/git_code.jpg)
 
 
 1. mysql 安装
@@ -30,7 +30,7 @@ cd MicroCommunity/java110-config/docker/mysql
 docker build -t java110/docker-mysql .
 
 ```
-![mysql](../images/mysql_01.jpg)
+![mysql](/images/mysql_01.jpg)
 
 ```
   docker run -ti --name mysql_test -e MYSQL_ROOT_PASSWORD=123456 -p3306:3306 -idt java110/docker-mysql:latest
@@ -40,13 +40,13 @@ docker build -t java110/docker-mysql .
 ```
 出现如下图安装成功
 
-![mysql安装成功](../images/mysql_02.jpg)
+![mysql安装成功](/images/mysql_02.jpg)
 
 用工具登录 如下图：
 
-![mysql_login](../images/mysql_03.jpg)
+![mysql_login](/images/mysql_03.jpg)
 
-![mysql_login](../images/mysql_04.jpg)
+![mysql_login](/images/mysql_04.jpg)
 
 安装完成
 
@@ -57,8 +57,8 @@ docker pull redis
 docker run -ti --name redis_test -p6379:6379 -idt redis:latest
 docker logs -f redis_test
 ```
-![redis download](../images/redis_01.jpg)
-![redis install complate](../images/redis_02.jpg)
+![redis download](/images/redis_01.jpg)
+![redis install complate](/images/redis_02.jpg)
 
 3. zookeeper 安装
 
@@ -67,8 +67,8 @@ docker pull zookeeper
 docker run -ti --name zookeeper_test -p2181:2181 -idt zookeeper:latest
 docker logs -f zookeeper_test
 ```
-![zookeeper_download](../images/zookeeper_01.jpg)
-![zookeeper install complate](../images/zookeeper_02.jpg)
+![zookeeper_download](/images/zookeeper_01.jpg)
+![zookeeper install complate](/images/zookeeper_02.jpg)
 
 4. kafka 安装
 
@@ -77,7 +77,7 @@ docker pull wurstmeister/kafka
 docker run --name kafka_test -e HOST_IP=localhost -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_BROKER_ID=1 -e KAFKA_ZOOKEEPER_CONNECT=192.168.31.199:2181 -e KAFKA_ADVERTISED_HOST_NAME=localhost -e ZK=zk -p 9092 --link zookeeper_test:zk -tdi wurstmeister/kafka
 docker logs -f kafka_test
 ```
-![kafka install](../images/kafka_01.jpg)
+![kafka install](/images/kafka_01.jpg)
 
 注意 KAFKA_ZOOKEEPER_CONNECT=192.168.31.199:2181 换成自己主机的IP端口
 
@@ -97,7 +97,7 @@ XXService 代表 CenterService，CodeService，CommentService，ConsoleService�
 ```
 mvn clean install
 ```
-![mvn code](../images/code_01.jpg)
+![mvn code](/images/code_01.jpg)
 
 第一次编译需要下载jar 时间有点长
 
@@ -108,9 +108,9 @@ mvn clean install
   chmod u+x onStart.sh
   sh onStart.sh
 ```
-![eureka 启动](../images/eureka_01.jpg)
-![eureka 启动](../images/eureka_02.jpg)
-![eureka 启动](../images/eureka_03.jpg)
+![eureka 启动](/images/eureka_01.jpg)
+![eureka 启动](/images/eureka_02.jpg)
+![eureka 启动](/images/eureka_03.jpg)
 
 注意：如果报 Cannot connect to the Docker daemon. Is the docker daemon running on this host?错，执行
 下面代码
@@ -129,7 +129,7 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![code install](../images/code_01.jpg)
+![code install](/images/code_01.jpg)
 
 8. 中心服务(CenterService)
 
@@ -139,8 +139,8 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![中心服务](../images/center_01.jpg)
-![中心服务](../images/center_02.jpg)
+![中心服务](/images/center_01.jpg)
+![中心服务](/images/center_02.jpg)
 
 9. 评论服务(CommentService)
 
@@ -150,8 +150,8 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![评论服务](../images/comment_01.jpg)
-![评论服务](../images/comment_02.jpg)
+![评论服务](/images/comment_01.jpg)
+![评论服务](/images/comment_02.jpg)
 
 10. 控制服务(ConsoleService)
 
@@ -161,7 +161,7 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![控制服务](../images/console_01.jpg)
+![控制服务](/images/console_01.jpg)
 
 11. 商品服务(ShopService)
 
@@ -171,7 +171,7 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![商品服务](../images/shop_01.jpg)
+![商品服务](/images/shop_01.jpg)
 
 12. 商户服务(StoreService)
 
@@ -181,7 +181,7 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![商户服务](../images/store_01.jpg)
+![商户服务](/images/store_01.jpg)
 
 13. 用户服务(UserService)
 
@@ -191,13 +191,13 @@ sudo service docker restart
   sh onStart.sh
 ```
 
-![用户服务](../images/user_01.jpg)
+![用户服务](/images/user_01.jpg)
 
 目前为止全部启动完成
 
-![启动完成](../images/all.jpg)
+![启动完成](/images/all.jpg)
 
-![docker](../images/docker_all.jpg)
+![docker](/images/docker_all.jpg)
 
 
 
