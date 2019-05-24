@@ -1,0 +1,12 @@
+version: '2'
+services:
+   webserivce:
+       container_name: eureka-1
+       build:
+          context: .
+          dockerfile: Dockerfile
+       restart: always
+       ports:
+       - "8761:8761"
+       volumes:
+       - ../target/eureka.jar:/root/target/eureka.jar
