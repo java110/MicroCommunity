@@ -1,8 +1,6 @@
 FROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0
 MAINTAINER wuxw <wuxw7@asiainfo.com>
 
-ADD target/eureka.jar /root/target/
-
 ADD bin/start_eureka.sh /root/
 
 
