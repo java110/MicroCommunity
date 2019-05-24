@@ -1,6 +1,6 @@
 version: '2'
 services:
-   webserivce:
+   eureka:
        container_name: eureka-1
        build:
           context: .
