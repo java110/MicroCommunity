@@ -81,6 +81,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 ### 成为开发者
 
 如果您对小区 物业 有较深的理解，也致力于开发一套系统方便与物业，业主沟通交流，如果您还有空闲的时间，不怕吃苦，hc小区开发团队欢迎您的加入！
+qq群号 992420128
 
 ![image](join_me.JPG)
 
