@@ -12,6 +12,6 @@ public interface IMenuServiceSMO {
      * 根据用户查菜单
      * @return
      */
-    public ResponseEntity<String> queryMenusByUserId(IPageData pd);
+     ResponseEntity<String> queryMenusByUserId(IPageData pd);
 
 }
