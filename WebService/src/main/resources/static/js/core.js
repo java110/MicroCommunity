@@ -69,10 +69,23 @@
                 });
         },
         get:function(componentCode,componentMethod,param,successCallback,errorCallback){
+                //加入缓存机制
+                var _getPath = '/'+componentCode +'/' +componentMethod;
+                if(vc.constant.GET_CACHE_URL.includes(_getPath)){
+                    var _cacheData = vc.getData(_getPath);
+                    //浏览器缓存中能获取到
+                    if(_cacheData != null && _cacheData != undefined){
+                        successCallback(JSON.stringify(_cacheData),{status:200});
+                        return ;
+                    }
+                }
                 vc.loading('open');
                 Vue.http.get('/callComponent/'+componentCode +"/"+componentMethod, param)
                 .then(function(res){
                     successCallback(res.bodyText,res);
+                    if(vc.constant.GET_CACHE_URL.includes(_getPath) && res.status == 200){
+                         vc.saveData(_getPath,JSON.parse(res.bodyText));
+                    }
                     vc.loading('close');
                 }, function(error){
                     errorCallback(error.bodyText,error);
@@ -144,6 +157,15 @@
     //获取用户菜单
     vc.getMenus = function(){
         return JSON.parse(window.localStorage.getItem('hc_menus'));
+    };
+
+    //保存用户菜单
+    vc.saveData = function(_key,_value){
+        window.localStorage.setItem(_key,JSON.stringify(_value));
+    };
+    //获取用户菜单
+    vc.getData = function(_key){
+        return JSON.parse(window.localStorage.getItem(_key));
     };
 
     //保存当前小区信息 _communityInfo : {"communityId":"123213","name":"测试小区"}

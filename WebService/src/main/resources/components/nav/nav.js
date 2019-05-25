@@ -17,10 +17,11 @@
         mounted:function(){
             this.getNavCommunity();
             this.getNavData();
-            this.getUserInfo();
+            //this.getUserInfo();
         },
         methods:{
             getNavData:function(){
+
                 var param = {
                     msg:'123',
                 };
@@ -59,6 +60,12 @@
                            );
             },
             getUserInfo:function(){
+//                var _userInfo = vc.getData("_userInfo");
+//                //浏览器缓存中能获取到
+//                if(_userInfo != null && _userInfo != undefined){
+//                    vm.userName = _userInfo.name;
+//                    return ;
+//                }
                 //获取用户名
                 var param = {
                                     msg:'123',
@@ -71,7 +78,9 @@
                              function(json,res){
                                 if(res.status == 200){
                                     var tmpUserInfo = JSON.parse(json);
+                                    console.log(vm,tmpUserInfo);
                                    vm.userName = tmpUserInfo.name;
+//                                   vc.saveData("_userInfo",tmpUserInfo);
                                }
                              },function(){
                                 console.log('请求失败处理');
@@ -124,4 +133,7 @@
 
 
     });
+
+     vm.getUserInfo();
+
 })(window.vc);
