@@ -1,6 +1,5 @@
 package com.java110.web.components;
 
-import com.alibaba.fastjson.JSONArray;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IMenuServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,10 @@ public class MenuComponent {
 
     /**
      * 测试版本号
+     *
      * @return
      */
-    public ResponseEntity<String> getMenus(IPageData pd){
+    public ResponseEntity<String> getMenus(IPageData pd) {
 
        /* String menuData = "[{'id':1,'icon':'fa-desktop','name':'我的菜单','label':'HOT','childs':[" +
                 "{'name':'子菜单','href':'http://www.baidu.com'}]}," +
@@ -36,11 +36,11 @@ public class MenuComponent {
 
         */
         ResponseEntity<String> responseEntity = null;
-        try{
-            responseEntity =  menuServiceSMOImpl.queryMenusByUserId(pd);
-        }catch (Exception e){
+        try {
+            responseEntity = menuServiceSMOImpl.queryMenusByUserId(pd);
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }finally {
+        } finally {
             return responseEntity;
         }
     }

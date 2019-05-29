@@ -1,15 +1,15 @@
 version: '2'
 services:
-   webserivce:
-       container_name: webserivce-1
+   eureka:
+       container_name: eureka-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "443:8443"
+       - "8761:8761"
        volumes:
-       - ../target/WebService.jar:/root/target/WebService.jar
+       - ../target/eureka.jar:/root/target/eureka.jar
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"
