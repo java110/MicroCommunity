@@ -73,7 +73,7 @@
         <axis.version>1.4</axis.version>
         <httpclient.verion>3.1</httpclient.verion>
         <spring.version>4.3.2.RELEASE</spring.version>
-        <zookeeper.version>3.3.6</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <swagger.version>2.5.0</swagger.version>
     </properties>
 
