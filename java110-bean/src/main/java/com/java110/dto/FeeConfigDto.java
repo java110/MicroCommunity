@@ -17,7 +17,6 @@ public class FeeConfigDto extends PageDto implements Serializable {
 private String feeTypeCd;
 private String configId;
 private String additionalAmount;
-private String startTime;
 private String communityId;
 
 
@@ -49,12 +48,6 @@ public String getAdditionalAmount() {
     }
 public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
-    }
-public String getStartTime() {
-        return startTime;
-    }
-public void setStartTime(String startTime) {
-        this.startTime = startTime;
     }
 public String getCommunityId() {
         return communityId;

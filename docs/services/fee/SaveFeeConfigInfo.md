@@ -48,7 +48,6 @@
 |businessFeeConfig|feeTypeCd|1|String|30|-|-|
 |businessFeeConfig|configId|1|String|30|-|-|
 |businessFeeConfig|additionalAmount|1|String|30|-|-|
-|businessFeeConfig|startTime|1|String|30|-|-|
 |businessFeeConfig|communityId|1|String|30|-|-|
 
 
@@ -96,7 +95,6 @@ Content-Type:application/json
         "feeTypeCd":"填写具体值",
         "configId":"填写具体值",
         "additionalAmount":"填写具体值",
-        "startTime":"填写具体值",
         "communityId":"填写具体值"
       }
     },

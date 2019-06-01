@@ -42,7 +42,6 @@ businessFeeConfigInfo.put("operate",businessFeeConfigInfo.get("operate"));
 businessFeeConfigInfo.put("feeTypeCd",businessFeeConfigInfo.get("fee_type_cd"));
 businessFeeConfigInfo.put("configId",businessFeeConfigInfo.get("config_id"));
 businessFeeConfigInfo.put("additionalAmount",businessFeeConfigInfo.get("additional_amount"));
-businessFeeConfigInfo.put("startTime",businessFeeConfigInfo.get("start_time"));
 businessFeeConfigInfo.put("communityId",businessFeeConfigInfo.get("community_id"));
 businessFeeConfigInfo.remove("bId");
         businessFeeConfigInfo.put("statusCd", statusCd);
@@ -72,7 +71,6 @@ currentFeeConfigInfo.put("operate",currentFeeConfigInfo.get("operate"));
 currentFeeConfigInfo.put("feeTypeCd",currentFeeConfigInfo.get("fee_type_cd"));
 currentFeeConfigInfo.put("configId",currentFeeConfigInfo.get("config_id"));
 currentFeeConfigInfo.put("additionalAmount",currentFeeConfigInfo.get("additional_amount"));
-currentFeeConfigInfo.put("startTime",currentFeeConfigInfo.get("start_time"));
 currentFeeConfigInfo.put("communityId",currentFeeConfigInfo.get("community_id"));
 
 
