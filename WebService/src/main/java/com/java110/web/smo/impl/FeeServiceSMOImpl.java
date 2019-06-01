@@ -1,6 +1,8 @@
 package com.java110.web.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.FeeTypeConstant;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
@@ -51,15 +53,27 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        paramIn.put("userId", pd.getUserId());
+        paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom",
+                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig",
                 HttpMethod.POST);
+
+        JSONArray feeConfigs = JSONArray.parseArray(responseEntity.getBody().toString());
+        if(feeConfigs != null && feeConfigs.size() > 1){
+            responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);
+            return responseEntity;
+        }
+
+        if(feeConfigs != null) {
+            responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigs.get(0)), HttpStatus.OK);
+        }else{
+            responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
+
+        }
+
 
         return responseEntity;
     }
-
-
 
 
     /**
@@ -109,8 +123,6 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         }
 
     }
-
-
 
 
     public RestTemplate getRestTemplate() {

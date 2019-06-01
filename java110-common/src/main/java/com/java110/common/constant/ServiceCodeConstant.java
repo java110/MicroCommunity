@@ -421,4 +421,7 @@ public class ServiceCodeConstant {
 
     //删除业主信息
     public static final String SERVICE_CODE_DELETE_OWNER = "owner.deleteOwner";
+
+    //查询费用配置
+    public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
 }
