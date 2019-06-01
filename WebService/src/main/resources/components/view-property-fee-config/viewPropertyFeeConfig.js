@@ -23,13 +23,13 @@
         methods:{
 
             openConfigPropertyFeeModel:function(){
-                vc.emit('configPropertyFee','openConfigPropertyFeeModel',feeConfigInfo);
+                vc.emit('configPropertyFee','openConfigPropertyFeeModel',vc.component.feeConfigInfo);
             },
             loadPropertyConfigFee:function(){
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        configId:feeConfigInfo.configId
+                        configId:vc.component.feeConfigInfo.configId
                     }
                 };
                 vc.http.get(

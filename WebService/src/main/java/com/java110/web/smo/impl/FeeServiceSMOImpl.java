@@ -4,16 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.FeeTypeConstant;
 import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
-import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
-import com.java110.common.util.CommonUtil;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFeeServiceSMO;
-import com.java110.web.smo.IRoomServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,19 +52,22 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig",
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
-
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
         JSONArray feeConfigs = JSONArray.parseArray(responseEntity.getBody().toString());
-        if(feeConfigs != null && feeConfigs.size() > 1){
+
+        if (feeConfigs != null && feeConfigs.size() > 1) {
             responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);
             return responseEntity;
         }
 
-        if(feeConfigs != null) {
+        if (feeConfigs != null) {
             responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigs.get(0)), HttpStatus.OK);
-        }else{
+        } else {
             responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
 
         }
@@ -78,7 +77,6 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
     }
 
     /**
-     *
      * @param pd 页面数据封装对象
      * @return
      */
@@ -103,11 +101,11 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
-        if(!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
+        if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                     ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
                     HttpMethod.POST);
-        }else{
+        } else {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                     ServiceConstant.SERVICE_API_URL + "/api/fee.updateFeeConfig",
                     HttpMethod.POST);
@@ -131,9 +129,10 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
 
     /**
      * 校验数据合法性
+     *
      * @param pd
      */
-    private void validateSaveOrUpdatePropertyFeeConfig(IPageData pd){
+    private void validateSaveOrUpdatePropertyFeeConfig(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "squarePrice", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "additionalAmount", "请求报文中未包含communityId节点");

@@ -5,7 +5,7 @@
             changeFeeConfigInfo:{
                 configId:"",
                 squarePrice:"",
-                additionalAmount:"0.00"
+                additionalAmount:""
             }
         },
          _initMethod:function(){
