@@ -21,7 +21,7 @@ public class ConfigPropertyFeeComponent {
     private IFeeServiceSMO feeServiceSMOImpl;
 
     public ResponseEntity<String> change(IPageData pd) {
-        return feeServiceSMOImpl.loadPropertyConfigFee(pd);
+        return feeServiceSMOImpl.saveOrUpdatePropertyFeeConfig(pd);
     }
 
 

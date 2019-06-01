@@ -134,7 +134,7 @@ public class SaveFeeConfigListener extends AbstractServiceApiDataFlowListener {
         //校验小区楼ID和小区是否有对应关系
         List<FeeConfigDto> configDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-        if (configDtos != null || configDtos.size() > 0) {
+        if (configDtos != null && configDtos.size() > 0) {
             throw new IllegalArgumentException("已经存在费用配置信息");
         }
 

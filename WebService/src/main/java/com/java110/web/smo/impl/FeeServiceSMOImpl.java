@@ -65,7 +65,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
             return responseEntity;
         }
 
-        if (feeConfigs != null) {
+        if (feeConfigs != null && feeConfigs.size() > 0) {
             responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigs.get(0)), HttpStatus.OK);
         } else {
             responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
