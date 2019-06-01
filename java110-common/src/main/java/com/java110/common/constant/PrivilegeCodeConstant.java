@@ -32,4 +32,7 @@ public final class PrivilegeCodeConstant {
 
     //出售房屋权限
     public static final String PRIVILEGE_OWNER_ROOM = "500201904015";
+
+    //物业费用配置权限
+    public static final String PRIVILEGE_PROPERTY_CONFIG_FEE = "500201904016";
 }
