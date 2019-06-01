@@ -60,7 +60,7 @@ public class QueryFeeConfigListener extends AbstractServiceApiDataFlowListener {
         validateFeeConfigData(reqJson);
 
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class));
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigDtos), HttpStatus.BAD_REQUEST);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigDtos), HttpStatus.OK);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }
