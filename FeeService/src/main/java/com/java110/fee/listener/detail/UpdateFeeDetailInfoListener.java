@@ -78,7 +78,7 @@ public class UpdateFeeDetailInfoListener extends AbstractFeeDetailBusinessServic
                     JSONObject businessFeeDetail = businessFeeDetails.getJSONObject(_feeDetailIndex);
                     doBusinessFeeDetail(business, businessFeeDetail);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("feeDetailId", businessFeeDetail.getString("feeDetailId"));
+                        dataFlowContext.addParamOut("detailId", businessFeeDetail.getString("detailId"));
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class UpdateFeeDetailInfoListener extends AbstractFeeDetailBusinessServic
                 flushBusinessFeeDetailInfo(businessFeeDetailInfo,StatusConstant.STATUS_CD_VALID);
                 feeDetailServiceDaoImpl.updateFeeDetailInfoInstance(businessFeeDetailInfo);
                 if(businessFeeDetailInfo.size() == 1) {
-                    dataFlowContext.addParamOut("feeDetailId", businessFeeDetailInfo.get("feeDetail_id"));
+                    dataFlowContext.addParamOut("detailId", businessFeeDetailInfo.get("detail_id"));
                 }
             }
         }
@@ -159,10 +159,10 @@ public class UpdateFeeDetailInfoListener extends AbstractFeeDetailBusinessServic
      */
     private void doBusinessFeeDetail(Business business,JSONObject businessFeeDetail){
 
-        Assert.jsonObjectHaveKey(businessFeeDetail,"feeDetailId","businessFeeDetail 节点下没有包含 feeDetailId 节点");
+        Assert.jsonObjectHaveKey(businessFeeDetail,"detailId","businessFeeDetail 节点下没有包含 detailId 节点");
 
-        if(businessFeeDetail.getString("feeDetailId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"feeDetailId 错误，不能自动生成（必须已经存在的feeDetailId）"+businessFeeDetail);
+        if(businessFeeDetail.getString("detailId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"detailId 错误，不能自动生成（必须已经存在的detailId）"+businessFeeDetail);
         }
         //自动保存DEL
         autoSaveDelBusinessFeeDetail(business,businessFeeDetail);

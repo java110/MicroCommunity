@@ -78,7 +78,7 @@ public class UpdateFeeConfigInfoListener extends AbstractFeeConfigBusinessServic
                     JSONObject businessFeeConfig = businessFeeConfigs.getJSONObject(_feeConfigIndex);
                     doBusinessFeeConfig(business, businessFeeConfig);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("feeConfigId", businessFeeConfig.getString("feeConfigId"));
+                        dataFlowContext.addParamOut("configId", businessFeeConfig.getString("configId"));
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class UpdateFeeConfigInfoListener extends AbstractFeeConfigBusinessServic
                 flushBusinessFeeConfigInfo(businessFeeConfigInfo,StatusConstant.STATUS_CD_VALID);
                 feeConfigServiceDaoImpl.updateFeeConfigInfoInstance(businessFeeConfigInfo);
                 if(businessFeeConfigInfo.size() == 1) {
-                    dataFlowContext.addParamOut("feeConfigId", businessFeeConfigInfo.get("feeConfig_id"));
+                    dataFlowContext.addParamOut("configId", businessFeeConfigInfo.get("config_id"));
                 }
             }
         }
@@ -159,10 +159,10 @@ public class UpdateFeeConfigInfoListener extends AbstractFeeConfigBusinessServic
      */
     private void doBusinessFeeConfig(Business business,JSONObject businessFeeConfig){
 
-        Assert.jsonObjectHaveKey(businessFeeConfig,"feeConfigId","businessFeeConfig 节点下没有包含 feeConfigId 节点");
+        Assert.jsonObjectHaveKey(businessFeeConfig,"configId","businessFeeConfig 节点下没有包含 configId 节点");
 
-        if(businessFeeConfig.getString("feeConfigId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"feeConfigId 错误，不能自动生成（必须已经存在的feeConfigId）"+businessFeeConfig);
+        if(businessFeeConfig.getString("configId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"configId 错误，不能自动生成（必须已经存在的configId）"+businessFeeConfig);
         }
         //自动保存DEL
         autoSaveDelBusinessFeeConfig(business,businessFeeConfig);

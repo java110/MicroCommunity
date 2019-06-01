@@ -77,7 +77,7 @@ public class DeleteFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
                     JSONObject businessFeeAttr = businessFeeAttrs.getJSONObject(_feeAttrIndex);
                     doBusinessFeeAttr(business, businessFeeAttr);
                     if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("feeAttrId", businessFeeAttr.getString("feeAttrId"));
+                        dataFlowContext.addParamOut("attrId", businessFeeAttr.getString("attrId"));
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class DeleteFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
                 Map businessFeeAttrInfo = businessFeeAttrInfos.get(_feeAttrIndex);
                 flushBusinessFeeAttrInfo(businessFeeAttrInfo,StatusConstant.STATUS_CD_INVALID);
                 feeAttrServiceDaoImpl.updateFeeAttrInfoInstance(businessFeeAttrInfo);
-                dataFlowContext.addParamOut("feeAttrId",businessFeeAttrInfo.get("feeAttr_id"));
+                dataFlowContext.addParamOut("attrId",businessFeeAttrInfo.get("attr_id"));
             }
         }
 
@@ -158,10 +158,10 @@ public class DeleteFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
      */
     private void doBusinessFeeAttr(Business business,JSONObject businessFeeAttr){
 
-        Assert.jsonObjectHaveKey(businessFeeAttr,"feeAttrId","businessFeeAttr 节点下没有包含 feeAttrId 节点");
+        Assert.jsonObjectHaveKey(businessFeeAttr,"attrId","businessFeeAttr 节点下没有包含 attrId 节点");
 
-        if(businessFeeAttr.getString("feeAttrId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"feeAttrId 错误，不能自动生成（必须已经存在的feeAttrId）"+businessFeeAttr);
+        if(businessFeeAttr.getString("attrId").startsWith("-")){
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"attrId 错误，不能自动生成（必须已经存在的attrId）"+businessFeeAttr);
         }
         //自动插入DEL
         autoSaveDelBusinessFeeAttr(business,businessFeeAttr);
