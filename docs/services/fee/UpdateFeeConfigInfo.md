@@ -5,7 +5,7 @@
 > API服务做修改费用配置时调用该接口
 
 ###### URL
-> [http://fee-service/feeConfigApi/service](http://fee-service/feeConfigApi/service)
+> [http://fee-service/feeApi/service](http://fee-service/feeApi/service)
 
 ###### 支持格式
 > JSON
@@ -63,7 +63,7 @@
 
 
 ###### 举例
-> 地址：[http://fee-service/feeConfigApi/service](http://fee-service/feeConfigApi/service)
+> 地址：[http://fee-service/feeApi/service](http://fee-service/feeApi/service)
 
 ``` javascript
 请求头信息：

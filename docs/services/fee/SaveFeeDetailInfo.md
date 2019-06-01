@@ -5,7 +5,7 @@
 > API服务做保存费用明细时调用该接口
 
 ###### URL
-> [http://fee-service/feeDetailApi/service](http://fee-service/feeDetailApi/service)
+> [http://fee-service/feeApi/service](http://fee-service/feeApi/service)
 
 ###### 支持格式
 > JSON
@@ -65,7 +65,7 @@
 
 
 ###### 举例
-> 地址：[http://fee-service/feeDetailApi/service](http://fee-service/feeDetailApi/service)
+> 地址：[http://fee-service/feeApi/service](http://fee-service/feeApi/service)
 
 ``` javascript
 请求头信息：
