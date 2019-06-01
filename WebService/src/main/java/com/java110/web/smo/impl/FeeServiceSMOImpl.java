@@ -8,6 +8,8 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.CommonUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFeeServiceSMO;
@@ -56,7 +58,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig",
-                HttpMethod.POST);
+                HttpMethod.GET);
 
         JSONArray feeConfigs = JSONArray.parseArray(responseEntity.getBody().toString());
         if(feeConfigs != null && feeConfigs.size() > 1){
@@ -75,6 +77,45 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         return responseEntity;
     }
 
+    /**
+     *
+     * @param pd 页面数据封装对象
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> saveOrUpdatePropertyFeeConfig(IPageData pd) {
+        validateLoadPropertyConfigFee(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PROPERTY_CONFIG_FEE);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        if(!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                    ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
+                    HttpMethod.POST);
+        }else{
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                    ServiceConstant.SERVICE_API_URL + "/api/fee.updateFeeConfig",
+                    HttpMethod.POST);
+        }
+
+        return responseEntity;
+    }
+
 
     /**
      * 小区房屋查询数据校验
@@ -86,6 +127,24 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+    }
+
+    /**
+     * 校验数据合法性
+     * @param pd
+     */
+    private void validateSaveOrUpdatePropertyFeeConfig(IPageData pd){
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "squarePrice", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "additionalAmount", "请求报文中未包含communityId节点");
+
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        Assert.isMoney(paramIn.getString("squarePrice"), "不是有效金额格式");
+        Assert.isMoney(paramIn.getString("additionalAmount"), "不是有效金额格式");
+
+
     }
 
     /**

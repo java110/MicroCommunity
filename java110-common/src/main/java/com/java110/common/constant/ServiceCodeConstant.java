@@ -424,4 +424,10 @@ public class ServiceCodeConstant {
 
     //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
+
+    //保存费用配置
+    public static final String SERVICE_CODE_SAVE_FEE_CONFIG = "fee.saveFeeConfig";
+
+    //修改费用配置
+    public static final String SERVICE_CODE_UPDATE_FEE_CONFIG = "fee.updateFeeConfig";
 }
