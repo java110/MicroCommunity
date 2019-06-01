@@ -67,6 +67,18 @@
   * [房屋售卖](services/owner/SaveOwnerRoomRelInfo.md)
   * [修改业主](services/owner/UpdateOwnerRoomRelInfo.md)
   * [删除业主](services/owner/DeleteOwnerRoomRelInfo.md)
+  * [保存费用](services/fee/SaveFeeInfo.md)
+  * [修改费用](services/fee/UpdateFeeInfo.md)
+  * [删除费用](services/fee/DeleteFeeInfo.md)
+  * [保存费用属性](services/fee/SaveFeeAttrInfo.md)
+  * [修改费用属性](services/fee/UpdateFeeAttrInfo.md)
+  * [删除费用属性](services/fee/DeleteFeeAttrInfo.md)
+  * [保存费用明细](services/fee/SaveFeeDetailInfo.md)
+  * [修改费用明细](services/fee/UpdateFeeDetailInfo.md)
+  * [删除费用明细](services/fee/DeleteFeeDetailInfo.md)
+  * [保存费用配置](services/fee/SaveFeeConfigInfo.md)
+  * [修改费用配置](services/fee/UpdateFeeConfigInfo.md)
+  * [删除费用配置](services/fee/DeleteFeeConfigInfo.md)
 
 * 工具类接口
 

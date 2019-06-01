@@ -27,7 +27,9 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
                 .replace("商户", data.getDesc())
                 .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd())
                 .replace("stare_id", data.getShareColumn())
-                .replace("shareId", data.getShareParam());
+                .replace("shareId", data.getShareParam())
+                .replace(data.getName()+"Id", data.getId())
+                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
         System.out.println(this.getClass().getResource("/listener").getPath());
         String writePath = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         writeFile(writePath,

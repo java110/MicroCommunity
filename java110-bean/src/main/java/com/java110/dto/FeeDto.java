@@ -1,0 +1,103 @@
+package com.java110.dto;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 费用数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class FeeDto extends PageDto implements Serializable {
+
+    private String amount;
+private String incomeObjId;
+private String feeTypeCd;
+private String startTime;
+private String endTime;
+private String communityId;
+private String feeId;
+private String userId;
+private String payerObjId;
+
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    public String getAmount() {
+        return amount;
+    }
+public void setAmount(String amount) {
+        this.amount = amount;
+    }
+public String getIncomeObjId() {
+        return incomeObjId;
+    }
+public void setIncomeObjId(String incomeObjId) {
+        this.incomeObjId = incomeObjId;
+    }
+public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
+public String getStartTime() {
+        return startTime;
+    }
+public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+public String getEndTime() {
+        return endTime;
+    }
+public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+public String getCommunityId() {
+        return communityId;
+    }
+public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+public String getFeeId() {
+        return feeId;
+    }
+public void setFeeId(String feeId) {
+        this.feeId = feeId;
+    }
+public String getUserId() {
+        return userId;
+    }
+public void setUserId(String userId) {
+        this.userId = userId;
+    }
+public String getPayerObjId() {
+        return payerObjId;
+    }
+public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}

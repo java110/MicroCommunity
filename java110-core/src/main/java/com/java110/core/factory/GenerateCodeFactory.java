@@ -66,9 +66,9 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_agentPhotoId = "81";
     public static final String CODE_PREFIX_agentCerdentialsId = "82";
     public static final String CODE_PREFIX_agentUserId = "83";
-    public static final String CODE_PREFIX_propertyId = "90";
-    public static final String CODE_PREFIX_propertyPhotoId = "91";
-    public static final String CODE_PREFIX_propertyCerdentialsId = "92";
+    public static final String CODE_PREFIX_feeId = "90";
+    public static final String CODE_PREFIX_detailId = "91";
+    public static final String CODE_PREFIX_configId = "92";
     public static final String CODE_PREFIX_propertyUserId = "93";
     public static final String CODE_PREFIX_propertyFeeId = "94";
     public static final String CODE_PREFIX_houseId = "95";

@@ -14,7 +14,9 @@ public class GeneratorAbstractBussiness extends BaseGenerator {
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
-                .replace("商户", data.getDesc());
+                .replace("商户", data.getDesc())
+                .replace(data.getName()+"Id", data.getId())
+                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
         Map<String, String> param = data.getParams();
         String mappingContext = "";
         String autoMappingContext = "";

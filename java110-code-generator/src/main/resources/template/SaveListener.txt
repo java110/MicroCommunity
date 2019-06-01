@@ -89,7 +89,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         //商户信息
         List<Map> businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
         if( businessStoreInfo != null && businessStoreInfo.size() >0) {
-            reFresh(info, businessStoreInfo.get(0));
+            reFreshShareColumn(info, businessStoreInfo.get(0));
             storeServiceDaoImpl.saveStoreInfoInstance(info);
             if(businessStoreInfo.size() == 1) {
                 dataFlowContext.addParamOut("storeId", businessStoreInfo.get(0).get("store_id"));
@@ -134,7 +134,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         //商户信息
         List<Map> storeInfo = storeServiceDaoImpl.getStoreInfo(info);
         if(storeInfo != null && storeInfo.size() > 0){
-            reFreshShareColumn(paramIn, roomInfo.get(0));
+            reFreshShareColumn(paramIn, storeInfo.get(0));
             storeServiceDaoImpl.updateStoreInfoInstance(paramIn);
         }
     }
