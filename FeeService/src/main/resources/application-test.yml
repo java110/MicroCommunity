@@ -18,7 +18,7 @@ eureka:
       defaultZone: http://test.java110.com:8761/eureka/
       #defaultZone: http://localhost:8761/eureka/
 server:
-  port: 8009
+  port: 8010
   tomcat:
     uri-encoding: UTF-8
 
@@ -29,7 +29,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: community-service
+    name: fee-service
   redis:
     database: 0
     host: test.redis.java110.com
