@@ -7,7 +7,7 @@ services:
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "8009:8009"
+       - "8010:8010"
        volumes:
        - ../target/FeeService.jar:/root/target/FeeService.jar
 #       extra_hosts:

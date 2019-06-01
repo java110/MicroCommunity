@@ -67,7 +67,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.community.FeeServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.fee.FeeServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>
