@@ -10,14 +10,19 @@
                 feeId:'',
                 builtUpArea:'',
                 squarePrice:'',
-                additionalAmount:''
+                additionalAmount:'',
+                communityId:''
             }
         },
         watch:{
             "propertyPayInfo.cycles":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
-                    vc.component.propertyPayInfo.receivableAmount = builtUpArea* squarePrice + additionalAmount;
-                    vc.component.propertyPayInfo.receivedAmount = builtUpArea* squarePrice + additionalAmount;
+                    vc.component.propertyPayInfo.receivableAmount = vc.component.propertyPayInfo.builtUpArea
+                                                                    * vc.component.propertyPayInfo.squarePrice
+                                                                    + vc.component.propertyPayInfo.additionalAmount;
+                    vc.component.propertyPayInfo.receivedAmount = vc.component.propertyPayInfo.builtUpArea
+                                                                  * vc.component.propertyPayInfo.squarePrice
+                                                                  + vc.component.propertyPayInfo.additionalAmount;
                 },
                 deep:true
             }
@@ -32,7 +37,7 @@
                 $('#propertyPayModel').modal('show');
                 vc.component.propertyPayInfo.feeId = _params.feeId;
                 vc.component.propertyPayInfo.builtUpArea = _params.builtUpArea;
-                vc.component.addRoomInfo.communityId = vc.getCurrentCommunity().communityId;
+                vc.component.propertyPayInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
@@ -128,7 +133,8 @@
                                              builtUpArea:'',
                                              feeId:'',
                                              squarePrice:'',
-                                             additionalAmount:''
+                                             additionalAmount:'',
+                                             communityId:''
                                          };
                 vc.component.loadPropertyConfigFee();
 

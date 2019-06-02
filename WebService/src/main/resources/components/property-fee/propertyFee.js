@@ -18,6 +18,7 @@
         },
         _initEvent:function(){
             vc.on('propertyFee','listFeeDetail',function(_param){
+                  vc.component.feeDetailInfo.feeId = _param.feeId;
                   vc.component.listFeeDetail();
             });
 
