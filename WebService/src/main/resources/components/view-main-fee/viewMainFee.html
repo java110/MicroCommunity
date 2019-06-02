@@ -7,8 +7,8 @@
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchRoomModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择房屋</button>
                     <button type="button" class="btn btn-primary btn-sm"
-                            v-if="mainFeeInfo.floorId != null && mainFeeInfo.floorId != ''"
-                            style="margin-left:10px" v-on:click="openAddRoomModel()">
+                            v-if="mainFeeInfo.feeId != null && mainFeeInfo.feeId != ''"
+                            style="margin-left:10px" v-on:click="openPayModel()">
                         <i class="glyphicon glyphicon-plus" ></i> 缴费</button>
                 </div>
             </div>
@@ -90,5 +90,5 @@
                emitLoadData="propertyFee"
                roomFlag="1"
     ></vc:create>
-    <!--<vc:create name="addRoom"></vc:create>-->
+    <vc:create name="propertyPay"></vc:create>
 </div>

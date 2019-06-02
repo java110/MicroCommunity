@@ -100,6 +100,7 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         //查询 房屋信息
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomId(feeDto.getPayerObjId());
+        roomDto.setCommunityId(feeDto.getCommunityId());
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
         if (roomDtos == null || roomDtos.size() != 1) {
@@ -107,11 +108,12 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         }
 
         roomDto = roomDtos.get(0);
-        apiFeeVo.setRoomId(roomDto.getRoomId());
-        apiFeeVo.setRoomNum(roomDto.getRoomNum());
+        /*apiFeeVo.setRoomId(roomDto.getRoomId());
+        apiFeeVo.setRoomNum(roomDto.getRoomNum());*/
+        apiFeeVo = BeanConvertUtil.covertBean(roomDto,apiFeeVo);
 
         //查询单元信息
-        UnitDto unitDto = new UnitDto();
+        /*UnitDto unitDto = new UnitDto();
         unitDto.setUnitId(roomDto.getUnitId());
         List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
 
@@ -122,9 +124,9 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         unitDto = unitDtos.get(0);
 
         apiFeeVo.setUnitId(unitDto.getUnitId());
-        apiFeeVo.setUnitNum(unitDto.getUnitNum());
+        apiFeeVo.setUnitNum(unitDto.getUnitNum());*/
 
-        //查询 小区楼信息
+       /* //查询 小区楼信息
         FloorDto floorDto = new FloorDto();
         floorDto.setFloorId(unitDto.getFloorId());
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
@@ -135,7 +137,7 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
 
         floorDto = floorDtos.get(0);
         apiFeeVo.setFloorNum(floorDto.getFloorNum());
-        apiFeeVo.setFloorId(floorDto.getFloorId());
+        apiFeeVo.setFloorId(floorDto.getFloorId());*/
 
         // 业主信息
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();

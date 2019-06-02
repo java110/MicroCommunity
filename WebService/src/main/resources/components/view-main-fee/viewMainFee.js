@@ -6,7 +6,8 @@
     vc.extends({
         propTypes: {
             feeName:vc.propTypes.string,
-            feeTypeCd:vc.propTypes.string
+            feeTypeCd:vc.propTypes.string,
+            payName:vc.propTypes.string
         },
         data:{
             mainFeeInfo:{
@@ -37,9 +38,9 @@
             openSearchRoomModel:function(){
                 vc.emit('searchRoom','openSearchRoomModel',{});
             },
-            openAddRoomModel:function(){
-                vc.emit($props.openAddRoomModelName,'addRoomModel',{
-                    floorId:vc.component.floorInfo.floorId
+            openPayModel:function(){
+                vc.emit($props.payName,'openPayModel',{
+                    feeId:vc.component.mainFeeInfo.feeId
                 });
             },
             loadMainFeeInfo:function(_room){
