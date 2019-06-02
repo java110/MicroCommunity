@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.FeeTypeConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
+import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -70,6 +72,9 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         //添加单元信息
         businesses.add(sellRoom(paramObj, dataFlowContext));
 
+        //添加物业费用信息
+        businesses.add(addPropertyFee(paramObj, dataFlowContext));
+
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
         //将 rest header 信息传递到下层服务中去
@@ -105,6 +110,35 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
     }
 
     /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
+        businessUnit.put("amount", "-1.00");
+        businessUnit.put("startTime", DateUtil.getCurrentDate());
+        businessUnit.put("endTime", DateUtil.getCurrentDate());
+        businessUnit.put("communityId", paramInJson.getString("communityId"));
+        businessUnit.put("payerObjId", paramInJson.getString("ownerId"));
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
+
+        return business;
+    }
+
+    /**
      * 数据校验
      *
      * @param paramIn "communityId": "7020181217000001",
@@ -116,6 +150,7 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId节点");
         Assert.jsonObjectHaveKey(paramIn, "roomId", "请求报文中未包含roomId节点");
         Assert.jsonObjectHaveKey(paramIn, "state", "请求报文中未包含state节点");
+        Assert.jsonObjectHaveKey(paramIn, "storeId", "请求报文中未包含storeId节点");
 
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         Assert.hasLength(paramObj.getString("communityId"), "小区ID不能为空");

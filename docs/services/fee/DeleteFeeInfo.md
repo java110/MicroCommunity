@@ -43,8 +43,8 @@
 |-|business|?|Array|-|业务节点|-|
 |business|businessTypeCd|1|String|12|业务类型编码|500100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
-|datas|businessFeeInfo|1|Object|-|小区成员|小区成员|
-|businessFeeInfo|feeId|1|String|30|-|-|
+|datas|businessFee|1|Object|-|小区成员|小区成员|
+|businessFee|feeId|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -86,7 +86,7 @@ Content-Type:application/json
     "bId":"1234567892",
     "remark": "备注",
     "datas": {
-      "businessFeeInfo": {
+      "businessFee": {
                 "feeId":"填写存在的值"
       }
     },

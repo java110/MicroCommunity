@@ -43,16 +43,16 @@
 |-|business|?|Array|-|业务节点|-|
 |business|businessTypeCd|1|String|12|业务类型编码|500100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
-|datas|businessFeeInfo|1|Object|-|小区成员|小区成员|
-|businessFeeInfo|amount|1|String|30|-|-|
-|businessFeeInfo|incomeObjId|1|String|30|-|-|
-|businessFeeInfo|feeTypeCd|1|String|30|-|-|
-|businessFeeInfo|startTime|1|String|30|-|-|
-|businessFeeInfo|endTime|1|String|30|-|-|
-|businessFeeInfo|communityId|1|String|30|-|-|
-|businessFeeInfo|feeId|1|String|30|-|-|
-|businessFeeInfo|userId|1|String|30|-|-|
-|businessFeeInfo|payerObjId|1|String|30|-|-|
+|datas|businessFee|1|Object|-|小区成员|小区成员|
+|businessFee|amount|1|String|30|-|-|
+|businessFee|incomeObjId|1|String|30|-|-|
+|businessFee|feeTypeCd|1|String|30|-|-|
+|businessFee|startTime|1|String|30|-|-|
+|businessFee|endTime|1|String|30|-|-|
+|businessFee|communityId|1|String|30|-|-|
+|businessFee|feeId|1|String|30|-|-|
+|businessFee|userId|1|String|30|-|-|
+|businessFee|payerObjId|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -94,7 +94,7 @@ Content-Type:application/json
     "bId":"1234567892",
     "remark": "备注",
     "datas": {
-      "businessFeeInfo": {
+      "businessFee": {
                 "amount":"填写具体值",
         "incomeObjId":"填写具体值",
         "feeTypeCd":"填写具体值",
