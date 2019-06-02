@@ -36,7 +36,7 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        feeId:vc.component.roomInfo.floorId
+                        feeId:vc.component.feeDetailInfo.feeId
                     }
                 }
                //发送get请求

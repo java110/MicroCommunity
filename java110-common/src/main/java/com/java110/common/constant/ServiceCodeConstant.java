@@ -427,6 +427,9 @@ public class ServiceCodeConstant {
 
     //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
+    public static final String SERVICE_CODE_QUERY_FEE_DETAIL = "fee.queryFeeDetail";
+
+
 
     //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE = "fee.queryFee";
