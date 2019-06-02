@@ -42,7 +42,7 @@ public class QueryRoomsWithSellListener extends AbstractServiceApiDataFlowListen
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_ROOMS_WITHOUT_SELL;
+        return ServiceCodeConstant.SERVICE_CODE_QUERY_ROOMS_WITH_SELL;
     }
 
     @Override
