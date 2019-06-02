@@ -41,7 +41,8 @@
             },
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
-                    feeId:vc.component.mainFeeInfo.feeId
+                    feeId:vc.component.mainFeeInfo.feeId,
+                    builtUpArea:vc.component.mainFeeInfo.builtUpArea
                 });
             },
             loadMainFeeInfo:function(_room){

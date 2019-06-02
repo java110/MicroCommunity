@@ -31,6 +31,7 @@
 
                 $('#propertyPayModel').modal('show');
                 vc.component.propertyPayInfo.feeId = _params.feeId;
+                vc.component.propertyPayInfo.builtUpArea = _params.builtUpArea;
                 vc.component.addRoomInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },

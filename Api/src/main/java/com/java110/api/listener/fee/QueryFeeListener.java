@@ -159,7 +159,7 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         apiFeeVo.setOwnerName(ownerDto.getName());
         apiFeeVo.setLink(ownerDto.getLink());
 
-        responseEntity = new ResponseEntity<String>(apiFeeVo.toString(), HttpStatus.OK);
+        responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
 
 
         dataFlowContext.setResponseEntity(responseEntity);

@@ -1,5 +1,7 @@
 package com.java110.vo.api;
 
+import com.java110.vo.Vo;
+
 /**
  * @ClassName ApiFeeVo
  * @Description TODO
@@ -8,7 +10,7 @@ package com.java110.vo.api;
  * @Version 1.0
  * add by wuxw 2019/6/2
  **/
-public class ApiFeeVo {
+public class ApiFeeVo extends Vo {
 
 
    private String feeId;
