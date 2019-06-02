@@ -1,6 +1,7 @@
 package com.java110.web.components.room;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IRoomServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class SearchRoomComponent {
      * @return ResponseEntity对象
      */
     public ResponseEntity<String> listRoom(IPageData pd) {
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        if(paramIn.containsKey("roomFlag") && "1".equals(paramIn.getString("roomFlag"))){
+            return roomServiceSMOImpl.listRoomWithSell(pd);
+        }
         return roomServiceSMOImpl.listRoomWithOutSell(pd);
     }
 

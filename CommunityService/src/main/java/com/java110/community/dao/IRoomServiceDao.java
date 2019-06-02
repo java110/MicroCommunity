@@ -88,6 +88,14 @@ public interface IRoomServiceDao {
      */
     int queryRoomsWithOutSellByCommunityIdCount(Map info);
 
+    /**
+     * 查询小区房屋（未销售）总数
+     *
+     * @param info 小区房屋信息
+     * @return 小区房屋数量
+     */
+    int queryRoomsWithSellByCommunityIdCount(Map info);
+
 
     /**
      * 查询小区房屋信息
@@ -117,5 +125,15 @@ public interface IRoomServiceDao {
      * @return 小区房屋信息
      */
     List<Map> getRoomInfoWithOutSellByCommunityId(Map info);
+
+
+    /**
+     * 查询小区房屋信息
+     * 根据bId 查询小区房屋信息
+     *
+     * @param info bId 信息
+     * @return 小区房屋信息
+     */
+    List<Map> getRoomInfoWithSellByCommunityId(Map info);
 
 }

@@ -2,7 +2,8 @@
     vc.extends({
         propTypes: {
            emitChooseRoom:vc.propTypes.string,
-           emitLoadData:vc.propTypes.string
+           emitLoadData:vc.propTypes.string,
+           roomFlag:vc.propTypes.string // 如果 1 表示查询售卖房屋 2 表示查询未售卖房屋
         },
         data:{
             searchRoomInfo:{
@@ -36,7 +37,8 @@
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
                         roomNum:_roomNum,
-                        floorNum:vc.component.searchRoomInfo._currentFloorNum
+                        floorNum:vc.component.searchRoomInfo._currentFloorNum,
+                        roomFlag:$props.roomFlag
                     }
                 };
 

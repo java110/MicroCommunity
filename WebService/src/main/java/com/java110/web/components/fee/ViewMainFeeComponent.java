@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * add by wuxw 2019/6/1
  **/
-@Component("viewPropertyFeeConfig")
+@Component("viewMainFee")
 public class ViewMainFeeComponent {
 
     @Autowired
