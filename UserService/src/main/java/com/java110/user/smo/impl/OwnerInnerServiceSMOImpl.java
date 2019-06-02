@@ -14,6 +14,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.UserDto;
 import com.java110.user.dao.IOwnerServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,6 +51,9 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         //调用 小区服务查询 小区成员业主信息
         CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(ownerDto, CommunityMemberDto.class);
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
+        if(StringUtils.isEmpty(communityMemberDto.getMemberId())&& !StringUtils.isEmpty(ownerDto.getOwnerId())){
+            communityMemberDto.setMemberId(ownerDto.getOwnerId());
+        }
         List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
         if (communityMemberDtos == null || communityMemberDtos.size() < 1) {

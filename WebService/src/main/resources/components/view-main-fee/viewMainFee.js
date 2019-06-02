@@ -16,6 +16,7 @@
                 floorNum:"",
                 roomId:"",
                 roomNum:"",
+                builtUpArea:"",
                 ownerId:"",
                 ownerName:"",
                 link:"",

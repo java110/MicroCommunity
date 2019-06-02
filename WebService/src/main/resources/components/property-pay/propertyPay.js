@@ -7,15 +7,28 @@
                 receivableAmount:'0.00',
                 receivedAmount:'0.00',
                 remark:'',
-                feeId:''
+                feeId:'',
+                builtUpArea:'',
+                squarePrice:'',
+                additionalAmount:''
             }
         },
+        watch:{
+            "propertyPayInfo.cycles":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                    vc.component.propertyPayInfo.receivableAmount = builtUpArea* squarePrice + additionalAmount;
+                    vc.component.propertyPayInfo.receivedAmount = builtUpArea* squarePrice + additionalAmount;
+                },
+                deep:true
+            }
+         },
          _initMethod:function(){
 
          },
          _initEvent:function(){
              vc.on('propertyPay','openPayModel',function(_params){
                 vc.component.refreshPropertyPayInfo();
+
                 $('#propertyPayModel').modal('show');
                 vc.component.propertyPayInfo.feeId = _params.feeId;
                 vc.component.addRoomInfo.communityId = vc.getCurrentCommunity().communityId;
@@ -111,9 +124,41 @@
                                              receivableAmount:'0.00',
                                              receivedAmount:'0.00',
                                              remark:'',
-                                             feeId:''
+                                             builtUpArea:'',
+                                             feeId:'',
+                                             squarePrice:'',
+                                             additionalAmount:''
                                          };
-            }
+                vc.component.loadPropertyConfigFee();
+
+            },
+            //加载配置数据
+            loadPropertyConfigFee:function(){
+                var param = {
+                    params:{
+                        communityId:vc.getCurrentCommunity().communityId,
+                        configId:''
+                    }
+                };
+                vc.http.get(
+                    'propertyPay',
+                    'loadPropertyConfigData',
+                     param,
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            //关闭model
+                            vc.copyObject(JSON.parse(json), vc.component.propertyPayInfo);
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+                }
         }
     });
 

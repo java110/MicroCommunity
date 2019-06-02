@@ -144,14 +144,15 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         ownerRoomRelDto.setRoomId(roomDto.getRoomId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到房屋和业主关系信息 roomId" + roomDto.getRoomId());
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到房屋和业主关系信息 roomId=" + roomDto.getRoomId());
         }
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+        ownerDto.setCommunityId(feeDto.getCommunityId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
 
         if (ownerDtos == null || ownerDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到业主信息 ownerId" + ownerRoomRelDtos.get(0).getOwnerId());
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到业主信息 ownerId=" + ownerRoomRelDtos.get(0).getOwnerId());
         }
         ownerDto = ownerDtos.get(0);
         apiFeeVo.setOwnerId(ownerDto.getOwnerId());

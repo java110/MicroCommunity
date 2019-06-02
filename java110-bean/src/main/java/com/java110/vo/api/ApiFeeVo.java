@@ -24,6 +24,7 @@ public class ApiFeeVo {
    private String startTime;
    private String endTime;
    private String amount;
+   private String builtUpArea;
 
 
     public String getFeeId() {
@@ -128,5 +129,13 @@ public class ApiFeeVo {
 
     public void setFloorId(String floorId) {
         this.floorId = floorId;
+    }
+
+    public String getBuiltUpArea() {
+        return builtUpArea;
+    }
+
+    public void setBuiltUpArea(String builtUpArea) {
+        this.builtUpArea = builtUpArea;
     }
 }
