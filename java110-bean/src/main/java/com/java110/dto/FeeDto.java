@@ -16,8 +16,8 @@ public class FeeDto extends PageDto implements Serializable {
     private String amount;
 private String incomeObjId;
 private String feeTypeCd;
-private String startTime;
-private String endTime;
+private Date startTime;
+private Date endTime;
 private String communityId;
 private String feeId;
 private String userId;
@@ -47,18 +47,7 @@ public String getFeeTypeCd() {
 public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
-public String getStartTime() {
-        return startTime;
-    }
-public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-public String getEndTime() {
-        return endTime;
-    }
-public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+
 public String getCommunityId() {
         return communityId;
     }
@@ -99,5 +88,21 @@ public void setPayerObjId(String payerObjId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
