@@ -17,12 +17,10 @@
         watch:{
             "propertyPayInfo.cycles":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
-                    vc.component.propertyPayInfo.receivableAmount = vc.component.propertyPayInfo.builtUpArea
-                                                                    * vc.component.propertyPayInfo.squarePrice
-                                                                    + vc.component.propertyPayInfo.additionalAmount;
-                    vc.component.propertyPayInfo.receivedAmount = vc.component.propertyPayInfo.builtUpArea
-                                                                  * vc.component.propertyPayInfo.squarePrice
-                                                                  + vc.component.propertyPayInfo.additionalAmount;
+                    vc.component.propertyPayInfo.receivableAmount = (parseFloat(vc.component.propertyPayInfo.builtUpArea)
+                                                                    * parseFloat(vc.component.propertyPayInfo.squarePrice)
+                                                                    + parseFloat(vc.component.propertyPayInfo.additionalAmount)) * parseFloat(val);
+                    vc.component.propertyPayInfo.receivedAmount = vc.component.propertyPayInfo.receivableAmount;
                 },
                 deep:true
             }
