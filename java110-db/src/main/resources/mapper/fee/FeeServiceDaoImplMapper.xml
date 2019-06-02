@@ -31,10 +31,10 @@ where 1 =1
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null ">
    and t.start_time= #{startTime}
 </if> 
-<if test="endTime !=null and endTime != ''">
+<if test="endTime !=null ">
    and t.end_time= #{endTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -74,10 +74,10 @@ amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null ">
    and t.start_time= #{startTime}
 </if> 
-<if test="endTime !=null and endTime != ''">
+<if test="endTime !=null ">
    and t.end_time= #{endTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -114,13 +114,13 @@ where 1 =1
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null ">
    and t.start_time= #{startTime}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
-<if test="endTime !=null and endTime != ''">
+<if test="endTime !=null ">
    and t.end_time= #{endTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -162,10 +162,10 @@ where 1 =1
 <if test="feeTypeCd !=null and feeTypeCd != ''">
 , t.fee_type_cd= #{feeTypeCd}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null ">
 , t.start_time= #{startTime}
 </if> 
-<if test="endTime !=null and endTime != ''">
+<if test="endTime !=null">
 , t.end_time= #{endTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -200,13 +200,13 @@ where 1 =1
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
-<if test="endTime !=null and endTime != ''">
+<if test="endTime !=null ">
    and t.end_time= #{endTime}
 </if> 
 <if test="communityId !=null and communityId != ''">

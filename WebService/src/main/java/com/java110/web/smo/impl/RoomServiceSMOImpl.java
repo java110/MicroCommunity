@@ -259,6 +259,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         paramIn.put("userId", pd.getUserId());
+        paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/room.exitRoom",
                 HttpMethod.POST);
