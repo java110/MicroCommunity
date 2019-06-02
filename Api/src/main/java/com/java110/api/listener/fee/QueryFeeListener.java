@@ -65,7 +65,7 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_QUERY_FEE_CONFIG;
+        return ServiceCodeConstant.SERVICE_CODE_QUERY_FEE;
     }
 
     @Override
