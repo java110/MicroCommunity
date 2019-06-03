@@ -59,6 +59,7 @@ public final class BeanConvertUtil {
             returnModel = t.newInstance();
             BeanUtils.copyProperties(returnModel, orgBean);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("bean转换bean失败", e);
         }
         return returnModel;
