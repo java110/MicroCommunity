@@ -10,7 +10,9 @@
                 feeDetails:[],
                 total:0,
                 records:1,
-                feeId:''
+                feeId:'',
+                startTime:'',
+                endTime:''
             }
         },
         _initMethod:function(){
@@ -28,8 +30,8 @@
         },
         methods:{
             initDate:function(){
-                $(".start_time").datetimepicker({format: 'yyyy-mm-dd'});
-                $(".end_time").datetimepicker({format: 'yyyy-mm-dd'});
+                $(".start_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN'});
+                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN'});
             },
             listFeeDetail:function(_page,_row){
                 var param = {

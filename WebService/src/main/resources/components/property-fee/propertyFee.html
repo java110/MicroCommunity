@@ -13,11 +13,11 @@
                 <div class="ibox-content">
 
                     <div class="row">
-                        <div class="col-sm-4 m-b-xs">
-                            <input size="16" type="text" placeholder="请选择开始时间"  value="" readonly class="start_time">
+                        <div class="col-sm-4 input-group">
+                            <input size="16" type="text" placeholder="请选择开始时间"  v-model="feeDetailInfo.startTime" readonly class="form-control form-control-sm start_time">
                         </div>
-                        <div class="col-sm-3 m-b-xs">
-                            <input size="16" type="text" placeholder="请选择结束时间"  value="" readonly class="end_time">
+                        <div class="col-sm-3 input-group">
+                            <input size="16" type="text" placeholder="请选择结束时间" v-model="feeDetailInfo.endTime" readonly class="form-control form-control-sm end_time">
                         </div>
 
                         <div class="col-sm-3">
