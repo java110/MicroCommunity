@@ -12,7 +12,11 @@ import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeDetailInnerServiceSMO;
 import com.java110.dto.FeeConfigDto;
 import com.java110.dto.FeeDetailDto;
+import com.java110.dto.RoomDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.vo.api.ApiFeeDetailDataVo;
+import com.java110.vo.api.ApiFeeDetailVo;
+import com.java110.vo.api.ApiRoomDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -56,8 +60,19 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateFeeConfigData(reqJson);
 
-        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeDetailDtos), HttpStatus.OK);
+        //查询总记录数
+        ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();
+
+        int total = feeDetailInnerServiceSMOImpl.queryFeeDetailsCount(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
+        apiFeeDetailVo.setTotal(total);
+        if (total > 0) {
+            List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
+            List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailDtos, ApiFeeDetailDataVo.class);
+            apiFeeDetailVo.setFeeDetails(feeDetails);
+        }
+        int row = reqJson.getInteger("row");
+        apiFeeDetailVo.setRecords((int) Math.ceil((double) total / (double) row));
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeDetailVo), HttpStatus.OK);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

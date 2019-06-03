@@ -19,7 +19,7 @@
         _initEvent:function(){
             vc.on('propertyFee','listFeeDetail',function(_param){
                   vc.component.feeDetailInfo.feeId = _param.feeId;
-                  vc.component.listFeeDetail();
+                  vc.component.listFeeDetail(DEFAULT_PAGE,DEFAULT_ROW);
             });
 
             vc.on('pagination','page_event',function(_currentPage){

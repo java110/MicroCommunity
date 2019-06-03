@@ -111,7 +111,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#propertyPayModel').modal('hide');
-                            vc.emit('propertyFee','listFeeDetail',propertyPayInfo);
+                            vc.emit('propertyFee','listFeeDetail',vc.component.propertyPayInfo);
                             return ;
                         }
                         vc.message(json);
