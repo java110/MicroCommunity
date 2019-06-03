@@ -112,6 +112,7 @@
                             //关闭model
                             $('#propertyPayModel').modal('hide');
                             vc.emit('propertyFee','listFeeDetail',vc.component.propertyPayInfo);
+                            vc.emit('viewMainFee','reloadFee',vc.component.propertyPayInfo);
                             return ;
                         }
                         vc.message(json);

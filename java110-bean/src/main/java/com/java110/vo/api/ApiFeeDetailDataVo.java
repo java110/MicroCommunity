@@ -25,7 +25,7 @@ public class ApiFeeDetailDataVo extends Vo {
     private String feeId;
 
 
-    private Date createTime;
+    private String createTime;
 
 
     public String getPrimeRate() {
@@ -92,11 +92,12 @@ public class ApiFeeDetailDataVo extends Vo {
         this.feeId = feeId;
     }
 
-    public Date getCreateTime() {
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 }

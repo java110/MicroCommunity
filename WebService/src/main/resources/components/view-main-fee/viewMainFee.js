@@ -33,6 +33,14 @@
                   vc.component.loadMainFeeInfo(_room);
             });
 
+            vc.on('viewMainFee','reloadFee',function(_room){
+                if(vc.component.mainFeeInfo.roomId != ''){
+                      vc.component.loadMainFeeInfo({
+                            roomId:vc.component.mainFeeInfo.roomId
+                      });
+
+                }
+            });
         },
         methods:{
 

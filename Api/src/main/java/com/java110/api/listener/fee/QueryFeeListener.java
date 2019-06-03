@@ -8,6 +8,7 @@ import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
@@ -96,6 +97,8 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         FeeDto feeDto = feeDtos.get(0);
 
         ApiFeeVo apiFeeVo = BeanConvertUtil.covertBean(feeDto, ApiFeeVo.class);
+        apiFeeVo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        apiFeeVo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         //查询 房屋信息
         RoomDto roomDto = new RoomDto();

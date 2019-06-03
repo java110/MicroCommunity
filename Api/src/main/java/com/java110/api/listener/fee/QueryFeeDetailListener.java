@@ -6,6 +6,7 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
@@ -68,6 +69,9 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         if (total > 0) {
             List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
             List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailDtos, ApiFeeDetailDataVo.class);
+
+            reFreshCreateTime(feeDetails, feeDetailDtos);
+
             apiFeeDetailVo.setFeeDetails(feeDetails);
         }
         int row = reqJson.getInteger("row");
@@ -75,6 +79,22 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeDetailVo), HttpStatus.OK);
 
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷新 创建时间
+     *
+     * @param feeDetails    返回对象
+     * @param feeDetailDtos 数据传输对象
+     */
+    private void reFreshCreateTime(List<ApiFeeDetailDataVo> feeDetails, List<FeeDetailDto> feeDetailDtos) {
+        for (ApiFeeDetailDataVo feeDetailDataVo : feeDetails) {
+            for (FeeDetailDto feeDetailDto : feeDetailDtos) {
+                if (feeDetailDataVo.getDetailId().equals(feeDetailDto.getDetailId())) {
+                    feeDetailDataVo.setCreateTime(DateUtil.getFormatTimeString(feeDetailDto.getCreateTime(), DateUtil.DATE_FORMATE_STRING_A));
+                }
+            }
+        }
     }
 
     /**
