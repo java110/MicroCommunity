@@ -10,6 +10,7 @@ import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
@@ -183,8 +184,10 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
         feeInfo.setEndTime(endCalender.getTime());
-        BeanConvertUtil.beanCovertMap(feeInfo);
-        businessFee.putAll(BeanConvertUtil.beanCovertMap(feeInfo));
+        Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
+        feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessFee);
 
         return business;
