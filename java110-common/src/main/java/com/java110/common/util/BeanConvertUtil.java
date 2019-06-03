@@ -50,15 +50,7 @@ public final class BeanConvertUtil {
             }
         }, Date.class);
 
-        ConvertUtils.register(new Converter() { //注册一个日期转换器
-
-            public Object convert(Class type, Object value) {
-                if (value instanceof Date) {
-                    return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
-                }
-                return String.valueOf(value);
-            }
-        }, String.class);
+        ConvertUtils.register(new Java110StringConvert(), String.class);
     }
 
 

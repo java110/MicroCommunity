@@ -44,6 +44,7 @@ public class BeanConvertUtilTest extends TestCase {
     public void testCoverBeanDateToString(){
         FeeDto feeDto = new FeeDto();
         feeDto.setStartTime(new Date());
+        feeDto.setAmount("1.00");
 
         ApiFeeVo apiFeeVo = BeanConvertUtil.covertBean(feeDto, ApiFeeVo.class);
 
