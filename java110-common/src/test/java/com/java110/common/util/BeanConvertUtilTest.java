@@ -33,7 +33,7 @@ public class BeanConvertUtilTest extends TestCase {
 
     public void testCoverBeanStringToDate(){
         Map reqJson = new HashMap();
-        reqJson.put("startTime","2019-06-02");
+        reqJson.put("startTime","2019-06-02 00:00:00");
         //reqJson.put("endTime","2019-06-03");
 
         FeeDetailDto feeDetailDto = BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class);

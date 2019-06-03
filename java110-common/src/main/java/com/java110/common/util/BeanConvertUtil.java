@@ -33,7 +33,7 @@ public final class BeanConvertUtil {
                 Date date1 = null;
                 if (value instanceof String) {
                     String date = (String) value;
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     try {
                         date1 = sdf.parse(date);
                     } catch (ParseException e) {

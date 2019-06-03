@@ -31,16 +31,16 @@
         methods:{
             initDate:function(){
                 $(".start_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "day"});
-                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "day"});
+                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "hour"});
                 $('.start_time').datetimepicker()
-                          .on('hide', function (ev) {
+                          .on('changeDate', function (ev) {
                             var value = $(".start_time").val();
-                            vc.component.feeDetailInfo.startTime = value;
+                            vc.component.feeDetailInfo.startTime = (value + " 00:00:00");
                           });
                 $('.end_time').datetimepicker()
-                              .on('hide', function (ev) {
+                              .on('changeDate', function (ev) {
                                 var value = $(".end_time").val();
-                                vc.component.feeDetailInfo.endTime = value;
+                                vc.component.feeDetailInfo.endTime = (value + " 00:00:00");
                               });
             },
             listFeeDetail:function(_page,_row){
