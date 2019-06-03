@@ -39,8 +39,9 @@ public final class BeanConvertUtil {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    return date1;
                 }
-                return date1;
+                return value;
             }
         }, Date.class);
     }
