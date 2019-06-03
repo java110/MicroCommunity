@@ -35,12 +35,12 @@
                 $('.start_time').datetimepicker()
                           .on('changeDate', function (ev) {
                             var value = $(".start_time").val();
-                            vc.component.feeDetailInfo.startTime = (value + " 00:00:00");
+                            vc.component.feeDetailInfo.startTime = value ;
                           });
                 $('.end_time').datetimepicker()
                               .on('changeDate', function (ev) {
                                 var value = $(".end_time").val();
-                                vc.component.feeDetailInfo.endTime = (value + " 00:00:00");
+                                vc.component.feeDetailInfo.endTime = value ;
                               });
             },
             listFeeDetail:function(_page,_row){

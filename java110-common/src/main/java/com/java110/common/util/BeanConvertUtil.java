@@ -33,7 +33,12 @@ public final class BeanConvertUtil {
                 Date date1 = null;
                 if (value instanceof String) {
                     String date = (String) value;
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat sdf = null;
+                    if (date.contains(":")) {
+                        sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    } else {
+                        sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    }
                     try {
                         date1 = sdf.parse(date);
                     } catch (ParseException e) {
@@ -48,11 +53,10 @@ public final class BeanConvertUtil {
         ConvertUtils.register(new Converter() { //注册一个日期转换器
 
             public Object convert(Class type, Object value) {
-                Date date1 = null;
                 if (value instanceof Date) {
                     return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
                 }
-                return value;
+                return String.valueOf(value);
             }
         }, String.class);
     }
