@@ -96,7 +96,9 @@ prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,c
 
     <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
     <select id="getFeeDetailInfo" parameterType="Map" resultType="Map">
-        select  t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId 
+        select  t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.community_id,
+        t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime
 from pay_fee_detail t 
 where 1 =1 
 <if test="primeRate !=null and primeRate != ''">
