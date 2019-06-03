@@ -44,6 +44,17 @@ public final class BeanConvertUtil {
                 return value;
             }
         }, Date.class);
+
+        ConvertUtils.register(new Converter() { //注册一个日期转换器
+
+            public Object convert(Class type, Object value) {
+                Date date1 = null;
+                if (value instanceof Date) {
+                    return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
+                }
+                return value;
+            }
+        }, String.class);
     }
 
 

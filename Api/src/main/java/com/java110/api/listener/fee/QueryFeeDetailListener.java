@@ -82,7 +82,7 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
             List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
             List<ApiFeeDetailDataVo> feeDetails = BeanConvertUtil.covertBeanList(feeDetailDtos, ApiFeeDetailDataVo.class);
 
-            reFreshCreateTime(feeDetails, feeDetailDtos);
+            //reFreshCreateTime(feeDetails, feeDetailDtos);
 
             apiFeeDetailVo.setFeeDetails(feeDetails);
         }

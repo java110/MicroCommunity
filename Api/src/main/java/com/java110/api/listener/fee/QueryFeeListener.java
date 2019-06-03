@@ -97,8 +97,8 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         FeeDto feeDto = feeDtos.get(0);
 
         ApiFeeVo apiFeeVo = BeanConvertUtil.covertBean(feeDto, ApiFeeVo.class);
-        apiFeeVo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        apiFeeVo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        //apiFeeVo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
+        //apiFeeVo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         //查询 房屋信息
         RoomDto roomDto = new RoomDto();
