@@ -3,7 +3,9 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.common.util.DateUtil;
@@ -59,8 +61,22 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
 
         //查询总记录数
         ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();
+        FeeDetailDto feeDetailDto = BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class);
 
-        int total = feeDetailInnerServiceSMOImpl.queryFeeDetailsCount(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));
+        try {
+            if (reqJson.containsKey("startTime")) {
+                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B));
+            }
+
+            if (reqJson.containsKey("endTime")) {
+                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B));
+            }
+        } catch (Exception e) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + "传入开始时间或结束时间格式错误 c");
+        }
+
+
+        int total = feeDetailInnerServiceSMOImpl.queryFeeDetailsCount(feeDetailDto);
         apiFeeDetailVo.setTotal(total);
         if (total > 0) {
             List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class));

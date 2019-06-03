@@ -39,7 +39,9 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        feeId:vc.component.feeDetailInfo.feeId
+                        feeId:vc.component.feeDetailInfo.feeId,
+                        startTime:vc.component.feeDetailInfo.startTime,
+                        startTime:vc.component.feeDetailInfo.endTime
                     }
                 }
                //发送get请求

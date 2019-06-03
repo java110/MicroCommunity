@@ -24,6 +24,8 @@ private String feeId;
 
 
     private Date createTime;
+    private Date startTime;
+    private Date endTime;
 
     private String statusCd = "0";
 
@@ -92,5 +94,21 @@ public void setFeeId(String feeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

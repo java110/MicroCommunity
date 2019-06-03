@@ -30,8 +30,7 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_J = "yyyyMMddHHmmss.SSS";
     public static final String DATE_FORMATE_STRING_K = "yyyyMMddHHmmssSSS";
 
-    static
-    {
+    static {
         formats.put("yyyyMMddHHmmss", new SimpleDateFormat("yyyyMMddHHmmss"));
         formats.put("yyyy-MM-dd HH:mm:ss", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         formats.put("yyyy-MM-dd", new SimpleDateFormat("yyyy-MM-dd"));
@@ -49,57 +48,62 @@ public class DateUtil {
 
     /**
      * 返回 yyyyMMddhhmmss 格式的日期串
+     *
      * @return
      */
-    public static String getyyyyMMddhhmmssDateString(){
+    public static String getyyyyMMddhhmmssDateString() {
         return dateFormat.format(new Date());
     }
 
 
     /**
      * 获取当前时间
+     *
      * @return
      */
-    public static Date getCurrentDate(){
+    public static Date getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();
     }
 
     /**
      * 获取当前月
+     *
      * @return
      */
-    public static int getCurrentMonth(){
+    public static int getCurrentMonth() {
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.MONTH)+1;
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
     public static Date getLastDate() throws ParseException {
-        return getDateFromString("3000-01-01",DATE_FORMATE_STRING_B);
+        return getDateFromString("3000-01-01", DATE_FORMATE_STRING_B);
     }
 
     /**
      * 转TimeStamp
+     *
      * @param date
      * @return
      */
-    public static Timestamp getTimestamp(Date date){
+    public static Timestamp getTimestamp(Date date) {
         Timestamp timestamp = new Timestamp(date.getTime());
         return timestamp;
     }
+
     /**
      * 获取未来时间
+     *
      * @param second 秒
      * @return
      */
-    public static Date getFutureDate(int second){
+    public static Date getFutureDate(int second) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND,second);
+        calendar.add(Calendar.SECOND, second);
         return calendar.getTime();
     }
 
-    public static String getFormatTimeString(Date date, String pattern)
-    {
+    public static String getFormatTimeString(Date date, String pattern) {
         SimpleDateFormat sDateFormat = getDateFormat(pattern);
 
         synchronized (sDateFormat) {
@@ -107,14 +111,12 @@ public class DateUtil {
         }
     }
 
-    public static String getDefaultFormateTimeString(Date date)
-    {
+    public static String getDefaultFormateTimeString(Date date) {
         return getFormatTimeString(date, "yyyyMMddHHmmss");
     }
 
-    public static SimpleDateFormat getDateFormat(String pattern)
-    {
-        SimpleDateFormat sDateFormat = (SimpleDateFormat)formats.get(pattern);
+    public static SimpleDateFormat getDateFormat(String pattern) {
+        SimpleDateFormat sDateFormat = (SimpleDateFormat) formats.get(pattern);
         if (sDateFormat == null) {
             sDateFormat = new SimpleDateFormat(pattern);
             formats.put(pattern, sDateFormat);
@@ -123,8 +125,7 @@ public class DateUtil {
     }
 
     public static Date getDateFromString(String date, String pattern)
-            throws ParseException
-    {
+            throws ParseException {
         SimpleDateFormat sDateFormat = getDateFormat(pattern);
 
         synchronized (sDateFormat) {
@@ -133,87 +134,76 @@ public class DateUtil {
     }
 
     public static Date getDefaultDateFromString(String date)
-            throws ParseException
-    {
+            throws ParseException {
         return getDateFromString(date, "yyyyMMddHHmmss");
     }
 
-    public static String getNowDefault()
-    {
+    public static String getNowDefault() {
         return getNow("yyyyMMddHHmmss");
     }
 
-    public static String getNow(String pattern)
-    {
+    public static String getNow(String pattern) {
         return getFormatTimeString(new Date(), pattern);
     }
 
-    public static String getNowII()
-    {
+    public static String getNowII() {
         return getFormatTimeString(new Date(), "yyyyMMdd");
     }
 
     public static long dateString2Long(String str, String pattern)
-            throws ParseException
-    {
+            throws ParseException {
         return getDateFromString(str, pattern).getTime();
     }
 
     /**
      * 校验字符串是否可以格式化为时间
+     *
      * @param str
      * @param pattern
      * @return
      */
-    public static boolean judgeDate(String str,String pattern){
-        try{
-            dateString2Long(str,pattern);
-        }catch (Exception e){
+    public static boolean judgeDate(String str, String pattern) {
+        try {
+            dateString2Long(str, pattern);
+        } catch (Exception e) {
             return false;
         }
         return true;
     }
 
-    public static String longToDateStringDefault(long time)
-    {
+    public static String longToDateStringDefault(long time) {
         return getFormatTimeString(new Date(time), "yyyyMMddHHmmss");
     }
 
-    public static String longToDateString(long time, String pattern)
-    {
+    public static String longToDateString(long time, String pattern) {
         return getFormatTimeString(new Date(time), pattern);
     }
 
-    public static long date2Long(Date date)
-    {
+    public static long date2Long(Date date) {
         return date.getTime();
     }
 
-    public static Date longToDate(long time)
-    {
+    public static Date longToDate(long time) {
         return new Date(time);
     }
 
     public static Date getDateFromStringAdaptTwoPattern(String date)
-            throws ParseException
-    {
-        try
-        {
-            return getDateFromString(date, "yyyy-MM-dd HH:mm:ss"); } catch (ParseException e) {
+            throws ParseException {
+        try {
+            return getDateFromString(date, "yyyy-MM-dd HH:mm:ss");
+        } catch (ParseException e) {
         }
         return getDateFromString(date, "yyyy-MM-dd");
     }
 
     public static String changeNumDateToDate(String numdate, String inFormat, String outFormat)
-            throws ParseException
-    {
+            throws ParseException {
         Date date = getDateFromString(numdate, inFormat);
         return getFormatTimeString(date, outFormat);
     }
 
     public static String getNextMonthFistDay(String nowdate, String inFormat, String outFormat)
-            throws ParseException
-    {
+            throws ParseException {
         Date date = getDateFromString(nowdate, inFormat);
 
         Calendar cl = Calendar.getInstance();
@@ -225,12 +215,10 @@ public class DateUtil {
         return getFormatTimeString(date, outFormat);
     }
 
-    public static boolean isLeapYear(int year)
-    {
+    public static boolean isLeapYear(int year) {
         if (year % 400 == 0)
             return true;
-        if (year % 4 == 0)
-        {
+        if (year % 4 == 0) {
             return (year % 100 != 0);
         }
 
@@ -238,16 +226,14 @@ public class DateUtil {
     }
 
     public static String getLastDay(String nowdate, String inFormat, String outFormat)
-            throws ParseException
-    {
+            throws ParseException {
         String returndate = "";
 
         Date date = getDateFromString(nowdate, inFormat);
 
         Calendar cl = Calendar.getInstance();
         cl.setTime(date);
-        switch (cl.get(2))
-        {
+        switch (cl.get(2)) {
             case 0:
                 cl.set(5, 31);
                 break;
@@ -298,13 +284,11 @@ public class DateUtil {
         return returndate;
     }
 
-    public static String getMonthLastDay(String fmt)
-    {
+    public static String getMonthLastDay(String fmt) {
         String returndate = "";
         Date date = null;
         Calendar cl = Calendar.getInstance();
-        switch (cl.get(2))
-        {
+        switch (cl.get(2)) {
             case 0:
                 cl.set(5, 31);
                 break;
@@ -355,8 +339,7 @@ public class DateUtil {
         return returndate;
     }
 
-    public static String getNextMonthFirstDay(String fmt)
-    {
+    public static String getNextMonthFirstDay(String fmt) {
         String returndate = "";
         Date date = null;
 
@@ -372,8 +355,7 @@ public class DateUtil {
     }
 
     public static boolean compareDate(String fistDate, String secondDate, String format)
-            throws ParseException
-    {
+            throws ParseException {
         boolean flag = false;
 
         Date fist = null;
@@ -389,10 +371,8 @@ public class DateUtil {
         return flag;
     }
 
-    public static boolean isRightDate(String value, String varValue)
-    {
-        try
-        {
+    public static boolean isRightDate(String value, String varValue) {
+        try {
             SimpleDateFormat format = new SimpleDateFormat(varValue);
             format.setLenient(false);
             format.parse(value);
