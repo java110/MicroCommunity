@@ -439,4 +439,7 @@ public class ServiceCodeConstant {
 
     //修改费用配置
     public static final String SERVICE_CODE_UPDATE_FEE_CONFIG = "fee.updateFeeConfig";
+
+    //缴费
+    public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
 }

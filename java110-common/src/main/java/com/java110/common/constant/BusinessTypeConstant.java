@@ -299,6 +299,7 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_FEE_CONFIG = "620100050001";
 
+
     /**
      * 删除住户
      */

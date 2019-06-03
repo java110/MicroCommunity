@@ -25,6 +25,16 @@ public class PropertyPayComponent {
     }
 
 
+    /**
+     * 缴费
+     * @param pd 页面数据封装
+     * @return 缴费接口
+     */
+    public ResponseEntity<String> payFee(IPageData pd) {
+        return feeServiceSMOImpl.payFee(pd);
+    }
+
+
     public IFeeServiceSMO getFeeServiceSMOImpl() {
         return feeServiceSMOImpl;
     }

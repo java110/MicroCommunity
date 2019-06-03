@@ -17,6 +17,14 @@ public interface IFeeServiceSMO {
     ResponseEntity<String> loadPropertyConfigFee(IPageData pd);
 
     /**
+     * 缴费
+     *
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> payFee(IPageData pd);
+
+    /**
      * 查询主费用
      *
      * @param pd 页面数据封装对象
