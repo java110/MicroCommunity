@@ -30,8 +30,18 @@
         },
         methods:{
             initDate:function(){
-                $(".start_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN'});
-                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN'});
+                $(".start_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "day"});
+                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "day"});
+                $('.start_time').datetimepicker()
+                          .on('hide', function (ev) {
+                            var value = $(".start_time").val();
+                            vc.component.feeDetailInfo.startTime = value;
+                          });
+                $('.end_time').datetimepicker()
+                              .on('hide', function (ev) {
+                                var value = $(".end_time").val();
+                                vc.component.feeDetailInfo.endTime = value;
+                              });
             },
             listFeeDetail:function(_page,_row){
                 var param = {
@@ -41,7 +51,7 @@
                         communityId:vc.getCurrentCommunity().communityId,
                         feeId:vc.component.feeDetailInfo.feeId,
                         startTime:vc.component.feeDetailInfo.startTime,
-                        startTime:vc.component.feeDetailInfo.endTime
+                        endTime:vc.component.feeDetailInfo.endTime
                     }
                 }
                //发送get请求

@@ -63,17 +63,17 @@ public class QueryFeeDetailListener extends AbstractServiceApiDataFlowListener {
         ApiFeeDetailVo apiFeeDetailVo = new ApiFeeDetailVo();
         FeeDetailDto feeDetailDto = BeanConvertUtil.covertBean(reqJson, FeeDetailDto.class);
 
-        try {
-            if (reqJson.containsKey("startTime")) {
-                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B));
-            }
-
-            if (reqJson.containsKey("endTime")) {
-                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B));
-            }
-        } catch (Exception e) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + "传入开始时间或结束时间格式错误 c");
-        }
+//        try {
+//            if (reqJson.containsKey("startTime")) {
+//                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("startTime"), DateUtil.DATE_FORMATE_STRING_B));
+//            }
+//
+//            if (reqJson.containsKey("endTime")) {
+//                feeDetailDto.setStartTime(DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B));
+//            }
+//        } catch (Exception e) {
+//            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + "传入开始时间或结束时间格式错误 c");
+//        }
 
 
         int total = feeDetailInnerServiceSMOImpl.queryFeeDetailsCount(feeDetailDto);

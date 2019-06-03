@@ -2,9 +2,14 @@ package com.java110.common.util;
 
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +24,25 @@ import java.util.Map;
 public final class BeanConvertUtil {
 
     private BeanConvertUtil() {
+    }
+
+    static {
+        ConvertUtils.register(new Converter() { //注册一个日期转换器
+
+            public Object convert(Class type, Object value) {
+                Date date1 = null;
+                if (value instanceof String) {
+                    String date = (String) value;
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        date1 = sdf.parse(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return date1;
+            }
+        }, Date.class);
     }
 
 
@@ -90,7 +114,7 @@ public final class BeanConvertUtil {
      * @param orgBean 原始bean
      * @return map对象
      */
-    public static  Map beanCovertMap(Object orgBean) {
+    public static Map beanCovertMap(Object orgBean) {
         Map newMap = null;
 
         try {
