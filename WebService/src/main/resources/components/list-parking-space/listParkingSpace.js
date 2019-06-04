@@ -59,6 +59,17 @@
             },
             _openEditParkingSpaceModel:function(_parkingSpace){
                 vc.emit('editParkingSpace','openEditParkingSpaceModal',_parkingSpace);
+            },
+            _viewParkingSpaceState:function(state){
+                if(state == 'F'){
+                    return "空闲";
+                }else if(state == 'S'){
+                    return "已售卖";
+                }else if(state == 'H'){
+                    return "已出租";
+                }else{
+                    return "未知";
+                }
             }
         }
     })

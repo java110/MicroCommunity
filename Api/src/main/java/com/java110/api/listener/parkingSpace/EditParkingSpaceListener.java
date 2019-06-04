@@ -12,13 +12,18 @@ import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
+import com.java110.dto.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * @ClassName EditParkingSpaceListener
@@ -32,6 +37,9 @@ import org.springframework.http.ResponseEntity;
 public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(EditParkingSpaceListener.class);
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -113,6 +121,16 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
      */
     private JSONObject editParkingSpace(JSONObject paramInJson) {
 
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(paramInJson.getString("communityId"));
+        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+        }
+
+        parkingSpaceDto = parkingSpaceDtos.get(0);
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
@@ -121,6 +139,7 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
         JSONObject businessParkingSpace = new JSONObject();
 
         businessParkingSpace.putAll(paramInJson);
+        businessParkingSpace.put("state", parkingSpaceDto.getState());
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
 
         return business;
@@ -129,5 +148,13 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
+    }
+
+    public IParkingSpaceInnerServiceSMO getParkingSpaceInnerServiceSMOImpl() {
+        return parkingSpaceInnerServiceSMOImpl;
+    }
+
+    public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
+        this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
     }
 }
