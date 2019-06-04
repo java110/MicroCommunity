@@ -6,7 +6,8 @@
             listParkingSpaceInfo:{
                 parkingSpaces:[],
                 total:0,
-                records:1
+                records:1,
+                num:''
             }
         },
         _initMethod:function(){
@@ -15,6 +16,7 @@
         _initEvent:function(){
             vc.on('listParkingSpace','listParkingSpaceData',function(){
                 vc.component._listParkingSpaceData(DEFAULT_PAGE,DEFAULT_ROWS);
+                vc.component.listParkingSpaceInfo.num = '';
             });
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listParkingSpaceData(_currentPage,DEFAULT_ROWS);
@@ -26,7 +28,8 @@
                     params:{
                         page:_page,
                         row:_row,
-                        communityId:vc.getCurrentCommunity().communityId
+                        communityId:vc.getCurrentCommunity().communityId,
+                        num:vc.component.listParkingSpaceInfo.num
                     }
                 }
 
@@ -70,6 +73,9 @@
                 }else{
                     return "未知";
                 }
+            },
+            queryParkingSpaceMethod:function(){
+                vc.component._listParkingSpaceData(DEFAULT_PAGE,DEFAULT_ROWS);
             }
         }
     })
