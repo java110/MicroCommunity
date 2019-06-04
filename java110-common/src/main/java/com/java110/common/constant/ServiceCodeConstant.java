@@ -442,4 +442,19 @@ public class ServiceCodeConstant {
 
     //缴费
     public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
+
+
+    //查询停车位
+    public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";
+
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_SAVE_PARKING_SPACE = "parkingSpace.saveParkingSpace";
+
+    // 编辑停车位信息
+    public static final String SERVICE_CODE_EDIT_PARKING_SPACE = "parkingSpace.editParkingSpace";
+
+    //删除停车位信息
+    public static final String SERVICE_CODE_DELETE_PARKING_SPACE = "parkingSpace.deleteParkingSpace";
+
 }

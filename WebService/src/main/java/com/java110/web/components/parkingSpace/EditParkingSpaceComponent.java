@@ -1,0 +1,41 @@
+package com.java110.web.components.parkingSpace;
+
+import com.java110.core.context.IPageData;
+import com.java110.web.smo.IParkingSpaceServiceSMO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+/**
+ * @ClassName EditParkingSpaceComponent
+ * @Description TODO 编辑小区楼信息
+ * @Author wuxw
+ * @Date 2019/4/28 15:10
+ * @Version 1.0
+ * add by wuxw 2019/4/28
+ **/
+
+@Component("editParkingSpace")
+public class EditParkingSpaceComponent {
+    @Autowired
+    private IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl;
+
+    /**
+     * 修改小区楼信息
+     *
+     * @param pd 页面数据封装
+     * @return 返回ResponseEntity对象
+     */
+    public ResponseEntity<String> changeParkingSpace(IPageData pd) {
+        return parkingSpaceServiceSMOImpl.editParkingSpace(pd);
+    }
+
+
+    public IParkingSpaceServiceSMO getParkingSpaceServiceSMOImpl() {
+        return parkingSpaceServiceSMOImpl;
+    }
+
+    public void setParkingSpaceServiceSMOImpl(IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl) {
+        this.parkingSpaceServiceSMOImpl = parkingSpaceServiceSMOImpl;
+    }
+}
