@@ -80,6 +80,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_roomAttrId = "76";
     public static final String CODE_PREFIX_ownerId = "77";
     public static final String CODE_PREFIX_ownerRoomRelId = "78";
+    public static final String CODE_PREFIX_psId = "79";
 
     /**
      * 只有在不调用服务生成ID时有用

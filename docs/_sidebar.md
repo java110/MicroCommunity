@@ -79,6 +79,9 @@
   * [保存费用配置](services/fee/SaveFeeConfigInfo.md)
   * [修改费用配置](services/fee/UpdateFeeConfigInfo.md)
   * [删除费用配置](services/fee/DeleteFeeConfigInfo.md)
+  * [保存停车位](services/parkingSpace/SaveParkingSpaceInfo.md)
+  * [修改停车位](services/parkingSpace/UpdateParkingSpaceInfo.md)
+  * [删除停车位](services/parkingSpace/DeleteParkingSpaceInfo.md)
 
 * 工具类接口
 

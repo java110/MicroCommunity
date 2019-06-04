@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="parkingSpaceServiceDaoImpl">
+
+    <!-- 保存停车位信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessParkingSpaceInfo" parameterType="Map">
+           insert into business_parking_space(
+area,operate,type_cd,num,ps_id,remark,state,community_id,b_id,user_id
+) values (
+#{area},#{operate},#{typeCd},#{num},#{psId},#{remark},#{state},#{communityId},#{bId},#{userId}
+)
+       </insert>
+
+
+       <!-- 查询停车位信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessParkingSpaceInfo" parameterType="Map" resultType="Map">
+           select  t.area,t.operate,t.type_cd,t.type_cd typeCd,t.num,t.ps_id,t.ps_id psId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+from business_parking_space t 
+where 1 =1 
+<if test="area !=null and area != ''">
+   and t.area= #{area}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="num !=null and num != ''">
+   and t.num= #{num}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存停车位信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveParkingSpaceInfoInstance" parameterType="Map">
+        insert into p_parking_space(
+area,type_cd,num,ps_id,remark,status_cd,state,community_id,b_id,user_id
+) select t.area,t.type_cd,t.num,t.ps_id,t.remark,'0',t.state,t.community_id,t.b_id,t.user_id from business_parking_space t where 1=1
+<if test="area !=null and area != ''">
+   and t.area= #{area}
+</if> 
+   and t.operate= 'ADD'
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="num !=null and num != ''">
+   and t.num= #{num}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询停车位信息 add by wuxw 2018-07-03 -->
+    <select id="getParkingSpaceInfo" parameterType="Map" resultType="Map">
+        select  t.area,t.type_cd,t.type_cd typeCd,t.num,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+from p_parking_space t 
+where 1 =1 
+<if test="area !=null and area != ''">
+   and t.area= #{area}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="num !=null and num != ''">
+   and t.num= #{num}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改停车位信息 add by wuxw 2018-07-03 -->
+    <update id="updateParkingSpaceInfoInstance" parameterType="Map">
+        update  p_parking_space t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="area !=null and area != ''">
+, t.area= #{area}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="num !=null and num != ''">
+, t.num= #{num}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="psId !=null and psId != ''">
+and t.ps_id= #{psId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询停车位数量 add by wuxw 2018-07-03 -->
+     <select id="queryParkingSpacesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from p_parking_space t 
+where 1 =1 
+<if test="area !=null and area != ''">
+   and t.area= #{area}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="num !=null and num != ''">
+   and t.num= #{num}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+
+     </select>
+
+</mapper>

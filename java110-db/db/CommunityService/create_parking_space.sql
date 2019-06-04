@@ -2,10 +2,11 @@
 CREATE TABLE business_parking_space(
   ps_id VARCHAR(30) NOT NULL COMMENT '车位ID',
   b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
+  community_id varchar(30) not null comment '小区ID',
   num VARCHAR(12) NOT NULL COMMENT '车位编号',
-  type_cd VARCHAR(4) NOT NULL COMMENT '车位类型',
-  state VARCHAR(4) NOT NULL COMMENT '车位状态',
-  area VARCHAR(4) NOT NULL COMMENT '车位面积',
+  type_cd VARCHAR(4) NOT NULL COMMENT '车位类型,地上停车位1001 地下停车位 2001',
+  state VARCHAR(4) NOT NULL COMMENT '车位状态 出售 S，出租 H ，空闲 F',
+  area decimal(7,2) NOT NULL COMMENT '车位面积',
   user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
   remark VARCHAR(300) NOT NULL COMMENT '用户ID',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -13,126 +14,24 @@ CREATE TABLE business_parking_space(
 );
 
 
-CREATE INDEX idx_business_floor_id ON business_floor(floor_id);
-CREATE INDEX idx_business_floor_b_id ON business_floor(b_id);
+CREATE INDEX idx_bps_ps_id ON business_parking_space(ps_id);
+CREATE INDEX idx_bps_b_id ON business_parking_space(b_id);
 
-
-CREATE TABLE f_floor(
-  floor_id VARCHAR(30) NOT NULL COMMENT '楼ID',
+-- 楼信息
+CREATE TABLE p_parking_space(
+  ps_id VARCHAR(30) NOT NULL COMMENT '车位ID',
   b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-  floor_num VARCHAR(12) NOT NULL COMMENT '楼编号',
-  `name` VARCHAR(100) NOT NULL COMMENT '小区楼名称',
+  community_id varchar(30) not null comment '小区ID',
+  num VARCHAR(12) NOT NULL COMMENT '车位编号',
+  type_cd VARCHAR(4) NOT NULL COMMENT '车位类型,地上停车位1001 地下停车位 2001',
+  state VARCHAR(4) NOT NULL COMMENT '车位状态 出售 S，出租 H ，空闲 F',
+  area decimal(7,2) NOT NULL COMMENT '车位面积',
   user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
   remark VARCHAR(300) NOT NULL COMMENT '用户ID',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-  UNIQUE KEY (floor_id)
-);
-CREATE INDEX idx_floor_b_id ON f_floor(b_id);
-CREATE UNIQUE INDEX idx_floor_id ON f_floor(floor_id);
-
-
--- 单元信息 building 楼宇管理
-CREATE TABLE business_building_unit(
-  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
-  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-  unit_num VARCHAR(12) NOT NULL COMMENT '单元编号',
-  floor_id VARCHAR(30) NOT NULL COMMENT '楼ID',
-  layer_count int NOT NULL COMMENT '总层数',
-  lift varchar(4) NOT NULL COMMENT '是否有电梯 1010有 2020 无',
-  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-  remark VARCHAR(200) NOT NULL COMMENT '备注',
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+  unique key (ps_id)
 );
 
-
-CREATE INDEX idx_business_unit_id ON business_building_unit(unit_id);
-CREATE INDEX idx_business_unit_b_id ON business_building_unit(b_id);
-
-
-CREATE TABLE building_unit(
-  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
-  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-  unit_num VARCHAR(12) NOT NULL COMMENT '单元编号',
-  floor_id VARCHAR(30) NOT NULL COMMENT '楼ID',
-  layer_count int NOT NULL COMMENT '总层数',
-  lift varchar(4) NOT NULL COMMENT '是否有电梯 1010有 2020 无',
-  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-  remark VARCHAR(200) NOT NULL COMMENT '备注',
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-  UNIQUE KEY (unit_id)
-);
-CREATE INDEX idx_unit_b_id ON building_unit(b_id);
-CREATE UNIQUE INDEX idx_unit_id ON building_unit(unit_id);
-
-
-
--- 单元信息 building 楼宇管理
-CREATE TABLE business_building_room(
-  room_id VARCHAR(30) NOT NULL COMMENT '房屋ID',
-  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-  room_num VARCHAR(12) NOT NULL COMMENT '房屋编号',
-  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
-  layer int NOT NULL COMMENT '层数',
-  section int NOT NULL COMMENT '室',
-  apartment varchar(4) NOT NULL COMMENT '户型',
-  built_up_area decimal(6,2) NOT NULL COMMENT '建筑面积',
-  unit_price DECIMAL(12,2) NOT NULL COMMENT '每平米单价',
-  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-  remark VARCHAR(200) NOT NULL COMMENT '备注',
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
-);
-
-
-CREATE INDEX idx_business_room_id ON business_building_room(room_id);
-CREATE INDEX idx_business_room_b_id ON business_building_room(b_id);
-
-
-CREATE TABLE building_room(
-  room_id VARCHAR(30) NOT NULL COMMENT '房屋ID',
-  b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
-  room_num VARCHAR(12) NOT NULL COMMENT '房屋编号',
-  unit_id VARCHAR(30) NOT NULL COMMENT '单元ID',
-  layer int NOT NULL COMMENT '层数',
-  section int NOT NULL COMMENT '室',
-  apartment varchar(4) NOT NULL COMMENT '户型',
-  built_up_area decimal(6,2) NOT NULL COMMENT '建筑面积',
-  unit_price DECIMAL(12,2) NOT NULL COMMENT '每平米单价',
-  user_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-  remark VARCHAR(200) NOT NULL COMMENT '备注',
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-  UNIQUE KEY (room_id)
-);
-CREATE INDEX idx_room_b_id ON building_room(b_id);
-CREATE UNIQUE INDEX idx_room_id ON building_room(room_id);
-
-create table business_building_room_attr(
-    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
-    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
-    room_id VARCHAR(30) NOT NULL COMMENT '用户ID',
-    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
-    `value` VARCHAR(50) NOT NULL COMMENT '属性值',
-    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
-);
-
-CREATE INDEX idx_business_b_room_attr ON business_building_room_attr(room_id);
-CREATE INDEX idx_business_b_room_attr_b_id ON business_building_room_attr(b_id);
-
-
-CREATE TABLE building_room_attr(
-    b_id VARCHAR(30) NOT NULL COMMENT '订单ID',
-    attr_id VARCHAR(30) NOT NULL COMMENT '属性id',
-    room_id VARCHAR(30) NOT NULL COMMENT '房屋ID',
-    spec_cd VARCHAR(12) NOT NULL COMMENT '规格id,参考spec表',
-    `value` VARCHAR(50) NOT NULL COMMENT '属性值',
-    create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
-    UNIQUE KEY (attr_id)
-);
-CREATE INDEX idx_b_attr_b_id ON building_room_attr(b_id);
-CREATE INDEX idx_attr_room_id ON building_room_attr(room_id);
+CREATE INDEX idx_ps_ps_id ON p_parking_space(ps_id);
+CREATE INDEX idx_ps_b_id ON p_parking_space(b_id);
