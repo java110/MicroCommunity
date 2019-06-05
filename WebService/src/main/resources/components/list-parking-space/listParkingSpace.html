@@ -5,23 +5,10 @@
                 <div class="ibox-title">
                     <h5>停车位信息</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <!--<div class="input-group" style="margin-right:10px">
-                            <input type="text" placeholder="请填写车位编号" class=" form-control" v-model="listParkingSpaceInfo.num" style="width: auto;">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-primary btn-sm"  v-on:click="queryParkingSpaceMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 马上查询</button>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddParkingSpaceModal(-1)">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                添加车位
-                            </button>
-                        </div>-->
 
                         <form>
                             <div class="form-row">
-                                <div class="col-8 input-group">
+                                <div class="col-8 input-group input-group-sm">
                                     <input type="text" placeholder="请填写车位编号" class=" form-control" v-model="listParkingSpaceInfo.num">
                                     <div class="input-group-prepend">
                                         <button type="button" class="btn btn-primary btn-sm"  v-on:click="queryParkingSpaceMethod()">
