@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>停车位信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择车位</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >车位ID：</label>
+                            <label class="">{{parkingSpaceInfo.psId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">编号：</label>
+                            <label class="">{{parkingSpaceInfo.num}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >类型：</label>
+                            <label class="">{{parkingSpaceInfo.typeCd == 1001 ? '地下停车位' : '地上停车位'}}</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >车位状态：</label>
+                            <label class="">{{parkingSpaceInfo.state}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >面积：</label>
+                            <label class="">{{parkingSpaceInfo.area}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">备注：</label>
+                            <label class="">{{parkingSpaceInfo.remark}}</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <vc:create name="searchParkingSpace"
+               emitChooseParkingSpace="viewSelectParkingSpace"
+               emitLoadData="sellRoomOther"
+               parkingSpaceFlag="'F'"
+    ></vc:create>
+</div>

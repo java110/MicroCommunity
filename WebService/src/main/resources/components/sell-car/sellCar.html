@@ -1,0 +1,19 @@
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+    <vc:create name="addCar"></vc:create>
+
+    <!-- 选择 业主信息 -->
+    <vc:create name="sellRoomSelectOwner"
+               callBackComponent = "sellCar"
+    ></vc:create>
+
+    <!-- 选择停车位 -->
+    <vc:create name="viewSelectParkingSpace"
+               callBackComponent="sellCar"
+    ></vc:create>
+
+    <div class="">
+        <button class="btn btn-primary float-right" type="button" v-on:click="doSellCar()" ><i class="fa fa-check"></i>&nbsp;我要售卖</button>
+    </div>
+
+</div>

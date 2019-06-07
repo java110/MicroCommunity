@@ -23,6 +23,7 @@ private String communityId;
 private String userId;
 
 
+
     private Date createTime;
 
     private String statusCd = "0";
