@@ -62,10 +62,6 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_communityId = "70";
     public static final String CODE_PREFIX_communityPhotoId = "71";
     public static final String CODE_PREFIX_communityMemberId = "72";
-    public static final String CODE_PREFIX_agentId = "80";
-    public static final String CODE_PREFIX_agentPhotoId = "81";
-    public static final String CODE_PREFIX_agentCerdentialsId = "82";
-    public static final String CODE_PREFIX_agentUserId = "83";
     public static final String CODE_PREFIX_feeId = "90";
     public static final String CODE_PREFIX_detailId = "91";
     public static final String CODE_PREFIX_configId = "92";
@@ -81,6 +77,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_ownerId = "77";
     public static final String CODE_PREFIX_ownerRoomRelId = "78";
     public static final String CODE_PREFIX_psId = "79";
+    public static final String CODE_PREFIX_carId = "80";
 
     /**
      * 只有在不调用服务生成ID时有用

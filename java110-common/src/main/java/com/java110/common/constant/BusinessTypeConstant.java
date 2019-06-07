@@ -91,6 +91,23 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_OWNER_ROOM_REL = "111100050001";
 
 
+    /**
+     * 保存业主车辆
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_CAR = "111200030001";
+
+    /**
+     * 修改业主车辆
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_CAR = "111200040001";
+
+
+    /**
+     * 删除业主车辆
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_CAR = "111200050001";
+
+
 
 
 

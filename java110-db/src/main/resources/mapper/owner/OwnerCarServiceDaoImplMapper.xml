@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerCarServiceDaoImpl">
+
+    <!-- 保存车辆管理信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessOwnerCarInfo" parameterType="Map">
+           insert into business_owner_car(
+car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id
+) values (
+#{carColor},#{carBrand},#{carType},#{operate},#{carNum},#{psId},#{remark},#{ownerId},#{bId},#{userId},#{carId}
+)
+       </insert>
+
+
+       <!-- 查询车辆管理信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessOwnerCarInfo" parameterType="Map" resultType="Map">
+           select  t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type carType,t.operate,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId 
+from business_owner_car t 
+where 1 =1 
+<if test="carColor !=null and carColor != ''">
+   and t.car_color= #{carColor}
+</if> 
+<if test="carBrand !=null and carBrand != ''">
+   and t.car_brand= #{carBrand}
+</if> 
+<if test="carType !=null and carType != ''">
+   and t.car_type= #{carType}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="carId !=null and carId != ''">
+   and t.car_id= #{carId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存车辆管理信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerCarInfoInstance" parameterType="Map">
+        insert into owner_car(
+car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_id,car_id
+) select t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id from business_owner_car t where 1=1
+<if test="carColor !=null and carColor != ''">
+   and t.car_color= #{carColor}
+</if> 
+<if test="carBrand !=null and carBrand != ''">
+   and t.car_brand= #{carBrand}
+</if> 
+<if test="carType !=null and carType != ''">
+   and t.car_type= #{carType}
+</if> 
+   and t.operate= 'ADD'
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="carId !=null and carId != ''">
+   and t.car_id= #{carId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询车辆管理信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerCarInfo" parameterType="Map" resultType="Map">
+        select  t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type carType,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId 
+from owner_car t 
+where 1 =1 
+<if test="carColor !=null and carColor != ''">
+   and t.car_color= #{carColor}
+</if> 
+<if test="carBrand !=null and carBrand != ''">
+   and t.car_brand= #{carBrand}
+</if> 
+<if test="carType !=null and carType != ''">
+   and t.car_type= #{carType}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="carId !=null and carId != ''">
+   and t.car_id= #{carId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改车辆管理信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerCarInfoInstance" parameterType="Map">
+        update  owner_car t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="carColor !=null and carColor != ''">
+, t.car_color= #{carColor}
+</if> 
+<if test="carBrand !=null and carBrand != ''">
+, t.car_brand= #{carBrand}
+</if> 
+<if test="carType !=null and carType != ''">
+, t.car_type= #{carType}
+</if> 
+<if test="carNum !=null and carNum != ''">
+, t.car_num= #{carNum}
+</if> 
+<if test="psId !=null and psId != ''">
+, t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="carId !=null and carId != ''">
+and t.car_id= #{carId}
+</if> 
+
+    </update>
+
+    <!-- 查询车辆管理数量 add by wuxw 2018-07-03 -->
+     <select id="queryOwnerCarsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from owner_car t 
+where 1 =1 
+<if test="carColor !=null and carColor != ''">
+   and t.car_color= #{carColor}
+</if> 
+<if test="carBrand !=null and carBrand != ''">
+   and t.car_brand= #{carBrand}
+</if> 
+<if test="carType !=null and carType != ''">
+   and t.car_type= #{carType}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="psId !=null and psId != ''">
+   and t.ps_id= #{psId}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="carId !=null and carId != ''">
+   and t.car_id= #{carId}
+</if> 
+
+
+     </select>
+
+</mapper>
