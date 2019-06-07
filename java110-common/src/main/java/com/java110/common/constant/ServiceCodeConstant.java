@@ -457,4 +457,8 @@ public class ServiceCodeConstant {
     //删除停车位信息
     public static final String SERVICE_CODE_DELETE_PARKING_SPACE = "parkingSpace.deleteParkingSpace";
 
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_SELL_PARKING_SPACE = "parkingSpace.sellParkingSpace";
+
 }

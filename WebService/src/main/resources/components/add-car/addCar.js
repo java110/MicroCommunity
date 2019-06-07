@@ -10,11 +10,11 @@
                 carBrand:'',
                 carType:'',
                 carColor:'',
-                remark:""
+                carRemark:""
             }
         },
         watch:{
-            otherInfo:{
+            addCarInfo:{
                 deep: true,
                 handler:function(){
                     vc.emit('sellCar','notify',vc.component.addCarInfo);

@@ -32,7 +32,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
     private RestTemplate restTemplate;
 
     @Override
-    public ResponseEntity<String> loadPropertyConfigFee(IPageData pd) {
+    public ResponseEntity<String> loadPropertyConfigFee(IPageData pd, String feeTypeCd) {
         validateLoadPropertyConfigFee(pd);
 
         //校验员工是否有权限操作
@@ -51,7 +51,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        paramIn.put("feeTypeCd", feeTypeCd);
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
                 HttpMethod.GET);

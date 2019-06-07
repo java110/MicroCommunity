@@ -4,50 +4,40 @@ import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;
 
 /**
- * 费用服务类
+ * 小区楼接口类
  */
-public interface IFeeServiceSMO {
+public interface ICarServiceSMO {
 
     /**
-     * 物业配置费
-     *
-     * @param pd 页面数据封装对象
-     * @param feeTypeCd 费用类型
-     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
-     */
-    ResponseEntity<String> loadPropertyConfigFee(IPageData pd, String feeTypeCd);
-
-    /**
-     * 缴费
+     * 查询小区楼信息
      *
      * @param pd 页面数据封装对象
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
-    ResponseEntity<String> payFee(IPageData pd);
+    ResponseEntity<String> listCar(IPageData pd);
+
 
     /**
-     * 查询主费用
+     * 添加小区楼信息
      *
      * @param pd 页面数据封装对象
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
-    ResponseEntity<String> loadFeeByRoomId(IPageData pd);
+    ResponseEntity<String> saveCar(IPageData pd);
 
     /**
-     * 查询费用明细
+     * 编辑小区楼信息
      *
      * @param pd 页面数据封装对象
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
-    ResponseEntity<String> loadFeeDetail(IPageData pd);
+    ResponseEntity<String> editCar(IPageData pd);
 
     /**
-     * 保存或修改物业费配置
+     * 删除小区楼
+     *
      * @param pd 页面数据封装对象
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
-    ResponseEntity<String> saveOrUpdatePropertyFeeConfig(IPageData pd);
-
-
-
+    ResponseEntity<String> deleteCar(IPageData pd);
 }

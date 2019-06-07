@@ -1,5 +1,6 @@
 package com.java110.web.components.fee;
 
+import com.java110.common.constant.FeeTypeConstant;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFeeServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class PropertyPayComponent {
     private IFeeServiceSMO feeServiceSMOImpl;
 
     public ResponseEntity<String> loadPropertyConfigData(IPageData pd) {
-        return feeServiceSMOImpl.loadPropertyConfigFee(pd);
+        return feeServiceSMOImpl.loadPropertyConfigFee(pd, FeeTypeConstant.FEE_TYPE_PROPERTY);
     }
 
 

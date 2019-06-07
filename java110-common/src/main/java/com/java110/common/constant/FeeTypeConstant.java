@@ -20,7 +20,29 @@ public class FeeTypeConstant {
     /**
      * 物业费
      */
-    public final static String FEE_TYPE_PROPERTY = "888800010001";
+    public static final String FEE_TYPE_PROPERTY = "888800010001";
+
+
+
+    /**
+     * 停车费 地上 出售费用类型
+     */
+    public static final String FEE_TYPE_SELL_UP_PARKING_SPACE = "888800010002";
+
+    /**
+     * 停车费 地下 出售费用类型
+     */
+    public static final String FEE_TYPE_SELL_DOWN_PARKING_SPACE = "888800010003";
+
+    /**
+     * 停车费 地上 出租费用类型
+     */
+    public static final String FEE_TYPE_HIRE_UP_PARKING_SPACE = "888800010004";
+
+    /**
+     * 停车费 地下 出租费用类型
+     */
+    public static final String FEE_TYPE_HIRE_DOWN_PARKING_SPACE = "888800010005";
 
 
 
