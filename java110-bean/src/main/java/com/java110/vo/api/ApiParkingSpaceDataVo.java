@@ -28,6 +28,12 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     private String createTime;
 
+    private String carId;
+    private String carNum;
+
+    private String carBrand;
+    private String carType;
+
     public String getArea() {
         return area;
     }
@@ -106,5 +112,37 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
+
+    public String getCarNum() {
+        return carNum;
+    }
+
+    public void setCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public String getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(String carBrand) {
+        this.carBrand = carBrand;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
     }
 }

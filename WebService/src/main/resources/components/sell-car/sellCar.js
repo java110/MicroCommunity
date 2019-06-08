@@ -128,7 +128,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            vc.jumpToPage("/flow/ownerCarFlow?" + vc.objToGetParam(vc.component.sellCarInfo.ownerInfo));
+                            vc.jumpToPage("/flow/ownerParkingSpaceFlow?" + vc.objToGetParam(vc.component.sellCarInfo.ownerInfo));
                             return ;
                         }
                         vc.message(json);

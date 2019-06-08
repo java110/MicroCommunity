@@ -1,4 +1,4 @@
-package com.java110.api.listener.room;
+package com.java110.api.listener.parkingSpace;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,10 +12,11 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
+import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.FeeDto;
-import com.java110.dto.OwnerRoomRelDto;
+import com.java110.dto.OwnerCarDto;
+import com.java110.dto.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
@@ -30,19 +31,22 @@ import java.util.List;
 
 /**
  * @ClassName SaveUnitListener
- * @Description TODO 退屋信息
+ * @Description TODO 退停车位信息
  * @Author wuxw
  * @Date 2019/5/3 11:54
  * @Version 1.0
  * add by wuxw 2019/5/3
  **/
-@Java110Listener("exitRoomListener")
-public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
-    private static Logger logger = LoggerFactory.getLogger(ExitRoomListener.class);
+@Java110Listener("exitParkingSpaceListener")
+public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener {
+    private static Logger logger = LoggerFactory.getLogger(ExitParkingSpaceListener.class);
 
 
     @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -53,7 +57,7 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_EXIT_ROOM;
+        return ServiceCodeConstant.SERVICE_CODE_EXIT_PARKING_SPACE;
     }
 
     @Override
@@ -75,12 +79,17 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         validate(paramIn);
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
+        validateHasSellParkingSpace(paramObj);
+
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        //添加单元信息
-        businesses.add(exitRoom(paramObj, dataFlowContext));
+        //退出 业主和停车位之间关系
+        businesses.add(exitParkingSpace(paramObj, dataFlowContext));
+
+        //将车位状态改为空闲状态
+        businesses.add(modifyParkingSpaceState(paramObj));
 
 
         //删除费用信息
@@ -104,26 +113,52 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject exitRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject exitParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        //根据ownerId 和 roomId 查询relId 删除
-        OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(paramInJson, OwnerRoomRelDto.class);
-        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
-        }
-
+        OwnerCarDto ownerCarDto = (OwnerCarDto) paramInJson.get("ownerCarDto");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
+        JSONObject businessOwnerCar = new JSONObject();
         //businessUnit.putAll(paramInJson);
-        businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
+        businessOwnerCar.put("carId", ownerCarDto.getCarId());
         //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerCar", businessOwnerCar);
+
+        return business;
+    }
+
+    /**
+     * 修改停车位状态信息
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject modifyParkingSpaceState(JSONObject paramInJson) {
+
+        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+        parkingSpaceDto.setCommunityId(paramInJson.getString("communityId"));
+        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
+        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
+        }
+
+        parkingSpaceDto = parkingSpaceDtos.get(0);
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessParkingSpace = new JSONObject();
+
+        businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
+        businessParkingSpace.put("state", "F");
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
 
         return business;
     }
@@ -142,7 +177,7 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         feeDto.setIncomeObjId(paramInJson.getString("storeId"));
-        feeDto.setPayerObjId(paramInJson.getString("roomId"));
+        feeDto.setPayerObjId(paramInJson.getString("psId"));
         feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
@@ -174,45 +209,52 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
     private void validate(String paramIn) {
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId节点");
-        Assert.jsonObjectHaveKey(paramIn, "roomId", "请求报文中未包含roomId节点");
+        Assert.jsonObjectHaveKey(paramIn, "psId", "请求报文中未包含psId节点");
         Assert.jsonObjectHaveKey(paramIn, "storeId", "请求报文中未包含storeId节点");
 
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         Assert.hasLength(paramObj.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramObj.getString("ownerId"), "ownerId不能为空");
-        Assert.hasLength(paramObj.getString("roomId"), "roomId不能为空");
+        Assert.hasLength(paramObj.getString("psId"), "psId不能为空");
         Assert.hasLength(paramObj.getString("storeId"), "storeId不能为空");
         //
 
         super.communityHasOwner(paramObj, communityInnerServiceSMOImpl);
 
-        //校验物业费是否已经交清
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(paramObj.getString("communityId"));
-        feeDto.setIncomeObjId(paramObj.getString("storeId"));
-        feeDto.setPayerObjId(paramObj.getString("roomId"));
-        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (feeDtos == null || feeDtos.size() == 0) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未包含物业费，数据异常");
-        }
-
-        if (feeDtos.size() > 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "包含多条物业费，数据异常");
-        }
-
-        FeeDto feeDtoData = feeDtos.get(0);
-
-        Calendar calc = Calendar.getInstance();
-        calc.setTime(feeDtoData.getEndTime());
-        calc.add(Calendar.DATE, 30);
-        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "你还有物业费没有缴清，请先缴清欠款");
-        }
-
 
     }
+
+
+    /**
+     * 校验是否存在实例数据
+     *
+     * @param paramObj 请参数 转成json对象
+     */
+    private void validateHasSellParkingSpace(JSONObject paramObj) {
+
+        //校验物业费是否已经交清
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setPsId(paramObj.getString("psId"));
+        ownerCarDto.setOwnerId(paramObj.getString("ownerId"));
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+        if (ownerCarDtos == null || ownerCarDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "该停车位没被出售过（出租过） 或 被多次出售过（出租过）");
+        }
+
+        ownerCarDto = ownerCarDtos.get(0);
+
+        Calendar calc = Calendar.getInstance();
+        calc.setTime(ownerCarDto.getCreateTime());
+        calc.add(Calendar.DATE, 7);
+
+        if (calc.getTime().getTime() > DateUtil.getCurrentDate().getTime()) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "只有在7天内才能退款，现已经过期，无法退款");
+        }
+
+        paramObj.put("ownerCarDto", ownerCarDto);
+    }
+
 
     public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
         return communityInnerServiceSMOImpl;
@@ -227,12 +269,12 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         return DEFAULT_ORDER;
     }
 
-    public IOwnerRoomRelInnerServiceSMO getOwnerRoomRelInnerServiceSMOImpl() {
-        return ownerRoomRelInnerServiceSMOImpl;
+    public IOwnerCarInnerServiceSMO getOwnerCarInnerServiceSMOImpl() {
+        return ownerCarInnerServiceSMOImpl;
     }
 
-    public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
-        this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
+    public void setOwnerCarInnerServiceSMOImpl(IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl) {
+        this.ownerCarInnerServiceSMOImpl = ownerCarInnerServiceSMOImpl;
     }
 
     public IFeeInnerServiceSMO getFeeInnerServiceSMOImpl() {
@@ -241,5 +283,13 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
 
     public void setFeeInnerServiceSMOImpl(IFeeInnerServiceSMO feeInnerServiceSMOImpl) {
         this.feeInnerServiceSMOImpl = feeInnerServiceSMOImpl;
+    }
+
+    public IParkingSpaceInnerServiceSMO getParkingSpaceInnerServiceSMOImpl() {
+        return parkingSpaceInnerServiceSMOImpl;
+    }
+
+    public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
+        this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
     }
 }

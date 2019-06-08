@@ -448,6 +448,10 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";
 
 
+    //查询停车位
+    public static final String SERVICE_CODE_QUERY_PARKING_SPACE_BY_OWNER = "parkingSpace.queryParkingSpacesByOwner";
+
+
     // 保存停车位信息
     public static final String SERVICE_CODE_SAVE_PARKING_SPACE = "parkingSpace.saveParkingSpace";
 
@@ -460,5 +464,10 @@ public class ServiceCodeConstant {
 
     // 保存停车位信息
     public static final String SERVICE_CODE_SELL_PARKING_SPACE = "parkingSpace.sellParkingSpace";
+
+
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_EXIT_PARKING_SPACE = "parkingSpace.exitParkingSpace";
 
 }

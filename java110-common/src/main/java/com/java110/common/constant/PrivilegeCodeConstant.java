@@ -42,6 +42,11 @@ public final class PrivilegeCodeConstant {
 
     //物业停车位权限
     public static final String PRIVILEGE_PARKING_SPACE = "500201906017";
+
+    //业主停车位
+    public static final String PRIVILEGE_PARKING_SPACE_FOR_OWNER = "500201906020";
+
+
     //车位出售
     public static final String PRIVILEGE_CAR = "500201906019";
 }
