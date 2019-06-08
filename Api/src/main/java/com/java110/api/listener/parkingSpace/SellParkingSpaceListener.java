@@ -6,6 +6,7 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.*;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.BeanConvertUtil;
 import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -152,7 +153,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessParkingSpace = new JSONObject();
 
-        businessParkingSpace.putAll(paramInJson);
+        businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
         businessParkingSpace.put("state", "S");
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
 
