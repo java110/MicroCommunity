@@ -236,7 +236,6 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         feeConfigDto = feeConfigDtos.get(0);
 
         double receivableAmount = Double.parseDouble(feeConfigDto.getAdditionalAmount());
-        receivableAmount = Double.parseDouble(paramInJson.getString("cycles")) * receivableAmount;
 
         businessFeeDetail.put("receivableAmount", receivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);

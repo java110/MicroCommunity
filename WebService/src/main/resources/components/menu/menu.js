@@ -32,6 +32,9 @@
                              param,
                              function(json,res){
                                 var _menus = JSON.parse(json);
+                                _menus.sort(function(a,b){
+                                       return a.seq - b.seq
+                                });
                                 var _currentMenusId = vc.getCurrentMenu() == null?_menus[0].id:vc.getCurrentMenu();
                                 vm.menus = vm.refreshMenuActive(_menus,_currentMenusId);
                                 vc.setMenus(vm.menus);
@@ -63,9 +66,7 @@
                     jsonArray[menuIndex].active=false;
                 }
 
-                jsonArray.sort(function(a,b){
-                			return a.seq - b.seq
-                });
+
 
                 return  jsonArray;
            },
