@@ -248,7 +248,7 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
         calc.setTime(ownerCarDto.getCreateTime());
         calc.add(Calendar.DATE, 7);
 
-        if (calc.getTime().getTime() > DateUtil.getCurrentDate().getTime()) {
+        if (calc.getTime().getTime() < DateUtil.getCurrentDate().getTime()) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "只有在7天内才能退款，现已经过期，无法退款");
         }
 

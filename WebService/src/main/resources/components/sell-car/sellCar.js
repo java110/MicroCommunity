@@ -14,7 +14,16 @@
                 psId:'',
                 typeCd:'',
                 receivableAmount: "0.00",
-                receivedAmount:"0.00"
+                receivedAmount:"0.00",
+                ownerInfo:{
+                    ownerId:"",
+                    name:"",
+                    age:"",
+                    sex:"",
+                    userName:"",
+                    remark:"",
+                    link:"",
+                },
             }
         },
         _initMethod:function(){
@@ -23,6 +32,8 @@
         _initEvent:function(){
             vc.on('sellCar','notify',function(_param){
                   vc.copyObject(_param,vc.component.sellCarInfo);
+                  vc.copyObject(_param,vc.component.sellCarInfo.ownerInfo);
+
 
                   if(_param.hasOwnProperty("typeCd")){
                         vc.component.computeReceivableAmount();
@@ -128,7 +139,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            vc.jumpToPage("/flow/ownerParkingSpaceFlow?" + vc.objToGetParam(vc.component.sellCarInfo.ownerInfo));
+                            vc.jumpToPage("/flow/ownerParkingSpaceFlow?" + vc.objToGetParam(vc.component.sellRoomInfo.ownerInfo));
                             return ;
                         }
                         vc.message(json);
