@@ -102,7 +102,9 @@ car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_i
 
     <!-- 查询车辆管理信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerCarInfo" parameterType="Map" resultType="Map">
-        select  t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type carType,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId 
+        select  t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type carType,
+        t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,
+        t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time createTime
 from owner_car t 
 where 1 =1 
 <if test="carColor !=null and carColor != ''">
