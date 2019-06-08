@@ -93,7 +93,7 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
 
         //删除费用信息
-        businesses.add(exitPropertyFee(paramObj, dataFlowContext));
+        businesses.add(exitParkingSpaceFee(paramObj, dataFlowContext));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -150,6 +150,7 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
         parkingSpaceDto = parkingSpaceDtos.get(0);
 
+
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
@@ -159,6 +160,8 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
         businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
         businessParkingSpace.put("state", "F");
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
+
+        paramInJson.put("parkingSpaceDto", parkingSpaceDto);
 
         return business;
     }
@@ -170,15 +173,17 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject exitPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject exitParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
+        ParkingSpaceDto parkingSpaceDto = (ParkingSpaceDto) paramInJson.get("parkingSpaceDto");
         //校验物业费是否已经交清
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         feeDto.setIncomeObjId(paramInJson.getString("storeId"));
         feeDto.setPayerObjId(paramInJson.getString("psId"));
-        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
+        feeDto.setFeeTypeCd("1001".equals(parkingSpaceDto.getTypeCd())
+                ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         if (feeDtos == null || feeDtos.size() != 1) {
