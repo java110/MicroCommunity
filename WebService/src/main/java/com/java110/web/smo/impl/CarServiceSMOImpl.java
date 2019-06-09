@@ -228,12 +228,23 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         Assert.jsonObjectHaveKey(pd.getReqData(), "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(pd.getReqData(), "psId", "未包含psId");
         Assert.jsonObjectHaveKey(pd.getReqData(), "receivedAmount", "未包含receivedAmount");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "sellOrHire", "未包含sellOrHire");
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(paramIn.getString("psId"), "psId不能为空");
         Assert.hasLength(paramIn.getString("receivedAmount"), "receivedAmount不能为空");
+
+        if(!"H".equals(paramIn.getString("sellOrHire"))
+                && !"S".equals(paramIn.getString("sellOrHire"))){
+            throw new IllegalArgumentException("入参错误，无法识别该操作");
+        }
+
+        if("H".equals(paramIn.getString("sellOrHire"))){
+            Assert.jsonObjectHaveKey(pd.getReqData(), "cycles", "未包含cycles");
+            Assert.hasLength(paramIn.getString("cycles"), "cycles不能为空");
+        }
     }
 
     /**
