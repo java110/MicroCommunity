@@ -4,6 +4,9 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+            callBackComponent:vc.propTypes.string
+        },
         data:{
             addCarInfo:{
                 carNum:'',
@@ -17,7 +20,7 @@
             addCarInfo:{
                 deep: true,
                 handler:function(){
-                    vc.emit('sellCar','notify',vc.component.addCarInfo);
+                    vc.emit($props.callBackComponent,'notify',vc.component.addCarInfo);
 
                 }
              }

@@ -1,10 +1,13 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
 
-    <vc:create name="addCar"></vc:create>
+    <vc:create name="addCar"
+               callBackComponent="hireParkingSpace"
+    >
+    </vc:create>
 
     <!-- 选择 业主信息 -->
     <vc:create name="sellRoomSelectOwner"
-               callBackComponent = "sellCar"
+               callBackComponent = "hireParkingSpace"
     ></vc:create>
 
     <!-- 选择停车位 -->

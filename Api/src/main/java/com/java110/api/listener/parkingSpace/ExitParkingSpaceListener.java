@@ -183,11 +183,16 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
         feeDto.setIncomeObjId(paramInJson.getString("storeId"));
         feeDto.setPayerObjId(paramInJson.getString("psId"));
         feeDto.setFeeTypeCd("1001".equals(parkingSpaceDto.getTypeCd())
-                ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
+                ? ("H".equals(parkingSpaceDto.getState())
+                        ? FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE
+                        : FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE)
+                : ("H".equals(parkingSpaceDto.getState())
+                        ?FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE
+                        :FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，物业费对应关系不是一条");
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，停车费对应关系不是一条");
         }
 
 

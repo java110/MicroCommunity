@@ -33,7 +33,7 @@
 
         },
         watch:{
-                    "propertyPayInfo.cycles":{//深度监听，可监听到对象、数组的变化
+                    "hireParkingSpace.cycles":{//深度监听，可监听到对象、数组的变化
                         handler(val, oldVal){
                             vc.component.computeReceivableAmount(val);
                         },
@@ -41,7 +41,7 @@
                     }
         },
         _initEvent:function(){
-            vc.on('sellCar','notify',function(_param){
+            vc.on('hireParkingSpace','notify',function(_param){
                   vc.copyObject(_param,vc.component.hireParkingSpace);
                   vc.copyObject(_param,vc.component.hireParkingSpace.ownerInfo);
 
@@ -201,6 +201,9 @@
 
             },
             computeReceivableAmount:function(_cycles){
+                        if(_cycles == null || _cycles == "" || _cycles == undefined){
+                            _cycles = "0.00";
+                        }
                         vc.component.hireParkingSpace.receivableAmount = (parseFloat(vc.component.hireParkingSpace.additionalAmount) * parseFloat(_cycles)).toFixed(2);
                         vc.component.hireParkingSpace.receivedAmount = vc.component.hireParkingSpace.receivableAmount;
             }
