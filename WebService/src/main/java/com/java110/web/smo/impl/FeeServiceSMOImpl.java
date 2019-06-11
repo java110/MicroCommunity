@@ -10,6 +10,7 @@ import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFeeServiceSMO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,50 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         return responseEntity;
     }
 
+
+    @Override
+    public ResponseEntity<String> loadParkingSpaceConfigFee(IPageData pd) {
+        validateLoadPropertyConfigFee(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PARKING_SPACE_CONFIG_FEE);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
+                HttpMethod.GET);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        JSONArray feeConfigs = JSONArray.parseArray(responseEntity.getBody().toString());
+
+        if (feeConfigs != null && feeConfigs.size() > 1) {
+            responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);
+            return responseEntity;
+        }
+
+        if (feeConfigs != null && feeConfigs.size() > 0) {
+            responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(feeConfigs.get(0)), HttpStatus.OK);
+        } else {
+            responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
+
+        }
+
+
+        return responseEntity;
+    }
     @Override
     public ResponseEntity<String> payFee(IPageData pd) {
         validatePayFee(pd);
@@ -106,6 +151,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
 
     /**
      * 查询主费用
+     *
      * @param pd 页面数据封装对象
      * @return
      */
@@ -158,7 +204,8 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeDetail" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
-        return responseEntity;    }
+        return responseEntity;
+    }
 
     /**
      * @param pd 页面数据封装对象
@@ -184,7 +231,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+            paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                     ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
@@ -198,6 +245,44 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         return responseEntity;
     }
 
+
+    /**
+     * @param pd 页面数据封装对象
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> saveOrUpdateParkingSpaceFeeConfig(IPageData pd) {
+        validateLoadParkingSpaceConfigFee(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PARKING_SPACE_CONFIG_FEE);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                    ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
+                    HttpMethod.POST);
+        } else {
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                    ServiceConstant.SERVICE_API_URL + "/api/fee.updateFeeConfig",
+                    HttpMethod.POST);
+        }
+
+        return responseEntity;
+    }
 
 
     private void validateLoadFee(IPageData pd) {
@@ -213,6 +298,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
 
     /**
      * 校验缴费参数
+     *
      * @param pd
      */
     private void validatePayFee(IPageData pd) {
@@ -249,6 +335,23 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
     }
+
+    /**
+     * 小区房屋查询数据校验
+     *
+     * @param pd 页面数据封装对象
+     */
+    private void validateLoadParkingSpaceConfigFee(IPageData pd) {
+        validateLoadPropertyConfigFee(pd);
+
+        Assert.jsonObjectHaveKey(pd.getReqData(), "feeTypeCd", "请求报文中未包含feeTypeCd节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("feeTypeCd"), "费用类型不能为空");
+
+
+    }
+
 
     /**
      * 校验数据合法性

@@ -17,6 +17,15 @@ public interface IFeeServiceSMO {
      */
     ResponseEntity<String> loadPropertyConfigFee(IPageData pd, String feeTypeCd);
 
+
+    /**
+     * 停车配置费
+     *
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> loadParkingSpaceConfigFee(IPageData pd);
+
     /**
      * 缴费
      *
@@ -47,6 +56,13 @@ public interface IFeeServiceSMO {
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
     ResponseEntity<String> saveOrUpdatePropertyFeeConfig(IPageData pd);
+
+    /**
+     * 保存或修改停车费配置
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> saveOrUpdateParkingSpaceFeeConfig(IPageData pd);
 
 
 

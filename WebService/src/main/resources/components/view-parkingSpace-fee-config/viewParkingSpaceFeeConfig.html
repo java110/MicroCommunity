@@ -1,0 +1,119 @@
+<div class="row" id="component">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>{{feeConfigUpHireInfo.feeName}}信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openConfigParkingSpaceFeeModel(feeConfigUpHireInfo)">
+                        <i class="glyphicon glyphicon-plus"></i> 编辑</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >地上停车费配置ID：</label>
+                            <label class="">{{feeConfigUpHireInfo.configId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >每月费用：</label>
+                            <label class="">{{feeConfigUpHireInfo.additionalAmount}} 元</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>{{feeConfigDownHireInfo.feeName}}信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openConfigParkingSpaceFeeModel(feeConfigDownHireInfo)">
+                        <i class="glyphicon glyphicon-plus"></i> 编辑</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >地下停车费配置ID：</label>
+                            <label class="">{{feeConfigDownHireInfo.configId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >每月费用：</label>
+                            <label class="">{{feeConfigDownHireInfo.additionalAmount}} 元</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>{{feeConfigUpSellInfo.feeName}}信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openConfigParkingSpaceFeeModel(feeConfigUpSellInfo)">
+                        <i class="glyphicon glyphicon-plus"></i> 编辑</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >地上停车费配置ID：</label>
+                            <label class="">{{feeConfigUpSellInfo.configId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >每月费用：</label>
+                            <label class="">{{feeConfigUpSellInfo.additionalAmount}} 元</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>{{feeConfigDownSellInfo.feeName}}信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openConfigParkingSpaceFeeModel(feeConfigDownSellInfo)">
+                        <i class="glyphicon glyphicon-plus"></i> 编辑</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >地下停车费配置ID：</label>
+                            <label class="">{{feeConfigDownSellInfo.configId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" >每月费用：</label>
+                            <label class="">{{feeConfigDownSellInfo.additionalAmount}} 元</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <vc:create name="configParkingSpaceFee"></vc:create>
+</div>
