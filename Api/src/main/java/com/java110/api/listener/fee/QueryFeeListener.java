@@ -115,33 +115,6 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         apiFeeVo.setRoomNum(roomDto.getRoomNum());*/
         apiFeeVo = BeanConvertUtil.covertBean(roomDto,apiFeeVo);
 
-        //查询单元信息
-        /*UnitDto unitDto = new UnitDto();
-        unitDto.setUnitId(roomDto.getUnitId());
-        List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-
-        if (unitDtos == null || unitDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到单元信息 unitId" + roomDto.getUnitId());
-        }
-
-        unitDto = unitDtos.get(0);
-
-        apiFeeVo.setUnitId(unitDto.getUnitId());
-        apiFeeVo.setUnitNum(unitDto.getUnitNum());*/
-
-       /* //查询 小区楼信息
-        FloorDto floorDto = new FloorDto();
-        floorDto.setFloorId(unitDto.getFloorId());
-        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-
-        if (floorDtos == null || floorDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到小区楼信息 floorId" + unitDto.getFloorId());
-        }
-
-        floorDto = floorDtos.get(0);
-        apiFeeVo.setFloorNum(floorDto.getFloorNum());
-        apiFeeVo.setFloorId(floorDto.getFloorId());*/
-
         // 业主信息
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(roomDto.getRoomId());

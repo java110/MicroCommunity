@@ -14,7 +14,9 @@
                             <div class="row">
 
                                 <div class="col-sm-6 m-b-xs">
-
+                                    <div class="input-group" v-if="searchParkingSpaceInfo.psFlag == 'SH'">
+                                        <input placeholder="输入车牌号" type="text" v-model="searchParkingSpaceInfo.carNum" class="form-control form-control-sm">
+                                    </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="input-group">

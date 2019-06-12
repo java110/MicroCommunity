@@ -181,6 +181,39 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         return responseEntity;
     }
 
+
+    /**
+     * 查询主费用
+     *
+     * @param pd 页面数据封装对象
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> loadFeeByPsId(IPageData pd) {
+        validateLoadParkingSpaceFee(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PARKING_SPACE);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeByParkingSpace" + mapToUrlParam(paramIn),
+                HttpMethod.GET);
+        return responseEntity;
+    }
+
     @Override
     public ResponseEntity<String> loadFeeDetail(IPageData pd) {
         validateLoadFeeDetail(pd);
@@ -295,6 +328,18 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         Assert.hasLength(paramIn.getString("roomId"), "房屋ID不能为空");
         Assert.hasLength(paramIn.getString("feeTypeCd"), "费用类型不能为空");
     }
+
+
+    private void validateLoadParkingSpaceFee(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "psId", "请求报文中未包含psId节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(paramIn.getString("psId"), "停车位ID不能为空");
+    }
+
+
 
     /**
      * 校验缴费参数

@@ -429,10 +429,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
     public static final String SERVICE_CODE_QUERY_FEE_DETAIL = "fee.queryFeeDetail";
 
-
-
     //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE = "fee.queryFee";
+
+    //查询费用配置 根据停车位
+    public static final String SERVICE_CODE_QUERY_FEE_BY_PARKING_SPACE = "fee.queryFeeByParkingSpace";
 
     //保存费用配置
     public static final String SERVICE_CODE_SAVE_FEE_CONFIG = "fee.saveFeeConfig";

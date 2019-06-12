@@ -24,11 +24,6 @@
                   vc.component.listFeeDetail(DEFAULT_PAGE,DEFAULT_ROW);
             });
 
-            vc.on('propertyFee','listParkingSpaceData',function(_param){
-                  vc.component.feeDetailInfo.feeId = _param.feeId;
-                  vc.component.listFeeDetail(DEFAULT_PAGE,DEFAULT_ROW);
-            });
-
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component.listRoom(_currentPage,DEFAULT_ROW);
             });

@@ -56,6 +56,8 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateParkingSpaceData(reqJson);
 
+        refreshReqJson(reqJson);
+
 
         int row = reqJson.getInteger("row");
 
@@ -73,6 +75,23 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiParkingSpaceVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 请求数据处理
+     *
+     * @param reqJson 请求数据对象
+     */
+    private void refreshReqJson(JSONObject reqJson) {
+
+        if (!reqJson.containsKey("state")) {
+            return;
+        }
+
+        if("SH".equals(reqJson.getString("state"))){
+            reqJson.put("states", new String[] {"S","H"});
+            reqJson.remove("state");
+        }
     }
 
 

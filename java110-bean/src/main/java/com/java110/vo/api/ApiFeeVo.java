@@ -10,10 +10,10 @@ import com.java110.vo.Vo;
  * @Version 1.0
  * add by wuxw 2019/6/2
  **/
-public class ApiFeeVo extends Vo {
+public class ApiFeeVo extends ApiMainFeeVo {
 
 
-   private String feeId;
+
    private String floorNum;
    private String floorId;
    private String unitId;
@@ -23,19 +23,7 @@ public class ApiFeeVo extends Vo {
    private String ownerId;
    private String ownerName;
    private String link;
-   private String startTime;
-   private String endTime;
-   private String amount;
    private String builtUpArea;
-
-
-    public String getFeeId() {
-        return feeId;
-    }
-
-    public void setFeeId(String feeId) {
-        this.feeId = feeId;
-    }
 
     public String getFloorNum() {
         return floorNum;
@@ -85,29 +73,7 @@ public class ApiFeeVo extends Vo {
         this.link = link;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 
     public String getUnitId() {
         return unitId;
@@ -140,4 +106,7 @@ public class ApiFeeVo extends Vo {
     public void setBuiltUpArea(String builtUpArea) {
         this.builtUpArea = builtUpArea;
     }
+
+
+
 }

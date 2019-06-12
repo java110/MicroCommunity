@@ -39,7 +39,8 @@ where 1 =1
 </if> 
 <if test="state !=null and state != ''">
    and t.state= #{state}
-</if> 
+</if>
+
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 
@@ -119,7 +120,13 @@ where 1 =1
 </if> 
 <if test="state !=null and state != ''">
    and t.state= #{state}
-</if> 
+</if>
+<if test="states != null and states != null">
+    and t.state in
+    <foreach collection="states" item="item" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+</if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 
@@ -128,7 +135,8 @@ where 1 =1
 </if> 
 <if test="userId !=null and userId != ''">
    and t.user_id= #{userId}
-</if> 
+</if>
+
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
@@ -199,7 +207,13 @@ where 1 =1
 </if> 
 <if test="state !=null and state != ''">
    and t.state= #{state}
-</if> 
+</if>
+ <if test="states != null and states != null">
+     and t.state in
+     <foreach collection="states" item="item" open="(" close=")" separator=",">
+         #{item}
+     </foreach>
+ </if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 
