@@ -22,7 +22,7 @@ private String state;
 private String communityId;
 private String userId;
 
-private String states;
+private String[] states;
 
 
 
@@ -97,11 +97,11 @@ public void setUserId(String userId) {
         this.statusCd = statusCd;
     }
 
-    public String getStates() {
+    public String[] getStates() {
         return states;
     }
 
-    public void setStates(String states) {
+    public void setStates(String[] states) {
         this.states = states;
     }
 }
