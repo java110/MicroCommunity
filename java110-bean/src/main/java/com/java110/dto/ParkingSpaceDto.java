@@ -22,6 +22,8 @@ private String state;
 private String communityId;
 private String userId;
 
+private String states;
+
 
 
     private Date createTime;
@@ -93,5 +95,13 @@ public void setUserId(String userId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStates() {
+        return states;
+    }
+
+    public void setStates(String states) {
+        this.states = states;
     }
 }

@@ -4,7 +4,7 @@
             <div class="ibox-title">
                 <h5>{{mainParkingSpaceFeeInfo.feeName}}信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchRoomModel()">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择停车位</button>
                     <button type="button" class="btn btn-primary btn-sm"
                             v-if="mainParkingSpaceFeeInfo.feeId != null && mainParkingSpaceFeeInfo.feeId != ''"
@@ -79,9 +79,9 @@
         </div>
     </div>
     <vc:create name="searchParkingSpace"
-               emitChooseRoom="viewMainParkingSpaceFee"
+               emitChooseParkingSpace="viewMainParkingSpaceFee"
                emitLoadData="propertyFee"
-               parkingSpaceFlag="SH"
+               parkingSpaceFlag="'SH'"
     ></vc:create>
     <vc:create name="propertyPay"></vc:create>
 </div>

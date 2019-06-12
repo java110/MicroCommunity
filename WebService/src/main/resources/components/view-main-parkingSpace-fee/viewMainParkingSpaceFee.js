@@ -42,8 +42,8 @@
         },
         methods:{
 
-            openSearchRoomModel:function(){
-                vc.emit('searchRoom','openSearchRoomModel',{});
+            openSearchParkingSpaceModel:function(){
+                vc.emit('searchParkingSpace','openSearchParkingSpaceModel',{});
             },
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
