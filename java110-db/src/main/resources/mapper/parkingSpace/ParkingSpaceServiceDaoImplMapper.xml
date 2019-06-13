@@ -127,6 +127,12 @@ where 1 =1
         #{item}
     </foreach>
 </if>
+<if test="psIds != null and psIds != null">
+    and t.ps_id in
+    <foreach collection="psIds" item="item" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+</if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 

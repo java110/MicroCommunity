@@ -1,6 +1,9 @@
 (function(vc,vm){
 
     vc.extends({
+        propTypes: {
+            emitReloadFee:vc.propTypes.string
+        },
         data:{
             propertyPayInfo:{
                 cycles:'',
@@ -116,7 +119,7 @@
                             //关闭model
                             $('#propertyPayModel').modal('hide');
                             vc.emit('propertyFee','listFeeDetail',vc.component.propertyPayInfo);
-                            vc.emit('viewMainFee','reloadFee',vc.component.propertyPayInfo);
+                            vc.emit($props.emitReloadFee,'reloadFee',vc.component.propertyPayInfo);
                             return ;
                         }
                         vc.message(json);

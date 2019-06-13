@@ -22,6 +22,8 @@ private String state;
 private String communityId;
 private String userId;
 
+private String[] psIds;
+
 private String[] states;
 
 
@@ -103,5 +105,14 @@ public void setUserId(String userId) {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+
+    public String[] getPsIds() {
+        return psIds;
+    }
+
+    public void setPsIds(String[] psIds) {
+        this.psIds = psIds;
     }
 }

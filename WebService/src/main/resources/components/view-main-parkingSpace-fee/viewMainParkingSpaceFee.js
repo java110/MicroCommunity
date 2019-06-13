@@ -32,10 +32,10 @@
                   vc.component.loadMainParkingSpaceFeeInfo(_parkingSPace);
             });
 
-            vc.on('viewMainFee','reloadFee',function(_room){
-                if(vc.component.mainParkingSpaceFeeInfo.roomId != ''){
-                      vc.component.loadMainFeeInfo({
-                            roomId:vc.component.mainParkingSpaceFeeInfo.roomId
+            vc.on('viewMainParkingSpaceFee','reloadFee',function(_parkingSpace){
+                if(vc.component.mainParkingSpaceFeeInfo.psId != ''){
+                      vc.component.loadMainParkingSpaceFeeInfo({
+                            psId:vc.component.mainParkingSpaceFeeInfo.psId
                       });
 
                 }

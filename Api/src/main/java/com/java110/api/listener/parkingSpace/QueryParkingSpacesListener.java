@@ -6,9 +6,12 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
+import com.java110.dto.OwnerCarDto;
 import com.java110.dto.ParkingSpaceDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiParkingSpaceDataVo;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +37,9 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -58,6 +65,13 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
 
         refreshReqJson(reqJson);
 
+        //根据车牌号去查询 车位信息
+        if (reqJson.containsKey("carNum") && !StringUtil.isEmpty("carNum")) {
+
+            queryParkingSpaceByCarNum(reqJson, dataFlowContext);
+            return;
+        }
+
 
         int row = reqJson.getInteger("row");
 
@@ -78,6 +92,51 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
     }
 
     /**
+     * 根据车牌号 查询 停车位
+     *
+     * @param reqJson         请求报文
+     * @param dataFlowContext 上线文对象
+     */
+    private void queryParkingSpaceByCarNum(JSONObject reqJson, DataFlowContext dataFlowContext) {
+
+
+        ApiParkingSpaceVo apiParkingSpaceVo = new ApiParkingSpaceVo();
+
+        int row = reqJson.getInteger("row");
+        //查询总记录数
+        OwnerCarDto ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
+        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        apiParkingSpaceVo.setTotal(ownerCarDtos.size());
+
+        if (ownerCarDtos.size() > 0) {
+            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+            parkingSpaceDto.setPsIds(getPsIds(ownerCarDtos));
+            List<ParkingSpaceDto> parkingSpaceDtoList = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+            apiParkingSpaceVo.setParkingSpaces(BeanConvertUtil.covertBeanList(parkingSpaceDtoList, ApiParkingSpaceDataVo.class));
+        }
+
+        apiParkingSpaceVo.setRecords((int) Math.ceil((double) ownerCarDtos.size() / (double) row));
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiParkingSpaceVo), HttpStatus.OK);
+        dataFlowContext.setResponseEntity(responseEntity);
+
+    }
+
+    /**
+     * 获取 停车位Ids
+     * @param ownerCarDtos 业主车位
+     * @return 停车位Ids
+     */
+    private String[] getPsIds(List<OwnerCarDto> ownerCarDtos){
+        List<String> psIds = new ArrayList<String>();
+        for (OwnerCarDto ownerCarDto : ownerCarDtos){
+            psIds.add(ownerCarDto.getPsId());
+        }
+
+        return psIds.toArray(new String[psIds.size()]);
+    }
+
+    /**
      * 请求数据处理
      *
      * @param reqJson 请求数据对象
@@ -88,8 +147,8 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
             return;
         }
 
-        if("SH".equals(reqJson.getString("state"))){
-            reqJson.put("states", new String[] {"S","H"});
+        if ("SH".equals(reqJson.getString("state"))) {
+            reqJson.put("states", new String[]{"S", "H"});
             reqJson.remove("state");
         }
     }
@@ -121,5 +180,14 @@ public class QueryParkingSpacesListener extends AbstractServiceApiDataFlowListen
 
     public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
         this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
+    }
+
+
+    public IOwnerCarInnerServiceSMO getOwnerCarInnerServiceSMOImpl() {
+        return ownerCarInnerServiceSMOImpl;
+    }
+
+    public void setOwnerCarInnerServiceSMOImpl(IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl) {
+        this.ownerCarInnerServiceSMOImpl = ownerCarInnerServiceSMOImpl;
     }
 }
