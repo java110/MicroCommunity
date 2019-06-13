@@ -100,7 +100,7 @@ public class QueryFeeByParkingSpaceListener extends AbstractServiceApiDataFlowLi
         BeanConvertUtil.covertBean(parkingSpaceDto, apiFeeVo);
 
         //查询车辆信息
-        OwnerCarDto  ownerCarDto = BeanConvertUtil.covertBean(feeDto, OwnerCarDto.class);
+        OwnerCarDto  ownerCarDto = BeanConvertUtil.covertBean(reqJson, OwnerCarDto.class);
 
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         Assert.listOnlyOne(ownerCarDtos, "未查询到或查询多条 车辆信息");
