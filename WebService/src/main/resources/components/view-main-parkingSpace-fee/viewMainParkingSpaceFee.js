@@ -49,7 +49,8 @@
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
                     feeId:vc.component.mainParkingSpaceFeeInfo.feeId,
-                    feeTypeCd:vc.component.mainParkingSpaceFeeInfo.feeTypeCd
+                    feeTypeCd:vc.component.mainParkingSpaceFeeInfo.feeTypeCd,
+                    builtUpArea:"0.00"
                 });
             },
             loadMainParkingSpaceFeeInfo:function(_parkingSPace){

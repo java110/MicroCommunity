@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.FeeTypeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.ListenerExecuteException;
@@ -130,16 +131,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo",feeDto);
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        if (roomDtos == null || roomDtos.size() != 1){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
-        }
 
-        roomDto = roomDtos.get(0);
-        String builtUpArea = roomDto.getBuiltUpArea();
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeDto.getFeeTypeCd());
@@ -150,6 +142,23 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         }
 
         feeConfigDto = feeConfigDtos.get(0);
+        String builtUpArea = "0.00";
+
+        //物业费时 需要建筑面积 但是停车费不需要建筑面积
+        if(FeeTypeConstant.FEE_TYPE_PROPERTY.equals(feeConfigDto.getFeeTypeCd())) {
+
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(feeDto.getPayerObjId());
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if (roomDtos == null || roomDtos.size() != 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+            }
+            roomDto = roomDtos.get(0);
+            builtUpArea = roomDto.getBuiltUpArea();
+        }
+
+
 
         double receivableAmount = Double.parseDouble(feeConfigDto.getSquarePrice())
                                     * Double.parseDouble(builtUpArea)

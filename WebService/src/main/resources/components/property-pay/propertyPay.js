@@ -38,6 +38,8 @@
                 vc.component.propertyPayInfo.feeTypeCd = _params.feeTypeCd;
                 vc.component.propertyPayInfo.builtUpArea = _params.builtUpArea;
                 vc.component.propertyPayInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                 vc.component.loadPropertyConfigFee();
             });
         },
         methods:{
@@ -132,11 +134,12 @@
                                              remark:'',
                                              builtUpArea:'',
                                              feeId:'',
+                                             feeTypeCd:'',
                                              squarePrice:'',
                                              additionalAmount:'',
                                              communityId:''
                                          };
-                vc.component.loadPropertyConfigFee();
+
 
             },
             //加载配置数据
@@ -144,8 +147,8 @@
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
+                        feeTypeCd: vc.component.propertyPayInfo.feeTypeCd,
                         configId:'',
-                        feeTypeCd: vc.component.propertyPayInfo.feeTypeCd
                     }
                 };
                 vc.http.get(

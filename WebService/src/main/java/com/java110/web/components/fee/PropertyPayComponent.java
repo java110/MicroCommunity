@@ -22,12 +22,13 @@ public class PropertyPayComponent {
     private IFeeServiceSMO feeServiceSMOImpl;
 
     public ResponseEntity<String> loadPropertyConfigData(IPageData pd) {
-        return feeServiceSMOImpl.loadPropertyConfigFee(pd, FeeTypeConstant.FEE_TYPE_PROPERTY);
+        return feeServiceSMOImpl.loadPropertyConfigFee(pd, "");
     }
 
 
     /**
      * 缴费
+     *
      * @param pd 页面数据封装
      * @return 缴费接口
      */

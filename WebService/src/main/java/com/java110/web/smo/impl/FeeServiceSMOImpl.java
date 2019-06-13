@@ -10,7 +10,6 @@ import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFeeServiceSMO;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,9 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        paramIn.put("feeTypeCd", feeTypeCd);
+        if (!StringUtil.isEmpty(feeTypeCd)) {
+            paramIn.put("feeTypeCd", feeTypeCd);
+        }
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
@@ -121,6 +122,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
 
         return responseEntity;
     }
+
     @Override
     public ResponseEntity<String> payFee(IPageData pd) {
         validatePayFee(pd);
@@ -264,7 +266,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-            paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        paramIn.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         if (!paramIn.containsKey("configId") || StringUtil.isEmpty(paramIn.getString("configId"))) {
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                     ServiceConstant.SERVICE_API_URL + "/api/fee.saveFeeConfig",
@@ -338,7 +340,6 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramIn.getString("psId"), "停车位ID不能为空");
     }
-
 
 
     /**
