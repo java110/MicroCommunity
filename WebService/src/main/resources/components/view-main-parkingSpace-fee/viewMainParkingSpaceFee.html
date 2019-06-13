@@ -7,7 +7,7 @@
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择停车位</button>
                     <button type="button" class="btn btn-primary btn-sm"
-                            v-if="mainParkingSpaceFeeInfo.feeId != null && mainParkingSpaceFeeInfo.feeId != ''"
+                            v-if="mainParkingSpaceFeeInfo.feeId != null && mainParkingSpaceFeeInfo.feeId != '' &&  mainParkingSpaceFeeInfo.amount == '-1.00'"
                             style="margin-left:10px" v-on:click="openPayModel()">
                         <i class="glyphicon glyphicon-plus" ></i> 缴费</button>
                 </div>

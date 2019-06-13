@@ -13,6 +13,7 @@
             mainFeeInfo:{
                 feeName:$props.feeName,
                 feeId:"",
+                feeTypeCd:'',
                 floorNum:"",
                 roomId:"",
                 roomNum:"",
@@ -50,6 +51,7 @@
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
                     feeId:vc.component.mainFeeInfo.feeId,
+                    feeTypeCd:vc.component.mainFeeInfo.feeTypeCd,
                     builtUpArea:vc.component.mainFeeInfo.builtUpArea
                 });
             },

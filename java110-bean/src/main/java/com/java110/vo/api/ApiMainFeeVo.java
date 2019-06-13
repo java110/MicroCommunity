@@ -13,7 +13,7 @@ import com.java110.vo.Vo;
 public class ApiMainFeeVo extends Vo {
 
     private String feeId;
-
+    private String feeTypeCd;
     private String startTime;
     private String endTime;
     private String amount;
@@ -52,4 +52,11 @@ public class ApiMainFeeVo extends Vo {
     }
 
 
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
 }

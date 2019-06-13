@@ -12,6 +12,7 @@
             mainParkingSpaceFeeInfo:{
                 feeName:$props.feeName,
                 feeId:"",
+                feeTypeCd:"",
                 psId:"",
                 num:"",
                 typeCd:"",
@@ -47,7 +48,8 @@
             },
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
-                    feeId:vc.component.mainParkingSpaceFeeInfo.feeId
+                    feeId:vc.component.mainParkingSpaceFeeInfo.feeId,
+                    feeTypeCd:vc.component.mainParkingSpaceFeeInfo.feeTypeCd
                 });
             },
             loadMainParkingSpaceFeeInfo:function(_parkingSPace){

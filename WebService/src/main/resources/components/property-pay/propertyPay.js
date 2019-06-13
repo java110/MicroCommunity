@@ -8,6 +8,7 @@
                 receivedAmount:'0.00',
                 remark:'',
                 feeId:'',
+                feeTypeCd:'',
                 builtUpArea:'',
                 squarePrice:'',
                 additionalAmount:'',
@@ -34,6 +35,7 @@
 
                 $('#propertyPayModel').modal('show');
                 vc.component.propertyPayInfo.feeId = _params.feeId;
+                vc.component.propertyPayInfo.feeTypeCd = _params.feeTypeCd;
                 vc.component.propertyPayInfo.builtUpArea = _params.builtUpArea;
                 vc.component.propertyPayInfo.communityId = vc.getCurrentCommunity().communityId;
             });
@@ -142,7 +144,8 @@
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        configId:''
+                        configId:'',
+                        feeTypeCd: vc.component.propertyPayInfo.feeTypeCd
                     }
                 };
                 vc.http.get(
