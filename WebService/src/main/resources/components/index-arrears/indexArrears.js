@@ -3,16 +3,10 @@
     var DEFAULT_ROWS = 10;
     vc.extends({
         data:{
-            indexContextInfo:{
-                ownerCount:'1000',
-                noEnterRoomCount:'90',
-                roomCount:'2000',
-                freeRoomCount:'100',
-                parkingSpaceCount:'3000',
-                freeParkingSpaceCount:'110',
-                shopCount:'70',
-                freeShopCount:'10'
-
+            indexArrearsInfo:{
+                arrears:[],
+                total:0,
+                records:1
             }
         },
         _initMethod:function(){
@@ -27,7 +21,8 @@
                     params:{
                         page:_page,
                         row:_row,
-                        communityId:vc.getCurrentCommunity().communityId
+                        communityId:vc.getCurrentCommunity().communityId,
+                        ownerTypeCd:'1001'
                     }
                 }
 

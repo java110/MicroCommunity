@@ -6,8 +6,7 @@
             listOwnerInfo:{
                 owners:[],
                 total:0,
-                records:1,
-                errorInfo:""
+                records:1
             }
         },
         _initMethod:function(){

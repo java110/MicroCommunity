@@ -8,8 +8,8 @@
                     <h5>业主</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">40 886,200</h1>
-                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
+                    <h1 class="no-margins">{{indexContextInfo.ownerCount}}</h1>
+                    <div class="stat-percent font-bold text-success">{{indexContextInfo.noEnterRoomCount}} <i class="fa fa-bolt"></i></div>
                     <small>未迁入</small>
                 </div>
             </div>
@@ -21,8 +21,8 @@
                     <h5>房屋</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">275,800</h1>
-                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+                    <h1 class="no-margins">{{indexContextInfo.roomCount}}</h1>
+                    <div class="stat-percent font-bold text-info">{{indexContextInfo.freeRoomCount}} <i class="fa fa-level-up"></i></div>
                     <small>空闲</small>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                     <h5>停车位</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">106,120</h1>
-                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
+                    <h1 class="no-margins">{{indexContextInfo.parkingSpaceCount}}</h1>
+                    <div class="stat-percent font-bold text-navy">{{indexContextInfo.freeParkingSpaceCount}} <i class="fa fa-level-up"></i></div>
                     <small>空闲</small>
                 </div>
             </div>
@@ -44,16 +44,17 @@
             <div class="ibox ">
                 <div class="ibox-title">
                     <span class="label label-danger float-right">总数</span>
-                    <h5>楼</h5>
+                    <h5>商铺</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">80,600</h1>
-                    <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-                    <small>In first month</small>
+                    <h1 class="no-margins">{{indexContextInfo.shopCount}}</h1>
+                    <div class="stat-percent font-bold text-danger">{{indexContextInfo.freeShopCount}} <i class="fa fa-level-down"></i></div>
+                    <small>空闲</small>
                 </div>
             </div>
         </div>
     </div>
 
+    <vc:create name="indexArrears"></vc:create>
 
 </div>
