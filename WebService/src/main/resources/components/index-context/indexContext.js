@@ -32,8 +32,8 @@
                 }
 
                //发送get请求
-               vc.http.get('listOwner',
-                            'list',
+               vc.http.get('indexContext',
+                            'getData',
                              param,
                              function(json,res){
                                 var listOwnerData =JSON.parse(json);
@@ -42,10 +42,7 @@
                                 vc.component.listOwnerInfo.records = listOwnerData.records;
                                 vc.component.listOwnerInfo.owners = listOwnerData.owners;
 
-                                vc.emit('pagination','init',{
-                                    total:vc.component.listOwnerInfo.records,
-                                    currentPage:_page
-                                });
+
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
