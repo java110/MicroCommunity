@@ -73,4 +73,22 @@ public interface IOwnerServiceDao {
      */
     int queryOwnersCount(Map info);
 
+
+    /**
+     * 查询业主总数
+     *
+     * @param info 业主信息
+     * @return 业主数量
+     */
+    int queryOwnersCountByCondition(Map info);
+
+    /**
+     * 查询业主信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+     List<Map> getOwnerInfoByCondition(Map info) throws DAOException;
+
 }

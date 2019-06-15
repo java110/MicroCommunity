@@ -79,7 +79,7 @@ public class UpdateOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
                     JSONObject businessOwner = businessOwners.getJSONObject(_ownerIndex);
                     doBusinessOwner(business, businessOwner);
                     if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("ownerId", businessOwner.getString("ownerId"));
+                        dataFlowContext.addParamOut("memberId", businessOwner.getString("memberId"));
                     }
                 }
             }

@@ -59,7 +59,9 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-
+        if (!paramObj.containsKey("ownerId") || "1001".equals(paramObj.getString("ownerTypeCd"))) {
+            paramObj.put("ownerId", paramObj.getString("memberId"));
+        }
         //添加小区楼
         businesses.add(editOwner(paramObj));
 
@@ -83,10 +85,13 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
      *                "memberTypeCd": "390001200001"
      */
     private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId");
+        Assert.jsonObjectHaveKey(paramIn, "memberId", "请求报文中未包含ownerId");
         Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "ownerNum", "请求报文中未包含ownerNum");
+        Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
+        Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 
@@ -104,11 +109,8 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
-        businessOwner.put("ownerId", paramInJson.getString("ownerId"));
-        businessOwner.put("name", paramInJson.getString("name"));
-        businessOwner.put("remark", paramInJson.getString("remark"));
-        businessOwner.put("userId", paramInJson.getString("userId"));
-        businessOwner.put("ownerNum", paramInJson.getString("ownerNum"));
+
+        businessOwner.putAll(paramInJson);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;

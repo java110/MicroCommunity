@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerServiceDaoImpl">
+
+    <!-- 保存业主信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessOwnerInfo" parameterType="Map">
+           insert into business_building_owner(
+operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
+) values (
+#{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd}
+)
+       </insert>
+
+
+       <!-- 查询业主信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessOwnerInfo" parameterType="Map" resultType="Map">
+           select  t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+           t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+from business_building_owner t 
+where 1 =1 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="sex !=null ">
+   and t.sex= #{sex}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+<if test="memberId !=null and memberId != ''">
+   and t.member_id= #{memberId}
+</if>
+           <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+   and t.owner_type_cd= #{ownerTypeCd}
+</if>
+
+       </select>
+
+
+
+
+
+    <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerInfoInstance" parameterType="Map">
+        insert into building_owner(
+sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
+) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd
+        from business_building_owner t where 1=1
+   and t.operate= 'ADD'
+<if test="sex !=null">
+   and t.sex= #{sex}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+<if test="memberId !=null and memberId != ''">
+   and t.member_id= #{memberId}
+</if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+
+    </insert>
+
+
+
+    <!-- 查询业主信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerInfo" parameterType="Map" resultType="Map">
+        select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
+        t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+from building_owner t 
+where 1 =1 
+<if test="sex !=null">
+   and t.sex= #{sex}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+<if test="memberId !=null and memberId != ''">
+   and t.member_id= #{memberId}
+</if>
+        <if test="ownerIds != null and ownerIds != ''">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改业主信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerInfoInstance" parameterType="Map">
+        update  building_owner t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="sex !=null ">
+, t.sex= #{sex}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="link !=null and link != ''">
+, t.link= #{link}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="age !=null and age != ''">
+, t.age= #{age}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="memberId !=null and memberId != ''">
+and t.member_id= #{memberId}
+</if> 
+
+    </update>
+
+    <!-- 查询业主数量 add by wuxw 2018-07-03 -->
+     <select id="queryOwnersCount" parameterType="Map" resultType="Map">
+        select  count(1) count
+         FROM building_owner t
+<if test="sex !=null ">
+   and t.sex= #{sex}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="link !=null and link != ''">
+   and t.link= #{link}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="age !=null and age != ''">
+   and t.age= #{age}
+</if> 
+<if test="memberId !=null and memberId != ''">
+   and t.member_id= #{memberId}
+</if>
+         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+             and t.owner_type_cd= #{ownerTypeCd}
+         </if>
+
+
+     </select>
+
+
+    <!-- 查询业主数量 add by wuxw 2018-07-03 -->
+    <select id="queryOwnersCountByCondition" parameterType="Map" resultType="Map">
+        select  count(1) count
+        FROM building_owner t , s_community_member cm
+        WHERE t.`member_id` = cm.`member_id`
+        AND cm.`community_id` = #{communityId}
+        AND cm.`status_cd` = '0'
+        AND t.`status_cd` = '0'
+        <if test="sex !=null ">
+            and t.sex= #{sex}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+
+
+    </select>
+
+
+    <!-- 查询业主信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerInfoByCondition" parameterType="Map" resultType="Map">
+    select  t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        FROM building_owner t , s_community_member cm
+        WHERE t.`member_id` = cm.`member_id`
+        AND cm.`community_id` = #{communityId}
+        AND cm.`status_cd` = '0'
+        AND t.`status_cd` = '0'
+    <if test="sex !=null ">
+        and t.sex= #{sex}
+    </if>
+    <if test="name !=null and name != ''">
+        and t.name= #{name}
+    </if>
+    <if test="link !=null and link != ''">
+        and t.link= #{link}
+    </if>
+    <if test="statusCd !=null and statusCd != ''">
+        and t.status_cd= #{statusCd}
+    </if>
+    <if test="remark !=null and remark != ''">
+        and t.remark= #{remark}
+    </if>
+    <if test="ownerId !=null and ownerId != ''">
+        and t.owner_id= #{ownerId}
+    </if>
+    <if test="bId !=null and bId != ''">
+        and t.b_id= #{bId}
+    </if>
+    <if test="userId !=null and userId != ''">
+        and t.user_id= #{userId}
+    </if>
+    <if test="age !=null and age != ''">
+        and t.age= #{age}
+    </if>
+    <if test="memberId !=null and memberId != ''">
+        and t.member_id= #{memberId}
+    </if>
+    <if test="ownerIds != null and ownerIds != ''">
+        and t.owner_id in
+        <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+    <if test="page != -1 and page != null ">
+        limit #{page}, #{row}
+    </if>
+    </select>
+
+</mapper>

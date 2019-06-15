@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.constant.StatusConstant;
+import com.java110.common.util.CommonUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ICommunityServiceSMO;
@@ -79,6 +80,12 @@ public class NavServiceSMOImpl extends BaseComponentSMO implements INavServiceSM
             JSONObject tmpUserInfo = JSONObject.parseObject(responseEntity.getBody().toString());
             JSONObject resultUserInfo = new JSONObject();
             resultUserInfo.put("name", tmpUserInfo.getString("name"));
+            resultUserInfo.put("address", tmpUserInfo.getString("address"));
+            resultUserInfo.put("sex", tmpUserInfo.getString("sex"));
+            resultUserInfo.put("localtionCd", tmpUserInfo.getString("localtionCd"));
+            resultUserInfo.put("levelCd", tmpUserInfo.getString("levelCd"));
+            resultUserInfo.put("tel", CommonUtil.mobileEncrypt(tmpUserInfo.getString("tel")));
+            resultUserInfo.put("email", tmpUserInfo.getString("email"));
             responseEntity = new ResponseEntity<String>(resultUserInfo.toJSONString(), HttpStatus.OK);
         }
         return responseEntity;

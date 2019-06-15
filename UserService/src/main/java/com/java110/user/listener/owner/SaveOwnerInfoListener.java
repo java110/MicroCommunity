@@ -10,6 +10,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.user.dao.IOwnerServiceDao;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
         if (businessOwnerInfo != null && businessOwnerInfo.size() > 0) {
             ownerServiceDaoImpl.saveOwnerInfoInstance(info);
             if (businessOwnerInfo.size() == 1) {
-                dataFlowContext.addParamOut("ownerId", businessOwnerInfo.get(0).get("owner_id"));
+                dataFlowContext.addParamOut("memberId", businessOwnerInfo.get(0).get("member_id"));
             }
         }
     }
@@ -144,7 +145,9 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
 
         }
 
-        if (businessOwner.getString("ownerId").startsWith("-")) {
+        if ("1001".equals(businessOwner.getString("ownerTypeCd"))
+                && !StringUtils.isEmpty(tmpMemberId)
+                ) {
             businessOwner.put("ownerId", tmpMemberId);
 
         }

@@ -90,6 +90,100 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
     }
 
     @Override
+    public ResponseEntity<String> listRoomByOwner(IPageData pd) {
+        validateListRoomByOwner(pd);
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_OWNER_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+
+
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsByOwner" + mapToUrlParam(paramIn);
+
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+        return responseEntity;
+    }
+
+
+    @Override
+    public ResponseEntity<String> listRoomWithOutSell(IPageData pd) {
+        validateListRoom(pd);
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+
+
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsWithOutSell" + mapToUrlParam(paramIn);
+
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> listRoomWithSell(IPageData pd) {
+        validateListRoom(pd);
+
+        //校验用户是否有权限
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+
+
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRoomsWithSell" + mapToUrlParam(paramIn);
+
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+        return responseEntity;
+    }
+
+    @Override
     public ResponseEntity<String> updateRoom(IPageData pd) {
         validateUpdateRoom(pd);
 
@@ -145,6 +239,115 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         return responseEntity;
     }
 
+    @Override
+    public ResponseEntity<String> sellRoom(IPageData pd) {
+
+        validateSellRoom(pd);
+
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_SELL_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        paramIn.put("userId", pd.getUserId());
+        paramIn.put("storeId", storeId);
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom",
+                HttpMethod.POST);
+
+        return responseEntity;
+    }
+
+    @Override
+    public ResponseEntity<String> exitRoom(IPageData pd) {
+
+        validateExitRoom(pd);
+        //校验员工是否有权限操作
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_OWNER_ROOM);
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        String communityId = paramIn.getString("communityId");
+        ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+        //数据校验是否 商户是否入驻该小区
+        super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        paramIn.put("userId", pd.getUserId());
+        paramIn.put("storeId", storeId);
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/room.exitRoom",
+                HttpMethod.POST);
+
+        return responseEntity;
+
+    }
+
+
+    /**
+     * 小区房屋查询数据校验
+     *
+     * @param pd 页面数据封装对象
+     */
+    private void validateExitRoom(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "请求报文中未包含ownerId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "roomId", "请求报文中未包含roomId节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(paramIn.getString("roomId"), "roomId不能为空");
+
+    }
+
+    /**
+     * 小区房屋查询数据校验
+     *
+     * @param pd 页面数据封装对象
+     */
+    private void validateSellRoom(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "请求报文中未包含ownerId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "roomId", "请求报文中未包含roomId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "state", "请求报文中未包含state节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(paramIn.getString("roomId"), "roomId不能为空");
+        Assert.hasLength(paramIn.getString("state"), "state不能为空");
+
+    }
+
+    /**
+     * 校验根据业主查询房屋信息
+     * @param pd 页面数据封装
+     */
+    private void validateListRoomByOwner(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "请求报文中未包含ownerId节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
+    }
 
     /**
      * 小区房屋查询数据校验
@@ -153,7 +356,6 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
      */
     private void validateListRoom(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "floorId", "请求报文中未包含floorId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含rows节点");
 

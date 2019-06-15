@@ -63,7 +63,12 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
         //添加小区楼
         businesses.add(deleteOwner(paramObj));
-        businesses.add(exitCommunityMember(paramObj));
+        if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
+            //ownerId 写为 memberId
+            paramObj.put("ownerId", paramObj.getString("memberId"));
+            //小区楼添加到小区中
+            businesses.add(exitCommunityMember(paramObj));
+        }
 
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
@@ -86,11 +91,11 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
-        businessOwner.put("ownerId", paramInJson.getString("ownerId"));
+        businessOwner.put("memberId", paramInJson.getString("memberId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;
@@ -113,11 +118,11 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
         communityMemberDto.setMemberId(paramInJson.getString("ownerId"));
         communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
         communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.FLOOR);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
         List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
         if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区楼和小区存在关系存在异常，请检查");
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "业主和小区存在关系存在异常，请检查");
         }
 
 
@@ -133,7 +138,7 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
      * @param paramIn 接口请求数据
      */
     private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId");
+        Assert.jsonObjectHaveKey(paramIn, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 

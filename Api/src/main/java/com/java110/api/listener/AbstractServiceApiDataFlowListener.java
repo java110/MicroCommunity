@@ -2,13 +2,14 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
+import com.java110.common.constant.*;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.event.service.api.ServiceDataFlowListener;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -276,7 +278,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
      * 将rest 协议转为 订单协议
      *
      * @param businesses 多个业务
-     * @param headers 订单头信息
+     * @param headers    订单头信息
      * @return
      */
     protected JSONObject restToCenterProtocol(JSONArray businesses, Map<String, String> headers) {
@@ -344,6 +346,25 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
             }
         }
 
+    }
+
+    /**
+     * 校验小区和业主是否有关系
+     *
+     * @param paramInJson                  请求报文
+     * @param communityInnerServiceSMOImpl 小区内部调用接口
+     */
+    protected void communityHasOwner(JSONObject paramInJson, ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setMemberId(paramInJson.getString("ownerId"));
+        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
+        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
+        List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+
+        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "业主和小区存在关系存在异常，请检查");
+        }
     }
 
 

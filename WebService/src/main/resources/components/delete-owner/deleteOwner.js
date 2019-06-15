@@ -1,5 +1,8 @@
 (function(vc){
     vc.extends({
+        propTypes: {
+                notifyLoadDataComponentName:vc.propTypes.string
+        },
         data:{
             deleteOwnerInfo:{}
         },
@@ -28,7 +31,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#deleteOwnerModel').modal('hide');
-                            vc.emit('listOwner','listOwnerData',{});
+                            vc.emit($props.notifyLoadDataComponentName,'listOwnerData',{});
                             return ;
                         }
                         vc.component.deleteOwnernfo.errorInfo = json;

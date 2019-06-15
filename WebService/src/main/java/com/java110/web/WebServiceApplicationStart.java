@@ -2,19 +2,12 @@ package com.java110.web;
 
 import com.java110.service.init.ServiceStartInit;
 import com.java110.web.core.VueComponentTemplate;
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -32,10 +25,15 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.web", "com.java110.core", "com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service.aop",
+        "com.java110.service.configuration",
+        "com.java110.service.controller",
+        "com.java110.service.filter",
+        "com.java110.service.init",
+        "com.java110.web", "com.java110.core", "com.java110.cache"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
-
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class WebServiceApplicationStart {
 
     /**

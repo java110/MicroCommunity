@@ -6,8 +6,7 @@
             listOwnerInfo:{
                 owners:[],
                 total:0,
-                records:1,
-                errorInfo:""
+                records:1
             }
         },
         _initMethod:function(){
@@ -22,12 +21,13 @@
             });
         },
         methods:{
-            _listOwnerData:function(_page,_rows){
+            _listOwnerData:function(_page,_row){
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
-                        communityId:vc.getCurrentCommunity().communityId
+                        row:_row,
+                        communityId:vc.getCurrentCommunity().communityId,
+                        ownerTypeCd:'1001'
                     }
                 }
 
@@ -40,7 +40,7 @@
 
                                 vc.component.listOwnerInfo.total = listOwnerData.total;
                                 vc.component.listOwnerInfo.records = listOwnerData.records;
-                                vc.component.listOwnerInfo.owners = listOwnerData.apiOwnerDataVoList;
+                                vc.component.listOwnerInfo.owners = listOwnerData.owners;
 
                                 vc.emit('pagination','init',{
                                     total:vc.component.listOwnerInfo.records,
@@ -53,7 +53,7 @@
 
             },
             _openAddOwnerModal:function(){ //打开添加框
-                vc.emit('addOwner','openAddOwnerModal',{});
+                vc.emit('addOwner','openAddOwnerModal',-1);
             },
             _openDelOwnerModel:function(_owner){ // 打开删除对话框
                 vc.emit('deleteOwner','openOwnerModel',_owner);

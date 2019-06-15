@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>{{mainParkingSpaceFeeInfo.feeName}}信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择停车位</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            v-if="mainParkingSpaceFeeInfo.feeId != null && mainParkingSpaceFeeInfo.feeId != '' &&  mainParkingSpaceFeeInfo.amount == '-1.00'"
+                            style="margin-left:10px" v-on:click="openPayModel()">
+                        <i class="glyphicon glyphicon-plus" ></i> 缴费</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >费用ID：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.feeId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">停车位编号：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.num}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >车位类型：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.typeCd}}</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >车牌号：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.carNum}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >车品牌：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.carBrand}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">车类型：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.carType}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >费用开始时间：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.startTime}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >费用到期时间：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.endTime}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group" v-if="mainParkingSpaceFeeInfo.amount != '-1.00'">
+                            <label class="col-form-label">费用金额：</label>
+                            <label class="">{{mainParkingSpaceFeeInfo.amount}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <vc:create name="searchParkingSpace"
+               emitChooseParkingSpace="viewMainParkingSpaceFee"
+               emitLoadData="propertyFee"
+               parkingSpaceFlag="'SH'"
+    ></vc:create>
+    <vc:create name="propertyPay"
+               emitReloadFee="viewMainParkingSpaceFee">
+
+    </vc:create>
+</div>

@@ -32,6 +32,16 @@ public interface IOwnerInnerServiceSMO {
     List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto);
 
     /**
+     * <p>查询业主成员</p>
+     *
+     *
+     * @param ownerDto 数据对象分享
+     * @return OwnerDto 对象数据
+     */
+    @RequestMapping(value = "/queryOwnerMembers", method = RequestMethod.POST)
+    List<OwnerDto> queryOwnerMembers(@RequestBody OwnerDto ownerDto);
+
+    /**
      * 查询<p>小区楼</p>总记录数
      *
      * @param ownerDto 数据对象分享
@@ -39,4 +49,24 @@ public interface IOwnerInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOwnersCount", method = RequestMethod.POST)
     int queryOwnersCount(@RequestBody OwnerDto ownerDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数 根据条件查询
+     * @param ownerDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryOwnerCountByCondition", method = RequestMethod.POST)
+    int queryOwnerCountByCondition(@RequestBody OwnerDto ownerDto);
+
+
+    /**
+     * <p>查询小区楼信息</p> 根据条件查询
+     *
+     *
+     * @param ownerDto 数据对象分享 根据条件查询
+     * @return OwnerDto 对象数据
+     */
+    @RequestMapping(value = "/queryOwnersByCondition", method = RequestMethod.POST)
+    List<OwnerDto> queryOwnersByCondition(@RequestBody OwnerDto ownerDto);
+
 }

@@ -56,6 +56,12 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateOwnerData(reqJson);
 
+
+        if (reqJson.containsKey("name")) {
+            queryByCondition(reqJson, dataFlowContext);
+            return;
+        }
+
         int row = reqJson.getInteger("row");
 
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
@@ -75,14 +81,38 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
     }
 
     /**
+     * 根据条件查询
+     *
+     * @param reqJson         查询信息
+     * @param dataFlowContext 上下文
+     */
+    private void queryByCondition(JSONObject reqJson, DataFlowContext dataFlowContext) {
+
+        int row = reqJson.getInteger("row");
+        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
+        int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+        apiOwnerVo.setTotal(total);
+        if (total > 0) {
+            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
+        }
+
+        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
+        dataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
      * 校验查询条件是否满足条件
      *
      * @param reqJson 包含查询条件
      */
     private void validateOwnerData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
-        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
         Assert.isInteger(reqJson.getString("page"), "不是有效数字");
         Assert.isInteger(reqJson.getString("row"), "不是有效数字");
 

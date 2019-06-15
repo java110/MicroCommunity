@@ -2,18 +2,31 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <h3 class="m-t-none m-b ">添加小区楼</h3>
+                <h3 class="m-t-none m-b ">添加业主</h3>
                 <div class="ibox-content">
                     <div>
-                        <p style="color:red;">{{addOwnerInfo.errorInfo}}</p>
                         <div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">楼名称</label>
+                                <label class="col-sm-2 col-form-label">名称</label>
                                 <div class="col-sm-10"><input v-model="addOwnerInfo.name" type="text" placeholder="必填，请填写名称" class="form-control"></div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">楼编号</label>
-                                <div class="col-sm-10"><input v-model="addOwnerInfo.ownerNum" type="email" placeholder="必填，请填写编号" class="form-control"></div>
+                                <label class="col-sm-2 col-form-label">性别</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="addOwnerInfo.sex">
+                                        <option selected  disabled value="">必填，请选择性别</option>
+                                        <option value="0">男</option>
+                                        <option value="1">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">年龄</label>
+                                <div class="col-sm-10"><input v-model="addOwnerInfo.age" type="number" placeholder="必填，请填写年龄" class="form-control"></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">手机</label>
+                                <div class="col-sm-10"><input v-model="addOwnerInfo.link" type="number" placeholder="必填，请填写联系方式" class="form-control"></div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">备注</label>

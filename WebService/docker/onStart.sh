@@ -4,8 +4,8 @@ cp -r ../bin .
 
 cp  -r ../target .
 
-docker build -t java110/console .
+docker build -t java110/web .
 
-docker run -ti --name console_test -p8443:8443 -idt java110/console:latest
+docker run -ti --name web_test -p8443:8443 -idt java110/web:latest
 
-docker logs -f console_test
+docker logs -f web_test

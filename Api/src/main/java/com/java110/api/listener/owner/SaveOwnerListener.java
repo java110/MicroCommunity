@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
 
-
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
 
 
@@ -60,18 +59,19 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
         HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        //生成ownerId
-        generateOwnerId(paramObj);
+        //生成memberId
+        generateMemberId(paramObj);
 
         //添加小区楼
         businesses.add(addOwner(paramObj));
 
-        //小区楼添加到小区中
-        businesses.add(addCommunityMember(paramObj));
+        if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
+            //小区楼添加到小区中
+            businesses.add(addCommunityMember(paramObj));
+        }
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -89,14 +89,23 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
      *
      * @param paramObj 请求入参数据
      */
-    private void generateOwnerId(JSONObject paramObj) {
-        String ownerId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
-        paramObj.put("ownerId", ownerId);
+    private void generateMemberId(JSONObject paramObj) {
+        String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
+        paramObj.put("memberId", memberId);
+        if (!paramObj.containsKey("ownerId") || "1001".equals(paramObj.getString("ownerTypeCd"))) {
+            paramObj.put("ownerId", memberId);
+        }
     }
 
 
     /**
      * 添加小区楼信息
+     * <p>
+     * * name:'',
+     * *                 age:'',
+     * *                 link:'',
+     * *                 sex:'',
+     * *                 remark:''
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
@@ -109,11 +118,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
-        businessOwner.put("ownerId", paramInJson.getString("ownerId"));
-        businessOwner.put("name", paramInJson.getString("name"));
-        businessOwner.put("remark", paramInJson.getString("remark"));
-        businessOwner.put("userId", paramInJson.getString("userId"));
-        businessOwner.put("ownerNum", paramInJson.getString("ownerNum"));
+        businessOwner.putAll(paramInJson);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;
@@ -137,7 +142,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("ownerId"));
-        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
+        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
         businessCommunityMember.put("auditStatusCd", StatusConstant.STATUS_CD_AUDIT_COMPLETE);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
@@ -146,6 +151,12 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
     /**
      * 数据校验
+     * <p>
+     * name:'',
+     * age:'',
+     * link:'',
+     * sex:'',
+     * remark:''
      *
      * @param paramIn "communityId": "7020181217000001",
      *                "memberId": "3456789",
@@ -154,7 +165,10 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
     private void validate(String paramIn) {
         Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "ownerNum", "请求报文中未包含ownerNum");
+        Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
+        Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
     }
 

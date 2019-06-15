@@ -46,6 +46,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         businessOwnerInfo.put("userId", businessOwnerInfo.get("user_id"));
         businessOwnerInfo.put("age", businessOwnerInfo.get("age"));
         businessOwnerInfo.put("memberId", businessOwnerInfo.get("member_id"));
+        businessOwnerInfo.put("ownerTypeCd", businessOwnerInfo.get("owner_type_cd"));
         businessOwnerInfo.remove("bId");
         businessOwnerInfo.put("statusCd", statusCd);
     }
@@ -59,7 +60,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
     protected void autoSaveDelBusinessOwner(Business business, JSONObject businessOwner) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("ownerId", businessOwner.getString("ownerId"));
+        info.put("memberId", businessOwner.getString("memberId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentOwnerInfos = getOwnerServiceDaoImpl().getOwnerInfo(info);
         if (currentOwnerInfos == null || currentOwnerInfos.size() != 1) {
@@ -79,6 +80,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         currentOwnerInfo.put("userId", currentOwnerInfo.get("user_id"));
         currentOwnerInfo.put("age", currentOwnerInfo.get("age"));
         currentOwnerInfo.put("memberId", currentOwnerInfo.get("member_id"));
+        currentOwnerInfo.put("ownerTypeCd", currentOwnerInfo.get("owner_type_cd"));
 
 
         currentOwnerInfo.put("operate", StatusConstant.OPERATE_DEL);

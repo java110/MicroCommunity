@@ -1,0 +1,60 @@
+<div id="component" class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <span class="label label-success float-right">总数</span>
+                    <h5>业主</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{indexContextInfo.ownerCount}}</h1>
+                    <div class="stat-percent font-bold text-success">{{indexContextInfo.noEnterRoomCount}} <i class="fa fa-bolt"></i></div>
+                    <small>未迁入</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <span class="label label-info float-right">总数</span>
+                    <h5>房屋</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{indexContextInfo.roomCount}}</h1>
+                    <div class="stat-percent font-bold text-info">{{indexContextInfo.freeRoomCount}} <i class="fa fa-level-up"></i></div>
+                    <small>空闲</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <span class="label label-primary float-right">总数</span>
+                    <h5>停车位</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{indexContextInfo.parkingSpaceCount}}</h1>
+                    <div class="stat-percent font-bold text-navy">{{indexContextInfo.freeParkingSpaceCount}} <i class="fa fa-level-up"></i></div>
+                    <small>空闲</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <span class="label label-danger float-right">总数</span>
+                    <h5>商铺</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{indexContextInfo.shopCount}}</h1>
+                    <div class="stat-percent font-bold text-danger">{{indexContextInfo.freeShopCount}} <i class="fa fa-level-down"></i></div>
+                    <small>空闲</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="indexArrears"></vc:create>
+
+</div>

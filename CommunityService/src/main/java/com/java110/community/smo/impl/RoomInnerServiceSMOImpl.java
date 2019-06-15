@@ -143,6 +143,109 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         return roomServiceDaoImpl.queryRoomsByCommunityIdCount(BeanConvertUtil.beanCovertMap(roomDto));
     }
 
+    @Override
+    public int queryRoomsWithOutSellCount(@RequestBody RoomDto roomDto) {
+        return roomServiceDaoImpl.queryRoomsWithOutSellByCommunityIdCount(BeanConvertUtil.beanCovertMap(roomDto));
+    }
+
+    @Override
+    public List<RoomDto> queryRoomsWithOutSell(@RequestBody RoomDto roomDto) {
+
+        //校验是否传了 分页信息
+
+        int page = roomDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roomDto.setPage((page - 1) * roomDto.getRow());
+            roomDto.setRow(page * roomDto.getRow());
+        }
+
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoWithOutSellByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
+
+        if (rooms == null || rooms.size() == 0) {
+            return rooms;
+        }
+
+        String[] roomIds = getRoomIds(rooms);
+        Map attrParamInfo = new HashMap();
+        attrParamInfo.put("roomIds", roomIds);
+        attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
+
+        String[] userIds = getUserIds(rooms);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (RoomDto room : rooms) {
+            refreshRoom(room, users, roomAttrDtos);
+        }
+        return rooms;
+    }
+
+    @Override
+    public int queryRoomsWithSellCount(@RequestBody RoomDto roomDto) {
+        return roomServiceDaoImpl.queryRoomsWithSellByCommunityIdCount(BeanConvertUtil.beanCovertMap(roomDto));
+    }
+
+    @Override
+    public List<RoomDto> queryRoomsWithSell(@RequestBody RoomDto roomDto) {
+
+        //校验是否传了 分页信息
+
+        int page = roomDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roomDto.setPage((page - 1) * roomDto.getRow());
+            roomDto.setRow(page * roomDto.getRow());
+        }
+
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoWithSellByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
+
+        if (rooms == null || rooms.size() == 0) {
+            return rooms;
+        }
+
+        String[] roomIds = getRoomIds(rooms);
+        Map attrParamInfo = new HashMap();
+        attrParamInfo.put("roomIds", roomIds);
+        attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
+
+        String[] userIds = getUserIds(rooms);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (RoomDto room : rooms) {
+            refreshRoom(room, users, roomAttrDtos);
+        }
+        return rooms;
+    }
+
+    @Override
+    public List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto) {
+
+        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByOwner(BeanConvertUtil.beanCovertMap(roomDto)),
+                RoomDto.class);
+
+        if (rooms == null || rooms.size() == 0) {
+            return rooms;
+        }
+        String[] roomIds = getRoomIds(rooms);
+        Map attrParamInfo = new HashMap();
+        attrParamInfo.put("roomIds", roomIds);
+        attrParamInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+        List<RoomAttrDto> roomAttrDtos = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(attrParamInfo), RoomAttrDto.class);
+
+        String[] userIds = getUserIds(rooms);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (RoomDto room : rooms) {
+            refreshRoom(room, users, roomAttrDtos);
+        }
+        return rooms;
+    }
+
     public IRoomServiceDao getRoomServiceDaoImpl() {
         return roomServiceDaoImpl;
     }

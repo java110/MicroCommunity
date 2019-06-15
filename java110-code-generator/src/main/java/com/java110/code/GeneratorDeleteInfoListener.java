@@ -18,7 +18,9 @@ public class GeneratorDeleteInfoListener extends BaseGenerator {
         fileContext = fileContext.replace("store",toLowerCaseFirstOne(data.getName()))
                 .replace("Store",toUpperCaseFirstOne(data.getName()))
                 .replace("商户",data.getDesc())
-                .replace("BUSINESS_TYPE_DELETE_STORE_INFO",data.getDeleteBusinessTypeCd());
+                .replace("BUSINESS_TYPE_DELETE_STORE_INFO",data.getDeleteBusinessTypeCd())
+                .replace(data.getName()+"Id", data.getId())
+                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
         System.out.println(this.getClass().getResource("/listener").getPath());
         String writePath = this.getClass().getResource("/listener").getPath()+"/Delete"+toUpperCaseFirstOne(data.getName())+"InfoListener.java";
         writeFile(writePath,

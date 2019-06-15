@@ -3,6 +3,11 @@
 :-: | :-: | :-: | :-:
 v0.01|初稿|2019-04-22|wuxw
 
+
+## 小区管理系统安装视频
+
+[点这里](http://www.iqiyi.com/w_19s9dzcnp9.html)
+
 ## 小区管理系统代码分享视频
 
 [点这里](http://www.iqiyi.com/w_19s7u6le2p.html#vfrm=16-1-1-1)

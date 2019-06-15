@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>车辆信息</h5>
+            </div>
+            <div class="ibox-content">
+                <div>
+                    <div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">车牌号</label>
+                            <div class="col-sm-10">
+                                <input v-model="addCarInfo.carNum" type="text" placeholder="必填，请填写车牌号" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">车品牌</label>
+                            <div class="col-sm-10">
+                                <input v-model="addCarInfo.carBrand" type="text" placeholder="必填，请填写车品牌，如 宝马X6" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">车类型</label>
+                            <div class="col-sm-10">
+                                <select class="custom-select" v-model="addCarInfo.carType">
+                                    <option selected  disabled value="">必填，请选择类型</option>
+                                    <option value="9901">家用小汽车</option>
+                                    <option value="9902">客车</option>
+                                    <option value="9903">货车</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">颜色</label>
+                            <div class="col-sm-10">
+                                <input v-model="addCarInfo.carColor" type="text" placeholder="必填，请填写车颜色，如白色" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">备注</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="addCarInfo.carRemark" type="text" placeholder="请填写备注信息" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

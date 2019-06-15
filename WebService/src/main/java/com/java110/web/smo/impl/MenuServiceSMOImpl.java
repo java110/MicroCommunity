@@ -30,7 +30,6 @@ public class MenuServiceSMOImpl extends BaseComponentSMO implements IMenuService
 
 
     /**
-     *
      * @param pd
      * @return
      */
@@ -38,10 +37,10 @@ public class MenuServiceSMOImpl extends BaseComponentSMO implements IMenuService
     public ResponseEntity<String> queryMenusByUserId(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
 
-        Assert.hasLength(pd.getUserId(),"用户还没有登录");
+        Assert.hasLength(pd.getUserId(), "用户还没有登录");
 
-        responseEntity = this.callCenterService(restTemplate,pd,"",
-                ServiceConstant.SERVICE_API_URL+"/api/query.menu.info?userId="+pd.getUserId(), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/query.menu.info?userId=" + pd.getUserId(), HttpMethod.GET);
         return responseEntity;
     }
 

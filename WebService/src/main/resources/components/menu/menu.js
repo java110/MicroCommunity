@@ -32,6 +32,9 @@
                              param,
                              function(json,res){
                                 var _menus = JSON.parse(json);
+                                _menus.sort(function(a,b){
+                                       return a.seq - b.seq
+                                });
                                 var _currentMenusId = vc.getCurrentMenu() == null?_menus[0].id:vc.getCurrentMenu();
                                 vm.menus = vm.refreshMenuActive(_menus,_currentMenusId);
                                 vc.setMenus(vm.menus);
@@ -42,6 +45,15 @@
            },
            refreshMenuActive:function(jsonArray,_id){
                 for(var menuIndex =0 ; menuIndex < jsonArray.length;menuIndex ++){
+
+                    if(jsonArray[menuIndex].hasOwnProperty('childs')){
+                        var _childs = jsonArray[menuIndex].childs;
+                        _childs.sort(function(_child,_newChild){
+                            return _child.seq - _newChild.seq
+                        });
+                        jsonArray[menuIndex].childs = _childs;
+                    }
+
                     if(_id === jsonArray[menuIndex].id){
                         if(jsonArray[menuIndex].active === true){
                             //如果当前本身是打开状态，说明 需要关闭
@@ -53,6 +65,8 @@
                     }
                     jsonArray[menuIndex].active=false;
                 }
+
+
 
                 return  jsonArray;
            },

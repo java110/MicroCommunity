@@ -33,6 +33,8 @@ public class ApiOwnerDataVo extends Vo {
 
     private String createTime;
 
+    private String ownerTypeCd;
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -103,5 +105,13 @@ public class ApiOwnerDataVo extends Vo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getOwnerTypeCd() {
+        return ownerTypeCd;
+    }
+
+    public void setOwnerTypeCd(String ownerTypeCd) {
+        this.ownerTypeCd = ownerTypeCd;
     }
 }
