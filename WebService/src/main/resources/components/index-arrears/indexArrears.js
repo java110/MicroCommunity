@@ -11,16 +11,16 @@
             }
         },
         _initMethod:function(){
-            vc.component._listArrearsData();
+            vc.component._listArrearsData(DEFAULT_PAGE,DEFAULT_ROWS);
         },
         _initEvent:function(){
             vc.on("indexArrears","_listArrearsData",function(){
-                vc.component._listArrearsData();
+                vc.component._listArrearsData(DEFAULT_PAGE,DEFAULT_ROWS);
             });
         },
         methods:{
             _listArrearsData:function(_page,_row){
-                if(!vc.getCurrentCommunity().hasOwnProperty('communityId')){
+                if(vc.getCurrentCommunity() == null || vc.getCurrentCommunity == undefined){
                     return ;
                 }
                 var param = {
@@ -28,7 +28,7 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        feeTypeCd:vc.indexArrearsInfo.feeTypeCd
+                        feeTypeCd:vc.component.indexArrearsInfo.feeTypeCd
                     }
                 }
 
@@ -55,7 +55,7 @@
             },
             _switchFeeType:function(_feeTypeCd){
                 vc.component.indexArrearsInfo.feeTypeCd = _feeTypeCd;
-                vc.component._listArrearsData();
+                vc.component._listArrearsData(DEFAULT_PAGE,DEFAULT_ROWS);
             }
         }
     })

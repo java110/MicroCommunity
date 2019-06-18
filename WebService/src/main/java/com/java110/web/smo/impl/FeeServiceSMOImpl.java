@@ -340,9 +340,9 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryArrearsFee",
-                HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/fee.queryArrearsFee" + super.mapToUrlParam(paramIn),
+                HttpMethod.GET);
 
         return responseEntity;
     }
@@ -370,13 +370,17 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
     }
 
 
-    private void validateListFee(IPageData pd){
+    private void validateListFee(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "feeTypeCd", "请求报文中未包含feeTypeCd节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramIn.getString("feeTypeCd"), "停车位feeTypeCd不能为空");
+        Assert.isInteger("row", "row必须为数字");
+        Assert.isInteger("page", "page必须为数字");
     }
 
 

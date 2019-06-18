@@ -79,6 +79,7 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateFeeData(reqJson);
+
         FeeDto feeDtoParamIn = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
         feeDtoParamIn.setArrearsEndTime(DateUtil.getCurrentDate());
 
@@ -89,10 +90,16 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
                     FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE});
         }
 
+        int page = reqJson.getInteger("page");
+        int row = reqJson.getInteger("row");
+
         int feeCount = feeInnerServiceSMOImpl.queryFeesCount(feeDtoParamIn);
+        ApiArrearsFeeVo apiArrearsFeeVo = new ApiArrearsFeeVo();
+        apiArrearsFeeVo.setTotal(feeCount);
+        apiArrearsFeeVo.setRecords((int) Math.ceil((double) feeCount / (double) row));
         ResponseEntity<String> responseEntity = null;
         if (feeCount == 0) {
-            responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(new ApiArrearsFeeVo()), HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiArrearsFeeVo), HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
@@ -116,8 +123,9 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
             freshParkingSpaceAndOwnerData(apiFeeVo, ownerDtos);
         }
 
+        apiArrearsFeeVo.setArrears(apiFeeVo);
 
-        responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
+        responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiArrearsFeeVo), HttpStatus.OK);
 
 
         dataFlowContext.setResponseEntity(responseEntity);
@@ -169,6 +177,12 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
     private void validateFeeData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "feeTypeCd", "请求中未包含feeTypeCd信息");
+        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
+
+
+        Assert.isInteger(reqJson.getString("row"), "row必须为数字");
+        Assert.isInteger(reqJson.getString("page"), "page必须为数字");
 
     }
 
