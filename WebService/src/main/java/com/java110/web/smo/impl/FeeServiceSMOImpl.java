@@ -379,8 +379,8 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramIn.getString("feeTypeCd"), "停车位feeTypeCd不能为空");
-        Assert.isInteger("row", "row必须为数字");
-        Assert.isInteger("page", "page必须为数字");
+        Assert.isInteger(paramIn.getString("row"), "row必须为数字");
+        Assert.isInteger(paramIn.getString("page"), "page必须为数字");
     }
 
 

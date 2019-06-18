@@ -4,10 +4,21 @@
         <div class="ibox ">
             <div class="ibox-title">
                 <h5>欠费信息</h5>
-                <div class="ibox-tools">
-                    <div data-toggle="buttons" class="btn-group btn-group-toggle">
-                        <label class="btn btn-sm btn-white active"> <input type="radio" v-on:click="_switchFeeType(888800010001)" name="options"> 物业费 </label>
-                        <label class="btn btn-sm btn-white "> <input type="radio" v-on:click="_switchFeeType(888800010006)" name="options"> 停车费 </label>
+                <div class="ibox-tools" style="top: 10px;">
+
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                v-bind:class="{'btn-primary': indexArrearsInfo.feeTypeCd == 888800010001}"
+                                v-on:click="_switchFeeType(888800010001)"
+                        >物业费</button>
+
+
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                v-bind:class="{'btn-primary': indexArrearsInfo.feeTypeCd == 888800010005}"
+                                v-on:click="_switchFeeType(888800010005)"
+                        >停车费</button>
                     </div>
                 </div>
             </div>

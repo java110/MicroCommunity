@@ -54,6 +54,7 @@
 
             },
             _switchFeeType:function(_feeTypeCd){
+                console.log('_feeTypeCd')
                 vc.component.indexArrearsInfo.feeTypeCd = _feeTypeCd;
                 vc.component._listArrearsData(DEFAULT_PAGE,DEFAULT_ROWS);
             }
