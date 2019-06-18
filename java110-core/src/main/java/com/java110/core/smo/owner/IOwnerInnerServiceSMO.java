@@ -88,4 +88,14 @@ public interface IOwnerInnerServiceSMO {
     @RequestMapping(value = "/queryOwnersByRoom", method = RequestMethod.POST)
     List<OwnerDto> queryOwnersByRoom(@RequestBody OwnerDto ownerDto);
 
+
+    /**
+     * 根据停车位查询业主信息
+     *
+     * @param ownerDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryOwnersByParkingSpace", method = RequestMethod.POST)
+    List<OwnerDto> queryOwnersByParkingSpace(@RequestBody OwnerDto ownerDto);
+
 }

@@ -4,9 +4,7 @@ package com.java110.api.listener.fee;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.FeeTypeConstant;
-import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.common.util.DateUtil;
@@ -20,12 +18,9 @@ import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.FeeDto;
 import com.java110.dto.OwnerDto;
-import com.java110.dto.OwnerRoomRelDto;
-import com.java110.dto.RoomDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiArrearsFeeDataVo;
 import com.java110.vo.api.ApiArrearsFeeVo;
-import com.java110.vo.api.ApiFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -88,10 +83,10 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
         feeDtoParamIn.setArrearsEndTime(DateUtil.getCurrentDate());
 
         //车位时处理为 查询多个
-        if(FeeTypeConstant.FEE_TYPE_HIRE_PARKING_SPACE.equals(feeDtoParamIn.getFeeTypeCd())){
+        if (FeeTypeConstant.FEE_TYPE_HIRE_PARKING_SPACE.equals(feeDtoParamIn.getFeeTypeCd())) {
             feeDtoParamIn.setFeeTypeCd("");
             feeDtoParamIn.setFeeTypeCds(new String[]{FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE,
-                                                     FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE});
+                    FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE});
         }
 
         int feeCount = feeInnerServiceSMOImpl.queryFeesCount(feeDtoParamIn);
@@ -115,7 +110,10 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
             freshRoomAndOwnerData(apiFeeVo, ownerDtos);
         } else {
-
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setRoomIds(objIds);
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByParkingSpace(ownerDto);
+            freshParkingSpaceAndOwnerData(apiFeeVo, ownerDtos);
         }
 
 
@@ -129,14 +127,33 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
      * 刷新 房间号
      *
      * @param apiFeeVos 费用出参对象
-     * @param ownerDtos  房屋信息
+     * @param ownerDtos 房屋信息
      */
     private void freshRoomAndOwnerData(List<ApiArrearsFeeDataVo> apiFeeVos, List<OwnerDto> ownerDtos) {
 
         for (ApiArrearsFeeDataVo apiFeeVo : apiFeeVos) {
             for (OwnerDto ownerDto : ownerDtos) {
-                if(apiFeeVo.getPayerObjId().equals(ownerDto.getRoomId())){
+                if (apiFeeVo.getPayerObjId().equals(ownerDto.getRoomId())) {
                     apiFeeVo.setNum(ownerDto.getRoomNum());
+                    apiFeeVo.setOwnerName(ownerDto.getName());
+                    apiFeeVo.setTel(ownerDto.getLink());
+                }
+            }
+        }
+    }
+
+    /**
+     * 刷新 车位编号
+     *
+     * @param apiFeeVos 费用出参对象
+     * @param ownerDtos 房屋信息
+     */
+    private void freshParkingSpaceAndOwnerData(List<ApiArrearsFeeDataVo> apiFeeVos, List<OwnerDto> ownerDtos) {
+
+        for (ApiArrearsFeeDataVo apiFeeVo : apiFeeVos) {
+            for (OwnerDto ownerDto : ownerDtos) {
+                if (apiFeeVo.getPayerObjId().equals(ownerDto.getPsId())) {
+                    apiFeeVo.setNum(ownerDto.getNum());
                     apiFeeVo.setOwnerName(ownerDto.getName());
                     apiFeeVo.setTel(ownerDto.getLink());
                 }
@@ -155,6 +172,11 @@ public class QueryArrearsFeeListener extends AbstractServiceApiDataFlowListener 
 
     }
 
+    /**
+     * 查询 objIds
+     * @param feeDtos 费用信息
+     * @return objIds信息
+     */
     private String[] getObjIds(List<FeeDto> feeDtos) {
         List<String> objIds = new ArrayList<String>();
         for (FeeDto feeDto : feeDtos) {

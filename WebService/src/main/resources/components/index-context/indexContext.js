@@ -17,7 +17,9 @@
             vc.component._queryIndexContextData();
         },
         _initEvent:function(){
-
+            vc.on("indexContext","_queryIndexContextData",function(){
+                vc.component._queryIndexContextData();
+            });
         },
         methods:{
             _queryIndexContextData:function(){

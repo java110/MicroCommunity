@@ -51,7 +51,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         //调用 小区服务查询 小区成员业主信息
         CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(ownerDto, CommunityMemberDto.class);
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
-        if(StringUtils.isEmpty(communityMemberDto.getMemberId())&& !StringUtils.isEmpty(ownerDto.getOwnerId())){
+        if (StringUtils.isEmpty(communityMemberDto.getMemberId()) && !StringUtils.isEmpty(ownerDto.getOwnerId())) {
             communityMemberDto.setMemberId(ownerDto.getOwnerId());
         }
         List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
@@ -196,13 +196,18 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
 
     @Override
-    public int queryNoEnterRoomOwnerCount(OwnerDto ownerDto) {
+    public int queryNoEnterRoomOwnerCount(@RequestBody OwnerDto ownerDto) {
         return ownerServiceDaoImpl.queryNoEnterRoomOwnerCount(BeanConvertUtil.beanCovertMap(ownerDto));
     }
 
     @Override
-    public List<OwnerDto> queryOwnersByRoom(OwnerDto ownerDto) {
-        return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnersByRoom(BeanConvertUtil.beanCovertMap(ownerDto)),OwnerDto.class);
+    public List<OwnerDto> queryOwnersByRoom(@RequestBody OwnerDto ownerDto) {
+        return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnersByRoom(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
+    }
+
+    @Override
+    public List<OwnerDto> queryOwnersByParkingSpace(@RequestBody OwnerDto ownerDto) {
+        return BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.queryOwnersByParkingSpace(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
     }
 
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {

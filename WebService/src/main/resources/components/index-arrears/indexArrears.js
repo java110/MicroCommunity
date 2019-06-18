@@ -14,10 +14,15 @@
             vc.component._listArrearsData();
         },
         _initEvent:function(){
-
+            vc.on("indexArrears","_listArrearsData",function(){
+                vc.component._listArrearsData();
+            });
         },
         methods:{
             _listArrearsData:function(_page,_row){
+                if(!vc.getCurrentCommunity().hasOwnProperty('communityId')){
+                    return ;
+                }
                 var param = {
                     params:{
                         page:_page,

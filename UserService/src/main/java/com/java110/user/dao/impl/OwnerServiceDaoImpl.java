@@ -185,5 +185,13 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
         return businessOwnerInfos;
     }
 
+    @Override
+    public List<Map> queryOwnersByParkingSpace(Map info) throws DAOException {
+        logger.debug("queryOwnersByParkingSpace 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByParkingSpace", info);
+
+        return businessOwnerInfos;    }
+
 
 }

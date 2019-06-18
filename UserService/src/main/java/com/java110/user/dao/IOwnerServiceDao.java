@@ -106,4 +106,12 @@ public interface IOwnerServiceDao {
      */
      List<Map> queryOwnersByRoom(Map info) throws DAOException;
 
+    /**
+     * 根据停车位查询业主信息
+     * @param info 查询条件
+     * @return 业主信息
+     * @throws DAOException 异常信息
+     */
+    List<Map> queryOwnersByParkingSpace(Map info) throws DAOException;
+
 }

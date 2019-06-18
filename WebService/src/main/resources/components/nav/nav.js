@@ -119,6 +119,11 @@
                                     vm.navCommunityInfo._currentCommunity = vm.navCommunityInfo.communityInfos[0];
                                     vc.setCurrentCommunity(vm.navCommunityInfo._currentCommunity);
                                     vc.setCommunitys(vm.navCommunityInfo.communityInfos);
+
+                                    //对首页做特殊处理，因为首页在加载数据时还没有小区信息 会报错
+
+                                    vc.emit("indexContext","_queryIndexContextData",{});
+                                    vc.emit("indexArrears","_listArrearsData",{});
                                }
                              },function(){
                                 console.log('请求失败处理');

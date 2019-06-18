@@ -364,7 +364,7 @@ and t.member_id= #{memberId}
             AND r.`room_id` = #{roomId}
         </if>
         <if test="roomIds != null ">
-            and t.room_id in
+            and r.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
@@ -372,6 +372,28 @@ and t.member_id= #{memberId}
         AND r.`status_cd` = '0'
         AND orr.`status_cd` = '0'
         AND t.`status_cd` = '0'
+    </select>
+
+    <!-- 根据停车位查询 -->
+    <select id="queryOwnersByParkingSpace" parameterType="Map" resultType="Map">
+
+        select ps.num,ps.ps_id psId,t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        from p_parking_space ps , owner_car oc,building_owner t
+        where ps.ps_id = oc.ps_id
+        and oc.owner_id = t.owner_id
+        AND oc.`status_cd` = '0'
+        AND ps.`status_cd` = '0'
+        AND t.`status_cd` = '0'
+        <if test="psIds != null ">
+            and ps.ps_id in
+            <foreach collection="psIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="psId !=null and psId != ''">
+            AND ps.`ps_id` = #{psId}
+        </if>
     </select>
 
 
