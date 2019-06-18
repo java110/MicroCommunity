@@ -14,11 +14,13 @@ import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.floor.IFloorInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
+import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.FeeDto;
 import com.java110.dto.OwnerDto;
 import com.java110.dto.OwnerRoomRelDto;
+import com.java110.dto.ParkingSpaceDto;
 import com.java110.dto.RoomDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiFeeVo;
@@ -44,6 +46,12 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_QUERY_INDEX_STATISTIC;
@@ -71,14 +79,26 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         int ownerCount = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
         int noEnterRoomOwnerCount = ownerInnerServiceSMOImpl.queryNoEnterRoomOwnerCount(ownerDto);
         // 查询房屋 总数量
-
+        int roomCount = roomInnerServiceSMOImpl.queryRoomsCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
+        int freeRoomCount = roomInnerServiceSMOImpl.queryRoomsWithOutSellCount(BeanConvertUtil.covertBean(reqJson, RoomDto.class));
         // 查询停车位 总数量
-
+        int parkingSpaceCount = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class));
+        ParkingSpaceDto parkingSpaceDto = BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class);
+        parkingSpaceDto.setState("F");
+        int freeParkingSpaceCount = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(parkingSpaceDto);
         // 查询商铺 总数量
+        int shopCount = 0;
+        int freeShopCount = 0;
 
 
         apiIndexStatisticVo.setOwnerCount(ownerCount + "");
         apiIndexStatisticVo.setNoEnterRoomCount(noEnterRoomOwnerCount + "");
+        apiIndexStatisticVo.setRoomCount(roomCount + "");
+        apiIndexStatisticVo.setFreeRoomCount(freeRoomCount + "");
+        apiIndexStatisticVo.setParkingSpaceCount(parkingSpaceCount + "");
+        apiIndexStatisticVo.setFreeParkingSpaceCount(freeParkingSpaceCount + "");
+        apiIndexStatisticVo.setShopCount(shopCount + "");
+        apiIndexStatisticVo.setFreeShopCount(freeShopCount + "");
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiIndexStatisticVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
@@ -105,5 +125,22 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
 
     public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
         this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
+    }
+
+
+    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
+        return roomInnerServiceSMOImpl;
+    }
+
+    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
+        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
+    }
+
+    public IParkingSpaceInnerServiceSMO getParkingSpaceInnerServiceSMOImpl() {
+        return parkingSpaceInnerServiceSMOImpl;
+    }
+
+    public void setParkingSpaceInnerServiceSMOImpl(IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl) {
+        this.parkingSpaceInnerServiceSMOImpl = parkingSpaceInnerServiceSMOImpl;
     }
 }
