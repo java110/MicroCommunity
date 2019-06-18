@@ -353,7 +353,7 @@ and t.member_id= #{memberId}
 
     <!-- queryOwnersByRoom -->
     <!-- 根据房屋查询业主信息 -->
-    <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
+    <select id="queryOwnersByRoom" parameterType="Map" resultType="Map">
         SELECT t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
         r.`room_id` roomId,r.`room_num` roomNum
