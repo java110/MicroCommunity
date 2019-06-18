@@ -22,6 +22,7 @@ import com.java110.dto.OwnerRoomRelDto;
 import com.java110.dto.RoomDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiFeeVo;
+import com.java110.vo.api.ApiIndexStatisticVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -65,9 +66,10 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateIndexStatistic(reqJson);
         // 查询业主 总数量
+        ApiIndexStatisticVo apiIndexStatisticVo = new ApiIndexStatisticVo();
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
         int ownerCount = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
-        int noEnterRoomCount =
+        int noEnterRoomOwnerCount = ownerInnerServiceSMOImpl.queryNoEnterRoomOwnerCount(ownerDto);
         // 查询房屋 总数量
 
         // 查询停车位 总数量
@@ -75,6 +77,9 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         // 查询商铺 总数量
 
 
+        apiIndexStatisticVo.setOwnerCount(ownerCount + "");
+        apiIndexStatisticVo.setNoEnterRoomCount(noEnterRoomOwnerCount + "");
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiIndexStatisticVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 

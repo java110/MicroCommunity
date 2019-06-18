@@ -194,6 +194,12 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         return owners;
     }
 
+
+    @Override
+    public int queryNoEnterRoomOwnerCount(OwnerDto ownerDto) {
+        return ownerServiceDaoImpl.queryNoEnterRoomOwnerCount(BeanConvertUtil.beanCovertMap(ownerDto));
+    }
+
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
         return userInnerServiceSMOImpl;
     }

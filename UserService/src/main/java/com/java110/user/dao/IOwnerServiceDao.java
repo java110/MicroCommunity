@@ -91,4 +91,11 @@ public interface IOwnerServiceDao {
      */
      List<Map> getOwnerInfoByCondition(Map info) throws DAOException;
 
+    /**
+     * 查询没有入驻的 业主数量
+     * @param info 信息
+     * @return 未入驻业主数量
+     */
+     int queryNoEnterRoomOwnerCount(Map info);
+
 }
