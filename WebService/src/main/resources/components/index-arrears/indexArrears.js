@@ -5,40 +5,41 @@
         data:{
             indexArrearsInfo:{
                 arrears:[],
+                feeTypeCd:'888800010001',
                 total:0,
                 records:1
             }
         },
         _initMethod:function(){
-            //vc.component._listOwnerData(DEFAULT_PAGE,DEFAULT_ROWS);
+            vc.component._listArrearsData();
         },
         _initEvent:function(){
 
         },
         methods:{
-            _listOwnerData:function(_page,_row){
+            _listArrearsData:function(_page,_row){
                 var param = {
                     params:{
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        ownerTypeCd:'1001'
+                        feeTypeCd:vc.indexArrearsInfo.feeTypeCd
                     }
                 }
 
                //发送get请求
-               vc.http.get('listOwner',
+               vc.http.get('listArrears',
                             'list',
                              param,
                              function(json,res){
-                                var listOwnerData =JSON.parse(json);
+                                var listArrearsData =JSON.parse(json);
 
-                                vc.component.listOwnerInfo.total = listOwnerData.total;
-                                vc.component.listOwnerInfo.records = listOwnerData.records;
-                                vc.component.listOwnerInfo.owners = listOwnerData.owners;
+                                vc.component.indexArrearsInfo.total = listArrearsData.total;
+                                vc.component.indexArrearsInfo.records = listArrearsData.records;
+                                vc.component.indexArrearsInfo.arrears = listArrearsData.arrears;
 
                                 vc.emit('pagination','init',{
-                                    total:vc.component.listOwnerInfo.records,
+                                    total:vc.component.indexArrearsInfo.records,
                                     currentPage:_page
                                 });
                              },function(errInfo,error){
@@ -46,6 +47,10 @@
                              }
                            );
 
+            },
+            _switchFeeType:function(_feeTypeCd){
+                vc.component.indexArrearsInfo.feeTypeCd = _feeTypeCd;
+                vc.component._listArrearsData();
             }
         }
     })

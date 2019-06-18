@@ -134,7 +134,14 @@ where 1 =1
 </if> 
 <if test="roomId !=null and roomId != ''">
    and t.room_id= #{roomId}
-</if> 
+</if>
+
+<if test="roomIds != null">
+    and t.room_id in
+    <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+</if>
 <if test="layer !=null and layer != ''">
    and t.layer= #{layer}
 </if> 

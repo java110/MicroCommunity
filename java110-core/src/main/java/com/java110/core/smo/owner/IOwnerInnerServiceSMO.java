@@ -79,4 +79,13 @@ public interface IOwnerInnerServiceSMO {
     @RequestMapping(value = "/queryNoEnterRoomOwnerCount", method = RequestMethod.POST)
     int queryNoEnterRoomOwnerCount(@RequestBody OwnerDto ownerDto);
 
+    /**
+     * 根据房屋查询业主信息
+     *
+     * @param ownerDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryOwnersByRoom", method = RequestMethod.POST)
+    List<OwnerDto> queryOwnersByRoom(@RequestBody OwnerDto ownerDto);
+
 }
