@@ -224,3 +224,13 @@ vc 校验 工具类 -method
     }
 
 })(window.vc.validate);
+
+
+/**
+对 validate 进行二次封装
+**/
+(function(vc){
+    vc.check = function(dataObj,dataConfig){
+        return vc.validate.validate(dataObj, dataConfig);
+    }
+})(window.vc)

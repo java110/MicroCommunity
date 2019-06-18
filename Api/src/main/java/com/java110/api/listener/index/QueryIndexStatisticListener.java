@@ -41,22 +41,7 @@ import java.util.List;
 public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
-    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
-
-    @Autowired
-    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
-
-    @Autowired
-    private IUnitInnerServiceSMO unitInnerServiceSMOImpl;
-
-    @Autowired
-    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
-
-    @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -78,58 +63,16 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
-        validateFeeData(reqJson);
-        FeeDto feeDtoParamIn = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
-        feeDtoParamIn.setPayerObjId(reqJson.getString("roomId"));
+        validateIndexStatistic(reqJson);
+        // 查询业主 总数量
+        OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
+        int ownerCount = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
+        int noEnterRoomCount =
+        // 查询房屋 总数量
 
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDtoParamIn);
-        ResponseEntity<String> responseEntity = null;
-        if (feeDtos == null || feeDtos.size() == 0) {
-            responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
-        }
+        // 查询停车位 总数量
 
-        FeeDto feeDto = feeDtos.get(0);
-
-        ApiFeeVo apiFeeVo = BeanConvertUtil.covertBean(feeDto, ApiFeeVo.class);
-        //apiFeeVo.setStartTime(DateUtil.getFormatTimeString(feeDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        //apiFeeVo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
-
-        //查询 房屋信息
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomId(feeDto.getPayerObjId());
-        roomDto.setCommunityId(feeDto.getCommunityId());
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        if (roomDtos == null || roomDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到房屋信息 roomId" + feeDto.getPayerObjId());
-        }
-
-        roomDto = roomDtos.get(0);
-        /*apiFeeVo.setRoomId(roomDto.getRoomId());
-        apiFeeVo.setRoomNum(roomDto.getRoomNum());*/
-        apiFeeVo = BeanConvertUtil.covertBean(roomDto,apiFeeVo);
-
-        // 业主信息
-        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setRoomId(roomDto.getRoomId());
-        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到房屋和业主关系信息 roomId=" + roomDto.getRoomId());
-        }
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
-        ownerDto.setCommunityId(feeDto.getCommunityId());
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-
-        if (ownerDtos == null || ownerDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据错误，未找到业主信息 ownerId=" + ownerRoomRelDtos.get(0).getOwnerId());
-        }
-        ownerDto = ownerDtos.get(0);
-        apiFeeVo.setOwnerId(ownerDto.getOwnerId());
-        apiFeeVo.setOwnerName(ownerDto.getName());
-        apiFeeVo.setLink(ownerDto.getLink());
-
-        responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
+        // 查询商铺 总数量
 
 
         dataFlowContext.setResponseEntity(responseEntity);
@@ -140,11 +83,8 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
      *
      * @param reqJson 包含查询条件
      */
-    private void validateFeeData(JSONObject reqJson) {
+    private void validateIndexStatistic(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "feeTypeCd", "请求中未包含feeTypeCd信息");
-        Assert.jsonObjectHaveKey(reqJson, "roomId", "请求中未包含roomId信息");
-
 
     }
 
@@ -153,39 +93,6 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
         return super.DEFAULT_ORDER;
     }
 
-    public IFeeInnerServiceSMO getFeeInnerServiceSMOImpl() {
-        return feeInnerServiceSMOImpl;
-    }
-
-    public void setFeeInnerServiceSMOImpl(IFeeInnerServiceSMO feeInnerServiceSMOImpl) {
-        this.feeInnerServiceSMOImpl = feeInnerServiceSMOImpl;
-    }
-
-
-    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
-        return roomInnerServiceSMOImpl;
-    }
-
-    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
-        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
-    }
-
-
-    public IFloorInnerServiceSMO getFloorInnerServiceSMOImpl() {
-        return floorInnerServiceSMOImpl;
-    }
-
-    public void setFloorInnerServiceSMOImpl(IFloorInnerServiceSMO floorInnerServiceSMOImpl) {
-        this.floorInnerServiceSMOImpl = floorInnerServiceSMOImpl;
-    }
-
-    public IUnitInnerServiceSMO getUnitInnerServiceSMOImpl() {
-        return unitInnerServiceSMOImpl;
-    }
-
-    public void setUnitInnerServiceSMOImpl(IUnitInnerServiceSMO unitInnerServiceSMOImpl) {
-        this.unitInnerServiceSMOImpl = unitInnerServiceSMOImpl;
-    }
 
     public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
         return ownerInnerServiceSMOImpl;
@@ -193,13 +100,5 @@ public class QueryIndexStatisticListener extends AbstractServiceApiDataFlowListe
 
     public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
         this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
-    }
-
-    public IOwnerRoomRelInnerServiceSMO getOwnerRoomRelInnerServiceSMOImpl() {
-        return ownerRoomRelInnerServiceSMOImpl;
-    }
-
-    public void setOwnerRoomRelInnerServiceSMOImpl(IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl) {
-        this.ownerRoomRelInnerServiceSMOImpl = ownerRoomRelInnerServiceSMOImpl;
     }
 }
