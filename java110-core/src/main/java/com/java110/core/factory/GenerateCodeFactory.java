@@ -78,6 +78,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_ownerRoomRelId = "78";
     public static final String CODE_PREFIX_psId = "79";
     public static final String CODE_PREFIX_carId = "80";
+    //测试用列
+    public static final String CODE_PREFIX_demoId="90";
 
     /**
      * 只有在不调用服务生成ID时有用

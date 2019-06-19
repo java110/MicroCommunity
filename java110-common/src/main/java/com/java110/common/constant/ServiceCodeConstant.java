@@ -471,4 +471,7 @@ public class ServiceCodeConstant {
     // 保存停车位信息
     public static final String SERVICE_CODE_EXIT_PARKING_SPACE = "parkingSpace.exitParkingSpace";
 
+    //查询用例配置
+    public static final String SERVICE_CODE_QUERY_DEMO_CONFIG = "demo.queryDemoConfig";
+
 }
