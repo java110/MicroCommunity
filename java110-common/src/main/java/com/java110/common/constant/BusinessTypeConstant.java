@@ -57,6 +57,57 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_RECOVER_USER_INFO = "100100040003";
 
+    /**
+     * 增加业主
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "110100030001";
+
+    /**
+     * 修改业主
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_INFO = "110100040001";
+
+
+    /**
+     * 删除业主
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_INFO = "110100050001";
+
+
+    /**
+     * 房屋购买
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_ROOM_REL = "111100030001";
+
+    /**
+     * 房屋状态变更
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_ROOM_REL = "111100040001";
+
+
+    /**
+     * 房屋转售
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_ROOM_REL = "111100050001";
+
+
+    /**
+     * 保存业主车辆
+     */
+    public static final String BUSINESS_TYPE_SAVE_OWNER_CAR = "111200030001";
+
+    /**
+     * 修改业主车辆
+     */
+    public static final String BUSINESS_TYPE_UPDATE_OWNER_CAR = "111200040001";
+
+
+    /**
+     * 删除业主车辆
+     */
+    public static final String BUSINESS_TYPE_DELETE_OWNER_CAR = "111200050001";
+
+
 
 
 
@@ -223,68 +274,65 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_ROOM_INFO = "530100050001";
 
+    /**
+     * 增加车位
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE = "540100030001";
 
     /**
-     * 保存物业信息
+     * 修改车位
      */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_INFO = "600100030001";
-    /**
-     * 保存物业照片
-     */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_PHOTO = "600100030002";
-    /**
-     * 保存物业证件
-     */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_CERDENTIALS = "600100030003";
-    /**
-     * 保存物业员工
-     */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_USER = "600100030004";
-    /**
-     * 保存物业费用
-     */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_FEE = "600100030005";
-    /**
-     * 保存住户
-     */
-    public static final String BUSINESS_TYPE_SAVE_PROPERTY_HOUSE = "600100030006";
-    /**
-     * 修改物业信息
-     */
-    public static final String BUSINESS_TYPE_UPDATE_PROPERTY_INFO = "600100040001";
-    /**
-     * 修改物业照片
-     */
-    public static final String BUSINESS_TYPE_UPDATE_PROPERTY_PHOTO = "600100040002";
-    /**
-     * 修改物业证件
-     */
-    public static final String BUSINESS_TYPE_UPDATE_PROPERTY_CERDENTIALS = "600100040003";
-    /**
-     * 修改 费用信息
-     */
-    public static final String BUSINESS_TYPE_UPDATE_PROPERTY_FEE = "600100040004";
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_SPACE = "540100040001";
+
 
     /**
-     * 修改住户信息
+     * 删除车位
      */
-    public static final String BUSINESS_TYPE_UPDATE_PROPERTY_HOUSE = "600100040005";
+    public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
+
+
+
+
     /**
-     * 删除物业属性
+     * 保存费用信息
      */
-    public static final String BUSINESS_TYPE_DELETE_PROPERTY_ATTR = "600100050001";
+    public static final String BUSINESS_TYPE_SAVE_FEE_INFO = "600100030001";
     /**
-     * 删除物业照片
+     * 修改费用信息
      */
-    public static final String BUSINESS_TYPE_DELETE_PROPERTY_PHOTO = "600100050002";
+    public static final String BUSINESS_TYPE_UPDATE_FEE_INFO = "600100040001";
     /**
-     * 删除 物业证件
+     * 删除费用信息
      */
-    public static final String BUSINESS_TYPE_DELETE_PROPERTY_CERDENTIALS = "600100050003";
+    public static final String BUSINESS_TYPE_DELETE_FEE_INFO = "600100050001";
+
     /**
-     * 删除物业员工
+     * 保存费用明细信息
      */
-    public static final String BUSINESS_TYPE_DELETE_PROPERTY_USER = "600100050004";
+    public static final String BUSINESS_TYPE_SAVE_FEE_DETAIL = "610100030001";
+    /**
+     * 修改费用明细信息
+     */
+    public static final String BUSINESS_TYPE_UPDATE_FEE_DETAIL = "610100040001";
+    /**
+     * 删除费用明细信息
+     */
+    public static final String BUSINESS_TYPE_DELETE_FEE_DETAIL = "610100050001";
+
+    /**
+     * 保存费用配置信息
+     */
+    public static final String BUSINESS_TYPE_SAVE_FEE_CONFIG = "620100030001";
+    /**
+     * 修改费用配置信息
+     */
+    public static final String BUSINESS_TYPE_UPDATE_FEE_CONFIG = "620100040001";
+    /**
+     * 删除费用配置信息
+     */
+    public static final String BUSINESS_TYPE_DELETE_FEE_CONFIG = "620100050001";
+
+
     /**
      * 删除住户
      */

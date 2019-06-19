@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomServiceDaoImpl">
+
+    <!-- 保存小区房屋信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessRoomInfo" parameterType="Map">
+           insert into business_building_room(
+unit_price,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state
+) values (
+#{unitPrice},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state}
+)
+       </insert>
+
+
+       <!-- 查询小区房屋信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessRoomInfo" parameterType="Map" resultType="Map">
+           select  t.unit_price,t.unit_price unitPrice,t.section,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.operate,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state
+from business_building_room t 
+where 1 =1 
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if>
+           <if test="state !=null and state != ''">
+               and t.state= #{state}
+           </if>
+
+       </select>
+
+
+
+
+
+    <!-- 保存小区房屋信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRoomInfoInstance" parameterType="Map">
+        insert into building_room(
+unit_price,section,status_cd,remark,user_id,room_id,layer,built_up_area,room_num,unit_id,b_id,apartment,state
+) select t.unit_price,t.section,'0',t.remark,t.user_id,t.room_id,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state from business_building_room t where 1=1
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+   and t.operate= 'ADD'
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+    </insert>
+
+
+
+    <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomInfo" parameterType="Map" resultType="Map">
+        select  t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state
+from building_room t 
+where 1 =1 
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if>
+
+<if test="roomIds != null">
+    and t.room_id in
+    <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+</if>
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+<if test="page != -1 and page != null">
+   limit #{page},#{row}
+</if>
+
+
+    </select>
+
+
+
+
+    <!-- 修改小区房屋信息 add by wuxw 2018-07-03 -->
+    <update id="updateRoomInfoInstance" parameterType="Map">
+        update  building_room t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="unitPrice !=null and unitPrice != ''">
+, t.unit_price= #{unitPrice}
+</if> 
+<if test="section !=null and section != ''">
+, t.section= #{section}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+<if test="layer !=null and layer != ''">
+, t.layer= #{layer}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+, t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+, t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+, t.unit_id= #{unitId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+, t.apartment= #{apartment}
+</if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+ where 1=1 <if test="roomId !=null and roomId != ''">
+and t.room_id= #{roomId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
+     <select id="queryRoomsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from building_room t 
+where 1 =1 
+<if test="unitPrice !=null and unitPrice != ''">
+   and t.unit_price= #{unitPrice}
+</if> 
+<if test="section !=null and section != ''">
+   and t.section= #{section}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="layer !=null and layer != ''">
+   and t.layer= #{layer}
+</if> 
+<if test="builtUpArea !=null and builtUpArea != ''">
+   and t.built_up_area= #{builtUpArea}
+</if> 
+<if test="roomNum !=null and roomNum != ''">
+   and t.room_num= #{roomNum}
+</if> 
+<if test="unitId !=null and unitId != ''">
+   and t.unit_id= #{unitId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="apartment !=null and apartment != ''">
+   and t.apartment= #{apartment}
+</if>
+         <if test="state !=null and state != ''">
+             and t.state= #{state}
+         </if>
+
+
+     </select>
+
+
+
+    <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
+    <select id="queryRoomsByCommunityIdCount" parameterType="Map" resultType="Map">
+        select  count(1) count
+        FROM building_room t,s_community c,s_community_member cm,building_unit u,f_floor f
+            WHERE 1 =1
+            AND t.`unit_id` = u.`unit_id`
+            AND u.`floor_id` = f.`floor_id`
+            AND f.`floor_id` = cm.`member_id`
+            AND cm.`community_id` = c.`community_id`
+            AND cm.`member_type_cd` = '390001200004'
+            AND c.`status_cd` = '0'
+            AND cm.`status_cd` = '0'
+            AND u.`status_cd` = '0'
+            AND f.`status_cd` = '0'
+            AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+    <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
+    <select id="queryRoomsWithOutSellByCommunityIdCount" parameterType="Map" resultType="Map">
+        select
+            count(1) count
+        FROM
+            building_room t,
+            s_community c,
+            s_community_member cm,
+            building_unit u,
+            f_floor f
+        WHERE 1 =1
+            AND t.`unit_id` = u.`unit_id`
+            AND u.`floor_id` = f.`floor_id`
+            AND f.`floor_id` = cm.`member_id`
+            AND cm.`community_id` = c.`community_id`
+            AND cm.`member_type_cd` = '390001200004'
+            AND c.`status_cd` = '0'
+            AND cm.`status_cd` = '0'
+            AND u.`status_cd` = '0'
+            AND f.`status_cd` = '0'
+            AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        AND NOT EXISTS(
+            SELECT 1 FROM building_owner_room_rel borr
+            WHERE borr.`status_cd` = '0'
+            AND borr.`room_id` = t.`room_id`
+        )
+
+
+    </select>
+
+    <!-- 查询小区房屋数量 add by wuxw 2018-07-03 -->
+    <select id="queryRoomsWithSellByCommunityIdCount" parameterType="Map" resultType="Map">
+        select
+        count(1) count
+        FROM
+        building_room t,
+        s_community c,
+        s_community_member cm,
+        building_unit u,
+        f_floor f
+        WHERE 1 =1
+        AND t.`unit_id` = u.`unit_id`
+        AND u.`floor_id` = f.`floor_id`
+        AND f.`floor_id` = cm.`member_id`
+        AND cm.`community_id` = c.`community_id`
+        AND cm.`member_type_cd` = '390001200004'
+        AND c.`status_cd` = '0'
+        AND cm.`status_cd` = '0'
+        AND u.`status_cd` = '0'
+        AND f.`status_cd` = '0'
+        AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        AND EXISTS(
+        SELECT 1 FROM building_owner_room_rel borr
+        WHERE borr.`status_cd` = '0'
+        AND borr.`room_id` = t.`room_id`
+        )
+
+
+    </select>
+
+    <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomInfoWithOutSellByCommunityId" parameterType="Map" resultType="Map">
+        SELECT  t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
+        FROM building_room t,s_community c,s_community_member cm,building_unit u,f_floor f
+        WHERE 1 =1
+            AND t.`unit_id` = u.`unit_id`
+            AND u.`floor_id` = f.`floor_id`
+            AND f.`floor_id` = cm.`member_id`
+            AND cm.`community_id` = c.`community_id`
+            AND cm.`member_type_cd` = '390001200004'
+            AND c.`status_cd` = '0'
+            AND cm.`status_cd` = '0'
+            AND u.`status_cd` = '0'
+            AND f.`status_cd` = '0'
+            AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        AND NOT EXISTS(
+            SELECT 1 FROM building_owner_room_rel borr
+            WHERE borr.`status_cd` = '0'
+            AND borr.`room_id` = t.`room_id`
+        )
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
+
+    </select>
+
+    <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomInfoWithSellByCommunityId" parameterType="Map" resultType="Map">
+        SELECT  t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
+        FROM building_room t,s_community c,s_community_member cm,building_unit u,f_floor f
+        WHERE 1 =1
+        AND t.`unit_id` = u.`unit_id`
+        AND u.`floor_id` = f.`floor_id`
+        AND f.`floor_id` = cm.`member_id`
+        AND cm.`community_id` = c.`community_id`
+        AND cm.`member_type_cd` = '390001200004'
+        AND c.`status_cd` = '0'
+        AND cm.`status_cd` = '0'
+        AND u.`status_cd` = '0'
+        AND f.`status_cd` = '0'
+        AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        AND EXISTS(
+        SELECT 1 FROM building_owner_room_rel borr
+        WHERE borr.`status_cd` = '0'
+        AND borr.`room_id` = t.`room_id`
+        )
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
+
+    </select>
+
+
+    <!-- 查询小区房屋信息 add by wuxw 2018-07-03 -->
+    <select id="getRoomInfoByCommunityId" parameterType="Map" resultType="Map">
+        SELECT  t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+        t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
+        t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,
+        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum
+        FROM building_room t,s_community c,s_community_member cm,building_unit u,f_floor f
+        WHERE 1 =1
+        AND t.`unit_id` = u.`unit_id`
+        AND u.`floor_id` = f.`floor_id`
+        AND f.`floor_id` = cm.`member_id`
+        AND cm.`community_id` = c.`community_id`
+        AND cm.`member_type_cd` = '390001200004'
+        AND c.`status_cd` = '0'
+        AND cm.`status_cd` = '0'
+        AND u.`status_cd` = '0'
+        AND f.`status_cd` = '0'
+        AND c.`community_id` = #{communityId}
+        <if test="floorId !=null and floorId != ''">
+            and f.`floor_id`= #{floorId}
+        </if>
+        <if test="unitPrice !=null and unitPrice != ''">
+            and t.unit_price= #{unitPrice}
+        </if>
+        <if test="section !=null and section != ''">
+            and t.section= #{section}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="layer !=null and layer != ''">
+            and t.layer= #{layer}
+        </if>
+        <if test="builtUpArea !=null and builtUpArea != ''">
+            and t.built_up_area= #{builtUpArea}
+        </if>
+        <if test="roomNum !=null and roomNum != ''">
+            and t.room_num= #{roomNum}
+        </if>
+        <if test="unitId !=null and unitId != ''">
+            and t.unit_id= #{unitId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="apartment !=null and apartment != ''">
+            and t.apartment= #{apartment}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
+
+    </select>
+
+    <!-- 根据业主查询房屋信息 -->
+    <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
+        SELECT
+            t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
+            t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
+            t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum,f.`floor_num` floorNum
+        FROM
+            building_owner bo,building_room t,building_owner_room_rel borr,building_unit u,f_floor f
+        WHERE
+            bo.`owner_id` = borr.`owner_id`
+            AND borr.`room_id` = t.`room_id`
+            AND t.`unit_id` = u.`unit_id`
+            AND u.`floor_id` = f.`floor_id`
+            AND u.`status_cd` = '0'
+            AND f.`status_cd` = '0'
+            AND borr.`status_cd` = '0'
+            AND t.`status_cd` = '0'
+            AND bo.`status_cd` = '0'
+            AND bo.`owner_type_cd` = '1001'
+        <if test="sex !=null ">
+            and bo.sex= #{sex}
+        </if>
+        <if test="name !=null and name != ''">
+            and bo.name= #{name}
+        </if>
+        <if test="link !=null and link != ''">
+            and bo.link= #{link}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and bo.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and bo.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and bo.owner_id= #{ownerId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and bo.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and bo.user_id= #{userId}
+        </if>
+        <if test="age !=null and age != ''">
+            and bo.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and bo.member_id= #{memberId}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and bo.owner_type_cd= #{ownerTypeCd}
+        </if>
+    </select>
+</mapper>

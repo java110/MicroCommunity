@@ -80,7 +80,7 @@ public class BaseServiceSMO extends AppBase {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.debug("请求中心服务信息，{}", responseEntity);
+            logger.debug("中心服务返回信息，{}", responseEntity);
             return responseEntity;
         }
 

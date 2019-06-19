@@ -25,6 +25,12 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-service</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-db</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

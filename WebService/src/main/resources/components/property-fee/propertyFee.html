@@ -1,0 +1,89 @@
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <vc:create name="viewMainFee"
+               feeName="物业费"
+               feeTypeCd="888800010001"
+               payName="propertyPay"
+    ></vc:create>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>缴费历史</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="row">
+                        <div class="col-sm-3 input-group">
+                            <input size="16" type="text" placeholder="请选择开始时间"   readonly class="form-control form-control-sm start_time">
+                        </div>
+                        <div class="col-sm-2">
+
+                        </div>
+                        <div class="col-sm-3 input-group">
+                            <input size="16" type="text" placeholder="请选择结束时间"  readonly class="form-control form-control-sm end_time">
+                        </div>
+
+                        <div class="col-sm-2">
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="queryFeeDetailMethod()">
+                                <i class="glyphicon glyphicon-search"></i> 马上查询</button>
+                        </div>
+
+                        </div>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" style="margin-top:10px" data-page-size="10">
+                        <thead>
+                        <tr>
+                            <th>缴费ID</th>
+                            <th data-hide="phone">周期</th>
+                            <th data-hide="phone">应收金额</th>
+                            <th data-hide="phone">实收金额</th>
+                            <th data-hide="phone">打折率</th>
+                            <th data-hide="phone" >备注</th>
+                            <th data-hide="phone">缴费时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="feeDetail in feeDetailInfo.feeDetails">
+                            <td>
+                                {{feeDetail.detailId}}
+                            </td>
+                            <td>
+                                {{feeDetail.cycles}} 月
+                            </td>
+                            <td>
+                                {{feeDetail.receivableAmount}} 元
+                            </td>
+                            <td>
+                                {{feeDetail.receivedAmount}} 元
+                            </td>
+                            <td>
+                                {{feeDetail.primeRate}}
+                            </td>
+                            <td>
+                                {{feeDetail.remark}}
+                            </td>
+                            <td>
+                                {{feeDetail.createTime}}
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

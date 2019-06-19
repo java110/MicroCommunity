@@ -91,11 +91,32 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
         //小区房屋信息
         List<Map> businessRoomInfo = roomServiceDaoImpl.getBusinessRoomInfo(info);
         if (businessRoomInfo != null && businessRoomInfo.size() > 0) {
+            reFresh(info, businessRoomInfo.get(0));
             roomServiceDaoImpl.saveRoomInfoInstance(info);
             if (businessRoomInfo.size() == 1) {
                 dataFlowContext.addParamOut("roomId", businessRoomInfo.get(0).get("room_id"));
             }
         }
+    }
+
+
+    /**
+     * 刷 roomId
+     *
+     * @param info         查询对象
+     * @param businessInfo 小区ID
+     */
+    private void reFresh(Map info, Map businessInfo) {
+
+        if (info.containsKey("roomId")) {
+            return;
+        }
+
+        if (!businessInfo.containsKey("room_id")) {
+            return;
+        }
+
+        info.put("roomId", businessInfo.get("room_id"));
     }
 
     /**
@@ -117,6 +138,7 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
         //小区房屋信息
         List<Map> roomInfo = roomServiceDaoImpl.getRoomInfo(info);
         if (roomInfo != null && roomInfo.size() > 0) {
+            reFresh(paramIn, roomInfo.get(0));
             roomServiceDaoImpl.updateRoomInfoInstance(paramIn);
         }
     }

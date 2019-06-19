@@ -28,7 +28,7 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages={"com.java110.service","com.java110.shop","com.java110.core","com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.shop", "com.java110.core", "com.java110.cache", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.shop.listener"})
@@ -40,6 +40,7 @@ public class ShopServiceApplicationStart {
 
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+     *
      * @return restTemplate
      */
     @Bean
@@ -50,7 +51,7 @@ public class ShopServiceApplicationStart {
         return restTemplate;
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(ShopServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
         //加载业务侦听

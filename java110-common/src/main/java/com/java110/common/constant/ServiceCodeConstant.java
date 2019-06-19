@@ -385,12 +385,94 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_ROOM = "room.saveRoom";
 
 
+    //售卖房屋
+    public static final String SERVICE_CODE_SELL_ROOM = "room.sellRoom";
+    //退房
+    public static final String SERVICE_CODE_EXIT_ROOM = "room.exitRoom";
+
+
     //查询房屋信息
     public static final String SERVICE_CODE_QUERY_ROOMS = "room.queryRooms";
+
+    //查询房屋信息
+    public static final String SERVICE_CODE_QUERY_ROOMS_BY_OWNER = "room.queryRoomsByOwner";
+
+    //查询房屋信息
+    public static final String SERVICE_CODE_QUERY_ROOMS_WITHOUT_SELL = "room.queryRoomsWithOutSell";
+
+    //查询房屋信息
+    public static final String SERVICE_CODE_QUERY_ROOMS_WITH_SELL = "room.queryRoomsWithSell";
 
     //修改房屋信息
     public static final String SERVICE_CODE_UPDATE_ROOMS = "room.updateRoom";
 
     //修改房屋信息
     public static final String SERVICE_CODE_DELETE_ROOMS = "room.deleteRoom";
+
+
+    //查询业主
+    public static final String SERVICE_CODE_QUERY_OWNER = "owner.queryOwners";
+
+    //查询业主成员
+    public static final String SERVICE_CODE_QUERY_OWNER_MEMBER = "owner.queryOwnerMembers";
+
+    // 保存业主信息
+    public static final String SERVICE_CODE_SAVE_OWNER = "owner.saveOwner";
+
+    // 编辑业主信息
+    public static final String SERVICE_CODE_EDIT_OWNER = "owner.editOwner";
+
+    //删除业主信息
+    public static final String SERVICE_CODE_DELETE_OWNER = "owner.deleteOwner";
+
+    //查询费用配置
+    public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
+    public static final String SERVICE_CODE_QUERY_FEE_DETAIL = "fee.queryFeeDetail";
+    public static final String SERVICE_CODE_QUERY_FEE = "fee.queryFee";
+
+    //查询欠费数据
+    public static final String SERVICE_CODE_QUERY_ARREARS_FEE = "fee.queryArrearsFee";
+
+    //查询首页统计信息
+    public static final String SERVICE_CODE_QUERY_INDEX_STATISTIC = "index.queryIndexStatistic";
+
+    //查询费用配置 根据停车位
+    public static final String SERVICE_CODE_QUERY_FEE_BY_PARKING_SPACE = "fee.queryFeeByParkingSpace";
+
+    //保存费用配置
+    public static final String SERVICE_CODE_SAVE_FEE_CONFIG = "fee.saveFeeConfig";
+
+    //修改费用配置
+    public static final String SERVICE_CODE_UPDATE_FEE_CONFIG = "fee.updateFeeConfig";
+
+    //缴费
+    public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
+
+
+    //查询停车位
+    public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";
+
+
+    //查询停车位
+    public static final String SERVICE_CODE_QUERY_PARKING_SPACE_BY_OWNER = "parkingSpace.queryParkingSpacesByOwner";
+
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_SAVE_PARKING_SPACE = "parkingSpace.saveParkingSpace";
+
+    // 编辑停车位信息
+    public static final String SERVICE_CODE_EDIT_PARKING_SPACE = "parkingSpace.editParkingSpace";
+
+    //删除停车位信息
+    public static final String SERVICE_CODE_DELETE_PARKING_SPACE = "parkingSpace.deleteParkingSpace";
+
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_SELL_PARKING_SPACE = "parkingSpace.sellParkingSpace";
+
+
+
+    // 保存停车位信息
+    public static final String SERVICE_CODE_EXIT_PARKING_SPACE = "parkingSpace.exitParkingSpace";
+
 }

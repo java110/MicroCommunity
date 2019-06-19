@@ -1,0 +1,48 @@
+<div id = "propertyPayModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="m-t-none m-b ">缴费信息</h3>
+                <div class="ibox-content">
+                    <div>
+                        <div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">缴费周期</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="propertyPayInfo.cycles">
+                                        <option selected  disabled value="">必填，请选择缴费周期</option>
+                                        <option value="1">1个月</option>
+                                        <option value="2">2个月</option>
+                                        <option value="3">3个月</option>
+                                        <option value="4">4个月</option>
+                                        <option value="5">5个月</option>
+                                        <option value="6">6个月</option>
+                                        <option value="12">一年</option>
+                                        <option value="24">两年</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">应收金额</label>
+                                <div class="col-sm-10"><input v-model="propertyPayInfo.receivableAmount" type="number" readonly class="form-control"></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">实收金额</label>
+                                <div class="col-sm-10"><input v-model="propertyPayInfo.receivedAmount" type="number"  class="form-control"></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">备注</label>
+                                <div class="col-sm-10"><input v-model="propertyPayInfo.remark" type="text" placeholder="请填写备注信息" class="form-control"></div>
+                            </div>
+                            <div class="ibox-content">
+                                <button class="btn btn-primary float-right" type="button" v-on:click="payFee()" ><i class="fa fa-check"></i>&nbsp;提交</button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,3 +10,10 @@ services:
        - "8006:8006"
        volumes:
        - ../target/StoreService.jar:/root/target/StoreService.jar
+#       extra_hosts:
+#       - "dev.java110.com:192.168.1.18"
+#       - "dev.db.java110.com:192.168.1.18"
+#       - "dev.zk.java110.com:192.168.1.18"
+#       - "dev.kafka.java110.com:192.168.1.18"
+#       - "dev.redis.java110.com:192.168.1.18"
+#       - "api.java110.com:92.168.1.18"

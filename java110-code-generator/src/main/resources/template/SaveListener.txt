@@ -89,6 +89,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         //商户信息
         List<Map> businessStoreInfo = storeServiceDaoImpl.getBusinessStoreInfo(info);
         if( businessStoreInfo != null && businessStoreInfo.size() >0) {
+            reFreshShareColumn(info, businessStoreInfo.get(0));
             storeServiceDaoImpl.saveStoreInfoInstance(info);
             if(businessStoreInfo.size() == 1) {
                 dataFlowContext.addParamOut("storeId", businessStoreInfo.get(0).get("store_id"));
@@ -96,6 +97,25 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         }
     }
 
+
+    /**
+     * 刷 分片字段
+     *
+     * @param info         查询对象
+     * @param businessInfo 小区ID
+     */
+    private void reFreshShareColumn(Map info, Map businessInfo) {
+
+        if (info.containsKey("shareId")) {
+            return;
+        }
+
+        if (!businessInfo.containsKey("stare_id")) {
+            return;
+        }
+
+        info.put("shareId", businessInfo.get("stare_id"));
+    }
     /**
      * 撤单
      * @param dataFlowContext 数据对象
@@ -114,6 +134,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         //商户信息
         List<Map> storeInfo = storeServiceDaoImpl.getStoreInfo(info);
         if(storeInfo != null && storeInfo.size() > 0){
+            reFreshShareColumn(paramIn, storeInfo.get(0));
             storeServiceDaoImpl.updateStoreInfoInstance(paramIn);
         }
     }

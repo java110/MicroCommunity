@@ -32,4 +32,13 @@ public interface ICommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/getCommunityMembers", method = RequestMethod.POST)
     List<CommunityMemberDto> getCommunityMembers(@RequestBody CommunityMemberDto communityMemberDto);
+
+    /**
+     * 查询小区成员数量
+     *
+     * @param communityMemberDto 小区成员数据封装
+     * @return CommunityMemberDto 数据
+     */
+    @RequestMapping(value = "/getCommunityMemberCount", method = RequestMethod.POST)
+    int getCommunityMemberCount(@RequestBody CommunityMemberDto communityMemberDto);
 }

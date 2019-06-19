@@ -39,4 +39,53 @@ public interface IRoomInnerServiceSMO {
      */
     @RequestMapping(value = "/queryRoomsCount", method = RequestMethod.POST)
     int queryRoomsCount(@RequestBody RoomDto roomDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param roomDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryRoomsWithOutSellCount", method = RequestMethod.POST)
+    int queryRoomsWithOutSellCount(@RequestBody RoomDto roomDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param roomDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryRoomsWithSellCount", method = RequestMethod.POST)
+    int queryRoomsWithSellCount(@RequestBody RoomDto roomDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param roomDto 数据对象分享
+     * @return RoomDto 对象数据
+     */
+    @RequestMapping(value = "/queryRoomsWithOutSell", method = RequestMethod.POST)
+    List<RoomDto> queryRoomsWithOutSell(@RequestBody RoomDto roomDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param roomDto 数据对象分享
+     * @return RoomDto 对象数据
+     */
+    @RequestMapping(value = "/queryRoomsWithSell", method = RequestMethod.POST)
+    List<RoomDto> queryRoomsWithSell(@RequestBody RoomDto roomDto);
+
+
+    /**
+     * <p>根据业主查询房屋信息</p>
+     *
+     *
+     * @param roomDto 数据对象分享
+     * @return RoomDto 对象数据
+     */
+    @RequestMapping(value = "/queryRoomsByOwner", method = RequestMethod.POST)
+    List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto);
 }

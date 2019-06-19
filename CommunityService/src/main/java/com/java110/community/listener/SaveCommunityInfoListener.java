@@ -89,21 +89,44 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
         //小区信息
         Map businessCommunityInfo = communityServiceDaoImpl.getBusinessCommunityInfo(info);
+
         if (businessCommunityInfo != null && !businessCommunityInfo.isEmpty()) {
-            communityServiceDaoImpl.saveCommunityInfoInstance(info);
+            reFresh(info, businessCommunityInfo);
+            communityServiceDaoImpl.saveCommunityInfoInstance(businessCommunityInfo);
             dataFlowContext.addParamOut("communityId", businessCommunityInfo.get("community_id"));
         }
         //小区属性
         List<Map> businessCommunityAttrs = communityServiceDaoImpl.getBusinessCommunityAttrs(info);
         if (businessCommunityAttrs != null && businessCommunityAttrs.size() > 0) {
+            reFresh(info, businessCommunityAttrs.get(0));
             communityServiceDaoImpl.saveCommunityAttrsInstance(info);
         }
         //小区照片
         List<Map> businessCommunityPhotos = communityServiceDaoImpl.getBusinessCommunityPhoto(info);
         if (businessCommunityPhotos != null && businessCommunityPhotos.size() > 0) {
+            reFresh(info, businessCommunityPhotos.get(0));
             communityServiceDaoImpl.saveCommunityPhotoInstance(info);
         }
 
+    }
+
+    /**
+     * 刷 communityId
+     *
+     * @param info         查询对象
+     * @param businessInfo 小区ID
+     */
+    private void reFresh(Map info, Map businessInfo) {
+
+        if (info.containsKey("communityId")) {
+            return;
+        }
+
+        if (!businessInfo.containsKey("community_id")) {
+            return;
+        }
+
+        info.put("communityId", businessInfo.get("community_id"));
     }
 
     /**

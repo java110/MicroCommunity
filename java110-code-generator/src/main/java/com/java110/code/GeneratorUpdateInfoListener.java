@@ -21,7 +21,9 @@ public class GeneratorUpdateInfoListener extends BaseGenerator {
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc())
-                .replace("BUSINESS_TYPE_UPDATE_STORE_INFO", data.getUpdateBusinessTypeCd());
+                .replace("BUSINESS_TYPE_UPDATE_STORE_INFO", data.getUpdateBusinessTypeCd())
+                .replace(data.getName()+"Id", data.getId())
+                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
         String writePath = this.getClass().getResource("/listener").getPath()
                 + "/Update" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         writeFile(writePath,

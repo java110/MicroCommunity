@@ -1,0 +1,19 @@
+version: '2'
+services:
+   eureka:
+       container_name: eureka-1
+       build:
+          context: .
+          dockerfile: Dockerfile
+       restart: always
+       ports:
+       - "8761:8761"
+       volumes:
+       - ../target/eureka.jar:/root/target/eureka.jar
+#       extra_hosts:
+#       - "dev.java110.com:192.168.1.18"
+#       - "dev.db.java110.com:192.168.1.18"
+#       - "dev.zk.java110.com:192.168.1.18"
+#       - "dev.kafka.java110.com:192.168.1.18"
+#       - "dev.redis.java110.com:192.168.1.18"
+#       - "api.java110.com:92.168.1.18"

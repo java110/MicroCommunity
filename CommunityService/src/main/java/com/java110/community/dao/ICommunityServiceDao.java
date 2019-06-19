@@ -210,4 +210,13 @@ public interface ICommunityServiceDao {
      */
      List<Map> getCommunityMembers(Map info) throws DAOException;
 
+    /**
+     * 查询小区成员个数
+     * 根据bId 查询小区信息
+     * @param info bId 信息
+     * @return 小区信息
+     * @throws DAOException
+     */
+     int getCommunityMemberCount(Map info);
+
 }

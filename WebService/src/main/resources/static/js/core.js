@@ -69,10 +69,23 @@
                 });
         },
         get:function(componentCode,componentMethod,param,successCallback,errorCallback){
+                //加入缓存机制
+                var _getPath = '/'+componentCode +'/' +componentMethod;
+                if(vc.constant.GET_CACHE_URL.includes(_getPath)){
+                    var _cacheData = vc.getData(_getPath);
+                    //浏览器缓存中能获取到
+                    if(_cacheData != null && _cacheData != undefined){
+                        successCallback(JSON.stringify(_cacheData),{status:200});
+                        return ;
+                    }
+                }
                 vc.loading('open');
                 Vue.http.get('/callComponent/'+componentCode +"/"+componentMethod, param)
                 .then(function(res){
                     successCallback(res.bodyText,res);
+                    if(vc.constant.GET_CACHE_URL.includes(_getPath) && res.status == 200){
+                         vc.saveData(_getPath,JSON.parse(res.bodyText));
+                    }
                     vc.loading('close');
                 }, function(error){
                     errorCallback(error.bodyText,error);
@@ -126,8 +139,8 @@
 
     //绑定跳转函数
     vc.jumpToPage = function(url){
-                                    window.location.href = url;
-                                };
+          window.location.href = url;
+    };
     //保存菜单
     vc.setCurrentMenu = function(_menuId){
         window.localStorage.setItem('hc_menuId',_menuId);
@@ -144,6 +157,15 @@
     //获取用户菜单
     vc.getMenus = function(){
         return JSON.parse(window.localStorage.getItem('hc_menus'));
+    };
+
+    //保存用户菜单
+    vc.saveData = function(_key,_value){
+        window.localStorage.setItem(_key,JSON.stringify(_value));
+    };
+    //获取用户菜单
+    vc.getData = function(_key){
+        return JSON.parse(window.localStorage.getItem(_key));
     };
 
     //保存当前小区信息 _communityInfo : {"communityId":"123213","name":"测试小区"}
@@ -181,6 +203,36 @@
                 dst[key] = org[key]
             }
         }
+    };
+    //获取url参数
+    vc.getParam = function(_key){
+        //返回当前 URL 的查询部分（问号 ? 之后的部分）。
+        var urlParameters = location.search;
+        //如果该求青中有请求的参数，则获取请求的参数，否则打印提示此请求没有请求的参数
+        if (urlParameters.indexOf('?') != -1)
+        {
+            //获取请求参数的字符串
+            var parameters = decodeURI(urlParameters.substr(1));
+            //将请求的参数以&分割中字符串数组
+            parameterArray = parameters.split('&');
+            //循环遍历，将请求的参数封装到请求参数的对象之中
+            for (var i = 0; i < parameterArray.length; i++) {
+                if(_key == parameterArray[i].split('=')[0]){
+                    return parameterArray[i].split('=')[1];
+                }
+            }
+        }
+
+        return "";
+    };
+    //对象转get参数
+    vc.objToGetParam =function(obj){
+         var str = [];
+         for (var p in obj)
+          if (obj.hasOwnProperty(p)) {
+           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          }
+         return str.join("&");
     }
 
 

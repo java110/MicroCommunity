@@ -30,7 +30,8 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order", "com.java110.core", "com.java110.event.order", "com.java110.cache"})
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order",
+        "com.java110.core", "com.java110.event.order", "com.java110.cache", "com.java110.db"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,

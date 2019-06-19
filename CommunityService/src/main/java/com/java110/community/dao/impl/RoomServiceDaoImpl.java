@@ -139,7 +139,32 @@ public class RoomServiceDaoImpl extends BaseServiceDao implements IRoomServiceDa
             return 0;
         }
 
-        return Integer.parseInt(businessRoomInfos.get(0).get("count").toString());    }
+        return Integer.parseInt(businessRoomInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public int queryRoomsWithOutSellByCommunityIdCount(Map info) {
+        logger.debug("查询小区房屋数据 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.queryRoomsWithOutSellByCommunityIdCount", info);
+        if (businessRoomInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessRoomInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public int queryRoomsWithSellByCommunityIdCount(Map info) {
+        logger.debug("查询小区房屋数据 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.queryRoomsWithSellByCommunityIdCount", info);
+        if (businessRoomInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessRoomInfos.get(0).get("count").toString());
+    }
 
     @Override
     public List<Map> getRoomInfoByCommunityId(Map info) {
@@ -149,6 +174,35 @@ public class RoomServiceDaoImpl extends BaseServiceDao implements IRoomServiceDa
 
         return businessRoomInfos;
     }
+
+    @Override
+    public List<Map> getRoomInfoByOwner(Map info) {
+        logger.debug("查询小区房屋信息 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.getRoomInfoByOwner", info);
+
+        return businessRoomInfos;
+    }
+
+    @Override
+    public List<Map> getRoomInfoWithOutSellByCommunityId(Map info) {
+        logger.debug("查询小区房屋信息 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.getRoomInfoWithOutSellByCommunityId", info);
+
+        return businessRoomInfos;
+    }
+
+
+    @Override
+    public List<Map> getRoomInfoWithSellByCommunityId(Map info) {
+        logger.debug("查询小区房屋信息 入参 info : {}", info);
+
+        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomServiceDaoImpl.getRoomInfoWithSellByCommunityId", info);
+
+        return businessRoomInfos;
+    }
+
 
 
 }

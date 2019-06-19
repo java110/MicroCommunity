@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 小区成员dto
  */
-public class CommunityMemberDto implements Serializable {
+public class CommunityMemberDto extends PageDto implements Serializable {
 
     private String communityMemberId;
 

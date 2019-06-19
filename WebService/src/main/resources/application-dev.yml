@@ -51,26 +51,6 @@ spring:
       max-idle: 100
       min-idle: 0
       timeout: 0
-  datasource:
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-    minIdle: 5
-    validationQuery: SELECT 1 FROM DUAL
-    initialSize: 5
-    maxWait: 60000
-    filters: stat,wall,log4j
-    poolPreparedStatements: true
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8
-    maxPoolPreparedStatementPerConnectionSize: 20
-    password: TT@12345678
-    testOnBorrow: false
-    testWhileIdle: true
-    minEvictableIdleTimeMillis: 300000
-    timeBetweenEvictionRunsMillis: 60000
-    testOnReturn: false
-    driverClassName: com.mysql.jdbc.Driver
-    maxActive: 20
-    username: TT
 
   thymeleaf:
     mode: LEGACYHTML5

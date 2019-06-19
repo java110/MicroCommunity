@@ -32,6 +32,7 @@
         <module>Api</module>
         <module>CommunityService</module>
         <module>java110-code-generator</module>
+        <module>java110-db</module>
     </modules>
 
     <parent>
@@ -72,7 +73,7 @@
         <axis.version>1.4</axis.version>
         <httpclient.verion>3.1</httpclient.verion>
         <spring.version>4.3.2.RELEASE</spring.version>
-        <zookeeper.version>3.3.6</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <swagger.version>2.5.0</swagger.version>
     </properties>
 
@@ -171,6 +172,11 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>java110-logAgent</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-db</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <!-- logback 日志组件支持  -->
@@ -297,6 +303,24 @@
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${httpclient.verion}</version>
+            </dependency>
+
+            <!--<dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc</artifactId>
+                <version>3.0.0.M3</version>
+            </dependency>-->
+
+            <!--<dependency>
+                <groupId>io.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-core</artifactId>
+                <version>3.1.0</version>
+            </dependency>-->
+
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-core</artifactId>
+                <version>4.0.0-RC1</version>
             </dependency>
 
 

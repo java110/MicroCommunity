@@ -1,5 +1,7 @@
 package com.java110.code;
 
+import org.springframework.util.StringUtils;
+
 import java.util.Map;
 
 public class GeneratorSaveInfoListener extends BaseGenerator {
@@ -13,10 +15,21 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
     public void generator(Data data) {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
+        if (StringUtils.isEmpty(data.getShareParam())) {
+            data.setShareParam(data.getId());
+        }
+
+        if (StringUtils.isEmpty(data.getShareColumn())) {
+            data.setShareColumn(data.getParams().get(data.getShareColumn()).toString());
+        }
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc())
-                .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd());
+                .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd())
+                .replace("stare_id", data.getShareColumn())
+                .replace("shareId", data.getShareParam())
+                .replace(data.getName()+"Id", data.getId())
+                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
         System.out.println(this.getClass().getResource("/listener").getPath());
         String writePath = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         writeFile(writePath,
