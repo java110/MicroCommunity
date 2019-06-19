@@ -41,7 +41,7 @@
                                 vc.component.listDemoInfo.demos = listDemoDate.demos;
 
                                 vc.emit('pagination','init',{
-                                    total:vc.component.listOwnerInfo.records,
+                                    total:vc.component.listDemoInfo.records,
                                     currentPage:_page
                                 });
                              },function(errInfo,error){
