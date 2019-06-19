@@ -17,6 +17,9 @@
             vc.on("indexArrears","_listArrearsData",function(){
                 vc.component._listArrearsData(DEFAULT_PAGE,DEFAULT_ROWS);
             });
+            vc.on('pagination','page_event',function(_currentPage){
+                vc.component._listArrearsData(_currentPage,DEFAULT_ROWS);
+            });
         },
         methods:{
             _listArrearsData:function(_page,_row){
