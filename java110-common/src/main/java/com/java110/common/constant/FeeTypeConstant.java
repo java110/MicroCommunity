@@ -45,6 +45,12 @@ public class FeeTypeConstant {
     public static final String FEE_TYPE_HIRE_DOWN_PARKING_SPACE = "888800010005";
 
 
+    /**
+     * 停车费 出租费用类型
+     */
+    public static final String FEE_TYPE_HIRE_PARKING_SPACE = "888800010006";
+
+
 
 
 

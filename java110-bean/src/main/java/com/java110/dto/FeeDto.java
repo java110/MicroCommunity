@@ -22,6 +22,9 @@ private String communityId;
 private String feeId;
 private String userId;
 private String payerObjId;
+private String[] feeTypeCds;
+
+private Date arrearsEndTime;
 
 
     private Date createTime;
@@ -104,5 +107,22 @@ public void setPayerObjId(String payerObjId) {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+
+    public Date getArrearsEndTime() {
+        return arrearsEndTime;
+    }
+
+    public void setArrearsEndTime(Date arrearsEndTime) {
+        this.arrearsEndTime = arrearsEndTime;
+    }
+
+    public String[] getFeeTypeCds() {
+        return feeTypeCds;
+    }
+
+    public void setFeeTypeCds(String[] feeTypeCds) {
+        this.feeTypeCds = feeTypeCds;
     }
 }

@@ -164,5 +164,34 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
         return businessOwnerInfos;
     }
 
+    @Override
+    public int queryNoEnterRoomOwnerCount(Map info) {
+        logger.debug("查询业主数据 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryNoEnterRoomOwnerCount", info);
+        if (businessOwnerInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryOwnersByRoom(Map info) throws DAOException {
+        logger.debug("queryOwnersByRoom 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByRoom", info);
+
+        return businessOwnerInfos;
+    }
+
+    @Override
+    public List<Map> queryOwnersByParkingSpace(Map info) throws DAOException {
+        logger.debug("queryOwnersByParkingSpace 入参 info : {}", info);
+
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByParkingSpace", info);
+
+        return businessOwnerInfos;    }
+
 
 }

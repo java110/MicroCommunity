@@ -428,9 +428,13 @@ public class ServiceCodeConstant {
     //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE_CONFIG = "fee.queryFeeConfig";
     public static final String SERVICE_CODE_QUERY_FEE_DETAIL = "fee.queryFeeDetail";
-
-    //查询费用配置
     public static final String SERVICE_CODE_QUERY_FEE = "fee.queryFee";
+
+    //查询欠费数据
+    public static final String SERVICE_CODE_QUERY_ARREARS_FEE = "fee.queryArrearsFee";
+
+    //查询首页统计信息
+    public static final String SERVICE_CODE_QUERY_INDEX_STATISTIC = "index.queryIndexStatistic";
 
     //查询费用配置 根据停车位
     public static final String SERVICE_CODE_QUERY_FEE_BY_PARKING_SPACE = "fee.queryFeeByParkingSpace";

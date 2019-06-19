@@ -4,26 +4,25 @@
         <div class="ibox ">
             <div class="ibox-title">
                 <h5>欠费信息</h5>
-                <div class="ibox-tools">
+                <div class="ibox-tools" style="top: 10px;">
+
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                v-bind:class="{'btn-primary': indexArrearsInfo.feeTypeCd == 888800010001}"
+                                v-on:click="_switchFeeType(888800010001)"
+                        >物业费</button>
+
+
+                        <button type="button"
+                                class="btn btn-light btn-sm"
+                                v-bind:class="{'btn-primary': indexArrearsInfo.feeTypeCd == 888800010005}"
+                                v-on:click="_switchFeeType(888800010005)"
+                        >停车费</button>
+                    </div>
                 </div>
             </div>
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-9 m-b-xs">
-                        <div data-toggle="buttons" class="btn-group btn-group-toggle">
-                            <label class="btn btn-sm btn-white active"> <input type="radio" id="option1" name="options"> 物业费 </label>
-                            <label class="btn btn-sm btn-white "> <input type="radio" id="option2" name="options"> 停车费 </label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-sm" placeholder="请输入业主名称">
-                            <div class="input-group-append">
-                                <button class="btn btn-sm btn-primary" type="button">查询</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -33,20 +32,18 @@
                             <th>联系电话 </th>
                             <th>房屋编号 </th>
                             <th>费用开始时间 </th>
-                            <th>到期时间 </th>
+                            <th>费用到期时间 </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Project <small>This is example of project</small></td>
-                            <td>Patrick Smith</td>
-                            <td>0800 051213</td>
-                            <td>Inceptos Hymenaeos Ltd</td>
-                            <td><span class="pie">0.52/1.561</span></td>
-                            <td>20%</td>
+                        <tr v-for="arr in indexArrearsInfo.arrears">
+                            <td>{{arr.feeId}}</td>
+                            <td>{{arr.ownerName}}</td>
+                            <td>{{arr.tel}}</td>
+                            <td>{{arr.num}}</td>
+                            <td>{{arr.startTime}}</td>
+                            <td>{{arr.endTime}}</td>
                         </tr>
-
-
                         </tbody>
                     </table>
                     <!-- 分页 -->

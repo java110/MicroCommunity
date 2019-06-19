@@ -113,7 +113,13 @@ where 1 =1
 </if> 
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
-</if> 
+</if>
+<if test="feeTypeCds != null ">
+    and t.fee_type_cd in
+    <foreach collection="feeTypeCds" item="item" open="(" close=")" separator=",">
+        #{item}
+    </foreach>
+</if>
 <if test="startTime !=null ">
    and t.start_time= #{startTime}
 </if> 
@@ -122,7 +128,10 @@ where 1 =1
 </if> 
 <if test="endTime !=null ">
    and t.end_time= #{endTime}
-</if> 
+</if>
+<if test="arrearsEndTime != null">
+    and t.end_time &lt; #{arrearsEndTime}
+</if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 
@@ -199,7 +208,13 @@ where 1 =1
 </if> 
 <if test="feeTypeCd !=null and feeTypeCd != ''">
    and t.fee_type_cd= #{feeTypeCd}
-</if> 
+</if>
+ <if test="feeTypeCds != null ">
+     and t.fee_type_cd in
+     <foreach collection="feeTypeCds" item="item" open="(" close=")" separator=",">
+         #{item}
+     </foreach>
+ </if>
 <if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
@@ -208,7 +223,10 @@ where 1 =1
 </if> 
 <if test="endTime !=null ">
    and t.end_time= #{endTime}
-</if> 
+</if>
+ <if test="arrearsEndTime != null">
+     and t.end_time &lt; #{arrearsEndTime}
+ </if>
 <if test="communityId !=null and communityId != ''">
    and t.community_id= #{communityId}
 </if> 

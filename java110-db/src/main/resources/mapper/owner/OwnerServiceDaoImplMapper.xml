@@ -333,5 +333,68 @@ and t.member_id= #{memberId}
         limit #{page}, #{row}
     </if>
     </select>
+    <!-- 查询未入驻业主 总数 -->
+    <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
+        SELECT
+            COUNT(1) count
+        FROM
+            building_owner_room_rel a,
+            building_owner o,
+            s_community_member m
+        WHERE a.`state` IN ('2001', '2003')
+            AND a.`owner_id` = o.`owner_id`
+            AND o.`owner_id` = m.`member_id`
+            AND m.`member_type_cd` = '390001200005'
+            AND m.`community_id` = #{communityId}
+            AND a.`status_cd` = '0'
+            AND o.`status_cd` = '0'
+            AND m.`status_cd` = '0'
+    </select>
+
+    <!-- queryOwnersByRoom -->
+    <!-- 根据房屋查询业主信息 -->
+    <select id="queryOwnersByRoom" parameterType="Map" resultType="Map">
+        SELECT t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
+        r.`room_id` roomId,r.`room_num` roomNum
+        FROM building_room r,building_owner_room_rel orr,building_owner t
+        WHERE r.`room_id` = orr.`room_id`
+        AND orr.`owner_id` = t.`owner_id`
+        <if test="roomId !=null and roomId != ''">
+            AND r.`room_id` = #{roomId}
+        </if>
+        <if test="roomIds != null ">
+            and r.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        AND r.`status_cd` = '0'
+        AND orr.`status_cd` = '0'
+        AND t.`status_cd` = '0'
+    </select>
+
+    <!-- 根据停车位查询 -->
+    <select id="queryOwnersByParkingSpace" parameterType="Map" resultType="Map">
+
+        select ps.num,ps.ps_id psId,t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        from p_parking_space ps , owner_car oc,building_owner t
+        where ps.ps_id = oc.ps_id
+        and oc.owner_id = t.owner_id
+        AND oc.`status_cd` = '0'
+        AND ps.`status_cd` = '0'
+        AND t.`status_cd` = '0'
+        <if test="psIds != null ">
+            and ps.ps_id in
+            <foreach collection="psIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="psId !=null and psId != ''">
+            AND ps.`ps_id` = #{psId}
+        </if>
+    </select>
+
 
 </mapper>

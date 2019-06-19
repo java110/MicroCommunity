@@ -17,6 +17,7 @@ public class OwnerDto extends PageDto implements Serializable {
     private String communityId;
 
     private String roomId;
+    private String[] roomIds;
     private String sex;
     private String name;
     private String link;
@@ -26,6 +27,9 @@ public class OwnerDto extends PageDto implements Serializable {
     private String age;
     private String memberId;
     private String ownerTypeCd;
+    private String roomNum;
+    private String psId;
+    private String num;
 
     private String userName;
 
@@ -131,5 +135,38 @@ public void setMemberId(String memberId) {
 
     public void setOwnerTypeCd(String ownerTypeCd) {
         this.ownerTypeCd = ownerTypeCd;
+    }
+
+
+    public String[] getRoomIds() {
+        return roomIds;
+    }
+
+    public void setRoomIds(String[] roomIds) {
+        this.roomIds = roomIds;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
+    }
+
+    public String getPsId() {
+        return psId;
+    }
+
+    public void setPsId(String psId) {
+        this.psId = psId;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 }

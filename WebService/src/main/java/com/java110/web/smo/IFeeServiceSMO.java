@@ -73,6 +73,12 @@ public interface IFeeServiceSMO {
      */
     ResponseEntity<String> saveOrUpdateParkingSpaceFeeConfig(IPageData pd);
 
+    /**
+     * 查询费用信息
+     * @param pd 页面数据封装
+     * @return 费用信息
+     */
+    ResponseEntity<String> listArrearsFee(IPageData pd);
 
 
 }
