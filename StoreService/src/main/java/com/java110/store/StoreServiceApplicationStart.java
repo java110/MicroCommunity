@@ -33,7 +33,15 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.store.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo"})
+@EnableFeignClients(basePackages = {"com.java110.core.smo.community",
+        "com.java110.core.smo.fee",
+        "com.java110.core.smo.floor",
+        "com.java110.core.smo.owner",
+        "com.java110.core.smo.parkingSpace",
+        "com.java110.core.smo.room",
+        "com.java110.core.smo.unit",
+        "com.java110.core.smo.user",
+})
 public class StoreServiceApplicationStart {
 
     private final static Logger logger = LoggerFactory.getLogger(StoreServiceApplicationStart.class);
