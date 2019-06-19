@@ -388,5 +388,18 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_AGENT_USER = "700100050004";
 
+    /**
+     * 删除方法编码
+     */
+    public static final String BUSINESS_TYPE_DELETE_DEMO_INFO = "900100050001";
+    /**
+     * 保存方法编码
+     */
+    public static final String BUSINESS_TYPE_SAVE_DEMO_INFO = "900100030001";
+    /**
+     * 修改方法编码
+     */
+    public static final String BUSINESS_TYPE_UPDATE_DEMO_INFO = "900100040001";
+
 
 }

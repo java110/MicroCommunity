@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="demoServiceDaoImpl">
+
+    <!-- 保存demo信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessDemoInfo" parameterType="Map">
+           insert into business_demo(
+demo_remark,demo_name,demo_value,operate,demo_id,b_id,user_id
+) values (
+#{demoRemark},#{demoName},#{demoValue},#{operate},#{demoId},#{bId},#{userId}
+)
+       </insert>
+
+
+       <!-- 查询demo信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessDemoInfo" parameterType="Map" resultType="Map">
+           select  t.demo_remark,t.demo_remark demoRemark,t.demo_name,t.demo_name demoName,t.demo_value,t.demo_value demoValue,t.operate,t.demo_id,t.demo_id demoId,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+from business_demo t 
+where 1 =1 
+<if test="demoRemark !=null and demoRemark != ''">
+   and t.demo_remark= #{demoRemark}
+</if> 
+<if test="demoName !=null and demoName != ''">
+   and t.demo_name= #{demoName}
+</if> 
+<if test="demoValue !=null and demoValue != ''">
+   and t.demo_value= #{demoValue}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="demoId !=null and demoId != ''">
+   and t.demo_id= #{demoId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存demo信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveDemoInfoInstance" parameterType="Map">
+        insert into demo(
+demo_remark,demo_name,demo_value,demo_id,b_id,user_id
+) select t.demo_remark,t.demo_name,t.demo_value,t.demo_id,t.b_id,t.user_id from business_demo t where 1=1
+<if test="demoRemark !=null and demoRemark != ''">
+   and t.demo_remark= #{demoRemark}
+</if> 
+<if test="demoName !=null and demoName != ''">
+   and t.demo_name= #{demoName}
+</if> 
+<if test="demoValue !=null and demoValue != ''">
+   and t.demo_value= #{demoValue}
+</if> 
+   and t.operate= 'ADD'
+<if test="demoId !=null and demoId != ''">
+   and t.demo_id= #{demoId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询demo信息 add by wuxw 2018-07-03 -->
+    <select id="getDemoInfo" parameterType="Map" resultType="Map">
+        select  t.demo_remark,t.demo_remark demoRemark,t.demo_name,t.demo_name demoName,t.demo_value,t.demo_value demoValue,t.demo_id,t.demo_id demoId,t.b_id,t.b_id bId,t.user_id,t.user_id userId 
+from demo t 
+where 1 =1 
+<if test="demoRemark !=null and demoRemark != ''">
+   and t.demo_remark= #{demoRemark}
+</if> 
+<if test="demoName !=null and demoName != ''">
+   and t.demo_name= #{demoName}
+</if> 
+<if test="demoValue !=null and demoValue != ''">
+   and t.demo_value= #{demoValue}
+</if> 
+<if test="demoId !=null and demoId != ''">
+   and t.demo_id= #{demoId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改demo信息 add by wuxw 2018-07-03 -->
+    <update id="updateDemoInfoInstance" parameterType="Map">
+        update  demo t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="demoRemark !=null and demoRemark != ''">
+, t.demo_remark= #{demoRemark}
+</if> 
+<if test="demoName !=null and demoName != ''">
+, t.demo_name= #{demoName}
+</if> 
+<if test="demoValue !=null and demoValue != ''">
+, t.demo_value= #{demoValue}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="demoId !=null and demoId != ''">
+and t.demo_id= #{demoId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询demo数量 add by wuxw 2018-07-03 -->
+     <select id="queryDemosCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from demo t 
+where 1 =1 
+<if test="demoRemark !=null and demoRemark != ''">
+   and t.demo_remark= #{demoRemark}
+</if> 
+<if test="demoName !=null and demoName != ''">
+   and t.demo_name= #{demoName}
+</if> 
+<if test="demoValue !=null and demoValue != ''">
+   and t.demo_value= #{demoValue}
+</if> 
+<if test="demoId !=null and demoId != ''">
+   and t.demo_id= #{demoId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+
+     </select>
+
+</mapper>
