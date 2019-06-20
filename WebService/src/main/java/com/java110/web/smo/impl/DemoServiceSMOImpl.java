@@ -248,8 +248,6 @@ public class DemoServiceSMOImpl extends BaseComponentSMO implements IDemoService
     private void validateListDemo(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "demoName", "请求中未包含demoName信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "demoValue", "请求中未包含demoValue信息");
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("row"), "rows不是数字");

@@ -52,7 +52,7 @@ public class QueryDemoConfigListener extends AbstractServiceApiDataFlowListener 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
-        validateDemoConfigData(reqJson);
+        //validateDemoConfigData(reqJson);
 
         List<DemoDto> DemoDtos = demoInnerServiceSMOImpl.queryDemos(BeanConvertUtil.covertBean(reqJson, DemoDto.class));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(DemoDtos), HttpStatus.OK);
