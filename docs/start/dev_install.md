@@ -14,17 +14,17 @@ v0.01|初稿|2019-06-17|wuxw
 
 这里略过,请自行百度，maven的settings.xml 中的中央仓库地址建议修改为国内仓库地址，如阿里云的，这样有利于项目编译和打包速度
 
-    ```
-    <mirrors>
-            <mirror>
-                  <id>alimaven</id>
-                  <name>aliyun maven</name>
-                  <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-                  <mirrorOf>central</mirrorOf>
-            </mirror>
+```
+<mirrors>
+        <mirror>
+              <id>alimaven</id>
+              <name>aliyun maven</name>
+              <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+              <mirrorOf>central</mirrorOf>
+        </mirror>
 
-    </mirrors>
-    ```
+</mirrors>
+```
 
 #### 安装git
 
@@ -38,31 +38,33 @@ v0.01|初稿|2019-06-17|wuxw
 
 选择项目保存文件夹如 C:\Users\Administrator\Documents\project\hc 目录下，执行
 
-    ```
-       git clone https://github.com/java110/MicroCommunity.git
+```
+   git clone https://github.com/java110/MicroCommunity.git
 
-    ```
+```
 
 或者 备份版本代码，主要是下载速度比较快
 
-     ```
-       git clone https://gitee.com/wuxw7/MicroCommunity.git
+ ```
+   git clone https://gitee.com/wuxw7/MicroCommunity.git
 
-     ```
+ ```
 
 #### 编译代码
 
 进入MicroCommunity目录下执行命令
 
-    ```
-        mvn clean install
+```
+    mvn clean install
 
-    ```
+```
+
 和
-    ```
-        mvn clean package
 
-    ```
+```
+    mvn clean package
+
+```
 
 #### idea 打开代码
 
@@ -88,22 +90,22 @@ v0.01|初稿|2019-06-17|wuxw
 
 如果本地没有安装kafka zookeeper Redis mysql 等开源中间件，也可以用演示环境的 kafka zookeeper mysql 和Redis，这样只需要在hosts 中加入
 
-    ```
-    api.java110.com 127.0.0.1
-    dev.java110.com 127.0.0.1
+```
+api.java110.com 127.0.0.1
+dev.java110.com 127.0.0.1
 
-    ```
+```
 
 如果你本地安装了 kafka zookeeper Redis mysql 开源中间件 则将对应域名改为对应IP
 
-    ```
-    dev.db.java110.com 这里写mysql的IP
-    dev.zk.java110.com 这里写zookeeper的IP
-    dev.kafka.java110.com 这里写kafka的IP
-    api.java110.com 127.0.0.1
-    dev.java110.com 127.0.0.1
+```
+dev.db.java110.com 这里写mysql的IP
+dev.zk.java110.com 这里写zookeeper的IP
+dev.kafka.java110.com 这里写kafka的IP
+api.java110.com 127.0.0.1
+dev.java110.com 127.0.0.1
 
-    ```
+```
 
 #### 启动相应服务
 
