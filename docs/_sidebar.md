@@ -2,10 +2,13 @@
 * 入门
 
   * [快速开始](README.md)
-  * [安装部署](start/install.md)
   * [编码规范](start/CodeStandards.md)
   * [视频](start/vedio.md)
 
+* 环境搭建
+
+  * [开发环境部署](start/dev_install.md)
+  * [生产环境部署](start/prod_install.md)
 
 * api接口
 
