@@ -19,6 +19,11 @@
   * [用户权限校验](develop/checkPrivilege.md)
   * [刷新缓存](develop/clearCache.md)
 
+* 字典数据
+
+  * [业务类型](dict/businessType.md)
+  * [组件](dict/businessType.md)
+
 * api接口
 
   * [用户注册](api/user/register.md)
