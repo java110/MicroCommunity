@@ -21,7 +21,7 @@
 * 字典数据
 
   * [业务类型](dict/businessType.md)
-  * [组件](dict/businessType.md)
+  * [组件](dict/app.md)
 
 * api接口
 
