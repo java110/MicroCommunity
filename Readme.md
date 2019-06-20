@@ -40,7 +40,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何安装（how to install）
 
-[安装文档](docs/install.md)
+[安装文档](http://www.java110.com/#/start/dev_install)
 
 ### 解决方案
 
