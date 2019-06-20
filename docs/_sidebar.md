@@ -10,6 +10,15 @@
   * [开发环境部署](start/dev_install.md)
   * [生产环境部署](start/prod_install.md)
 
+* 二次开发
+
+  * [前段开发](develop/front.md)
+  * [接口开发](develop/api.md)
+  * [服务端开发](develop/service.md)
+  * [添加服务](develop/addService)
+  * [用户权限校验](develop/checkPrivilege.md)
+  * [刷新缓存](develop/clearCache.md)
+
 * api接口
 
   * [用户注册](api/user/register.md)
@@ -89,9 +98,3 @@
 * 工具类接口
 
   * [刷新缓存](api/utils/clearCache)
-
-* 二次开发教程
-
-  * [添加服务](develop/addService)
-  * [用户权限校验](develop/checkPrivilege.md)
-  * [刷新缓存](develop/clearCache.md)
