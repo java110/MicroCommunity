@@ -35,10 +35,9 @@
                              param,
                              function(json,res){
                                 var listDemoDate =JSON.parse(json);
-
-                                vc.component.listDemoInfo.total = listDemoDate.total;
-                                vc.component.listDemoInfo.records = listDemoDate.records;
-                                vc.component.listDemoInfo.demos = listDemoDate.demos;
+                                vc.component.listDemoInfo.total = listDemoDate[0].total;
+                                vc.component.listDemoInfo.records = listDemoDate[0].records;
+                                vc.component.listDemoInfo.demos = listDemoDate;
 
                                 vc.emit('pagination','init',{
                                     total:vc.component.listDemoInfo.records,
