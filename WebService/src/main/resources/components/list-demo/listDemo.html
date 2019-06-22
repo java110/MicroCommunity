@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>业主信息</h5>
+                    <h5>DEMO信息</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOwnerModal(-1)">
                             <i class="glyphicon glyphicon-plus"></i>
@@ -25,20 +25,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="owner in listDemoInfo.owners">
+                        <tr v-for="demo in listDemoInfo.demos">
                             <td>
-                                {{demos.demoId}}
+                                {{demo.demoId}}
                             </td>
 
                             <td>
-                                {{demos.demoName}}
+                                {{demo.demoName}}
                             </td>
 
                             <td>
-                                {{demos.demoValue}}
+                                {{demo.demoValue}}
                             </td>
                             <td>
-                                {{demos.demoRemark}}
+                                {{demo.demoRemark}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
