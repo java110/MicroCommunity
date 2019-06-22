@@ -75,7 +75,7 @@
                             //关闭model
                             $('#addDemoModel').modal('hide');
                             vc.component.clearAddFloorInfo();
-                            vc.emit('listFloor','listFloorData',{});
+                            vc.emit('listDemo','listDemoData',{});
 
                             return ;
                         }

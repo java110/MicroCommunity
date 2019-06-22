@@ -98,7 +98,7 @@ public class DemoServiceSMOImpl extends BaseComponentSMO implements IDemoService
         paramIn.put("userId", pd.getUserId());
         paramIn.put("storeId", storeId);
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace",
+                ServiceConstant.SERVICE_API_URL + "/api/demo.saveDemoConfig",
                 HttpMethod.POST);
 
         return responseEntity;
