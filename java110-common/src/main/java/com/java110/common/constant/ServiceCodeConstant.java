@@ -478,4 +478,7 @@ public class ServiceCodeConstant {
     //查询用例配置
     public static final String SERVICE_CODE_QUERY_DEMO_CONFIG = "demo.queryDemoConfig";
 
+    //保存用例配置
+    public static final String SERVICE_CODE_SAVE_DEMO_CONFIG = "demo.saveDemoConfig";
+
 }
