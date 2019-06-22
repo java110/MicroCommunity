@@ -67,8 +67,8 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-        //添加单元信息
-        //businesses.add(addFeeConfig(paramObj, dataFlowContext));
+        //添加DEMO信息
+        businesses.add(addFeeConfig(paramObj, dataFlowContext));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
