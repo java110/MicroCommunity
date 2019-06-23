@@ -68,7 +68,7 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加DEMO信息
-        businesses.add(addFeeConfig(paramObj, dataFlowContext));
+        businesses.add(addDemoConfig(paramObj, dataFlowContext));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -88,11 +88,11 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject addDemoConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_DEMO_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
