@@ -11,6 +11,7 @@ import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,5 +182,39 @@ public class BaseComponentSMO extends BaseServiceSMO {
         urlParam = urlParam.endsWith("&") ? urlParam.substring(0, urlParam.length() - 1) : urlParam;
 
         return urlParam;
+    }
+
+
+    /**
+     * 校验 员工 商户 小区 关系
+     * <p>
+     * 判断员工和商户是否有关系， 商户和 小区是否有关系
+     *
+     * @param pd           页面数据封装
+     * @param restTemplate http调用工具
+     * @return ComponentValidateResult 校验对象
+     */
+    protected ComponentValidateResult validateStoreStaffCommunityRelationship(IPageData pd, RestTemplate restTemplate) {
+
+        // 校验 员工和商户是否有关系
+        ResponseEntity responseEntity = getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, responseEntity.getBody() + "");
+        }
+
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+        String communityId = "";
+        if (paramIn.containsKey("communityId")) {
+            communityId = paramIn.getString("communityId");
+            checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+        }
+        return new ComponentValidateResult(storeId, storeTypeCd, communityId, pd.getUserId());
     }
 }
