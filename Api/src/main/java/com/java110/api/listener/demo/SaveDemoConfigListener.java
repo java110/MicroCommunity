@@ -82,7 +82,7 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
     }
 
     /**
-     * 添加小区楼信息
+     * 添加DEMO楼信息
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
@@ -95,10 +95,10 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_DEMO_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFeeConfig = new JSONObject();
-        businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("configId", "-1");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        JSONObject businessDemo = new JSONObject();
+        businessDemo.putAll(paramInJson);
+        businessDemo.put("demoId", "-1");
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessDemo", businessDemo);
 
         return business;
     }
