@@ -28,10 +28,10 @@
             <artifactId>java110-event</artifactId>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>
