@@ -3,7 +3,7 @@ package com.java110.core.smo.room;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.RoomAttrDto;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

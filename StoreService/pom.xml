@@ -27,6 +27,11 @@
             <groupId>com.java110</groupId>
             <artifactId>java110-event</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

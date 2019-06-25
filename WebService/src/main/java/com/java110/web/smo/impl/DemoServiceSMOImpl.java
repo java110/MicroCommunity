@@ -74,6 +74,26 @@ public class DemoServiceSMOImpl extends BaseComponentSMO implements IDemoService
     }
 
     @Override
+    public ResponseEntity<String> listDemoStudy(IPageData pd) {
+
+        validateListDemoStudy(pd);
+
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_DEMO);
+
+        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/demo.queryDemoConfig" + mapToUrlParam(paramIn);
+
+
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+
+        return responseEntity;
+    }
+
+    @Override
     public ResponseEntity<String> saveDemo(IPageData pd) {
 
         validateSaveCar(pd);
@@ -238,6 +258,27 @@ public class DemoServiceSMOImpl extends BaseComponentSMO implements IDemoService
 
     }
 
+
+
+    /**
+     * 校验查询小区楼信息
+     *
+     * @param pd 页面封装对象
+     */
+    private void validateListDemoStudy(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.isInteger(paramIn.getString("page"), "page不是数字");
+        Assert.isInteger(paramIn.getString("row"), "rows不是数字");
+        int row = Integer.parseInt(paramIn.getString("row"));
+
+
+        if (row > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "row 数量不能大于50");
+        }
+
+    }
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

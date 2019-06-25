@@ -1,6 +1,6 @@
 package com.java110.core.smo.code;
 
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * @ClassName IPrimaryKeyInnerServiceSMO

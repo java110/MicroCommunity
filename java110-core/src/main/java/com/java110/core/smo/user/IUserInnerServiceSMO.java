@@ -2,7 +2,7 @@ package com.java110.core.smo.user;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UserDto;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
