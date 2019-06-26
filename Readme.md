@@ -48,7 +48,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 二次开发视频
 
-[视频](https://pan.baidu.com/s/1hnw5u-rnsZrLJjzMVrhI6A)
+[视频](https://www.java110.com/#/start/vedio)
 
 ### 接口协议
 
