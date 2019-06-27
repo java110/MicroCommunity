@@ -32,6 +32,9 @@
                              param,
                              function(json,res){
                                 var _menus = JSON.parse(json);
+                                if(_menus == null || _menus.length == 0){
+                                    return ;
+                                }
                                 _menus.sort(function(a,b){
                                        return a.seq - b.seq
                                 });

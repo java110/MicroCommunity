@@ -23,6 +23,11 @@
         },
         methods:{
             _queryIndexContextData:function(){
+
+                if(vc.getCurrentCommunity() == null || vc.getCurrentCommunity() == undefined){
+                    return ;
+                }
+
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId
