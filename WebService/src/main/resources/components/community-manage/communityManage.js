@@ -46,11 +46,11 @@
                              }
                            );
             },
-            _openEnterCommunityModal:function(){
-                vc.emit('storeEnterCommunity','openStoreEnterCommunity',{});
+            _openAddCommunityModal:function(){
+                vc.emit('addCommunity','openAddCommunity',{});
             },
-            _openExitCommunityModel:function(_community){
-                vc.emit('storeExitCommunity','openStoreExitCommunityModal',_community);
+            _openEditCommunityModel:function(_community){
+                vc.emit('editCommunity','openEditCommunityModal',_community);
             },
             _showCommunityStatus(_statusCd){
                 if(_statusCd == '1000'){

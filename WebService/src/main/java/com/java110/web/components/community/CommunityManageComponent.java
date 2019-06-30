@@ -2,7 +2,7 @@ package com.java110.web.components.community;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.web.smo.community.ICommunityManageSMO;
+import com.java110.web.smo.community.IListCommunitysManageSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class CommunityManageComponent {
 
     @Autowired
-    private ICommunityManageSMO communityManageSMOImpl;
+    private IListCommunitysManageSMO communityManageSMOImpl;
 
     /**
      * 查询小区列表
@@ -30,11 +30,11 @@ public class CommunityManageComponent {
         return communityManageSMOImpl.listCommunitys(pd);
     }
 
-    public ICommunityManageSMO getCommunityManageSMOImpl() {
+    public IListCommunitysManageSMO getCommunityManageSMOImpl() {
         return communityManageSMOImpl;
     }
 
-    public void setCommunityManageSMOImpl(ICommunityManageSMO communityManageSMOImpl) {
+    public void setCommunityManageSMOImpl(IListCommunitysManageSMO communityManageSMOImpl) {
         this.communityManageSMOImpl = communityManageSMOImpl;
     }
 }

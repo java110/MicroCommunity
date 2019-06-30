@@ -1,4 +1,4 @@
-package com.java110.web.smo.community.impl;
+package com.java110.web.smo.@@templateCode@@.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
@@ -9,7 +9,7 @@ import com.java110.core.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.community.IListCommunitysManageSMO;
+import com.java110.web.smo.@@templateCode@@.IList@@TemplateCode@@sManageSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,16 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * 查询小区服务类
+ * 查询@@templateCode@@服务类
  */
-@Service("listCommunitysSMOImpl")
-public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IListCommunitysManageSMO {
+@Service("list@@TemplateCode@@sSMOImpl")
+public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implements IList@@TemplateCode@@sSMO {
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public ResponseEntity<String> listCommunitys(IPageData pd) throws SMOException {
+    public ResponseEntity<String> list@@TemplateCode@@s(IPageData pd) throws SMOException {
         return businessProcess(pd);
     }
 
@@ -36,7 +36,7 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_@@TEMPLATECODE@@);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listCommunitys" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.list@@TemplateCode@@s" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
