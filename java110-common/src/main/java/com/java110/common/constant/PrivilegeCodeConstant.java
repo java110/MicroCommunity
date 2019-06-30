@@ -57,4 +57,7 @@ public final class PrivilegeCodeConstant {
 
     // demo 权限编码
     public static final String PRIVILEGE_DEMO = "500201906023";
+
+
+    public static final String AGENT_HAS_LIST_COMMUNITY = "500201906025";
 }

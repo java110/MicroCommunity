@@ -433,4 +433,36 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
 
         return Integer.parseInt(memberCommunitys.get(0).get("count").toString());
     }
+
+    /**
+     * 查询小区信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getCommunityInfoNew(Map info) throws DAOException {
+        logger.debug("查询小区信息 入参 info : {}",info);
+
+        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityInfoNew",info);
+
+        return businessCommunityInfos;
+    }
+
+    /**
+     * 查询小区数量
+     * @param info 小区信息
+     * @return 小区数量
+     */
+    @Override
+    public int queryCommunitysCount(Map info) {
+        logger.debug("查询小区数据 入参 info : {}",info);
+
+        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.queryCommunitysCount", info);
+        if (businessCommunityInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
+    }
 }

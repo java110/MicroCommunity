@@ -481,4 +481,9 @@ public class ServiceCodeConstant {
     //保存用例配置
     public static final String SERVICE_CODE_SAVE_DEMO_CONFIG = "demo.saveDemoConfig";
 
+    /**
+     * 查询小区信息
+     */
+    public static final String SERVICE_CODE_LIST_COMMUNITYS = "community.listCommunitys";
+
 }

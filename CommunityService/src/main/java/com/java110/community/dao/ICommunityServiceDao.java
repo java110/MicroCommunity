@@ -219,4 +219,23 @@ public interface ICommunityServiceDao {
      */
      int getCommunityMemberCount(Map info);
 
+    /**
+     * 查询小区信息（instance过程）
+     * 根据bId 查询小区信息
+     * @param info bId 信息
+     * @return 小区信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getCommunityInfoNew(Map info) throws DAOException;
+
+
+
+    /**
+     * 查询小区总数
+     *
+     * @param info 小区信息
+     * @return 小区数量
+     */
+    int queryCommunitysCount(Map info);
+
 }

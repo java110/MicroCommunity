@@ -7,12 +7,15 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.UserDto;
+import com.java110.dto.community.CommunityDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +54,34 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
          logger.debug("getCommunityMemberCount：{}", JSONObject.toJSONString(communityMemberDto));
 
         return communityServiceDaoImpl.getCommunityMemberCount(BeanConvertUtil.beanCovertMap(communityMemberDto));
+    }
+
+    @Override
+    public List<CommunityDto> queryCommunitys(@RequestBody  CommunityDto communityDto) {
+
+        //校验是否传了 分页信息
+
+        int page = communityDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            communityDto.setPage((page - 1) * communityDto.getRow());
+            communityDto.setRow(page * communityDto.getRow());
+        }
+
+        List<CommunityDto> communitys = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityInfoNew(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
+
+
+
+        return communitys;
+    }
+
+
+
+
+
+    @Override
+    public int queryCommunitysCount(@RequestBody CommunityDto communityDto) {
+        return communityServiceDaoImpl.queryCommunitysCount(BeanConvertUtil.beanCovertMap(communityDto));
     }
 
     public ICommunityServiceDao getCommunityServiceDaoImpl() {

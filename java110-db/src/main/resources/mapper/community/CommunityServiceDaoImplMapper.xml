@@ -356,4 +356,79 @@
         </if>
     </select>
 
+    <!-- 查询小区信息 add by wuxw 2018-07-03 -->
+    <select id="getCommunityInfoNew" parameterType="Map" resultType="Map">
+        select  t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,t.map_x,t.map_x mapX
+        from s_community t
+        where 1 =1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+            and t.nearby_landmarks= #{nearbyLandmarks}
+        </if>
+        <if test="cityCode !=null and cityCode != ''">
+            and t.city_code= #{cityCode}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+
+    <!-- 查询小区数量 add by wuxw 2018-07-03 -->
+    <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
+        select  count(1) count
+        from s_community t
+        where 1 =1
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+            and t.nearby_landmarks= #{nearbyLandmarks}
+        </if>
+        <if test="cityCode !=null and cityCode != ''">
+            and t.city_code= #{cityCode}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+
+
+    </select>
 </mapper>
