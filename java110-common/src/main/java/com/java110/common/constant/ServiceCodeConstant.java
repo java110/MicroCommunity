@@ -486,4 +486,9 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_LIST_COMMUNITYS = "community.listCommunitys";
 
+    /**
+     * 保存小区
+     */
+    public static final String SERVICE_CODE_SAVE_COMMUNITY = "community.saveCommunity";
+
 }
