@@ -13,5 +13,11 @@ public class GeneratorStart extends BaseGenerator {
 
         GeneratorManagerComponent managerComponent = new GeneratorManagerComponent();
         managerComponent.generator(data);
+
+
+        //添加功能开发完成
+
+        GeneratorAddComponent addComponent = new GeneratorAddComponent();
+        addComponent.generator(data);
     }
 }

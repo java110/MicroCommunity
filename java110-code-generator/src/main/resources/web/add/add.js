@@ -19,18 +19,9 @@
                 return vc.validate.validate({
                     add@@TemplateCode@@Info:vc.component.add@@TemplateCode@@Info
                 },{
-                    'add@@TemplateCode@@Info.name':[
-                        {
-                            limit:"required",
-                            param:"",
-                            errInfo:"楼名称不能为空"
-                        },
-                        {
-                            limit:"maxin",
-                            param:"2,10",
-                            errInfo:"楼名称长度必须在2位至10位"
-                        },
-                    ]
+                    @@addTemplateCodeValidate@@
+
+
 
                 });
             },
