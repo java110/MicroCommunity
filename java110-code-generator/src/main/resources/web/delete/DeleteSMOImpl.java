@@ -1,24 +1,24 @@
-package com.java110.web.smo.community.impl;
+package com.java110.web.smo.@@templateCode@@.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
-import com.java110.web.smo.community.IAddCommunitySMO;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;
-import org.springframework.stereotype.Service;
+import com.java110.web.smo.@@templateCode@@
+import org.springframework.stereotype.Service;.IDelete@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 /**
  * 添加小区服务实现类
- * add by wuxw 2019-06-30
+ * delete by wuxw 2019-06-30
  */
-@Service("addCommunitySMOImpl")
-public class AddCommunitySMOImpl extends AbstractComponentSMO implements IAddCommunitySMO {
+@Service("delete@@TemplateCode@@SMOImpl")
+public class Delete@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements IDelete@@TemplateCode@@SMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -29,13 +29,10 @@ public class AddCommunitySMOImpl extends AbstractComponentSMO implements IAddCom
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
-        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写小区名称");
-Assert.hasKeyAndValue(paramIn, "address", "必填，请填写小区地址");
-Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附近地标");
+        @@validateTemplateColumns@@
 
 
-
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_@@TEMPLATECODE@@);
 
     }
 
@@ -45,13 +42,13 @@ Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附�
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.saveCommunity",
+                ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.delete@@TemplateCode@@",
                 HttpMethod.POST);
         return responseEntity;
     }
 
     @Override
-    public ResponseEntity<String> saveCommunity(IPageData pd) {
+    public ResponseEntity<String> delete@@TemplateCode@@(IPageData pd) {
         return super.businessProcess(pd);
     }
 

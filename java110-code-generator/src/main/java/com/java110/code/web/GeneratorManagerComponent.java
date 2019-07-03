@@ -142,7 +142,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/smo/"+data.getString("templateCode")+"/List"+toUpperCaseFirstOne(data.getString("templateCode"))+"sSMOImpl.java";
+                +"out/web/smo/"+data.getString("templateCode")+"/impl/List"+toUpperCaseFirstOne(data.getString("templateCode"))+"sSMOImpl.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

@@ -30,7 +30,7 @@ public class @@TemplateCode@@ManageComponent {
         return list@@TemplateCode@@sSMOImpl.list@@TemplateCode@@s(pd);
     }
 
-    public I@@TemplateCode@@ManageSMO getList@@TemplateCode@@sSMOImpl() {
+    public IList@@TemplateCode@@sSMO getList@@TemplateCode@@sSMOImpl() {
         return list@@TemplateCode@@sSMOImpl;
     }
 

@@ -13,11 +13,11 @@
             }
         },
         _initMethod:function(){
-            vc.component.listMyCommunity(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component.listCommunity(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
-            vc.on('communityManage','listMyCommunity',function(_param){
-                  vc.component._listCommunitys();
+            vc.on('communityManage','listCommunity',function(_param){
+                  vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listCommunitys(_currentPage,DEFAULT_ROWS);
@@ -52,16 +52,8 @@
             _openEditCommunityModel:function(_community){
                 vc.emit('editCommunity','openEditCommunityModal',_community);
             },
-            _showCommunityStatus(_statusCd){
-                if(_statusCd == '1000'){
-                    return "入驻审核";
-                }else if(_statusCd == '1001'){
-                    return "退出审核";
-                }else if(_statusCd == '0000'){
-                    return "入驻成功";
-                }
-
-                return "未知";
+            _openDeleteCommunityModel:function(_community){
+                vc.emit('deleteCommunity','openDeleteCommunityModal',_community);
             }
         }
     });

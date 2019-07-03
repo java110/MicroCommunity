@@ -16,46 +16,35 @@
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                         <thead>
                         <tr>
-                            <th>小区ID</th>
-                            <th data-hide="phone">名称</th>
-                            <th data-hide="phone">联系方式</th>
-                            <th data-hide="phone">地址</th>
-                            <th data-hide="phone">地标</th>
-                            <th data-hide="phone,tablet" >城市编码</th>
-                            <th data-hide="phone">状态</th>
+                                                        <th>小区ID</th>
+                            <th>小区名称</th>
+                            <th>小区地址</th>
+                            <th>附近地标</th>
+                            <th>城市编码</th>
+                            <th>小区维度</th>
+                            <th>小区经度</th>
                             <th class="text-right">操作</th>
+
 
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="community in communityManageInfo.communitys">
-                            <td>
-                                {{community.communityId}}
-                            </td>
-                            <td>
-                                {{community.name}}
-                            </td>
-                            <td>
-                                {{community.tel}}
-                            </td>
-                            <td>
-                                {{community.address}}
-                            </td>
-                            <td>
-                                {{community.nearbyLandmarks}}
-                            </td>
-                            <td>
-                                {{community.cityCode}}
-                            </td>
-                            <td>
-                                {{_showCommunityStatus(community.auditStatusCd)}}
-                            </td>
-                            <td class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditCommunityModel(floor)">修改</button>
+                            <tr v-for="community in communityManageInfo.communitys">
+                                                            <td>{{community.communityId}}</td>
+                            <td>{{community.name}}</td>
+                            <td>{{community.address}}</td>
+                            <td>{{community.nearbyLandmarks}}</td>
+                            <td>{{community.cityCode}}</td>
+                            <td>{{community.mapX}}</td>
+                            <td>{{community.mapY}}</td>
+                            <td><div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openEditCommunityModel(community)">修改</button>
                                 </div>
-                            </td>
-                        </tr>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openDelCommunityModel(community)">删除</button>
+                                </div></td>
+
+                            </tr>
                         </tbody>
                         <tfoot>
                         <tr>
@@ -73,5 +62,7 @@
     </div>
 
     <vc:create name="addCommunity"></vc:create>
+    <vc:create name="editCommunity"></vc:create>
+    <vc:create name="deleteCommunity"></vc:create>
 
 </div>

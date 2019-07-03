@@ -14,15 +14,13 @@ import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.BusinessTypeConstant;
 
-
-
 import com.java110.core.annotation.Java110Listener;
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
  */
-@Java110Listener("save@@TemplateCode@@Listener")
-public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
+@Java110Listener("delete@@TemplateCode@@Listener")
+public class Delete@@TemplateCode@@Listener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -40,7 +38,7 @@ public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(add@@TemplateCode@@(reqJson, context));
+        businesses.add(delete@@TemplateCode@@(reqJson, context));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -54,7 +52,7 @@ public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_SAVE_@@TEMPLATECODE@@;
+        return ServiceCodeConstant.SERVICE_CODE_DELETE_@@TEMPLATECODE@@;
     }
 
     @Override
@@ -75,16 +73,15 @@ public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject add@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject delete@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_@@TEMPLATECODE@@_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_@@TEMPLATECODE@@_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject business@@TemplateCode@@ = new JSONObject();
         business@@TemplateCode@@.putAll(paramInJson);
-        business@@TemplateCode@@.put("@@templateKey@@", "-1");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("business@@TemplateCode@@", business@@TemplateCode@@);
         return business;

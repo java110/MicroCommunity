@@ -491,4 +491,17 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_SAVE_COMMUNITY = "community.saveCommunity";
 
+
+    /**
+     * 修改小区
+     */
+    public static final String SERVICE_CODE_UPDATE_COMMUNITY = "community.updateCommunity";
+/**
+     * 删除小区
+     */
+    public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
+
+
+
+
 }

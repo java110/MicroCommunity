@@ -5,11 +5,11 @@
       xmlns:vc="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>添加小区|java110</title>
+    <title>@@templateName@@初始化|java110</title>
     <vc:create name="commonTop"></vc:create>
 </head>
 <body>
-<vc:create name="loading"></vc:create>
+<vc:create name="bodyTop"></vc:create>
 <div id="wrapper">
     <vc:create name="menu"></vc:create>
 
@@ -19,8 +19,8 @@
             <vc:create name="nav"></vc:create>
         </div>
         <!-- id="component" -->
-        <div id="component" class="wrapper wrapper-content animated fadeInRight">
-            <vc:create name="communityManage"></vc:create>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <vc:create name="@@templateCode@@Manage"></vc:create>
         </div>
 
         <vc:create name="copyright"></vc:create>

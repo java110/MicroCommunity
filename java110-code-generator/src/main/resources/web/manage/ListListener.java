@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.java110.common.constant.CommonConstant;
+import com.java110.common.constant.BusinessTypeConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +26,14 @@ import java.util.List;
  * 查询小区侦听类
  */
 @Java110Listener("list@@TemplateCode@@sListener")
-public class List@@TemplateCode@@Listener extends AbstractServiceApiListener {
+public class List@@TemplateCode@@sListener extends AbstractServiceApiListener {
 
     @Autowired
     private I@@TemplateCode@@InnerServiceSMO @@templateCode@@InnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_@@@@TEMPLATECODE@@@@S;
+        return ServiceCodeConstant.SERVICE_CODE_LIST_@@TEMPLATECODE@@S;
     }
 
     @Override

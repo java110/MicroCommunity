@@ -11,6 +11,11 @@ public class GeneratorStart extends BaseGenerator {
 
         JSONObject data = JSONObject.parseObject(sb.toString());
 
+
+        GeneratorFlow flow = new GeneratorFlow();
+        flow.generator(data);
+
+
         GeneratorManagerComponent managerComponent = new GeneratorManagerComponent();
         managerComponent.generator(data);
 
@@ -19,5 +24,14 @@ public class GeneratorStart extends BaseGenerator {
 
         GeneratorAddComponent addComponent = new GeneratorAddComponent();
         addComponent.generator(data);
+
+        //编辑功能开发完成
+        GeneratorEditComponent editComponent = new GeneratorEditComponent();
+        editComponent.generator(data);
+
+        //删除功能开发完成
+
+        GeneratorDeleteComponent deleteComponent = new GeneratorDeleteComponent();
+        deleteComponent.generator(data);
     }
 }

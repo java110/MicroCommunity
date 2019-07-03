@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  *
  * add by wuxw 2019-06-29
  */
-public interface IListCommunitysManageSMO {
+public interface IListCommunitysSMO {
 
     /**
      * 查询小区信息

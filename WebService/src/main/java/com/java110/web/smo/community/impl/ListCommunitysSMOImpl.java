@@ -5,23 +5,23 @@ import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.web.smo.community.IListCommunitysSMO;
+import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.community.IListCommunitysManageSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 /**
- * 查询小区服务类
+ * 查询community服务类
  */
 @Service("listCommunitysSMOImpl")
-public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IListCommunitysManageSMO {
+public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IListCommunitysSMO {
 
     @Autowired
     private RestTemplate restTemplate;
