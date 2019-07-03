@@ -41,6 +41,10 @@
                                 vc.component.communityManageInfo.total = _communityManageInfo.total;
                                 vc.component.communityManageInfo.records = _communityManageInfo.records;
                                 vc.component.communityManageInfo.communitys = _communityManageInfo.communitys;
+                                vc.emit('pagination','init',{
+                                    total:vc.component.communityManageInfo.records,
+                                    currentPage:_page
+                                });
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

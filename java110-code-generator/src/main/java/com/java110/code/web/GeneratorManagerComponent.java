@@ -186,6 +186,16 @@ public class GeneratorManagerComponent extends BaseGenerator {
         JSONArray columns = data.getJSONArray("columns");
         String variable = "";
         String variableGetSet = "";
+
+        variable += "private String " + data.getString("templateKey") + ";\n";
+
+        variableGetSet += "public String get" + toUpperCaseFirstOne(data.getString("templateKey")) + "() {\n"
+                + "        return " + data.getString("templateKey") + ";\n"
+                + "    }\n";
+        variableGetSet += "public void set" + toUpperCaseFirstOne(data.getString("templateKey")) + "(String " + data.getString("templateKey") + ") {\n"
+                + "        this." + data.getString("templateKey") + " = " + data.getString("templateKey") + ";\n"
+                + "    }\n";
+
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
             String key = column.getString("code");

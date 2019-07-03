@@ -41,6 +41,10 @@
                                 vc.component.@@templateCode@@ManageInfo.total = _@@templateCode@@ManageInfo.total;
                                 vc.component.@@templateCode@@ManageInfo.records = _@@templateCode@@ManageInfo.records;
                                 vc.component.@@templateCode@@ManageInfo.@@templateCode@@s = _@@templateCode@@ManageInfo.@@templateCode@@s;
+                                vc.emit('pagination','init',{
+                                     total:vc.component.@@templateCode@@ManageInfo.records,
+                                     currentPage:_page
+                                 });
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
