@@ -29,7 +29,70 @@ mapY:'101.33',
                         return vc.validate.validate({
                             editCommunityInfo:vc.component.editCommunityInfo
                         },{
-                            @@addTemplateCodeValidate@@
+                            'editCommunityInfo.name':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"小区名称不能为空"
+                        },
+ {
+                            limit:"maxin",
+                            param:"10,20",
+                            errInfo:"小区名称必须在10至20字符之间"
+                        },
+                    ],
+'editCommunityInfo.address':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"小区地址不能为空"
+                        },
+ {
+                            limit:"maxin",
+                            param:"200",
+                            errInfo:"小区地址不能大于200个字符"
+                        },
+                    ],
+'editCommunityInfo.nearbyLandmarks':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"附近地标不能为空"
+                        },
+ {
+                            limit:"maxin",
+                            param:"50",
+                            errInfo:"小区附近地标不能大于50个字符"
+                        },
+                    ],
+'editCommunityInfo.cityCode':[
+ {
+                            limit:"maxin",
+                            param:"12",
+                            errInfo:"小区城市编码不能大于4个字符"
+                        },
+                    ],
+'editCommunityInfo.mapX':[
+ {
+                            limit:"maxin",
+                            param:"20",
+                            errInfo:"小区城市编码不能大于4个字符"
+                        },
+                    ],
+'editCommunityInfo.mapY':[
+ {
+                            limit:"maxin",
+                            param:"20",
+                            errInfo:"小区城市编码不能大于4个字符"
+                        },
+                    ],
+'editCommunityInfo.communityId':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"小区ID不能为空"
+                        }]
+
                         });
              },
             editCommunity:function(){

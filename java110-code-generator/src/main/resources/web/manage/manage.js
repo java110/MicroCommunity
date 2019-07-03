@@ -13,7 +13,7 @@
             }
         },
         _initMethod:function(){
-            vc.component.list@@TemplateCode@@(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
             vc.on('@@templateCode@@Manage','list@@TemplateCode@@',function(_param){
@@ -47,7 +47,7 @@
                            );
             },
             _openAdd@@TemplateCode@@Modal:function(){
-                vc.emit('add@@TemplateCode@@','openAdd@@TemplateCode@@',{});
+                vc.emit('add@@TemplateCode@@','openAdd@@TemplateCode@@Modal',{});
             },
             _openEdit@@TemplateCode@@Model:function(_@@templateCode@@){
                 vc.emit('edit@@TemplateCode@@','openEdit@@TemplateCode@@Modal',_@@templateCode@@);

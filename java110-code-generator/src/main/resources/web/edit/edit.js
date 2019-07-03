@@ -22,7 +22,7 @@
                         return vc.validate.validate({
                             edit@@TemplateCode@@Info:vc.component.edit@@TemplateCode@@Info
                         },{
-                            @@addTemplateCodeValidate@@
+                            @@editTemplateCodeValidate@@
                         });
              },
             edit@@TemplateCode@@:function(){

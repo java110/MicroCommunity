@@ -13,7 +13,7 @@
             }
         },
         _initMethod:function(){
-            vc.component.listCommunity(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
             vc.on('communityManage','listCommunity',function(_param){
@@ -47,7 +47,7 @@
                            );
             },
             _openAddCommunityModal:function(){
-                vc.emit('addCommunity','openAddCommunity',{});
+                vc.emit('addCommunity','openAddCommunityModal',{});
             },
             _openEditCommunityModel:function(_community){
                 vc.emit('editCommunity','openEditCommunityModal',_community);

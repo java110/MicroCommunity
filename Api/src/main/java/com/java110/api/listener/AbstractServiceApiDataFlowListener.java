@@ -372,8 +372,8 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
      * @param reqJson
      */
     protected void validatePageInfo(JSONObject reqJson){
-        Assert.jsonObjectHaveKey(reqJson, "feeTypeCd", "请求中未包含feeTypeCd信息");
-        Assert.jsonObjectHaveKey(reqJson, "roomId", "请求中未包含roomId信息");
+        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
     }
 
 
