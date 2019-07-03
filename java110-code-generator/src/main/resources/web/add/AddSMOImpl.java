@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
-import com.java110.core.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;
 import com.java110.web.smo.@@templateCode@@

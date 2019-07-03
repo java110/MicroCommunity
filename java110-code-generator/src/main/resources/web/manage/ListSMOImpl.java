@@ -5,7 +5,7 @@ import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.BeanConvertUtil;
-import com.java110.core.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.core.AbstractComponentSMO;
