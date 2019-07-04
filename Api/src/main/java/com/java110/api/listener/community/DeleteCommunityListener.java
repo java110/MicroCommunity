@@ -104,7 +104,7 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
          communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
         if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和代理商存在关系存在异常，请检查");
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和开发者存在关系存在异常，请检查");
         }
 
 
@@ -125,7 +125,7 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
          communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
 
         if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和代理商存在关系存在异常，请检查");
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和运维团队存在关系存在异常，请检查");
         }
 
 

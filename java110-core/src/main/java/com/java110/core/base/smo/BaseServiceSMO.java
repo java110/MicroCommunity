@@ -72,7 +72,7 @@ public class BaseServiceSMO extends AppBase {
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), pd.getRequestTime());
         header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
-        logger.debug("请求中心服务信息，{}", httpEntity);
+        //logger.debug("请求中心服务信息，{}", httpEntity);
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
@@ -80,7 +80,7 @@ public class BaseServiceSMO extends AppBase {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.debug("中心服务返回信息，{}", responseEntity);
+            logger.debug("请求地址为,{} 请求中心服务信息，{},中心服务返回信息，{}", url, httpEntity, responseEntity);
             return responseEntity;
         }
 
