@@ -26,4 +26,12 @@ public final class CommunityMemberTypeConstant {
     //代理商
     public static final String AGENT = "390001200003";
 
+
+    //运维团队
+    public static final String OPT = "800900000001";
+
+
+    //开发团队
+    public static final String DEV = "800900000000";
+
 }

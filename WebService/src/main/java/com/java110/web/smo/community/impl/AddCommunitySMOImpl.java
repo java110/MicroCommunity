@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.smo.community.IAddCommunitySMO;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
@@ -42,8 +43,10 @@ Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附�
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        paramIn.put("storeId", result.getStoreId());
+        paramIn.put("storeTypeCd", result.getStoreTypeCd());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/community.saveCommunity",
                 HttpMethod.POST);
