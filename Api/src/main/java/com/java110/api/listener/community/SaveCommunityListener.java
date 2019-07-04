@@ -6,6 +6,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.common.constant.*;
 import com.java110.common.util.Assert;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 
 import com.java110.core.annotation.Java110Listener;
+
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
@@ -25,8 +27,8 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写小区名称");
-Assert.hasKeyAndValue(reqJson, "address", "必填，请填写小区地址");
-Assert.hasKeyAndValue(reqJson, "nearbyLandmarks", "必填，请填写小区附近地标");
+        Assert.hasKeyAndValue(reqJson, "address", "必填，请填写小区地址");
+        Assert.hasKeyAndValue(reqJson, "nearbyLandmarks", "必填，请填写小区附近地标");
 
     }
 
@@ -134,14 +136,13 @@ Assert.hasKeyAndValue(reqJson, "nearbyLandmarks", "必填，请填写小区附�
      */
     private JSONObject addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
+        paramInJson.put("communityId", GenerateCodeFactory.getCommunityId());
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunity = new JSONObject();
         businessCommunity.putAll(paramInJson);
-        businessCommunity.put("communityId", "-1");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
         return business;
