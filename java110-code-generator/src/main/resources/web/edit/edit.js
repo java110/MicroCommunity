@@ -10,7 +10,7 @@
 
          },
          _initEvent:function(){
-             vc.on('edit@@TemplateCode@@','openEdit@@TemplateCode@@Model',function(_params){
+             vc.on('edit@@TemplateCode@@','openEdit@@TemplateCode@@Modal',function(_params){
                 vc.component.refreshEdit@@TemplateCode@@Info();
                 $('#edit@@TemplateCode@@Model').modal('show');
                 vc.component.edit@@TemplateCode@@Info = _params;

@@ -10,7 +10,7 @@
 
          },
          _initEvent:function(){
-             vc.on('delete@@TemplateCode@@','open@@TemplateCode@@Model',function(_params){
+             vc.on('delete@@TemplateCode@@','openDelete@@TemplateCode@@Modal',function(_params){
 
                 vc.component.delete@@TemplateCode@@Info = _params;
                 $('#delete@@TemplateCode@@Model').modal('show');

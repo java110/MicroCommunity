@@ -10,7 +10,7 @@
 
          },
          _initEvent:function(){
-             vc.on('deleteCommunity','openCommunityModel',function(_params){
+             vc.on('deleteCommunity','openDeleteCommunityModal',function(_params){
 
                 vc.component.deleteCommunityInfo = _params;
                 $('#deleteCommunityModel').modal('show');
