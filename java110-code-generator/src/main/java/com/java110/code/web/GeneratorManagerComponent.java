@@ -55,7 +55,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
                 "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">修改</button>\n" +
                 "                                </div>\n" +
                 "                                <div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDel"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">删除</button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">删除</button>\n" +
                 "                                </div></td>\n");
 
         fileContext = fileContext.replace("@@columnsCnCode@@", thSb.toString())

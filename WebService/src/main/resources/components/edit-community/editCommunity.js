@@ -17,11 +17,11 @@ mapY:'101.33',
 
          },
          _initEvent:function(){
-             vc.on('editCommunity','openCommunityModel',function(_params){
+             vc.on('editCommunity','openEditCommunityModel',function(_params){
                 vc.component.refreshEditCommunityInfo();
                 $('#editCommunityModel').modal('show');
                 vc.component.editCommunityInfo = _params;
-                vc.component.editCommunityInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.editCommunityInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
