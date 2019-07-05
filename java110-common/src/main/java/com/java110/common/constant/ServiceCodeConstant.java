@@ -502,6 +502,25 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
 
 
+    /**
+     * 保存公告
+     */
+    public static final String SERVICE_CODE_SAVE_NOTICE = "notice.saveNotice";
+
+
+    /**
+     * 修改公告
+     */
+    public static final String SERVICE_CODE_UPDATE_NOTICE = "notice.updateNotice";
+    /**
+     * 删除公告community.deleteCommunity
+     */
+    public static final String SERVICE_CODE_DELETE_NOTICE = "notice.deleteNotice";
+
+    public static final String SERVICE_CODE_LIST_NOTICES = "notice.listNotices";
+
+
+
 
 
 }

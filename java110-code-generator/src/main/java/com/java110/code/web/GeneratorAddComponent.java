@@ -53,7 +53,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
                 String option = "";
-                for (int valueIndex = 0; valueIndex <= selectValues.length; valueIndex++) {
+                for (int valueIndex = 0; valueIndex < selectValues.length; valueIndex++) {
 
                     String value = selectValues[valueIndex];
 

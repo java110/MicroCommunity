@@ -1,79 +1,56 @@
 {
-  "templateName":"小区",
-  "templateCode":"community",
-  "templateKey":"communityId",
-  "templateKeyName":"小区ID",
+  "templateName":"公告",
+  "templateCode":"notice",
+  "templateKey":"noticeId",
+  "templateKeyName":"公告ID",
   "columns":[
     {
-      "code":"name",
-      "cnCode":"小区名称",
-      "desc":"必填，请填写小区名称",
+      "code":"title",
+      "cnCode":"标题",
+      "desc":"必填，请填写标题",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxin",
-      "limitParam":"10,20",
-      "limitErrInfo":"小区名称必须在10至20字符之间"
+      "limitParam":"4,100",
+      "limitErrInfo":"小区名称必须在4至100字符之间"
     },
     {
-      "code":"address",
-      "cnCode":"小区地址",
-      "desc":"必填，请填写小区地址",
+      "code":"noticeTypeCd",
+      "cnCode":"公告类型",
+      "desc":"必填，请选择公告类型",
       "required":true,
       "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxin",
+      "inputType":"select",
+      "selectValue":"1000,1001,1002",
+      "selectValueName":"业主通知,员工通知,小区通知",
+      "limit":"maxLength",
       "limitParam":"200",
-      "limitErrInfo":"小区地址不能大于200个字符"
+      "limitErrInfo":"公告类型错误"
     },
     {
-      "code":"nearbyLandmarks",
-      "cnCode":"附近地标",
-      "desc":"必填，请填写小区附近地标",
+      "code":"context",
+      "cnCode":"公告内容",
+      "desc":"必填，请填写公告内容",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"50",
-      "limitErrInfo":"小区附近地标不能大于50个字符"
+      "limit":"maxLength",
+      "limitParam":"500",
+      "limitErrInfo":"公告内容不能超过500个字"
     },
     {
-      "code":"cityCode",
-      "cnCode":"城市编码",
-      "desc":"",
-      "required":false,
-      "hasDefaultValue":true,
-      "defaultValue":"0971",
-      "inputType":"none",
-      "limit":"maxin",
-      "limitParam":"12",
-      "limitErrInfo":"小区城市编码不能大于4个字符"
-    },
-    {
-      "code":"mapX",
-      "cnCode":"小区维度",
-      "desc":"",
-      "required":false,
-      "hasDefaultValue":true,
-      "defaultValue":"101.33",
-      "inputType":"none",
-      "limit":"maxin",
-      "limitParam":"20",
-      "limitErrInfo":"小区城市编码不能大于4个字符"
-    },
-    {
-      "code":"mapY",
-      "cnCode":"小区经度",
-      "desc":"",
-      "required":false,
-      "hasDefaultValue":true,
-      "defaultValue":"101.33",
-      "inputType":"none",
-      "limit":"maxin",
-      "limitParam":"20",
-      "limitErrInfo":"小区城市编码不能大于4个字符"
+      "code":"startTime",
+      "cnCode":"开始时间",
+      "desc":"必选，请填写开始时间 2019-01-02",
+      "required":true,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"date",
+      "limitParam":"",
+      "limitErrInfo":"开始时间不是有效的日志"
     }
-
 
   ]
 }
