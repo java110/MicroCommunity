@@ -56,7 +56,7 @@ Assert.hasKeyAndValue(reqJson, "startTime", "必选，请填写开始时间 2019
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_COMMUNITY;
+        return ServiceCodeConstant.SERVICE_CODE_UPDATE_NOTICE;
     }
 
     @Override
