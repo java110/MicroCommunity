@@ -28,7 +28,7 @@ where 1 =1
 <if test="context !=null and context != ''">
    and t.context= #{context}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -65,7 +65,7 @@ notice_type_cd,context,start_time,status_cd,community_id,title,b_id,user_id,noti
 <if test="context !=null and context != ''">
    and t.context= #{context}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -99,7 +99,7 @@ where 1 =1
 <if test="context !=null and context != ''">
    and t.context= #{context}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
@@ -141,7 +141,7 @@ where 1 =1
 <if test="context !=null and context != ''">
 , t.context= #{context}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
 , t.start_time= #{startTime}
 </if> 
 <if test="communityId !=null and communityId != ''">
@@ -173,7 +173,7 @@ where 1 =1
 <if test="context !=null and context != ''">
    and t.context= #{context}
 </if> 
-<if test="startTime !=null and startTime != ''">
+<if test="startTime !=null">
    and t.start_time= #{startTime}
 </if> 
 <if test="statusCd !=null and statusCd != ''">

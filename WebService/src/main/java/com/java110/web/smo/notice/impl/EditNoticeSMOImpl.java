@@ -44,7 +44,7 @@ Assert.hasKeyAndValue(paramIn, "startTime", "必选，请填写开始时间 2019
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        paramIn.put("userId", pd.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/notice.updateNotice",
                 HttpMethod.POST);
