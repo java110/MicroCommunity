@@ -76,7 +76,7 @@ public class Update@@TemplateCode@@Listener extends AbstractServiceApiListener {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_@@TEMPLATECODE@@);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject business@@TemplateCode@@ = new JSONObject();

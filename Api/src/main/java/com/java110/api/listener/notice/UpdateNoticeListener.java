@@ -81,7 +81,7 @@ Assert.hasKeyAndValue(reqJson, "startTime", "必选，请填写开始时间 2019
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_NOTICE);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessNotice = new JSONObject();
