@@ -36,7 +36,7 @@ Assert.hasKeyAndValue(paramIn, "startTime", "必选，请填写开始时间 2019
 
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.HAS_LIST_NOTICE);
 
     }
 

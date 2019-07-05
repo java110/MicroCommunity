@@ -60,5 +60,5 @@ public final class PrivilegeCodeConstant {
 
 
     public static final String AGENT_HAS_LIST_COMMUNITY = "500201906025";
-    public static final String AGENT_HAS_LIST_NOTICE = "500201906026";
+    public static final String HAS_LIST_NOTICE = "500201904009";
 }

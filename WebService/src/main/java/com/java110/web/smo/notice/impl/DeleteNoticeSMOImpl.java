@@ -33,7 +33,7 @@ public class DeleteNoticeSMOImpl extends AbstractComponentSMO implements IDelete
 
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_NOTICE);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.HAS_LIST_NOTICE);
 
     }
 

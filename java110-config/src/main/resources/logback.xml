@@ -60,7 +60,7 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework" level="DEBUG">
+    <logger name="org.springframework" level="ERROR">
         <appender-ref ref="STDOUT_FILE" />
     </logger>
     <logger name="com.java110.api" level="DEBUG"/>

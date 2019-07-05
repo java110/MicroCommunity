@@ -36,7 +36,7 @@ public class ListNoticesSMOImpl extends AbstractComponentSMO implements IListNot
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_NOTICE);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.HAS_LIST_NOTICE);
     }
 
     @Override
