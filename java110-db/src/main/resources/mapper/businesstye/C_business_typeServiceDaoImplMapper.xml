@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="c_business_typeServiceDaoImpl">
+
+    <!-- 保存BusinessType信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessC_business_typeInfo" parameterType="Map">
+           insert into business_bus(
+business_type_cd,operate,name,description,id,user_id
+) values (
+#{businessTypeCd},#{operate},#{name},#{description},#{id},#{userId}
+)
+       </insert>
+
+
+       <!-- 查询BusinessType信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessC_business_typeInfo" parameterType="Map" resultType="Map">
+           select  t.business_type_cd,t.business_type_cd businessTypeCd,t.operate,t.name,t.description,t.id,t.user_id,t.user_id userId 
+from business_bus t 
+where 1 =1 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="id !=null and id != ''">
+   and t.id= #{id}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存BusinessType信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveC_business_typeInfoInstance" parameterType="Map">
+        insert into c_business_type(
+business_type_cd,name,description,id,user_id
+) select t.business_type_cd,t.name,t.description,t.id,t.user_id from business_bus t where 1=1
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+   and t.operate= 'ADD'
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="id !=null and id != ''">
+   and t.id= #{id}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询BusinessType信息 add by wuxw 2018-07-03 -->
+    <select id="getC_business_typeInfo" parameterType="Map" resultType="Map">
+        select  t.business_type_cd,t.business_type_cd businessTypeCd,t.name,t.description,t.id,t.user_id,t.user_id userId 
+from c_business_type t 
+where 1 =1 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="id !=null and id != ''">
+   and t.id= #{id}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改BusinessType信息 add by wuxw 2018-07-03 -->
+    <update id="updateC_business_typeInfoInstance" parameterType="Map">
+        update  c_business_type t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+, t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="name !=null and name != ''">
+, t.name= #{name}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="id !=null and id != ''">
+and t.id= #{id}
+</if> 
+
+    </update>
+
+    <!-- 查询BusinessType数量 add by wuxw 2018-07-03 -->
+     <select id="queryC_business_typesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from c_business_type t 
+where 1 =1 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="name !=null and name != ''">
+   and t.name= #{name}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="id !=null and id != ''">
+   and t.id= #{id}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+
+
+     </select>
+
+</mapper>

@@ -399,7 +399,18 @@ public class BusinessTypeConstant {
     /**
      * 修改方法编码
      */
-    public static final String BUSINESS_TYPE_UPDATE_DEMO_INFO = "900100040001";
+    /**
+     * 删除BUSINESSTYPE方法编码
+     */
+    public static final String BUSINESS_TYPE_DELETE_BUSINESSTYPE_INFO = "900100050002";
+    /**
+     * 保存BUSINESSTYPE方法编码
+     */
+    public static final String BUSINESS_TYPE_SAVE_BUSINESSTYPE_INFO = "900100030002";
+    /**
+     * 修改BUSINESSTYPE方法编码
+     */
+    public static final String BUSINESS_TYPE_UPDATE_BUSINESSTYPE_INFO = "900100040002";
 
 
 }

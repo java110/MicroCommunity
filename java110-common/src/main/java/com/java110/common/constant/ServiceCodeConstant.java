@@ -481,4 +481,13 @@ public class ServiceCodeConstant {
     //保存用例配置
     public static final String SERVICE_CODE_SAVE_DEMO_CONFIG = "demo.saveDemoConfig";
 
+    // 保存BUSINESSTYPE信息
+    public static final String SERVICE_CODE_EXIT_BUSINESSTYPE_SPACE = "business.exitBusinessTypeSpace";
+
+    //查询BUSINESSTYPE配置
+    public static final String SERVICE_CODE_QUERY_BUSINESSTYPE_CONFIG = "business.queryBusinessTypeConfig";
+
+    //保存BUSINESSTYPE配置
+    public static final String SERVICE_CODE_SAVE_BUSINESSTYPE_CONFIG = "business.saveBusinessTypeConfig";
+
 }

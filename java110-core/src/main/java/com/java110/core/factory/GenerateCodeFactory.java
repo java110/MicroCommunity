@@ -81,6 +81,9 @@ public class GenerateCodeFactory {
     //测试用列
     public static final String CODE_PREFIX_demoId="90";
 
+    //BUSINESSTYPE
+    public static final String CODE_PREFIX_id="99";
+
     /**
      * 只有在不调用服务生成ID时有用
      */
