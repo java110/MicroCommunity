@@ -16,7 +16,7 @@ status_cd,app_id,black_list_ip,name,security_code,remark,while_list_ip
 
        <!-- 查询应用信息（Business） add by wuxw 2018-07-03 -->
        <select id="getBusinessAppInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.user_id,t.user_id userId,t.while_list_ip,t.while_list_ip whileListIp 
+           select  t.operate,t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.while_list_ip,t.while_list_ip whileListIp
 from business_app t 
 where 1 =1 
 <if test="operate !=null and operate != ''">
@@ -37,9 +37,7 @@ where 1 =1
 <if test="remark !=null and remark != ''">
    and t.remark= #{remark}
 </if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+
 <if test="whileListIp !=null and whileListIp != ''">
    and t.while_list_ip= #{whileListIp}
 </if> 
@@ -53,8 +51,8 @@ where 1 =1
     <!-- 保存应用信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAppInfoInstance" parameterType="Map">
         insert into c_app(
-app_id,black_list_ip,name,security_code,remark,status_cd,user_id,while_list_ip
-) select t.app_id,t.black_list_ip,t.name,t.security_code,t.remark,'0',t.user_id,t.while_list_ip from business_app t where 1=1
+app_id,black_list_ip,name,security_code,remark,status_cd,while_list_ip
+) select t.app_id,t.black_list_ip,t.name,t.security_code,t.remark,'0',t.while_list_ip from business_app t where 1=1
    and t.operate= 'ADD'
 <if test="appId !=null and appId != ''">
    and t.app_id= #{appId}
@@ -71,9 +69,7 @@ app_id,black_list_ip,name,security_code,remark,status_cd,user_id,while_list_ip
 <if test="remark !=null and remark != ''">
    and t.remark= #{remark}
 </if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+
 <if test="whileListIp !=null and whileListIp != ''">
    and t.while_list_ip= #{whileListIp}
 </if> 
@@ -84,7 +80,7 @@ app_id,black_list_ip,name,security_code,remark,status_cd,user_id,while_list_ip
 
     <!-- 查询应用信息 add by wuxw 2018-07-03 -->
     <select id="getAppInfo" parameterType="Map" resultType="Map">
-        select  t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.status_cd,t.status_cd statusCd,t.user_id,t.user_id userId,t.while_list_ip,t.while_list_ip whileListIp 
+        select  t.app_id,t.app_id appId,t.black_list_ip,t.black_list_ip blackListIp,t.name,t.security_code,t.security_code securityCode,t.remark,t.status_cd,t.status_cd statusCd,t.while_list_ip,t.while_list_ip whileListIp
 from c_app t 
 where 1 =1 
 <if test="appId !=null and appId != ''">
@@ -105,9 +101,7 @@ where 1 =1
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+
 <if test="whileListIp !=null and whileListIp != ''">
    and t.while_list_ip= #{whileListIp}
 </if> 
@@ -135,9 +129,7 @@ where 1 =1
 <if test="remark !=null and remark != ''">
 , t.remark= #{remark}
 </if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
+
 <if test="whileListIp !=null and whileListIp != ''">
 , t.while_list_ip= #{whileListIp}
 </if> 
@@ -170,9 +162,7 @@ where 1 =1
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+
 <if test="whileListIp !=null and whileListIp != ''">
    and t.while_list_ip= #{whileListIp}
 </if> 
