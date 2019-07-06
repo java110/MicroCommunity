@@ -33,7 +33,7 @@ Assert.hasKeyAndValue(paramIn, "name", "必填，请填写应用名称");
 
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_APP);
 
     }
 
