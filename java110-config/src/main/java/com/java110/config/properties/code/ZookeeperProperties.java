@@ -1,13 +1,15 @@
 package com.java110.config.properties.code;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by wuxw on 2018/6/6.
  */
 @Component
-@ConfigurationProperties(prefix = "java110.code.zookeeper",locations="classpath:config/code/zookeeper.properties")
+@ConfigurationProperties(prefix = "java110.code.zookeeper")
+@PropertySource("classpath:config/code/zookeeper.properties")
 public class ZookeeperProperties {
 
     private String url;

@@ -16,6 +16,14 @@ public interface IDemoServiceSMO {
      */
     ResponseEntity<String> listDemo(IPageData pd);
 
+    /**
+     * 查询用例信息
+     *
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    ResponseEntity<String> listDemoStudy(IPageData pd);
+
 
     /**
      * 添加用例信息

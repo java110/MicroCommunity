@@ -1,6 +1,7 @@
 package com.java110.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,8 +9,9 @@ import org.springframework.stereotype.Component;
  * Created by wuxw on 2017/4/25.
  */
 
-@ConfigurationProperties(prefix = "java110.order",locations="classpath:config/order.properties")
+@ConfigurationProperties(prefix = "java110.order")
 @Component("orderProperties")
+@PropertySource("classpath:config/order.properties")
 public class OrderProperties {
 
     private String deleteOrderAsyn;

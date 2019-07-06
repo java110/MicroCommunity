@@ -1,5 +1,7 @@
 package com.java110.code;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.*;
 
 public class BaseGenerator {
@@ -50,6 +52,10 @@ public class BaseGenerator {
     public static void writeFile(String filePath,String fileName) {
         try {
             File writeName = new File(filePath); // 相对路径，如果没有则要建立一个新的output.txt文件
+            File fileParent = writeName.getParentFile();
+            if(!fileParent.exists()){
+                fileParent.mkdirs();
+            }
             writeName.createNewFile(); // 创建新文件,有同名的文件的话直接覆盖
             try (FileWriter writer = new FileWriter(writeName);
                  BufferedWriter out = new BufferedWriter(writer)
@@ -60,5 +66,15 @@ public class BaseGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected String replaceTemplateContext(String srcStr, JSONObject data){
+        return srcStr.replace("@@templateName@@", data.getString("templateName"))
+                .replace("@@templateCode@@", data.getString("templateCode"))
+                .replace("@@TemplateCode@@", toUpperCaseFirstOne(data.getString("templateCode")))
+                .replace("@@templateKey@@", data.getString("templateKey"))
+                .replace("@@TemplateKey@@", toUpperCaseFirstOne(data.getString("templateKey")))
+                .replace("@@templateKeyName@@", data.getString("templateKeyName"))
+                .replace("@@TEMPLATECODE@@", data.getString("templateCode").toUpperCase());
     }
 }

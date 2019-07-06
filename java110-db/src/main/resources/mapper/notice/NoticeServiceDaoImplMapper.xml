@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="noticeServiceDaoImpl">
+
+    <!-- 保存通知信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessNoticeInfo" parameterType="Map">
+           insert into business_notice(
+operate,notice_type_cd,context,start_time,community_id,title,b_id,user_id,notice_id
+) values (
+#{operate},#{noticeTypeCd},#{context},#{startTime},#{communityId},#{title},#{bId},#{userId},#{noticeId}
+)
+       </insert>
+
+
+       <!-- 查询通知信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessNoticeInfo" parameterType="Map" resultType="Map">
+           select  t.operate,t.notice_type_cd,t.notice_type_cd noticeTypeCd,t.context,t.start_time,t.start_time startTime,t.community_id,t.community_id communityId,t.title,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.notice_id,t.notice_id noticeId 
+from business_notice t 
+where 1 =1 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="noticeTypeCd !=null and noticeTypeCd != ''">
+   and t.notice_type_cd= #{noticeTypeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null">
+   and t.start_time= #{startTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="noticeId !=null and noticeId != ''">
+   and t.notice_id= #{noticeId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存通知信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveNoticeInfoInstance" parameterType="Map">
+        insert into n_notice(
+notice_type_cd,context,start_time,status_cd,community_id,title,b_id,user_id,notice_id
+) select t.notice_type_cd,t.context,t.start_time,'0',t.community_id,t.title,t.b_id,t.user_id,t.notice_id from business_notice t where 1=1
+   and t.operate= 'ADD'
+<if test="noticeTypeCd !=null and noticeTypeCd != ''">
+   and t.notice_type_cd= #{noticeTypeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null">
+   and t.start_time= #{startTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="noticeId !=null and noticeId != ''">
+   and t.notice_id= #{noticeId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询通知信息 add by wuxw 2018-07-03 -->
+    <select id="getNoticeInfo" parameterType="Map" resultType="Map">
+        select  t.notice_type_cd,t.notice_type_cd noticeTypeCd,t.context,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.title,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.notice_id,t.notice_id noticeId 
+from n_notice t 
+where 1 =1 
+<if test="noticeTypeCd !=null and noticeTypeCd != ''">
+   and t.notice_type_cd= #{noticeTypeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="noticeId !=null and noticeId != ''">
+   and t.notice_id= #{noticeId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改通知信息 add by wuxw 2018-07-03 -->
+    <update id="updateNoticeInfoInstance" parameterType="Map">
+        update  n_notice t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="noticeTypeCd !=null and noticeTypeCd != ''">
+, t.notice_type_cd= #{noticeTypeCd}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="startTime !=null">
+, t.start_time= #{startTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="title !=null and title != ''">
+, t.title= #{title}
+</if> 
+<if test="userId !=null and userId != ''">
+, t.user_id= #{userId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="noticeId !=null and noticeId != ''">
+and t.notice_id= #{noticeId}
+</if> 
+
+    </update>
+
+    <!-- 查询通知数量 add by wuxw 2018-07-03 -->
+     <select id="queryNoticesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from n_notice t 
+where 1 =1 
+<if test="noticeTypeCd !=null and noticeTypeCd != ''">
+   and t.notice_type_cd= #{noticeTypeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="startTime !=null">
+   and t.start_time= #{startTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="title !=null and title != ''">
+   and t.title= #{title}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="userId !=null and userId != ''">
+   and t.user_id= #{userId}
+</if> 
+<if test="noticeId !=null and noticeId != ''">
+   and t.notice_id= #{noticeId}
+</if> 
+
+
+     </select>
+
+</mapper>

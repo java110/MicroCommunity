@@ -32,7 +32,10 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 [https://demo.java110.com](https://demo.java110.com)
 
-账号/密码：wuxw/admin
+物业 账号/密码：wuxw/admin
+代理商 账号/密码：dails/admin
+运维团队 账号/密码：admin/admin
+开发团队 账号/密码：dev/admin
 
 ### 如何开始（how to start）
 
@@ -48,7 +51,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 二次开发视频
 
-[视频](https://pan.baidu.com/s/1hnw5u-rnsZrLJjzMVrhI6A)
+[视频](https://www.java110.com/#/start/vedio)
 
 ### 接口协议
 

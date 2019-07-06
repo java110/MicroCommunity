@@ -367,6 +367,15 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
         }
     }
 
+    /**
+     * 分页信息校验
+     * @param reqJson
+     */
+    protected void validatePageInfo(JSONObject reqJson){
+        Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
+    }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

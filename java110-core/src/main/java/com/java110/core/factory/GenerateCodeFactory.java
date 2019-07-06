@@ -80,6 +80,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_carId = "80";
     //测试用列
     public static final String CODE_PREFIX_demoId="90";
+    public static final String CODE_PREFIX_noticeId="96";
 
     //BUSINESSTYPE
     public static final String CODE_PREFIX_id="99";

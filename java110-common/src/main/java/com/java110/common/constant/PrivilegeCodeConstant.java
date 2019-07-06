@@ -54,4 +54,11 @@ public final class PrivilegeCodeConstant {
 
     //停车费用配置权限
     public static final String PRIVILEGE_PARKING_SPACE_CONFIG_FEE = "500201904021";
+
+    // demo 权限编码
+    public static final String PRIVILEGE_DEMO = "500201906023";
+
+
+    public static final String AGENT_HAS_LIST_COMMUNITY = "500201906025";
+    public static final String HAS_LIST_NOTICE = "500201904009";
 }

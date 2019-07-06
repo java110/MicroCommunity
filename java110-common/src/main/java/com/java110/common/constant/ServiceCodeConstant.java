@@ -481,6 +481,7 @@ public class ServiceCodeConstant {
     //保存用例配置
     public static final String SERVICE_CODE_SAVE_DEMO_CONFIG = "demo.saveDemoConfig";
 
+
     // 保存BUSINESSTYPE信息
     public static final String SERVICE_CODE_EXIT_BUSINESSTYPE_SPACE = "business.exitBusinessTypeSpace";
 
@@ -489,5 +490,44 @@ public class ServiceCodeConstant {
 
     //保存BUSINESSTYPE配置
     public static final String SERVICE_CODE_SAVE_BUSINESSTYPE_CONFIG = "business.saveBusinessTypeConfig";
+
+    /**
+     * 查询小区信息
+     */
+    public static final String SERVICE_CODE_LIST_COMMUNITYS = "community.listCommunitys";
+
+    /**
+     * 保存小区
+     */
+    public static final String SERVICE_CODE_SAVE_COMMUNITY = "community.saveCommunity";
+
+
+    /**
+     * 修改小区
+     */
+    public static final String SERVICE_CODE_UPDATE_COMMUNITY = "community.updateCommunity";
+/**
+     * 删除小区community.deleteCommunity
+     */
+    public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
+
+
+    /**
+     * 保存公告
+     */
+    public static final String SERVICE_CODE_SAVE_NOTICE = "notice.saveNotice";
+
+
+    /**
+     * 修改公告
+     */
+    public static final String SERVICE_CODE_UPDATE_NOTICE = "notice.updateNotice";
+    /**
+     * 删除公告community.deleteCommunity
+     */
+    public static final String SERVICE_CODE_DELETE_NOTICE = "notice.deleteNotice";
+
+    public static final String SERVICE_CODE_LIST_NOTICES = "notice.listNotices";
+
 
 }

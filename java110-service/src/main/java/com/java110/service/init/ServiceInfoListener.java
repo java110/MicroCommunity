@@ -2,7 +2,7 @@ package com.java110.service.init;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
+import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Created by wuxw on 2018/6/6.
  */
 @Component
-public class ServiceInfoListener implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
+public class ServiceInfoListener implements ApplicationListener<WebServerInitializedEvent> {
 
     private final static Logger logger = LoggerFactory.getLogger(ServiceInfoListener.class);
 
@@ -22,8 +22,8 @@ public class ServiceInfoListener implements ApplicationListener<EmbeddedServletC
     private long workId;
 
     @Override
-    public void onApplicationEvent(EmbeddedServletContainerInitializedEvent event) {
-        this.serverPort = event.getEmbeddedServletContainer().getPort();
+    public void onApplicationEvent(WebServerInitializedEvent event) {
+        this.serverPort = event.getWebServer().getPort();
     }
 
     public int getServerPort() {

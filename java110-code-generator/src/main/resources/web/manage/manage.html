@@ -1,0 +1,47 @@
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>@@templateName@@信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAdd@@TemplateCode@@Modal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加@@templateName@@
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            @@columnsCnCode@@
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="@@templateCode@@ in @@templateCode@@ManageInfo.@@templateCode@@s">
+                                @@columnsName@@
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="add@@TemplateCode@@"></vc:create>
+    <vc:create name="edit@@TemplateCode@@"></vc:create>
+    <vc:create name="delete@@TemplateCode@@"></vc:create>
+
+</div>

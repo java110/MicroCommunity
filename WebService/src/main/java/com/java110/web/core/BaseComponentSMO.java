@@ -147,13 +147,21 @@ public class BaseComponentSMO extends BaseServiceSMO {
      *
      * @param pd
      * @param restTemplate
-     * @param privilegeCode
+     * @param privilegeCodes
      */
-    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate, String privilegeCode) {
+    protected void checkUserHasPrivilege(IPageData pd, RestTemplate restTemplate, String ...privilegeCodes) {
         ResponseEntity<String> responseEntity = null;
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCode);
+        for(String privilegeCode : privilegeCodes) {
+            responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL
+                    + "/api/check.user.hasPrivilege?userId=" + pd.getUserId() + "&pId=" + privilegeCode, HttpMethod.GET);
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                //throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
+                break;
+            }
+        }
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK){
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "用户没有权限操作权限" + privilegeCodes);
         }
     }
 
@@ -216,5 +224,19 @@ public class BaseComponentSMO extends BaseServiceSMO {
             checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         }
         return new ComponentValidateResult(storeId, storeTypeCd, communityId, pd.getUserId());
+    }
+
+    /**
+     * 分页信息校验
+     * @param pd 页面数据封装
+     */
+    protected void validatePageInfo(IPageData pd){
+
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.isInteger(paramIn.getString("row"), "row必须为数字");
+        Assert.isInteger(paramIn.getString("page"), "page必须为数字");
     }
 }

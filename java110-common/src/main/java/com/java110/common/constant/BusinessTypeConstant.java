@@ -291,6 +291,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
 
 
+    /**
+     * 发布公告
+     */
+    public static final String BUSINESS_TYPE_SAVE_NOTICE = "550100030001";
+
+    /**
+     * 修改公告
+     */
+    public static final String BUSINESS_TYPE_UPDATE_NOTICE = "550100040001";
+
+
+    /**
+     * 删除公告
+     */
+    public static final String BUSINESS_TYPE_DELETE_NOTICE = "550100050001";
+
 
 
     /**
@@ -411,6 +427,9 @@ public class BusinessTypeConstant {
      * 修改BUSINESSTYPE方法编码
      */
     public static final String BUSINESS_TYPE_UPDATE_BUSINESSTYPE_INFO = "900100040002";
+
+
+
 
 
 }
