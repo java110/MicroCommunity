@@ -9,7 +9,7 @@ public class ServiceCodeAppConstant {
     /**
      * 添加 应用
      */
-    public static final String ADD_APP = "app.updateApp";
+    public static final String ADD_APP = "app.saveApp";
 
 
     /**

@@ -9,7 +9,7 @@ public class ServiceCode@@TemplateCode@@Constant {
     /**
      * 添加 @@templateName@@
      */
-    public static final String ADD_@@TEMPLATECODE@@ = "@@templateCode@@.update@@TemplateCode@@";
+    public static final String ADD_@@TEMPLATECODE@@ = "@@templateCode@@.save@@TemplateCode@@";
 
 
     /**
