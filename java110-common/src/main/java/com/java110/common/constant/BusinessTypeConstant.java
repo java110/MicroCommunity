@@ -412,6 +412,11 @@ public class BusinessTypeConstant {
      * 保存方法编码
      */
     public static final String BUSINESS_TYPE_SAVE_DEMO_INFO = "900100030001";
+
+    /**
+     * 保存方法编码
+     */
+    public static final String BUSINESS_TYPE_UPDATE_DEMO_INFO = "900100040001";
     /**
      * 修改方法编码
      */
