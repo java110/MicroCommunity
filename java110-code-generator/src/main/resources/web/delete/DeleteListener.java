@@ -15,6 +15,8 @@ import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.BusinessTypeConstant;
 
 import com.java110.core.annotation.Java110Listener;
+import com.java110.common.constant.ServiceCode@@TemplateCode@@Constant;
+
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
@@ -52,7 +54,7 @@ public class Delete@@TemplateCode@@Listener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_DELETE_@@TEMPLATECODE@@;
+        return ServiceCode@@TemplateCode@@Constant.DELETE_@@TEMPLATECODE@@;
     }
 
     @Override

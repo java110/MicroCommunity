@@ -1,55 +1,66 @@
 {
-  "templateName":"公告",
-  "templateCode":"notice",
-  "templateKey":"noticeId",
-  "templateKeyName":"公告ID",
+  "templateName":"应用",
+  "templateCode":"app",
+  "templateKey":"appId",
+  "templateKeyName":"应用Id",
   "columns":[
     {
-      "code":"title",
-      "cnCode":"标题",
-      "desc":"必填，请填写标题",
+      "code":"name",
+      "cnCode":"应用名称",
+      "desc":"必填，请填写应用名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxin",
-      "limitParam":"4,100",
-      "limitErrInfo":"小区名称必须在4至100字符之间"
+      "limitParam":"2,50",
+      "limitErrInfo":"应用名称必须在2至50字符之间"
     },
     {
-      "code":"noticeTypeCd",
-      "cnCode":"公告类型",
-      "desc":"必填，请选择公告类型",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"select",
-      "selectValue":"1000,1001,1002",
-      "selectValueName":"业主通知,员工通知,小区通知",
-      "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"公告类型错误"
-    },
-    {
-      "code":"context",
-      "cnCode":"公告内容",
-      "desc":"必填，请填写公告内容",
-      "required":true,
+      "code":"securityCode",
+      "cnCode":"秘钥",
+      "desc":"可填，请填写秘钥，如果填写了需要加密传输",
+      "required":false,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxLength",
-      "limitParam":"500",
-      "limitErrInfo":"公告内容不能超过500个字"
+      "limitParam":"64",
+      "limitErrInfo":"秘钥太长超过64位"
     },
     {
-      "code":"startTime",
-      "cnCode":"开始时间",
-      "desc":"必选，请填写开始时间 2019-01-02",
-      "required":true,
+      "code":"whileListIp",
+      "cnCode":"白名单",
+      "desc":"可填，请填写白名单IP，以，号分割",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"白名单内容不能超过200"
+    },
+    {
+      "code":"blackListIp",
+      "cnCode":"黑名单",
+      "desc":"可填，请填写黑名单IP，以，号分割",
+      "required":false,
       "hasDefaultValue":false,
       "defaultValue":"",
       "inputType":"input",
-      "limit":"date",
-      "limitParam":"",
-      "limitErrInfo":"开始时间不是有效的日志"
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"黑名单内容不能超过200"
+    },
+
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"可填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200"
     }
 
   ]

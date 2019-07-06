@@ -18,7 +18,27 @@ public class GeneratorAddComponent extends BaseGenerator {
         genneratorListSmoImpl(data);
         genneratorListListener(data);
 
+        genneratorServiceCodeConstant(data);
 
+
+
+    }
+
+    /**
+     * 生成常量类
+     * @param data
+     */
+    private void genneratorServiceCodeConstant(JSONObject data) {
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/constant/ServiceCodeConstant.java").getFile());
+        String fileContext = sb.toString();
+
+        fileContext = super.replaceTemplateContext(fileContext, data);
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/web/constant/" + data.getString("templateCode") + "/ServiceCode" + toUpperCaseFirstOne(data.getString("templateCode")) + "Constant.java";
+        System.out.printf("writePath: " + writePath);
+        writeFile(writePath,
+                fileContext);
 
     }
 
@@ -65,7 +85,11 @@ public class GeneratorAddComponent extends BaseGenerator {
                         "         <option selected  disabled value=\"\">"+ required + "，请选择" + column.getString("cnCode") + "</option>\n" +
                         "         " +option+
                         "  </select>";
-            } else {
+            } else if("textarea".equals(column.getString("inputType"))){
+                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\""+
+                        " v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\">"+
+                        "</textarea>";
+            }else {
                 inputStr = "           <input v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\" " +
                         "                  type=\"text\" placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\">\n";
             }

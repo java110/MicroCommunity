@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.BusinessTypeConstant;
+import com.java110.common.constant.ServiceCode@@TemplateCode@@Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class List@@TemplateCode@@sListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_LIST_@@TEMPLATECODE@@S;
+        return ServiceCode@@TemplateCode@@Constant.LIST_@@TEMPLATECODE@@S;
     }
 
     @Override

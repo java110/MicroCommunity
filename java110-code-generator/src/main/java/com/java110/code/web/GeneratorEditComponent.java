@@ -65,7 +65,11 @@ public class GeneratorEditComponent extends BaseGenerator {
                         "         <option selected  disabled value=\"\">"+ required + "，请选择" + column.getString("cnCode") + "</option>\n" +
                         "         " +option+
                         "  </select>";
-            } else {
+            } else if("textarea".equals(column.getString("inputType"))){
+                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\""+
+                        " v-model=\"edit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\">"+
+                        "</textarea>";
+            }else {
                 inputStr = "           <input v-model=\"edit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\" " +
                         "                  type=\"text\" placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\">\n";
             }
