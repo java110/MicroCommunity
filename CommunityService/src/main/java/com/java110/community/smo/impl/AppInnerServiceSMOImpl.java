@@ -47,17 +47,7 @@ public class AppInnerServiceSMOImpl extends BaseServiceSMO implements IAppInnerS
 
         List<AppDto> apps = BeanConvertUtil.covertBeanList(appServiceDaoImpl.getAppInfo(BeanConvertUtil.beanCovertMap(appDto)), AppDto.class);
 
-        if (apps == null || apps.size() == 0) {
-            return apps;
-        }
 
-        String[] userIds = getUserIds(apps);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (AppDto app : apps) {
-            refreshApp(app, users);
-        }
         return apps;
     }
 
