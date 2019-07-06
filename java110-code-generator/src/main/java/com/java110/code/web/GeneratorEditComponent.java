@@ -41,7 +41,7 @@ public class GeneratorEditComponent extends BaseGenerator {
         JSONArray columns = data.getJSONArray("columns");
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            if (column.getBoolean("hasDefaultValue")) {
+            if ("none".equals(column.getString("inputType"))) {
                 continue;
             }
             String required = column.getBoolean("required") ? "必填" : "选填";
