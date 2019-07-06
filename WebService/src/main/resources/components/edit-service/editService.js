@@ -25,7 +25,7 @@ provideAppId:'8000418002',
              vc.on('editService','openEditServiceModal',function(_params){
                 vc.component.refreshEditServiceInfo();
                 $('#editServiceModel').modal('show');
-                vc.component.editServiceInfo = _params;
+                vc.copyObject(vc.component.editServiceInfo,_params);
                 vc.component.editServiceInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
