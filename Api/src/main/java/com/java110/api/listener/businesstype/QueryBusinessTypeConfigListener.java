@@ -28,7 +28,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@Java110Listener("businessTypeConfig")
+@Java110Listener("queryBusinessTypeConfig")
 public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
