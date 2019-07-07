@@ -64,7 +64,7 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements ICbu
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
        // super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/buiness.businessTypeDemoConfig" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/business.businessTypeDemoConfig" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",

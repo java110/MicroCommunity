@@ -7,7 +7,7 @@ import com.java110.common.exception.ListenerExecuteException;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.cbusinesstype.dao.ICbusinesstypeServiceDao;
+import com.java110.store.dao.ICbusinesstypeServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
