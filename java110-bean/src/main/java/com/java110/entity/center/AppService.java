@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class AppService implements Serializable{
 
-    private int serviceId;
+    private String serviceId;
 
     private String serviceCode;
 
@@ -37,11 +37,11 @@ public class AppService implements Serializable{
 
     private String statusCd;
 
-    public int getServiceId() {
+    public String getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(int serviceId) {
+    public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
 
@@ -145,7 +145,7 @@ public class AppService implements Serializable{
         this.setServiceCode(serviceInfo.get("service_code").toString());
         this.setTimeOut(Integer.parseInt(serviceInfo.get("timeout").toString()));
         this.setUrl(serviceInfo.get("url") == null ? null : serviceInfo.get("url").toString());
-        this.setServiceId(Integer.parseInt(serviceInfo.get("service_id").toString()));
+        this.setServiceId(serviceInfo.get("service_id").toString());
         this.setIsInstance(serviceInfo.get("is_instance").toString());
         this.setStatusCd("0");
         return this;
