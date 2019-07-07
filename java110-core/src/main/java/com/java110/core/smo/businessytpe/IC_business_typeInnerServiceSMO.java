@@ -20,7 +20,6 @@ import java.util.List;
 @FeignClient(name = "store-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/c_business_typeApi")
 public interface IC_business_typeInnerServiceSMO {
-
     /**
      * <p>查询小区楼信息</p>
      *

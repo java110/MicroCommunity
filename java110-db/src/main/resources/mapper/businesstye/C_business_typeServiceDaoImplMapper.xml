@@ -72,7 +72,7 @@ business_type_cd,name,description,id,user_id
 
     <!-- 查询BusinessType信息 add by wuxw 2018-07-03 -->
     <select id="getC_business_typeInfo" parameterType="Map" resultType="Map">
-        select  t.business_type_cd,t.business_type_cd businessTypeCd,t.name,t.description,t.id,t.user_id,t.user_id userId 
+        select  t.business_type_cd,t.business_type_cd businessTypeCd,t.name,t.description,t.id
 from c_business_type t 
 where 1 =1 
 <if test="businessTypeCd !=null and businessTypeCd != ''">
@@ -86,10 +86,7 @@ where 1 =1
 </if> 
 <if test="id !=null and id != ''">
    and t.id= #{id}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
+</if>
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 

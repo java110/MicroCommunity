@@ -69,7 +69,7 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
-
+        System.out.println("我就看看获取到的数据"+responseEntity.toString());
         return responseEntity;
     }
 
