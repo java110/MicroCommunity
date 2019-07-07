@@ -36,9 +36,7 @@
                              function(json,res){
                                 var listBusinessTypeData =JSON.parse(json);
 
-                                vc.component.listBusinessTypeInfo.total = listBusinessTypeData.total;
-                                vc.component.listBusinessTypeInfo.records = listBusinessTypeData.records;
-                                vc.component.listBusinessTypeInfo.BusinessType = listBusinessTypeData.BusinessType;
+                                vc.component.listBusinessTypeInfo.BusinessType = listBusinessTypeData;
 
                                 vc.emit('pagination','init',{
                                     total:vc.component.listBusinessTypeInfo.records,

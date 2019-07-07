@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 /**
  * 用例接口
  */
-public interface IBusinessTypeServiceSMO {
+public interface ICbusinessTypeServiceSMO {
 
     /**
      * 查询用例信息

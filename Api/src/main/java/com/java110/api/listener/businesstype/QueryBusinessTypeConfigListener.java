@@ -8,8 +8,10 @@ import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.businessytpe.IC_business_typeInnerServiceSMO;
-import com.java110.dto.businesstypecd.C_business_typeDto;
+import com.java110.core.smo.businesstype.ICbusinesstypeInnerServiceSMO;
+import com.java110.core.smo.demo.IDemoInnerServiceSMO;
+import com.java110.dto.businesstype.CbusinesstypeDto;
+import com.java110.dto.demo.DemoDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -26,11 +28,11 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@Java110Listener("queryBusinessTypeConfig")
+@Java110Listener("businessTypeDemoConfig")
 public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
-    private IC_business_typeInnerServiceSMO ic_business_typeInnerServiceSMOImpl;
+    private ICbusinesstypeInnerServiceSMO iCbusinesstypeInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -52,10 +54,10 @@ public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowL
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
-        validateDemoConfigData(reqJson);
+        //validateDemoConfigData(reqJson);
 
-        List<C_business_typeDto> C_business_typeDto = ic_business_typeInnerServiceSMOImpl.queryC_business_types(BeanConvertUtil.covertBean(reqJson, C_business_typeDto.class));
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(C_business_typeDto), HttpStatus.OK);
+        List<CbusinesstypeDto> cbusinesstypeDto = iCbusinesstypeInnerServiceSMOImpl.queryCbusinesstypes(BeanConvertUtil.covertBean(reqJson, CbusinesstypeDto.class));
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(cbusinesstypeDto), HttpStatus.OK);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }
@@ -66,7 +68,9 @@ public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowL
      * @param reqJson 包含查询条件
      */
     private void validateDemoConfigData(JSONObject reqJson) {
-       System.out.println("校验已经通过");
+        Assert.jsonObjectHaveKey(reqJson, "demoName", "请求中未包含demoName信息");
+        Assert.jsonObjectHaveKey(reqJson, "demoValue", "请求中未包含demoValue信息");
+
 
     }
 
@@ -75,11 +79,11 @@ public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowL
         return super.DEFAULT_ORDER;
     }
 
-    public IC_business_typeInnerServiceSMO getIc_business_typeInnerServiceSMOImpl() {
-        return ic_business_typeInnerServiceSMOImpl;
+    public ICbusinesstypeInnerServiceSMO getiCbusinesstypeInnerServiceSMOImpl() {
+        return iCbusinesstypeInnerServiceSMOImpl;
     }
 
-    public void setIc_business_typeInnerServiceSMOImpl(IC_business_typeInnerServiceSMO ic_business_typeInnerServiceSMOImpl) {
-        this.ic_business_typeInnerServiceSMOImpl = ic_business_typeInnerServiceSMOImpl;
+    public void setiCbusinesstypeInnerServiceSMOImpl(ICbusinesstypeInnerServiceSMO iCbusinesstypeInnerServiceSMOImpl) {
+        this.iCbusinesstypeInnerServiceSMOImpl = iCbusinesstypeInnerServiceSMOImpl;
     }
 }

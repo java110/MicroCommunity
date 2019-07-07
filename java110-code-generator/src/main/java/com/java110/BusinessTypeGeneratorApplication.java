@@ -24,14 +24,14 @@ public class BusinessTypeGeneratorApplication {
     public static void main(String[] args) {
         Data data = new Data();
         data.setId("id");//主键ID
-        data.setName("c_business_type");//表名
-        data.setDesc("BusinessType");//中文表名
+        data.setName("cbusinesstype");//表名
+        data.setDesc("cbusinesstype");//中文表名
         data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_BUSINESSTYPE_INFO"); //业务类型
         data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_BUSINESSTYPE_INFO");//修改业务类型
         data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_BUSINESSTYPE_INFO");//删除业务类型
-        data.setNewBusinessTypeCdValue("900100030002");//业务类型编码
-        data.setUpdateBusinessTypeCdValue("900100040002");//修修改业务类型编码
-        data.setDeleteBusinessTypeCdValue("900100050002");//删除业务类型编码
+        data.setNewBusinessTypeCdValue("900100030005");//业务类型编码
+        data.setUpdateBusinessTypeCdValue("900100040005");//修修改业务类型编码
+        data.setDeleteBusinessTypeCdValue("900100050005");//删除业务类型编码
         data.setBusinessTableName("business_bus");//表模型过程表名称
         data.setTableName("c_business_type");//表模型实列表名称
         data.setShareParam("id");
@@ -42,8 +42,6 @@ public class BusinessTypeGeneratorApplication {
         param.put("businessTypeCd", "business_type_cd");
         param.put("name", "name");
         param.put("description", "description");
-        param.put("userId", "user_id");
-        param.put("operate", "operate");
         /**表模型字段绑定end  创建时间CREATE_DATE不需要绑定系统默认自带**/
         data.setParams(param);
         GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();

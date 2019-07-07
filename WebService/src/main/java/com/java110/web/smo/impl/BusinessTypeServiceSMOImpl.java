@@ -8,7 +8,8 @@ import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
-import com.java110.web.smo.IBusinessTypeServiceSMO;
+import com.java110.web.smo.ICbusinessTypeServiceSMO;
+import com.java110.web.smo.IDemoServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ import org.springframework.web.client.RestTemplate;
  * add by wuxw 2019-04-22
  */
 
-@Service("businessTypeServiceSMO")
-public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBusinessTypeServiceSMO {
+@Service("businessTypeServiceSMOImpl")
+public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements ICbusinessTypeServiceSMO {
 
     private static Logger logger = LoggerFactory.getLogger(BusinessTypeServiceSMOImpl.class);
 
@@ -42,7 +43,7 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
     @Override
     public ResponseEntity<String> listBusinessType(IPageData pd) {
 
-        validateListDemo(pd);
+        validateListBusinessType(pd);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         int page = Integer.parseInt(paramIn.getString("page"));
@@ -59,19 +60,20 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
 
-       /* String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");*/
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
        // super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/business.queryBusinessTypeConfig" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/buiness.businessTypeDemoConfig" + mapToUrlParam(paramIn);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
-        System.out.println("我就看看获取到的数据"+responseEntity.toString());
+
         return responseEntity;
     }
+
 
     @Override
     public ResponseEntity<String> saveBusinessType(IPageData pd) {
@@ -223,7 +225,7 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
      *
      * @param pd 页面封装对象
      */
-    private void validateListDemo(IPageData pd) {
+    private void validateListBusinessType(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
@@ -238,6 +240,27 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
 
     }
 
+
+
+    /**
+     * 校验查询小区楼信息
+     *
+     * @param pd 页面封装对象
+     */
+    private void validateListDemoStudy(IPageData pd) {
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.isInteger(paramIn.getString("page"), "page不是数字");
+        Assert.isInteger(paramIn.getString("row"), "rows不是数字");
+        int row = Integer.parseInt(paramIn.getString("row"));
+
+
+        if (row > MAX_ROW) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "row 数量不能大于50");
+        }
+
+    }
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

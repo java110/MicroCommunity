@@ -1,11 +1,11 @@
 
 
-**1\. 保存BusinessType**
+**1\. 修改cbusinesstype**
 ###### 接口功能
-> API服务做保存BusinessType时调用该接口
+> API服务做修改cbusinesstype时调用该接口
 
 ###### URL
-> [http://c_business_type-service/c_business_typeApi/service](http://c_business_type-service/c_business_typeApi/service)
+> [http://cbusinesstype-service/cbusinesstypeApi/service](http://cbusinesstype-service/cbusinesstypeApi/service)
 
 ###### 支持格式
 > JSON
@@ -43,12 +43,11 @@
 |-|business|?|Array|-|业务节点|-|
 |business|businessTypeCd|1|String|12|业务类型编码|500100030002|
 |business|datas|1|Object|-|数据节点|不同的服务下的节点不一样|
-|datas|businessC_business_typeInfo|1|Object|-|小区成员|小区成员|
-|businessC_business_typeInfo|businessTypeCd|1|String|30|-|-|
-|businessC_business_typeInfo|name|1|String|30|-|-|
-|businessC_business_typeInfo|description|1|String|30|-|-|
-|businessC_business_typeInfo|id|1|String|30|-|-|
-|businessC_business_typeInfo|userId|1|String|30|-|-|
+|datas|businessCbusinesstypeInfo|1|Object|-|小区成员|小区成员|
+|businessCbusinesstypeInfo|businessTypeCd|1|String|30|-|-|
+|businessCbusinesstypeInfo|name|1|String|30|-|-|
+|businessCbusinesstypeInfo|description|1|String|30|-|-|
+|businessCbusinesstypeInfo|id|1|String|30|-|-|
 
 
 ###### 返回协议
@@ -62,7 +61,7 @@
 
 
 ###### 举例
-> 地址：[http://c_business_type-service/c_business_typeApi/service](http://c_business_type-service/c_business_typeApi/service)
+> 地址：[http://cbusinesstype-service/cbusinesstypeApi/service](http://cbusinesstype-service/cbusinesstypeApi/service)
 
 ``` javascript
 请求头信息：
@@ -86,16 +85,15 @@ Content-Type:application/json
     }]
   },
   "business": {
-    "businessTypeCd": "900100030002",
+    "businessTypeCd": "900100040005",
     "bId":"1234567892",
     "remark": "备注",
     "datas": {
-      "businessC_business_typeInfo": {
+      "businessCbusinesstypeInfo": {
                 "businessTypeCd":"填写具体值",
         "name":"填写具体值",
         "description":"填写具体值",
-        "id":"填写具体值",
-        "userId":"填写具体值"
+        "id":"填写具体值"
       }
     },
     "attrs": [{

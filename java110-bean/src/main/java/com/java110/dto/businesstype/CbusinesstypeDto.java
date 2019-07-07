@@ -1,4 +1,4 @@
-package com.java110.dto.businesstypecd;
+package com.java110.dto.businesstype;
 
 import com.java110.dto.PageDto;
 
@@ -7,13 +7,13 @@ import java.util.Date;
 
 /**
  * @ClassName FloorDto
- * @Description BusinessType数据层封装
+ * @Description cbusinesstype数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class C_business_typeDto extends PageDto implements Serializable {
+public class CbusinesstypeDto extends PageDto implements Serializable {
 
     private String businessTypeCd;
 private String name;
@@ -51,12 +51,6 @@ public String getId() {
 public void setId(String id) {
         this.id = id;
     }
-public String getUserId() {
-        return userId;
-    }
-public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
 
     public Date getCreateTime() {
@@ -73,5 +67,13 @@ public void setUserId(String userId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
