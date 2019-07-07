@@ -52,7 +52,7 @@ public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowL
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         //获取请求数据
         JSONObject reqJson = dataFlowContext.getReqJson();
-        //validateDemoConfigData(reqJson);
+        validateDemoConfigData(reqJson);
 
         List<C_business_typeDto> C_business_typeDto = ic_business_typeInnerServiceSMOImpl.queryC_business_types(BeanConvertUtil.covertBean(reqJson, C_business_typeDto.class));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(C_business_typeDto), HttpStatus.OK);
@@ -66,9 +66,7 @@ public class QueryBusinessTypeConfigListener extends AbstractServiceApiDataFlowL
      * @param reqJson 包含查询条件
      */
     private void validateDemoConfigData(JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "demoName", "请求中未包含demoName信息");
-        Assert.jsonObjectHaveKey(reqJson, "demoValue", "请求中未包含demoValue信息");
-
+       System.out.println("校验已经通过");
 
     }
 

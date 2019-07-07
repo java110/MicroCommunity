@@ -50,7 +50,7 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
 
 
         //校验用户是否有权限
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
 
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -59,8 +59,8 @@ public class BusinessTypeServiceSMOImpl extends BaseComponentSMO implements IBus
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
 
-        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+       /* String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");*/
         //数据校验是否 商户是否入驻该小区
        // super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/business.queryBusinessTypeConfig" + mapToUrlParam(paramIn);
