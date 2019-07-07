@@ -84,6 +84,7 @@ public class GenerateCodeFactory {
 
     //BUSINESSTYPE
     public static final String CODE_PREFIX_id="99";
+    public static final String CODE_PREFIX_service_id="98";
 
     /**
      * 只有在不调用服务生成ID时有用

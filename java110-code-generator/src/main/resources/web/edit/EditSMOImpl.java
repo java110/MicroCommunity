@@ -31,7 +31,7 @@ public class Edit@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements
         @@validateTemplateColumns@@
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__@@TEMPLATECODE@@);
 
     }
 

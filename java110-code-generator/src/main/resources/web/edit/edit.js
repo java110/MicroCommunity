@@ -13,7 +13,7 @@
              vc.on('edit@@TemplateCode@@','openEdit@@TemplateCode@@Modal',function(_params){
                 vc.component.refreshEdit@@TemplateCode@@Info();
                 $('#edit@@TemplateCode@@Model').modal('show');
-                vc.component.edit@@TemplateCode@@Info = _params;
+                vc.copyObject(_params, vc.component.edit@@TemplateCode@@Info );
                 vc.component.edit@@TemplateCode@@Info.communityId = vc.getCurrentCommunity().communityId;
             });
         },

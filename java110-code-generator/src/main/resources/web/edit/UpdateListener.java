@@ -14,6 +14,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import com.java110.common.constant.ServiceCode@@TemplateCode@@Constant;
 
 /**
  * 保存@@templateName@@侦听
@@ -51,7 +52,7 @@ public class Update@@TemplateCode@@Listener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_@@TEMPLATECODE@@;
+        return ServiceCode@@TemplateCode@@Constant.UPDATE_@@TEMPLATECODE@@;
     }
 
     @Override
