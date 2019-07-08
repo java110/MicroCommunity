@@ -3,6 +3,8 @@
   "templateCode":"mapping",
   "templateKey":"id",
   "templateKeyName":"编码ID",
+  "searchCode": "name",
+  "searchName": "名称",
   "columns":[
     {
       "code":"domain",
