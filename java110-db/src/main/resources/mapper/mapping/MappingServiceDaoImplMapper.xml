@@ -8,8 +8,8 @@
        <insert id="saveMappingInfo" parameterType="Map">
            <![CDATA[
             insert into c_mapping(
-            domain,name,remark,id,value,`key`) values (
-            #{domain},#{name},#{remark},#{id},#{value},#{key}
+            domain,name,remark,id,``key``,value) values (
+            #{domain},#{name},#{remark},#{id},#{key},#{value}
             )
         ]]>
 
