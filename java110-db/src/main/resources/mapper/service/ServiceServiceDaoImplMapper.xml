@@ -155,7 +155,8 @@ where 1 =1
 </if> 
 <if test="seq !=null and seq != ''">
    and t.seq= #{seq}
-</if> 
+</if>
+        order by t.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
