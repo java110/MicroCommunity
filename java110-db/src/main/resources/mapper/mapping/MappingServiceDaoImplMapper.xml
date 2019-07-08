@@ -6,11 +6,13 @@
 
     <!-- 保存映射信息 add by wuxw 2018-07-03 -->
        <insert id="saveMappingInfo" parameterType="Map">
-           insert into c_mapping(
-domain,name,remark,id,value,`key`
-) values (
-#{domain},#{name},#{remark},#{id},#{value},#{key}
-)
+           <![CDATA[
+            insert into c_mapping(
+            domain,name,remark,id,value,`key`) values (
+            #{domain},#{name},#{remark},#{id},#{value},#{key}
+            )
+        ]]>
+
        </insert>
 
 
