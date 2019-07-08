@@ -7,9 +7,8 @@
     <!-- 保存映射信息 add by wuxw 2018-07-03 -->
        <insert id="saveMappingInfo" parameterType="Map">
            <![CDATA[
-            insert into c_mapping(
-            domain,name,remark,id,`key`,value) values (
-            #{domain},#{name},#{remark},#{id},#{key},#{value}
+            insert into c_mapping  values (
+            #{id},#{domain},#{name},#{key},#{value},#{remark},now(),'0'
             )
         ]]>
 

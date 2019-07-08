@@ -76,7 +76,7 @@ public class BaseGenerator {
                 .replace("@@TemplateKey@@", toUpperCaseFirstOne(data.getString("templateKey")))
                 .replace("@@templateKeyName@@", data.getString("templateKeyName"))
                 .replace("@@TEMPLATECODE@@", data.getString("templateCode").toUpperCase())
-                .replace("@@searchCode@@", data.getString("searchCode").toUpperCase())
-                .replace("@@searchName@@", data.getString("searchName").toUpperCase());
+                .replace("@@searchCode@@", data.getString("searchCode"))
+                .replace("@@searchName@@", data.getString("searchName"));
     }
 }
