@@ -29,7 +29,8 @@
                 var param = {
                     params:{
                         page:_page,
-                        row:_rows
+                        row:_rows,
+                        @@searchCode@@:vc.component.@@templateCode@@ManageInfo.@@searchCode@@
                     }
 
                }
