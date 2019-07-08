@@ -39,19 +39,19 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
         StringBuffer thSb = new StringBuffer();
         StringBuffer tdSb = new StringBuffer();
-        thSb.append("                            <th>" + data.getString("templateKeyName") + "</th>\n");
+        thSb.append("                            <th class=\"text-center\">" + data.getString("templateKeyName") + "</th>\n");
 
-        tdSb.append("                            <td>{{" + data.getString("templateCode") + "." + data.getString("templateKey") + "}}</td>\n");
+        tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + data.getString("templateKey") + "}}</td>\n");
 
         JSONArray columns = data.getJSONArray("columns");
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            thSb.append("                            <th>" + column.getString("cnCode") + "</th>\n");
+            thSb.append("                            <th class=\"text-center\">" + column.getString("cnCode") + "</th>\n");
 
-            tdSb.append("                            <td>{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
+            tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
         }
-        thSb.append("                            <th class=\"text-right\">操作</th>\n");
-        tdSb.append("                            <td><div class=\"btn-group\">\n" +
+        thSb.append("                            <th class=\"text-center\">操作</th>\n");
+        tdSb.append("                            <td class=\"text-center\"><div class=\"btn-group\">\n" +
                 "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">修改</button>\n" +
                 "                                </div>\n" +
                 "                                <div class=\"btn-group\">\n" +

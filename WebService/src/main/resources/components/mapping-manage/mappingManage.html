@@ -13,29 +13,32 @@
                 </div>
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <table class="footable table table-stripped toggle-arrow-tiny"
+                           data-page-size="15"
+                           style="table-layout: fixed;word-break:break-all;"
+                    >
                         <thead>
                         <tr>
-                                                        <th>编码ID</th>
-                            <th>域</th>
-                            <th>名称</th>
-                            <th>键</th>
-                            <th>值</th>
-                            <th>备注</th>
-                            <th class="text-right">操作</th>
+                                                        <th class="text-center">编码ID</th>
+                            <th class="text-center">域</th>
+                            <th class="text-center">名称</th>
+                            <th class="text-center">键</th>
+                            <th class="text-center">值</th>
+                            <th class="text-center">备注</th>
+                            <th class="text-center">操作</th>
 
 
                         </tr>
                         </thead>
                         <tbody>
                             <tr v-for="mapping in mappingManageInfo.mappings">
-                                                            <td>{{mapping.id}}</td>
-                            <td>{{mapping.domain}}</td>
-                            <td>{{mapping.name}}</td>
-                            <td>{{mapping.key}}</td>
-                            <td>{{mapping.value}}</td>
-                            <td>{{mapping.remark}}</td>
-                            <td><div class="btn-group">
+                            <td class="text-center">{{mapping.id}}</td>
+                            <td class="text-center">{{mapping.domain}}</td>
+                            <td class="text-center">{{mapping.name}}</td>
+                            <td class="text-center">{{mapping.key}}</td>
+                            <td class="text-center">{{mapping.value}}</td>
+                            <td class="text-center">{{mapping.remark}}</td>
+                            <td class="text-center"><div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditMappingModel(mapping)">修改</button>
                                 </div>
                                 <div class="btn-group">
