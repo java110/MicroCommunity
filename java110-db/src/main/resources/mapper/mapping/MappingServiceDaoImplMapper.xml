@@ -7,7 +7,7 @@
     <!-- 保存映射信息 add by wuxw 2018-07-03 -->
        <insert id="saveMappingInfo" parameterType="Map">
            insert into c_mapping(
-domain,name,remark,id,value,key
+domain,name,remark,id,value,`key`
 ) values (
 #{domain},#{name},#{remark},#{id},#{value},#{key}
 )
@@ -38,7 +38,7 @@ where 1 =1
    and t.value= #{value}
 </if> 
 <if test="key !=null and key != ''">
-   and t.key= #{key}
+   and t.`key`= #{key}
 </if> 
 
        </select>
@@ -101,7 +101,8 @@ where 1 =1
 </if> 
 <if test="key !=null and key != ''">
    and t.key= #{key}
-</if> 
+</if>
+        order by t.create_time desc
 <if test="page != -1 and page != null ">
    limit #{page}, #{row}
 </if> 
@@ -128,7 +129,7 @@ where 1 =1
 , t.value= #{value}
 </if> 
 <if test="key !=null and key != ''">
-, t.key= #{key}
+, t.`key`= #{key}
 </if> 
  where 1=1 <if test="id !=null and id != ''">
 and t.id= #{id}
