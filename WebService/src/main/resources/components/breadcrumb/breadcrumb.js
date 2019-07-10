@@ -34,12 +34,12 @@
                                     parentPageName: "",
                                     pageName: _tmpMenus[menuIndex].name
                                 };
-                                vm.breadCrumbInfo.breadCrumbs.push(_tmpBreadCrumbInf);
+                                this.breadCrumbs.push(_tmpBreadCrumbInf);
                                 _tmpBreadCrumbInf = {
                                     parentPageName: _tmpMenus[menuIndex].name,
                                     pageName: _childs[_childIndex].name
                                 };
-                               vm.breadCrumbs.push(_tmpBreadCrumbInf);
+                               this.breadCrumbs.push(_tmpBreadCrumbInf);
                                 break;
                             }
                         }
@@ -49,7 +49,7 @@
                                 parentPageName: "首页",
                                 pageName: _tmpMenus[menuIndex].name
                             };
-                            vm.breadCrumbs.push(_tmpBreadCrumbInf);
+                            this.breadCrumbs.push(_tmpBreadCrumbInf);
                         }
                     }
                 }
