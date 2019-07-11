@@ -228,11 +228,7 @@
     //查询url
     vc.getUrl = function(){
         //返回当前 URL 的查询部分（问号 ? 之后的部分）。
-        var urlParameters = location.search;
-        //如果该求青中有请求的参数，则获取请求的参数，否则打印提示此请求没有请求的参数
-        if(urlParameters.indexOf('?') != -1){
-            return urlParameters.substring(0, urlParameters.indexOf('?'));
-        }
+        var urlParameters = location.pathname;
         return urlParameters;
     };
     //对象转get参数
