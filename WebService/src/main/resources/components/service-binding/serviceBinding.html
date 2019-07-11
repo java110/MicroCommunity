@@ -1,0 +1,31 @@
+<div id="component" >
+
+    <div class="row">
+        <div class="steps clearfix">
+            <ul role="tablist">
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==1,disabled:serviceBindingInfo.step!=1 }" >
+                    <a>
+                        <span class="current-info audible">current step: </span>
+                        <span class="number">1.</span> 基本信息
+                    </a>
+                </li>
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==2,disabled:serviceBindingInfo.step!=2 }">
+                    <a>
+                        <span class="number">2.</span> 扩展信息
+                    </a>
+                </li>
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==3,disabled:serviceBindingInfo.step!=3 }">
+                    <a>
+                        <span class="number">3.</span> 证件信息
+                    </a>
+                </li>
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==4,disabled:serviceBindingInfo.step!=4 }">
+                    <a>
+                        <span class="number">4.</span> 须知
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
