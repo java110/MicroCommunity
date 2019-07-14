@@ -1,31 +1,31 @@
 <div id="component" >
 
-    <div class="row">
+    <div class="row" class="wizard-big wizard clearfix">
         <div class="steps clearfix">
             <ul role="tablist">
-                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==1,disabled:serviceBindingInfo.step!=1 }" >
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==1,vc_disabled:serviceBindingInfo.step!=1 }" >
                     <a>
                         <span class="current-info audible">current step: </span>
-                        <span class="number">1.</span> 基本信息
+                        <span class="number">1.</span> 选择应用
                     </a>
                 </li>
-                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==2,disabled:serviceBindingInfo.step!=2 }">
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==2,vc_disabled:serviceBindingInfo.step!=2 }">
                     <a>
-                        <span class="number">2.</span> 扩展信息
+                        <span class="number">2.</span> 选择服务
                     </a>
                 </li>
-                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==3,disabled:serviceBindingInfo.step!=3 }">
+                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==3,vc_disabled:serviceBindingInfo.step!=3 }">
                     <a>
-                        <span class="number">3.</span> 证件信息
-                    </a>
-                </li>
-                <li role="tab" v-bind:class="{ current: serviceBindingInfo.step==4,disabled:serviceBindingInfo.step!=4 }">
-                    <a>
-                        <span class="number">4.</span> 须知
+                        <span class="number">3.</span> 确认绑定
                     </a>
                 </li>
             </ul>
         </div>
     </div>
+
+    <!-- 选择 应用信息 -->
+    <vc:create name="sellRoomSelectOwner"
+               callBackComponent = "sellCar"
+    ></vc:create>
 
 </div>
