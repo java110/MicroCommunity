@@ -1,0 +1,5 @@
+@media screen and (max-width:991px) {
+    .event-box p{    
+        margin-left: 20px;
+    }
+}

@@ -1,29 +1,628 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>HC小区管理系统</title>
-    <link rel="icon" href="favicon.ico">
-    <meta name="keywords" content="HC,小区管理系统,物业管理系统,HC小区管理系统文档">
-    <meta name="description" content="HC小区是为物业企业打造的智慧物业综合管理平台提供商家入驻、快递代收、房屋租赁等盈利功能，为物业企业提供全新的运营盈利模式">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
-    <meta name="360-site-vSaveDemoConfigListener.java:78erification" content="6bcfefdd0f72c39dd6833024d32a7e3a" />
-</head>
-<body>
-<nav>
-    <a href="https://www.java110.com/#/start/vedio">视频</a>
-    <a target="_blank" href="https://demo.java110.com">演示环境</a>
-</nav>
-<div id="app"></div>
-<script>
-    window.$docsify = {
-      loadSidebar: true,
-      subMaxLevel: 2,
-      coverpage: true
-    }
-  </script>
-<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home</title>
+
+<!--======== All Stylesheet =========-->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/linearicons.css" rel="stylesheet">
+<!--=== plugins ===-->
+<link href="css/owl.carousel.css" rel="stylesheet">
+<link href="css/owl.theme.css" rel="stylesheet">
+<!--=== end plugins ===-->
+<link rel="shortcut icon" href="images/promo-logo.png">
+<link href="css/style.css" rel="stylesheet">
+<link href="css/responsive.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,900,700,600,300,200' rel='stylesheet' type='text/css'>
+</head>	
+
+<body data-spy="scroll" data-target=".nav-top">
+<!--======== header =========-->
+<header id="home" data-spy="scroll" data-target="#top-nav">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<!-- menu 4 -->
+			<div class="navbar navbar-default navbar-fixed-top default-menu menu-4" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-4" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand default-logo scroll" href="#home"><img src="images/promo-logo2.png" alt="logo" /></a>
+					</div>
+
+					<div class="collapse navbar-collapse top-nav" id="menu-4">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a class="scroll" href="#service">服务架构介绍</a></li>
+							<li><a class="scroll" href="#portfolio">产品展示</a></li>
+							<li><a class="scroll" href="#team">开发者展示</a></li>
+							<li><a class="scroll" href="#clients">开发者自述</a></li>
+							<li><a class="scroll" href="#contact">联系我们</a></li>
+						</ul>
+						
+					</div>
+				</div>
+			</div><!-- end menu -->
+		</div>
+	</div>            
+</header>
+<!--======== end header =========-->
+
+<!--======== intro =========-->
+<section class="intro">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-sm-8 col-xs-12">
+				<div class="intro-content">
+					<h1>HC 物业管理平台</h1>
+					<p>物业管理系统是现代居住小区不可缺少的一部分。一个好的物业管理系统可以提升小区的管理水平，使小区的日常管理更加方便。将计算机的强大功能与现代的管理思想相结合，建立现代的智能小区是物业管理发展的方向。重视现代化的管理，重视细致周到的服务是小区工作的宗旨。以提高物业管理的经济效益、管理水平，确保取得最大经济效益为目标</p>
+					<a class="btn btn-default" href="https://github.com/java110/MicroCommunity" role="button">源码下载<i class="lnr lnr-arrow-right"></i></a></i></a>
+					<a class="btn btn-primary" href="http://www.java110.com/#/" role="button">相关文档 <i class="lnr lnr-arrow-right"></i></a></i></a>
+					<div><i class="fa fa-caret-down"></i></div>    
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-8 col-xs-12">
+				<div><img src="images/intro-image.png" class="img-responsive" alt="intro-image"></div>
+			</div>    
+		</div>
+	</div>
+</section>
+<!--======== end intro =========-->
+
+<!--======== support =========-->
+<section class="support">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="media">
+							<div class="media-left media-middle">
+								<i class="fa fa-windows"></i>
+							</div>
+							<div class="media-body">
+								<h3>Windows</h3>
+								<p>PC端应用让操作更快捷</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="media">
+							<div class="media-left media-middle">
+								<i class="fa fa-android"></i>
+							</div>
+							<div class="media-body">
+								<h3>Android</h3>
+								<p>完美支持安卓手机</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="media">
+							<div class="media-left media-middle">
+								<i class="fa fa-apple"></i>
+							</div>
+							<div class="media-body">
+								<h3>Apple</h3>
+								<p>兼容苹果让适配更完美</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>    
+</section>
+<!--======== end support =========-->
+
+<!--======== Our Services =========-->
+<section id="service" class="service">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">服务架构介绍</h2>
+				<p class="section-para">微服务是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。
+					在所有情况下，每个任务代表着一个小的业务能力。</p>
+			</div>
+		</div>   
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-screen"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">Spring boot</h3>
+								<p>Spring Boot 是由 Pivotal 团队提供的全新框架，其设计目的是用来简化新 Spring 应用的初始搭建以及开发过程。
+									　　该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。
+									　　通过这种方式，Spring Boot 致力于在蓬勃发展的快速应用开发领域（rapidapplication development）成为领导者。</p>
+							</div>
+						</div>
+						
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-screen"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">Spring Cloud</h3>
+								<p>SpringCloud是一个基于SpringBoot实现的微服务架构开发工具。它为微服务架构中涉及的配置管理、服务治理、断路器、智能路由、微代理、控制总线、全局锁、决策竞选、分布式会话和集群状态管理等操作提供了一种简单的开发方式。</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-laptop-phone"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">KAFKA</h3>
+								<p>Kafka是由Apache软件基金会开发的一个开源流处理平台，由Scala和Java编写。它是一个分布式、支持分区的的、多副本，基于zookeeper协调的分布式消息系统。它的最大特性是可以实时的处理大量数据以满足各种需求场景：
+									比如基于Hadoop的批处理系统、低延时的实时系统、storm/Spark流式处理引擎，web/nginx日志，访问日志，消息服务等等。最初由Linkedin公司开发，于2010年贡献给Apache基金会并成为顶级开源项目。
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-screen"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">zooKeeper</h3>
+								<p>ZooKeeper 是一个开源的分布式协调服务，是 Google Chubby 的开源实现。分布式应用程序可以基于 ZooKeeper 实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master 选举、分布式锁和分布式队列等功能。</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-tablet"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">VUE</h3>
+								<p>Vue 是一套用于构建用户界面的渐进式javascript框架，与其它大型框架不同的是：Vue被设计为可以自底向上逐层应用。Vue的核心库只关注视图层，不仅易于上手，还便于与第三方库或既有项目整合，另外一个方面,当Vue与现代化的工具链以及各种支持类库结合使用时，Vue也完全能够为复杂的单页应用提供驱动。
+									</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-screen"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">DOCKER容器化技术</h3>
+								<p>Docker时Docker.Lnc公司开源的一个基于LXC技术之上搭建的Container容器引擎，源代码托管在Github上，基于Go语言并遵从Apache2.0协议开源。
+									属于Linux容器的一种封装，提供简单易用的容器使用接口。
+									将应用程序与该程序的依赖，打包在一个文件里面。运行这个文件，就会生成一个虚拟容器。程序在这个虚拟容器里运行，就好像在真实的物理机上运行一样。有了Docker，就不用担心环境问题。
+									总体来说，Docker的接口相当简单，用户可以方便地创建和使用容器，把自己的应用放入容器。容器还可以进行版本管理、复制、分享、修改，就像管理普通的代码一样。</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-laptop"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">MYSQL</h3>
+								<p>MySQL是一个关系型数据库管理系统，由瑞典MySQL AB 公司开发，目前属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件。</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left">
+								<i class="lnr lnr-screen"></i>
+							</div>
+							<div class="media-body">
+								<h3 class="media-heading">JAVA</h3>
+								<p>Java是由Sun Microsystems公司于1995年5月推出的Java面向对象程序设计语言和Java平台的总称。由James Gosling和同事们共同研发，并在1995年正式推出。
+									Java分为三个体系：
+									JavaSE（J2SE）（Java2 Platform Standard Edition，java平台标准版）
+									JavaEE(J2EE)(Java 2 Platform,Enterprise Edition，java平台企业版)
+									JavaME(J2ME)(Java 2 Platform Micro Edition，java平台微型版)。
+									2005年6月，JavaOne大会召开，SUN公司公开Java SE 6。此时，Java的各种版本已经更名以取消其中的数字"2"：J2EE更名为Java EE, J2SE更名为Java SE，J2ME更名为Java ME</p>
+							</div>
+						</div>
+					</div>
+				</div>   
+			</div>   
+		</div>   
+	</div>
+</section>
+<!--======== end Our Services =========-->
+<!--======== about us =========-->
+<!--<section class="about-us">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5 col-xs-12">
+				<div class="about-content">
+					<h1 class="section-title">About Us</h1>
+					<p>Lorem ipsum dolor sit amet reprehenderit, enim eiusmod high life 
+					accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard 
+					dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Haccusamus terry richardson ad squid. pwolf moon 
+					officia aute, non cupidatat skateboard. Wolf moon officia aute, non cupidatat skateboard 
+					dolor brunch. Food truck quinoa nesciunt cusamus terry richardson ad squid.</p>
+					<a class="btn btn-default" href="#" role="button">Download <i class="lnr lnr-arrow-right"></i></a></i></a>
+				</div> 
+			</div>
+			<div class="col-md-7 col-xs-12">
+				<div class="about-img"><img class="img-responsive" src="images/about-us.png" alt="about us image" /></div>
+			</div>
+		</div>
+	</div>
+</section>-->
+<!--======== end about us =========-->
+
+<!--======== Our portfolio =========-->
+<section id="portfolio" class="work">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">产品展示</h2>
+				<p class="section-para">我们对现有的产品做了一个演示环境,包含了业主管理、车位管理、小区管理等基础功能，方便各位合作伙伴及开发者朋友们更直观的了解我们的产品以及快速的加入到我们的开发者大军中来</p>
+					<div class="col-md-7 col-xs-12">
+						<div class="about-img"><img class="img-responsive" src="images/about-us.png" alt="about us image" /></div>
+					</div>
+					<p class="section-para">带上用户密码吧：wuxw/admin</p>
+					<a class="btn btn-default" href="https://demo.java110.com/" role="button">去看产品 <i class="lnr lnr-arrow-right"></i></a></i></a>
+			</div>
+		</div>
+		
+		<!--<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="col-md-3">
+					<div class="single-work"><img src="images/work-1.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="single-work"><img src="images/work-2.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="single-work"><img src="images/work-2.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+
+					 <div class="single-work"><img src="images/work-1.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="single-work"><img src="images/work-1.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="single-work"><img src="images/work-2.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="single-work"><img src="images/work-2.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="single-work"><img src="images/work-1.jpg" alt="">
+						<div class="service-overflow">
+							<ul class="list-inline work-links text-center">
+								<li><i class="lnr lnr-magnifier"></i></li>
+								<li><i class="lnr lnr-link"></i></li>
+								<li><i class="lnr lnr-thumbs-up"></i></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+	</div>
+</section>
+<!--======== end Our Work =========-->
+
+<!--======== our Team =========-->
+<section id="team" class="our-experts">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">认识一下开发者吧！</h2>
+				<p class="section-para">我们是一群年轻，充满活力的年轻人，将自己的爱好慢慢培养成了一个完美的作品，也希望更多的人来认识我们，加入我们，让HC平台越来越完美</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="expert-box">
+					<img src="images/team-1.jpg" alt="">
+					<div class="expert-overflow">
+						<ul class="list-inline text-center">
+							<li><i class="fa fa-facebook"></i></li>
+							<li><i class="fa fa-twitter"></i></li>
+							<li><i class="fa fa-google-plus"></i></li>
+						</ul>
+					</div>
+					<div class="name-plate text-center">
+						<h3 class="expert-name">吴学文</h3>
+						<strong class="expert-tag">我是作者，爱代码爱生活</strong>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="expert-box">
+					<img src="images/team-2.jpg" alt="">
+					<div class="expert-overflow">
+						<ul class="list-inline text-center">
+							<li><i class="fa fa-facebook"></i></li>
+							<li><i class="fa fa-twitter"></i></li>
+							<li><i class="fa fa-google-plus"></i></li>
+						</ul>
+					</div>
+					<div class="name-plate text-center">
+						<h3 class="expert-name">师延俊 </h3>
+						<strong class="expert-tag">我是2号，爱生活才开始爱代码</strong>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="expert-box">
+					<img src="images/team-3.jpg" alt="">
+					<div class="expert-overflow">
+						<ul class="list-inline text-center">
+							<li><i class="fa fa-facebook"></i></li>
+							<li><i class="fa fa-twitter"></i></li>
+							<li><i class="fa fa-google-plus"></i></li>
+						</ul>
+					</div>
+					<div class="name-plate text-center">
+						<h3 class="expert-name">任志远</h3>
+						<strong class="expert-tag">我是3号，我都爱但依然单身</strong>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="expert-box">
+					<img src="images/team-2.jpg" alt="">
+					<div class="expert-overflow">
+						<ul class="list-inline text-center">
+							<li><i class="fa fa-facebook"></i></li>
+							<li><i class="fa fa-twitter"></i></li>
+							<li><i class="fa fa-google-plus"></i></li>
+						</ul>
+					</div>
+					<div class="name-plate text-center">
+						<h3 class="expert-name">刘宗洋</h3>
+						<strong class="expert-tag">我是4号，不知道我爱什么反正还单身</strong>
+					</div>
+				</div>
+			</div>
+		</div>    
+		</div>
+	</div>    
+</section>
+<!--======== end our Genius =========-->
+
+<!--======== extra featrue =========-->
+<!--<section class="extra-feature">
+	<div class="container"> 
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">Promo Compatibility</h2>
+				<p class="section-para">Lorem ipsum dolor sit amet reprehenderit, enim eiusmod high life accusamus terry richardson ad
+				squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod cusamus terry.</p>
+				<ul class="list-inline platform text-center">
+					<li><i class="lnr lnr-screen"></i><span>Relability</span></li>
+					<li><i class="lnr lnr-laptop-phone"></i><span>Responsive</span></li>
+					<li><i class="lnr lnr-smartphone"></i><span>Comfortable</span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="e-feature">
+					<img class="feature-img" src="images/compatibility-img.png" alt="" />
+				</div>    
+			</div>    
+		</div>
+	</div>    
+</section>-->
+<!--======== end extra featrue =========-->    
+
+<!--======== our sponsors =========-->
+<section id="clients" class="our-sponsors">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">来听听程序猿们有什么想说的吧！</h2>
+				<p class="section-para">平时不喜欢沟通、不怎么活泼的程序员们也有自己的理想，也会有自己的小情绪，来听听他们有什么想改变世界的想法吧！不要为此惊讶到哦。。爱想象加上勇敢的去尝试，才会有不同的生活体验。对吧！</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="list-inline sponsor-logo text-center">
+					<li><img class="img-responsive" src="images/microsoft.png" alt="client log" /></li>
+					<li><img class="img-responsive" src="images/instagram.png" alt="client log" /></li>
+					<li><img class="img-responsive" src="images/google.png" alt="client log" /></li>
+					<li><img class="img-responsive" src="images/converse.png" alt="client log" /></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="people">
+					<p>Lorem ipsum dolor sit amet reprehenderit, enim eiusmod high life accusamus terry richardson ad
+					squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
+					<div class="media">
+						<div class="media-left">
+							<img class="media-object" src="images/client-1.png" alt="sponsor image">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">K.Dutchmane</h3>
+							<strong>Co-Founder- ThemeForest</strong>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="people">
+					<p>Lorem ipsum dolor sit amet reprehenderit, enim eiusmod high life accusamus terry richardson ad
+					squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
+					<div class="media">
+						<div class="media-left">
+							<img class="media-object" src="images/client-1.png" alt="sponsor image">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">K.Dutchmane</h3>
+							<strong>Co-Founder- ThemeForest</strong>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="people">
+					<p>Lorem ipsum dolor sit amet reprehenderit, enim eiusmod high life accusamus terry richardson ad
+					squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
+					<div class="media">
+						<div class="media-left">
+							<img class="media-object" src="images/client-1.png" alt="sponsor image">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">K.Dutchmane</h3>
+							<strong>Co-Founder- ThemeForest</strong>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--======== end recent evnt =========-->
+
+<!--======== contact =========-->
+<section id="contact" class="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">  
+				<h1 class="section-title">联系我们</h2>
+				<p class="section-para">有兴趣更深入的了解我们的产品，或者想加入我们一起来完善我们的作品请看看下面的联系方式，联系我们！加入我们！  期待与你的相遇</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 col-md-offset-2">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="sr-only" for="exampleInputEmail3">QQ群号</label>
+							<p>HC交流群：827669685</p>
+							<p>HC开发群：992420128</p>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="sr-only" for="exampleInputEmail3">邮件</label>
+							<p>作者邮箱：928255095@qq.com</p>
+							<p>程序员邮箱：1537006941@qq.com</p>
+						</div>
+					</div>
+				<!--	<div class="col-md-12">
+						<div class="form-group">
+							<label class="sr-only" for="exampleInputEmail3">Phone</label>
+							<input type="tel" class="form-control" id="exampleInputEmail3" placeholder="Phone">
+						</div>
+					</div>-->
+				</div>    
+			</div>
+		<!--	<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="sr-only" for="exampleInputEmail3">Massage</label>
+							<textarea class="form-control textarea" rows="5" placeholder="Massage"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>-->
+		</div>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2">
+						<div class="form-group text-center">
+							<button type="submit" class="btn btn-default ">Send Massage</button>
+						</div>
+					</div>
+				</div>
+				<ul class="list-inline social-links text-center">
+					<li><i class="fa fa-facebook"></i></li>
+					<li><i class="fa fa-Twitter"></i></li>
+					<li><i class="fa fa-google-plus"></i></li>
+					<li><i class="fa fa-dribbble"></i></li>
+				</ul>
+			</div>
+		</div>
+	</div>    
+</section>
+<!--======== end contact =========-->
+
+<!--======== footer =========-->
+<footer class="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-md-12 text-center">
+				<p>Copyright &copy; 2019.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+			</div>
+		</div>
+	</div>    
+</footer>
+<!--======== end footer =========-->
+
+<!--======== All Javascript =========-->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/custom.js"></script>
 </body>
 </html>
