@@ -1,0 +1,72 @@
+{
+  "templateName":"编码映射",
+  "templateCode":"mapping",
+  "templateKey":"id",
+  "templateKeyName":"编码ID",
+  "searchCode": "name",
+  "searchName": "名称",
+  "columns":[
+    {
+      "code":"domain",
+      "cnCode":"域",
+      "desc":"必填，请填写域",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"DOMAIN.COMMON",
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"域长度不能超过50"
+    },
+    {
+      "code":"name",
+      "cnCode":"名称",
+      "desc":"必填，请填写名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"名称必须在2至50字符之间"
+    },
+    {
+      "code":"key",
+      "cnCode":"键",
+      "desc":"必填，请填写键",
+      "required":true,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,100",
+      "limitErrInfo":"键必须在1至100之间"
+    },
+
+    {
+      "code":"value",
+      "cnCode":"值",
+      "desc":"必填，请填写值",
+      "required":true,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,100",
+      "limitErrInfo":"值必须在1至100之间"
+    },
+
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"可填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200"
+    }
+
+  ]
+}

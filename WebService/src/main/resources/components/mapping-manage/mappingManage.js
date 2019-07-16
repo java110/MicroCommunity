@@ -8,6 +8,7 @@
         data:{
             mappingManageInfo:{
                 mappings:[],
+                name:'',
                 total:0,
                 records:1
             }
@@ -28,7 +29,8 @@
                 var param = {
                     params:{
                         page:_page,
-                        row:_rows
+                        row:_rows,
+                        name:vc.component.mappingManageInfo.name
                     }
 
                }
@@ -58,6 +60,10 @@
             },
             _openDeleteMappingModel:function(_mapping){
                 vc.emit('deleteMapping','openDeleteMappingModal',_mapping);
+            },
+            _queryMappingMethod:function(){
+                vc.component._listMappings(DEFAULT_PAGE, DEFAULT_ROWS);
+
             }
         }
     });

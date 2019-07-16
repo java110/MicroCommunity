@@ -9,7 +9,8 @@
             @@templateCode@@ManageInfo:{
                 @@templateCode@@s:[],
                 total:0,
-                records:1
+                records:1,
+                @@searchCode@@:''
             }
         },
         _initMethod:function(){
@@ -28,7 +29,8 @@
                 var param = {
                     params:{
                         page:_page,
-                        row:_rows
+                        row:_rows,
+                        @@searchCode@@:vc.component.@@templateCode@@ManageInfo.@@searchCode@@
                     }
 
                }
@@ -58,6 +60,10 @@
             },
             _openDelete@@TemplateCode@@Model:function(_@@templateCode@@){
                 vc.emit('delete@@TemplateCode@@','openDelete@@TemplateCode@@Modal',_@@templateCode@@);
+            },
+            _query@@TemplateCode@@Method:function(){
+                vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
+
             }
         }
     });

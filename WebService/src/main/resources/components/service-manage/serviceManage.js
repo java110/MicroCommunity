@@ -9,7 +9,8 @@
             serviceManageInfo:{
                 services:[],
                 total:0,
-                records:1
+                records:1,
+                name:''
             }
         },
         _initMethod:function(){
@@ -28,7 +29,8 @@
                 var param = {
                     params:{
                         page:_page,
-                        row:_rows
+                        row:_rows,
+                        name:vc.component.serviceManageInfo.name
                     }
 
                }
@@ -58,6 +60,10 @@
             },
             _openDeleteServiceModel:function(_service){
                 vc.emit('deleteService','openDeleteServiceModal',_service);
+            },
+            _queryServiceMethod:function(){
+                vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+
             }
         }
     });

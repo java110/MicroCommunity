@@ -32,3 +32,20 @@
 .java110_loading>div{
     margin: 70px auto;
 }
+
+.wizard > .actions .vc_disabled a,
+.wizard > .actions .vc_disabled a:hover,
+.wizard > .actions .vc_disabled a:active
+{
+    background: #fff;
+    color: #888;
+}
+
+.wizard > .steps .vc_disabled a,
+.wizard > .steps .vc_disabled a:hover,
+.wizard > .steps .vc_disabled a:active
+{
+    background: #fff;
+    color: #888;
+    cursor: default;
+}

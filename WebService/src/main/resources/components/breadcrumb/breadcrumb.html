@@ -1,0 +1,19 @@
+<div id="breadcrumb" class="border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12" style="margin-left: 5px;">
+            <h2>{{breadCrumbs.length > 0 ? breadCrumbs[breadCrumbs.length-1].pageName : ''}}</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/">首页</a>
+                </li>
+                <li class="breadcrumb-item" v-for="breadCrumb in breadCrumbs">
+                    <span v-if="breadCrumb.parentPageName == ''">
+                        {{breadCrumb.pageName}}
+                    </span>
+                    <strong v-if="breadCrumb.parentPageName != ''">{{breadCrumb.pageName}}</strong>
+                </li>
+
+            </ol>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,7 @@
 
     <artifactId>OrderService</artifactId>
 
-    <name>CenterService</name>
+    <name>OrderService</name>
     <!-- FIXME change it to the project's website -->
     <url>http://maven.apache.org</url>
 

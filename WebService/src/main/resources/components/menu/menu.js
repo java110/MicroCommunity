@@ -16,6 +16,7 @@
                 var _tmpMenus = vc.getMenus();
                 //浏览器缓存中能获取到
                 if(_tmpMenus != null && _tmpMenus != undefined){
+                    this.miniMenu();
                     this.menus = _tmpMenus;
                     return ;
                 }
@@ -41,6 +42,7 @@
                                 var _currentMenusId = vc.getCurrentMenu() == null?_menus[0].id:vc.getCurrentMenu();
                                 vm.menus = vm.refreshMenuActive(_menus,_currentMenusId);
                                 vc.setMenus(vm.menus);
+                                vm.miniMenu();
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
@@ -78,7 +80,12 @@
                 vc.setCurrentMenu(_id);
                 vm.menus = vm.refreshMenuActive(vm.menus,_id);
                 vc.setMenus(vm.menus);
+           },
+           miniMenu:function(){
+                $("body").toggleClass("mini-navbar");
+                //SmoothlyMenu();
            }
+
        },
 
     });
