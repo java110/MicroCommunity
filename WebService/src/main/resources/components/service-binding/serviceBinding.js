@@ -7,18 +7,32 @@
     vc.extends({
         data:{
             serviceBindingInfo:{
-                step:1,
+                $step:'',
             }
         },
         _initMethod:function(){
-            vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._initStep();
         },
         _initEvent:function(){
 
         },
         methods:{
-            _listServices:function(_page, _rows){
-
+            _initStep:function(){
+                vc.component.serviceBindingInfo.$step = $("#step");
+                vc.component.serviceBindingInfo.$step.step({
+                    index: 0,
+                    time: 500,
+                    title: ["选择应用", "选择服务", "确认绑定"]
+                });
+                //vc.component.serviceBindingInfo.step = $step.getIndex();
+            },
+            _prevStep:function(){
+                vc.component.serviceBindingInfo.$step.prevStep();
+                //vc.component.serviceBindingInfo.step = $step.getIndex();
+            },
+            _nextStep:function(){
+                vc.component.serviceBindingInfo.$step.nextStep();
+                //vc.component.serviceBindingInfo.step = $step.getIndex();
             }
         }
     });
