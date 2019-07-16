@@ -4,47 +4,38 @@
 (function(vc){
 
     vc.extends({
-        propTypes: {
-            callBackComponent:vc.propTypes.string
-        },
+
         data:{
-            ownerInfo:{
-                ownerId:"",
+            viewAppInfo:{
+                appId:"",
                 name:"",
-                age:"",
-                sex:"",
-                userName:"",
-                remark:"",
-                link:"",
+                securityCode:"",
+                whileListIp:"",
+                blackListIp:"",
+                remark:""
             }
         },
         _initMethod:function(){
             //根据请求参数查询 查询 业主信息
-            vc.component.loadOwnerData();
+            vc.component._loadAppInfoData();
         },
         _initEvent:function(){
-            vc.on('sellRoomSelectOwner','chooseOwner',function(_owner){
-                vc.component.ownerInfo = _owner;
-                vc.emit($props.callBackComponent,'notify',_owner);
+            vc.on('viewAppInfo','chooseAppInfo',function(_app){
+                vc.component.viewAppInfo = _app;
+                //vc.emit($props.callBackComponent,'notify',_owner);
             });
 
         },
         methods:{
 
-            openSearchOwnerModel(){
-                vc.emit('searchOwner','openSearchOwnerModel',{});
+            _openSelectAppInfoModel(){
+                vc.emit('selectAppInfo','openSelectAppModel',{});
             },
-            loadOwnerData:function(){
-               vc.component.ownerInfo.ownerId = vc.getParam("ownerId");
-               vc.component.ownerInfo.name = vc.getParam("name");
-               vc.component.ownerInfo.age = vc.getParam("age");
-               vc.component.ownerInfo.sex = vc.getParam("sex");
-               vc.component.ownerInfo.userName = vc.getParam("userName");
-               vc.component.ownerInfo.link = vc.getParam("link");
+            _openAddAppInfoModel(){
+                vc.emit('addApp','openAddAppModal',{});
+            },
+            _loadAppInfoData:function(){
 
-               if(vc.component.ownerInfo.ownerId != ''){
-                  vc.emit($props.callBackComponent,'notify',vc.component.ownerInfo);
-               }
             }
         }
     });
