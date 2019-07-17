@@ -20,7 +20,7 @@
             vc.component._loadAppInfoData();
         },
         _initEvent:function(){
-            vc.on('viewAppInfo','chooseAppInfo',function(_app){
+            vc.on('viewAppInfo','chooseApp',function(_app){
                 vc.component.viewAppInfo = _app;
                 //vc.emit($props.callBackComponent,'notify',_owner);
             });
@@ -29,7 +29,7 @@
         methods:{
 
             _openSelectAppInfoModel(){
-                vc.emit('selectAppInfo','openSelectAppModel',{});
+                vc.emit('chooseApp','openChooseAppModel',{});
             },
             _openAddAppInfoModel(){
                 vc.emit('addApp','openAddAppModal',{});

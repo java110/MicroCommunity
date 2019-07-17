@@ -39,11 +39,11 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何开始（how to start）
 
-[http://www.java110.com](http://www.java110.com)
+[http://www.homecommunity.cn](http://www.homecommunity.cn)
 
 ### 如何安装（how to install）
 
-[安装文档](http://www.java110.com/#/start/dev_install)
+[安装文档](http://www.homecommunity.cn/document/#/start/dev_install)
 
 ### 解决方案
 
@@ -51,13 +51,13 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 二次开发视频
 
-[视频](https://www.java110.com/#/start/vedio)
+[视频](http://www.homecommunity.cn/document/#/start/vedio)
 
 ### 接口协议
 
-1. [Api协议](https://www.java110.com/#/api/user/register)
+1. [Api协议](http://www.homecommunity.cn/document/#/api/user/register)
 
-2. [后台协议](https://www.java110.com/#/dictionary)
+2. [后台协议](http://www.homecommunity.cn/document/#/dictionary)
 
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
