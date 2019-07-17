@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>服务信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectServiceInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择服务</button>
+
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddServiceInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加服务</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >服务ID：</label>
+                            <label class="">{{viewServiceInfo.serviceId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">服务名称：</label>
+                            <label class="">{{viewServiceInfo.name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >服务编码：</label>
+                            <label class="">{{viewServiceInfo.serviceCode}}</label>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >消息队列：</label>
+                            <label class="">{{viewServiceInfo.messageQueueName}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >是否实例：</label>
+                            <label class="">{{viewServiceInfo.isInstance}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">调用地址：</label>
+                            <label class="">{{viewServiceInfo.url}}</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >调用方式：</label>
+                            <label class="">{{viewServiceInfo.method}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >超时时间：</label>
+                            <label class="">{{viewServiceInfo.timeout}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">重试次数：</label>
+                            <label class="">{{viewServiceInfo.retryCount}}</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="addService"></vc:create>
+
+
+  <!--  <vc:create name="chooseService"
+               emitChooseService="viewServiceInfo"
+               emitLoadData="viewServiceInfo"
+    ></vc:create>-->
+</div>

@@ -8,6 +8,7 @@
         data:{
             serviceBindingInfo:{
                 $step:'',
+                index:0,
             }
         },
         _initMethod:function(){
@@ -24,15 +25,15 @@
                     time: 500,
                     title: ["选择应用", "选择服务", "确认绑定"]
                 });
-                //vc.component.serviceBindingInfo.step = $step.getIndex();
+                vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             },
             _prevStep:function(){
                 vc.component.serviceBindingInfo.$step.prevStep();
-                //vc.component.serviceBindingInfo.step = $step.getIndex();
+                vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             },
             _nextStep:function(){
                 vc.component.serviceBindingInfo.$step.nextStep();
-                //vc.component.serviceBindingInfo.step = $step.getIndex();
+                vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             }
         }
     });

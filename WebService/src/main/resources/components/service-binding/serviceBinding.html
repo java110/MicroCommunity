@@ -5,8 +5,16 @@
     </div>
 
     <!-- 选择 应用信息 -->
-    <vc:create name="viewAppInfo"
-    ></vc:create>
+    <div v-if="serviceBindingInfo.index == 0">
+        <vc:create name="viewAppInfo"
+        ></vc:create>
+    </div>
+
+    <!-- 选择 应用信息 -->
+    <div v-if="serviceBindingInfo.index == 1">
+        <vc:create name="viewServiceInfo"
+        ></vc:create>
+    </div>
 
 
 
