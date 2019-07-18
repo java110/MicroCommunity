@@ -7,6 +7,8 @@
     <!-- 选择 应用信息 -->
     <div v-if="serviceBindingInfo.index == 0">
         <vc:create name="viewAppInfo"
+                   callBackListener="serviceBinding"
+                   callBackFunction="notify"
         ></vc:create>
     </div>
 

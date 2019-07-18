@@ -7,14 +7,18 @@
     vc.extends({
         data:{
             serviceBindingInfo:{
-                $step:'',
+                $step:{},
                 index:0,
+                infos:[]
             }
         },
         _initMethod:function(){
             vc.component._initStep();
         },
         _initEvent:function(){
+            vc.on("serviceBinding", "notify", function(_info){
+                vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index] = _info;
+            });
 
         },
         methods:{
@@ -32,6 +36,11 @@
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             },
             _nextStep:function(){
+                var _currentData = vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index];
+                if( _currentData == null || _currentData == undefined){
+                    vc.message("请选择相关信息");
+                    return ;
+                }
                 vc.component.serviceBindingInfo.$step.nextStep();
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             }
