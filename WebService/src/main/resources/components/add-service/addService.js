@@ -1,6 +1,10 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+                   callBackListener:vc.propTypes.string, //父组件名称
+                   callBackFunction:vc.propTypes.string //父组件监听方法
+        },
         data:{
             addServiceInfo:{
                 name:'',
@@ -166,7 +170,12 @@ provideAppId:'8000418002',
                 }
 
                 vc.component.addServiceInfo.communityId = vc.getCurrentCommunity().communityId;
-
+                //不提交数据将数据 回调给侦听处理
+                if(vc.notNull($props.callBackListener)){
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.addServiceInfo);
+                    $('#addServiceModel').modal('hide');
+                    return ;
+                }
                 vc.http.post(
                     'addService',
                     'save',

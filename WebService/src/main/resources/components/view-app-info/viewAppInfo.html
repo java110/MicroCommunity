@@ -60,15 +60,14 @@
         </div>
     </div>
 
-    <vc:create name="addApp"></vc:create>
+    <vc:create name="addApp"
+               callBackListener="viewAppInfo"
+               callBackFunction="chooseApp"
+    ></vc:create>
 
 
     <vc:create name="chooseApp"
                emitChooseApp="viewAppInfo"
                emitLoadData="viewAppInfo"
     ></vc:create>
-    <!--<vc:create name="searchOwner"
-               emitChooseOwner="sellRoomSelectOwner"
-               emitLoadData="sellRoomOther"
-    ></vc:create>-->
 </div>

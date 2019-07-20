@@ -4,7 +4,10 @@
 (function(vc){
 
     vc.extends({
-
+        propTypes: {
+           callBackListener:vc.propTypes.string, //父组件名称
+           callBackFunction:vc.propTypes.string //父组件监听方法
+        },
         data:{
             viewServiceInfo:{
                 serviceId:"",
@@ -22,7 +25,7 @@
         _initEvent:function(){
             vc.on('viewServiceInfo','chooseService',function(_service){
                 vc.component.viewServiceInfo = _service;
-                //vc.emit($props.callBackComponent,'notify',_owner);
+                vc.emit($props.callBackListener,$props.callBackFunction,_service);
             });
 
         },

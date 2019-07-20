@@ -1,6 +1,10 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+               callBackListener:vc.propTypes.string, //父组件名称
+               callBackFunction:vc.propTypes.string //父组件监听方法
+        },
         data:{
             addAppInfo:{
                 name:'',
@@ -78,6 +82,13 @@ remark:'',
                 }
 
                 vc.component.addAppInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                //不提交数据将数据 回调给侦听处理
+                if(vc.notNull($props.callBackListener)){
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.addAppInfo);
+                    $('#addAppModel').modal('hide');
+                    return ;
+                }
 
                 vc.http.post(
                     'addApp',

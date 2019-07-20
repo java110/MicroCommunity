@@ -58,7 +58,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         //将组建名称写入组建HTML 第一个标签中
         addDataComponent(elements, componentName);
 
-       htmlModel.addModel(modelFactory.parse(context.getTemplateData(), doc.body().children().toString()));
+        htmlModel.addModel(modelFactory.parse(context.getTemplateData(), doc.body().children().toString()));
 
         String css = VueComponentTemplate.findTemplateByComponentCode(componentName + "." + VueComponentTemplate.COMPONENT_CSS);
         if (css != null) {
@@ -86,7 +86,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
     /**
      * 加入组件名称到 HTML中 方便定位问题
      *
-     * @param elements        页面节点
+     * @param elements      页面节点
      * @param componentCode 组件编码
      */
     private void addDataComponent(Elements elements, String componentCode) {
@@ -99,7 +99,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
      * 处理js
      *
      * @param tag 页面元素
-     * @param js      js文件内容
+     * @param js  js文件内容
      * @return js 文件内容
      */
     private String dealJs(String js, IProcessableElementTag tag) {
@@ -117,14 +117,20 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             return js;
         }
 
-        String[] tmpType = tmpProTypes.split(",");
+        String[] tmpType = tmpProTypes.contains("\r\n")
+                        ? tmpProTypes.split("\r\n")
+                        : tmpProTypes.split(",");
         StringBuffer propsJs = new StringBuffer("\nvar $props = {};\n");
         for (String type : tmpType) {
             if (StringUtils.isEmpty(type) || !type.contains(":")) {
                 continue;
             }
             String[] types = type.split(":");
-            String attrKey = types[0].replace(" ", "")
+            String attrKey = "";
+            if (types[0].contains("//")) {
+                attrKey = types[0].substring(0, types[0].indexOf("//"));
+            }
+            attrKey = types[0].replace(" ", "")
                     .replace("\n", "")
                     .replace("\r", "");
             if (!tag.hasAttribute(attrKey)) {
@@ -133,7 +139,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = tag.getAttributeValue(attrKey);
-            if (types[1].equals("vc.propTypes.string")) {
+            if (types[1].contains("vc.propTypes.string")) {
                 vcType = "'" + vcType + "'";
             }
             propsJs.append("$props." + attrKey + "=" + vcType + ";\n");
@@ -154,10 +160,10 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
      * 处理js 变量和 方法都加入 组件编码
      *
      * @param tag 页面元素
-     * @param js      js文件内容
+     * @param js  js文件内容
      * @return js 文件内容
      */
-    private String dealJsAddComponentCode(String js,IProcessableElementTag tag) {
+    private String dealJsAddComponentCode(String js, IProcessableElementTag tag) {
 
         if (!tag.hasAttribute("code")) {
             return js;

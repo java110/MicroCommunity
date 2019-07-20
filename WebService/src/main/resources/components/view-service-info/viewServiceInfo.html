@@ -81,11 +81,14 @@
         </div>
     </div>
 
-    <vc:create name="addService"></vc:create>
+    <vc:create name="addService"
+               callBackListener="viewServiceInfo"
+               callBackFunction="chooseService"
+    ></vc:create>
 
 
-  <!--  <vc:create name="chooseService"
+    <vc:create name="chooseService"
                emitChooseService="viewServiceInfo"
                emitLoadData="viewServiceInfo"
-    ></vc:create>-->
+    ></vc:create>
 </div>
