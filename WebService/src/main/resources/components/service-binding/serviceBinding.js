@@ -34,6 +34,9 @@
             _prevStep:function(){
                 vc.component.serviceBindingInfo.$step.prevStep();
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
+
+                 vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+                 vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
             },
             _nextStep:function(){
                 var _currentData = vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index];

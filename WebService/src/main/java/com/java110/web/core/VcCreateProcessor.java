@@ -117,8 +117,10 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             return js;
         }
 
-        String[] tmpType = tmpProTypes.contains("\r\n")
-                        ? tmpProTypes.split("\r\n")
+        tmpProTypes = tmpProTypes.contains("\r")? tmpProTypes.replace("\r", "") : tmpProTypes;
+
+        String[] tmpType = tmpProTypes.contains("\n")
+                        ? tmpProTypes.split("\n")
                         : tmpProTypes.split(",");
         StringBuffer propsJs = new StringBuffer("\nvar $props = {};\n");
         for (String type : tmpType) {

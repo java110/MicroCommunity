@@ -30,7 +30,7 @@
             });
 
              vc.on('viewServiceInfo', 'onIndex', function(_index){
-                vc.component.viewAppInfo.index = _index;
+                vc.component.viewServiceInfo.index = _index;
             });
 
         },
