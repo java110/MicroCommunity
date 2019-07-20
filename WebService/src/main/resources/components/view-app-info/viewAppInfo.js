@@ -10,6 +10,7 @@
         },
         data:{
             viewAppInfo:{
+                index:0,
                 appId:"",
                 name:"",
                 securityCode:"",
@@ -26,6 +27,10 @@
             vc.on('viewAppInfo','chooseApp',function(_app){
                 vc.component.viewAppInfo = _app;
                 vc.emit($props.callBackListener,$props.callBackFunction,_app);
+            });
+
+            vc.on('viewAppInfo', 'onIndex', function(_index){
+                vc.component.viewAppInfo.index = _index;
             });
 
         },

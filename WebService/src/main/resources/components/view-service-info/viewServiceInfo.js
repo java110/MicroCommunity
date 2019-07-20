@@ -10,6 +10,7 @@
         },
         data:{
             viewServiceInfo:{
+                index:0,
                 serviceId:"",
                 name:"",
                 securityCode:"",
@@ -26,6 +27,10 @@
             vc.on('viewServiceInfo','chooseService',function(_service){
                 vc.component.viewServiceInfo = _service;
                 vc.emit($props.callBackListener,$props.callBackFunction,_service);
+            });
+
+             vc.on('viewServiceInfo', 'onIndex', function(_index){
+                vc.component.viewAppInfo.index = _index;
             });
 
         },

@@ -26,7 +26,8 @@
         <div class="col-md-10"></div>
         <div class="col-md-2 " style="margin-bottom:10px; text-align:right">
             <button type="button" class="btn btn-secondary" v-on:click="_prevStep()">上一步</button>
-            <button type="button" class="btn btn-primary" style="margin-left:10px;" v-on:click="_nextStep()">下一步</button>
+            <button v-if="serviceBindingInfo.index != 2" type="button" class="btn btn-primary" style="margin-left:10px;" v-on:click="_nextStep()">下一步</button>
+            <button v-if="serviceBindingInfo.index == 2" type="button" class="btn btn-primary" style="margin-left:10px;" v-on:click="_finishStep()">完成</button>
         </div>
     </div>
 

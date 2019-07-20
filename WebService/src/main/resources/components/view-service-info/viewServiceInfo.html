@@ -4,10 +4,10 @@
             <div class="ibox-title">
                 <h5>服务信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectServiceInfoModel()">
+                    <button type="button" v-if="viewServiceInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectServiceInfoModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择服务</button>
 
-                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddServiceInfoModel()">
+                    <button type="button" v-if="viewServiceInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddServiceInfoModel()">
                         <i class="glyphicon glyphicon-plus"></i> 添加服务</button>
                 </div>
             </div>

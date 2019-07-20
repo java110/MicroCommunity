@@ -43,6 +43,12 @@
                 }
                 vc.component.serviceBindingInfo.$step.nextStep();
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
+
+                vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+                vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+            },
+            _finishStep:function(){
+
             }
         }
     });
