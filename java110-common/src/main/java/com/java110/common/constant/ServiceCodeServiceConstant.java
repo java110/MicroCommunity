@@ -28,4 +28,11 @@ public class ServiceCodeServiceConstant {
     public static final String LIST_SERVICES = "service.listServices";
 
 
+
+    /**
+     * 绑定 服务
+     */
+    public static final String BINDING_SERVICES = "service.bindingServices";
+
+
 }

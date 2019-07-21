@@ -12,6 +12,7 @@
             viewServiceInfo:{
                 index:0,
                 serviceId:"",
+                flowComponent:'Service',
                 name:"",
                 securityCode:"",
                 whileListIp:"",

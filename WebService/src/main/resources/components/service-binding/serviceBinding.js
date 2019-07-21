@@ -52,6 +52,30 @@
             },
             _finishStep:function(){
 
+                var param = {
+                    data:vc.component.serviceBindingInfo.info
+                }
+
+               vc.http.post(
+                   'serviceBinding',
+                   'binding',
+                   JSON.stringify(param),
+                   {
+                       emulateJSON:true
+                    },
+                    function(json,res){
+                       if(res.status == 200){
+                           //关闭model
+                           //vc.jumpToPage("/flow/ownerRoomFlow?" + vc.objToGetParam(vc.component.sellRoomInfo.ownerInfo));
+                           return ;
+                       }
+                       vc.message(json);
+                    },
+                    function(errInfo,error){
+                       console.log('请求失败处理');
+
+                       vc.message(errInfo);
+                    });
             }
         }
     });

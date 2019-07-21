@@ -11,6 +11,7 @@
         data:{
             viewAppInfo:{
                 index:0,
+                flowComponent:'App',
                 appId:"",
                 name:"",
                 securityCode:"",
