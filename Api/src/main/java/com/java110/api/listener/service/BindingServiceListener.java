@@ -155,7 +155,7 @@ public class BindingServiceListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeServiceConstant.BINDING_SERVICES;
+        return ServiceCodeServiceConstant.BINDING_SERVICE;
     }
 
     @Override

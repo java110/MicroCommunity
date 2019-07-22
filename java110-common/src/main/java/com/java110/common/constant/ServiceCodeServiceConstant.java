@@ -32,7 +32,7 @@ public class ServiceCodeServiceConstant {
     /**
      * 绑定 服务
      */
-    public static final String BINDING_SERVICES = "service.bindingServices";
+    public static final String BINDING_SERVICE = "service.bindingService";
 
 
 }
