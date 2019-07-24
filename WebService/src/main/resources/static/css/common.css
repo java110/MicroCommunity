@@ -27,7 +27,7 @@
     width: 100%;
     height: 100%;
     z-index: 2300;
-    position: absolute;
+    position: fixed;
 }
 .java110_loading>div{
     margin: 70px auto;
