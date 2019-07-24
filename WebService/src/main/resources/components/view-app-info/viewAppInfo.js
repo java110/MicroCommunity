@@ -26,8 +26,8 @@
         },
         _initEvent:function(){
             vc.on('viewAppInfo','chooseApp',function(_app){
-                vc.component.viewAppInfo = _app;
-                vc.emit($props.callBackListener,$props.callBackFunction,_app);
+                vc.copyObject(_app, vc.component.viewAppInfo);
+                vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewAppInfo);
             });
 
             vc.on('viewAppInfo', 'onIndex', function(_index){

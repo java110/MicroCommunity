@@ -82,10 +82,10 @@ public class BindingServiceListener extends AbstractServiceApiListener {
         }
 
         //处理 服务信息
-        if(!serviceInfo.containsKey("servicdeId")
-                || StringUtils.isEmpty(serviceInfo.getString("servicdeId"))
-                || serviceInfo.getString("servicdeId").startsWith("-")){
-            serviceInfo.put("servicdeId", saveServiceInfo(reqJson, serviceInfo));
+        if(!serviceInfo.containsKey("serviceId")
+                || StringUtils.isEmpty(serviceInfo.getString("serviceId"))
+                || serviceInfo.getString("serviceId").startsWith("-")){
+            serviceInfo.put("serviceId", saveServiceInfo(reqJson, serviceInfo));
         }
 
         //处理路由信息

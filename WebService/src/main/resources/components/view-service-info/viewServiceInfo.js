@@ -14,10 +14,13 @@
                 serviceId:"",
                 flowComponent:'Service',
                 name:"",
-                securityCode:"",
-                whileListIp:"",
-                blackListIp:"",
-                remark:""
+                serviceCode:"",
+                messageQueueName:"",
+                isInstance:"",
+                url:"",
+                method:"",
+                timeout:"",
+                retryCount:""
             }
         },
         _initMethod:function(){
@@ -26,8 +29,9 @@
         },
         _initEvent:function(){
             vc.on('viewServiceInfo','chooseService',function(_service){
-                vc.component.viewServiceInfo = _service;
-                vc.emit($props.callBackListener,$props.callBackFunction,_service);
+                vc.copyObject(_service, vc.component.viewServiceInfo);
+
+                vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewServiceInfo);
             });
 
              vc.on('viewServiceInfo', 'onIndex', function(_index){
