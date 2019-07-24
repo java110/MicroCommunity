@@ -42,6 +42,9 @@
                                     vc.component.$emit('errorInfoEvent',errInfo);
                                  });
 
+                },
+                enterToLogin:function(){
+                    vc.emit('login','doLogin',{});
                 }
             },
              _destroyedMethod:function(){

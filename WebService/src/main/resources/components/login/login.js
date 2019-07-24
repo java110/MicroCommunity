@@ -22,6 +22,9 @@
                          }
                          console.log('errorInfoEvent 事件被监听',params)
                      });
+             vc.on('login','doLogin',function(){
+                vc.component.doLogin();
+             })
         },
         methods:{
             clearCacheData:function(){

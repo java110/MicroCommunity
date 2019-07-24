@@ -6,10 +6,10 @@
     <p style="color: red;">{{loginInfo.errorInfo}}</p>
     <div class="m-t" role="form">
         <div class="form-group">
-            <input type="text" v-model="loginInfo.username" class="form-control" placeholder="用户名" required=""/>
+            <input type="text" v-model="loginInfo.username" class="form-control" placeholder="用户名" required="" @keyup.enter="doLogin"/>
         </div>
         <div class="form-group">
-            <input type="password" v-model="loginInfo.passwd" class="form-control" placeholder="密码" required=""/>
+            <input type="password" v-model="loginInfo.passwd" class="form-control" placeholder="密码" required="" @keyup.enter="doLogin"/>
         </div>
         <vc:create name="validate-code"></vc:create>
         <button type="submit" v-on:click="doLogin()" class="btn btn-primary block full-width m-b">登录</button>
