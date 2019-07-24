@@ -72,9 +72,8 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
             js = dealJs(js, tag);
             js = dealJsAddComponentCode(js, tag);
-            js = "<script type=\"text/javascript\">//<![CDATA[ \n" + js + "//]]>\n</script>";
+            js = "<script type=\"text/javascript\" "+DIV_PROPERTY_COMPONENT+"=\""+componentName+"\">//<![CDATA[ \n" + js + "//]]>\n</script>";
             htmlModel.add(modelFactory.createText(js));
-
         }
 
         logger.debug("解析完成组件{},{}", componentName, new Date().getTime());
