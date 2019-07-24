@@ -67,4 +67,12 @@ public class RuleDomain {
 
 
     public final static String REDIS_KEY_RULE_GROUP ="Rule_Group"; // redis key Rule
+
+
+    public final static String REPLAY_TYPE_A = "########";				//'yyyyMMdd'
+    public final static String REPLAY_TYPE_E = "##########";			//'yyyyMMddHH'
+    public final static String REPLAY_TYPE_F = "############";			//'yyyyMMddHHmm'
+    public final static String REPLAY_TYPE_SQL = "select";           //文件名支持sql查询
+
+
 }
