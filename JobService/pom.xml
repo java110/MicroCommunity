@@ -63,6 +63,7 @@
                                 <artifactItem>
                                     <groupId>com.java110</groupId>
                                     <artifactId>java110-config</artifactId>
+                                    <!--<testFailureIgnore>true</testFailureIgnore>-->
                                     <version>${microcommunity.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
@@ -77,7 +78,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.user.UserServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.job.Java110JobserviceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

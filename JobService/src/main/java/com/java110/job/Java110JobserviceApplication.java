@@ -12,6 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
@@ -22,6 +23,7 @@ import java.nio.charset.Charset;
 )
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.java110.core.smo.community"})
+@EnableScheduling
 public class Java110JobserviceApplication {
     private static Logger logger = LoggerFactory.getLogger(Java110JobserviceApplication.class);
 

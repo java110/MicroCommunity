@@ -57,7 +57,7 @@ public abstract class PrvncFtpToFileSystemQuartz {
 	 * 
 	 * @param ftpItemConfigInfo
 	 */
-	public void startFtpTask(Map ftpItemConfigInfo) throws Exception {
+	public  void startFtpTask(Map ftpItemConfigInfo) throws Exception {
 
 		// 这么做是为了，单线程调用，防止多线程导致数据重复处理
 		if (!ftpItemConfigInfo.containsKey("RUN_STATE") || "R".equals(ftpItemConfigInfo.get("RUN_STATE"))) {
