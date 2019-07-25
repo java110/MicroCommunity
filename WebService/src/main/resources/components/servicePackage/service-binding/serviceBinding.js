@@ -65,9 +65,9 @@
                     },
                     function(json,res){
                        if(res.status == 200){
+                           vc.message('处理成功',true);
                            //关闭model
                            //vc.jumpToPage("/flow/ownerRoomFlow?" + vc.objToGetParam(vc.component.sellRoomInfo.ownerInfo));
-                           vc.message('处理成功');
                            return ;
                        }
                        vc.message(json);

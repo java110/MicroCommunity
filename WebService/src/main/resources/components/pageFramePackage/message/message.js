@@ -27,15 +27,20 @@
     });
 
     vm.$on('message_openMessage',function(_msg){
-        console.log("开始加载");
+        //console.log("开始加载");
         vm.messageInfo.hide = false;
         vm.messageInfo.errorInfo = _msg.msg;
     });
     /**
         加载遮罩层
+        @param _msg 提示内容
+        @param _notAutoHide 是否需要自动隐藏
     **/
-    vc.message = function(_msg){
+    vc.message = function(_msg, _notAutoHide){
        vm.$emit('message_openMessage',{msg:_msg});
-       vm.messageTimer();
+       if(!_needAutoHide){
+            vm.messageTimer();
+       }
+
     }
 })(window.vc)
