@@ -8,9 +8,8 @@ import com.java110.job.dao.IPrvncFtpFileDAO;
 import com.java110.job.task.PrvncFtpToFileSystemJob;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.util.ValidatorUtils;
-import org.quartz.CronTrigger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
+
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +51,9 @@ public class PrvncFtpToFileSystemConfigAction{
 	private static int pageSize = 20;
 
 	public JSONObject resultMsg;
+
+	@Autowired
+	private Scheduler scheduler;
 
 	/**
 	 * 
@@ -485,8 +487,6 @@ public class PrvncFtpToFileSystemConfigAction{
 
 		List<Map> doFtpItems = getPrvncFtpFileDAO().queryFtpItemsByTaskIds(info);
 
-		// 获取Spring调度器
-		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
 		try {
@@ -501,28 +501,31 @@ public class PrvncFtpToFileSystemConfigAction{
 
 				// 获取定时时间
 				String cronExpression = doFtpItem.get("TASKCRON") == null ? defaultCronExpression : doFtpItem.get("TASKCRON").toString();// 如果没有配置则，每一分运行一次
+				// 设置触发时间点
+				CronScheduleBuilder cronScheduleBuilder =CronScheduleBuilder.cronSchedule(cronExpression);
 
 				String jobName = prefixJobName + taskId;
 
 				String triggerName = prefixJobName + taskId;
-
-				JobDetail jobDetail = scheduler.getJobDetail(jobName, PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+				//设置任务名称
+				JobKey jobKey = new JobKey(jobName);
+				JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 				// 说明这个没有启动，则需要重新启动，如果启动着不做处理
 				if (jobDetail == null) {
 					// 任务名称
 					String taskCfgName = (String) doFtpItem.get("TASKNAME");
-
-					JobDetail warnJob = new JobDetail(jobName, PrvncFtpToFileSystemJob.JOB_GROUP_NAME, PrvncFtpToFileSystemJob.class);
-
+					//构建job信息
+					JobDetail warnJob = JobBuilder.newJob(PrvncFtpToFileSystemJob.class).withIdentity(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
+					// job.getJobDataMap().put("params", param.toString());
 					warnJob.getJobDataMap().put(PrvncFtpToFileSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
 
 					warnJob.getJobDataMap().put(PrvncFtpToFileSystemJob.JOB_DATA_TASK_ID, taskId);
-
-					CronTrigger warnTrigger = new CronTrigger(triggerName, triggerName, cronExpression);
+					// 触发时间点
+					CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName).withSchedule(cronScheduleBuilder).build();
 
 					// 错过执行后，立即执行
-					warnTrigger.setMisfireInstruction(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
-
+					//warnTrigger(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+					//交由Scheduler安排触发
 					scheduler.scheduleJob(warnJob, warnTrigger);
 
 					// 修改数据状态，将任务数据状态改为运行状态
@@ -616,9 +619,6 @@ public class PrvncFtpToFileSystemConfigAction{
 
 		List<Map> doFtpItems = getPrvncFtpFileDAO().queryFtpItemsByTaskIds(info);
 
-		// 获取Spring调度器
-		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
-
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
 		try {
@@ -633,8 +633,15 @@ public class PrvncFtpToFileSystemConfigAction{
 				String jobName = prefixJobName + taskId;
 
 				String triggerName = prefixJobName + taskId;
-				scheduler.deleteJob(jobName, PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+				TriggerKey triggerKey = TriggerKey.triggerKey(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+				// 停止触发器
+				scheduler.pauseTrigger(triggerKey);
+				// 移除触发器
+				scheduler.unscheduleJob(triggerKey);
 
+				JobKey jobKey = new JobKey(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+				// 删除任务
+				scheduler.deleteJob(jobKey);
 				// 修改数据状态，将任务数据状态改为运行状态
 
 				Map updateTaskInfo = new HashMap();
