@@ -38,7 +38,7 @@
     **/
     vc.message = function(_msg, _notAutoHide){
        vm.$emit('message_openMessage',{msg:_msg});
-       if(!_needAutoHide){
+       if(!_notAutoHide){
             vm.messageTimer();
        }
 
