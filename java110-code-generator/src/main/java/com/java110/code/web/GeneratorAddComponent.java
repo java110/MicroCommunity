@@ -106,7 +106,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/component/"+data.getString("templateCode")+"Package/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -165,7 +165,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/component/"+data.getString("templateCode")+"Package/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

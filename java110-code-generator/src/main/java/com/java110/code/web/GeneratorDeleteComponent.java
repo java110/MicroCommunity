@@ -37,7 +37,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/delete-" + data.getString("templateCode") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/component/"+data.getString("templateCode")+"Package/delete-" + data.getString("templateCode") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -62,7 +62,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/delete-" + data.getString("templateCode") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/component/"+data.getString("templateCode")+"Package/delete-" + data.getString("templateCode") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

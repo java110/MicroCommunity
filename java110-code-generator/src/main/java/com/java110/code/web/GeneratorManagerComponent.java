@@ -64,7 +64,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.html";
+                +"out/web/component/"+data.getString("templateCode")+"Package/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -85,7 +85,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.js";
+                +"out/web/component/"+data.getString("templateCode")+"Package/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

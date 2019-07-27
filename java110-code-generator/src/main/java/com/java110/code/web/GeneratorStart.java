@@ -21,7 +21,6 @@ public class GeneratorStart extends BaseGenerator {
 
 
         //添加功能开发完成
-
         GeneratorAddComponent addComponent = new GeneratorAddComponent();
         addComponent.generator(data);
 
@@ -30,8 +29,14 @@ public class GeneratorStart extends BaseGenerator {
         editComponent.generator(data);
 
         //删除功能开发完成
-
         GeneratorDeleteComponent deleteComponent = new GeneratorDeleteComponent();
         deleteComponent.generator(data);
+
+        //生成选择功能组件
+        GeneratorChooseComponent generatorChooseComponent = new GeneratorChooseComponent();
+        generatorChooseComponent.generator(data);
+
+        GeneratorViewComponent generatorViewComponent = new GeneratorViewComponent();
+        generatorViewComponent.generator(data);
     }
 }
