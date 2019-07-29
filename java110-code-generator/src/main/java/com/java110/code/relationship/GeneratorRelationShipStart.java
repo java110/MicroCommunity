@@ -1,6 +1,8 @@
 package com.java110.code.relationship;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.code.BaseGenerator;
+import com.java110.code.web.GeneratorStart;
 
 /**
  * @ClassName GeneratorRelationShipStart
@@ -14,5 +16,11 @@ public class GeneratorRelationShipStart extends BaseGenerator {
 
     public static void main(String[] args) {
 
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/template_1.json").getFile());
+
+        JSONObject data = JSONObject.parseObject(sb.toString());
+
+        GeneratorBindingComponent generatorBindingComponent = new GeneratorBindingComponent();
+        generatorBindingComponent.generator(data);
     }
 }

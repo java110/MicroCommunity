@@ -1,8 +1,11 @@
 {
-  "templateName":"服务",
-  "templateCode":"service",
-  "templateKey":"serviceId",
-  "templateKeyName":"服务ID",
+  "templateName":"添加房屋",
+  "templateCode":"addRoomBinding",
+  "templateKey":"roomId",
+  "templateKeyName":"房屋ID",
+  "package": "roomPackage",
+  "successUrl": "/",
+  "needAffirm": false,
   "flows":[
     {
       "index": 0,
@@ -12,14 +15,14 @@
       "existsComponent": true
     },
     {
-      "index": 0,
+      "index": 1,
       "code":"unit",
       "cnCode":"选择单元",
       "vcName":"viewUnitInfo",
       "existsComponent": true
     },
     {
-      "index": 0,
+      "index": 2,
       "code":"room",
       "cnCode":"添加房屋",
       "vcName":"addRoomView",

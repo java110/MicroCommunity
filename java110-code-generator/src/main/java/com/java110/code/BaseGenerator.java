@@ -68,6 +68,16 @@ public class BaseGenerator {
         }
     }
 
+    protected String replaceBindingTemplateContext(String srcStr, JSONObject data){
+        return srcStr.replace("@@templateName@@", data.getString("templateName"))
+                .replace("@@templateCode@@", data.getString("templateCode"))
+                .replace("@@TemplateCode@@", toUpperCaseFirstOne(data.getString("templateCode")))
+                .replace("@@templateKey@@", data.getString("templateKey"))
+                .replace("@@TemplateKey@@", toUpperCaseFirstOne(data.getString("templateKey")))
+                .replace("@@templateKeyName@@", data.getString("templateKeyName"))
+                .replace("@@TEMPLATECODE@@", data.getString("templateCode").toUpperCase());
+    }
+
     protected String replaceTemplateContext(String srcStr, JSONObject data){
         return srcStr.replace("@@templateName@@", data.getString("templateName"))
                 .replace("@@templateCode@@", data.getString("templateCode"))
