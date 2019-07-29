@@ -14,12 +14,12 @@ public class GeneratorBindingComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-       /* generatorComponentJava(data);
+        generatorComponentJava(data);
         genneratorIListSmo(data);
         genneratorListSmoImpl(data);
-        genneratorListListener(data);
+        //genneratorListListener(data);
 
-        genneratorServiceCodeConstant(data);*/
+        //genneratorServiceCodeConstant(data);
 
 
     }
@@ -144,13 +144,13 @@ public class GeneratorBindingComponent extends BaseGenerator {
      */
     private void generatorComponentJava(JSONObject data) {
 
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/add/AddComponent.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/binding/BindingComponent.java").getFile());
         String fileContext = sb.toString();
 
-        fileContext = super.replaceTemplateContext(fileContext, data);
+        fileContext = super.replaceBindingTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/java/" + data.getString("templateCode") + "/Add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java";
+                + "out/relationship/component/java/" + data.getString("templateCode") + "/" + toUpperCaseFirstOne(data.getString("templateCode")) + "BindingComponent.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -164,13 +164,13 @@ public class GeneratorBindingComponent extends BaseGenerator {
      * @param data
      */
     private void genneratorIListSmo(JSONObject data) {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/add/IAddSMO.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/binding/IBindingSMO.java").getFile());
         String fileContext = sb.toString();
 
-        fileContext = super.replaceTemplateContext(fileContext, data);
+        fileContext = super.replaceBindingTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/smo/" + data.getString("templateCode") + "/IAdd" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMO.java";
+                + "out/relationship/smo/" + data.getString("templateCode") + "/I" + toUpperCaseFirstOne(data.getString("templateCode")) + "BindingSMO.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -182,26 +182,26 @@ public class GeneratorBindingComponent extends BaseGenerator {
      * @param data
      */
     private void genneratorListSmoImpl(JSONObject data) {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/add/AddSMOImpl.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/binding/BindingSMOImpl.java").getFile());
         String fileContext = sb.toString();
 
-        fileContext = super.replaceTemplateContext(fileContext, data);
+        fileContext = super.replaceBindingTemplateContext(fileContext, data);
 
-        //替换校验部分代码 @@validateTemplateColumns@@
-        JSONArray columns = data.getJSONArray("columns");
-        StringBuffer validateStr = new StringBuffer();
-        for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-            JSONObject column = columns.getJSONObject(columnIndex);
-            if (column.getBoolean("required")) {
-                validateStr.append("Assert.hasKeyAndValue(paramIn, \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
-            }
-        }
-
-        fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
+//        //替换校验部分代码 @@validateTemplateColumns@@
+//        JSONArray columns = data.getJSONArray("columns");
+//        StringBuffer validateStr = new StringBuffer();
+//        for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
+//            JSONObject column = columns.getJSONObject(columnIndex);
+//            if (column.getBoolean("required")) {
+//                validateStr.append("Assert.hasKeyAndValue(paramIn, \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
+//            }
+//        }
+//
+//        fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/smo/" + data.getString("templateCode") + "/impl/Add" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMOImpl.java";
+                + "out/relationship/smo/" + data.getString("templateCode") + "/impl/" + toUpperCaseFirstOne(data.getString("templateCode")) + "BindingSMOImpl.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
