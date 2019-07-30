@@ -28,6 +28,7 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        JSONArray infos = reqJson.getJSONObject("infos")
 
         @@validateTemplateColumns@@
     }
@@ -43,6 +44,9 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
 
         JSONArray infos = reqJson.getJSONArray("data");
+
+
+        @@doSoService@@
 
         JSONObject appInfo = getObj(infos, "APP"); //应用信息
         JSONObject serviceInfo = getObj(infos, "SERVICE"); // 服务信息

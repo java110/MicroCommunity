@@ -19,7 +19,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
         genneratorListSmoImpl(data);
 
 
-        //genneratorListListener(data);
+        genneratorListListener(data);
 
         //genneratorServiceCodeConstant(data);
 
@@ -369,18 +369,33 @@ public class GeneratorBindingComponent extends BaseGenerator {
      * @param data
      */
     private void genneratorListListener(JSONObject data) {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/add/SaveListener.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/binding/BindingListener.java").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         //替换校验部分代码 @@validateTemplateColumns@@
-        JSONArray columns = data.getJSONArray("columns");
+        JSONArray flows = data.getJSONArray("flows");
         StringBuffer validateStr = new StringBuffer();
-        for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-            JSONObject column = columns.getJSONObject(columnIndex);
-            if (column.getBoolean("required")) {
-                validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
+        for(int flowIndex = 0 ; flowIndex < flows.size() ; flowIndex ++) {
+
+            JSONObject flowObj = flows.getJSONObject(flowIndex);
+
+            if(flowObj.containsKey("existsComponent") && flowObj.getBoolean("existsComponent")){
+                continue;
+            }
+
+            String vcName = flowObj.getString("vcName");
+
+            JSONObject vcObject = data.getJSONObject("components").getJSONObject(vcName);
+
+            JSONArray columns = vcObject.getJSONArray("columns");
+
+            for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
+                JSONObject column = columns.getJSONObject(columnIndex);
+                if (column.getBoolean("required")) {
+                    validateStr.append("Assert.hasKeyByFlowData(infos, \""+ flowObj.getString("vcName") +"\", \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
+                }
             }
         }
 

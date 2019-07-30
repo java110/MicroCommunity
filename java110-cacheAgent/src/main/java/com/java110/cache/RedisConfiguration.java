@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -19,8 +20,19 @@ public class RedisConfiguration extends CachingConfigurerSupport  {
     @Autowired
     public JedisPool jedisPool(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                @Value("${jedis.pool.host}")String host,
-                               @Value("${jedis.pool.port}")int port) {
-        return new JedisPool(config, host, port);
+                               @Value("${jedis.pool.port}")int port,
+                               @Value("${jedis.pool.timeout}")int timeout,
+                               @Value("${jedis.pool.password}") String password) {
+        //没有配置改为默认值
+        if(timeout == 0){
+            timeout = 2000;
+        }
+
+        if(StringUtils.isEmpty(password)) {
+            return new JedisPool(config, host, port,timeout);
+        }else{
+            return new JedisPool(config,host,port,timeout,password);
+        }
     }
 
     @Bean(name= "jedis.pool.config")
