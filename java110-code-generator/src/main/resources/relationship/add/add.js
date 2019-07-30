@@ -6,37 +6,42 @@
            callBackFunction:vc.propTypes.string //父组件监听方法
         },
         data:{
-            @@templateCode@@ViewInfo:{
+            @@columnTemplateCode@@ViewInfo:{
+                flowComponent:'@@columnTemplateCode@@',
                 @@templateCodeColumns@@
             }
+        },
+        watch:{
+            @@columnTemplateCode@@ViewInfo:{
+                deep: true,
+                handler:function(){
+                    vc.component.save@@ColumnTemplateCode@@Info();
+                }
+             }
         },
          _initMethod:function(){
 
          },
          _initEvent:function(){
 
-            vc.on('@@templateCode@@ViewInfo', 'onIndex', function(_index){
-                vc.component.@@templateCode@@ViewInfo.index = _index;
+            vc.on('@@columnTemplateCode@@ViewInfo', 'onIndex', function(_index){
+                vc.component.@@columnTemplateCode@@ViewInfo.index = _index;
             });
         },
         methods:{
-            add@@TemplateCode@@Validate(){
+            @@columnTemplateCode@@Validate(){
                 return vc.validate.validate({
-                    @@templateCode@@ViewInfo:vc.component.@@templateCode@@ViewInfo
+                    @@columnTemplateCode@@ViewInfo:vc.component.@@columnTemplateCode@@ViewInfo
                 },{
                     @@addTemplateCodeValidate@@
                 });
             },
-            save@@TemplateCode@@Info:function(){
-                if(!vc.component.@@templateCode@@Validate()){
-                    vc.message(vc.validate.errInfo);
-
+            save@@ColumnTemplateCode@@Info:function(){
+                if(vc.component.@@columnTemplateCode@@Validate()){
+                    //侦听回传
+                    vc.emit($props.callBackListener,$props.callBackFunction, vc.component.@@columnTemplateCode@@ViewInfo);
                     return ;
                 }
-
-                vc.component.@@templateCode@@ViewInfo.communityId = vc.getCurrentCommunity().communityId;
-
-                //侦听回传
             }
         }
     });

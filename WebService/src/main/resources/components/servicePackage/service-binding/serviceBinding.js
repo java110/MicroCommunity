@@ -52,6 +52,12 @@
             },
             _finishStep:function(){
 
+                var _currentData = vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index];
+                if( _currentData == null || _currentData == undefined){
+                    vc.message("请选择相关信息");
+                    return ;
+                }
+
                 var param = {
                     data:vc.component.serviceBindingInfo.infos
                 }

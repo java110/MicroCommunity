@@ -246,4 +246,23 @@ public class Assert extends org.springframework.util.Assert {
         }
     }
 
+    /**
+     * 检验是否在 infos 中存在 flowComponent 对应组件的key
+     * @param infos
+     * @param flowComponent
+     * @param key
+     * @param message
+     */
+    public static void hasKeyByFlowData(JSONArray infos, String flowComponent, String key, String message){
+
+        for(int infoIndex = 0 ; infoIndex < infos.size() ; infoIndex ++){
+            JSONObject _info = infos.getJSONObject(infoIndex);
+            if(_info.containsKey(flowComponent) && _info.getString("flowComponent").equals(flowComponent)){
+                hasKeyAndValue(_info, key, message);
+                break;
+            }
+        }
+
+    }
+
 }

@@ -27,7 +27,7 @@ public class @@TemplateCode@@BindingSMOImpl extends AbstractComponentSMO impleme
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         //super.validatePageInfo(pd);
-
+        JSONArray infos = paramIn.getJSONObject("infos")
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         @@validateTemplateColumns@@
 
