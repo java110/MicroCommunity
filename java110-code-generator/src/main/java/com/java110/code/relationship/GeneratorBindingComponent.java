@@ -26,7 +26,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
     }
 
-    private void genneratorAddHtml(JSONObject data, String componentName){
+    private void genneratorAddHtml(JSONObject data, String componentName) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/add/add.html").getFile());
         String fileContext = sb.toString();
 
@@ -61,22 +61,22 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
                 }
 
-                inputStr = "<select class=\"custom-select\" v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo."+column.getString("code")+"\">\n" +
-                        "         <option selected  disabled value=\"\">"+ required + "，请选择" + column.getString("cnCode") + "</option>\n" +
-                        "         " +option+
+                inputStr = "<select class=\"custom-select\" v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo." + column.getString("code") + "\">\n" +
+                        "         <option selected  disabled value=\"\">" + required + "，请选择" + column.getString("cnCode") + "</option>\n" +
+                        "         " + option +
                         "  </select>";
-            } else if("textarea".equals(column.getString("inputType"))){
-                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\""+
-                        " v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo."+column.getString("code")+"\">"+
+            } else if ("textarea".equals(column.getString("inputType"))) {
+                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\"" +
+                        " v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo." + column.getString("code") + "\">" +
                         "</textarea>";
-            }else {
-                inputStr = "           <input v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo."+column.getString("code")+"\" " +
+            } else {
+                inputStr = "           <input v-model=\"" + _currentObj.getString("templateCode") + "ViewInfo." + column.getString("code") + "\" " +
                         "                  type=\"text\" placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\">\n";
             }
             thSb.append("<div class=\"form-group row\">\n" +
                     "         <label class=\"col-sm-2 col-form-label\">" + column.getString("cnCode") + "</label>\n" +
                     "         <div class=\"col-sm-10\">\n" +
-                    inputStr+
+                    inputStr +
                     "         </div>\n" +
                     "</div>\n");
 
@@ -86,7 +86,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/relationship/component/"+_currentObj.getString("package")+"/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.html";
+                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -122,33 +122,33 @@ public class GeneratorBindingComponent extends BaseGenerator {
             defaultValue = "'" + defaultValue + "'";
             variable.append(column.getString("code") + ":" + defaultValue + ",\n");
 
-            validateInfo += "'"+_currentObj.getString("templateCode")+"ViewInfo."+column.getString("code")+"':[\n" ;
-            if(column.getBoolean("required")) {
-                validateInfo +="{\n" +
+            validateInfo += "'" + _currentObj.getString("templateCode") + "ViewInfo." + column.getString("code") + "':[\n";
+            if (column.getBoolean("required")) {
+                validateInfo += "{\n" +
                         "                            limit:\"required\",\n" +
                         "                            param:\"\",\n" +
-                        "                            errInfo:\""+column.getString("cnCode")+"不能为空\"\n" +
+                        "                            errInfo:\"" + column.getString("cnCode") + "不能为空\"\n" +
                         "                        },\n";
             }
 
-            if(column.containsKey("limit") && !StringUtils.isEmpty(column.getString("limit"))) {
-                validateInfo +=" {\n" +
-                        "                            limit:\""+column.getString("limit")+"\",\n" +
-                        "                            param:\""+column.getString("limitParam")+"\",\n" +
-                        "                            errInfo:\""+column.getString("limitErrInfo")+"\"\n" +
+            if (column.containsKey("limit") && !StringUtils.isEmpty(column.getString("limit"))) {
+                validateInfo += " {\n" +
+                        "                            limit:\"" + column.getString("limit") + "\",\n" +
+                        "                            param:\"" + column.getString("limitParam") + "\",\n" +
+                        "                            errInfo:\"" + column.getString("limitErrInfo") + "\"\n" +
                         "                        },\n" +
                         "                    ],\n";
             }
 
         }
-        fileContext =  fileContext.replace("@@templateCodeColumns@@", variable.toString());
+        fileContext = fileContext.replace("@@templateCodeColumns@@", variable.toString());
         fileContext = fileContext.replace("@@addTemplateCodeValidate@@", validateInfo);
 
         // 替换 数据校验部分代码
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/relationship/component/"+_currentObj.getString("package")+"/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.js";
+                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -202,7 +202,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
                     "        ></vc:create>\n" +
                     "    </div>\n");
             //如果相应组件不存在，则根据组件配置自动生成
-            if(!flow.getBoolean("existsComponent")){
+            if (!flow.getBoolean("existsComponent")) {
                 genneratorAddHtml(data, flow.getString("vcName"));
             }
         }
@@ -253,7 +253,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
             validateInfo.append("vc.emit('" + flow.getString("vcName") + "', 'onIndex', vc.component.serviceBindingInfo.index);\n");
 
             //如果相应组件不存在，则根据组件配置自动生成
-            if(!flow.getBoolean("existsComponent")){
+            if (!flow.getBoolean("existsComponent")) {
                 generatorAddJs(data, flow.getString("vcName"));
             }
 
@@ -331,11 +331,11 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
         JSONArray flows = data.getJSONArray("flows");
         StringBuffer validateStr = new StringBuffer();
-        for(int flowIndex = 0 ; flowIndex < flows.size() ; flowIndex ++) {
+        for (int flowIndex = 0; flowIndex < flows.size(); flowIndex++) {
 
             JSONObject flowObj = flows.getJSONObject(flowIndex);
 
-            if(flowObj.containsKey("existsComponent") && flowObj.getBoolean("existsComponent")){
+            if (flowObj.containsKey("existsComponent") && flowObj.getBoolean("existsComponent")) {
                 continue;
             }
 
@@ -348,7 +348,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
             for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
                 JSONObject column = columns.getJSONObject(columnIndex);
                 if (column.getBoolean("required")) {
-                    validateStr.append("Assert.hasKeyByFlowData(infos, \""+ flowObj.getString("vcName") +"\", \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
+                    validateStr.append("Assert.hasKeyByFlowData(infos, \"" + flowObj.getString("vcName") + "\", \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
                 }
             }
         }
@@ -372,20 +372,46 @@ public class GeneratorBindingComponent extends BaseGenerator {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/binding/BindingListener.java").getFile());
         String fileContext = sb.toString();
 
-        fileContext = super.replaceTemplateContext(fileContext, data);
+        fileContext = super.replaceBindingTemplateContext(fileContext, data);
 
         //替换校验部分代码 @@validateTemplateColumns@@
         JSONArray flows = data.getJSONArray("flows");
         StringBuffer validateStr = new StringBuffer();
-        for(int flowIndex = 0 ; flowIndex < flows.size() ; flowIndex ++) {
+        StringBuffer variableStr = new StringBuffer();
+
+        StringBuffer ifCode = new StringBuffer();
+
+        StringBuffer methodCode = new StringBuffer();
+        for (int flowIndex = 0; flowIndex < flows.size(); flowIndex++) {
 
             JSONObject flowObj = flows.getJSONObject(flowIndex);
 
-            if(flowObj.containsKey("existsComponent") && flowObj.getBoolean("existsComponent")){
+            String vcName = flowObj.getString("vcName");
+
+            variableStr.append("JSONObject " + vcName + " = getObj(infos, \"" + vcName + "\");\n");
+
+            ifCode.append("" +
+                    "        if(!hasKey("+vcName+", \"" + flowObj.getString("flowKey") + "\")){\n" +
+                    "             "+vcName+".put(\"" + flowObj.getString("flowKey") + "\", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_" + flowObj.getString("flowKey") + "));\n" +
+                    "             businesses.add(add" + toUpperCaseFirstOne(flowObj.getString("businessName")) + "("+vcName+", context));\n" +
+                    "        }\n");
+
+
+            methodCode.append("private JSONObject add"+toUpperCaseFirstOne(flowObj.getString("businessName"))+"(JSONObject paramInJson, DataFlowContext dataFlowContext) {\n" +
+                    "        JSONObject business = JSONObject.parseObject(\"{\\\"datas\\\":{}}\");\n" +
+                    "        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant."+flowObj.getString("businessType")+");\n" +
+                    "        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);\n" +
+                    "        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);\n" +
+                    "        JSONObject businessObj = new JSONObject();\n" +
+                    "        businessObj.putAll(paramInJson);\n" +
+                    "        //计算 应收金额\n" +
+                    "        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(\""+flowObj.getString("businessName")+"\", businessObj);\n" +
+                    "        return business;\n" +
+                    "    }\n");
+            if (flowObj.containsKey("existsComponent") && flowObj.getBoolean("existsComponent")) {
                 continue;
             }
 
-            String vcName = flowObj.getString("vcName");
 
             JSONObject vcObject = data.getJSONObject("components").getJSONObject(vcName);
 
@@ -394,16 +420,18 @@ public class GeneratorBindingComponent extends BaseGenerator {
             for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
                 JSONObject column = columns.getJSONObject(columnIndex);
                 if (column.getBoolean("required")) {
-                    validateStr.append("Assert.hasKeyByFlowData(infos, \""+ flowObj.getString("vcName") +"\", \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
+                    validateStr.append("Assert.hasKeyByFlowData(infos, \"" + flowObj.getString("vcName") + "\", \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
                 }
             }
         }
 
         fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
+        fileContext = fileContext.replace("@@doSoService@@", variableStr.toString() + ifCode.toString());
+        fileContext = fileContext.replace("@@bindingMethod@@", methodCode.toString());
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/api/listener/" + data.getString("templateCode") + "/Save" + toUpperCaseFirstOne(data.getString("templateCode")) + "Listener.java";
+                + "out/api/listener/" + data.getString("templateCode") + "/Binding" + toUpperCaseFirstOne(data.getString("templateCode")) + "Listener.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

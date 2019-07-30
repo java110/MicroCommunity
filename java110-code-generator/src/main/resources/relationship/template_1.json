@@ -14,6 +14,7 @@
       "cnCode":"选择楼",
       "vcName":"viewFloorInfo",
       "businessName": "businessFloor",
+      "businessType": "BUSINESS_TYPE_SAVE_FLOOR_INFO",
       "existsComponent": true
     },
     {
@@ -23,6 +24,7 @@
       "cnCode":"选择单元",
       "vcName":"viewUnitInfo",
       "businessName": "businessUnit",
+      "businessType": "BUSINESS_TYPE_SAVE_UNIT_INFO",
       "existsComponent": true
     },
     {
@@ -32,6 +34,7 @@
       "cnCode":"添加房屋",
       "vcName":"addRoomView",
       "businessName": "businessRoom",
+      "businessType": "BUSINESS_TYPE_SAVE_ROOM_INFO",
       "existsComponent": false
     }
   ],

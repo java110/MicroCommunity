@@ -48,14 +48,6 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
         @@doSoService@@
 
-        JSONObject appInfo = getObj(infos, "APP"); //应用信息
-        JSONObject serviceInfo = getObj(infos, "SERVICE"); // 服务信息
-
-        //处理 应用信息
-        if(!hasKey(appInfo, "appId")){
-             appInfo.put("appId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appId));
-             businesses.add(addViewUnitInfo(reqJson, context));
-        }
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -85,24 +77,7 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
     @@bindingMethod@@
 
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addViewUnitInfo(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_BIND_@@TEMPLATECODE@@);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessObj = new JSONObject();
-        businessObj.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRoom", businessObj);
-        return business;
-    }
+
 
 
     private boolean hasKey(JSONObject info, String key){
