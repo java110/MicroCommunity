@@ -1,6 +1,10 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+                   callBackListener:vc.propTypes.string, //父组件名称
+                   callBackFunction:vc.propTypes.string //父组件监听方法
+        },
         data:{
             addFloorInfo:{
                 name:'',
@@ -59,14 +63,21 @@
             },
             saveFloorInfo:function(){
                 if(!vc.component.addFloorValidate()){
-                    vc.component.addFloorInfo.errorInfo = vc.validate.errInfo;
+                    vc.message(vc.validate.errInfo);
 
                     return ;
                 }
 
-                vc.component.addFloorInfo.errorInfo = "";
 
                 vc.component.addFloorInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                //不提交数据将数据 回调给侦听处理
+                if(vc.notNull($props.callBackListener)){
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.addFloorInfo);
+                    $('#addFloorModel').modal('hide');
+                    return ;
+                }
+
                 vc.http.post(
                     'addFloor',
                     'saveFloor',

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * 2019-06-29
  */
 @Component("choose@@TemplateCode@@")
-public class Choose@@TemplateCodeComponent {
+public class Choose@@TemplateCode@@Component {
 
     @Autowired
     private IList@@TemplateCode@@sSMO list@@TemplateCode@@sSMOImpl;

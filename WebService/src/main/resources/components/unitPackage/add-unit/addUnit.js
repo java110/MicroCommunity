@@ -1,6 +1,10 @@
 (function(vc,vm){
 
     vc.extends({
+        propTypes: {
+                   callBackListener:vc.propTypes.string, //父组件名称
+                   callBackFunction:vc.propTypes.string //父组件监听方法
+        },
         data:{
             addUnitInfo:{
                 floorId:'',
@@ -15,6 +19,12 @@
 
          },
          _initEvent:function(){
+             vc.on('addUnit','openAddUnitModal',function(_params){
+                 vc.component.refreshAddUnitInfo();
+                $('#addUnitModel').modal('show');
+                vc.component.addUnitInfo.floorId = _params.floorId;
+                vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
+             });
              vc.on('addUnit','addUnitModel',function(_params){
                 vc.component.refreshAddUnitInfo();
                 $('#addUnitModel').modal('show');
@@ -78,6 +88,15 @@
             addUnit:function(){
                 if(!vc.component.addUnitValidate()){
                     vc.message(vc.validate.errInfo);
+                    return ;
+                }
+
+                 vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                //不提交数据将数据 回调给侦听处理
+                if(vc.notNull($props.callBackListener)){
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.addUnitInfo);
+                    $('#addUnitModel').modal('hide');
                     return ;
                 }
 

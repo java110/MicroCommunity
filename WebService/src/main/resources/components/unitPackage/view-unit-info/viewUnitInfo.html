@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>单元信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" v-if="viewUnitInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectUnitInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择单元</button>
+
+                    <button type="button" v-if="viewUnitInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddUnitInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加单元</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >单元编号：</label>
+                            <label class="">{{viewUnitInfo.unitNum}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >总层数：</label>
+                            <label class="">{{viewUnitInfo.layerCount}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >电梯：</label>
+                            <label class="">{{viewUnitInfo.lift}}</label>
+                        </div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >备注：</label>
+                            <label class="">{{viewUnitInfo.remark}}</label>
+                        </div>
+</div>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="addUnit"
+               callBackListener="viewUnitInfo"
+               callBackFunction="chooseUnit"
+    ></vc:create>
+
+
+    <vc:create name="chooseUnit"
+               emitChooseUnit="viewUnitInfo"
+               emitLoadData="viewUnitInfo"
+    ></vc:create>
+</div>

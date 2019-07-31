@@ -11,7 +11,7 @@
         data:{
             view@@TemplateCode@@Info:{
                 index:0,
-                flowComponent:'@@TemplateCode@@',
+                flowComponent:'view@@TemplateCode@@Info',
                 @@templateCodeColumns@@
             }
         },

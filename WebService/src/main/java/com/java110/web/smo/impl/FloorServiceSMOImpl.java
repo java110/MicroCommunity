@@ -43,10 +43,12 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      */
     @Override
     public ResponseEntity<String> listFloor(IPageData pd) {
-
-        validateListFloor(pd);
-
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        if(paramIn.containsKey("row")){
+            paramIn.put("rows",paramIn.getString("row"));
+        }
+        validateListFloor(pd,paramIn);
+
         int page = Integer.parseInt(paramIn.getString("page"));
         int rows = Integer.parseInt(paramIn.getString("rows"));
         String communityId = paramIn.getString("communityId");
@@ -223,11 +225,11 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
      *
      * @param pd 页面封装对象
      */
-    private void validateListFloor(IPageData pd) {
-        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+    private void validateListFloor(IPageData pd, JSONObject paramIn) {
+        Assert.jsonObjectHaveKey(paramIn, "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(paramIn, "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
+        //JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
         Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");

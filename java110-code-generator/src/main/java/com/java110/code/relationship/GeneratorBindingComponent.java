@@ -86,7 +86,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.html";
+                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + _currentObj.getString("templateCode") + "View.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -148,7 +148,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + toUpperCaseFirstOne(_currentObj.getString("templateCode")) + "View.js";
+                + "out/relationship/component/" + _currentObj.getString("package") + "/" + _currentObj.getString("templateCode") + "View/" + _currentObj.getString("templateCode") + "View.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -256,7 +256,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
             }
 
 
-            validateInfo.append("vc.emit('" + flow.getString("vcName") + "', 'onIndex', vc.component.serviceBindingInfo.index);\n");
+            validateInfo.append("vc.emit('" + flow.getString("vcName") + "', 'onIndex', vc.component."+data.getString("templateCode")+"Info.index);\n");
 
             //如果相应组件不存在，则根据组件配置自动生成
             if (!flow.getBoolean("existsComponent")) {

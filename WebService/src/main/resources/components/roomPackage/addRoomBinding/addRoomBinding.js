@@ -33,9 +33,9 @@
                 vc.component.addRoomBindingInfo.$step.prevStep();
                 vc.component.addRoomBindingInfo.index = vc.component.addRoomBindingInfo.$step.getIndex();
 
-                vc.emit('viewFloorInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-vc.emit('viewUnitInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-vc.emit('addRoomView', 'onIndex', vc.component.serviceBindingInfo.index);
+                vc.emit('viewFloorInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
             },
             _nextStep:function(){
@@ -47,9 +47,9 @@ vc.emit('addRoomView', 'onIndex', vc.component.serviceBindingInfo.index);
                 vc.component.addRoomBindingInfo.$step.nextStep();
                 vc.component.addRoomBindingInfo.index = vc.component.addRoomBindingInfo.$step.getIndex();
 
-                 vc.emit('viewFloorInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-vc.emit('viewUnitInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-vc.emit('addRoomView', 'onIndex', vc.component.serviceBindingInfo.index);
+                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
             },
             _finishStep:function(){
