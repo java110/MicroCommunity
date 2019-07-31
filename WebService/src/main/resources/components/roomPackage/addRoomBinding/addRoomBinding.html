@@ -1,0 +1,38 @@
+<div id="component" >
+
+    <div class="java110_step">
+        <div id="step" ></div>
+    </div>
+
+    <!-- 选择 应用信息 -->
+   <div v-if="addRoomBindingInfo.index == 0">
+        <vc:create name="viewFloorInfo"
+                   callBackListener="addRoomBinding"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+<div v-if="addRoomBindingInfo.index == 1">
+        <vc:create name="viewUnitInfo"
+                   callBackListener="addRoomBinding"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+<div v-if="addRoomBindingInfo.index == 2">
+        <vc:create name="addRoomView"
+                   callBackListener="addRoomBinding"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-10"></div>
+        <div class="col-md-2 " style="margin-bottom:10px; text-align:right">
+            <button type="button" class="btn btn-secondary" v-on:click="_prevStep()">上一步</button>
+            <button v-if="addRoomBindingInfo.index != 2" type="button" class="btn btn-primary" style="margin-left:10px;" v-on:click="_nextStep()">下一步</button>
+            <button v-if="addRoomBindingInfo.index == 2" type="button" class="btn btn-primary" style="margin-left:10px;" v-on:click="_finishStep()">完成</button>
+        </div>
+    </div>
+
+</div>

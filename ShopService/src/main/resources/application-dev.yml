@@ -6,6 +6,8 @@ jedis:
       maxWaitMillis: 20000
     host: dev.redis.java110.com
     port: 6379
+    timeout: 3000
+    password:
 
 eureka:
   instance:

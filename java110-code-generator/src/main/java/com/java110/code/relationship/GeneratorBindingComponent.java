@@ -21,7 +21,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
         genneratorListListener(data);
 
-        //genneratorServiceCodeConstant(data);
+        genneratorServiceCodeConstant(data);
 
 
     }
@@ -162,13 +162,19 @@ public class GeneratorBindingComponent extends BaseGenerator {
      * @param data
      */
     private void genneratorServiceCodeConstant(JSONObject data) {
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/constant/ServiceCodeConstant.java").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/relationship/constant/ServiceCodeConstant.java").getFile());
         String fileContext = sb.toString();
 
-        fileContext = super.replaceTemplateContext(fileContext, data);
+        fileContext = super.replaceBindingTemplateContext(fileContext, data);
+
+        String variable = data.getString("package").indexOf("Package") >0 ?
+                    data.getString("package").replace("Package","") :
+                    data.getString("package");
+        variable += ("." + data.getString("templateCode"));
+        fileContext = fileContext.replace("@@constantVariable@@", variable);
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/constant/" + data.getString("templateCode") + "/ServiceCode" + toUpperCaseFirstOne(data.getString("templateCode")) + "Constant.java";
+                + "out/relationship/constant/" + data.getString("templateCode") + "/ServiceCode" + toUpperCaseFirstOne(data.getString("templateCode")) + "Constant.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

@@ -60,7 +60,7 @@
                 }
 
                vc.http.post(
-                   '@@templateCode@@',
+                   '@@templateCode@@Binding',
                    'binding',
                    JSON.stringify(param),
                    {

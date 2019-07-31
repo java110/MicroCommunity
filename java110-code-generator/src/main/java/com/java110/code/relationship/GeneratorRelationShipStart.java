@@ -22,5 +22,8 @@ public class GeneratorRelationShipStart extends BaseGenerator {
 
         GeneratorBindingComponent generatorBindingComponent = new GeneratorBindingComponent();
         generatorBindingComponent.generator(data);
+
+        GeneratorFlow generatorFlow = new GeneratorFlow();
+        generatorFlow.generator(data);
     }
 }

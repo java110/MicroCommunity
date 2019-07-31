@@ -2,6 +2,7 @@ package com.java110.api.listener.@@templateCode@@;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.util.StringUtil;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.common.util.Assert;
 import com.java110.core.context.DataFlowContext;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.BusinessTypeConstant;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.common.constant.ServiceCode@@TemplateCode@@Constant;
 
 
@@ -28,7 +30,7 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-        JSONArray infos = reqJson.getJSONObject("infos")
+        JSONArray infos = reqJson.getJSONArray("data");
 
         @@validateTemplateColumns@@
     }
@@ -61,7 +63,7 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
     @Override
     public String getServiceCode() {
-        return ServiceCode@@TemplateCode@@Constant.@@TEMPLATECODE@@;
+        return ServiceCode@@TemplateCode@@Constant.BINDING_@@TEMPLATECODE@@;
     }
 
     @Override
@@ -82,7 +84,7 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
     private boolean hasKey(JSONObject info, String key){
         if(!info.containsKey(key)
-            || StringUtils.isEmpty(info.getString(key))
+            || StringUtil.isEmpty(info.getString(key))
             || info.getString(key).startsWith("-")){
             return false;
         }
@@ -92,13 +94,16 @@ public class Binding@@TemplateCode@@Listener extends AbstractServiceApiListener 
 
     private JSONObject getObj(JSONArray infos , String flowComponent){
 
+        JSONObject serviceInfo = null;
+
         for(int infoIndex = 0 ; infoIndex < infos.size(); infoIndex ++){
 
             Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
 
             if(flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))){
+                serviceInfo = infos.getJSONObject(infoIndex);
                 Assert.notNull(serviceInfo, "未包含服务信息");
-                return infos.getJSONObject(infoIndex);
+                return serviceInfo;
             }
          }
 
