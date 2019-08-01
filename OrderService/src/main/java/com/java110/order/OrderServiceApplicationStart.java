@@ -1,8 +1,12 @@
 package com.java110.order;
 
+import com.java110.common.cache.MappingCache;
+import com.java110.common.constant.DomainContant;
 import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
+import com.java110.entity.mapping.Mapping;
 import com.java110.event.center.DataFlowEventPublishing;
 import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.service.init.ServiceStartInit;
@@ -88,6 +92,15 @@ public class OrderServiceApplicationStart {
     private static void flushMainCache(String[] args) {
 
         logger.debug("判断是否需要刷新日志，参数 args 为 {}", args);
+
+        //因为好多朋友启动时 不加 参数-Dcache 所以启动时检测 redis 中是否存在 java110_hc_version
+        String mapping = MappingCache.getValue("java110_hc_version");
+        if(StringUtil.isEmpty(mapping)){
+            ICenterServiceCacheSMO centerServiceCacheSMO = (ICenterServiceCacheSMO) ApplicationContextFactory.getBean("centerServiceCacheSMOImpl");
+            centerServiceCacheSMO.startFlush();
+            return ;
+        }
+
         if (args == null || args.length == 0) {
             return;
         }
