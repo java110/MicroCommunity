@@ -23,4 +23,14 @@ v0.01|初稿|2019-04-22|wuxw
 [点这里](http://www.iqiyi.com/w_19s7omicex.html#curid=38432723509_ef5ddb9c572fa848bcdd80f193d78eeb)
 
 
+## HC小区物业系统接口开发实战讲解
+
+[点这里](https://www.bilibili.com/video/av58265365)
+
+
+## HC小区物业系统单页面管理代码生成器
+
+[点这里](https://www.bilibili.com/video/av61638024)
+
+
 
