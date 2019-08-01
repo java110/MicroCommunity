@@ -7,6 +7,7 @@
         },
         data:{
             addAppInfo:{
+                appId:'',
                 name:'',
 securityCode:'',
 whileListIp:'',

@@ -7,6 +7,7 @@
         },
         data:{
             addServiceInfo:{
+                serviceId:'',
                 name:'',
 serviceCode:'',
 businessTypeCd:'API',

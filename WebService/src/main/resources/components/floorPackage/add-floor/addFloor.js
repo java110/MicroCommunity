@@ -7,6 +7,7 @@
         },
         data:{
             addFloorInfo:{
+                floorId:'',
                 name:'',
                 floorNum:'',
                 remark:'',

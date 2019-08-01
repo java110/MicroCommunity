@@ -7,6 +7,7 @@
         },
         data:{
             add@@TemplateCode@@Info:{
+                @@templateKey@@:'',
                 @@templateCodeColumns@@
             }
         },
