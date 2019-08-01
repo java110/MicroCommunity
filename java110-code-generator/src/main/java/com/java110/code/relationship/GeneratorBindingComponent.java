@@ -411,6 +411,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
             ifCode.append("" +
                     "        if(!hasKey("+vcName+", \"" + flowObj.getString("flowKey") + "\")){\n" +
                     "             "+vcName+".put(\"" + flowObj.getString("flowKey") + "\", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_" + flowObj.getString("flowKey") + "));\n" +
+                    "             "+vcName+".put(\"userId\", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));\n" +
                     "             businesses.add(add" + toUpperCaseFirstOne(flowObj.getString("businessName")) + "("+vcName+", context));\n" +
                     "        }\n");
 
