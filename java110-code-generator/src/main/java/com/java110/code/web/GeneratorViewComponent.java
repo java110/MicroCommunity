@@ -6,6 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.code.BaseGenerator;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+import java.util.Map;
+
 public class GeneratorViewComponent extends BaseGenerator {
 
     public void generator(JSONObject data) {
@@ -34,8 +37,14 @@ public class GeneratorViewComponent extends BaseGenerator {
         StringBuffer thSb = new StringBuffer();
 
         JSONArray columns = data.getJSONArray("columns");
-        for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-            JSONObject column = columns.getJSONObject(columnIndex);
+
+        JSONArray cols = new JSONArray();
+        JSONObject col = new JSONObject();
+        col.put("cnCode", data.getString("templateKeyName"));
+        col.put("code", data.getString("templateKey"));
+        cols.addAll(columns);
+        for (int columnIndex = 0; columnIndex < cols.size(); columnIndex++) {
+            JSONObject column = cols.getJSONObject(columnIndex);
             if(columnIndex % 3 == 0){
                 thSb.append("<div class=\"row\">\n");
             }

@@ -12,10 +12,12 @@
             viewUnitInfo:{
                 index:0,
                 flowComponent:'viewUnitInfo',
+                unitId:'',
                 unitNum:'',
-layerCount:'',
-lift:'',
-remark:'',
+                layerCount:'',
+                lift:'',
+                remark:'',
+                floorId:'',
 
             }
         },
@@ -31,6 +33,10 @@ remark:'',
 
             vc.on('viewUnitInfo', 'onIndex', function(_index){
                 vc.component.viewUnitInfo.index = _index;
+            });
+
+            vc.on('viewUnitInfo','onFloorInfo',function(_param){
+                vc.component.viewUnitInfo.floorId = _param.floorId;
             });
 
         },

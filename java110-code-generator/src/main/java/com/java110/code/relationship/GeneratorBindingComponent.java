@@ -273,6 +273,18 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
         // 替换 数据校验部分代码
 
+        String needCheckCurrentData = "var _currentData = vc.component."+data.getString("templateCode")+"Info.infos[vc.component."+data.getString("templateCode")+"Info.index];\n" +
+                "                if( _currentData == null || _currentData == undefined){\n" +
+                "                    vc.message(\"请选择或填写必选信息\");\n" +
+                "                    return ;\n" +
+                "                }";
+
+        if(data.getBoolean("needAffirm")){
+            fileContext = fileContext.replace("@@needCheckCurrentData@@", "");
+        }else{
+            fileContext = fileContext.replace("@@needCheckCurrentData@@", needCheckCurrentData);
+        }
+
 
         String writePath = this.getClass().getResource("/").getPath()
                 + "out/relationship/component/" + data.getString("package") + "/" + data.getString("templateCode") + "/" + data.getString("templateCode") + ".js";

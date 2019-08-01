@@ -10,49 +10,55 @@
             <div class="ibox-content">
 
                 <div class="form-group row">
-         <label class="col-sm-2 col-form-label">房屋编号</label>
-         <div class="col-sm-10">
-           <input v-model="addRoomViewInfo.roomNum"                   type="text" placeholder="必填，请填写房屋编号" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">房屋楼层</label>
-         <div class="col-sm-10">
-           <input v-model="addRoomViewInfo.layer"                   type="text" placeholder="必填，请填写房屋楼层" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">房间数</label>
-         <div class="col-sm-10">
-           <input v-model="addRoomViewInfo.section"                   type="text" placeholder="必填，请填写房间数" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">房屋户型</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="addRoomViewInfo.apartment">
-         <option selected  disabled value="">必填，请选择房屋户型</option>
-         <option  value="一室两厅">1010</option>
-<option  value="两室两厅">2020</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">建筑面积</label>
-         <div class="col-sm-10">
-           <input v-model="addRoomViewInfo.builtUpArea"                   type="text" placeholder="必填，请填写建筑面积" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">房屋单价</label>
-         <div class="col-sm-10">
-           <input v-model="addRoomViewInfo.unitPrice"                   type="text" placeholder="必填，请填写房屋单价" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">备注</label>
-         <div class="col-sm-10">
-<textarea  placeholder="选填，请填写备注" class="form-control" v-model="addRoomViewInfo.remark"></textarea>         </div>
-</div>
+                    <label class="col-sm-2 col-form-label">房屋编号</label>
+                    <div class="col-sm-10">
+                        <input v-model="addRoomViewInfo.roomNum" type="text" placeholder="必填，请填写房屋编号"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">房屋楼层</label>
+                    <div class="col-sm-10">
+                        <input v-model="addRoomViewInfo.layer" type="text" placeholder="必填，请填写房屋楼层"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">房间数</label>
+                    <div class="col-sm-10">
+                        <input v-model="addRoomViewInfo.section" type="text" placeholder="必填，请填写房间数"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">房屋户型</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select" v-model="addRoomViewInfo.apartment">
+                            <option selected disabled value="">必填，请选择房屋户型</option>
+                            <option value="1010">一室两厅</option>
+                            <option value="2020">两室两厅</option>
+                        </select></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">建筑面积</label>
+                    <div class="col-sm-10">
+                        <input v-model="addRoomViewInfo.builtUpArea" type="text" placeholder="必填，请填写建筑面积"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">房屋单价</label>
+                    <div class="col-sm-10">
+                        <input v-model="addRoomViewInfo.unitPrice" type="text" placeholder="必填，请填写房屋单价"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">备注</label>
+                    <div class="col-sm-10">
+                        <textarea placeholder="选填，请填写备注" class="form-control"
+                                  v-model="addRoomViewInfo.remark"></textarea></div>
+                </div>
 
             </div>
         </div>

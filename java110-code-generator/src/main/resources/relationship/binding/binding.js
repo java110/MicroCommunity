@@ -49,11 +49,7 @@
             _finishStep:function(){
 
 
-                var _currentData = vc.component.@@templateCode@@Info.infos[vc.component.@@templateCode@@Info.index];
-                if( _currentData == null || _currentData == undefined){
-                    vc.message("请选择或填写必选信息");
-                    return ;
-                }
+                @@needCheckCurrentData@@
 
                 var param = {
                     data:vc.component.@@templateCode@@Info.infos

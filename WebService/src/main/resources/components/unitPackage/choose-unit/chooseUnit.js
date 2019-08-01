@@ -8,6 +8,7 @@
             chooseUnitInfo:{
                 units:[],
                 _currentUnitName:'',
+                floorId:'',
             }
         },
         _initMethod:function(){
@@ -18,6 +19,9 @@
                 vc.component._refreshChooseUnitInfo();
                 vc.component._loadAllUnitInfo(1,10,'');
             });
+            vc.on('chooseUnit','onFloorInfo',function(_param){
+                vc.component.chooseUnitInfo.floorId = _param.floorId;
+            });
         },
         methods:{
             _loadAllUnitInfo:function(_page,_row,_name){
@@ -26,6 +30,7 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
+                        floorId:vc.component.chooseUnitInfo.floorId,
                         name:_name
                     }
                 };
@@ -36,7 +41,7 @@
                              param,
                              function(json){
                                 var _unitInfo = JSON.parse(json);
-                                vc.component.chooseUnitInfo.units = _unitInfo.units;
+                                vc.component.chooseUnitInfo.units = _unitInfo;
                              },function(){
                                 console.log('请求失败处理');
                              }

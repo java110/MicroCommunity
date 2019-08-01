@@ -12,9 +12,10 @@
             viewFloorInfo:{
                 index:0,
                 flowComponent:'viewFloorInfo',
+                floorId:'',
                 name:'',
-floorNum:'',
-remark:'',
+                floorNum:'',
+                remark:'',
 
             }
         },
@@ -26,6 +27,12 @@ remark:'',
             vc.on('viewFloorInfo','chooseFloor',function(_app){
                 vc.copyObject(_app, vc.component.viewFloorInfo);
                 vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewFloorInfo);
+                vc.emit('chooseUnit', 'onFloorInfo', {
+                    floorId: vc.component.viewFloorInfo.floorId
+                });
+                vc.emit('viewUnitInfo', 'onFloorInfo', {
+                    floorId: vc.component.viewFloorInfo.floorId
+                });
             });
 
             vc.on('viewFloorInfo', 'onIndex', function(_index){
