@@ -61,10 +61,12 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
         }
         if (!hasKey(viewUnitInfo, "unitId")) {
             viewUnitInfo.put("unitId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
+            viewUnitInfo.put("unitId", viewFloorInfo.getString("floorId"));
             businesses.add(addBusinessUnit(viewUnitInfo, context));
         }
         if (!hasKey(addRoomView, "roomId")) {
             addRoomView.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
+            addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
             businesses.add(addBusinessRoom(addRoomView, context));
         }
 

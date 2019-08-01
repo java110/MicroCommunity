@@ -7,7 +7,7 @@
         },
         data:{
             @@columnTemplateCode@@ViewInfo:{
-                flowComponent:'@@columnTemplateCode@@',
+                flowComponent:'@@columnTemplateCode@@View',
                 @@templateCodeColumns@@
             }
         },

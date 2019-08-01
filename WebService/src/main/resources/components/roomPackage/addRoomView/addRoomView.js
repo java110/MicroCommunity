@@ -7,7 +7,7 @@
         },
         data:{
             addRoomViewInfo:{
-                flowComponent:'addRoom',
+                flowComponent:'addRoomView',
                 roomNum:'',
 layer:'',
 section:'',
