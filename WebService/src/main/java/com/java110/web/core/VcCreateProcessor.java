@@ -134,13 +134,15 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             attrKey = types[0].replace(" ", "")
                     .replace("\n", "")
                     .replace("\r", "");
-            if (!tag.hasAttribute(attrKey)) {
+            if (!tag.hasAttribute(attrKey) && !types[1].contains("=")) {
                 String componentName = tag.getAttributeValue("name");
                 logger.error("组件" + componentName + "未配置组件属性 " + attrKey);
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = tag.getAttributeValue(attrKey);
-            if (types[1].contains("vc.propTypes.string")) {
+            if(!tag.hasAttribute(attrKey) && types[1].contains("=")) {
+                vcType = dealJsPropTypesDefault(types[1]);
+            }else if (types[1].contains("vc.propTypes.string")) {
                 vcType = "'" + vcType + "'";
             }
             propsJs.append("$props." + attrKey + "=" + vcType + ";\n");
@@ -155,6 +157,19 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         }
         js = new StringBuffer(js).insert(position + 1, propsJs).toString();
         return js;
+    }
+
+
+    private String dealJsPropTypesDefault(String typeValue){
+         int startPos = typeValue.indexOf("=") + 1;
+         int endPos = typeValue.length();
+         if(typeValue.contains(",")){
+             endPos = typeValue.indexOf(",");
+         }else if(typeValue.contains("//")){
+             endPos = typeValue.indexOf("//");
+         }
+
+         return typeValue.substring(startPos,endPos);
     }
 
     /**

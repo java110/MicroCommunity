@@ -6,7 +6,8 @@
     vc.extends({
         propTypes: {
            callBackListener:vc.propTypes.string, //父组件名称
-           callBackFunction:vc.propTypes.string //父组件监听方法
+           callBackFunction:vc.propTypes.string, //父组件监听方法
+           needShowAddAppButton:vc.propTypes.string = 'true' // 是否显示添加应用button
         },
         data:{
             viewAppInfo:{
@@ -17,7 +18,8 @@
                 securityCode:"",
                 whileListIp:"",
                 blackListIp:"",
-                remark:""
+                remark:"",
+                needShowAddAppButton:$props.needShowAddAppButton
             }
         },
         _initMethod:function(){

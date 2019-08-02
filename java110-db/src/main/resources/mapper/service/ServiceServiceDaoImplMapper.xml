@@ -115,8 +115,16 @@ business_type_cd,method,provide_app_id,service_code,retry_count,status_cd,messag
     <!-- 查询服务信息 add by wuxw 2018-07-03 -->
     <select id="getServiceInfo" parameterType="Map" resultType="Map">
         select  t.business_type_cd,t.business_type_cd businessTypeCd,t.method,t.provide_app_id,t.provide_app_id provideAppId,t.service_code,t.service_code serviceCode,t.retry_count,t.retry_count retryCount,t.status_cd,t.status_cd statusCd,t.messageQueueName,t.url,t.timeout,t.is_instance,t.is_instance isInstance,t.name,t.service_id,t.service_id serviceId,t.seq 
-from c_service t 
-where 1 =1 
+from c_service t
+        <if test="appId != null and appId != ''">
+            , c_route r
+        </if>
+        where 1 =1
+        <if test="appId != null and appId != ''">
+            and t.service_id = r.service_id
+            and t.status_cd = '0'
+            and t.app_id = #{appId}
+        </if>
 <if test="businessTypeCd !=null and businessTypeCd != ''">
    and t.business_type_cd= #{businessTypeCd}
 </if> 
@@ -212,8 +220,16 @@ and t.service_id= #{serviceId}
     <!-- 查询服务数量 add by wuxw 2018-07-03 -->
      <select id="queryServicesCount" parameterType="Map" resultType="Map">
         select  count(1) count 
-from c_service t 
-where 1 =1 
+from c_service t
+         <if test="appId != null and appId != ''">
+             , c_route r
+         </if>
+where 1 =1
+         <if test="appId != null and appId != ''">
+             and t.service_id = r.service_id
+             and t.status_cd = '0'
+             and t.app_id = #{appId}
+         </if>
 <if test="businessTypeCd !=null and businessTypeCd != ''">
    and t.business_type_cd= #{businessTypeCd}
 </if> 

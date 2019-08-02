@@ -5,12 +5,18 @@
     var DEFAULT_PAGE = 1;
     var DEFAULT_ROWS = 10;
     vc.extends({
+        propTypes: {
+           needShowAddAppButton:vc.propTypes.string = 'true' // 是否显示添加应用button
+        },
         data:{
             serviceManageInfo:{
                 services:[],
                 total:0,
                 records:1,
-                name:''
+                name:'',
+                serviceCode:'',
+                appId:'',
+                needShowAddAppButton:$props.needShowAddAppButton
             }
         },
         _initMethod:function(){
@@ -30,7 +36,9 @@
                     params:{
                         page:_page,
                         row:_rows,
-                        name:vc.component.serviceManageInfo.name
+                        appId:vc.component.serviceManageInfo.appId,
+                        name:vc.component.serviceManageInfo.name,
+                        serviceCode:vc.component.serviceManageInfo.serviceCode
                     }
 
                }

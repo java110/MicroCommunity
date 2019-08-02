@@ -27,6 +27,7 @@ private String isInstance;
 private String name;
 private String serviceId;
 private String seq;
+private String appId;
 
 
     private Date createTime;
@@ -122,5 +123,13 @@ public void setSeq(String seq) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }

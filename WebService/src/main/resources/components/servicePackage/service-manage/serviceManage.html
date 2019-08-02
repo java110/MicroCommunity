@@ -9,14 +9,15 @@
                             <div class="form-row">
                                 <div class="col-8 input-group input-group-sm">
                                     <input type="text" placeholder="请填写服务名称" class=" form-control" v-model="serviceManageInfo.name">
+                                    <input type="text" placeholder="请填写服务编码" class=" form-control" v-model="serviceManageInfo.serviceCode">
                                     <div class="input-group-prepend">
                                         <button type="button" class="btn btn-primary btn-sm"  v-on:click="_queryServiceMethod()">
                                             <i class="glyphicon glyphicon-search"></i> 马上查询</button>
                                     </div>
                                 </div>
 
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddServiceModal()">
+                                <div class="col-2" v-if="serviceManageInfo.needShowAddAppButton=='true'">
+                                    <button type="button"  class="btn btn-primary btn-sm" v-on:click="_openAddServiceModal()">
                                         <i class="glyphicon glyphicon-plus"></i>
                                         添加服务
                                     </button>
