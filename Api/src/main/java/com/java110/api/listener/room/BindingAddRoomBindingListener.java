@@ -12,6 +12,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.BusinessTypeConstant;
@@ -81,6 +82,14 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
 
         ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
 
+        JSONObject paramOutObj = new JSONObject();
+        paramOutObj.put("floorId", viewFloorInfo.getString("floorId"));
+        paramOutObj.put("unitId", viewUnitInfo.getString("unitId"));
+        paramOutObj.put("roomId", addRoomView.getString("floorId"));
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            responseEntity = new ResponseEntity<String>(paramOutObj.toJSONString(), HttpStatus.OK);
+        }
         context.setResponseEntity(responseEntity);
     }
 
@@ -147,15 +156,15 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
 
     }
 
-    private JSONObject getObj(JSONArray infos , String flowComponent){
+    private JSONObject getObj(JSONArray infos, String flowComponent) {
 
         JSONObject serviceInfo = null;
 
-        for(int infoIndex = 0 ; infoIndex < infos.size(); infoIndex ++){
+        for (int infoIndex = 0; infoIndex < infos.size(); infoIndex++) {
 
             Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
 
-            if(flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))){
+            if (flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))) {
                 serviceInfo = infos.getJSONObject(infoIndex);
                 Assert.notNull(serviceInfo, "未包含服务信息");
                 return serviceInfo;
@@ -164,7 +173,6 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
 
         throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
     }
-
 
 
 }

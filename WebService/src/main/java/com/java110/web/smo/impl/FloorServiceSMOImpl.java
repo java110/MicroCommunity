@@ -8,6 +8,7 @@ import com.java110.common.exception.SMOException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.IFloorServiceSMO;
 import org.slf4j.Logger;
@@ -34,6 +35,26 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
 
     @Autowired
     private RestTemplate restTemplate;
+
+    /**
+     * 查询 楼栋
+     * @param pd 页面数据封装对象
+     * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
+     */
+    public ResponseEntity<String> getFloor(IPageData pd){
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("page",1);
+        paramIn.put("row",1);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_FLOOR);
+
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+
+        ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" +  mapToUrlParam(paramIn),
+                HttpMethod.GET);
+
+        return responseEntity;
+    }
 
     /**
      * 查询小区楼

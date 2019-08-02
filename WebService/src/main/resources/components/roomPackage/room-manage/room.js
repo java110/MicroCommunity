@@ -18,26 +18,30 @@
             }
         },
         _initMethod:function(){
-
+            //根据 参数查询相应数据
+            vc.component._loadDataByParam();
         },
         _initEvent:function(){
             vc.on('room','listRoom',function(_param){
                   vc.component.listRoom();
             });
             vc.on('room','loadData',function(_param){
-                vc.component.roomInfo.floorId = _param.floorId;
-                vc.component.roomInfo.unitId = '';
-                vc.component.roomInfo.state = '';
-                vc.component.roomInfo.roomNum = '';
-
-                vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
-                vc.component.loadUnits(_param.floorId);
+                  vc.component._loadData(_param);
             });
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component.listRoom(_currentPage,DEFAULT_ROW);
             });
         },
         methods:{
+            _loadData:function(_param){
+                    vc.component.roomInfo.floorId = _param.floorId;
+                    vc.component.roomInfo.unitId = '';
+                    vc.component.roomInfo.state = '';
+                    vc.component.roomInfo.roomNum = '';
+
+                    vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
+                    vc.component.loadUnits(_param.floorId);
+            },
             listRoom:function(_page,_row){
                 var param = {
                     params:{
@@ -131,6 +135,45 @@
                 }else{
                     return "未知";
                 }
+            }
+            _loadDataByParam: function(){
+                vc.component.roomInfo.floorId = vc.getParam("floorId");
+                //如果 floodId 没有传 则，直接结束
+                if(vc.component.roomInfo.floorId == null
+                    || vc.component.roomInfo.floorId == undefined
+                    || vc.component.roomInfo.floorId == ''){
+                    return ;
+                }
+
+                var param = {
+                    params:{
+                        communityId:vc.getCurrentCommunity().communityId,
+                        floorId:vc.component.roomInfo.floorId
+                    }
+                }
+
+                vc.http.get(
+                    'room',
+                    'loadFloor',
+                     param,
+                     function(json,res){
+                        if(res.status == 200){
+                            var _floorInfo = JSON.parse(json);
+                            var _tmpFloor = _floorInfo.apiFloorDataVoList[0];
+                            vc.emit('roomSelectFloor','chooseFloor', _tmpFloor);
+                            vc.component._loadData({
+                                floorId: _tmpFloor.floorId
+                            });
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+
             }
         }
     });

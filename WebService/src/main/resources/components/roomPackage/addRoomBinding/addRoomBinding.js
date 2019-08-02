@@ -77,7 +77,7 @@ vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
                            vc.message('处理成功',true);
                            //关闭model
-                           vc.jumpToPage("/?" + vc.objToGetParam(JSON.parse(json)));
+                           vc.jumpToPage("/flow/roomFlow?" + vc.objToGetParam(JSON.parse(json)));
                            return ;
                        }
                        vc.message(json);
