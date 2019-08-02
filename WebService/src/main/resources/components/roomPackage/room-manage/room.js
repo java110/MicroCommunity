@@ -135,7 +135,7 @@
                 }else{
                     return "未知";
                 }
-            }
+            },
             _loadDataByParam: function(){
                 vc.component.roomInfo.floorId = vc.getParam("floorId");
                 //如果 floodId 没有传 则，直接结束
