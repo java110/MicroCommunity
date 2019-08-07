@@ -1,0 +1,45 @@
+{
+  "templateName":"楼",
+  "templateCode":"floor",
+  "templateKey":"floorId",
+  "templateKeyName":"楼ID",
+  "searchCode": "floorNum",
+  "searchName": "楼编号",
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"楼名称",
+      "desc":"必填，请填写名称,如一号楼",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"楼名称不能超过50"
+    },
+    {
+      "code":"floorNum",
+      "cnCode":"楼编号",
+      "desc":"必填，请填写楼编号如 C_001",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,12",
+      "limitErrInfo":"楼编号必须在1至12字符之间"
+    },
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"可填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200"
+    }
+
+  ]
+}
