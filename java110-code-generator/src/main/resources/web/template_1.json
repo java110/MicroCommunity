@@ -9,6 +9,7 @@
     {
       "name": "应用名称",
       "inputType": "choose",
+      "componentName": "chooseApp",
       "code": "appName",
       "whereCondition": "equal"
     },

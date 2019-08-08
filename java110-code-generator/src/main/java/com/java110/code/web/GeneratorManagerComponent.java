@@ -35,6 +35,68 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
+        //处理查询条件
+        JSONArray tmpConditions = data.getJSONArray("conditions");
+
+        StringBuffer conditionInput = new StringBuffer();
+
+        for(int condIndex = 0 ; condIndex <  tmpConditions.size(); condIndex ++){
+
+            JSONObject tmpCond = tmpConditions.getJSONObject(condIndex);
+
+            if(condIndex % 3 == 0){
+                conditionInput.append("<div class=\"row\">\n");
+            }
+
+            if(condIndex % 3 == 0 || condIndex % 3 == 1) {
+                conditionInput.append("<div class=\"col-sm-4\">\n");
+            }else if(condIndex % 3 == 2){
+                conditionInput.append("<div class=\"col-sm-3\">\n");
+            }
+            if("choose".equals(tmpCond.getString("inputType"))){
+                conditionInput.append("                            <div class=\"form-group input-group\">\n" +
+                        "                                <input type=\"text\" placeholder=\"请选择"+tmpCond.getString("name")+"\" v-model=\""+ data.getString("templateCode")+"ManageInfo."+tmpCond.getString("code")+"\" class=\" form-control\">\n" +
+                        "                                <div class=\"input-group-prepend\">\n" +
+                        "                                    <button type=\"button\" class=\"btn btn-primary btn-sm\"><i\n" +
+                        "                                            class=\"glyphicon glyphicon-search\"></i> 选择\n" +
+                        "                                    </button>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n");
+
+            }else if("input".equals(tmpCond.getString("inputType"))){
+                conditionInput.append("<div class=\"form-group\">\n" +
+                        "                                <input type=\"text\" placeholder=\"请输入"+tmpCond.getString("name")+"\" v-model=\""+ data.getString("templateCode")+"ManageInfo."+tmpCond.getString("code")+"\" class=\" form-control\">\n" +
+                        "                            </div>");
+            }
+
+                conditionInput.append("                        </div>");
+            if(condIndex == 2){
+                conditionInput.append("<div class=\"col-sm-1\">\n" +
+                        "                            <button type=\"button\" class=\"btn btn-primary btn-sm\"><i\n" +
+                        "                                    class=\"glyphicon glyphicon-search\"></i> 查询\n" +
+                        "                            </button>\n" +
+                        "                        </div>");
+            }else if(condIndex % 3 == 2){
+                conditionInput.append("<div class=\"col-sm-1\">\n" +
+                        "                        </div>");
+
+            }
+
+
+            if(condIndex % 3 == 2 || condIndex == tmpConditions.size() -1){
+                conditionInput.append("</div>\n");
+            }
+        }
+
+        fileContext = fileContext.replace("@@conditionInput@@", conditionInput.toString());
+
+        if(tmpConditions.size() > 3){
+            fileContext = fileContext.replace("@@moreCondition@@","<button type=\"button\"  class=\"btn btn-link btn-sm\" style=\"margin-right:10px;\"  v-on:click=\"_moreCondition()\">更多</button>");
+        }else{
+            fileContext = fileContext.replace("@@moreCondition@@","");
+
+        }
+
         // 处理 th 信息
 
         StringBuffer thSb = new StringBuffer();

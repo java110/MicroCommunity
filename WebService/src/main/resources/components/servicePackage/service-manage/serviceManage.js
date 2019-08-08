@@ -72,6 +72,9 @@
             _queryServiceMethod:function(){
                 vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
 
+            },
+            _moreCondition:function(){
+
             }
         }
     });

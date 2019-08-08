@@ -1,29 +1,57 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
         <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        @@moreCondition@@
+                        <!--<button type="button"  class="btn btn-link btn-sm" style="margin-right:10px;"  v-on:click="_moreCondition()">更多</button>-->
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    @@conditionInput@@
+                    <!--<div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group input-group">
+                                <input type="text" placeholder="请选择应用" class=" form-control">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary btn-sm"><i
+                                            class="glyphicon glyphicon-search"></i> 选择
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入服务名称" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入服务编码" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm"><i
+                                    class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>@@templateName@@信息</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-8 input-group input-group-sm">
-                                    <input type="text" placeholder="请填写@@searchName@@" class=" form-control" v-model="@@templateCode@@ManageInfo.@@searchCode@@">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="btn btn-primary btn-sm"  v-on:click="_query@@TemplateCode@@Method()">
-                                            <i class="glyphicon glyphicon-search"></i> 马上查询</button>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAdd@@TemplateCode@@Modal()">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        添加@@templateName@@
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAdd@@TemplateCode@@Modal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加@@templateName@@
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -39,9 +67,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="@@templateCode@@ in @@templateCode@@ManageInfo.@@templateCode@@s">
-                                @@columnsName@@
-                            </tr>
+                        <tr v-for="@@templateCode@@ in @@templateCode@@ManageInfo.@@templateCode@@s">
+                            @@columnsName@@
+                        </tr>
                         </tbody>
                         <tfoot>
                         <tr>

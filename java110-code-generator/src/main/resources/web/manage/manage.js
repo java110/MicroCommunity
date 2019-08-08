@@ -64,6 +64,9 @@
             _query@@TemplateCode@@Method:function(){
                 vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
 
+            },
+            _moreCondition:function(){
+
             }
         }
     });
