@@ -270,7 +270,7 @@
             and t.url= #{url}
         </if>
         <if test="serviceUrl !=null and serviceUrl != ''">
-            and t.url like "%"#{serviceUrl}"%"
+            and t.url like '%#{serviceUrl}%'
         </if>
         <if test="timeout !=null and timeout != ''">
             and t.timeout= #{timeout}
@@ -282,7 +282,7 @@
             and t.name= #{name}
         </if>
         <if test="serviceName !=null and serviceName != ''">
-            and t.name like "%"#{serviceName}"%"
+            and t.name like '%#{serviceName}%'
         </if>
         <if test="serviceId !=null and serviceId != ''">
             and t.service_id= #{serviceId}
