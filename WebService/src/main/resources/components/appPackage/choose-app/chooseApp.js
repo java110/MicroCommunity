@@ -44,6 +44,7 @@
                            );
             },
             chooseApp:function(_app){
+                _app.appName = _app.name;
                 vc.emit($props.emitChooseApp,'chooseApp',_app);
                 vc.emit($props.emitLoadData,'listAppData',{
                     appId:_app.appId

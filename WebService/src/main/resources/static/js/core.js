@@ -204,6 +204,14 @@
             }
         }
     };
+    //扩展 现有的对象 没有的属性扩充上去
+    vc.extendObject = function(org,dst){
+        for(var key in dst){
+            if (!org.hasOwnProperty(key)){
+                dst[key] = org[key]
+            }
+        }
+    };
     //获取url参数
     vc.getParam = function(_key){
         //返回当前 URL 的查询部分（问号 ? 之后的部分）。

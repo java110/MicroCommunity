@@ -25,6 +25,8 @@ private String url;
 private String timeout;
 private String isInstance;
 private String name;
+private String serviceName;
+private String serviceUrl;
 private String serviceId;
 private String seq;
 private String appId;
@@ -131,5 +133,21 @@ public void setSeq(String seq) {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 }

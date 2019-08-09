@@ -11,6 +11,7 @@
       "inputType": "choose",
       "componentName": "chooseApp",
       "code": "appName",
+      "key": "appId",
       "whereCondition": "equal"
     },
     {
@@ -178,6 +179,5 @@
       "limitErrInfo":"重试次数必须为数字",
       "show": false
     }
-  ],
-  "sql": ""
+  ]
 }

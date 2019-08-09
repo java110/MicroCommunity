@@ -43,6 +43,9 @@
                            );
             },
             choose@@TemplateCode@@:function(_@@templateCode@@){
+                if(_@@templateCode@@.hasOwnProperty('name')){
+                     _@@templateCode@@.@@templateCode@@Name = _@@templateCode@@.name;
+                }
                 vc.emit($props.emitChoose@@TemplateCode@@,'choose@@TemplateCode@@',_@@templateCode@@);
                 vc.emit($props.emitLoadData,'list@@TemplateCode@@Data',{
                     @@templateCode@@Id:_@@templateCode@@.@@templateCode@@Id

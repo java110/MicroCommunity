@@ -14,10 +14,11 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group input-group">
-                                <input type="text" placeholder="请选择应用名称" v-model="serviceManageInfo.appName"
+                                <input type="text" placeholder="请选择应用名称" v-model="serviceManageInfo.conditions.appName"
                                        class=" form-control">
                                 <div class="input-group-prepend">
-                                    <button type="button" class="btn btn-primary btn-sm"><i
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            v-on:click="_openChooseAppMethod()"><i
                                             class="glyphicon glyphicon-search"></i> 选择
                                     </button>
                                 </div>
@@ -25,30 +26,31 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入服务名称" v-model="serviceManageInfo.serviceName"
-                                       class=" form-control">
+                                <input type="text" placeholder="请输入服务名称"
+                                       v-model="serviceManageInfo.conditions.serviceName" class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入服务编码" v-model="serviceManageInfo.serviceCode"
-                                       class=" form-control">
+                                <input type="text" placeholder="请输入服务编码"
+                                       v-model="serviceManageInfo.conditions.serviceCode" class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm"><i
-                                    class="glyphicon glyphicon-search"></i> 查询
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryServiceMethod()"><i
+                                    class="glyphicon glyphicon-search" ></i> 查询
                             </button>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" v-if="serviceManageInfo.moreCondition == true">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入调用地址" v-model="serviceManageInfo.serviceUrl"
-                                       class=" form-control">
+                                <input type="text" placeholder="请输入调用地址"
+                                       v-model="serviceManageInfo.conditions.serviceUrl" class=" form-control">
                             </div>
                         </div>
                     </div>
+
 
                 </div>
             </div>
@@ -59,6 +61,12 @@
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>服务信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddServiceModal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加服务
+                        </button>
+                    </div>
                 </div>
                 <div class="ibox-content">
 
@@ -71,15 +79,9 @@
                             <th class="text-center">服务ID</th>
                             <th class="text-center">服务名称</th>
                             <th class="text-center">服务编码</th>
-                            <th class="text-center">秘钥</th>
-                            <th class="text-center">序列</th>
                             <th class="text-center">消息队列</th>
-                            <th class="text-center">是否实例</th>
                             <th class="text-center">调用地址</th>
                             <th class="text-center">调用方式</th>
-                            <th class="text-center">超时时间</th>
-                            <th class="text-center">重试次数</th>
-                            <th class="text-center">提供服务</th>
                             <th class="text-center">操作</th>
 
 
@@ -90,15 +92,9 @@
                             <td class="text-center">{{service.serviceId}}</td>
                             <td class="text-center">{{service.name}}</td>
                             <td class="text-center">{{service.serviceCode}}</td>
-                            <td class="text-center">{{service.businessTypeCd}}</td>
-                            <td class="text-center">{{service.seq}}</td>
                             <td class="text-center">{{service.messageQueueName}}</td>
-                            <td class="text-center">{{service.isInstance}}</td>
                             <td class="text-center">{{service.url}}</td>
                             <td class="text-center">{{service.method}}</td>
-                            <td class="text-center">{{service.timeout}}</td>
-                            <td class="text-center">{{service.retryCount}}</td>
-                            <td class="text-center">{{service.provideAppId}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditServiceModel(service)">
@@ -128,6 +124,12 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="chooseApp"
+               emitChooseApp="serviceManage"
+               emitLoadData="serviceManage"
+    ></vc:create>
+
 
     <vc:create name="addService"
                callBackListener=""

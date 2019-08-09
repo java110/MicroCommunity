@@ -39,61 +39,79 @@ public class GeneratorManagerComponent extends BaseGenerator {
         JSONArray tmpConditions = data.getJSONArray("conditions");
 
         StringBuffer conditionInput = new StringBuffer();
+        StringBuffer vcCreate = new StringBuffer();
 
-        for(int condIndex = 0 ; condIndex <  tmpConditions.size(); condIndex ++){
+        for (int condIndex = 0; condIndex < tmpConditions.size(); condIndex++) {
 
             JSONObject tmpCond = tmpConditions.getJSONObject(condIndex);
 
-            if(condIndex % 3 == 0){
+            if (condIndex % 3 == 0) {
                 conditionInput.append("<div class=\"row\">\n");
             }
 
-            if(condIndex % 3 == 0 || condIndex % 3 == 1) {
-                conditionInput.append("<div class=\"col-sm-4\">\n");
-            }else if(condIndex % 3 == 2){
-                conditionInput.append("<div class=\"col-sm-3\">\n");
+            if (condIndex % 3 == 0 || condIndex % 3 == 1) {
+                conditionInput.append("<div class=\"col-sm-4\" ");
+            } else if (condIndex % 3 == 2) {
+                conditionInput.append("<div class=\"col-sm-3\" ");
             }
-            if("choose".equals(tmpCond.getString("inputType"))){
+
+            if (condIndex > 2) {
+                conditionInput.append("v-if=\"" + data.getString("templateCode") + "ManageInfo.moreCondition == true\">\n");
+            } else {
+                conditionInput.append(">\n");
+            }
+
+            if ("choose".equals(tmpCond.getString("inputType"))) {
                 conditionInput.append("                            <div class=\"form-group input-group\">\n" +
-                        "                                <input type=\"text\" placeholder=\"请选择"+tmpCond.getString("name")+"\" v-model=\""+ data.getString("templateCode")+"ManageInfo."+tmpCond.getString("code")+"\" class=\" form-control\">\n" +
+                        "                                <input type=\"text\" placeholder=\"请选择" + tmpCond.getString("name") +
+                        "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
                         "                                <div class=\"input-group-prepend\">\n" +
-                        "                                    <button type=\"button\" class=\"btn btn-primary btn-sm\"><i\n" +
+                        "                                    <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_open" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "Method()\"><i\n" +
                         "                                            class=\"glyphicon glyphicon-search\"></i> 选择\n" +
                         "                                    </button>\n" +
                         "                                </div>\n" +
                         "                            </div>\n");
 
-            }else if("input".equals(tmpCond.getString("inputType"))){
+                if (tmpCond.containsKey("componentName")) {
+                    vcCreate.append("<vc:create name=\"" + tmpCond.getString("componentName") + "\"\n" +
+                            "               emit" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "=\"" + data.getString("templateCode") + "Manage\"\n" +
+                            "               emitLoadData=\"" + data.getString("templateCode") + "Manage\"\n" +
+                            "    ></vc:create>\n");
+
+                }
+
+            } else if ("input".equals(tmpCond.getString("inputType"))) {
                 conditionInput.append("<div class=\"form-group\">\n" +
-                        "                                <input type=\"text\" placeholder=\"请输入"+tmpCond.getString("name")+"\" v-model=\""+ data.getString("templateCode")+"ManageInfo."+tmpCond.getString("code")+"\" class=\" form-control\">\n" +
+                        "                                <input type=\"text\" placeholder=\"请输入" + tmpCond.getString("name") + "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
                         "                            </div>");
             }
 
-                conditionInput.append("                        </div>");
-            if(condIndex == 2){
+            conditionInput.append("                        </div>");
+            if (condIndex == 2) {
                 conditionInput.append("<div class=\"col-sm-1\">\n" +
-                        "                            <button type=\"button\" class=\"btn btn-primary btn-sm\"><i\n" +
-                        "                                    class=\"glyphicon glyphicon-search\"></i> 查询\n" +
+                        "                            <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_query" + toUpperCaseFirstOne(data.getString("templateCode")) + "Method()><i\n" +
+                        "                                    class=\"glyphicon glyphicon-search\" \"></i> 查询\n" +
                         "                            </button>\n" +
                         "                        </div>");
-            }else if(condIndex % 3 == 2){
+            } else if (condIndex % 3 == 2) {
                 conditionInput.append("<div class=\"col-sm-1\">\n" +
                         "                        </div>");
 
             }
 
 
-            if(condIndex % 3 == 2 || condIndex == tmpConditions.size() -1){
+            if (condIndex % 3 == 2 || condIndex == tmpConditions.size() - 1) {
                 conditionInput.append("</div>\n");
             }
         }
 
         fileContext = fileContext.replace("@@conditionInput@@", conditionInput.toString());
+        fileContext = fileContext.replace("@@vcCreate@@", vcCreate.toString());
 
-        if(tmpConditions.size() > 3){
-            fileContext = fileContext.replace("@@moreCondition@@","<button type=\"button\"  class=\"btn btn-link btn-sm\" style=\"margin-right:10px;\"  v-on:click=\"_moreCondition()\">更多</button>");
-        }else{
-            fileContext = fileContext.replace("@@moreCondition@@","");
+        if (tmpConditions.size() > 3) {
+            fileContext = fileContext.replace("@@moreCondition@@", "<button type=\"button\"  class=\"btn btn-link btn-sm\" style=\"margin-right:10px;\"  v-on:click=\"_moreCondition()\">更多</button>");
+        } else {
+            fileContext = fileContext.replace("@@moreCondition@@", "");
 
         }
 
@@ -108,25 +126,25 @@ public class GeneratorManagerComponent extends BaseGenerator {
         JSONArray columns = data.getJSONArray("columns");
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            thSb.append("                            <th class=\"text-center\">" + column.getString("cnCode") + "</th>\n");
-
-            tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
+            if (column.getBoolean("show")) {
+                thSb.append("                            <th class=\"text-center\">" + column.getString("cnCode") + "</th>\n");
+                tdSb.append("                            <td class=\"text-center\">{{" + data.getString("templateCode") + "." + column.getString("code") + "}}</td>\n");
+            }
         }
         thSb.append("                            <th class=\"text-center\">操作</th>\n");
         tdSb.append("                            <td class=\"text-center\"><div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">修改</button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openEdit" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\">修改</button>\n" +
                 "                                </div>\n" +
                 "                                <div class=\"btn-group\">\n" +
-                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete"+toUpperCaseFirstOne(data.getString("templateCode"))+"Model("+data.getString("templateCode")+")\">删除</button>\n" +
+                "                                    <button class=\"btn-white btn btn-xs\" v-on:click=\"_openDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Model(" + data.getString("templateCode") + ")\">删除</button>\n" +
                 "                                </div></td>\n");
 
         fileContext = fileContext.replace("@@columnsCnCode@@", thSb.toString())
-                                .replace("@@columnsName@@", tdSb.toString());
-
+                .replace("@@columnsName@@", tdSb.toString());
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"Package/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.html";
+                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "-manage/" + data.getString("templateCode") + "Manage.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -146,8 +164,43 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
+        //处理查询条件
+        JSONArray tmpConditions = data.getJSONArray("conditions");
+
+        StringBuffer conditionInput = new StringBuffer();
+
+        StringBuffer conditionMethod = new StringBuffer();
+
+        StringBuffer conditionEvent = new StringBuffer();
+
+        for (int condIndex = 0; condIndex < tmpConditions.size(); condIndex++) {
+
+            JSONObject tmpCond = tmpConditions.getJSONObject(condIndex);
+            conditionInput.append(tmpCond.getString("code") + ":'',\n");
+            if(tmpCond.containsKey("key")){
+                conditionInput.append(tmpCond.getString("key") + ":'',\n");
+            }
+
+            if (tmpCond.containsKey("componentName")) {
+                conditionMethod.append(",\n _open" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "Method:function(){\n" +
+                        "                vc.emit('" + tmpCond.getString("componentName") + "','open" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "Model',{});\n" +
+                        "\n" +
+                        "            }"
+                );
+
+                conditionEvent.append("vc.on('" + data.getString("templateCode") + "Manage','" + tmpCond.getString("componentName") + "',function(_param){\n" +
+                        "              vc.copyObject(_param,vc.component." + data.getString("templateCode") + "ManageInfo.conditions);\n" +
+                        "            });\n");
+            }
+
+        }
+
+        fileContext = fileContext.replace("@@conditions@@", conditionInput.toString());
+        fileContext = fileContext.replace("@@extendMethods@@", conditionMethod.toString());
+        fileContext = fileContext.replace("@@extendEvent@@", conditionEvent.toString());
+
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"Package/"+data.getString("templateCode")+"-manage/"+data.getString("templateCode")+"Manage.js";
+                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "-manage/" + data.getString("templateCode") + "Manage.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -168,7 +221,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/java/"+data.getString("templateCode")+"/"+toUpperCaseFirstOne(data.getString("templateCode"))+"ManageComponent.java";
+                + "out/web/component/java/" + data.getString("templateCode") + "/" + toUpperCaseFirstOne(data.getString("templateCode")) + "ManageComponent.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -178,16 +231,17 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
     /**
      * 生成接口类
+     *
      * @param data
      */
-    private void genneratorIListSmo(JSONObject data){
+    private void genneratorIListSmo(JSONObject data) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/IListSMO.java").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/smo/"+data.getString("templateCode")+"/IList"+toUpperCaseFirstOne(data.getString("templateCode"))+"sSMO.java";
+                + "out/web/smo/" + data.getString("templateCode") + "/IList" + toUpperCaseFirstOne(data.getString("templateCode")) + "sSMO.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -195,16 +249,17 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
     /**
      * 生成接口类
+     *
      * @param data
      */
-    private void genneratorListSmoImpl(JSONObject data){
+    private void genneratorListSmoImpl(JSONObject data) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ListSMOImpl.java").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/smo/"+data.getString("templateCode")+"/impl/List"+toUpperCaseFirstOne(data.getString("templateCode"))+"sSMOImpl.java";
+                + "out/web/smo/" + data.getString("templateCode") + "/impl/List" + toUpperCaseFirstOne(data.getString("templateCode")) + "sSMOImpl.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -212,35 +267,36 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
     /**
      * 生成API 侦听处理类
+     *
      * @param data
      */
-    private void genneratorListListener(JSONObject data){
+    private void genneratorListListener(JSONObject data) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ListListener.java").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/api/listener/"+data.getString("templateCode")+"/List"+toUpperCaseFirstOne(data.getString("templateCode"))+"sListener.java";
+                + "out/api/listener/" + data.getString("templateCode") + "/List" + toUpperCaseFirstOne(data.getString("templateCode")) + "sListener.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
     }
 
-    private void genneratorVo(JSONObject data){
+    private void genneratorVo(JSONObject data) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ApiVo.java").getFile());
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/api/vo/"+data.getString("templateCode")+"/Api"+toUpperCaseFirstOne(data.getString("templateCode"))+"Vo.java";
+                + "out/api/vo/" + data.getString("templateCode") + "/Api" + toUpperCaseFirstOne(data.getString("templateCode")) + "Vo.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
     }
 
-    private void genneratorDataVo(JSONObject data){
+    private void genneratorDataVo(JSONObject data) {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ApiDataVo.java").getFile());
         String fileContext = sb.toString();
 
@@ -274,7 +330,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = fileContext.replace("@@templateColumns@@", variable + variableGetSet);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/api/vo/"+data.getString("templateCode")+"/Api"+toUpperCaseFirstOne(data.getString("templateCode"))+"DataVo.java";
+                + "out/api/vo/" + data.getString("templateCode") + "/Api" + toUpperCaseFirstOne(data.getString("templateCode")) + "DataVo.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
