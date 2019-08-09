@@ -68,8 +68,9 @@
                     function(json,res){
                        if(res.status == 200){
                            vc.message('处理成功',true);
+                           var _jInfo = JSON.parse(json);
                            //关闭model
-                           //vc.jumpToPage("/flow/ownerRoomFlow?" + vc.objToGetParam(vc.component.sellRoomInfo.ownerInfo));
+                           vc.jumpToPage("/flow/serviceFlow?" + vc.objToGetParam(_jInfo));
                            return ;
                        }
                        vc.message(json);

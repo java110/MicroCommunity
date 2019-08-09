@@ -23,7 +23,8 @@ serviceUrl:'',
             }
         },
         _initMethod:function(){
-            vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+            //vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._loadDataByParam();
         },
         _initEvent:function(){
             vc.on('serviceManage','chooseApp',function(_param){
@@ -65,7 +66,8 @@ serviceUrl:'',
                            );
             },
             _openAddServiceModal:function(){
-                vc.emit('addService','openAddServiceModal',{});
+                //vc.emit('addService','openAddServiceModal',{});
+                vc.jumpToPage("/flow/serviceBindingFlow");
             },
             _openEditServiceModel:function(_service){
                 vc.emit('editService','openEditServiceModal',_service);
@@ -88,6 +90,48 @@ serviceUrl:'',
              ,
  _openChooseAppMethod:function(){
                 vc.emit('chooseApp','openChooseAppModel',{});
+
+            },
+            _loadDataByParam: function(){
+                vc.component.serviceManageInfo.conditions.appId = vc.getParam("appId");
+                //如果 floodId 没有传 则，直接结束
+                if(vc.component.serviceManageInfo.conditions.appId == null
+                    || vc.component.serviceManageInfo.conditions.appId == undefined
+                    || vc.component.serviceManageInfo.conditions.appId == ''){
+                    vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+                    return ;
+                }
+
+                var param = {
+                    params:{
+                        page:DEFAULT_PAGE,
+                        row:DEFAULT_ROWS,
+                        communityId:vc.getCurrentCommunity().communityId,
+                        appId:vc.component.serviceManageInfo.conditions.appId
+                    }
+                }
+
+                vc.http.get(
+                    'serviceManage',
+                    'loadApp',
+                     param,
+                     function(json,res){
+                        if(res.status == 200){
+                            var _appInfo = JSON.parse(json);
+                            var _tmpApp = _appInfo.apps[0];
+                            vc.component.serviceManageInfo.conditions.appName = _tmpApp.name;
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+
+                vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+
 
             }
         }
