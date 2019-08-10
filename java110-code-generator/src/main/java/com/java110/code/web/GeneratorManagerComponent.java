@@ -89,8 +89,8 @@ public class GeneratorManagerComponent extends BaseGenerator {
             conditionInput.append("                        </div>");
             if (condIndex == 2) {
                 conditionInput.append("<div class=\"col-sm-1\">\n" +
-                        "                            <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_query" + toUpperCaseFirstOne(data.getString("templateCode")) + "Method()><i\n" +
-                        "                                    class=\"glyphicon glyphicon-search\" \"></i> 查询\n" +
+                        "                            <button type=\"button\" class=\"btn btn-primary btn-sm\" v-on:click=\"_query" + toUpperCaseFirstOne(data.getString("templateCode")) + "Method()\">\n" +
+                        "                                    <i class=\"glyphicon glyphicon-search\"></i> 查询\n" +
                         "                            </button>\n" +
                         "                        </div>");
             } else if (condIndex % 3 == 2) {

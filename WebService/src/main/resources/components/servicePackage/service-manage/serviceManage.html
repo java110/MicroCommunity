@@ -5,25 +5,14 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                       <!-- <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
                                 v-on:click="_moreCondition()">更多
-                        </button>
+                        </button>-->
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group input-group">
-                                <input type="text" placeholder="请选择应用名称" v-model="serviceManageInfo.conditions.appName"
-                                       class=" form-control">
-                                <div class="input-group-prepend">
-                                    <button type="button" class="btn btn-primary btn-sm"
-                                            v-on:click="_openChooseAppMethod()"><i
-                                            class="glyphicon glyphicon-search"></i> 选择
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <input type="text" placeholder="请输入服务名称"
@@ -36,19 +25,18 @@
                                        v-model="serviceManageInfo.conditions.serviceCode" class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryServiceMethod()"><i
-                                    class="glyphicon glyphicon-search" ></i> 查询
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4" v-if="serviceManageInfo.moreCondition == true">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <input type="text" placeholder="请输入调用地址"
                                        v-model="serviceManageInfo.conditions.serviceUrl" class=" form-control">
                             </div>
                         </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryServiceMethod()"><i
+                                    class="glyphicon glyphicon-search" ></i> 查询
+                            </button>
+                        </div>
+
                     </div>
 
 
@@ -125,10 +113,10 @@
         </div>
     </div>
 
-    <vc:create name="chooseApp"
+    <!--<vc:create name="chooseApp"
                emitChooseApp="serviceManage"
                emitLoadData="serviceManage"
-    ></vc:create>
+    ></vc:create>-->
 
 
     <vc:create name="addService"

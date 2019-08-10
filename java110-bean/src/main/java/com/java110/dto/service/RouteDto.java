@@ -21,6 +21,8 @@ private String appId;
 private String id;
 private String serviceId;
 private String invokeModel;
+private String appName;
+private String serviceName;
 
 
     private Date createTime;
@@ -80,5 +82,21 @@ public void setInvokeModel(String invokeModel) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }

@@ -20,7 +20,7 @@
                     <span v-if="menu.label == undefined || menu.label == ''" class="fa arrow"></span>
                 </a>
                 <ul v-if="menu.childs != undefined && menu.childs.length >0" class="nav nav-second-level collapse" v-bind:class="{in: menu.active}">
-                    <li v-for="subMenu in menu.childs"><a v-bind:href="subMenu.href">{{subMenu.name}}</a></li>
+                    <li v-for="subMenu in menu.childs" v-if="subMenu.isShow == 'Y'"><a v-bind:href="subMenu.href">{{subMenu.name}}</a></li>
                 </ul>
                 <a v-if="menu.childs == undefined || menu.childs.length ==0" v-bind:href="menu.href">
                     <i class="fa " v-bind:class="menu.icon"></i>

@@ -14,10 +14,10 @@
                 name:'',
                 conditions:{
                     appName:'',
-appId:'',
-serviceName:'',
-serviceCode:'',
-serviceUrl:'',
+                    appId:'',
+                    serviceName:'',
+                    serviceCode:'',
+                    serviceUrl:'',
 
                 }
             }
@@ -66,8 +66,8 @@ serviceUrl:'',
                            );
             },
             _openAddServiceModal:function(){
-                //vc.emit('addService','openAddServiceModal',{});
-                vc.jumpToPage("/flow/serviceBindingFlow");
+                vc.emit('addService','openAddServiceModal',{});
+
             },
             _openEditServiceModel:function(_service){
                 vc.emit('editService','openEditServiceModal',_service);

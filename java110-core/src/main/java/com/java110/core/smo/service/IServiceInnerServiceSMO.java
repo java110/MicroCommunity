@@ -72,4 +72,6 @@ public interface IServiceInnerServiceSMO {
      */
     @RequestMapping(value = "/deleteService", method = RequestMethod.POST)
     int deleteService(@RequestBody ServiceDto serviceDto);
+
+
 }

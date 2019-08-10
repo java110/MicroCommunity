@@ -142,6 +142,9 @@ public class BindingServiceListener extends AbstractServiceApiListener {
      */
     private String saveServiceInfo(JSONObject reqJson, JSONObject serviceInfo){
         ServiceDto serviceDto = BeanConvertUtil.covertBean(serviceInfo, ServiceDto.class);
+        serviceDto.setProvideAppId("8000418002");
+        serviceDto.setBusinessTypeCd("API");
+        serviceDto.setSeq("1");
 
         serviceDto.setServiceId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_service_id));
 
