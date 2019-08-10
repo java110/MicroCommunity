@@ -66,7 +66,7 @@ vc.emit('addRouteView', 'onIndex', vc.component.serviceBindingInfo.index);
                 }
 
                vc.http.post(
-                   'serviceBindingBinding',
+                   'serviceBinding',
                    'binding',
                    JSON.stringify(param),
                    {

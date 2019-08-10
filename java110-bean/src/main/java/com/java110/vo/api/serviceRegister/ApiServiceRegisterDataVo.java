@@ -11,6 +11,10 @@ private String serviceId;
 private String orderTypeCd;
 private String invokeLimitTimes;
 private String invokeModel;
+
+    private String appName;
+    private String serviceName;
+    private String serviceCode;
 public String getId() {
         return id;
     }
@@ -48,6 +52,27 @@ public void setInvokeModel(String invokeModel) {
         this.invokeModel = invokeModel;
     }
 
+    public String getAppName() {
+        return appName;
+    }
 
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getServiceCode() {
+        return serviceCode;
+    }
+
+    public void setServiceCode(String serviceCode) {
+        this.serviceCode = serviceCode;
+    }
 }

@@ -23,6 +23,7 @@ private String serviceId;
 private String invokeModel;
 private String appName;
 private String serviceName;
+private String serviceCode;
 
 
     private Date createTime;
@@ -98,5 +99,13 @@ public void setInvokeModel(String invokeModel) {
 
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public String getServiceCode() {
+        return serviceCode;
+    }
+
+    public void setServiceCode(String serviceCode) {
+        this.serviceCode = serviceCode;
     }
 }

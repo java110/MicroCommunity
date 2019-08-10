@@ -37,7 +37,7 @@ invokeModel:'',
  {
                             limit:"maxLength",
                             param:"50",
-                            errInfo:"应用ID不能超过50"
+                            errInfo:"应用ID不能超过50位"
                         },
                     ],
 'editServiceRegisterInfo.serviceId':[
@@ -47,9 +47,9 @@ invokeModel:'',
                             errInfo:"服务ID不能为空"
                         },
  {
-                            limit:"maxin",
-                            param:"2,50",
-                            errInfo:"服务ID必须在2至50字符之间"
+                            limit:"maxLength",
+                            param:"50",
+                            errInfo:"服务ID不能超过50位"
                         },
                     ],
 'editServiceRegisterInfo.orderTypeCd':[

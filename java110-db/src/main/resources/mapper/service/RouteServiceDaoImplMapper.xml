@@ -61,7 +61,7 @@
     <select id="getRouteInfo" parameterType="Map" resultType="Map">
         select t.invoke_limit_times,t.invoke_limit_times invokeLimitTimes,t.order_type_cd,t.order_type_cd
         orderTypeCd,t.app_id,t.app_id appId,t.status_cd,t.status_cd statusCd,t.id,t.service_id,t.service_id
-        serviceId,t.invoke_model,t.invoke_model invokeModel,s.name serviceName,a.name appName
+        serviceId,t.invoke_model,t.invoke_model invokeModel,s.name serviceName,a.name appName,s.service_code serviceCode
         from c_route t,c_service s, c_app a
         where 1 =1
         and t.app_id = a.app_id
