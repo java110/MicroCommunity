@@ -5,16 +5,20 @@
     </div>
 
     <!-- 选择 应用信息 -->
-    <div v-if="serviceBindingInfo.index == 0 || serviceBindingInfo.index == 2">
+    <div v-if="serviceBindingInfo.index == 0">
         <vc:create name="viewAppInfo"
                    callBackListener="serviceBinding"
                    callBackFunction="notify"
         ></vc:create>
     </div>
-
-    <!-- 选择 应用信息 -->
-    <div v-if="serviceBindingInfo.index == 1 || serviceBindingInfo.index == 2">
+    <div v-if="serviceBindingInfo.index == 1">
         <vc:create name="viewServiceInfo"
+                   callBackListener="serviceBinding"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+    <div v-if="serviceBindingInfo.index == 2">
+        <vc:create name="addRouteView"
                    callBackListener="serviceBinding"
                    callBackFunction="notify"
         ></vc:create>

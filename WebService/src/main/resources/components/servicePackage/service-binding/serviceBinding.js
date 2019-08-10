@@ -2,8 +2,6 @@
     入驻小区
 **/
 (function(vc){
-    var DEFAULT_PAGE = 1;
-    var DEFAULT_ROWS = 10;
     vc.extends({
         data:{
             serviceBindingInfo:{
@@ -27,7 +25,7 @@
                 vc.component.serviceBindingInfo.$step.step({
                     index: 0,
                     time: 500,
-                    title: ["选择应用", "选择服务", "确认绑定"]
+                    title: ["选择应用","选择服务","扩展信息"]
                 });
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
             },
@@ -35,31 +33,40 @@
                 vc.component.serviceBindingInfo.$step.prevStep();
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
 
-                 vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-                 vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+                vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+vc.emit('addRouteView', 'onIndex', vc.component.serviceBindingInfo.index);
+
             },
             _nextStep:function(){
                 var _currentData = vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index];
                 if( _currentData == null || _currentData == undefined){
-                    vc.message("请选择相关信息");
+                    vc.message("请选择或填写必选信息");
                     return ;
                 }
                 vc.component.serviceBindingInfo.$step.nextStep();
                 vc.component.serviceBindingInfo.index = vc.component.serviceBindingInfo.$step.getIndex();
 
-                vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
-                vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+                 vc.emit('viewAppInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+vc.emit('viewServiceInfo', 'onIndex', vc.component.serviceBindingInfo.index);
+vc.emit('addRouteView', 'onIndex', vc.component.serviceBindingInfo.index);
+
             },
             _finishStep:function(){
 
 
+                var _currentData = vc.component.serviceBindingInfo.infos[vc.component.serviceBindingInfo.index];
+                if( _currentData == null || _currentData == undefined){
+                    vc.message("请选择或填写必选信息");
+                    return ;
+                }
 
                 var param = {
                     data:vc.component.serviceBindingInfo.infos
                 }
 
                vc.http.post(
-                   'serviceBinding',
+                   'serviceBindingBinding',
                    'binding',
                    JSON.stringify(param),
                    {
@@ -67,10 +74,10 @@
                     },
                     function(json,res){
                        if(res.status == 200){
+
                            vc.message('处理成功',true);
-                           var _jInfo = JSON.parse(json);
                            //关闭model
-                           vc.jumpToPage("/flow/serviceFlow?" + vc.objToGetParam(_jInfo));
+                           vc.jumpToPage("/flow/serviceRegisterFlow?" + vc.objToGetParam(JSON.parse(json)));
                            return ;
                        }
                        vc.message(json);

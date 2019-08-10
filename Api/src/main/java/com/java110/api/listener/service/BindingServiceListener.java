@@ -4,11 +4,13 @@ package com.java110.api.listener.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.common.constant.CommonConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeServiceConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -45,8 +47,12 @@ public class BindingServiceListener extends AbstractServiceApiListener {
 
         JSONArray infos = reqJson.getJSONArray("data");
 
-        if(infos == null || infos.size() !=2){
-            throw new IllegalArgumentException("请求参数错误，为包含 应用或服务信息");
+        Assert.hasKeyByFlowData(infos, "addRouteView", "orderTypeCd", "必填，请填写订单类型");
+        Assert.hasKeyByFlowData(infos, "addRouteView", "invokeLimitTimes", "必填，请填写调用次数");
+        Assert.hasKeyByFlowData(infos, "addRouteView", "invokeModel", "可填，请填写消息队列，订单在异步调用时使用");
+
+        if(infos == null || infos.size() !=3){
+            throw new IllegalArgumentException("请求参数错误，为包含 应用，服务或扩展信息");
         }
     }
 
@@ -55,47 +61,30 @@ public class BindingServiceListener extends AbstractServiceApiListener {
 
         JSONArray infos = reqJson.getJSONArray("data");
 
-        JSONObject appInfo = null; //应用信息
-        JSONObject serviceInfo = null; // 服务信息
+        JSONObject viewAppInfo = getObj(infos, "App");
+        JSONObject viewServiceInfo = getObj(infos, "Service");
+        JSONObject addRouteView = getObj(infos, "addRouteView");
 
-        for(int infoIndex = 0 ; infoIndex < infos.size(); infoIndex ++){
-
-            Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
-
-            if("App".equals(infos.getJSONObject(infoIndex).getString("flowComponent"))){
-                appInfo = infos.getJSONObject(infoIndex);
-            }
-            if("Service".equals(infos.getJSONObject(infoIndex).getString("flowComponent"))){
-                serviceInfo = infos.getJSONObject(infoIndex);
-            }
-        }
-
-        Assert.notNull(appInfo, "未包含应用信息");
-        Assert.notNull(serviceInfo, "未包含服务信息");
+        Assert.notNull(viewAppInfo, "未包含应用信息");
+        Assert.notNull(viewServiceInfo, "未包含服务信息");
+        Assert.notNull(addRouteView, "未包含扩展信息");
 
 
         //处理 应用信息
-        if(!appInfo.containsKey("appId")
-                || StringUtils.isEmpty(appInfo.getString("appId"))
-                || appInfo.getString("appId").startsWith("-")){
-            appInfo.put("appId", saveAppInfo(reqJson, appInfo));
+        if(!hasKey(viewAppInfo, "appId")){
+            viewAppInfo.put("appId", saveAppInfo(reqJson, viewAppInfo));
         }
 
         //处理 服务信息
-        if(!serviceInfo.containsKey("serviceId")
-                || StringUtils.isEmpty(serviceInfo.getString("serviceId"))
-                || serviceInfo.getString("serviceId").startsWith("-")){
-            serviceInfo.put("serviceId", saveServiceInfo(reqJson, serviceInfo));
+        if(!hasKey(viewServiceInfo, "serviceId")){
+            viewServiceInfo.put("serviceId", saveServiceInfo(reqJson, viewServiceInfo));
         }
 
         //处理路由信息
 
-        RouteDto routeDto = new RouteDto();
-        routeDto.setAppId(appInfo.getString("appId"));
-        routeDto.setServiceId(serviceInfo.getString("serviceId"));
-        routeDto.setInvokeLimitTimes("1000");
-        routeDto.setInvokeModel("S");
-        routeDto.setOrderTypeCd("Q");
+        RouteDto routeDto = BeanConvertUtil.covertBean(addRouteView, RouteDto.class);
+        routeDto.setAppId(viewAppInfo.getString("appId"));
+        routeDto.setServiceId(viewServiceInfo.getString("serviceId"));
 
         int count = routeInnerServiceSMOImpl.saveRoute(routeDto);
 
@@ -155,6 +144,35 @@ public class BindingServiceListener extends AbstractServiceApiListener {
         }
         return serviceDto.getServiceId();
     }
+
+    private JSONObject getObj(JSONArray infos , String flowComponent){
+
+        JSONObject serviceInfo = null;
+
+        for(int infoIndex = 0 ; infoIndex < infos.size(); infoIndex ++){
+
+            Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
+
+            if(flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))){
+                serviceInfo = infos.getJSONObject(infoIndex);
+                Assert.notNull(serviceInfo, "未包含服务信息");
+                return serviceInfo;
+            }
+        }
+
+        throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
+    }
+
+    private boolean hasKey(JSONObject info, String key){
+        if(!info.containsKey(key)
+                || StringUtil.isEmpty(info.getString(key))
+                || info.getString(key).startsWith("-")){
+            return false;
+        }
+        return true;
+
+    }
+
 
     @Override
     public String getServiceCode() {
