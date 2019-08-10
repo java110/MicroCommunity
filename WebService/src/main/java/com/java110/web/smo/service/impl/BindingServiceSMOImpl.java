@@ -27,9 +27,14 @@ public class BindingServiceSMOImpl extends AbstractComponentSMO implements IBind
 
         JSONArray infos = paramIn.getJSONArray("data");
 
-        if(infos == null || infos.size() !=2){
-            throw new IllegalArgumentException("请求参数错误，为包含 应用或服务信息");
+        if(infos == null || infos.size() !=3){
+            throw new IllegalArgumentException("请求参数错误，为包含 应用, 服务或 扩展信息");
         }
+
+        Assert.hasKeyByFlowData(infos, "addRouteView", "orderTypeCd", "必填，请填写订单类型");
+        Assert.hasKeyByFlowData(infos, "addRouteView", "invokeLimitTimes", "必填，请填写调用次数");
+        Assert.hasKeyByFlowData(infos, "addRouteView", "invokeModel", "可填，请填写消息队列，订单在异步调用时使用");
+
     }
 
     @Override

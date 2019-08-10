@@ -23,7 +23,8 @@ serviceUrl:'',
             }
         },
         _initMethod:function(){
-            vc.component._listServiceRegisters(DEFAULT_PAGE, DEFAULT_ROWS);
+            //vc.component._listServiceRegisters(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._loadDataByParam(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
             vc.on('serviceRegisterManage','chooseApp',function(_param){
@@ -92,12 +93,12 @@ serviceUrl:'',
 
             },
             _loadDataByParam: function(){
-                    vc.component.serviceManageInfo.conditions.appId = vc.getParam("appId");
+                    vc.component.serviceRegisterManageInfo.conditions.appId = vc.getParam("appId");
                     //如果 floodId 没有传 则，直接结束
-                    if(vc.component.serviceManageInfo.conditions.appId == null
-                        || vc.component.serviceManageInfo.conditions.appId == undefined
-                        || vc.component.serviceManageInfo.conditions.appId == ''){
-                        vc.component._listServices(DEFAULT_PAGE, DEFAULT_ROWS);
+                    if(vc.component.serviceRegisterManageInfo.conditions.appId == null
+                        || vc.component.serviceRegisterManageInfo.conditions.appId == undefined
+                        || vc.component.serviceRegisterManageInfo.conditions.appId == ''){
+                        vc.component._listServiceRegisters(DEFAULT_PAGE, DEFAULT_ROWS);
                         return ;
                     }
 
@@ -106,7 +107,7 @@ serviceUrl:'',
                             page:DEFAULT_PAGE,
                             row:DEFAULT_ROWS,
                             communityId:vc.getCurrentCommunity().communityId,
-                            appId:vc.component.serviceManageInfo.conditions.appId
+                            appId:vc.component.serviceRegisterManageInfo.conditions.appId
                         }
                     }
 
@@ -118,7 +119,7 @@ serviceUrl:'',
                             if(res.status == 200){
                                 var _appInfo = JSON.parse(json);
                                 var _tmpApp = _appInfo.apps[0];
-                                vc.component.serviceManageInfo.conditions.appName = _tmpApp.name;
+                                vc.component.serviceRegisterManageInfo.conditions.appName = _tmpApp.name;
                                 return ;
                             }
                             vc.message(json);
