@@ -50,6 +50,9 @@ public class ListCachesSMOImpl extends AbstractComponentSMO implements IListCach
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
+        int page = paramIn.getInteger("page");
+        paramIn.put("page", ( page - 1)* paramIn.getInteger("row"));
+        paramIn.put("row", page * paramIn.getInteger("row"));
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/query.console.caches" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
@@ -66,6 +69,8 @@ public class ListCachesSMOImpl extends AbstractComponentSMO implements IListCach
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.HAS_LIST_CACHE);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+
 
         //根据ID查询缓存ID
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/query.console.cache" + mapToUrlParam(paramIn);
