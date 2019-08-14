@@ -60,6 +60,10 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     maxActive: 20
     username: TT
+  mvc:
+    view:
+      prefix: classpath:/view/
+      suffix: .html
 
 #============== kafka ===================
 kafka:

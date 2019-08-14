@@ -25,7 +25,7 @@ public class JobController extends BaseController {
     /**
      * 首页处理方法
      *
-     * @param JobCode 流程编码
+     * @param JobCode 编码
      * @param request  请求对象
      * @return 页面名称
      */
@@ -40,9 +40,9 @@ public class JobController extends BaseController {
         } catch (Throwable e) {
             flowCode = "error";
         }*/
+        System.out.println(JobCode);
 
-
-        return JobCode;
+        return "prvncFtpToFileSystemConfigList";
     }
 
 
