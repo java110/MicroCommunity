@@ -68,6 +68,9 @@ public final class PrivilegeCodeConstant {
     public static final String AGENT_HAS_LIST_SERVICEREGISTER = "500201907032";
 
     public static final String HAS_LIST_CACHE = "500201907032";
+    public static final String LIST_SERVICEIMPL = "500201906028";
+
+
 
 
 

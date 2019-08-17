@@ -1,0 +1,72 @@
+<div id = "chooseServiceImplModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="chooseServiceImplModelLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="chooseServiceImplModelLabel">选择服务实现</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="row">
+
+                                <div class="col-sm-7 m-b-xs">
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input placeholder="输入服务实现名称" type="text" v-model="chooseServiceImplInfo._currentServiceImplName" class="form-control form-control-sm">
+                                        <span class="input-group-append">
+                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="queryServiceImpls()">查询</button>
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="margin-top:15px">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                                                        <th class="text-center">服务实现ID</th>
+                            <th class="text-center">服务实现ID</th>
+                            <th class="text-center">业务类型</th>
+                            <th class="text-center">业务名称</th>
+                            <th class="text-center">调用类型</th>
+                            <th class="text-center">调用地址</th>
+                            <th class="text-center">kafka主题</th>
+                            <th class="text-center">超时时间</th>
+                            <th class="text-center">重试次数</th>
+                            <th class="text-center">描述</th>
+                            <th class="text-center">操作</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="serviceImpl in chooseServiceImplInfo.serviceImpls">
+                                                                        <td class="text-center">{{serviceImpl.serviceBusinessId}}</td>
+                            <td class="text-center">{{serviceImpl.serviceBusinessId}}</td>
+                            <td class="text-center">{{serviceImpl.businessTypeCd}}</td>
+                            <td class="text-center">{{serviceImpl.name}}</td>
+                            <td class="text-center">{{serviceImpl.invokeType}}</td>
+                            <td class="text-center">{{serviceImpl.url}}</td>
+                            <td class="text-center">{{serviceImpl.messageTopic}}</td>
+                            <td class="text-center">{{serviceImpl.timeout}}</td>
+                            <td class="text-center">{{serviceImpl.retryCount}}</td>
+                            <td class="text-center">{{serviceImpl.description}}</td>
+
+                                            <td>
+                                                <button class="btn btn-primary btn-xs" v-on:click="chooseServiceImpl(serviceImpl)">选择</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
