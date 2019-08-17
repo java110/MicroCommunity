@@ -99,7 +99,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
                 }
 
-                conditionInput.append("<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+tmpCond.getString("code")+"\">\n" +
+                conditionInput.append("<select class=\"custom-select\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") +"\">\n" +
                         "         <option selected  value=\"\">请选择" + tmpCond.getString("name") + "</option>\n" +
                         "         " +option+
                         "  </select>"
