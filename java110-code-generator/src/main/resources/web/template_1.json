@@ -35,18 +35,6 @@
   ],
   "columns":[
     {
-      "code":"serviceBusinessId",
-      "cnCode":"服务实现ID",
-      "desc":"必填，请填写应用ID",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"服务实现ID不能超过50",
-      "show": true
-    },
-    {
       "code":"businessTypeCd",
       "cnCode":"业务类型",
       "desc":"必填，请填写业务类型",
