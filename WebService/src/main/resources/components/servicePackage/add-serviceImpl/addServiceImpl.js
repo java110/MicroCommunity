@@ -8,7 +8,6 @@
         data:{
             addServiceImplInfo:{
                 serviceBusinessId:'',
-                serviceBusinessId:'',
 businessTypeCd:'',
 name:'',
 invokeType:'',
@@ -33,18 +32,7 @@ description:'',
                 return vc.validate.validate({
                     addServiceImplInfo:vc.component.addServiceImplInfo
                 },{
-                    'addServiceImplInfo.serviceBusinessId':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"服务实现ID不能为空"
-                        },
- {
-                            limit:"maxLength",
-                            param:"50",
-                            errInfo:"服务实现ID不能超过50"
-                        },
-                    ],
+
 'addServiceImplInfo.businessTypeCd':[
 {
                             limit:"required",

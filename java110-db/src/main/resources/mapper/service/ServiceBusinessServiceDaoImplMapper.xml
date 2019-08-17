@@ -84,7 +84,7 @@ business_type_cd,invoke_type,message_topic,retry_count,status_cd,service_busines
 
     <!-- 查询服务实现信息 add by wuxw 2018-07-03 -->
     <select id="getServiceBusinessInfo" parameterType="Map" resultType="Map">
-        select  t.business_type_cd,t.business_type_cd businessTypeCd,t.invoke_type,t.invoke_type invokeType,t.message_topic,t.message_topic messageTopic,t.retry_count,t.retry_count retryCount,t.status_cd,t.status_cd statusCd,t.service_business_id,t.service_business_id serviceBusinessId,t.url,t.timeout 
+        select  t.business_type_cd,c.name,c.description,t.business_type_cd businessTypeCd,t.invoke_type,t.invoke_type invokeType,t.message_topic,t.message_topic messageTopic,t.retry_count,t.retry_count retryCount,t.status_cd,t.status_cd statusCd,t.service_business_id,t.service_business_id serviceBusinessId,t.url,t.timeout
 from c_service_business t ,c_business_type c
 where 1 =1
         and t.business_type_cd = c.business_type_cd

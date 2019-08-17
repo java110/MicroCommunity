@@ -3,7 +3,6 @@
     vc.extends({
         data:{
             editServiceImplInfo:{
-                serviceBusinessId:'',
 serviceBusinessId:'',
 businessTypeCd:'',
 name:'',
