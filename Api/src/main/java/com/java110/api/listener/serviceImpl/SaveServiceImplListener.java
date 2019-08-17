@@ -37,7 +37,7 @@ public class SaveServiceImplListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        Assert.hasKeyAndValue(reqJson, "serviceBusinessId", "必填，请填写应用ID");
+        //Assert.hasKeyAndValue(reqJson, "serviceBusinessId", "必填，请填写应用ID");
         Assert.hasKeyAndValue(reqJson, "businessTypeCd", "必填，请填写业务类型");
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写业务名称");
         Assert.hasKeyAndValue(reqJson, "invokeType", "必填，请填写调用类型");
