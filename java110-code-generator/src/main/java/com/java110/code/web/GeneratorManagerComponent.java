@@ -84,6 +84,27 @@ public class GeneratorManagerComponent extends BaseGenerator {
                 conditionInput.append("<div class=\"form-group\">\n" +
                         "                                <input type=\"text\" placeholder=\"请输入" + tmpCond.getString("name") + "\" v-model=\"" + data.getString("templateCode") + "ManageInfo.conditions." + tmpCond.getString("code") + "\" class=\" form-control\">\n" +
                         "                            </div>");
+            } else if ("select".equals(tmpCond.getString("inputType"))){
+
+                String[] selectValues = tmpCond.getString("selectValue").split(",");
+                String[] selectValueNames = tmpCond.getString("selectValueName").split(",");
+
+
+                String option = "";
+                for (int valueIndex = 0; valueIndex < selectValues.length; valueIndex++) {
+
+                    String value = selectValues[valueIndex];
+
+                    option += "<option  value=\"" + value + "\">" + selectValueNames[valueIndex] + "</option>\n";
+
+                }
+
+                conditionInput.append("<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+tmpCond.getString("code")+"\">\n" +
+                        "         <option selected  value=\"\">请选择" + tmpCond.getString("name") + "</option>\n" +
+                        "         " +option+
+                        "  </select>"
+                );
+
             }
 
             conditionInput.append("                        </div>");

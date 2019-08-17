@@ -5,28 +5,42 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button"  class="btn btn-link btn-sm" style="margin-right:10px;"  v-on:click="_moreCondition()">更多</button>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;" v-on:click="_moreCondition()">更多</button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入业务类型" v-model="serviceImplManageInfo.conditions.businessTypeCd" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<div class="form-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入业务名称" v-model="serviceImplManageInfo.conditions.name" class=" form-control">
-                            </div>                        </div><div class="col-sm-3" >
-                        </div><div class="col-sm-1">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="custom-select" v-model="addServiceImplInfo.invokeType">
+                                <option selected value="">请选择调用方式</option>
+                                <option value="1">微服务POST方式</option>
+                                <option value="2">webservice方式</option>
+                                <option value="3">http post方式</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryServiceImplMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
-<div class="row">
-<div class="col-sm-4" v-if="serviceImplManageInfo.moreCondition == true">
-<div class="form-group">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" v-if="serviceImplManageInfo.moreCondition == true">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入kafka主题" v-model="serviceImplManageInfo.conditions.messageTopic" class=" form-control">
-                            </div>                        </div></div>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -53,7 +67,7 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">服务实现ID</th>
+                            <th class="text-center">服务实现ID</th>
                             <th class="text-center">服务实现ID</th>
                             <th class="text-center">业务类型</th>
                             <th class="text-center">业务名称</th>
@@ -65,17 +79,19 @@
                         </thead>
                         <tbody>
                         <tr v-for="serviceImpl in serviceImplManageInfo.serviceImpls">
-                                                        <td class="text-center">{{serviceImpl.serviceBusinessId}}</td>
+                            <td class="text-center">{{serviceImpl.serviceBusinessId}}</td>
                             <td class="text-center">{{serviceImpl.serviceBusinessId}}</td>
                             <td class="text-center">{{serviceImpl.businessTypeCd}}</td>
                             <td class="text-center">{{serviceImpl.name}}</td>
                             <td class="text-center">{{serviceImpl.invokeType}}</td>
-                            <td class="text-center"><div class="btn-group">
+                            <td class="text-center">
+                                <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditServiceImplModel(serviceImpl)">修改</button>
                                 </div>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteServiceImplModel(serviceImpl)">删除</button>
-                                </div></td>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -94,7 +110,6 @@
         </div>
     </div>
 
-    
 
     <vc:create name="addServiceImpl"
                callBackListener=""
