@@ -7,9 +7,9 @@
     <!-- 保存服务实现信息 add by wuxw 2018-07-03 -->
        <insert id="saveServiceBusiness" parameterType="Map">
            insert into c_service_business(
-business_type_cd,invoke_type,message_topic,operate,retry_count,url,timeout
+business_type_cd,invoke_type,message_topic,retry_count,url,timeout
 ) values (
-#{businessTypeCd},#{invokeType},#{messageTopic},#{operate},#{retryCount},#{url},#{timeout}
+#{businessTypeCd},#{invokeType},#{messageTopic},#{retryCount},#{url},#{timeout}
 )
        </insert>
 
