@@ -198,7 +198,7 @@ and t.service_business_id= #{serviceBusinessId}
      </select>
 
     <select id="queryBusinessType" parameterType="Map" resultType="Map">
-        select ct.* from c_service_type ct
+        select ct.* from c_business_type ct
         where ct.business_type_cd = #{businessTypeCd}
     </select>
 
