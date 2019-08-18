@@ -1,4 +1,4 @@
-<div id = "editServiceImplModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div id="editServiceImplModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -6,66 +6,61 @@
                 <div class="ibox-content">
                     <div>
                         <div>
+
                             <div class="form-group row">
-         <label class="col-sm-2 col-form-label">服务实现ID</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.serviceBusinessId"                   type="text" placeholder="必填，请填写服务实现ID" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">业务类型</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.businessTypeCd"                   type="text" placeholder="必填，请填写业务类型" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">业务名称</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.name"                   type="text" placeholder="必填，请填写业务名称" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">调用类型</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="editServiceImplInfo.invokeType">
-         <option selected  disabled value="">必填，请选择调用类型</option>
-         <option  value="1">微服务POST方式</option>
-<option  value="2">webservice方式</option>
-<option  value="3">http post方式</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">调用地址</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.url"                   type="text" placeholder="必填，请填写调用地址" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">kafka主题</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.messageTopic"                   type="text" placeholder="选填，请填写kafka主题" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">超时时间</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.timeout"                   type="text" placeholder="必填，请填写超时时间" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">重试次数</label>
-         <div class="col-sm-10">
-           <input v-model="editServiceImplInfo.retryCount"                   type="text" placeholder="必填，请填写重试次数" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">描述</label>
-         <div class="col-sm-10">
-<textarea  placeholder="选填，请填写描述" class="form-control" v-model="editServiceImplInfo.description"></textarea>         </div>
-</div>
+                                <label class="col-sm-2 col-form-label">业务类型</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.businessTypeCd" type="text" placeholder="必填，请填写业务类型" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">业务名称</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.name" type="text" placeholder="必填，请填写业务名称" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">调用类型</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="editServiceImplInfo.invokeType">
+                                        <option selected disabled value="">必填，请选择调用类型</option>
+                                        <option value="1">微服务POST方式</option>
+                                        <option value="2">webservice方式</option>
+                                        <option value="3">http post方式</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">调用地址</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.url" type="text" placeholder="必填，请填写调用地址" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">kafka主题</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.messageTopic" type="text" placeholder="选填，请填写kafka主题" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">超时时间</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.timeout" type="text" placeholder="必填，请填写超时时间" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">重试次数</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editServiceImplInfo.retryCount" type="text" placeholder="必填，请填写重试次数" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">描述</label>
+                                <div class="col-sm-10">
+                                    <textarea placeholder="选填，请填写描述" class="form-control" v-model="editServiceImplInfo.description"></textarea></div>
+                            </div>
 
                             <div class="ibox-content">
-                                <button class="btn btn-primary float-right" type="button" v-on:click="editServiceImpl()" ><i class="fa fa-check"></i>&nbsp;保存</button>
+                                <button class="btn btn-primary float-right" type="button" v-on:click="editServiceImpl()"><i class="fa fa-check"></i>&nbsp;保存</button>
                                 <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
                             </div>
                         </div>
