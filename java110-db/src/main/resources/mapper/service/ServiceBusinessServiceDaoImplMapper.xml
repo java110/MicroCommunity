@@ -203,7 +203,7 @@ and t.service_business_id= #{serviceBusinessId}
     </select>
 
     <insert id="saveBusinessType" parameterType="Map">
-        insert into c_service_type(business_type_cd,name,description)
+        insert into c_business_type(business_type_cd,name,description)
         values(#{businessTypeCd},#{name},#{description})
 
     </insert>

@@ -11,7 +11,7 @@
 businessTypeCd:'',
 name:'',
 invokeType:'',
-url:'1000',
+url:'',
 messageTopic:'',
 timeout:'60',
 retryCount:'3',
@@ -76,9 +76,9 @@ description:'',
                             errInfo:"调用地址不能为空"
                         },
  {
-                            limit:"num",
-                            param:"",
-                            errInfo:"调用次数错误"
+                            limit:"maxLength",
+                            param:"200",
+                            errInfo:"调用地址超过200位"
                         },
                     ],
 'addServiceImplInfo.messageTopic':[
