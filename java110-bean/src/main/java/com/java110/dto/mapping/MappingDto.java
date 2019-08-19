@@ -16,11 +16,11 @@ import java.util.Date;
 public class MappingDto extends PageDto implements Serializable {
 
     private String domain;
-private String name;
-private String remark;
-private String id;
-private String value;
-private String key;
+    private String name;
+    private String remark;
+    private String id;
+    private String value;
+    private String key;
 
 
     private Date createTime;
@@ -31,37 +31,48 @@ private String key;
     public String getDomain() {
         return domain;
     }
-public void setDomain(String domain) {
+
+    public void setDomain(String domain) {
         this.domain = domain;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getId() {
+
+    public String getId() {
         return id;
     }
-public void setId(String id) {
+
+    public void setId(String id) {
         this.id = id;
     }
-public String getValue() {
+
+    public String getValue() {
         return value;
     }
-public void setValue(String value) {
+
+    public void setValue(String value) {
         this.value = value;
     }
-public String getKey() {
+
+    public String getKey() {
         return key;
     }
-public void setKey(String key) {
+
+    public void setKey(String key) {
         this.key = key;
     }
 

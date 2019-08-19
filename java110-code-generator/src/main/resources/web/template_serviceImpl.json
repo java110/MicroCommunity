@@ -1,0 +1,142 @@
+{
+  "templateName":"服务实现",
+  "templateCode":"serviceImpl",
+  "templateKey":"serviceBusinessId",
+  "templateKeyName":"服务实现ID",
+  "searchCode": "name",
+  "searchName": "服务名称",
+  "conditions": [
+    {
+      "name": "业务类型",
+      "inputType": "input",
+      "code": "businessTypeCd",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "业务名称",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "like"
+    },
+    {
+      "name": "调用方式",
+      "inputType": "select",
+      "code": "invokeType",
+      "selectValue":"1,2,3",
+      "selectValueName":"微服务POST方式,webservice方式,http post方式",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "kafka主题",
+      "inputType": "input",
+      "code": "messageTopic",
+      "whereCondition": "like"
+    }
+  ],
+  "columns":[
+    {
+      "code":"businessTypeCd",
+      "cnCode":"业务类型",
+      "desc":"必填，请填写业务类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"业务类型必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"name",
+      "cnCode":"业务名称",
+      "desc":"必填，请填写业务名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"业务类型必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"invokeType",
+      "cnCode":"调用类型",
+      "desc":"必填，请填写调用类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"1,2,3",
+      "selectValueName":"微服务POST方式,webservice方式,http post方式",
+      "limit":"maxin",
+      "limitParam":"1,4",
+      "limitErrInfo":"调用类型错误",
+      "show": true
+    },
+
+    {
+      "code":"url",
+      "cnCode":"调用地址",
+      "desc":"必填，请填写调用地址，为mapping 表中domain为DOMAIN.COMMON映射key",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"1000",
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"调用次数错误",
+      "show": false
+    },
+    {
+      "code":"messageTopic",
+      "cnCode":"kafka主题",
+      "desc":"可填，请填写kafka主题",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"kafka主题不能超过50",
+      "show": false
+    },
+    {
+      "code":"timeout",
+      "cnCode":"超时时间",
+      "desc":"必填，请填写超时时间",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":60,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"超时时间必须为数字",
+      "show": false
+    },
+    {
+      "code":"retryCount",
+      "cnCode":"重试次数",
+      "desc":"必填，请填写重试次数",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":3,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"重试次数必须为数字",
+      "show": false
+    },
+    {
+      "code":"description",
+      "cnCode":"描述",
+      "desc":"可填，请填写描述",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200",
+      "show": false
+    }
+  ]
+}
