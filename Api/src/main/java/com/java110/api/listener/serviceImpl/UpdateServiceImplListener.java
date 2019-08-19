@@ -34,7 +34,6 @@ public class UpdateServiceImplListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "serviceBusinessId", "服务实现ID不能为空");
 Assert.hasKeyAndValue(reqJson, "serviceBusinessId", "必填，请填写应用ID");
 Assert.hasKeyAndValue(reqJson, "businessTypeCd", "必填，请填写业务类型");
 Assert.hasKeyAndValue(reqJson, "name", "必填，请填写业务名称");
