@@ -218,7 +218,7 @@ and t.service_business_id= #{serviceBusinessId}
                 ct.business_type_cd= #{businessTypeCd},
             </if>
             <if test="description !=null and description != ''">
-                ct.description= #{description},
+                ct.description= #{description}
             </if>
         </set>
 
