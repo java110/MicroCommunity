@@ -69,4 +69,12 @@ public class MenuGroupDto extends PageDto implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String getgId() {
+        return gId;
+    }
+
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
 }

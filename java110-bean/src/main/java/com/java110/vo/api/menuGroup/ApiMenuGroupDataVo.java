@@ -48,6 +48,13 @@ public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getgId() {
+        return gId;
+    }
+
+    public void setgId(String gId) {
+        this.gId = gId;
+    }
 
 
 }

@@ -5,27 +5,35 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        
+
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入组名称" v-model="menuGroupManageInfo.conditions.name" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入icon" v-model="menuGroupManageInfo.conditions.icon" class=" form-control">
-                            </div>                        </div><div class="col-sm-3" >
-<select class="custom-select" v-model="menuGroupManageInfo.conditions.label">
-         <option selected  value="">请选择标签</option>
-         <option  value="HOT">HOT</option>
-<option  value="TOP">TOP</option>
-  </select>                        </div><div class="col-sm-1">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入组名称" v-model="menuGroupManageInfo.conditions.name"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入icon" v-model="menuGroupManageInfo.conditions.icon"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="custom-select" v-model="menuGroupManageInfo.conditions.label">
+                                <option selected value="">请选择标签</option>
+                                <option value="HOT">HOT</option>
+                                <option value="TOP">TOP</option>
+                            </select></div>
+                        <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryMenuGroupMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -48,11 +56,10 @@
 
                     <table class="footable table table-stripped toggle-arrow-tiny"
                            data-page-size="15"
-                           style="table-layout: fixed;word-break:break-all;"
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">组Id</th>
+                            <th class="text-center">组Id</th>
                             <th class="text-center">组名称</th>
                             <th class="text-center">icon</th>
                             <th class="text-center">标签</th>
@@ -64,17 +71,23 @@
                         </thead>
                         <tbody>
                         <tr v-for="menuGroup in menuGroupManageInfo.menuGroups">
-                                                        <td class="text-center">{{menuGroup.gId}}</td>
+                            <td class="text-center">{{menuGroup.gId}}</td>
                             <td class="text-center">{{menuGroup.name}}</td>
                             <td class="text-center">{{menuGroup.icon}}</td>
                             <td class="text-center">{{menuGroup.label}}</td>
                             <td class="text-center">{{menuGroup.seq}}</td>
-                            <td class="text-center"><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditMenuGroupModel(menuGroup)">修改</button>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditMenuGroupModel(menuGroup)">修改
+                                    </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteMenuGroupModel(menuGroup)">删除</button>
-                                </div></td>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeleteMenuGroupModel(menuGroup)">删除
+                                    </button>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -93,7 +106,6 @@
         </div>
     </div>
 
-    
 
     <vc:create name="addMenuGroup"
                callBackListener=""
