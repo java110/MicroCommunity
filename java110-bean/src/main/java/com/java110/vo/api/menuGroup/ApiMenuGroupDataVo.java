@@ -6,45 +6,57 @@ import java.util.Date;
 public class ApiMenuGroupDataVo implements Serializable {
 
     private String gId;
-private String name;
-private String icon;
-private String label;
-private String seq;
-private String description;
-public String getGId() {
+    private String name;
+    private String icon;
+    private String label;
+    private String seq;
+    private String description;
+
+    public String getGId() {
         return gId;
     }
-public void setGId(String gId) {
+
+    public void setGId(String gId) {
         this.gId = gId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getIcon() {
+
+    public String getIcon() {
         return icon;
     }
-public void setIcon(String icon) {
+
+    public void setIcon(String icon) {
         this.icon = icon;
     }
-public String getLabel() {
+
+    public String getLabel() {
         return label;
     }
-public void setLabel(String label) {
+
+    public void setLabel(String label) {
         this.label = label;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-public String getDescription() {
+
+    public String getDescription() {
         return description;
     }
-public void setDescription(String description) {
+
+    public void setDescription(String description) {
         this.description = description;
     }
 

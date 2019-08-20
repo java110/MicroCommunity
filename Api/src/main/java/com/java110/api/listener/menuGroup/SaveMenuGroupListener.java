@@ -6,11 +6,13 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.menu.IMenuInnerServiceSMO;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.dto.service.ServiceBusinessDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -51,12 +53,27 @@ public class SaveMenuGroupListener extends AbstractServiceApiListener {
 
         MenuGroupDto menuGroupDto = BeanConvertUtil.covertBean(reqJson, MenuGroupDto.class);
 
+        freshGId(menuGroupDto);
+
 
         int saveFlag = menuInnerServiceSMOImpl.saveMenuGroup(menuGroupDto);
 
         responseEntity = new ResponseEntity<String>(saveFlag > 0 ? "成功" : "失败", saveFlag > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷新 菜单组ID
+     * @param menuGroupDto
+     */
+    private void freshGId(MenuGroupDto menuGroupDto) {
+
+        if(!StringUtils.isEmpty(menuGroupDto.getGId())){
+            return ;
+        }
+        //生成流水
+        menuGroupDto.setGId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.MENU_GROUP));
     }
 
     @Override

@@ -66,4 +66,7 @@ public interface IMenuInnerServiceSMO {
      */
     @RequestMapping(value = "/deleteMenuGroup", method = RequestMethod.POST)
     int deleteMenuGroup(@RequestBody MenuGroupDto routeDto);
+
+
+
 }
