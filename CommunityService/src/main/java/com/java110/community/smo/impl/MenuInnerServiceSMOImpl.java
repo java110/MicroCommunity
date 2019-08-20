@@ -6,6 +6,7 @@ import com.java110.community.dao.IMenuServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.menu.IMenuInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,4 +74,43 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
     public void setMenuServiceDaoImpl(IMenuServiceDao menuServiceDaoImpl) {
         this.menuServiceDaoImpl = menuServiceDaoImpl;
     }
+
+
+    @Override
+    public List<BasePrivilegeDto> queryBasePrivileges(@RequestBody  BasePrivilegeDto basePrivilegeDto) {
+
+        //校验是否传了 分页信息
+
+        int page = basePrivilegeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            basePrivilegeDto.setPage((page - 1) * basePrivilegeDto.getRow());
+            basePrivilegeDto.setRow(page * basePrivilegeDto.getRow());
+        }
+
+        List<BasePrivilegeDto> basePrivileges = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.getBasePrivilegeInfo(BeanConvertUtil.beanCovertMap(basePrivilegeDto)), BasePrivilegeDto.class);
+
+
+        return basePrivileges;
+    }
+
+    @Override
+    public int updateBasePrivilege(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+        return menuServiceDaoImpl.updateBasePrivilegeInfo(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
+    }
+
+    @Override
+    public int saveBasePrivilege(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+        return menuServiceDaoImpl.saveBasePrivilegeInfo(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
+    }
+
+    @Override
+    public int deleteBasePrivilege(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+        basePrivilegeDto.setStatusCd("1");
+        return menuServiceDaoImpl.updateBasePrivilegeInfo(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
+    }
+
+    @Override
+    public int queryBasePrivilegesCount(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+        return menuServiceDaoImpl.queryBasePrivilegesCount(BeanConvertUtil.beanCovertMap(basePrivilegeDto));    }
 }

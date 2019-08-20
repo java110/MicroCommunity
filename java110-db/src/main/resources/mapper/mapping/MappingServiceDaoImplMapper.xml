@@ -5,167 +5,162 @@
 <mapper namespace="mappingServiceDaoImpl">
 
     <!-- 保存映射信息 add by wuxw 2018-07-03 -->
-       <insert id="saveMappingInfo" parameterType="Map">
-           <![CDATA[
+    <insert id="saveMappingInfo" parameterType="Map">
+        <![CDATA[
             insert into c_mapping select
             #{id},#{domain},#{name},#{key},#{value},#{remark},now(),'0'
 
         ]]>
 
-       </insert>
+    </insert>
 
 
-       <!-- 查询映射信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessMappingInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.domain,t.name,t.remark,t.id,t.value,t.key 
-from business_mapping t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="domain !=null and domain != ''">
-   and t.domain= #{domain}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="id !=null and id != ''">
-   and t.id= #{id}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="key !=null and key != ''">
-   and t.`key`= #{key}
-</if> 
+    <!-- 查询映射信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessMappingInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.domain,t.name,t.remark,t.id,t.value,t.key
+        from business_mapping t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="key !=null and key != ''">
+            and t.`key`= #{key}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存映射信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMappingInfoInstance" parameterType="Map">
         insert into c_mapping(
-domain,name,remark,status_cd,id,value,key
-) select t.domain,t.name,t.remark,'0',t.id,t.value,t.key from business_mapping t where 1=1
-   and t.operate= 'ADD'
-<if test="domain !=null and domain != ''">
-   and t.domain= #{domain}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="id !=null and id != ''">
-   and t.id= #{id}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="key !=null and key != ''">
-   and t.key= #{key}
-</if> 
+        domain,name,remark,status_cd,id,value,key
+        ) select t.domain,t.name,t.remark,'0',t.id,t.value,t.key from business_mapping t where 1=1
+        and t.operate= 'ADD'
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="key !=null and key != ''">
+            and t.key= #{key}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询映射信息 add by wuxw 2018-07-03 -->
     <select id="getMappingInfo" parameterType="Map" resultType="Map">
-        select  t.domain,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.id,t.value,t.key 
-from c_mapping t 
-where 1 =1 
-<if test="domain !=null and domain != ''">
-   and t.domain= #{domain}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="id !=null and id != ''">
-   and t.id= #{id}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="key !=null and key != ''">
-   and t.key= #{key}
-</if>
+        select t.domain,t.name,t.remark,t.status_cd,t.status_cd statusCd,t.id,t.value,t.key
+        from c_mapping t
+        where 1 =1
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="key !=null and key != ''">
+            and t.key= #{key}
+        </if>
         order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改映射信息 add by wuxw 2018-07-03 -->
     <update id="updateMappingInfo" parameterType="Map">
-        update  c_mapping t set t.status_cd = #{statusCd}
+        update c_mapping t set t.status_cd = #{statusCd}
 
-<if test="domain !=null and domain != ''">
-, t.domain= #{domain}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="value !=null and value != ''">
-, t.value= #{value}
-</if> 
-<if test="key !=null and key != ''">
-, t.`key`= #{key}
-</if> 
- where 1=1 <if test="id !=null and id != ''">
-and t.id= #{id}
-</if> 
+        <if test="domain !=null and domain != ''">
+            , t.domain= #{domain}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        <if test="key !=null and key != ''">
+            , t.`key`= #{key}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
 
     </update>
 
     <!-- 查询映射数量 add by wuxw 2018-07-03 -->
-     <select id="queryMappingsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from c_mapping t 
-where 1 =1 
-<if test="domain !=null and domain != ''">
-   and t.domain= #{domain}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="id !=null and id != ''">
-   and t.id= #{id}
-</if> 
-<if test="value !=null and value != ''">
-   and t.value= #{value}
-</if> 
-<if test="key !=null and key != ''">
-   and t.key= #{key}
-</if> 
+    <select id="queryMappingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_mapping t
+        where 1 =1
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        <if test="key !=null and key != ''">
+            and t.key= #{key}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

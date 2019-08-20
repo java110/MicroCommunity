@@ -1,82 +1,57 @@
 {
-  "templateName":"菜单组",
-  "templateCode":"menuGroup",
-  "templateKey":"gId",
-  "templateKeyName":"组Id",
+  "templateName":"权限",
+  "templateCode":"basePrivilege",
+  "templateKey":"pId",
+  "templateKeyName":"权限ID",
   "searchCode": "name",
-  "searchName": "组名称",
+  "searchName": "权限名称",
   "conditions": [
     {
-      "name": "组名称",
+      "name": "权限名称",
       "inputType": "input",
       "code": "name",
       "whereCondition": "like"
     },
     {
-      "name": "icon",
+      "name": "权限编码",
       "inputType": "input",
-      "code": "icon",
-      "whereCondition": "like"
+      "code": "pId",
+      "whereCondition": "equal"
     },
     {
-      "name": "标签",
+      "name": "商户类型",
       "inputType": "select",
-      "code": "label",
-      "selectValue":"HOT,TOP",
-      "selectValueName":"HOT,TOP",
+      "code": "domain",
+      "selectValue":"800900000001,800900000002,800900000003,800900000000",
+      "selectValueName":"运营团队,代理商,物业,开发团队",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
       "code":"name",
-      "cnCode":"组名称",
-      "desc":"必填，请填写组名称",
+      "cnCode":"权限名称",
+      "desc":"必填，请填写权限名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxin",
       "limitParam":"2,10",
-      "limitErrInfo":"组名称必须在2至10字符之间",
+      "limitErrInfo":"权限名称必须在2至10字符之间",
       "show": true
     },
     {
-      "code":"icon",
-      "cnCode":"icon",
-      "desc":"必填，请填写icon",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"2,20",
-      "limitErrInfo":"icon必须在2至20字符之间",
-      "show": true
-    },
-    {
-      "code":"label",
-      "cnCode":"标签",
-      "desc":"必填，请填写标签",
+      "code":"domain",
+      "cnCode":"商户类型",
+      "desc":"必填，请选择商户类型",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"select",
-      "selectValue":"HOT,TOP",
-      "selectValueName":"HOT,TOP",
+      "selectValue":"800900000001,800900000002,800900000003,800900000000",
+      "selectValueName":"运营团队,代理商,物业,开发团队",
       "limit":"maxin",
-      "limitParam":"1,20",
-      "limitErrInfo":"标签错误",
-      "show": true
-    },
-
-    {
-      "code":"seq",
-      "cnCode":"序列",
-      "desc":"必填，请填写序列",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"序列必须为整数",
+      "limitParam":"1,12",
+      "limitErrInfo":"商户类型错误",
       "show": true
     },
     {

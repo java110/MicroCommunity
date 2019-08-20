@@ -71,6 +71,7 @@ public final class PrivilegeCodeConstant {
     public static final String LIST_SERVICEIMPL = "500201906028";
 
     public static final String MENU = "500201908035";
+    public static final String BASE_PRIVILEGE = "500201908035";
 
 
 

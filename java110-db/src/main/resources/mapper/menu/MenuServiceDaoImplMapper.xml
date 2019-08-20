@@ -39,6 +39,7 @@
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -98,6 +99,81 @@
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
+        </if>
+    </select>
+
+
+
+
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveBasePrivilegeInfo" parameterType="Map">
+        insert into p_privilege(
+        p_id,name,domain,description
+        ) values (
+        #{pId},#{name},#{domain},#{description}
+        )
+
+    </insert>
+
+
+    <!-- 查询路由信息 add by wuxw 2018-07-03 -->
+    <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
+        select t.p_id,t.name,t.domain,t.description,t.p_id pId,t.create_time createTime
+        from p_privilege t
+        where t.status_cd= '0'
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateBasePrivilegeInfo" parameterType="Map">
+        update p_privilege t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="name !=null and name != ''">
+                t.name= #{name},
+            </if>
+            <if test="domain !=null and domain != ''">
+                t.domain= #{domain},
+            </if>
+            <if test="description !=null and description != ''">
+                t.description= #{description}
+            </if>
+        </set>
+        where t.p_id= #{pId}
+
+    </update>
+
+    <!-- 查询路由数量 add by wuxw 2018-07-03 -->
+    <select id="queryBasePrivilegesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from p_privilege t
+        where 1 =1
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
         </if>
     </select>
 
