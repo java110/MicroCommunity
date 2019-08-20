@@ -12,6 +12,8 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
     private String description;
     private String statusCd;
 
+    private String createTime;
+
     public String getPId() {
         return pId;
     }
@@ -58,5 +60,13 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
