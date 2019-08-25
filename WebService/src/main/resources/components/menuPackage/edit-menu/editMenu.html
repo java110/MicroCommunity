@@ -1,0 +1,52 @@
+<div id = "editMenuModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="m-t-none m-b ">修改菜单</h3>
+                <div class="ibox-content">
+                    <div>
+                        <div>
+                            <div class="form-group row">
+         <label class="col-sm-2 col-form-label">菜单名称</label>
+         <div class="col-sm-10">
+           <input v-model="editMenuInfo.name"                   type="text" placeholder="必填，请填写菜单名称" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">菜单地址</label>
+         <div class="col-sm-10">
+           <input v-model="editMenuInfo.url"                   type="text" placeholder="必填，请填写菜单地址" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">序列</label>
+         <div class="col-sm-10">
+           <input v-model="editMenuInfo.seq"                   type="text" placeholder="必填，请填写序列" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">菜单显示</label>
+         <div class="col-sm-10">
+<select class="custom-select" v-model="editMenuInfo.isShow">
+         <option selected  disabled value="">必填，请选择菜单显示</option>
+         <option  value="Y">显示菜单</option>
+<option  value="N">不显示菜单</option>
+  </select>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">描述</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写描述" class="form-control" v-model="editMenuInfo.description"></textarea>         </div>
+</div>
+
+                            <div class="ibox-content">
+                                <button class="btn btn-primary float-right" type="button" v-on:click="editMenu()" ><i class="fa fa-check"></i>&nbsp;保存</button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

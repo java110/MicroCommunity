@@ -1,0 +1,79 @@
+package com.java110.api.listener.menu;
+
+import com.alibaba.fastjson.JSONObject;
+import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.common.constant.ServiceCodeMenuConstant;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.menu.IMenuInnerServiceSMO;
+import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+
+
+/**
+ * 查询小区侦听类
+ */
+@Java110Listener("listMenusListener")
+public class ListMenusListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
+    @Override
+    public String getServiceCode() {
+        return ServiceCodeMenuConstant.LIST_MENUS;
+    }
+
+    @Override
+    public HttpMethod getHttpMethod() {
+        return HttpMethod.GET;
+    }
+
+
+    @Override
+    public int getOrder() {
+        return DEFAULT_ORDER;
+    }
+
+
+    public IMenuInnerServiceSMO getMenuInnerServiceSMOImpl() {
+        return menuInnerServiceSMOImpl;
+    }
+
+    public void setMenuInnerServiceSMOImpl(IMenuInnerServiceSMO menuInnerServiceSMOImpl) {
+        this.menuInnerServiceSMOImpl = menuInnerServiceSMOImpl;
+    }
+
+    @Override
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        super.validatePageInfo(reqJson);
+    }
+
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+
+        /*MenuDto menuDto = BeanConvertUtil.covertBean(reqJson, MenuDto.class);
+
+        int count = menuInnerServiceSMOImpl.queryMenusCount(menuDto);
+
+        List<ApiMenuDataVo> menus = null;
+
+        if (count > 0) {
+            menus = BeanConvertUtil.covertBeanList(menuInnerServiceSMOImpl.queryMenus(menuDto), ApiMenuDataVo.class);
+        } else {
+            menus = new ArrayList<>();
+        }
+
+        ApiMenuVo apiMenuVo = new ApiMenuVo();
+
+        apiMenuVo.setTotal(count);
+        apiMenuVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiMenuVo.setMenus(menus);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiMenuVo), HttpStatus.OK);
+
+        context.setResponseEntity(responseEntity);*/
+
+    }
+}
