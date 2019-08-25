@@ -7,6 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.menu.IMenuInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -113,4 +114,45 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
     @Override
     public int queryBasePrivilegesCount(@RequestBody BasePrivilegeDto basePrivilegeDto) {
         return menuServiceDaoImpl.queryBasePrivilegesCount(BeanConvertUtil.beanCovertMap(basePrivilegeDto));    }
+
+
+
+    @Override
+    public List<MenuDto> queryMenus(@RequestBody  MenuDto menuDto) {
+
+        //校验是否传了 分页信息
+
+        int page = menuDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            menuDto.setPage((page - 1) * menuDto.getRow());
+            menuDto.setRow(page * menuDto.getRow());
+        }
+
+        List<MenuDto> menus = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.getMenuInfo(BeanConvertUtil.beanCovertMap(menuDto)), MenuDto.class);
+
+
+        return menus;
+    }
+
+    @Override
+    public int updateMenu(@RequestBody MenuDto menuDto) {
+        return menuServiceDaoImpl.updateMenuInfo(BeanConvertUtil.beanCovertMap(menuDto));
+    }
+
+    @Override
+    public int saveMenu(@RequestBody MenuDto menuDto) {
+        return menuServiceDaoImpl.saveMenuInfo(BeanConvertUtil.beanCovertMap(menuDto));
+    }
+
+    @Override
+    public int deleteMenu(@RequestBody MenuDto menuDto) {
+        menuDto.setStatusCd("1");
+        return menuServiceDaoImpl.updateMenuInfo(BeanConvertUtil.beanCovertMap(menuDto));
+    }
+
+    @Override
+    public int queryMenusCount(@RequestBody MenuDto menuDto) {
+        return menuServiceDaoImpl.queryMenusCount(BeanConvertUtil.beanCovertMap(menuDto));    }
+
 }

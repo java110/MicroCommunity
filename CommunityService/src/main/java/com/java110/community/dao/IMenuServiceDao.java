@@ -88,11 +88,49 @@ public interface IMenuServiceDao {
 
 
     /**
-     * 查询路由总数
+     * 查询菜单总数
      *
-     * @param info 路由信息
-     * @return 路由数量
+     * @param info 菜单信息
+     * @return 菜单数量
      */
     int queryBasePrivilegesCount(Map info);
+
+
+    /**
+     * 保存 菜单信息 Business数据到 Instance中
+     * @param info
+     * @throws DAOException DAO异常
+     */
+    int saveMenuInfo(Map info) throws DAOException;
+
+
+
+
+    /**
+     * 查询菜单信息（instance过程）
+     * 根据bId 查询菜单信息
+     * @param info bId 信息
+     * @return 菜单信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getMenuInfo(Map info) throws DAOException;
+
+
+
+    /**
+     * 修改菜单信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    int updateMenuInfo(Map info) throws DAOException;
+
+
+    /**
+     * 查询菜单总数
+     *
+     * @param info 菜单信息
+     * @return 菜单数量
+     */
+    int queryMenusCount(Map info);
 
 }

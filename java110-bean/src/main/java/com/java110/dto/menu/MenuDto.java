@@ -1,9 +1,10 @@
-package com.java110.vo.api.menu;
+package com.java110.dto.menu;
+
+import com.java110.dto.PageDto;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class ApiMenuDataVo implements Serializable {
+public class MenuDto extends PageDto implements Serializable {
 
     private String mId;
     private String name;
@@ -11,6 +12,7 @@ public class ApiMenuDataVo implements Serializable {
     private String seq;
     private String isShow;
     private String description;
+    private String statusCd;
 
     public String getMId() {
         return mId;
@@ -66,5 +68,13 @@ public class ApiMenuDataVo implements Serializable {
 
     public void setmId(String mId) {
         this.mId = mId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

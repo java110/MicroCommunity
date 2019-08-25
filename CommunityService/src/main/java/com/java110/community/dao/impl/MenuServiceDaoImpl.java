@@ -149,4 +149,69 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
         return Integer.parseInt(businessBasePrivilegeInfos.get(0).get("count").toString());
     }
 
+
+
+    /**
+     * 保存路由信息 到 instance
+     * @param info   bId 信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int saveMenuInfo(Map info) throws DAOException {
+        logger.debug("保存路由信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("menuServiceDaoImpl.saveMenuInfo",info);
+
+        return saveFlag;
+    }
+
+
+    /**
+     * 查询路由信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getMenuInfo(Map info) throws DAOException {
+        logger.debug("查询路由信息 入参 info : {}",info);
+
+        List<Map> businessMenuInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.getMenuInfo",info);
+
+        return businessMenuInfos;
+    }
+
+
+    /**
+     * 修改路由信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int updateMenuInfo(Map info) throws DAOException {
+        logger.debug("修改路由信息Instance 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateMenuInfo",info);
+
+        return saveFlag;
+    }
+
+    /**
+     * 查询路由数量
+     * @param info 路由信息
+     * @return 路由数量
+     */
+    @Override
+    public int queryMenusCount(Map info) {
+        logger.debug("查询路由数据 入参 info : {}",info);
+
+        List<Map> businessMenuInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.queryMenusCount", info);
+        if (businessMenuInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessMenuInfos.get(0).get("count").toString());
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.java110.core.smo.menu;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,6 +116,55 @@ public interface IMenuInnerServiceSMO {
      */
     @RequestMapping(value = "/deleteBasePrivilege", method = RequestMethod.POST)
     int deleteBasePrivilege(@RequestBody BasePrivilegeDto routeDto);
+
+
+
+
+    /**
+     * <p>查询菜单信息</p>
+     *
+     * @param routeDto 数据对象分享
+     * @return MenuGroupDto 对象数据
+     */
+    @RequestMapping(value = "/queryMenus", method = RequestMethod.POST)
+    List<MenuDto> queryMenus(@RequestBody MenuDto routeDto);
+
+    /**
+     * 查询<p>菜单</p>总记录数
+     *
+     * @param routeDto 数据对象分享
+     * @return 菜单记录数
+     */
+    @RequestMapping(value = "/queryMenusCount", method = RequestMethod.POST)
+    int queryMenusCount(@RequestBody MenuDto routeDto);
+
+    /**
+     * <p>修改菜单信息</p>
+     *
+     * @param routeDto 数据对象分享
+     * @return ServiceDto 对象数据
+     */
+    @RequestMapping(value = "/updateMenu", method = RequestMethod.POST)
+    int updateMenu(@RequestBody MenuDto routeDto);
+
+
+    /**
+     * <p>添加菜单信息</p>
+     *
+     * @param routeDto 数据对象分享
+     * @return MenuDto 对象数据
+     */
+    @RequestMapping(value = "/saveMenu", method = RequestMethod.POST)
+    int saveMenu(@RequestBody MenuDto routeDto);
+
+    /**
+     * <p>删除菜单信息</p>
+     *
+     * @param routeDto 数据对象分享
+     * @return MenuDto 对象数据
+     */
+    @RequestMapping(value = "/deleteMenu", method = RequestMethod.POST)
+    int deleteMenu(@RequestBody MenuDto routeDto);
 
 
 }
