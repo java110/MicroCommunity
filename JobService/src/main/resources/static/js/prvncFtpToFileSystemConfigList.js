@@ -1,6 +1,6 @@
 $(document).ready(function(){
 　　// 开始加载数据（任务数据）
-    loadTaskData();
+    //loadTaskData();
 });
 /**
  * 加载任务数据（分页查询）

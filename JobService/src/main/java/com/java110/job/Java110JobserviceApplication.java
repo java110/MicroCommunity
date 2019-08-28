@@ -18,7 +18,11 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.Charset;
 
 @SpringBootApplication(
-        scanBasePackages = {"com.java110.service", "com.java110.job", "com.java110.core", "com.java110.cache", "com.java110.db"},
+        scanBasePackages = {"com.java110.service",
+                "com.java110.job",
+                "com.java110.core",
+                "com.java110.cache",
+                "com.java110.db"},
         excludeName = {"com.java110.core.smo.jobservice"}
 )
 @EnableDiscoveryClient

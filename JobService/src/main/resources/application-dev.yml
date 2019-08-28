@@ -60,10 +60,17 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     maxActive: 20
     username: TT
-  mvc:
-    view:
-      prefix: classpath:/view/
-      suffix: .html
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+    prefix: classpath:/templates/
+    encoding: UTF-8
+    suffix: .html
+    content-type: text/html
+#  mvc:
+#    view:
+#      prefix: classpath:/templates/
+#      suffix: .html
 
 #============== kafka ===================
 kafka:
@@ -97,23 +104,23 @@ kafka:
     buffer:
       memory: 40960
 
-  quartz:
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: clusteredScheduler
-            instanceId: AUTO
-          jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            tablePrefix: HC_
-            isClustered: false
-            clusterCheckinInterval: 10000
-            useProperties: false
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
-    job-store-type: jdbc
+quartz:
+  properties:
+    org:
+      quartz:
+        scheduler:
+          instanceName: clusteredScheduler
+          instanceId: AUTO
+        jobStore:
+          class: org.quartz.impl.jdbcjobstore.JobStoreTX
+          driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+          tablePrefix: HC_
+          isClustered: false
+          clusterCheckinInterval: 10000
+          useProperties: false
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadCount: 10
+          threadPriority: 5
+          threadsInheritContextClassLoaderOfInitializingThread: true
+  job-store-type: jdbc
