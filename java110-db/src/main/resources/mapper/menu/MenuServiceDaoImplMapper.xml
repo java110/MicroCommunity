@@ -208,7 +208,7 @@
             and t.p_id= #{pId}
         </if>
         <if test="domain !=null and domain != ''">
-            and t.domain= #{domain}
+            and p.domain= #{domain}
         </if>
         <if test="pName !=null and pName != ''">
             and p.name like concat('%',#{pName},'%')
@@ -233,24 +233,26 @@
         </if>
         <if test="uName != null and uName != ''">
             and exists(
-                SELECT 1
-                    FROM p_privilege_user ppu
-                    WHERE ppu.`p_id` = p.`p_id`
-                    AND ppu.`privilege_flag` = '0'
-                    AND ppu.`name` = #{uName}
-                    AND ppu.`status_cd` = '0'
-                UNION
-                SELECT 1
-                    FROM p_privilege_user ppu,
-                    p_privilege_group ppg,p_privilege_rel ppr
-                WHERE ppu.`p_id` = ppr.pg_id
-                AND ppr.pg_id = ppg.pg_id
-                AND ppr.p_id = p.`p_id`
-                AND ppu.`privilege_flag` = '1'
-                AND ppu.`name` = #{uName}
-                AND ppu.`status_cd` = '0'
-                AND ppg.status_cd = '0'
-                AND ppr.status_cd = '0'
+            SELECT 1
+            FROM p_privilege_user ppu,u_user u
+            WHERE ppu.`p_id` = p.`p_id`
+            AND ppu.`privilege_flag` = '0'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            UNION
+            SELECT 1
+            FROM p_privilege_user ppu,
+            p_privilege_group ppg,p_privilege_rel ppr,u_user u
+            WHERE ppu.`p_id` = ppr.pg_id
+            AND ppr.pg_id = ppg.pg_id
+            AND ppr.p_id = p.`p_id`
+            AND ppu.`privilege_flag` = '1'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            AND ppg.status_cd = '0'
+            AND ppr.status_cd = '0'
             )
         </if>
         order by t.create_time desc
@@ -310,7 +312,7 @@
             and t.p_id= #{pId}
         </if>
         <if test="domain !=null and domain != ''">
-            and t.domain= #{domain}
+            and p.domain= #{domain}
         </if>
         <if test="pName !=null and pName != ''">
             and p.name like concat('%',#{pName},'%')
@@ -336,20 +338,22 @@
         <if test="uName != null and uName != ''">
             and exists(
             SELECT 1
-            FROM p_privilege_user ppu
+            FROM p_privilege_user ppu,u_user u
             WHERE ppu.`p_id` = p.`p_id`
             AND ppu.`privilege_flag` = '0'
-            AND ppu.`name` = #{uName}
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
             AND ppu.`status_cd` = '0'
             UNION
             SELECT 1
             FROM p_privilege_user ppu,
-            p_privilege_group ppg,p_privilege_rel ppr
+            p_privilege_group ppg,p_privilege_rel ppr,u_user u
             WHERE ppu.`p_id` = ppr.pg_id
             AND ppr.pg_id = ppg.pg_id
             AND ppr.p_id = p.`p_id`
             AND ppu.`privilege_flag` = '1'
-            AND ppu.`name` = #{uName}
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
             AND ppu.`status_cd` = '0'
             AND ppg.status_cd = '0'
             AND ppr.status_cd = '0'
