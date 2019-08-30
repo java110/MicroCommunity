@@ -87,6 +87,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_service_id="98";
 
     public static final String MENU_GROUP = "80";
+    public static final String MENU = "70";
     public static final String BASE_PRIVILEGE = "50";
 
     /**

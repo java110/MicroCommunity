@@ -1,6 +1,6 @@
 {
-  "templateName":"菜单",
-  "templateCode":"menu",
+  "templateName":"配置菜单",
+  "templateCode":"configMenu",
   "templateKey":"mId",
   "templateKeyName":"菜单ID",
   "package": "menuPackage",
@@ -22,71 +22,138 @@
       "code":"menu",
       "flowKey": "mId",
       "cnCode":"菜单信息",
-      "vcName":"viewMenuInfo",
-      "businessName": "businessService",
-      "businessType": "BUSINESS_TYPE_SAVE_SERVICE_INFO",
-      "existsComponent": true
+      "vcName":"addMenuView",
+      "businessName": "businessMenu",
+      "businessType": "BUSINESS_TYPE_SAVE_MENU_INFO",
+      "existsComponent": false
     },
     {
       "index": 2,
       "code":"privilege",
-      "flowKey": "id",
+      "flowKey": "pId",
       "cnCode":"权限信息",
-      "vcName":"addRouteView",
-      "businessName": "businessRoute",
-      "businessType": "BUSINESS_TYPE_SAVE_ROUTE_INFO",
+      "vcName":"addPrivilegeView",
+      "businessName": "businessPrivilege",
+      "businessType": "BUSINESS_TYPE_SAVE_PRIVILEGE_INFO",
       "existsComponent": false
     }
   ],
   "components": {
-      "addRouteView": {
-        "templateName":"扩展信息",
-        "templateCode":"addRoute",
-        "package": "servicePackage",
+      "addMenuView": {
+        "templateName":"菜单信息",
+        "templateCode":"addMenu",
+        "package": "menuPackage",
         "columns":[
           {
-            "code":"orderTypeCd",
-            "cnCode":"订单类型",
-            "desc":"必填，请填写订单类型",
+            "code":"name",
+            "cnCode":"菜单名称",
+            "desc":"必填，请填写菜单名称",
             "required":true,
             "hasDefaultValue":false,
-            "inputType":"select",
-            "selectValue":"Q,D",
-            "selectValueName":"查询,业务受理",
+            "inputType":"input",
             "limit":"maxin",
-            "limitParam":"1,4",
-            "limitErrInfo":"订单类型错误",
+            "limitParam":"2,10",
+            "limitErrInfo":"菜单名称必须在2至10字符之间",
             "show": true
           },
           {
-            "code":"invokeLimitTimes",
-            "cnCode":"调用次数",
-            "desc":"必填，请填写调用次数",
+            "code":"url",
+            "cnCode":"菜单地址",
+            "desc":"必填，请菜单菜单地址",
             "required":true,
-            "hasDefaultValue":true,
-            "defaultValue":"1000",
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"maxin",
+            "limitParam":"2,10",
+            "limitErrInfo":"菜单名称必须在2至10字符之间",
+            "show": true
+          },
+          {
+            "code":"seq",
+            "cnCode":"序列",
+            "desc":"必填，请填写序列",
+            "required":true,
+            "hasDefaultValue":false,
             "inputType":"input",
             "limit":"num",
             "limitParam":"",
-            "limitErrInfo":"调用次数错误",
-            "show": false
+            "limitErrInfo":"序列必须为整数",
+            "show": true
           },
           {
-            "code":"invokeModel",
-            "cnCode":"调用方式",
-            "desc":"可填，请填写消息队列，订单在异步调用时使用",
+            "code":"isShow",
+            "cnCode":"菜单显示",
+            "desc":"必填，请选择是否显示菜单",
             "required":true,
             "hasDefaultValue":false,
-            "defaultValue":"",
             "inputType":"select",
-            "selectValue":"S,A",
-            "selectValueName":"同步方式,异步方式",
+            "selectValue":"Y,N",
+            "selectValueName":"显示菜单,不显示菜单",
+            "limit":"maxin",
+            "limitParam":"1,12",
+            "limitErrInfo":"菜单显示错误",
+            "show": true
+          },
+          {
+            "code":"description",
+            "cnCode":"描述",
+            "desc":"可填，请填写描述",
+            "required":false,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"textarea",
             "limit":"maxLength",
-            "limitParam":"50",
-            "limitErrInfo":"消息队列不能超过50",
+            "limitParam":"200",
+            "limitErrInfo":"备注内容不能超过200",
             "show": false
           }
         ]
-      }
+      },
+    "addPrivilegeView": {
+      "templateName":"权限信息",
+      "templateCode":"addPrivilege",
+      "package": "privilegePackage",
+      "columns":[
+        {
+          "code":"name",
+          "cnCode":"权限名称",
+          "desc":"必填，请填写权限名称",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"maxin",
+          "limitParam":"2,10",
+          "limitErrInfo":"权限名称必须在2至10字符之间",
+          "show": true
+        },
+        {
+          "code":"domain",
+          "cnCode":"商户类型",
+          "desc":"必填，请选择商户类型",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"select",
+          "selectValue":"800900000001,800900000002,800900000003,800900000000",
+          "selectValueName":"运营团队,代理商,物业,开发团队",
+          "limit":"maxin",
+          "limitParam":"1,12",
+          "limitErrInfo":"商户类型错误",
+          "show": true
+        },
+        {
+          "code":"description",
+          "cnCode":"描述",
+          "desc":"可填，请填写描述",
+          "required":false,
+          "hasDefaultValue":false,
+          "defaultValue":"",
+          "inputType":"textarea",
+          "limit":"maxLength",
+          "limitParam":"200",
+          "limitErrInfo":"备注内容不能超过200",
+          "show": false
+        }
+      ]
+    }
   }
 }
