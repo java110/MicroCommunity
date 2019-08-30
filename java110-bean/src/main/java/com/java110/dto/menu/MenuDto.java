@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class MenuDto extends PageDto implements Serializable {
 
     private String mId;
+    private String mName;
     private String name;
     private String url;
     private String seq;
@@ -130,5 +131,13 @@ public class MenuDto extends PageDto implements Serializable {
 
     public void setuName(String uName) {
         this.uName = uName;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 }

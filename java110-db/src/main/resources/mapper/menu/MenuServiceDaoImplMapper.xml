@@ -204,6 +204,9 @@
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
         </if>
+        <if test="mName !=null and mName != ''">
+            and t.name like concat('%',#{mName},'%')
+        </if>
         <if test="pId !=null and pId != ''">
             and t.p_id= #{pId}
         </if>
@@ -307,6 +310,9 @@
         </if>
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="mName !=null and mName != ''">
+            and t.name like concat('%',#{mName},'%')
         </if>
         <if test="pId !=null and pId != ''">
             and t.p_id= #{pId}
