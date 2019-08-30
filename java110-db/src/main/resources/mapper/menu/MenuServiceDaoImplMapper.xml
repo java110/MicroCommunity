@@ -191,14 +191,27 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getMenuInfo" parameterType="Map" resultType="Map">
-        select t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow
-        from m_menu t
+        select t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow,
+        if(t.is_show='Y','显示','不显示') isShowName,
+        p.p_id pId,p.name pName
+        from m_menu t,p_privilege p
         where t.status_cd= '0'
+        and p.status_cd= '0'
+        and t.p_id = p.p_id
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="pName !=null and pName != ''">
+            and p.name like concat('%',#{pName},'%')
         </if>
         <if test="mId !=null and mId != ''">
             and t.m_id= #{mId}
@@ -217,6 +230,28 @@
         </if>
         <if test="description !=null and description != ''">
             and t.description= #{description}
+        </if>
+        <if test="uName != null and uName != ''">
+            and exists(
+                SELECT 1
+                    FROM p_privilege_user ppu
+                    WHERE ppu.`p_id` = p.`p_id`
+                    AND ppu.`privilege_flag` = '0'
+                    AND ppu.`name` = #{uName}
+                    AND ppu.`status_cd` = '0'
+                UNION
+                SELECT 1
+                    FROM p_privilege_user ppu,
+                    p_privilege_group ppg,p_privilege_rel ppr
+                WHERE ppu.`p_id` = ppr.pg_id
+                AND ppr.pg_id = ppg.pg_id
+                AND ppr.p_id = p.`p_id`
+                AND ppu.`privilege_flag` = '1'
+                AND ppu.`name` = #{uName}
+                AND ppu.`status_cd` = '0'
+                AND ppg.status_cd = '0'
+                AND ppr.status_cd = '0'
+            )
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -261,13 +296,24 @@
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryMenusCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from m_menu t
+        from m_menu t,p_privilege p
         where t.status_cd= '0'
+        and p.status_cd= '0'
+        and t.p_id = p.p_id
         <if test="gId !=null and gId != ''">
             and t.g_id= #{gId}
         </if>
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        <if test="pName !=null and pName != ''">
+            and p.name like concat('%',#{pName},'%')
         </if>
         <if test="mId !=null and mId != ''">
             and t.m_id= #{mId}
@@ -287,7 +333,28 @@
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
-        order by t.create_time desc
+        <if test="uName != null and uName != ''">
+            and exists(
+            SELECT 1
+            FROM p_privilege_user ppu
+            WHERE ppu.`p_id` = p.`p_id`
+            AND ppu.`privilege_flag` = '0'
+            AND ppu.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            UNION
+            SELECT 1
+            FROM p_privilege_user ppu,
+            p_privilege_group ppg,p_privilege_rel ppr
+            WHERE ppu.`p_id` = ppr.pg_id
+            AND ppr.pg_id = ppg.pg_id
+            AND ppr.p_id = p.`p_id`
+            AND ppu.`privilege_flag` = '1'
+            AND ppu.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            AND ppg.status_cd = '0'
+            AND ppr.status_cd = '0'
+            )
+        </if>
     </select>
 
 

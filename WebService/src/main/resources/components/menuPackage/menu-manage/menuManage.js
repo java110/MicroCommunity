@@ -30,6 +30,9 @@ uName:'',
         },
         _initEvent:function(){
             vc.on('menuManage','chooseMenuGroup',function(_param){
+            if(_param.hasOwnProperty("name")){
+                _param.mName = _param.name;
+            }
               vc.copyObject(_param,vc.component.menuManageInfo.conditions);
             });
 
