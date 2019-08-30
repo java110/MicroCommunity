@@ -47,9 +47,9 @@ description:'',
                             errInfo:"菜单地址不能为空"
                         },
  {
-                            limit:"maxin",
-                            param:"2,10",
-                            errInfo:"菜单名称必须在2至10字符之间"
+                            limit:"maxLength",
+                            param:"200",
+                            errInfo:"菜单地址不能超过200"
                         },
                     ],
 'editMenuInfo.seq':[
