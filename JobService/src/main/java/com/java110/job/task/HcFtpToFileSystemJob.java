@@ -1,8 +1,8 @@
 package com.java110.job.task;
 
 import com.java110.common.util.SpringBeanInvoker;
-import com.java110.job.dao.IPrvncFtpFileDAO;
-import com.java110.job.smo.PrvncFtpToFileSystemQuartz;
+import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.smo.HcFtpToFileSystemQuartz;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -21,17 +21,17 @@ import java.util.Map;
  *
  */
 
-public class PrvncFtpToFileSystemJob implements Job {
+public class HcFtpToFileSystemJob implements Job {
 
-	private static final Logger logger = LoggerFactory.getLogger(PrvncFtpToFileSystemJob.class);
+	private static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemJob.class);
 
 	public static String JOB_DATA_CONFIG_NAME = "ftpToFileSystemTaskName";
 	public static String JOB_DATA_TASK_ID = "ftpToFileSystemTaskID";
 	public static String JOB_GROUP_NAME = "ftpToFileSystemJobGroup"; // 任务的 分组名称
 	@Autowired
-	private IPrvncFtpFileDAO prvncFtpFileDAO;
+	private IHccFtpFileDAO prvncFtpFileDAO;
 	@Autowired
-	private PrvncFtpToFileSystemQuartz prvncDumpQuartz;
+	private HcFtpToFileSystemQuartz prvncDumpQuartz;
 
 	protected void executeInternal(JobExecutionContext context) {
 		try {
@@ -56,7 +56,7 @@ public class PrvncFtpToFileSystemJob implements Job {
 			}
 
 			String dealClass = ftpItemConfigInfo.get("DEAL_CLASS").toString();
-			prvncDumpQuartz = (PrvncFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
+			prvncDumpQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
 			prvncDumpQuartz.startFtpTask(ftpItemConfigInfo);
 		} catch (Throwable ex) {
 			logger.error("执行任务失败：", ex);
@@ -81,9 +81,9 @@ public class PrvncFtpToFileSystemJob implements Job {
 		return ftpItem;
 	}
 
-	public IPrvncFtpFileDAO getPrvncFtpFileDAO() {
+	public IHccFtpFileDAO getPrvncFtpFileDAO() {
 		if (this.prvncFtpFileDAO == null) {
-			this.prvncFtpFileDAO = ((IPrvncFtpFileDAO) SpringBeanInvoker
+			this.prvncFtpFileDAO = ((IHccFtpFileDAO) SpringBeanInvoker
 					.getBean("provInner.PrvncFtpFileDAO"));
 		}
 		return prvncFtpFileDAO;

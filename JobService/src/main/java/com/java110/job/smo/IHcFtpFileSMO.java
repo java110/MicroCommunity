@@ -10,7 +10,7 @@ import java.util.Map;
  * @author 师延俊
  * @version
  */  
-public interface IPrvncFtpFileSMO {
+public interface IHcFtpFileSMO {
 
 	/**
      * 保存执行任务的日志，任务的执行状态

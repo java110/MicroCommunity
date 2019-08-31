@@ -1,9 +1,9 @@
 package com.java110.job.util;
 
 import com.java110.common.util.SpringBeanInvoker;
-import com.java110.job.dao.IPrvncFtpFileDAO;
+import com.java110.job.dao.IHccFtpFileDAO;
 import com.java110.job.model.FtpTaskLogDetail;
-import com.java110.job.smo.IPrvncFtpFileSMO;
+import com.java110.job.smo.IHcFtpFileSMO;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -48,9 +48,9 @@ public class FTPClientTemplate implements Callable<Map> {
     private String transferflag;											//传输类型
     private Map threadpara;												//线程执行参数
     @Autowired
-    private IPrvncFtpFileDAO prvncFtpFileDAO;
+    private IHccFtpFileDAO prvncFtpFileDAO;
     @Autowired
-    private IPrvncFtpFileSMO prvncFtpFileSMO;
+    private IHcFtpFileSMO prvncFtpFileSMO;
     public static String SPECIAL_SINGLESPLIT_a="+*|";										//字符串分隔符特殊字符需要用加"\\"来转译
     //传输类型（“U"是上传      upload     ”D“是下载   download）
     public static class TransferType{
@@ -104,8 +104,8 @@ public class FTPClientTemplate implements Callable<Map> {
 		init();
 	}
 	private void init(){
-		this.prvncFtpFileDAO = ((IPrvncFtpFileDAO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileDAO"));
-		this.prvncFtpFileSMO=((IPrvncFtpFileSMO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileSMO"));
+		this.prvncFtpFileDAO = ((IHccFtpFileDAO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileDAO"));
+		this.prvncFtpFileSMO=((IHcFtpFileSMO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileSMO"));
 	}
 	public Map call() throws Exception {
 		Map result=null;

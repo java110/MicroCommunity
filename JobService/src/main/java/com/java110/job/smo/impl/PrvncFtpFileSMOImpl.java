@@ -1,8 +1,8 @@
 package com.java110.job.smo.impl;
 
 import com.java110.job.model.*;
-import com.java110.job.smo.IPrvncFtpFileBMO;
-import com.java110.job.smo.IPrvncFtpFileSMO;
+import com.java110.job.smo.IHcFtpFileBMO;
+import com.java110.job.smo.IHcFtpFileSMO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 @Service("prvncFtpFileSMOImpl")
 @Transactional
-public class PrvncFtpFileSMOImpl implements IPrvncFtpFileSMO {
+public class PrvncFtpFileSMOImpl implements IHcFtpFileSMO {
     /** logger */  
     protected final Logger log= Logger.getLogger(getClass());
 	@Autowired
-	private IPrvncFtpFileBMO iPrvncFtpFileBMO;
+	private IHcFtpFileBMO iPrvncFtpFileBMO;
 
 	@Override
 	public long saveTaskRunLog(FtpTaskLog loginfo) {

@@ -1,8 +1,8 @@
 package com.java110.job.smo.impl;
 
-import com.java110.job.dao.IPrvncFtpFileDAO;
+import com.java110.job.dao.IHccFtpFileDAO;
 import com.java110.job.model.*;
-import com.java110.job.smo.IPrvncFtpFileBMO;
+import com.java110.job.smo.IHcFtpFileBMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 @Service("prvncFtpFileBMOImpl")
 @Transactional
-public class PrvncFtpFileBMOImpl implements IPrvncFtpFileBMO {
+public class PrvncFtpFileBMOImpl implements IHcFtpFileBMO {
 	@Autowired
-	private IPrvncFtpFileDAO iprvncFtpFileDAO;
+	private IHccFtpFileDAO iprvncFtpFileDAO;
 
 	@Override
 	public long saveTaskRunLog(FtpTaskLog loginfo) {

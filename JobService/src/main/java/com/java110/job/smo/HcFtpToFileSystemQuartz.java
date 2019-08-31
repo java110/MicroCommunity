@@ -2,7 +2,7 @@ package com.java110.job.smo;
 import com.java110.common.constant.RuleDomain;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.job.dao.IPrvncFtpFileDAO;
+import com.java110.job.dao.IHccFtpFileDAO;
 
 import com.java110.job.model.FtpTaskLog;
 import com.java110.job.model.FtpTaskLogDetail;
@@ -24,13 +24,13 @@ import java.util.*;
  * @author wuxw7 add by 2016-01-03
  * 
  */
-public abstract class PrvncFtpToFileSystemQuartz {
+public abstract class HcFtpToFileSystemQuartz {
 
-	protected static final Logger logger = LoggerFactory.getLogger(PrvncFtpToFileSystemQuartz.class);
+	protected static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemQuartz.class);
 	@Autowired
-	private IPrvncFtpFileDAO iprvncFtpFileDAO;
+	private IHccFtpFileDAO iprvncFtpFileDAO;
 	@Autowired
-	private IPrvncFtpFileSMO iprvncFtpFileSMO;
+	private IHcFtpFileSMO iprvncFtpFileSMO;
 
 	/*private IPrvncDumpSMO prvncDumpSMO;*/
 	// 运行状态，R：正在执行 T：等待运行 TD1:文件下载失败 TD2:文件内容保存失败 TU1:数据文件生成失败 TU2:数据文件上传失败
@@ -349,19 +349,19 @@ public abstract class PrvncFtpToFileSystemQuartz {
 
 	}
 
-	public IPrvncFtpFileDAO getPrvncFtpFileDAO() {
+	public IHccFtpFileDAO getPrvncFtpFileDAO() {
 		return iprvncFtpFileDAO;
 	}
 
-	public void setPrvncFtpFileDAO(IPrvncFtpFileDAO prvncFtpFileDAO) {
+	public void setPrvncFtpFileDAO(IHccFtpFileDAO prvncFtpFileDAO) {
 		this.iprvncFtpFileDAO = prvncFtpFileDAO;
 	}
 
-	public IPrvncFtpFileSMO getPrvncFtpFileSMO() {
+	public IHcFtpFileSMO getPrvncFtpFileSMO() {
 		return iprvncFtpFileSMO;
 	}
 
-	public void setPrvncFtpFileSMO(IPrvncFtpFileSMO prvncFtpFileSMO) {
+	public void setPrvncFtpFileSMO(IHcFtpFileSMO prvncFtpFileSMO) {
 		this.iprvncFtpFileSMO = prvncFtpFileSMO;
 	}
 

@@ -3,7 +3,7 @@ package com.java110.job.smo;
 import com.java110.job.model.*;
 import java.util.Map;
 
-public interface IPrvncFtpFileBMO {
+public interface IHcFtpFileBMO {
 
 	/**
      * 保存执行任务的日志，任务的执行状态

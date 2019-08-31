@@ -3,17 +3,17 @@ package com.java110.job.Api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.util.SpringBeanInvoker;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.job.common.CustomizedPropertyPlaceholderConfigurer;
-import com.java110.job.dao.IPrvncFtpFileDAO;
-import com.java110.job.task.PrvncFtpToFileSystemJob;
+import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.task.HcFtpToFileSystemJob;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.util.ValidatorUtils;
-
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
@@ -22,58 +22,57 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * 将ftp上的文件保存到支持的文件系统
- * 
+ *
  * @author wuxw7 add by 20170103
- * 
+ * 		   shiyj update by 2019.08.29
+ *
  */
-@RestController
-public class PrvncFtpToFileSystemConfigAction{
+@Service
+public class HcFtpToFileSystemConfigAction {
 
-	private static final Logger logger = LoggerFactory.getLogger(PrvncFtpToFileSystemConfigAction.class);
+	private static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemConfigAction.class);
 
 	private static final String defaultCronExpression = "0 * * * * ?";// 每分钟执行一次
 
-	private static final String prefixJobName = "PrvncFtpToSystem_"; // job
+	private static final String prefixJobName = "HcFtpToSystem_"; // job
 	// 名称前缀，防止和其他的job名称产生冲突
 
 	private static final String RUNFLAG_START = "1";
 
 	private static final String RUNFLAG_STOP = "0";
+
 	@Autowired
-	private IPrvncFtpFileDAO iprvncFtpFileDAO;
+	private IHccFtpFileDAO iprvncFtpFileDAO;
+	@Autowired
+	private Scheduler scheduler;
+
 	// 每页数据条数
 	private static int pageSize = 20;
 
 	public JSONObject resultMsg;
 
-	@Autowired
-	private Scheduler scheduler;
-
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 查询配置的需要下载任务的列表
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/queryFtpItems" , method = RequestMethod.POST)
-	public String queryFtpItems(@RequestBody String queryftpinfo,HttpServletRequest request) {
+	public JSONObject queryFtpItems(HttpServletRequest request) {
 
-		JSONObject queryftp = JSONObject.parseObject(queryftpinfo);
-		String curPage = queryftp.getString("curPage");
+		String curPage = request.getParameter("curPage");
 		curPage = curPage == null || "".equals(curPage) ? "1" : curPage;
 
 		// 查询在用状态时的下载任务列表
 		Map info = new HashMap();
-		info.put("curPage", curPage);
-		info.put("pageSize", pageSize);
-		Map resultInfo = getPrvncFtpFileDAO().queryFtpItems(info);
+		info.put("curPage", (Integer.parseInt(curPage)-1)*pageSize);
+		info.put("pageSize", pageSize*Integer.parseInt(curPage));
+		Map resultInfo = iprvncFtpFileDAO.queryFtpItems(info);
 
 		// 获取总数据数
 		int dataCount = resultInfo.get("ITEMSCOUNT") == null ? 0 : Integer.parseInt(resultInfo.get("ITEMSCOUNT").toString());
@@ -99,29 +98,28 @@ public class PrvncFtpToFileSystemConfigAction{
 
 				// 处理时间显示和界面显示传输类型
 				Map ftpItemMap = ftpItems.get(itemIndex);
-				ftpItemMap.put("U_OR_D_NAME", "task.tamplete.name." + ftpItemMap.get("U_OR_D"));// 暂且写死，最终还是读取配置
+				ftpItemMap.put("U_OR_D_NAME", CustomizedPropertyPlaceholderConfigurer.getContextProperty("task.tamplete.name." + ftpItemMap.get("U_OR_D")));// 暂且写死，最终还是读取配置
 				ftpItemMap.put("CREATE_DATE", df.format(ftpItemMap.get("CREATE_DATE")));// 暂且写死，最终还是读取配置
 				rows.add(JSONObject.parseObject(JSONObject.toJSONString(ftpItems.get(itemIndex))));
 			}
 			data.put("rows", rows);
 			resultMsg = data;
-			return data.toString();
+			return data;
 		}
 		data.put("rows", "[]");
 		resultMsg = data;
-		return data.toString();
+		return data;
 	}
 
 	/**
 	 * 增加Ftp配置
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/addFtpItem" , method = RequestMethod.POST)
-	public String addFtpItem(@RequestBody String addFtpIteminfo,HttpServletRequest request) {
-		JSONObject addFtpItem = JSONObject.parseObject(addFtpIteminfo);
+	public JSONObject addFtpItem(HttpServletRequest request) {
+
 		// 请求参数
-		String ftpItemJson = addFtpItem.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		JSONObject ftpItemJsonObj = null;
 		try {
 			// 校验格式是否正确
@@ -129,29 +127,34 @@ public class PrvncFtpToFileSystemConfigAction{
 		} catch (Exception e) {
 			logger.error("传入参数格式不正确：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "传入参数格式不正确：" + ftpItemJson, "");
-			return "addFtpItem";
+			return resultMsg;
 		}
 
 		// 将ftpItemJson装为Map保存操作
 		Map paramIn = JSONObject.parseObject(ftpItemJsonObj.getJSONObject("taskInfo").toJSONString(), Map.class);
 
 		// 数据规范性校验
-
+		Object dealClassObj = null;
 		// 在prvncCrm.properties 文件中获取对应处理类
-		Object dealClassObj = CustomizedPropertyPlaceholderConfigurer.getContextProperty("task.deal.class." + paramIn.get("uOrD"));
+		if ("DT".equals(paramIn.get("uOrD").toString())) {
+			 dealClassObj = CustomizedPropertyPlaceholderConfigurer.getContextProperty("com.java110.job.smo.DownloadFileFromFtpToTable");
+		}else{
+			resultMsg = this.createResultMsg("1999", "对应模板不存在，请联系管理员", "");
+			return resultMsg;
+		}
 		// Object dealClassObj = "provInner.DownloadFileFromFtpToTFS";
 		if (dealClassObj == null) {
 			resultMsg = this.createResultMsg("1999", "对应模板不存在，请联系管理员", "");
-			return "addFtpItem";
+			return resultMsg;
 		}
 		String dealClass = dealClassObj.toString();
 
-		long taskId = getPrvncFtpFileDAO().newCreateTaskId();
+		long taskId = Long.parseLong(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_HCJOBId));
 		// 保存数据
 		paramIn.put("taskId", taskId);
 		paramIn.put("dealClass", dealClass);
 
-		int addFtpItemFlag = getPrvncFtpFileDAO().addFtpItem(paramIn);
+		int addFtpItemFlag = iprvncFtpFileDAO.addFtpItem(paramIn);
 
 		if (addFtpItemFlag > 0) {
 			// #taskId#,#itemSpecId#,#value#
@@ -166,28 +169,27 @@ public class PrvncFtpToFileSystemConfigAction{
 				taskAttrMap.put("value", taskAttr.get("value"));
 				taskAttrsList.add(taskAttrMap);
 			}
-			int addFtpItemAttrFlag = getPrvncFtpFileDAO().addFtpItemAttrs(taskAttrsList);
+			int addFtpItemAttrFlag = iprvncFtpFileDAO.addFtpItemAttrs(taskAttrsList);
 			if (addFtpItemAttrFlag > 0) {
 				resultMsg = this.createResultMsg("0000", "成功", ftpItemJson);
 			} else {
 				resultMsg = this.createResultMsg("1999", "保存属性失败", "");
 			}
-			return resultMsg.toString();
+			return resultMsg;
 		}
 		resultMsg = this.createResultMsg("1999", "保存数据失败", "");
-		return resultMsg.toString();
+		return resultMsg;
 	}
 
 	/**
 	 * 编辑Ftp配置，编辑时将会修改所有的ftpItem 信息，所以传递是所有字段需要传递全
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/editFtpItem",method = RequestMethod.POST)
-	public String editFtpItem(@RequestBody String editFtpItem,HttpServletRequest request) {
-		JSONObject editftpitem =  JSONObject.parseObject(editFtpItem);
+	public String editFtpItem(HttpServletRequest request) {
+
 		// 请求参数为{"taskId":"12","taskName":"经办人照片同步处理","ftpUserName":"weblogic",.....}
-		String ftpItemJson = editftpitem.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		JSONObject ftpItemJsonObj = null;
 		try {
 			// 校验格式是否正确
@@ -213,14 +215,14 @@ public class PrvncFtpToFileSystemConfigAction{
 		paramIn.put("dealClass", dealClass);
 
 		// 根据taskId 查询记录是否存在，如果不存在直接返回失败
-		Map ftpItem = getPrvncFtpFileDAO().queryFtpItemByTaskId(paramIn);
+		Map ftpItem = iprvncFtpFileDAO.queryFtpItemByTaskId(paramIn);
 		// 判断是否有对应的数据
 		if (ftpItem != null && ftpItem.containsKey("TASKID")) {
 			// 更新数据
-			int updateFtpItemFlag = getPrvncFtpFileDAO().updateFtpItemByTaskId(paramIn);
+			int updateFtpItemFlag = iprvncFtpFileDAO.updateFtpItemByTaskId(paramIn);
 			if (updateFtpItemFlag > 0) {
 				// 首先先删除
-				getPrvncFtpFileDAO().deleteFtpItemAttrsbyTaskId(paramIn);
+				iprvncFtpFileDAO.deleteFtpItemAttrsbyTaskId(paramIn);
 				// 保存属性信息
 				JSONArray taskAttrs = ftpItemJsonObj.getJSONArray("taskAttrs");
 				List<Map> taskAttrsList = new ArrayList<Map>();
@@ -232,7 +234,7 @@ public class PrvncFtpToFileSystemConfigAction{
 					taskAttrMap.put("value", taskAttr.get("value"));
 					taskAttrsList.add(taskAttrMap);
 				}
-				int addFtpItemAttrFlag = getPrvncFtpFileDAO().addFtpItemAttrs(taskAttrsList);
+				int addFtpItemAttrFlag = iprvncFtpFileDAO.addFtpItemAttrs(taskAttrsList);
 				if (addFtpItemAttrFlag > 0) {
 					resultMsg = this.createResultMsg("0000", "成功", ftpItemJson);
 				} else {
@@ -249,15 +251,13 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 删除ftp配置
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/deleteFtpItem",method = RequestMethod.POST)
-	public String deleteFtpItem(@RequestBody String deleteFtpItemInfo,HttpServletRequest request) {
+	public String deleteFtpItem(HttpServletRequest request) {
 
-		JSONObject delteftpinfo = JSONObject.parseObject(deleteFtpItemInfo);
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"DELETE"}
-		String ftpItemJson = delteftpinfo.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.deleteFtpItem】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -302,7 +302,7 @@ public class PrvncFtpToFileSystemConfigAction{
 		Map paramInfo = new HashMap();
 		paramInfo.put("taskIds", taskIds.split(","));
 		// 更新数据
-		int updateFtpItemFlag = getPrvncFtpFileDAO().deleteFtpItemByTaskId(paramInfo);
+		int updateFtpItemFlag = iprvncFtpFileDAO.deleteFtpItemByTaskId(paramInfo);
 		if (updateFtpItemFlag > 0) {
 			resultMsg = this.createResultMsg("0000", "成功", ftpItemJson);
 			return "deleteFtpItem";
@@ -315,15 +315,14 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 根据taskId 获取 ftp配置信息
-	 * 
+	 *
 	 * @return
 	 */
+	public String queryFtpItemByTaskId(HttpServletRequest request) {
 
-	@RequestMapping(path = "/FtpToFileSystem/queryFtpItemByTaskId" , method = RequestMethod.POST)
-	public String queryFtpItemByTaskId(@RequestBody String queryFtpItemByTaskId,HttpServletRequest request) {
-		JSONObject queryFtpItemByTask = JSONObject.parseObject(queryFtpItemByTaskId);
-		// 请求参数
-		String ftpItemJson = queryFtpItemByTask.getString("ftpItemJson");
+		// 请求参数为{"taskId":"12"}
+		String ftpItemJson = request.getParameter("ftpItemJson");
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.queryFtpItemByTaskId】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -341,7 +340,7 @@ public class PrvncFtpToFileSystemConfigAction{
 		Map paramIn = JSONObject.parseObject(ftpItemJson, Map.class);
 
 		// 根据taskId 查询记录是否存在，如果不存在直接返回失败
-		Map ftpItem = getPrvncFtpFileDAO().queryFtpItemByTaskId(paramIn);
+		Map ftpItem = iprvncFtpFileDAO.queryFtpItemByTaskId(paramIn);
 		// 判断是否有对应的数据
 		if (ftpItem != null && ftpItem.containsKey("TASKID")) {
 			// 更新数据
@@ -355,16 +354,14 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 查询任务模板 ftpItemJson:{'uOrD':'U'}
-	 * 
+	 *
 	 * @return
 	 */
+	public String questTaskTample(HttpServletRequest request) {
 
-	@RequestMapping(path = "/FtpToFileSystem/questTaskTample" , method = RequestMethod.POST)
-	public String questTaskTample(@RequestBody String questTaskTample,HttpServletRequest request) {
-		JSONObject questtasktample = JSONObject.parseObject(questTaskTample);
-		// 请求参数
-		String ftpItemJson = questtasktample.getString("ftpItemJson");
 		// 请求参数为{"taskId":"12"}
+		String ftpItemJson = request.getParameter("ftpItemJson");
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.queryFtpItemByTaskId】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -383,7 +380,7 @@ public class PrvncFtpToFileSystemConfigAction{
 		Map info = new HashMap();
 		info.put("domain", tample);
 
-		List<Map> itemSpecs = getPrvncFtpFileDAO().queryItemSpec(info);
+		List<Map> itemSpecs = iprvncFtpFileDAO.queryItemSpec(info);
 		String taskItems = JSONObject.toJSONString(itemSpecs);
 
 		resultMsg = this.createResultMsg("0000", "成功", "{\"U_OR_D\":\"" + tample + "\",\"TASK_ITEMS\":" + taskItems + "}");
@@ -392,16 +389,13 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 根据TaskId 获取任务属性
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/queryTaskAttrs" , method = RequestMethod.POST)
-	public String queryTaskAttrs(@RequestBody String queryTaskAttrsInfo,HttpServletRequest request) {
-
-		JSONObject querytaskattrs = JSONObject.parseObject(queryTaskAttrsInfo);
+	public String queryTaskAttrs(HttpServletRequest request) {
 
 		// 请求参数为{"taskId":"12"}
-		String ftpItemJson = querytaskattrs.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.queryTaskAttrs】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -420,7 +414,7 @@ public class PrvncFtpToFileSystemConfigAction{
 		Map info = new HashMap();
 		info.put("taskId", taskId);
 
-		List<Map> itemAttrs = getPrvncFtpFileDAO().queryFtpItemAttrsByTaskId(info);
+		List<Map> itemAttrs = iprvncFtpFileDAO.queryFtpItemAttrsByTaskId(info);
 		String itemsAttrs = JSONObject.toJSONString(itemAttrs);
 
 		resultMsg = this.createResultMsg("0000", "成功", "{\"TASK_ATTRS\":" + itemsAttrs + "}");
@@ -429,15 +423,13 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 启动侦听（多节点启动）
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/startJob",method = RequestMethod.POST)
-	public String startJob(@RequestBody String startInfo , HttpServletRequest request) {
+	public String startJob(HttpServletRequest request) {
 
-		JSONObject startinfo = JSONObject.parseObject(startInfo);
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"START"}
-		String ftpItemJson = startinfo.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.startJob】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -482,8 +474,10 @@ public class PrvncFtpToFileSystemConfigAction{
 
 		info.put("taskIds", taskIds.split(","));
 
-		List<Map> doFtpItems = getPrvncFtpFileDAO().queryFtpItemsByTaskIds(info);
+		List<Map> doFtpItems = iprvncFtpFileDAO.queryFtpItemsByTaskIds(info);
 
+		// 获取Spring调度器
+		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
 		try {
@@ -504,19 +498,21 @@ public class PrvncFtpToFileSystemConfigAction{
 				String jobName = prefixJobName + taskId;
 
 				String triggerName = prefixJobName + taskId;
+
 				//设置任务名称
 				JobKey jobKey = new JobKey(jobName);
-				JobDetail jobDetail = scheduler.getJobDetail(jobKey);
-				// 说明这个没有启动，则需要重新启动，如果启动着不做处理
+				JobDetail jobDetail = scheduler.getJobDetail(jobKey);				// 说明这个没有启动，则需要重新启动，如果启动着不做处理
+
 				if (jobDetail == null) {
 					// 任务名称
 					String taskCfgName = (String) doFtpItem.get("TASKNAME");
 					//构建job信息
-					JobDetail warnJob = JobBuilder.newJob(PrvncFtpToFileSystemJob.class).withIdentity(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
-					// job.getJobDataMap().put("params", param.toString());
-					warnJob.getJobDataMap().put(PrvncFtpToFileSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
+					JobDetail warnJob = JobBuilder.newJob(HcFtpToFileSystemJob.class).withIdentity(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
 
-					warnJob.getJobDataMap().put(PrvncFtpToFileSystemJob.JOB_DATA_TASK_ID, taskId);
+					warnJob.getJobDataMap().put(HcFtpToFileSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
+
+					warnJob.getJobDataMap().put(HcFtpToFileSystemJob.JOB_DATA_TASK_ID, taskId);
+
 					// 触发时间点
 					CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName).withSchedule(cronScheduleBuilder).build();
 
@@ -532,7 +528,7 @@ public class PrvncFtpToFileSystemConfigAction{
 					updateTaskInfo.put("taskId", taskId);
 					updateTaskInfo.put("runFlag", RUNFLAG_START);
 					// 这里更新状态没有成功的，只是在后台打印日志，再前台不进行展示
-					int updateTaskStateFlag = getPrvncFtpFileDAO().updateFtpItemByTaskId(updateTaskInfo);
+					int updateTaskStateFlag = iprvncFtpFileDAO.updateFtpItemByTaskId(updateTaskInfo);
 					if (updateTaskStateFlag < 1) {
 						logger.error("---侦听【" + taskId + "】启动成功，但是更新任务状态失败,请关注！！！", info);
 						updateTaskStateFailCount++;
@@ -561,15 +557,13 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 停止侦听
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/stopJob",method = RequestMethod.POST)
-	public String stopJob(@RequestBody String stopjobInfo,HttpServletRequest request) {
+	public String stopJob(HttpServletRequest request) {
 
-		JSONObject stopjob = JSONObject.parseObject(stopjobInfo);
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"STOP"}
-		String ftpItemJson = stopjob.getString("ftpItemJson");
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.stopJob】入参为：" + ftpItemJson, ftpItemJson);
 		}
@@ -614,7 +608,10 @@ public class PrvncFtpToFileSystemConfigAction{
 
 		info.put("taskIds", taskIds.split(","));
 
-		List<Map> doFtpItems = getPrvncFtpFileDAO().queryFtpItemsByTaskIds(info);
+		List<Map> doFtpItems = iprvncFtpFileDAO.queryFtpItemsByTaskIds(info);
+
+		// 获取Spring调度器
+		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
 
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
@@ -630,13 +627,14 @@ public class PrvncFtpToFileSystemConfigAction{
 				String jobName = prefixJobName + taskId;
 
 				String triggerName = prefixJobName + taskId;
-				TriggerKey triggerKey = TriggerKey.triggerKey(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+
+				TriggerKey triggerKey = TriggerKey.triggerKey(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME);
 				// 停止触发器
 				scheduler.pauseTrigger(triggerKey);
 				// 移除触发器
 				scheduler.unscheduleJob(triggerKey);
 
-				JobKey jobKey = new JobKey(jobName,PrvncFtpToFileSystemJob.JOB_GROUP_NAME);
+				JobKey jobKey = new JobKey(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME);
 				// 删除任务
 				scheduler.deleteJob(jobKey);
 				// 修改数据状态，将任务数据状态改为运行状态
@@ -646,7 +644,7 @@ public class PrvncFtpToFileSystemConfigAction{
 				updateTaskInfo.put("taskId", taskId);
 				updateTaskInfo.put("runFlag", RUNFLAG_STOP);
 				// 这里更新状态没有成功的，只是在后台打印日志，再前台不进行展示
-				int updateTaskStateFlag = getPrvncFtpFileDAO().updateFtpItemByTaskId(updateTaskInfo);
+				int updateTaskStateFlag = iprvncFtpFileDAO.updateFtpItemByTaskId(updateTaskInfo);
 				if (updateTaskStateFlag < 1) {
 					logger.error("---侦听【" + taskId + "】停止成功，但是更新任务状态失败,请关注！！！", info);
 					updateTaskStateFailCount++;
@@ -674,13 +672,12 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 根据任务名称或任务ID模糊查询
-	 * 
+	 *
 	 * @return
 	 */
-	@RequestMapping(path = "/FtpToFileSystem/searchTaskByNameOrId" , method = RequestMethod.POST)
-	public String searchTaskByNameOrId(@RequestBody String searchTaskByNameOrIdInfo,HttpServletRequest request) {
-		JSONObject searchTaskByNameOrIdObj = JSONObject.parseObject(searchTaskByNameOrIdInfo);
-		String ftpItemJson = searchTaskByNameOrIdObj.getString("ftpItemJson");
+	public String searchTaskByNameOrId(HttpServletRequest request) {
+
+		String ftpItemJson = request.getParameter("ftpItemJson");
 		JSONObject ftpItemJsonObj = null;
 		try {
 			// 校验格式是否正确
@@ -708,7 +705,7 @@ public class PrvncFtpToFileSystemConfigAction{
 		if (GenericValidator.isInt(taskNameOrTaskId) || GenericValidator.isLong(taskNameOrTaskId)) {
 			// 根据taskId 查询记录
 			paramIn.put("taskId", taskNameOrTaskId);
-			Map ftpItem = getPrvncFtpFileDAO().queryFtpItemByTaskId(paramIn);
+			Map ftpItem = iprvncFtpFileDAO.queryFtpItemByTaskId(paramIn);
 			if (ftpItem != null && ftpItem.containsKey("FTP_ITEM_ATTRS")) {
 				ftpItem.remove("FTP_ITEM_ATTRS");// 前台暂时用不到，所以这里将属性移除
 
@@ -716,7 +713,7 @@ public class PrvncFtpToFileSystemConfigAction{
 				ftpItems.add(ftpItem);
 			}
 		} else {
-			ftpItems = getPrvncFtpFileDAO().searchFtpItemByTaskName(paramIn);
+			ftpItems = iprvncFtpFileDAO.searchFtpItemByTaskName(paramIn);
 		}
 
 		JSONArray rows = new JSONArray();
@@ -737,7 +734,7 @@ public class PrvncFtpToFileSystemConfigAction{
 
 	/**
 	 * 创建公用输出
-	 * 
+	 *
 	 * @return
 	 */
 	private JSONObject createResultMsg(String resultCode, String resultMsg, String resultInfo) {
@@ -746,13 +743,6 @@ public class PrvncFtpToFileSystemConfigAction{
 		data.put("RESULT_MSG", resultMsg);
 		data.put("RESULT_INFO", resultInfo);
 		return data;
-	}
-
-	public IPrvncFtpFileDAO getPrvncFtpFileDAO() {
-		if (this.iprvncFtpFileDAO == null) {
-			this.iprvncFtpFileDAO = ((IPrvncFtpFileDAO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileDAO"));
-		}
-		return iprvncFtpFileDAO;
 	}
 
 }

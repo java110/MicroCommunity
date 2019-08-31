@@ -1,6 +1,6 @@
 $(document).ready(function(){
 　　// 开始加载数据（任务数据）
-    //loadTaskData();
+    loadTaskData();
 });
 /**
  * 加载任务数据（分页查询）
@@ -8,7 +8,7 @@ $(document).ready(function(){
 function loadTaskDataPage(curPage){
 	$.ajax({
 	      type: 'POST',
-	      url: '../FtpToFileSystem_queryFtpItems.action',
+	      url: '/FtpToFileSystemConfigList/queryFtpItems',
 	      data: {
 	    	curPage:curPage
 	      },
@@ -505,6 +505,9 @@ function queryTaskAttr(obj,doType){
     }
 
     var taskTample = obj.value;
+    if ('U' == taskTample){
+        return "改功能未开放请等待!!!!!!!!!!!!!!";
+    }
 
     var requestParam = "{'uOrD':'"+taskTample+"'}";
     // 请求处理
@@ -584,7 +587,7 @@ function saveTaskInfo(doType){
     var uOrDNew = $('#uOrD'+doType).val();
     var fileNameNew = $('#fileName'+doType).val();
     var taskId = -1;
-    var url = "../FtpToFileSystem_addFtpItem.action";// 新增时的URL
+    var url = "/FtpToFileSystemConfigList/addFtpItem";// 新增时的URL
     if(doType == 'Edit'){
         url = '../FtpToFileSystem_editFtpItem.action';// 编辑时的URL
         taskId = $('#taskId'+doType).val();

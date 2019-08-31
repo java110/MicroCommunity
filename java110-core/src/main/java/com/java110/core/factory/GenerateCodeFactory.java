@@ -82,6 +82,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_demoId="90";
     public static final String CODE_PREFIX_noticeId="96";
 
+    public static final String CODE_PREFIX_HCJOBId="96";
+
     //BUSINESSTYPE
     public static final String CODE_PREFIX_id="99";
     public static final String CODE_PREFIX_service_id="98";

@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author wuxw7 2016-01-04
  * 
  */
-public class DownloadFileFromFtpToTable extends PrvncFtpToFileSystemQuartz {
+public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 
 	private static final String ITEM_SPEC_CD_10011 = "10011";// FTP地址
 	private static final String ITEM_SPEC_CD_10012 = "10012";// FTP端口号
