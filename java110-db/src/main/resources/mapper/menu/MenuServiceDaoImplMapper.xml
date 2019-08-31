@@ -108,8 +108,20 @@
 
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
-    <insert id="saveBasePrivilegeInfo" parameterType="Map">
+    <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
         insert into p_privilege(
+        p_id,pg_id
+        ) values (
+        #{pId},#{pgId}
+        )
+
+    </insert>
+
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
+        insert into p_privilege_rel(
         p_id,name,domain,description
         ) values (
         #{pId},#{name},#{domain},#{description}
@@ -160,6 +172,24 @@
         where t.p_id= #{pId}
 
     </update>
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateBasePrivilegeRelInfo" parameterType="Map">
+        update p_privilege_rel t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="pgId !=null and pgId != ''">
+                t.pg_id= #{pgId},
+            </if>
+
+        </set>
+        where t.p_id= #{pId}
+
+    </update>
+
+
 
     <!-- 查询路由数量 add by wuxw 2018-07-03 -->
     <select id="queryBasePrivilegesCount" parameterType="Map" resultType="Map">

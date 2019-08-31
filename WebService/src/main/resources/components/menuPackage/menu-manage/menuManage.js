@@ -71,7 +71,8 @@
                            );
             },
             _openAddMenuModal:function(){
-                vc.emit('addMenu','openAddMenuModal',{});
+                //vc.emit('addMenu','openAddMenuModal',{});
+                vc.jumpToPage("/flow/configMenuFlow");
             },
             _openEditMenuModel:function(_menu){
                 vc.emit('editMenu','openEditMenuModal',_menu);

@@ -16,9 +16,8 @@ import com.java110.common.constant.BusinessTypeConstant;
 import com.java110.common.constant.ServiceCodeMenuConstant;
 
 
-
-
 import com.java110.core.annotation.Java110Listener;
+
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
@@ -30,9 +29,9 @@ public class SaveMenuListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写菜单名称");
-Assert.hasKeyAndValue(reqJson, "url", "必填，请菜单菜单地址");
-Assert.hasKeyAndValue(reqJson, "seq", "必填，请填写序列");
-Assert.hasKeyAndValue(reqJson, "isShow", "必填，请选择是否显示菜单");
+        Assert.hasKeyAndValue(reqJson, "url", "必填，请菜单菜单地址");
+        Assert.hasKeyAndValue(reqJson, "seq", "必填，请填写序列");
+        Assert.hasKeyAndValue(reqJson, "isShow", "必填，请选择是否显示菜单");
 
     }
 
@@ -56,8 +55,6 @@ Assert.hasKeyAndValue(reqJson, "isShow", "必填，请选择是否显示菜单")
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
 
 
 }
