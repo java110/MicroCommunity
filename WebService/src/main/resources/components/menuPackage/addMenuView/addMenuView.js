@@ -98,6 +98,11 @@ description:'',
             },
             saveAddMenuInfo:function(){
                 if(vc.component.addMenuValidate()){
+
+                    vc.emit('addPrivilegeViewInfo','syncData',{
+                        name:vc.component.addMenuViewInfo.name,
+                        description:vc.component.addMenuViewInfo.description
+                    });
                     //侦听回传
                     vc.emit($props.callBackListener,$props.callBackFunction, vc.component.addMenuViewInfo);
                     return ;

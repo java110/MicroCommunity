@@ -27,6 +27,10 @@
          },
          _initEvent:function(){
 
+            vc.on('addPrivilegeViewInfo','syncData',function(_obj){
+                vc.copyObject(_obj,vc.component.addPrivilegeViewInfo);
+            });
+
             vc.on('addPrivilegeViewInfo', 'onIndex', function(_index){
                 vc.component.addPrivilegeViewInfo.index = _index;
             });

@@ -34,8 +34,8 @@
                 vc.component.configMenuInfo.index = vc.component.configMenuInfo.$step.getIndex();
 
                 vc.emit('viewMenuGroupInfo', 'onIndex', vc.component.configMenuInfo.index);
-vc.emit('addMenuView', 'onIndex', vc.component.configMenuInfo.index);
-vc.emit('addPrivilegeView', 'onIndex', vc.component.configMenuInfo.index);
+                vc.emit('addMenuView', 'onIndex', vc.component.configMenuInfo.index);
+                vc.emit('addPrivilegeView', 'onIndex', vc.component.configMenuInfo.index);
 
             },
             _nextStep:function(){
@@ -48,8 +48,8 @@ vc.emit('addPrivilegeView', 'onIndex', vc.component.configMenuInfo.index);
                 vc.component.configMenuInfo.index = vc.component.configMenuInfo.$step.getIndex();
 
                  vc.emit('viewMenuGroupInfo', 'onIndex', vc.component.configMenuInfo.index);
-vc.emit('addMenuView', 'onIndex', vc.component.configMenuInfo.index);
-vc.emit('addPrivilegeView', 'onIndex', vc.component.configMenuInfo.index);
+                vc.emit('addMenuView', 'onIndex', vc.component.configMenuInfo.index);
+                vc.emit('addPrivilegeView', 'onIndex', vc.component.configMenuInfo.index);
 
             },
             _finishStep:function(){
