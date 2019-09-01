@@ -109,7 +109,7 @@
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
-        insert into p_privilege(
+        insert into p_privilege_rel(
         p_id,pg_id
         ) values (
         #{pId},#{pgId}
@@ -120,8 +120,8 @@
 
 
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
-    <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
-        insert into p_privilege_rel(
+    <insert id="saveBasePrivilegeInfo" parameterType="Map">
+        insert into p_privilege(
         p_id,name,domain,description
         ) values (
         #{pId},#{name},#{domain},#{description}
