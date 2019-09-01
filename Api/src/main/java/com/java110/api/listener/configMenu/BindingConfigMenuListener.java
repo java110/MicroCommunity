@@ -83,13 +83,18 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         }
 
         if (!hasKey(addMenuView, "mId")) {
-            addMenuView.put("gId",viewMenuGroupInfo.getString("gId"));
-            addMenuView.put("pId",addPrivilegeView.getString("pId"));
+            addMenuView.put("gId", viewMenuGroupInfo.getString("gId"));
+            addMenuView.put("pId", addPrivilegeView.getString("pId"));
             saveMenu(addMenuView, context);
         }
 
+        JSONObject outParam = new JSONObject();
+        outParam.put("gId", viewMenuGroupInfo.getString("gId"));
+        outParam.put("pId", addPrivilegeView.getString("pId"));
+        outParam.put("mId", addMenuView.getString("mId"));
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
 

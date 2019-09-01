@@ -26,6 +26,7 @@
             }
         },
         _initMethod:function(){
+            vc.component.menuManageInfo.conditions.mId = vc.getParam("mId");
             vc.component._listMenus(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){

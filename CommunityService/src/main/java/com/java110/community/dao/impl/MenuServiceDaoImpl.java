@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -230,7 +231,34 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
     public int updateMenuInfo(Map info) throws DAOException {
         logger.debug("修改路由信息Instance 入参 info : {}", info);
 
-        int saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateMenuInfo", info);
+        int saveFlag = 0;
+
+        //判断是否为删除
+        if(info.containsKey("statusCd") && StatusConstant.STATUS_CD_INVALID.equals(info.get("statusCd"))){
+            //做查询
+            List<Map> baseMenus = getMenuInfo(info);
+
+            if(baseMenus != null && baseMenus.size() > 0){
+                Map privilegeInfo = new HashMap();
+                privilegeInfo.put("pId", baseMenus.get(0).get("pId"));
+                privilegeInfo.put("statusCd", StatusConstant.STATUS_CD_INVALID);
+                //删除权限 权限组关系
+                saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateBasePrivilegeRelInfo", info);
+
+                if(saveFlag < 1){
+                    return saveFlag;
+                }
+                //删除权限
+                saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateBasePrivilegeInfo", info);
+
+                if(saveFlag < 1){
+                    return saveFlag;
+                }
+            }
+
+        }
+
+        saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateMenuInfo", info);
 
         return saveFlag;
     }
