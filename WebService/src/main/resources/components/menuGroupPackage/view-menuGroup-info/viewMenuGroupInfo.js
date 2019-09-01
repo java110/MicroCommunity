@@ -13,11 +13,11 @@
                 index:0,
                 flowComponent:'viewMenuGroupInfo',
                 name:'',
-icon:'',
-label:'',
-seq:'',
-description:'',
-
+                icon:'',
+                label:'',
+                seq:'',
+                description:'',
+                gId:''
             }
         },
         _initMethod:function(){
