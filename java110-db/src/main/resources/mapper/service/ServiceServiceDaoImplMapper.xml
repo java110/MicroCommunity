@@ -294,4 +294,111 @@
 
     </select>
 
+
+    <!-- 保存服务提供信息 add by wuxw 2018-07-03 -->
+    <insert id="saveServiceProvideInfo" parameterType="Map">
+        insert into c_service_sql(
+        service_code,name,params,query_model,sql,proc,java_script,template,remark
+        ) values (
+        #{serviceCode},#{name},#{params},#{queryModel},#{sql},#{proc},#{javaScript},#{template},#{remark}
+        )
+    </insert>
+
+
+    <!-- 查询服务提供信息 add by wuxw 2018-07-03 -->
+    <select id="getServiceProvideInfo" parameterType="Map" resultType="Map">
+        select t.service_code serviceCode,t.name,t.params,t.query_model queryModel,
+        (CASE
+        WHEN t.`query_model` = '1'
+        THEN 'SQL方式'
+        WHEN t.query_model = '2'
+        THEN '存储过程'
+        ELSE
+        'java 方式'
+        END) queryModel ,
+        t.sql,t.proc,t.java_script javaScript,t.template,t.remark
+        from c_service_sql t
+        where 1 =1
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            and t.query_model= #{queryModel}
+        </if>
+
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改服务提供信息 add by wuxw 2018-07-03 -->
+    <update id="updateServiceProvideInfo" parameterType="Map">
+        update c_service_sql t set t.status_cd = #{statusCd}
+
+        <if test="serviceCode !=null and serviceCode != ''">
+            , t.service_code= #{serviceCode}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="params !=null and params != ''">
+            , t.params= #{params}
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            , t.query_model= #{queryModel}
+        </if>
+        <if test="sql !=null and sql != ''">
+            , t.sql= #{sql}
+        </if>
+        <if test="proc !=null and proc != ''">
+            , t.proc= #{proc}
+        </if>
+        <if test="javaScript !=null and javaScript != ''">
+            , t.java_script= #{javaScript}
+        </if>
+        <if test="template !=null and template != ''">
+            , t.template= #{template}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+
+
+    </update>
+
+    <!-- 查询服务提供数量 add by wuxw 2018-07-03 -->
+    <select id="queryServiceProvidesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_service_sql t
+        where 1 =1
+        <if test="serviceCode !=null and serviceCode != ''">
+            and t.service_code= #{serviceCode}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="queryModel !=null and queryModel != ''">
+            and t.query_model= #{queryModel}
+        </if>
+
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+
+    </select>
+
 </mapper>

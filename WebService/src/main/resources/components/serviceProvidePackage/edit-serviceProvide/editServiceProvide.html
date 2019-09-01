@@ -1,0 +1,73 @@
+<div id = "editServiceProvideModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="m-t-none m-b ">修改服务提供</h3>
+                <div class="ibox-content">
+                    <div>
+                        <div>
+                            <div class="form-group row">
+         <label class="col-sm-2 col-form-label">服务名称</label>
+         <div class="col-sm-10">
+           <input v-model="editServiceProvideInfo.name"                   type="text" placeholder="必填，请填写服务名称" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">服务编码</label>
+         <div class="col-sm-10">
+           <input v-model="editServiceProvideInfo.serviceCode"                   type="text" placeholder="必填，请填写服务编码" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">参数</label>
+         <div class="col-sm-10">
+           <input v-model="editServiceProvideInfo.params"                   type="text" placeholder="必填，请填写参数" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">实现方式</label>
+         <div class="col-sm-10">
+<select class="custom-select" v-model="editServiceProvideInfo.queryModel">
+         <option selected  disabled value="">必填，请选择实现方式</option>
+         <option  value="1">sql方式</option>
+<option  value="3">java方式</option>
+<option  value="2">存储过程方式</option>
+  </select>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">sql</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写sql" class="form-control" v-model="editServiceProvideInfo.sql"></textarea>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">输出模板</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写输出模板" class="form-control" v-model="editServiceProvideInfo.template"></textarea>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">存储过程</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写存储过程" class="form-control" v-model="editServiceProvideInfo.proc"></textarea>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">java</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写java" class="form-control" v-model="editServiceProvideInfo.javaScript"></textarea>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">描述</label>
+         <div class="col-sm-10">
+<textarea  placeholder="选填，请填写描述" class="form-control" v-model="editServiceProvideInfo.remark"></textarea>         </div>
+</div>
+
+                            <div class="ibox-content">
+                                <button class="btn btn-primary float-right" type="button" v-on:click="editServiceProvide()" ><i class="fa fa-check"></i>&nbsp;保存</button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

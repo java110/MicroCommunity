@@ -9,6 +9,7 @@ import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.UserDto;
 import com.java110.dto.service.ServiceDto;
+import com.java110.dto.service.ServiceProvideDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,5 +90,48 @@ public class ServiceInnerServiceSMOImpl extends BaseServiceSMO implements IServi
 
     public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
         this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+
+    @Override
+    public List<ServiceProvideDto> queryServiceProvides(@RequestBody ServiceProvideDto serviceProvideDto) {
+
+        //校验是否传了 分页信息
+
+        int page = serviceProvideDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            serviceProvideDto.setPage((page - 1) * serviceProvideDto.getRow());
+            serviceProvideDto.setRow(page * serviceProvideDto.getRow());
+        }
+
+        List<ServiceProvideDto> services = BeanConvertUtil.covertBeanList(serviceServiceDaoImpl.getServiceProvideInfo(BeanConvertUtil.beanCovertMap(serviceProvideDto)), ServiceProvideDto.class);
+
+
+        return services;
+    }
+
+
+
+    @Override
+    public int queryServiceProvidesCount(@RequestBody ServiceProvideDto serviceProvideDto) {
+        return serviceServiceDaoImpl.queryServiceProvidesCount(BeanConvertUtil.beanCovertMap(serviceProvideDto));
+    }
+
+
+    @Override
+    public int updateServiceProvide(@RequestBody ServiceProvideDto serviceProvideDto) {
+        return serviceServiceDaoImpl.updateServiceProvideInfo(BeanConvertUtil.beanCovertMap(serviceProvideDto));
+    }
+
+    @Override
+    public int saveServiceProvide(@RequestBody ServiceProvideDto serviceProvideDto) {
+        return serviceServiceDaoImpl.saveServiceProvideInfo(BeanConvertUtil.beanCovertMap(serviceProvideDto));
+    }
+
+    @Override
+    public int deleteServiceProvide(@RequestBody ServiceProvideDto serviceProvideDto) {
+        serviceProvideDto.setStatusCd("1");
+        return serviceServiceDaoImpl.updateServiceProvideInfo(BeanConvertUtil.beanCovertMap(serviceProvideDto));
     }
 }

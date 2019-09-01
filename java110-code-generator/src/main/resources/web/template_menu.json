@@ -1,0 +1,121 @@
+{
+  "templateName":"菜单",
+  "templateCode":"menu",
+  "templateKey":"mId",
+  "templateKeyName":"菜单ID",
+  "searchCode": "name",
+  "searchName": "菜单名称",
+  "conditions": [
+    {
+      "name": "菜单组名称",
+      "inputType": "choose",
+      "componentName": "chooseMenuGroup",
+      "code": "gName",
+      "key": "gId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "菜单ID",
+      "inputType": "input",
+      "code": "mId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "菜单名称",
+      "inputType": "input",
+      "code": "mName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "权限ID",
+      "inputType": "input",
+      "code": "pId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "权限名称",
+      "inputType": "input",
+      "code": "pName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "商户类型",
+      "inputType": "select",
+      "code": "domain",
+      "selectValue":"800900000001,800900000002,800900000003,800900000000",
+      "selectValueName":"运营团队,代理商,物业,开发团队",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "用户名称",
+      "inputType": "input",
+      "code": "uName",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"菜单名称",
+      "desc":"必填，请填写菜单名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"菜单名称必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"url",
+      "cnCode":"菜单地址",
+      "desc":"必填，请菜单菜单地址",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"菜单名称必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"seq",
+      "cnCode":"序列",
+      "desc":"必填，请填写序列",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"序列必须为整数",
+      "show": true
+    },
+    {
+      "code":"isShow",
+      "cnCode":"菜单显示",
+      "desc":"必填，请选择是否显示菜单",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"Y,N",
+      "selectValueName":"显示菜单,不显示菜单",
+      "limit":"maxin",
+      "limitParam":"1,12",
+      "limitErrInfo":"菜单显示错误",
+      "show": true
+    },
+    {
+      "code":"description",
+      "cnCode":"描述",
+      "desc":"可填，请填写描述",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200",
+      "show": false
+    }
+  ]
+}
