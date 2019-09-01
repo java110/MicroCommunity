@@ -82,8 +82,12 @@
                 vc.setMenus(vm.menus);
            },
            miniMenu:function(){
+                if(vc.notNull(vc.getMenuState()) && vc.getMenuState() == 'ON'){
+                    return ;
+                }
+
                 $("body").toggleClass("mini-navbar");
-                //SmoothlyMenu();
+                vc.setMenuState('OFF');
            }
 
        },

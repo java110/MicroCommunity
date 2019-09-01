@@ -280,12 +280,14 @@ function SmoothlyMenu() {
         // Hide menu in order to smoothly turn on when maximize menu
         $('#side-menu').hide();
         // For smoothly turn on menu
+        vc.setMenuState('ON');
         setTimeout(
             function () {
                 $('#side-menu').fadeIn(400);
             }, 200);
     } else if ($('body').hasClass('fixed-sidebar')) {
         $('#side-menu').hide();
+        vc.setMenuState('ON');
         setTimeout(
             function () {
                 $('#side-menu').fadeIn(400);
@@ -293,6 +295,7 @@ function SmoothlyMenu() {
     } else {
         // Remove all inline style from jquery fadeIn function to reset menu state
         $('#side-menu').removeAttr('style');
+        vc.setMenuState('OFF');
     }
 }
 

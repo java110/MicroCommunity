@@ -159,6 +159,15 @@
         return JSON.parse(window.localStorage.getItem('hc_menus'));
     };
 
+    //保存菜单状态
+    vc.setMenuState = function(_menuState){
+        window.localStorage.setItem('hc_menu_state',_menuState);
+    };
+    //获取菜单状态
+    vc.getMenuState = function(){
+        return window.localStorage.getItem('hc_menu_state');
+    };
+
     //保存用户菜单
     vc.saveData = function(_key,_value){
         window.localStorage.setItem(_key,JSON.stringify(_value));

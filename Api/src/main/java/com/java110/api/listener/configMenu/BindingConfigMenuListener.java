@@ -78,6 +78,7 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
             saveMenuGroup(viewMenuGroupInfo, context);
         }
         if (!hasKey(addMenuView, "mId")) {
+            addMenuView.put("gId",viewMenuGroupInfo.getString("gId"));
             saveMenu(addMenuView, context);
         }
         if (!hasKey(addPrivilegeView, "pId")) {
