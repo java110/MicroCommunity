@@ -22,6 +22,7 @@ queryModel:'',
             }
         },
         _initMethod:function(){
+            vc.component.serviceProvideManageInfo.conditions.serviceCode = vc.getParam("serviceCode");
             vc.component._listServiceProvides(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
@@ -61,7 +62,8 @@ queryModel:'',
                            );
             },
             _openAddServiceProvideModal:function(){
-                vc.emit('addServiceProvide','openAddServiceProvideModal',{});
+                //vc.emit('addServiceProvide','openAddServiceProvideModal',{});
+                vc.jumpToPage("/flow/devServiceProvideFlow");
             },
             _openEditServiceProvideModel:function(_serviceProvide){
                 vc.emit('editServiceProvide','openEditServiceProvideModal',_serviceProvide);

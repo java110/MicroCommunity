@@ -5,33 +5,47 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button"  class="btn btn-link btn-sm" style="margin-right:10px;"  v-on:click="_moreCondition()">更多</button>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">更多
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入提供ID" v-model="serviceProvideManageInfo.conditions.id" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入服务编码" v-model="serviceProvideManageInfo.conditions.serviceCode" class=" form-control">
-                            </div>                        </div><div class="col-sm-3" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入服务名称" v-model="serviceProvideManageInfo.conditions.name" class=" form-control">
-                            </div>                        </div><div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryServiceProvideMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入提供ID"
+                                       v-model="serviceProvideManageInfo.conditions.id" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入服务编码"
+                                       v-model="serviceProvideManageInfo.conditions.serviceCode" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入服务名称"
+                                       v-model="serviceProvideManageInfo.conditions.name" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    v-on:click="_queryServiceProvideMethod()">
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
-<div class="row">
-<div class="col-sm-4" v-if="serviceProvideManageInfo.moreCondition == true">
-<select class="custom-select" v-model="serviceProvideManageInfo.conditions.queryModel">
-         <option selected  value="">请选择实现方式</option>
-         <option  value="1">sql方式</option>
-<option  value="3">java方式</option>
-<option  value="2">存储过程方式</option>
-  </select>                        </div></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" v-if="serviceProvideManageInfo.moreCondition == true">
+                            <select class="custom-select" v-model="serviceProvideManageInfo.conditions.queryModel">
+                                <option selected value="">请选择实现方式</option>
+                                <option value="1">sql方式</option>
+                                <option value="3">java方式</option>
+                                <option value="2">存储过程方式</option>
+                            </select></div>
+                    </div>
 
 
                 </div>
@@ -46,7 +60,7 @@
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddServiceProvideModal()">
                             <i class="glyphicon glyphicon-plus"></i>
-                            添加服务提供
+                            开发服务
                         </button>
                     </div>
                 </div>
@@ -57,7 +71,7 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">提供ID</th>
+                            <th class="text-center">提供ID</th>
                             <th class="text-center">服务名称</th>
                             <th class="text-center">服务编码</th>
                             <th class="text-center">参数</th>
@@ -69,17 +83,23 @@
                         </thead>
                         <tbody>
                         <tr v-for="serviceProvide in serviceProvideManageInfo.serviceProvides">
-                                                        <td class="text-center">{{serviceProvide.id}}</td>
+                            <td class="text-center">{{serviceProvide.id}}</td>
                             <td class="text-center">{{serviceProvide.name}}</td>
                             <td class="text-center">{{serviceProvide.serviceCode}}</td>
                             <td class="text-center">{{serviceProvide.params}}</td>
                             <td class="text-center">{{serviceProvide.queryModel}}</td>
-                            <td class="text-center"><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditServiceProvideModel(serviceProvide)">修改</button>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditServiceProvideModel(serviceProvide)">修改
+                                    </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteServiceProvideModel(serviceProvide)">删除</button>
-                                </div></td>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeleteServiceProvideModel(serviceProvide)">删除
+                                    </button>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -98,12 +118,11 @@
         </div>
     </div>
 
-    
 
-    <vc:create name="addServiceProvide"
+   <!-- <vc:create name="addServiceProvide"
                callBackListener=""
                callBackFunction=""
-    ></vc:create>
+    ></vc:create>-->
     <vc:create name="editServiceProvide"></vc:create>
     <vc:create name="deleteServiceProvide"></vc:create>
 
