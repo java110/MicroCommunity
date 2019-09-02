@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ApiServiceDataVo implements Serializable {
-
     private String serviceId;
 private String name;
 private String serviceCode;

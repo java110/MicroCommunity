@@ -307,7 +307,7 @@
 
     <!-- 查询服务提供信息 add by wuxw 2018-07-03 -->
     <select id="getServiceProvideInfo" parameterType="Map" resultType="Map">
-        select t.service_code serviceCode,t.name,t.params,t.query_model queryModel,
+        select t.id,t.service_code serviceCode,t.name,t.params,t.query_model queryModel,
         (CASE
         WHEN t.`query_model` = '1'
         THEN 'SQL方式'
