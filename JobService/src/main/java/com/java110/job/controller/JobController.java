@@ -64,4 +64,28 @@ public class JobController extends BaseController {
         return JSON.toJSONString();
     }
 
+    /**
+     * 获取任务属性
+     * @return
+     */
+    @RequestMapping(path = "/questTaskTample")
+    @ResponseBody
+    public String questTaskTample(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("questTaskTample  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.questTaskTample(request);
+        return JSON.toJSONString();
+    }
+
+    /**
+     * 根据TaskId 获取任务属性
+     * @return
+     */
+    @RequestMapping(path = "/queryTaskAttrs")
+    @ResponseBody
+    public String queryTaskAttrs(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("queryTaskAttrs  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.queryTaskAttrs(request);
+        return JSON.toJSONString();
+    }
+
 }

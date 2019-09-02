@@ -1,7 +1,7 @@
 package com.java110.job.task;
 
 import com.java110.common.util.SpringBeanInvoker;
-import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.smo.HcFtpToFileSystemQuartz;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -29,9 +29,9 @@ public class HcFtpToFileSystemJob implements Job {
 	public static String JOB_DATA_TASK_ID = "ftpToFileSystemTaskID";
 	public static String JOB_GROUP_NAME = "ftpToFileSystemJobGroup"; // 任务的 分组名称
 	@Autowired
-	private IHccFtpFileDAO prvncFtpFileDAO;
+	private IHcFtpFileDAO iHcFtpFileDAO;
 	@Autowired
-	private HcFtpToFileSystemQuartz prvncDumpQuartz;
+	private HcFtpToFileSystemQuartz hcFtpToFileSystemQuartz;
 
 	protected void executeInternal(JobExecutionContext context) {
 		try {
@@ -56,8 +56,8 @@ public class HcFtpToFileSystemJob implements Job {
 			}
 
 			String dealClass = ftpItemConfigInfo.get("DEAL_CLASS").toString();
-			prvncDumpQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
-			prvncDumpQuartz.startFtpTask(ftpItemConfigInfo);
+			hcFtpToFileSystemQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
+			hcFtpToFileSystemQuartz.startFtpTask(ftpItemConfigInfo);
 		} catch (Throwable ex) {
 			logger.error("执行任务失败：", ex);
 		}
@@ -72,7 +72,7 @@ public class HcFtpToFileSystemJob implements Job {
 	private Map getFtpConfigInfo(long taskId) {
 		Map info = new HashMap();
 		info.put("taskId", taskId);
-		Map ftpItem = getPrvncFtpFileDAO().queryFtpItemByTaskId(info);
+		Map ftpItem = getiHcFtpFileDAO().queryFtpItemByTaskId(info);
 		if (logger.isDebugEnabled()) {
 			logger.debug(
 					"---【PrvncFtpToFileSystemQuartz.getFtpConfigInfo】查询到的配置数据为："
@@ -81,12 +81,12 @@ public class HcFtpToFileSystemJob implements Job {
 		return ftpItem;
 	}
 
-	public IHccFtpFileDAO getPrvncFtpFileDAO() {
-		if (this.prvncFtpFileDAO == null) {
-			this.prvncFtpFileDAO = ((IHccFtpFileDAO) SpringBeanInvoker
-					.getBean("provInner.PrvncFtpFileDAO"));
+	public IHcFtpFileDAO getiHcFtpFileDAO() {
+		if (this.iHcFtpFileDAO == null) {
+			this.iHcFtpFileDAO = ((IHcFtpFileDAO) SpringBeanInvoker
+					.getBean("provInner.iHcFtpFileDAO"));
 		}
-		return prvncFtpFileDAO;
+		return iHcFtpFileDAO;
 	}
 
 	@Override

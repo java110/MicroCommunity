@@ -1,7 +1,7 @@
 package com.java110.job.dao.impl;
 
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.model.FtpTaskLog;
 import com.java110.job.model.FtpTaskLogDetail;
 import org.springframework.stereotype.Service;
@@ -11,29 +11,29 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-@Service("IPrvncFtpFileDAO")
+@Service("IHcFtpFileDAO")
 @Transactional
-public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
+public class HcFtpFileDAOImpl extends BaseServiceDao implements IHcFtpFileDAO {
 
 	public long saveTaskRunLog(FtpTaskLog loginfo){
 		// TODO Auto-generated method stub
-		return sqlSessionTemplate.insert("IPrvncFtpFileDAO.saveTaskRunLog",loginfo);
+		return sqlSessionTemplate.insert("IHcFtpFileDAO.saveTaskRunLog",loginfo);
 	}
 
 	public void updateTaskRunLog(FtpTaskLog loginfo){
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.update("IPrvncFtpFileDAO.updateTaskRunLog",loginfo);
+		sqlSessionTemplate.update("IHcFtpFileDAO.updateTaskRunLog",loginfo);
 	}
 	public int saveTaskRunDetailLog(FtpTaskLogDetail logdetail){
 		// TODO Auto-generated method stub
-		return sqlSessionTemplate.insert("IPrvncFtpFileDAO.saveTaskRunDetailLog",logdetail);
+		return sqlSessionTemplate.insert("IHcFtpFileDAO.saveTaskRunDetailLog",logdetail);
 	}
 
 
 
 	@Override
 	public List execConfigSql(String dbsql){
-		return  sqlSessionTemplate.selectList("IPrvncFtpFileDAO.execConfigSql", dbsql);
+		return  sqlSessionTemplate.selectList("IHcFtpFileDAO.execConfigSql", dbsql);
 	}
 	/**
 	 * 查询文件下载在文件系统的配置任务列表
@@ -43,9 +43,9 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	public Map queryFtpItems(Map info){
 		Map resultInfo = new HashMap();
 		//1.0查询总数
-		Integer allCNT = (Integer) sqlSessionTemplate.selectOne("IPrvncFtpFileDAO.queryFtpItemsCount", info);
+		Integer allCNT = (Integer) sqlSessionTemplate.selectOne("IHcFtpFileDAO.queryFtpItemsCount", info);
 		resultInfo.put("ITEMSCOUNT", allCNT);
-		List datas = sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryFtpItems",info);
+		List datas = sqlSessionTemplate.selectList("IHcFtpFileDAO.queryFtpItems",info);
 		resultInfo.put("DATA", datas);
 		return resultInfo;
 	}
@@ -54,7 +54,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public long newCreateTaskId(){
-		Long tastId = (Long) sqlSessionTemplate.selectOne("IPrvncFtpFileDAO.newCreateTaskId");
+		Long tastId = (Long) sqlSessionTemplate.selectOne("IHcFtpFileDAO.newCreateTaskId");
 		return tastId;
 	}
 	/**
@@ -63,8 +63,8 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int addFtpItem(Map info){
-//		return  Integer.parseInt(sqlSessionTemplate.insert("IPrvncFtpFileDAO.addFtpItem", info).toString());
-		sqlSessionTemplate.insert("IPrvncFtpFileDAO.addFtpItem", info);
+//		return  Integer.parseInt(sqlSessionTemplate.insert("IHcFtpFileDAO.addFtpItem", info).toString());
+		sqlSessionTemplate.insert("IHcFtpFileDAO.addFtpItem", info);
 		return 1;
 	}
 	/**
@@ -73,12 +73,12 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public Map queryFtpItemByTaskId(Map info){
-		Object data = sqlSessionTemplate.selectOne("IPrvncFtpFileDAO.queryFtpItemByTaskId", info);
+		Object data = sqlSessionTemplate.selectOne("IHcFtpFileDAO.queryFtpItemByTaskId", info);
 		Map ftpItem = null ;
 		if(data != null){
 			ftpItem = (Map)data;
 			//查ftpitem属性
-			List<Map> ftpItemAttrs = sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryFtpItemAttrsByTaskId",info);
+			List<Map> ftpItemAttrs = sqlSessionTemplate.selectList("IHcFtpFileDAO.queryFtpItemAttrsByTaskId",info);
 			ftpItem.put("FTP_ITEM_ATTRS", ftpItemAttrs);
 		}
 
@@ -91,7 +91,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public List<Map> searchFtpItemByTaskName(Map info){
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.searchFtpItemByTaskName",info);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.searchFtpItemByTaskName",info);
 	}
 	/**
 	 * 修改ftp配置信息
@@ -99,7 +99,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int updateFtpItemByTaskId(Map info){
-		return sqlSessionTemplate.update("IPrvncFtpFileDAO.updateFtpItemByTaskId", info);
+		return sqlSessionTemplate.update("IHcFtpFileDAO.updateFtpItemByTaskId", info);
 	}
 	/**
 	 * 删除ftp配置信息
@@ -107,7 +107,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int deleteFtpItemByTaskId(Map info){
-		return sqlSessionTemplate.update("IPrvncFtpFileDAO.deleteFtpItemByTaskId", info);
+		return sqlSessionTemplate.update("IHcFtpFileDAO.deleteFtpItemByTaskId", info);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public List<Map> queryFtpItemsByTaskIds(Map info){
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryFtpItemsByTaskIds",info);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.queryFtpItemsByTaskIds",info);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public List<Map> queryFtpItemAttrsByTaskId(Map info){
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryFtpItemAttrsByTaskId",info);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.queryFtpItemAttrsByTaskId",info);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int deleteFtpItemAttrsbyTaskId(Map info){
-		return sqlSessionTemplate.delete("IPrvncFtpFileDAO.deleteFtpItemAttrsbyTaskId", info);
+		return sqlSessionTemplate.delete("IHcFtpFileDAO.deleteFtpItemAttrsbyTaskId", info);
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 		}
 		para.put("tablename", tablename.toUpperCase());
 		para.put("colnames", "'"+colnames.toUpperCase().replaceAll(",", "','")+"'");
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryTableColInfo",para);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.queryTableColInfo",para);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 */
 	public int addFtpItemAttrs(List<Map> infos){
 		for(Map info :infos){
-			sqlSessionTemplate.insert("IPrvncFtpFileDAO.addFtpItemAttrs",info);
+			sqlSessionTemplate.insert("IHcFtpFileDAO.addFtpItemAttrs",info);
 		}
 
 		return 1;
@@ -169,7 +169,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public List<Map> queryFileNamesWithOutFtpLog(Map info){
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryFileNamesWithOutFtpLog",info);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.queryFileNamesWithOutFtpLog",info);
 	}
 	/**
 	 * 查询ItemSpec
@@ -177,7 +177,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public List<Map> queryItemSpec(Map info){
-		return sqlSessionTemplate.selectList("IPrvncFtpFileDAO.queryItemSpec",info);
+		return sqlSessionTemplate.selectList("IHcFtpFileDAO.queryItemSpec",info);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int updateFtpItemRunState(Map info){
-		return sqlSessionTemplate.update("IPrvncFtpFileDAO.updateFtpItemRunState", info);
+		return sqlSessionTemplate.update("IHcFtpFileDAO.updateFtpItemRunState", info);
 	}
 
 	/**
@@ -195,9 +195,9 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	 * @return
 	 */
 	public int addDownloadFileName(Map info){
-//		return  Integer.parseInt(getSqlMapClientTemplate().insert("IPrvncFtpFileDAO.addDownloadFileName", info).toString());
+//		return  Integer.parseInt(getSqlMapClientTemplate().insert("IHcFtpFileDAO.addDownloadFileName", info).toString());
 
-		return  sqlSessionTemplate.insert("IPrvncFtpFileDAO.addDownloadFileName", info);
+		return  sqlSessionTemplate.insert("IHcFtpFileDAO.addDownloadFileName", info);
 	}
 
 	/**
@@ -206,18 +206,18 @@ public class HcFtpFileDAOImpl extends BaseServiceDao implements IHccFtpFileDAO {
 	public void saveDbFunction(String function){
 		Map para=new HashMap();
 		para.put("functionname", function);
-		sqlSessionTemplate.selectOne("IPrvncFtpFileDAO.calltaskfunction",para);
+		sqlSessionTemplate.selectOne("IHcFtpFileDAO.calltaskfunction",para);
 	}
 
 	/**
 	 * 执行存过(带参数)，处理任务执行前后的事情
 	 */
 	public void saveDbFunctionWithParam(Map info){
-		sqlSessionTemplate.selectOne("IPrvncFtpFileDAO.calltaskfunctionwithparam",info);
+		sqlSessionTemplate.selectOne("IHcFtpFileDAO.calltaskfunctionwithparam",info);
 	}
 
 	public void insertFileData2Table(String insertSQL){
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.update("IPrvncFtpFileDAO.insertFileData2Table",insertSQL);
+		sqlSessionTemplate.update("IHcFtpFileDAO.insertFileData2Table",insertSQL);
 	}
 }

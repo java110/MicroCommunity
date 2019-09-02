@@ -2,7 +2,7 @@ package com.java110.job.smo;
 import com.java110.common.constant.RuleDomain;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.StringUtil;
-import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.dao.IHcFtpFileDAO;
 
 import com.java110.job.model.FtpTaskLog;
 import com.java110.job.model.FtpTaskLogDetail;
@@ -28,9 +28,9 @@ public abstract class HcFtpToFileSystemQuartz {
 
 	protected static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemQuartz.class);
 	@Autowired
-	private IHccFtpFileDAO iprvncFtpFileDAO;
+	private IHcFtpFileDAO iHcFtpFileDAO;
 	@Autowired
-	private IHcFtpFileSMO iprvncFtpFileSMO;
+	private IHcFtpFileSMO iHcFtpFileSMO;
 
 	/*private IPrvncDumpSMO prvncDumpSMO;*/
 	// 运行状态，R：正在执行 T：等待运行 TD1:文件下载失败 TD2:文件内容保存失败 TU1:数据文件生成失败 TU2:数据文件上传失败
@@ -46,7 +46,7 @@ public abstract class HcFtpToFileSystemQuartz {
 		Map paramIn = new HashMap();
 		paramIn.put("oldRunState", "R");
 		paramIn.put("runState", "T");
-		int updateFtpItemRunStateFlag = iprvncFtpFileDAO.updateFtpItemRunState(paramIn);
+		int updateFtpItemRunStateFlag = iHcFtpFileDAO.updateFtpItemRunState(paramIn);
 		if (updateFtpItemRunStateFlag < 1) {
 			logger.error("--【PrvncFtpToFileSystemQuartz.initTask】,没有需要更新的内容（没有下载一半后停止应用的情况）", paramIn);
 		}
@@ -153,7 +153,7 @@ public abstract class HcFtpToFileSystemQuartz {
 
 		if (taskInfo.containsKey("PREFUNCTION") && taskInfo.get("PREFUNCTION") != null && !"".equals(taskInfo.get("PREFUNCTION"))) {
 			try {
-				iprvncFtpFileSMO.saveDbFunction(taskInfo.get("PREFUNCTION").toString());
+				iHcFtpFileSMO.saveDbFunction(taskInfo.get("PREFUNCTION").toString());
 				taskInfo.put("threadrunstate", "T");
 				taskInfo.put("remark", "调用事前存过结束");
 				saveTaskLogDetail(taskInfo);
@@ -181,7 +181,7 @@ public abstract class HcFtpToFileSystemQuartz {
 			try {
 				taskInfo.put("functionname", taskInfo.get("AFTERFUNCTION"));
 				// taskInfo 参数param需要在process方法中需要自己写入
-				iprvncFtpFileSMO.saveDbFunctionWithParam(taskInfo);
+				iHcFtpFileSMO.saveDbFunctionWithParam(taskInfo);
 				taskInfo.put("threadrunstate", "T");
 				taskInfo.put("remark", "调用事后存过结束");
 				saveTaskLogDetail(taskInfo);
@@ -205,7 +205,7 @@ public abstract class HcFtpToFileSystemQuartz {
 
 		info.put("taskId", taskId);
 		info.put("runState", state);
-		int updateFtpItemFlag = iprvncFtpFileDAO.updateFtpItemByTaskId(info);
+		int updateFtpItemFlag = iHcFtpFileDAO.updateFtpItemByTaskId(info);
 		// 这里只是后台提示，不进行日志保存
 		if (updateFtpItemFlag < 1) {
 			logger.error("---【PrvncFtpToFileSystemQuartz.updateTaskState】修改任务【" + taskId + "】的状态失败", info);
@@ -219,7 +219,7 @@ public abstract class HcFtpToFileSystemQuartz {
 		FtpTaskLog loginfo = new FtpTaskLog();
 		loginfo.setLogid(Long.valueOf(taskInfo.get("logid").toString()));
 		loginfo.setState(taskInfo.get("threadrunstate").toString());
-		iprvncFtpFileSMO.updateTaskRunLog(loginfo);
+		iHcFtpFileSMO.updateTaskRunLog(loginfo);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public abstract class HcFtpToFileSystemQuartz {
 		logdetail.setData(taskInfo.get("data") == null ? "" : taskInfo.get("data").toString());
 		logdetail.setServerfilename(taskInfo.get("serverfilename") == null ? "" : taskInfo.get("serverfilename").toString());
 		logdetail.setLocalfilename(taskInfo.get("localfilename") == null ? "" : taskInfo.get("localfilename").toString());
-		int logdetailid = iprvncFtpFileSMO.saveTaskRunDetailLog(logdetail);
+		int logdetailid = iHcFtpFileSMO.saveTaskRunDetailLog(logdetail);
 		taskInfo.put("logdetailid", logdetailid);
 	}
 
@@ -273,7 +273,7 @@ public abstract class HcFtpToFileSystemQuartz {
 		loginfo.setServerfilename("");// taskInfo.get("serverfilename").toString()
 		loginfo.setLocalfilename("");// taskInfo.get("localfilename").toString()
 		loginfo.setUord(taskInfo.get("U_OR_D").toString());
-		return iprvncFtpFileSMO.saveTaskRunLog(loginfo);
+		return iHcFtpFileSMO.saveTaskRunLog(loginfo);
 	}
 
 	/**
@@ -349,20 +349,20 @@ public abstract class HcFtpToFileSystemQuartz {
 
 	}
 
-	public IHccFtpFileDAO getPrvncFtpFileDAO() {
-		return iprvncFtpFileDAO;
+	public IHcFtpFileDAO getPrvncFtpFileDAO() {
+		return iHcFtpFileDAO;
 	}
 
-	public void setPrvncFtpFileDAO(IHccFtpFileDAO prvncFtpFileDAO) {
-		this.iprvncFtpFileDAO = prvncFtpFileDAO;
+	public void setPrvncFtpFileDAO(IHcFtpFileDAO prvncFtpFileDAO) {
+		this.iHcFtpFileDAO = prvncFtpFileDAO;
 	}
 
 	public IHcFtpFileSMO getPrvncFtpFileSMO() {
-		return iprvncFtpFileSMO;
+		return iHcFtpFileSMO;
 	}
 
 	public void setPrvncFtpFileSMO(IHcFtpFileSMO prvncFtpFileSMO) {
-		this.iprvncFtpFileSMO = prvncFtpFileSMO;
+		this.iHcFtpFileSMO = prvncFtpFileSMO;
 	}
 
 	/*public IPrvncDumpSMO getPrvncDumpSMO() {

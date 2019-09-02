@@ -28,13 +28,13 @@
 	        ]]>
         </selectKey>
         insert into
-        HC_FTP_TASKLOG(logid,taskid,u_or_d,create_date,state,serverfilename,localfilename,filelength)
+        hc_ftp_tasklog(logid,taskid,u_or_d,create_date,state,serverfilename,localfilename,filelength)
         values(#logid#,#taskid#,#uord#,sysdate,#state#,#serverfilename#,#localfilename#,#filelength#)
     </insert>
 
     <update id="updateTaskRunLog"
     >
-        update HC_FTP_TASKLOG set update_date=sysdate
+        update hc_ftp_tasklog set update_date=sysdate
         <if test="state !=null and state != ''">,state = #{state}
         </if>
         where logid=#logid#
@@ -48,13 +48,13 @@
 	        ]]>
         </selectKey>
         insert into
-        HC_FTP_TASKLOG_DETAIL(id,logid,taskid,create_date,state,tnum,begin,end,data,havedown,remark,SERVERFILENAME,LOCALFILENAME)
+        hc_ftp_tasklog_detail(id,logid,taskid,create_date,state,tnum,begin,end,data,havedown,remark,SERVERFILENAME,LOCALFILENAME)
         values(#id#,#logid#,#taskid#,sysdate,#state#,#tnum#,#begin#,#end#,#data#,#havedown#,#remark#,#serverfilename#,#localfilename#)
     </insert>
 
 
             <insert id="addFtpItem" parameterType="Map">
-                insert into HC_FTP_TASK(taskid,
+                insert into hc_ftp_task(taskid,
                 taskname,
                 file_name,
                 u_or_d,
@@ -89,7 +89,7 @@
 
             <select id="queryTaskDetailInfo" parameterType="long"
                 resultType="Map">
-                select * from HC_FTP_TASKLOG_DETAIL
+                select * from hc_ftp_tasklog_detail
                 where detailid=#{value}
             </select>
             <select id="queryFtpUserInfo" parameterType="long" resultType="Map">
@@ -111,7 +111,7 @@
             <select id="queryFtpItemsCount" parameterType="Map"
                 resultType="Integer">
                 SELECT count(1)
-                FROM HC_FTP_TASK A
+                FROM hc_ftp_task A
                 WHERE A.STATE = 'A'
 
             </select>
@@ -136,7 +136,7 @@
                        A.AFTERFUNCTION,
                        A.DEAL_CLASS,
                        A.CREATE_DATE
-                  FROM HC_FTP_TASK A
+                  FROM hc_ftp_task A
                  WHERE A.STATE = 'A') A1
                  where  1 = 1 limit #{curPage},#{pageSize}
             ]]>
@@ -167,7 +167,7 @@
                 A.AFTERFUNCTION,
                 A.DEAL_CLASS,
                 A.CREATE_DATE
-                FROM HC_FTP_TASK A
+                FROM hc_ftp_task A
                 WHERE A.STATE = 'A'
                 and A.TASKID = #{taskId}
             </select>
@@ -192,7 +192,7 @@
                 A.AFTERFUNCTION,
                 A.DEAL_CLASS,
                 A.CREATE_DATE
-                FROM HC_FTP_TASK A
+                FROM hc_ftp_task A
                 WHERE A.STATE = 'A'
                 and A.TASKNAME like '%' || #{taskName} || '%'
                 and rownum < 1000
@@ -200,7 +200,7 @@
             </select>
             <!-- 修改ftp配置信息 -->
             <update id="updateFtpItemByTaskId" parameterType="Map">
-                update HC_FTP_TASK sft
+                update hc_ftp_task sft
                 set update_date = sysdate
                 <if test="taskName !=null and taskName != ''">,sft.taskname = #{taskName}
                 </if>
@@ -232,7 +232,7 @@
             <!-- 修改ftp配置信息 -->
             <update id="updateFtpItemRunState" parameterType="Map">
                 update
-                HC_FTP_TASK sft
+                hc_ftp_task sft
                 set update_date = sysdate,sft.run_state= #{runState}
                 where sft.run_state = #{oldRunState}
             </update>
@@ -240,7 +240,7 @@
             <!-- 删除ftp配置信息 -->
             <update id="deleteFtpItemByTaskId" parameterType="Map">
                 update
-                HC_FTP_TASK sft
+                hc_ftp_task sft
                 set sft.state = 'R'
                 where sft.state = 'A'
                 and sft.taskid in
@@ -268,7 +268,7 @@
                 A.AFTERFLAG,
                 A.AFTERFUNCTION,
                 A.DEAL_CLASS
-                FROM HC_FTP_TASK A
+                FROM hc_ftp_task A
                 WHERE A.STATE = 'A'
                 AND A.TASKID in
                 <foreach open="(" close=")"
@@ -280,13 +280,13 @@
             <select id="queryFtpItemAttrsByTaskId" parameterType="Map"
                 resultType="Map">
                 SELECT A.TASKID, A.ITEM_SPEC_ID, A.VALUE
-                FROM HC_FTP_TASK_ATTR A
+                FROM hc_ftp_task_attr A
                 WHERE A.TASKID = #{taskId}
             </select>
             <!-- 保存FTPItem的属性信息 -->
             <insert id="addFtpItemAttrs" parameterType="Map">
                 insert into
-                HC_FTP_TASK_ATTR(taskid,item_spec_id,value)
+                hc_ftp_task_attr(taskid,item_spec_id,value)
                 values(#{taskId},#{itemSpecId},#{value})
             </insert>
             <!-- 查询没有下载过的文件名 -->
@@ -295,7 +295,7 @@
                 <![CDATA[
                 SELECT #{fileNames} AS fileNames FROM DUAL
                  where #{fileNames} not in
-                       (select sfl.file_name from saop_ftp_log sfl where sfl.taskId = #{taskId})
+                       (select sfl.file_name from hc_ftp_log sfl where sfl.taskId = #{taskId})
                 ]]>
             </select>
 
@@ -305,7 +305,7 @@
                     SELECT seq_cep_taskid.NEXTVAL  AS logid from dual
                     ]]>
                 </selectKey>
-            insert into saop_ftp_log(
+            insert into hc_ftp_log(
             log_id,
             taskid,
             file_name,
@@ -321,8 +321,8 @@
 
 
             <select id="queryItemSpec" parameterType="Map" resultType="Map">
-                select a.item_spec_cd, a.domain, a.name, a.describes, a.create_date
-                from saop_ftp_item_spec a
+                select a.item_spec_cd as ITEM_SPEC_CD, a.domain as DOMAIN, a.name as NAME, a.describes as DESCRIBES, a.create_date as CREATE_DATE
+                from hc_ftp_item_spec a
                 where a.status_cd = '0'
                 <if test="domain != null and domain !='' "> and a.domain = #{domain}</if>
                 <if test="name != null and name !='' "> and a.name = #{name}</if>

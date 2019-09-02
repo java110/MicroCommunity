@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 @Service("prvncFtpFileSMOImpl")
 @Transactional
-public class PrvncFtpFileSMOImpl implements IHcFtpFileSMO {
+public class HcFtpFileSMOImpl implements IHcFtpFileSMO {
     /** logger */  
     protected final Logger log= Logger.getLogger(getClass());
 	@Autowired

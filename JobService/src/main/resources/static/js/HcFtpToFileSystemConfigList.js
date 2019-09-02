@@ -8,7 +8,7 @@ $(document).ready(function(){
 function loadTaskDataPage(curPage){
 	$.ajax({
 	      type: 'POST',
-	      url: '/FtpToFileSystemConfigList/queryFtpItems',
+	      url: '/HcFtpToFileSystemConfigList/queryFtpItems',
 	      data: {
 	    	curPage:curPage
 	      },
@@ -457,7 +457,7 @@ function queryTaskAttrData(taskId){
 
         $.ajax({
           type: 'POST',
-          url: '../FtpToFileSystem_queryTaskAttrs.action',
+          url: '/HcFtpToFileSystemConfigList/queryTaskAttrs',
           data: {
                 ftpItemJson:requestParam
           },
@@ -513,7 +513,7 @@ function queryTaskAttr(obj,doType){
     // 请求处理
      $.ajax({
           type: 'POST',
-          url: '../FtpToFileSystem_questTaskTample.action',
+          url: '/HcFtpToFileSystemConfigList/questTaskTample',
           data: {
                 ftpItemJson:requestParam
           },
@@ -587,7 +587,7 @@ function saveTaskInfo(doType){
     var uOrDNew = $('#uOrD'+doType).val();
     var fileNameNew = $('#fileName'+doType).val();
     var taskId = -1;
-    var url = "/FtpToFileSystemConfigList/addFtpItem";// 新增时的URL
+    var url = "/HcFtpToFileSystemConfigList/addFtpItem";// 新增时的URL
     if(doType == 'Edit'){
         url = '../FtpToFileSystem_editFtpItem.action';// 编辑时的URL
         taskId = $('#taskId'+doType).val();

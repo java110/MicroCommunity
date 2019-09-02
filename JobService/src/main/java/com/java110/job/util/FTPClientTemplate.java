@@ -1,7 +1,7 @@
 package com.java110.job.util;
 
 import com.java110.common.util.SpringBeanInvoker;
-import com.java110.job.dao.IHccFtpFileDAO;
+import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.model.FtpTaskLogDetail;
 import com.java110.job.smo.IHcFtpFileSMO;
 import org.apache.commons.net.PrintCommandListener;
@@ -48,9 +48,9 @@ public class FTPClientTemplate implements Callable<Map> {
     private String transferflag;											//传输类型
     private Map threadpara;												//线程执行参数
     @Autowired
-    private IHccFtpFileDAO prvncFtpFileDAO;
+    private IHcFtpFileDAO iHcFtpFileDAO;
     @Autowired
-    private IHcFtpFileSMO prvncFtpFileSMO;
+    private IHcFtpFileSMO iHcFtpFileSMO;
     public static String SPECIAL_SINGLESPLIT_a="+*|";										//字符串分隔符特殊字符需要用加"\\"来转译
     //传输类型（“U"是上传      upload     ”D“是下载   download）
     public static class TransferType{
@@ -104,8 +104,8 @@ public class FTPClientTemplate implements Callable<Map> {
 		init();
 	}
 	private void init(){
-		this.prvncFtpFileDAO = ((IHccFtpFileDAO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileDAO"));
-		this.prvncFtpFileSMO=((IHcFtpFileSMO) SpringBeanInvoker.getBean("provInner.PrvncFtpFileSMO"));
+		this.iHcFtpFileDAO = ((IHcFtpFileDAO) SpringBeanInvoker.getBean("provInner.iHcFtpFileDAO"));
+		this.iHcFtpFileSMO=((IHcFtpFileSMO) SpringBeanInvoker.getBean("provInner.iHcFtpFileSMO"));
 	}
 	public Map call() throws Exception {
 		Map result=null;
@@ -500,7 +500,7 @@ public class FTPClientTemplate implements Callable<Map> {
     		tablename=tablename.trim();
     		tablename=tablename.substring(tablename.lastIndexOf(" "), tablename.length());
     		//查字段的数据类型
-    		List<Map> collist=prvncFtpFileDAO.queryTableColInfo(tablename.trim(), colnames.trim());
+    		List<Map> collist=iHcFtpFileDAO.queryTableColInfo(tablename.trim(), colnames.trim());
 			RandomAccessFile raf = new RandomAccessFile(localfilename, "r");
 			long filelen=raf.length();
 			if (filelen != 0L) {  
@@ -569,7 +569,7 @@ public class FTPClientTemplate implements Callable<Map> {
 		logdetail.setRemark((String)threadpara.get("remark"));
 		logdetail.setServerfilename((String)threadpara.get("serverfilename"));
 		logdetail.setLocalfilename((String)threadpara.get("localfilename"));
-		prvncFtpFileSMO.saveTaskRunDetailLog(logdetail);
+		iHcFtpFileSMO.saveTaskRunDetailLog(logdetail);
 	}
     public void saveStringToData(String data, String insertsql, String colnames, List<Map> collist){
 		//拼接数据保存的SQL语句，日期型的值要格式化下
@@ -588,7 +588,7 @@ public class FTPClientTemplate implements Callable<Map> {
 		}
 		insertsql=getInsertTableSQL(colnames,collist,datarows,insertsql);
 		//执行SQL语句，保存数据
-		prvncFtpFileSMO.insertFileData2Table(insertsql);
+		iHcFtpFileSMO.insertFileData2Table(insertsql);
     }
     /**
      * 拼接数据保存的SQL语句，日期型的值要格式化下

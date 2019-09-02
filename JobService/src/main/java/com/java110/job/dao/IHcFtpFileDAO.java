@@ -5,7 +5,7 @@ import com.java110.job.model.*;
 import java.util.List;
 import java.util.Map;
 
-public interface IHccFtpFileDAO {
+public interface IHcFtpFileDAO {
 
 
 	/**
