@@ -33,4 +33,13 @@ public class DomainContant {
     public final static String COMMON_DOMAIN = "DOMAIN.COMMON";
 
 
+    /**
+     * 商户类型对应 权限组 管理员
+     *
+     *
+     */
+
+    public final static String DEFAULT_PRIVILEGE_ADMIN = "DEFAULT_PRIVILEGE_ADMIN";
+
+
 }

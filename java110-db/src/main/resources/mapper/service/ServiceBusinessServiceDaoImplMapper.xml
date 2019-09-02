@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="serviceBusinessServiceDaoImpl">
+
+    <!-- 保存服务实现信息 add by wuxw 2018-07-03 -->
+       <insert id="saveServiceBusiness" parameterType="Map">
+           insert into c_service_business(
+business_type_cd,invoke_type,message_topic,retry_count,url,timeout
+) values (
+#{businessTypeCd},#{invokeType},#{messageTopic},#{retryCount},#{url},#{timeout}
+)
+       </insert>
+
+
+       <!-- 查询服务实现信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessServiceBusinessInfo" parameterType="Map" resultType="Map">
+           select  t.business_type_cd,t.business_type_cd businessTypeCd,t.invoke_type,t.invoke_type invokeType,t.message_topic,t.message_topic messageTopic,t.operate,t.retry_count,t.retry_count retryCount,t.service_business_id,t.service_business_id serviceBusinessId,t.url,t.timeout 
+from c_service_business t 
+where 1 =1 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="invokeType !=null and invokeType != ''">
+   and t.invoke_type= #{invokeType}
+</if> 
+<if test="messageTopic !=null and messageTopic != ''">
+   and t.message_topic= #{messageTopic}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="retryCount !=null and retryCount != ''">
+   and t.retry_count= #{retryCount}
+</if> 
+<if test="serviceBusinessId !=null and serviceBusinessId != ''">
+   and t.service_business_id= #{serviceBusinessId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="timeout !=null and timeout != ''">
+   and t.timeout= #{timeout}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存服务实现信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveServiceBusinessInfoInstance" parameterType="Map">
+        insert into c_service_business(
+business_type_cd,invoke_type,message_topic,retry_count,status_cd,service_business_id,url,timeout
+) select t.business_type_cd,t.invoke_type,t.message_topic,t.retry_count,'0',t.service_business_id,t.url,t.timeout from c_service_business t where 1=1
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="invokeType !=null and invokeType != ''">
+   and t.invoke_type= #{invokeType}
+</if> 
+<if test="messageTopic !=null and messageTopic != ''">
+   and t.message_topic= #{messageTopic}
+</if> 
+   and t.operate= 'ADD'
+<if test="retryCount !=null and retryCount != ''">
+   and t.retry_count= #{retryCount}
+</if> 
+<if test="serviceBusinessId !=null and serviceBusinessId != ''">
+   and t.service_business_id= #{serviceBusinessId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="timeout !=null and timeout != ''">
+   and t.timeout= #{timeout}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询服务实现信息 add by wuxw 2018-07-03 -->
+    <select id="getServiceBusinessInfo" parameterType="Map" resultType="Map">
+        select  t.business_type_cd,c.name,c.description,t.business_type_cd businessTypeCd,t.invoke_type,t.invoke_type invokeType,t.message_topic,t.message_topic messageTopic,t.retry_count,t.retry_count retryCount,t.status_cd,t.status_cd statusCd,t.service_business_id,t.service_business_id serviceBusinessId,t.url,t.timeout
+from c_service_business t ,c_business_type c
+where 1 =1
+        and t.business_type_cd = c.business_type_cd
+        <if test="name != null and name !=''">
+            and c.name like concat('%',#{name},'%')
+        </if>
+        <if test="description != null and description !=''">
+            and c.description like concat('%',#{description},'%')
+        </if>
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="invokeType !=null and invokeType != ''">
+   and t.invoke_type= #{invokeType}
+</if> 
+<if test="messageTopic !=null and messageTopic != ''">
+   and t.message_topic= #{messageTopic}
+</if> 
+<if test="retryCount !=null and retryCount != ''">
+   and t.retry_count= #{retryCount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="serviceBusinessId !=null and serviceBusinessId != ''">
+   and t.service_business_id= #{serviceBusinessId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="timeout !=null and timeout != ''">
+   and t.timeout= #{timeout}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改服务实现信息 add by wuxw 2018-07-03 -->
+    <update id="updateServiceBusiness" parameterType="Map">
+        update  c_service_business t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+, t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="invokeType !=null and invokeType != ''">
+, t.invoke_type= #{invokeType}
+</if> 
+<if test="messageTopic !=null and messageTopic != ''">
+, t.message_topic= #{messageTopic}
+</if> 
+<if test="retryCount !=null and retryCount != ''">
+, t.retry_count= #{retryCount}
+</if> 
+<if test="url !=null and url != ''">
+, t.url= #{url}
+</if> 
+<if test="timeout !=null and timeout != ''">
+, t.timeout= #{timeout}
+</if> 
+ where 1=1 <if test="serviceBusinessId !=null and serviceBusinessId != ''">
+and t.service_business_id= #{serviceBusinessId}
+</if> 
+
+    </update>
+
+    <!-- 查询服务实现数量 add by wuxw 2018-07-03 -->
+     <select id="queryServiceBusinesssCount" parameterType="Map" resultType="Map">
+        select  count(1) count
+         from c_service_business t ,c_business_type c
+         where 1 =1
+         and t.business_type_cd = c.business_type_cd
+         <if test="name != null and name !=''">
+             and c.name like concat('%',#{name},'%')
+         </if>
+         <if test="description != null and description !=''">
+             and c.description like concat('%',#{description},'%')
+         </if>
+<if test="businessTypeCd !=null and businessTypeCd != ''">
+   and t.business_type_cd= #{businessTypeCd}
+</if> 
+<if test="invokeType !=null and invokeType != ''">
+   and t.invoke_type= #{invokeType}
+</if> 
+<if test="messageTopic !=null and messageTopic != ''">
+   and t.message_topic= #{messageTopic}
+</if> 
+<if test="retryCount !=null and retryCount != ''">
+   and t.retry_count= #{retryCount}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="serviceBusinessId !=null and serviceBusinessId != ''">
+   and t.service_business_id= #{serviceBusinessId}
+</if> 
+<if test="url !=null and url != ''">
+   and t.url= #{url}
+</if> 
+<if test="timeout !=null and timeout != ''">
+   and t.timeout= #{timeout}
+</if> 
+
+
+     </select>
+
+    <select id="queryBusinessType" parameterType="Map" resultType="Map">
+        select ct.* from c_business_type ct
+        where ct.business_type_cd = #{businessTypeCd}
+    </select>
+
+    <insert id="saveBusinessType" parameterType="Map">
+        insert into c_business_type(business_type_cd,name,description)
+        values(#{businessTypeCd},#{name},#{description})
+
+    </insert>
+
+    <update id="updateBusinessType" parameterType="Map">
+        update c_business_type ct
+        <set>
+            <if test="name !=null and name != ''">
+                ct.name= #{name},
+            </if>
+            <if test="businessTypeCd !=null and businessTypeCd != ''">
+                ct.business_type_cd= #{businessTypeCd},
+            </if>
+            <if test="description !=null and description != ''">
+                ct.description= #{description}
+            </if>
+        </set>
+
+        where ct.business_type_cd= #{businessTypeCd}
+
+    </update>
+
+</mapper>

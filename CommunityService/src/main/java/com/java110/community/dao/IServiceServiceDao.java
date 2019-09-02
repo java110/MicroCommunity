@@ -78,4 +78,40 @@ public interface IServiceServiceDao {
      */
     int queryServicesCount(Map info);
 
+
+    /**
+     * 保存 服务信息
+     * @param businessServiceProvideInfo 服务信息 封装
+     * @throws DAOException 操作数据库异常
+     */
+    int saveServiceProvideInfo(Map businessServiceProvideInfo) throws DAOException;
+
+
+    /**
+     * 查询服务信息（instance过程）
+     * 根据bId 查询服务信息
+     * @param info bId 信息
+     * @return 服务信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getServiceProvideInfo(Map info) throws DAOException;
+
+
+
+    /**
+     * 修改服务信息
+     * @param info 修改信息
+     * @throws DAOException DAO异常
+     */
+    int updateServiceProvideInfo(Map info) throws DAOException;
+
+
+    /**
+     * 查询服务总数
+     *
+     * @param info 服务信息
+     * @return 服务数量
+     */
+    int queryServiceProvidesCount(Map info);
+
 }

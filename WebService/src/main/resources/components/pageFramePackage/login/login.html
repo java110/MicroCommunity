@@ -1,0 +1,22 @@
+<div component="login">
+    <div>
+        <h1 class="logo-name">HC</h1>
+    </div>
+    <h3>请登录</h3>
+    <p style="color: red;">{{loginInfo.errorInfo}}</p>
+    <div class="m-t" role="form">
+        <div class="form-group">
+            <input type="text" v-model="loginInfo.username" class="form-control" placeholder="用户名" required="" @keyup.enter="doLogin"/>
+        </div>
+        <div class="form-group">
+            <input type="password" v-model="loginInfo.passwd" class="form-control" placeholder="密码" required="" @keyup.enter="doLogin"/>
+        </div>
+        <vc:create name="validate-code"></vc:create>
+        <button type="submit" v-on:click="doLogin()" class="btn btn-primary block full-width m-b">登录</button>
+
+        <a href="#"><small>忘记密码?</small></a>
+        <p class="text-muted text-center"><small>Do not have an account?</small></p>
+        <a class="btn btn-sm btn-white btn-block" href="/flow/register">请注册</a>
+    </div>
+
+</div>

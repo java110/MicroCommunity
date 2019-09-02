@@ -2,6 +2,7 @@ package com.java110.web.components.service;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.web.smo.app.IListAppsSMO;
 import com.java110.web.smo.service.IListServicesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class ServiceManageComponent {
     @Autowired
     private IListServicesSMO listServicesSMOImpl;
 
+    @Autowired
+    private IListAppsSMO listAppsSMOImpl;
+
     /**
      * 查询服务列表
      *
@@ -31,11 +35,23 @@ public class ServiceManageComponent {
         return listServicesSMOImpl.listServices(pd);
     }
 
+    public ResponseEntity<String> loadApp(IPageData pd){
+        return listAppsSMOImpl.listApps(pd);
+    }
+
     public IListServicesSMO getListServicesSMOImpl() {
         return listServicesSMOImpl;
     }
 
     public void setListServicesSMOImpl(IListServicesSMO listServicesSMOImpl) {
         this.listServicesSMOImpl = listServicesSMOImpl;
+    }
+
+    public IListAppsSMO getListAppsSMOImpl() {
+        return listAppsSMOImpl;
+    }
+
+    public void setListAppsSMOImpl(IListAppsSMO listAppsSMOImpl) {
+        this.listAppsSMOImpl = listAppsSMOImpl;
     }
 }

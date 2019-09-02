@@ -26,7 +26,6 @@ public final class PrivilegeCodeConstant {
     public static final String PRIVILEGE_ROOM = "500201904006";
 
 
-
     //出售房屋权限
     public static final String PRIVILEGE_SELL_ROOM = "500201904014";
 
@@ -51,7 +50,6 @@ public final class PrivilegeCodeConstant {
     public static final String PRIVILEGE_CAR = "500201906019";
 
 
-
     //停车费用配置权限
     public static final String PRIVILEGE_PARKING_SPACE_CONFIG_FEE = "500201904021";
 
@@ -65,6 +63,21 @@ public final class PrivilegeCodeConstant {
     public static final String AGENT_HAS_LIST_SERVICE = "500201906027";
     public static final String AGENT_HAS_LIST_MAPPING = "500201906029";
 
+    public static final String AGENT_HAS_LIST_SERVICEREGISTER = "500201907032";
+
+    public static final String HAS_LIST_CACHE = "500201907032";
+    public static final String LIST_SERVICEIMPL = "500201906028";
+
+    public static final String MENU = "500201908035";
+
+    public static final String MENU_MANAGE = "502019082521880003";
+
+    public static final String BASE_PRIVILEGE = "500201908036";
+
+    /**
+     * 服务提供权限编码
+     */
+    public static final String SERVICE_PROVIDE = "502019090149430005";
 
 
 }

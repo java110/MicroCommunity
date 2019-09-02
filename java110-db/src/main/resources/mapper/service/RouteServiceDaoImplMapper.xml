@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="routeServiceDaoImpl">
+
+    <!-- 保存路由信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessRouteInfo" parameterType="Map">
+        insert into business_route(
+        invoke_limit_times,order_type_cd,operate,app_id,id,service_id,invoke_model
+        ) values (
+        #{invokeLimitTimes},#{orderTypeCd},#{operate},#{appId},#{id},#{serviceId},#{invokeModel}
+        )
+    </insert>
+
+
+    <!-- 查询路由信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRouteInfo" parameterType="Map" resultType="Map">
+        select t.invoke_limit_times,t.invoke_limit_times invokeLimitTimes,t.order_type_cd,t.order_type_cd
+        orderTypeCd,t.operate,t.app_id,t.app_id appId,t.id,t.service_id,t.service_id
+        serviceId,t.invoke_model,t.invoke_model invokeModel
+        from business_route t
+        where 1 =1
+        <if test="invokeLimitTimes !=null and invokeLimitTimes != ''">
+            and t.invoke_limit_times= #{invokeLimitTimes}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            and t.order_type_cd= #{orderTypeCd}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="serviceId !=null and serviceId != ''">
+            and t.service_id= #{serviceId}
+        </if>
+        <if test="invokeModel !=null and invokeModel != ''">
+            and t.invoke_model= #{invokeModel}
+        </if>
+
+    </select>
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRouteInfo" parameterType="Map">
+        insert into c_route(
+        invoke_limit_times,order_type_cd,app_id,id,service_id,invoke_model
+        ) values (
+        #{invokeLimitTimes},#{orderTypeCd},#{appId},#{id},#{serviceId},#{invokeModel}
+        )
+
+    </insert>
+
+
+    <!-- 查询路由信息 add by wuxw 2018-07-03 -->
+    <select id="getRouteInfo" parameterType="Map" resultType="Map">
+        select t.invoke_limit_times,t.invoke_limit_times invokeLimitTimes,t.order_type_cd,t.order_type_cd
+        orderTypeCd,t.app_id,t.app_id appId,t.status_cd,t.status_cd statusCd,t.id,t.service_id,t.service_id
+        serviceId,t.invoke_model,t.invoke_model invokeModel,s.name serviceName,a.name appName,s.service_code serviceCode
+        from c_route t,c_service s, c_app a
+        where 1 =1
+        and t.app_id = a.app_id
+        and t.service_id = s.service_id
+        <if test="invokeLimitTimes !=null and invokeLimitTimes != ''">
+            and t.invoke_limit_times= #{invokeLimitTimes}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            and t.order_type_cd= #{orderTypeCd}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+            and s.status_cd= #{statusCd}
+            and a.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="serviceId !=null and serviceId != ''">
+            and t.service_id= #{serviceId}
+        </if>
+        <if test="invokeModel !=null and invokeModel != ''">
+            and t.invoke_model= #{invokeModel}
+        </if>
+        <if test="serviceUrl !=null and serviceUrl != ''">
+            and s.url like concat('%',#{serviceUrl},'%')
+        </if>
+        <if test="serviceName !=null and serviceName != ''">
+            and s.name like concat('%',#{serviceName},'%')
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and s.service_code= #{serviceCode}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateRouteInfo" parameterType="Map">
+        update c_route t set t.status_cd = #{statusCd}
+
+        <if test="invokeLimitTimes !=null and invokeLimitTimes != ''">
+            , t.invoke_limit_times= #{invokeLimitTimes}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            , t.order_type_cd= #{orderTypeCd}
+        </if>
+        <if test="invokeModel !=null and invokeModel != ''">
+            , t.invoke_model= #{invokeModel}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+
+    </update>
+
+    <!-- 查询路由数量 add by wuxw 2018-07-03 -->
+    <select id="queryRoutesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_route t,c_service s, c_app a
+        where 1 =1
+        and t.app_id = a.app_id
+        and t.service_id = s.service_id
+        <if test="invokeLimitTimes !=null and invokeLimitTimes != ''">
+            and t.invoke_limit_times= #{invokeLimitTimes}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            and t.order_type_cd= #{orderTypeCd}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+            and s.status_cd= #{statusCd}
+            and a.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="serviceId !=null and serviceId != ''">
+            and t.service_id= #{serviceId}
+        </if>
+        <if test="invokeModel !=null and invokeModel != ''">
+            and t.invoke_model= #{invokeModel}
+        </if>
+        <if test="serviceUrl !=null and serviceUrl != ''">
+            and s.url like concat('%',#{serviceUrl},'%')
+        </if>
+        <if test="serviceName !=null and serviceName != ''">
+            and s.name like concat('%',#{serviceName},'%')
+        </if>
+        <if test="serviceCode !=null and serviceCode != ''">
+            and s.service_code= #{serviceCode}
+        </if>
+
+
+    </select>
+
+</mapper>

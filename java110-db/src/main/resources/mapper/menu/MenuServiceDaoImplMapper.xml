@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menuServiceDaoImpl">
+    
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveMenuGroupInfo" parameterType="Map">
+        insert into m_menu_group(
+        g_id,name,icon,label,seq,description
+        ) values (
+        #{gId},#{name},#{icon},#{label},#{seq},#{description}
+        )
+
+    </insert>
+
+
+    <!-- 查询路由信息 add by wuxw 2018-07-03 -->
+    <select id="getMenuGroupInfo" parameterType="Map" resultType="Map">
+        select t.g_id,t.name,t.icon,t.label,t.seq,t.description,t.g_id gId
+        from m_menu_group t
+        where t.status_cd= '0'
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="icon !=null and icon != ''">
+            and t.icon= #{icon}
+        </if>
+        <if test="label !=null and label != ''">
+            and t.label= #{label}
+        </if>
+        <if test="seq !=null">
+            and t.seq= #{seq}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateMenuGroupInfo" parameterType="Map">
+        update m_menu_group t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="name !=null and name != ''">
+                 t.name= #{name},
+            </if>
+            <if test="icon !=null and icon != ''">
+                t.icon= #{icon},
+            </if>
+            <if test="label !=null and label != ''">
+                t.label= #{label},
+            </if>
+            <if test="seq !=null ">
+                t.seq= #{seq},
+            </if>
+            <if test="description !=null and description != ''">
+                t.description= #{description}
+            </if>
+        </set>
+        where t.g_id= #{gId}
+
+    </update>
+
+    <!-- 查询路由数量 add by wuxw 2018-07-03 -->
+    <select id="queryMenuGroupsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from m_menu_group t
+        where 1 =1
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="icon !=null and icon != ''">
+            and t.icon= #{icon}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="label !=null and label != ''">
+            and t.label= #{label}
+        </if>
+        <if test="seq !=null">
+            and t.seq= #{seq}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+    </select>
+
+
+
+
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveBasePrivilegeRelInfo" parameterType="Map">
+        insert into p_privilege_rel(
+        p_id,pg_id
+        ) values (
+        #{pId},#{pgId}
+        )
+
+    </insert>
+
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveBasePrivilegeInfo" parameterType="Map">
+        insert into p_privilege(
+        p_id,name,domain,description
+        ) values (
+        #{pId},#{name},#{domain},#{description}
+        )
+
+    </insert>
+
+
+    <!-- 查询路由信息 add by wuxw 2018-07-03 -->
+    <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
+        select t.p_id,t.name,t.domain,t.description,t.p_id pId,t.create_time createTime
+        from p_privilege t
+        where t.status_cd= '0'
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateBasePrivilegeInfo" parameterType="Map">
+        update p_privilege t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="name !=null and name != ''">
+                t.name= #{name},
+            </if>
+            <if test="domain !=null and domain != ''">
+                t.domain= #{domain},
+            </if>
+            <if test="description !=null and description != ''">
+                t.description= #{description}
+            </if>
+        </set>
+        where t.p_id= #{pId}
+
+    </update>
+
+    <!-- 修改路由信息 add by wuxw 2018-07-03 -->
+    <update id="updateBasePrivilegeRelInfo" parameterType="Map">
+        update p_privilege_rel t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="pgId !=null and pgId != ''">
+                t.pg_id= #{pgId},
+            </if>
+
+        </set>
+        where t.p_id= #{pId}
+
+    </update>
+
+
+
+    <!-- 查询路由数量 add by wuxw 2018-07-03 -->
+    <select id="queryBasePrivilegesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from p_privilege t
+        where 1 =1
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="domain !=null and domain != ''">
+            and t.domain= #{domain}
+        </if>
+    </select>
+
+
+
+    <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveMenuInfo" parameterType="Map">
+        insert into m_menu(
+           m_id,name,g_id,url,seq,p_id,description,is_show
+        ) values (
+            #{mId},#{name},#{gId},#{url},#{seq},#{pId},#{description},#{isShow}
+        )
+    </insert>
+
+
+    <!-- 查询路由信息 add by wuxw 2018-07-03 -->
+    <select id="getMenuInfo" parameterType="Map" resultType="Map">
+        select t.m_id mId,t.name,t.g_id gId,t.url,t.seq,t.p_id pId,t.description,t.is_show isShow,
+        if(t.is_show='Y','显示','不显示') isShowName,
+        p.p_id pId,p.name pName
+        from m_menu t,p_privilege p
+        where t.status_cd= '0'
+        and p.status_cd= '0'
+        and t.p_id = p.p_id
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="mName !=null and mName != ''">
+            and t.name like concat('%',#{mName},'%')
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and p.domain= #{domain}
+        </if>
+        <if test="pName !=null and pName != ''">
+            and p.name like concat('%',#{pName},'%')
+        </if>
+        <if test="mId !=null and mId != ''">
+            and t.m_id= #{mId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url like concat('%',#{url},'%')
+        </if>
+        <if test="seq !=null">
+            and t.seq= #{seq}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="uName != null and uName != ''">
+            and exists(
+            SELECT 1
+            FROM p_privilege_user ppu,u_user u
+            WHERE ppu.`p_id` = p.`p_id`
+            AND ppu.`privilege_flag` = '0'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            UNION
+            SELECT 1
+            FROM p_privilege_user ppu,
+            p_privilege_group ppg,p_privilege_rel ppr,u_user u
+            WHERE ppu.`p_id` = ppr.pg_id
+            AND ppr.pg_id = ppg.pg_id
+            AND ppr.p_id = p.`p_id`
+            AND ppu.`privilege_flag` = '1'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            AND ppg.status_cd = '0'
+            AND ppr.status_cd = '0'
+            )
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改路由信息
+  ,t.description,t.is_show isShow
+    add by wuxw 2018-07-03 -->
+    <update id="updateMenuInfo" parameterType="Map">
+        update m_menu t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
+            <if test="name !=null and name != ''">
+                t.name= #{name},
+            </if>
+            <if test="gId !=null and gId != ''">
+                t.g_id= #{gId},
+            </if>
+            <if test="url !=null and url != ''">
+                t.url= #{url},
+            </if>
+            <if test="seq !=null ">
+                t.seq= #{seq},
+            </if>
+            <if test="isShow !=null and isShow != ''">
+                t.is_show= #{isShow},
+            </if>
+            <if test="description !=null and description != ''">
+                t.description= #{description}
+            </if>
+        </set>
+        where t.m_id= #{mId}
+
+    </update>
+
+    <!-- 查询路由数量 add by wuxw 2018-07-03 -->
+    <select id="queryMenusCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from m_menu t,p_privilege p
+        where t.status_cd= '0'
+        and p.status_cd= '0'
+        and t.p_id = p.p_id
+        <if test="gId !=null and gId != ''">
+            and t.g_id= #{gId}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="mName !=null and mName != ''">
+            and t.name like concat('%',#{mName},'%')
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="domain !=null and domain != ''">
+            and p.domain= #{domain}
+        </if>
+        <if test="pName !=null and pName != ''">
+            and p.name like concat('%',#{pName},'%')
+        </if>
+        <if test="mId !=null and mId != ''">
+            and t.m_id= #{mId}
+        </if>
+        <if test="pId !=null and pId != ''">
+            and t.p_id= #{pId}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        <if test="url !=null and url != ''">
+            and t.url like concat('%',#{url},'%')
+        </if>
+        <if test="seq !=null">
+            and t.seq= #{seq}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="uName != null and uName != ''">
+            and exists(
+            SELECT 1
+            FROM p_privilege_user ppu,u_user u
+            WHERE ppu.`p_id` = p.`p_id`
+            AND ppu.`privilege_flag` = '0'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            UNION
+            SELECT 1
+            FROM p_privilege_user ppu,
+            p_privilege_group ppg,p_privilege_rel ppr,u_user u
+            WHERE ppu.`p_id` = ppr.pg_id
+            AND ppr.pg_id = ppg.pg_id
+            AND ppr.p_id = p.`p_id`
+            AND ppu.`privilege_flag` = '1'
+            and ppu.user_id = u.user_id
+            AND u.`name` = #{uName}
+            AND ppu.`status_cd` = '0'
+            AND ppg.status_cd = '0'
+            AND ppr.status_cd = '0'
+            )
+        </if>
+    </select>
+
+
+</mapper>

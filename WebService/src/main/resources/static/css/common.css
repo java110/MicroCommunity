@@ -27,7 +27,7 @@
     width: 100%;
     height: 100%;
     z-index: 2300;
-    position: absolute;
+    position: fixed;
 }
 .java110_loading>div{
     margin: 70px auto;
@@ -48,4 +48,14 @@
     background: #fff;
     color: #888;
     cursor: default;
+}
+
+
+.wizard > .steps > ul > li {
+    width: 33.33%;
+}
+
+.java110_step{
+    width:80%;
+    margin: 20px auto 50px auto;
 }

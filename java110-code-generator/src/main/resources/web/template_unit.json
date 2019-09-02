@@ -1,0 +1,58 @@
+{
+  "templateName":"单元",
+  "templateCode":"unit",
+  "templateKey":"unitId",
+  "templateKeyName":"单元ID",
+  "searchCode": "unitNum",
+  "searchName": "单元编号",
+  "columns":[
+    {
+      "code":"unitNum",
+      "cnCode":"单元编号",
+      "desc":"必填，请填写单元编号，如1",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"单元编号必须是数字"
+    },
+    {
+      "code":"layerCount",
+      "cnCode":"总层数",
+      "desc":"必填，请填写单元总层数",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"单元总层数必须是数字"
+    },
+    {
+      "code":"lift",
+      "cnCode":"电梯",
+      "desc":"必填，请选择是否有电梯",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"1010,2020",
+      "selectValueName":"有,无",
+      "limit":"maxLength",
+      "limitParam":"10",
+      "limitErrInfo":"电梯错误"
+    },
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"可填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200"
+    }
+
+  ]
+}

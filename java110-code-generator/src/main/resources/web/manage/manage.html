@@ -1,36 +1,36 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
         <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        @@moreCondition@@
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    @@conditionInput@@
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>@@templateName@@信息</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-8 input-group input-group-sm">
-                                    <input type="text" placeholder="请填写@@searchName@@" class=" form-control" v-model="@@templateCode@@ManageInfo.@@searchCode@@">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="btn btn-primary btn-sm"  v-on:click="_query@@TemplateCode@@Method()">
-                                            <i class="glyphicon glyphicon-search"></i> 马上查询</button>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAdd@@TemplateCode@@Modal()">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        添加@@templateName@@
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAdd@@TemplateCode@@Modal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加@@templateName@@
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny"
                            data-page-size="15"
-                           style="table-layout: fixed;word-break:break-all;"
                     >
                         <thead>
                         <tr>
@@ -39,9 +39,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="@@templateCode@@ in @@templateCode@@ManageInfo.@@templateCode@@s">
-                                @@columnsName@@
-                            </tr>
+                        <tr v-for="@@templateCode@@ in @@templateCode@@ManageInfo.@@templateCode@@s">
+                            @@columnsName@@
+                        </tr>
                         </tbody>
                         <tfoot>
                         <tr>
@@ -58,7 +58,12 @@
         </div>
     </div>
 
-    <vc:create name="add@@TemplateCode@@"></vc:create>
+    @@vcCreate@@
+
+    <vc:create name="add@@TemplateCode@@"
+               callBackListener=""
+               callBackFunction=""
+    ></vc:create>
     <vc:create name="edit@@TemplateCode@@"></vc:create>
     <vc:create name="delete@@TemplateCode@@"></vc:create>
 

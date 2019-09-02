@@ -1,10 +1,39 @@
 {
-  "templateName":"服务",
-  "templateCode":"service",
-  "templateKey":"serviceId",
-  "templateKeyName":"服务ID",
+  "templateName":"服务提供",
+  "templateCode":"serviceProvide",
+  "templateKey":"id",
+  "templateKeyName":"提供ID",
   "searchCode": "name",
   "searchName": "服务名称",
+  "conditions": [
+
+    {
+      "name": "提供ID",
+      "inputType": "input",
+      "code": "id",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "服务编码",
+      "inputType": "input",
+      "code": "serviceCode",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "服务名称",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "实现方式",
+      "inputType": "select",
+      "code": "queryModel",
+      "selectValue":"1,3,2",
+      "selectValueName":"sql方式,java方式,存储过程方式",
+      "whereCondition": "equal"
+    }
+  ],
   "columns":[
     {
       "code":"name",
@@ -13,136 +42,113 @@
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"服务名称不能超过50"
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"服务名称必须在2至50字符之间",
+      "show": true
     },
     {
       "code":"serviceCode",
       "cnCode":"服务编码",
-      "desc":"必填，请填写服务编码如 service.saveService",
+      "desc":"必填，请填写服务编码",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxin",
       "limitParam":"2,50",
-      "limitErrInfo":"服务编码必须在2至50字符之间"
+      "limitErrInfo":"服务编码必须在2至50字符之间",
+      "show": true
     },
     {
-      "code":"businessTypeCd",
-      "cnCode":"秘钥",
-      "desc":"可填，请填写秘钥，如果填写了需要加密传输",
+      "code":"params",
+      "cnCode":"参数",
+      "desc":"必填，请填写参数",
       "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"API",
-      "inputType":"none",
-      "limit":"maxin",
-      "limitParam":"2,4",
-      "limitErrInfo":"业务类型必须为API"
-    },
-
-    {
-      "code":"seq",
-      "cnCode":"序列",
-      "desc":"必填，请填写序列",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"1",
-      "inputType":"none",
-      "limit":"maxLength",
-      "limitParam":"1",
-      "limitErrInfo":"序列格式错误"
-    },
-
-    {
-      "code":"messageQueueName",
-      "cnCode":"消息队列",
-      "desc":"可填，请填写消息队列，订单在异步调用时使用",
-      "required":false,
       "hasDefaultValue":false,
-      "defaultValue":"",
       "inputType":"input",
       "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"消息队列不能超过50"
-    }
-  ,
-
-    {
-      "code":"isInstance",
-      "cnCode":"是否实例",
-      "desc":"可填，请填写实例 Y 或N",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"Y",
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"实例不能超过50"
-    }
-  ,
-
-    {
-      "code":"url",
-      "cnCode":"调用地址",
-      "desc":"可填，请填写调用地址",
-      "required":false,
-      "hasDefaultValue":true,
-      "defaultValue":"http://order-service/orderApi/service",
-      "inputType":"input",
-      "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"调用地址不能超过200"
+      "limitParam":"500",
+      "limitErrInfo":"参数内容不能超过200",
+      "show": true
     },
     {
-      "code":"method",
-      "cnCode":"调用方式",
-      "desc":"必填，请填写调用方式",
+      "code":"queryModel",
+      "cnCode":"实现方式",
+      "desc":"必填，请选择是否显示菜单",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"select",
-      "selectValue":"GET,POST",
-      "selectValueName":"http get,http post",
+      "selectValue":"1,3,2",
+      "selectValueName":"sql方式,java方式,存储过程方式",
+      "limit":"maxin",
+      "limitParam":"1,12",
+      "limitErrInfo":"实现方式错误",
+      "show": true
+    },
+    {
+      "code":"sql",
+      "cnCode":"sql",
+      "desc":"可填，请填写sql",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
       "limit":"maxLength",
-      "limitParam":"50",
-      "limitErrInfo":"调用方式不能超过50"
+      "limitParam":"2000",
+      "limitErrInfo":"sql不能超过2000",
+      "show": false
     },
     {
-      "code":"timeout",
-      "cnCode":"超时时间",
-      "desc":"必填，请填写超时时间",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"60",
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"超时时间必须为数字"
+      "code":"template",
+      "cnCode":"输出模板",
+      "desc":"可填，请填写输出模板",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"2000",
+      "limitErrInfo":"输出模板不能超过2000",
+      "show": false
     },
     {
-      "code":"retryCount",
-      "cnCode":"重试次数",
-      "desc":"必填，请填写重试次数",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"3",
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"重试次数必须为数字"
+      "code":"proc",
+      "cnCode":"存储过程",
+      "desc":"可填，请填写存储过程",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"存储过程不能超过200",
+      "show": false
     },
     {
-      "code":"provideAppId",
-      "cnCode":"提供服务",
-      "desc":"必填，请填写提供服务",
-      "required":true,
-      "hasDefaultValue":true,
-      "defaultValue":"8000418002",
-      "inputType":"none",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"重试次数必须为数字"
+      "code":"javaScript",
+      "cnCode":"java",
+      "desc":"可填，请填写java语句",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"2000",
+      "limitErrInfo":"java不能超过2000",
+      "show": false
+    },
+    {
+      "code":"remark",
+      "cnCode":"描述",
+      "desc":"可填，请填写描述",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200",
+      "show": false
     }
-
   ]
 }

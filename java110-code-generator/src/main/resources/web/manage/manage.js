@@ -10,13 +10,18 @@
                 @@templateCode@@s:[],
                 total:0,
                 records:1,
-                @@searchCode@@:''
+                moreCondition:false,
+                @@searchCode@@:'',
+                conditions:{
+                    @@conditions@@
+                }
             }
         },
         _initMethod:function(){
             vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
+            @@extendEvent@@
             vc.on('@@templateCode@@Manage','list@@TemplateCode@@',function(_param){
                   vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
             });
@@ -26,14 +31,13 @@
         },
         methods:{
             _list@@TemplateCode@@s:function(_page, _rows){
-                var param = {
-                    params:{
-                        page:_page,
-                        row:_rows,
-                        @@searchCode@@:vc.component.@@templateCode@@ManageInfo.@@searchCode@@
-                    }
 
-               }
+                vc.component.@@templateCode@@ManageInfo.conditions.page = _page;
+                vc.component.@@templateCode@@ManageInfo.conditions.row = _rows;
+                var param = {
+                    params:vc.component.@@templateCode@@ManageInfo.conditions
+               };
+
                //发送get请求
                vc.http.get('@@templateCode@@Manage',
                             'list',
@@ -64,7 +68,16 @@
             _query@@TemplateCode@@Method:function(){
                 vc.component._list@@TemplateCode@@s(DEFAULT_PAGE, DEFAULT_ROWS);
 
+            },
+            _moreCondition:function(){
+                if(vc.component.@@templateCode@@ManageInfo.moreCondition){
+                    vc.component.@@templateCode@@ManageInfo.moreCondition = false;
+                }else{
+                    vc.component.@@templateCode@@ManageInfo.moreCondition = true;
+                }
             }
+
+             @@extendMethods@@
         }
     });
 })(window.vc);

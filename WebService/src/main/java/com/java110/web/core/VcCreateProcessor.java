@@ -58,7 +58,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         //将组建名称写入组建HTML 第一个标签中
         addDataComponent(elements, componentName);
 
-       htmlModel.addModel(modelFactory.parse(context.getTemplateData(), doc.body().children().toString()));
+        htmlModel.addModel(modelFactory.parse(context.getTemplateData(), doc.body().children().toString()));
 
         String css = VueComponentTemplate.findTemplateByComponentCode(componentName + "." + VueComponentTemplate.COMPONENT_CSS);
         if (css != null) {
@@ -72,9 +72,8 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
             js = dealJs(js, tag);
             js = dealJsAddComponentCode(js, tag);
-            js = "<script type=\"text/javascript\">//<![CDATA[ \n" + js + "//]]>\n</script>";
+            js = "<script type=\"text/javascript\" "+DIV_PROPERTY_COMPONENT+"=\""+componentName+"\">//<![CDATA[ \n" + js + "//]]>\n</script>";
             htmlModel.add(modelFactory.createText(js));
-
         }
 
         logger.debug("解析完成组件{},{}", componentName, new Date().getTime());
@@ -86,7 +85,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
     /**
      * 加入组件名称到 HTML中 方便定位问题
      *
-     * @param elements        页面节点
+     * @param elements      页面节点
      * @param componentCode 组件编码
      */
     private void addDataComponent(Elements elements, String componentCode) {
@@ -99,7 +98,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
      * 处理js
      *
      * @param tag 页面元素
-     * @param js      js文件内容
+     * @param js  js文件内容
      * @return js 文件内容
      */
     private String dealJs(String js, IProcessableElementTag tag) {
@@ -117,23 +116,33 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             return js;
         }
 
-        String[] tmpType = tmpProTypes.split(",");
+        tmpProTypes = tmpProTypes.contains("\r")? tmpProTypes.replace("\r", "") : tmpProTypes;
+
+        String[] tmpType = tmpProTypes.contains("\n")
+                        ? tmpProTypes.split("\n")
+                        : tmpProTypes.split(",");
         StringBuffer propsJs = new StringBuffer("\nvar $props = {};\n");
         for (String type : tmpType) {
             if (StringUtils.isEmpty(type) || !type.contains(":")) {
                 continue;
             }
             String[] types = type.split(":");
-            String attrKey = types[0].replace(" ", "")
+            String attrKey = "";
+            if (types[0].contains("//")) {
+                attrKey = types[0].substring(0, types[0].indexOf("//"));
+            }
+            attrKey = types[0].replace(" ", "")
                     .replace("\n", "")
                     .replace("\r", "");
-            if (!tag.hasAttribute(attrKey)) {
+            if (!tag.hasAttribute(attrKey) && !types[1].contains("=")) {
                 String componentName = tag.getAttributeValue("name");
                 logger.error("组件" + componentName + "未配置组件属性 " + attrKey);
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = tag.getAttributeValue(attrKey);
-            if (types[1].equals("vc.propTypes.string")) {
+            if(!tag.hasAttribute(attrKey) && types[1].contains("=")) {
+                vcType = dealJsPropTypesDefault(types[1]);
+            }else if (types[1].contains("vc.propTypes.string")) {
                 vcType = "'" + vcType + "'";
             }
             propsJs.append("$props." + attrKey + "=" + vcType + ";\n");
@@ -150,14 +159,27 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         return js;
     }
 
+
+    private String dealJsPropTypesDefault(String typeValue){
+         int startPos = typeValue.indexOf("=") + 1;
+         int endPos = typeValue.length();
+         if(typeValue.contains(",")){
+             endPos = typeValue.indexOf(",");
+         }else if(typeValue.contains("//")){
+             endPos = typeValue.indexOf("//");
+         }
+
+         return typeValue.substring(startPos,endPos);
+    }
+
     /**
      * 处理js 变量和 方法都加入 组件编码
      *
      * @param tag 页面元素
-     * @param js      js文件内容
+     * @param js  js文件内容
      * @return js 文件内容
      */
-    private String dealJsAddComponentCode(String js,IProcessableElementTag tag) {
+    private String dealJsAddComponentCode(String js, IProcessableElementTag tag) {
 
         if (!tag.hasAttribute("code")) {
             return js;

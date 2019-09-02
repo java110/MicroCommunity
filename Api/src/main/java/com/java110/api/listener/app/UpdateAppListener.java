@@ -28,11 +28,12 @@ public class UpdateAppListener extends AbstractServiceApiListener {
 
     @Autowired
     private IAppInnerServiceSMO appInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "appId", "应用Id不能为空");
-Assert.hasKeyAndValue(reqJson, "name", "必填，请填写应用名称");
+        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写应用名称");
 
     }
 
@@ -43,7 +44,6 @@ Assert.hasKeyAndValue(reqJson, "name", "必填，请填写应用名称");
 
 
         int count = appInnerServiceSMOImpl.updateApp(appDto);
-
 
 
         if (count < 1) {
@@ -69,7 +69,6 @@ Assert.hasKeyAndValue(reqJson, "name", "必填，请填写应用名称");
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
 
     public IAppInnerServiceSMO getAppInnerServiceSMOImpl() {

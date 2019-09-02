@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>楼信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" v-if="viewFloorInfo.index != 2" class="btn btn-primary btn-sm"
+                            style="margin-right:10px;" v-on:click="_openSelectFloorInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择楼
+                    </button>
+
+                    <button type="button" v-if="viewFloorInfo.index != 2" class="btn btn-primary btn-sm"
+                            v-on:click="_openAddFloorInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加楼
+                    </button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">楼ID：</label>
+                            <label class="">{{viewFloorInfo.floorId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">楼名称：</label>
+                            <label class="">{{viewFloorInfo.name}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">楼编号：</label>
+                            <label class="">{{viewFloorInfo.floorNum}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">楼名称：</label>
+                            <label class="">{{viewFloorInfo.remark}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <vc:create name="addFloor"
+               callBackListener="viewFloorInfo"
+               callBackFunction="chooseFloor"
+    ></vc:create>
+
+
+    <vc:create name="chooseFloor"
+               emitChooseFloor="viewFloorInfo"
+               emitLoadData="viewFloorInfo"
+    ></vc:create>
+</div>

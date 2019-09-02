@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>小区楼信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchFloorModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择小区楼</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            v-if="floorInfo.floorId != null && floorInfo.floorId != ''"
+                            style="margin-left:10px" v-on:click="openAddUnitModel()">
+                        <i class="glyphicon glyphicon-plus" ></i> 添加单元</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="col-form-label" >小区楼ID：</label>
+                            <label class="">{{floorInfo.floorId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="col-form-label">名称：</label>
+                            <label class="">{{floorInfo.floorName}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="col-form-label" >编号：</label>
+                            <label class="">{{floorInfo.floorNum}}</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <vc:create name="searchFloor"
+               emitChooseFloor="unitSelectFloor"
+               emitLoadData="unit"
+    ></vc:create>
+    <vc:create name="addUnit"
+               callBackListener=""
+               callBackFunction=""
+    ></vc:create>
+</div>

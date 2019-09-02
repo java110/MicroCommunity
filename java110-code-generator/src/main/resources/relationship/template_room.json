@@ -1,0 +1,142 @@
+{
+  "templateName":"添加房屋",
+  "templateCode":"addRoomBinding",
+  "templateKey":"roomId",
+  "templateKeyName":"房屋ID",
+  "package": "roomPackage",
+  "successUrl": "/",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"floor",
+      "flowKey": "floorId",
+      "cnCode":"选择楼",
+      "vcName":"viewFloorInfo",
+      "businessName": "businessFloor",
+      "businessType": "BUSINESS_TYPE_SAVE_FLOOR_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"unit",
+      "flowKey": "unitId",
+      "cnCode":"选择单元",
+      "vcName":"viewUnitInfo",
+      "businessName": "businessUnit",
+      "businessType": "BUSINESS_TYPE_SAVE_UNIT_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"room",
+      "flowKey": "roomId",
+      "cnCode":"添加房屋",
+      "vcName":"addRoomView",
+      "businessName": "businessRoom",
+      "businessType": "BUSINESS_TYPE_SAVE_ROOM_INFO",
+      "existsComponent": false
+    }
+  ],
+  "components": {
+      "addRoomView": {
+        "templateName":"添加房屋",
+        "templateCode":"addRoom",
+        "package": "roomPackage",
+        "columns":[
+          {
+            "code":"roomNum",
+            "cnCode":"房屋编号",
+            "desc":"必填，请填写房屋编号",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"maxLength",
+            "limitParam":"12",
+            "limitErrInfo":"房屋编号长度不能超过12位"
+          },
+          {
+            "code":"layer",
+            "cnCode":"房屋楼层",
+            "desc":"必填，请填写房屋楼层",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"num",
+            "limitParam":"",
+            "limitErrInfo":"房屋楼层高度必须为数字"
+          },
+          {
+            "code":"section",
+            "cnCode":"房间数",
+            "desc":"必填，请填写房屋楼层",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"num",
+            "limitParam":"",
+            "limitErrInfo":"房间数必须为数字"
+          },
+          {
+            "code":"apartment",
+            "cnCode":"房屋户型",
+            "desc":"必填，请选择房屋户型",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"select",
+            "selectValue":"一室两厅,两室两厅",
+            "selectValueName":"1010,2020",
+            "limit":"maxLength",
+            "limitParam":"50",
+            "limitErrInfo":"房屋户型不能大于50"
+          },
+          {
+            "code":"builtUpArea",
+            "cnCode":"建筑面积",
+            "desc":"必填，请填写房屋建筑面积",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"money",
+            "limitParam":"",
+            "limitErrInfo":"建筑面积错误，如 300.00"
+          },
+          {
+            "code":"unitPrice",
+            "cnCode":"房屋单价",
+            "desc":"必填，请填写房屋每平米单价",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"money",
+            "limitParam":"",
+            "limitErrInfo":"房屋单价错误 如 300.00"
+          },
+          {
+            "code":"state",
+            "cnCode":"房屋状态",
+            "desc":"必填，请选择房屋状态",
+            "required":true,
+            "hasDefaultValue":true,
+            "defaultValue":"2002",
+            "inputType":"none",
+            "limit":"maxLength",
+            "limitParam":"12",
+            "limitErrInfo":"房屋状态 不能超过12位"
+          },
+          {
+            "code":"remark",
+            "cnCode":"备注",
+            "desc":"可填，请填写备注",
+            "required":false,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"textarea",
+            "limit":"maxLength",
+            "limitParam":"200",
+            "limitErrInfo":"备注内容不能超过200"
+          }
+        ]
+      }
+  }
+}

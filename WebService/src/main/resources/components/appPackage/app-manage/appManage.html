@@ -1,0 +1,69 @@
+<div id="component" >
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>应用信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddAppModal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加应用
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th>应用Id</th>
+                            <th>应用名称</th>
+                            <th>秘钥</th>
+                            <th>白名单</th>
+                            <th>黑名单</th>
+                            <th>备注</th>
+                            <th class="text-right">操作</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="app in appManageInfo.apps">
+                            <td>{{app.appId}}</td>
+                            <td>{{app.name}}</td>
+                            <td>{{app.securityCode}}</td>
+                            <td>{{app.whileListIp}}</td>
+                            <td>{{app.blackListIp}}</td>
+                            <td>{{app.remark}}</td>
+                            <td><div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openEditAppModel(app)">修改</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteAppModel(app)">删除</button>
+                                </div></td>
+
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="addApp"
+               callBackListener=""
+               callBackFunction=""
+    ></vc:create>
+    <vc:create name="editApp"></vc:create>
+    <vc:create name="deleteApp"></vc:create>
+
+</div>

@@ -1,0 +1,183 @@
+{
+  "templateName":"服务",
+  "templateCode":"service",
+  "templateKey":"serviceId",
+  "templateKeyName":"服务ID",
+  "searchCode": "name",
+  "searchName": "服务名称",
+  "conditions": [
+    {
+      "name": "应用名称",
+      "inputType": "choose",
+      "componentName": "chooseApp",
+      "code": "appName",
+      "key": "appId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "服务名称",
+      "inputType": "input",
+      "code": "serviceName",
+      "whereCondition": "like"
+    },
+    {
+      "name": "服务编码",
+      "inputType": "input",
+      "code": "serviceCode",
+      "whereCondition": "like"
+    },
+    {
+      "name": "调用地址",
+      "inputType": "input",
+      "code": "serviceUrl",
+      "whereCondition": "like"
+    }
+  ],
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"服务名称",
+      "desc":"必填，请填写服务名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"服务名称不能超过50",
+      "show": true
+    },
+    {
+      "code":"serviceCode",
+      "cnCode":"服务编码",
+      "desc":"必填，请填写服务编码如 service.saveService",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"服务编码必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"businessTypeCd",
+      "cnCode":"秘钥",
+      "desc":"可填，请填写秘钥，如果填写了需要加密传输",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"API",
+      "inputType":"none",
+      "limit":"maxin",
+      "limitParam":"2,4",
+      "limitErrInfo":"业务类型必须为API",
+      "show": false
+    },
+
+    {
+      "code":"seq",
+      "cnCode":"序列",
+      "desc":"必填，请填写序列",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"1",
+      "inputType":"none",
+      "limit":"maxLength",
+      "limitParam":"1",
+      "limitErrInfo":"序列格式错误",
+      "show": false
+    },
+    {
+      "code":"messageQueueName",
+      "cnCode":"消息队列",
+      "desc":"可填，请填写消息队列，订单在异步调用时使用",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"消息队列不能超过50",
+      "show": true
+    },
+    {
+      "code":"isInstance",
+      "cnCode":"是否实例",
+      "desc":"可填，请填写实例 Y 或N",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"Y",
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"实例不能超过50",
+      "show": false
+    }
+  ,
+
+    {
+      "code":"url",
+      "cnCode":"调用地址",
+      "desc":"可填，请填写调用地址",
+      "required":false,
+      "hasDefaultValue":true,
+      "defaultValue":"http://order-service/orderApi/service",
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"调用地址不能超过200",
+      "show": true
+    },
+    {
+      "code":"method",
+      "cnCode":"调用方式",
+      "desc":"必填，请填写调用方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"GET,POST",
+      "selectValueName":"http get,http post",
+      "limit":"maxLength",
+      "limitParam":"50",
+      "limitErrInfo":"调用方式不能超过50",
+      "show": true
+    },
+    {
+      "code":"timeout",
+      "cnCode":"超时时间",
+      "desc":"必填，请填写超时时间",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"60",
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"超时时间必须为数字",
+      "show": false
+    },
+    {
+      "code":"retryCount",
+      "cnCode":"重试次数",
+      "desc":"必填，请填写重试次数",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"3",
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"重试次数必须为数字",
+      "show": false
+    },
+    {
+      "code":"provideAppId",
+      "cnCode":"提供服务",
+      "desc":"必填，请填写提供服务",
+      "required":true,
+      "hasDefaultValue":true,
+      "defaultValue":"8000418002",
+      "inputType":"none",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"重试次数必须为数字",
+      "show": false
+    }
+  ]
+}

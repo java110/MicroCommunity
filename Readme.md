@@ -39,11 +39,11 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 如何开始（how to start）
 
-[http://www.java110.com](http://www.java110.com)
+[http://www.homecommunity.cn](http://www.homecommunity.cn)
 
 ### 如何安装（how to install）
 
-[安装文档](http://www.java110.com/#/start/dev_install)
+[安装文档](http://www.homecommunity.cn/document/#/start/dev_install)
 
 ### 解决方案
 
@@ -51,13 +51,13 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 二次开发视频
 
-[视频](https://www.java110.com/#/start/vedio)
+[视频](http://www.homecommunity.cn/document/#/start/vedio)
 
 ### 接口协议
 
-1. [Api协议](https://www.java110.com/#/api/user/register)
+1. [Api协议](http://www.homecommunity.cn/document/#/api/user/register)
 
-2. [后台协议](https://www.java110.com/#/dictionary)
+2. [后台协议](http://www.homecommunity.cn/document/#/dictionary)
 
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
@@ -84,7 +84,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 ### 成为开发者
 
 如果您对小区 物业 有较深的理解，也致力于开发一套系统方便与物业，业主沟通交流，如果您还有空闲的时间，不怕吃苦，hc小区开发团队欢迎您的加入！
-qq群号 992420128
+qq群号 992420128  微信：syj15309714817 （添加时请备注HC小区开发）
 
 ![image](join_me.JPG)
 

@@ -1,0 +1,92 @@
+{
+  "templateName":"服务绑定",
+  "templateCode":"serviceBinding",
+  "templateKey":"id",
+  "templateKeyName":"绑定ID",
+  "package": "servicePackage",
+  "successUrl": "/flow/serviceRegisterFlow",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"app",
+      "flowKey": "appId",
+      "cnCode":"选择应用",
+      "vcName":"viewAppInfo",
+      "businessName": "businessApp",
+      "businessType": "BUSINESS_TYPE_SAVE_APP_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"service",
+      "flowKey": "serviceId",
+      "cnCode":"选择服务",
+      "vcName":"viewServiceInfo",
+      "businessName": "businessService",
+      "businessType": "BUSINESS_TYPE_SAVE_SERVICE_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"route",
+      "flowKey": "id",
+      "cnCode":"扩展信息",
+      "vcName":"addRouteView",
+      "businessName": "businessRoute",
+      "businessType": "BUSINESS_TYPE_SAVE_ROUTE_INFO",
+      "existsComponent": false
+    }
+  ],
+  "components": {
+      "addRouteView": {
+        "templateName":"扩展信息",
+        "templateCode":"addRoute",
+        "package": "servicePackage",
+        "columns":[
+          {
+            "code":"orderTypeCd",
+            "cnCode":"订单类型",
+            "desc":"必填，请填写订单类型",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"select",
+            "selectValue":"Q,D",
+            "selectValueName":"查询,业务受理",
+            "limit":"maxin",
+            "limitParam":"1,4",
+            "limitErrInfo":"订单类型错误",
+            "show": true
+          },
+          {
+            "code":"invokeLimitTimes",
+            "cnCode":"调用次数",
+            "desc":"必填，请填写调用次数",
+            "required":true,
+            "hasDefaultValue":true,
+            "defaultValue":"1000",
+            "inputType":"input",
+            "limit":"num",
+            "limitParam":"",
+            "limitErrInfo":"调用次数错误",
+            "show": false
+          },
+          {
+            "code":"invokeModel",
+            "cnCode":"调用方式",
+            "desc":"可填，请填写消息队列，订单在异步调用时使用",
+            "required":true,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"select",
+            "selectValue":"S,A",
+            "selectValueName":"同步方式,异步方式",
+            "limit":"maxLength",
+            "limitParam":"50",
+            "limitErrInfo":"消息队列不能超过50",
+            "show": false
+          }
+        ]
+      }
+  }
+}
