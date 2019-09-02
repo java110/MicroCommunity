@@ -26,25 +26,25 @@
                                class="form-control">
                     </div>
                 </div>
-                <div class="form-group row" v-if="addServiceProvideInfo.queryModel==1">
+                <div class="form-group row" v-if="devServiceProvideViewInfo.queryModel==1">
                     <label class="col-sm-2 col-form-label">sql</label>
                     <div class="col-sm-10">
                         <textarea rows="15" placeholder="选填，请填写sql" class="form-control"
                                   v-model="devServiceProvideViewInfo.sql"></textarea></div>
                 </div>
-                <div class="form-group row" v-if="addServiceProvideInfo.queryModel==1">
+                <div class="form-group row" v-if="devServiceProvideViewInfo.queryModel==1">
                     <label class="col-sm-2 col-form-label">输出模板</label>
                     <div class="col-sm-10">
                         <textarea cols="5" placeholder="选填，请填写输出模板" class="form-control"
                                   v-model="devServiceProvideViewInfo.template"></textarea></div>
                 </div>
-                <div class="form-group row" v-if="addServiceProvideInfo.queryModel==2">
+                <div class="form-group row" v-if="devServiceProvideViewInfo.queryModel==2">
                     <label class="col-sm-2 col-form-label">存储过程</label>
                     <div class="col-sm-10">
                         <textarea cols="5" placeholder="选填，请填写存储过程" class="form-control"
                                   v-model="devServiceProvideViewInfo.proc"></textarea></div>
                 </div>
-                <div class="form-group row" v-if="addServiceProvideInfo.queryModel==3">
+                <div class="form-group row" v-if="devServiceProvideViewInfo.queryModel==3">
                     <label class="col-sm-2 col-form-label">java</label>
                     <div class="col-sm-10">
                         <textarea rows="20" placeholder="选填，请填写java" class="form-control"
