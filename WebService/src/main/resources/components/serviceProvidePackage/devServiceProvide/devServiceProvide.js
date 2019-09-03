@@ -77,7 +77,7 @@ vc.emit('serviceProvideRemarkView', 'onIndex', vc.component.devServiceProvideInf
 
                            vc.message('处理成功',true);
                            //关闭model
-                           vc.jumpToPage("/flow/devServiceProvideFlow?" + vc.objToGetParam(JSON.parse(json)));
+                           vc.jumpToPage("/flow/serviceProvideFlow?" + vc.objToGetParam(JSON.parse(json)));
                            return ;
                        }
                        vc.message(json);
