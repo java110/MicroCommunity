@@ -298,7 +298,7 @@
     <!-- 保存服务提供信息 add by wuxw 2018-07-03 -->
     <insert id="saveServiceProvideInfo" parameterType="Map">
         insert into c_service_sql(
-        service_code,name,params,query_model,sql,proc,java_script,template,remark
+        service_code,name,params,query_model,`sql`,proc,java_script,template,remark
         ) values (
         #{serviceCode},#{name},#{params},#{queryModel},#{sql},#{proc},#{javaScript},#{template},#{remark}
         )
