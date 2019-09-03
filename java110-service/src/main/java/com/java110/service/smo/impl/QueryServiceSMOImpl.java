@@ -172,25 +172,25 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
      */
     private void doExecuteJava(DataQuery dataQuery) throws BusinessException {
         try {
-            JSONObject params = dataQuery.getRequestParams();
+            //JSONObject params = dataQuery.getRequestParams();
             String javaCode = dataQuery.getServiceSql().getJavaScript();
 
             Interpreter interpreter = new Interpreter();
             interpreter.eval(javaCode);
-            String param = "";
+           /* String param = "";
             for (String key : params.keySet()) {
                 param += (params.getString(key) + ",");
             }
 
             if (param.endsWith(",")) {
                 param = param.substring(0, param.length() - 1);
-            }
+            }*/
 
             dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
-                    "成功", JSONObject.parseObject(interpreter.eval("execute(" + param + ")").toString())));
+                    "成功", JSONObject.parseObject(interpreter.eval("execute(" + dataQuery + ")").toString())));
         } catch (Exception e) {
             logger.error("数据交互异常：", e);
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常。。。");
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常,"+e.getMessage());
         }
     }
 
@@ -251,6 +251,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             List<Object> currentParams = new ArrayList<Object>();
 
             String currentSql = sqlObj.getString(dataQuery.getTemplateKey());
+            //处理 if 判断
+            currentSql = dealSqlIf(currentSql);
+
             String[] sqls = currentSql.split("#");
             String currentSqlNew = "";
             for (int sqlIndex = 0; sqlIndex < sqls.length; sqlIndex++) {
@@ -318,6 +321,27 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             logger.error("数据交互异常：", e);
             throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常。。。");
         }
+    }
+
+    /**
+     * 处理SQL语句
+     * @param oldSql
+     *              select * from s_a a
+     *              where if(name != null && name != ''){
+             *                  a.name = #name#
+             *             }
+     * @return
+     */
+    private String dealSqlIf(String oldSql){
+        String newSql = "";
+        // 未包含 条件语句
+        if(!oldSql.replace(" ","").contains("if(")){
+            return oldSql;
+        }
+
+
+        return newSql;
+
     }
 
     /**

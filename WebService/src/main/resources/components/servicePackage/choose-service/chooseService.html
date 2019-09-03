@@ -28,24 +28,24 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">服务ID</th>
+                                           <!-- <th class="text-center">服务ID</th>-->
                                             <th class="text-center">服务名称</th>
                                             <th class="text-center">服务编码</th>
-                                            <th class="text-center">序列</th>
+                                            <!--<th class="text-center">序列</th>
                                             <th class="text-center">消息队列</th>
-                                            <th class="text-center">调用地址</th>
+                                            <th class="text-center">调用地址</th>-->
                                             <th class="text-center">调用方式</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="service in chooseServiceInfo.services">
-                                            <td class="text-center">{{service.serviceId}}</td>
+                                            <!--<td class="text-center">{{service.serviceId}}</td>-->
                                             <td class="text-center">{{service.name}}</td>
                                             <td class="text-center">{{service.serviceCode}}</td>
-                                            <td class="text-center">{{service.seq}}</td>
+                                            <!--<td class="text-center">{{service.seq}}</td>
                                             <td class="text-center">{{service.messageQueueName}}</td>
-                                            <td class="text-center">{{service.url}}</td>
+                                            <td class="text-center">{{service.url}}</td>-->
                                             <td class="text-center">{{service.method}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-xs" v-on:click="chooseService(service)">选择</button>
