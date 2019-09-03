@@ -57,7 +57,7 @@ public class SaveServiceProvideListener extends AbstractServiceApiListener {
         JSONArray infos = reqJson.getJSONArray("data");
 
 
-        JSONObject viewServiceInfo = getObj(infos, "viewServiceInfo");
+        JSONObject viewServiceInfo = getObj(infos, "Service");
         JSONObject devServiceProvideView = getObj(infos, "devServiceProvideView");
         JSONObject serviceProvideRemarkView = getObj(infos, "serviceProvideRemarkView");
 
