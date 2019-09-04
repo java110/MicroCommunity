@@ -16,7 +16,13 @@ import com.java110.entity.service.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import com.java110.service.smo.IQueryServiceSMO;
+import javassist.ClassPool;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.ognl.Ognl;
+import org.apache.ibatis.ognl.OgnlException;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,11 +192,14 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                 param = param.substring(0, param.length() - 1);
             }*/
 
+
+
+
             dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                     "成功", JSONObject.parseObject(interpreter.eval("execute(" + dataQuery + ")").toString())));
         } catch (Exception e) {
             logger.error("数据交互异常：", e);
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常,"+e.getMessage());
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "数据交互异常," + e.getMessage());
         }
     }
 
@@ -252,7 +261,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
             String currentSql = sqlObj.getString(dataQuery.getTemplateKey());
             //处理 if 判断
-            currentSql = dealSqlIf(currentSql);
+            currentSql = dealSqlIf(currentSql, params);
 
             String[] sqls = currentSql.split("#");
             String currentSqlNew = "";
@@ -325,22 +334,52 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
     /**
      * 处理SQL语句
-     * @param oldSql
-     *              select * from s_a a
-     *              where if(name != null && name != ''){
-             *                  a.name = #name#
-             *             }
+     *
+     * @param oldSql select * from s_a a
+     *               where <if test="name != null && name != ''">
+     *               a.name = #name#
+     *               </if>
      * @return
      */
-    private String dealSqlIf(String oldSql){
-        String newSql = "";
+    public String dealSqlIf(String oldSql, JSONObject requestParams) throws DocumentException, OgnlException {
+        StringBuffer newSql = new StringBuffer();
+        String tmpSql = "";
+        Boolean conditionResult = false;
         // 未包含 条件语句
-        if(!oldSql.replace(" ","").contains("if(")){
+        if (!oldSql.contains("<if")) {
             return oldSql;
         }
 
+        String[] oSqls = oldSql.split("</if>");
+        for (String oSql : oSqls) {
+            if (!oSql.startsWith("<if")) {
+                newSql.append(oSql.substring(0, oSql.indexOf("<if")));
+            }
 
-        return newSql;
+            tmpSql = oSql.substring(oSql.indexOf("<if")) + "</if>";
+
+            Element root = DocumentHelper.parseText(tmpSql).getRootElement();
+
+            String condition = root.attribute("test").getValue();
+
+            Object condObj = Ognl.parseExpression(condition);
+
+            Object value = Ognl.getValue(condObj, requestParams);
+
+            if (value instanceof Boolean) {
+                conditionResult = (Boolean) value;
+            } else {
+                throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR, "配置错误，if语句配置错误 " + condition);
+            }
+
+            if (conditionResult) {
+                newSql.append(root.getText());
+            }
+
+        }
+
+
+        return newSql.toString();
 
     }
 
