@@ -33,4 +33,23 @@ public class QueryServiceSMOImplTest extends TestCase {
 
         move.invoke(con);
     }
+
+
+
+    public void testExistsJavaClass() throws Exception{
+        ClassPool classPool = ClassPool.getDefault();
+        CtClass ctClass = classPool.get("com.java110.core.javassist.Java110CoreTemplateJavassist");
+
+
+
+        String javaCode = "public static void testJava2() {        System.out.println(\"123213\");\n}\n";
+        String    javaCode2 ="public static void testJava1() {     testJava2();   System.out.println(\"223213\");\n}";
+        CtMethod helloM = CtNewMethod.make(javaCode, ctClass);
+        ctClass.addMethod(helloM);
+
+        CtMethod helloM1 = CtNewMethod.make(javaCode2, ctClass);
+        ctClass.addMethod(helloM1);
+        //ctClass
+        ctClass.writeFile("E:\\project\\HC\\MicroCommunity\\11");
+    }
 }
