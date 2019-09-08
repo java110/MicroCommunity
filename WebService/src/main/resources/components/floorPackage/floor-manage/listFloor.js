@@ -60,6 +60,9 @@
             _openAddFloorModal:function(){ //打开添加框
                 vc.emit('addFloor','openAddFloorModal',{});
             },
+            _openBatchAddFloorModal:function(){ //打开批量添加框
+               vc.emit('batchAddFloor','openBatchAddFloorModal',{});
+            },
             _openDelFloorModel:function(_floor){ // 打开删除对话框
                 vc.emit('deleteFloor','openFloorModel',_floor);
             },

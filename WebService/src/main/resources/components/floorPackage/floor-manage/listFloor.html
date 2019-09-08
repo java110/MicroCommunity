@@ -54,6 +54,10 @@
                             <i class="glyphicon glyphicon-plus"></i>
                             添加楼栋
                         </button>
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openBatchAddFloorModal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            批量生成
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -109,6 +113,10 @@
     </div>
 
     <vc:create name="addFloor"
+               callBackListener=""
+               callBackFunction=""
+    ></vc:create>
+    <vc:create name="batchAddFloor"
                callBackListener=""
                callBackFunction=""
     ></vc:create>
