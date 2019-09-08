@@ -259,7 +259,7 @@
     }
     //空判断 true 为非空 false 为空
     vc.notNull = function(_paramObj){
-        if(_paramObj == null || _paramObj == undefined || _paramObj == ''){
+        if(_paramObj == null || _paramObj == undefined || _paramObj.trim() == ''){
             return false;
         }
         return true;

@@ -1,4 +1,4 @@
-package com.java110.service.develop.notice;
+package com.java110.service.develop.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.service.context.DataQuery;
@@ -16,7 +16,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/9/8
  **/
-public class GetNoticesByJava implements IDevelop {
+public class GetUserByJava implements IDevelop {
     @Override
     public JSONObject execute(DataQuery dataQuery) {
         JSONObject params = dataQuery.getRequestParams();
