@@ -5,7 +5,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.factory.DataQueryFactory;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.entity.service.DataQuery;
+import com.java110.service.context.DataQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

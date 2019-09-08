@@ -15,7 +15,7 @@ import com.java110.common.util.Assert;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.mapping.Mapping;
-import com.java110.entity.service.DataQuery;
+import com.java110.service.context.DataQuery;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import org.slf4j.Logger;

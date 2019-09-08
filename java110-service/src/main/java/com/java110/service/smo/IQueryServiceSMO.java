@@ -1,8 +1,7 @@
 package com.java110.service.smo;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.common.exception.BusinessException;
-import com.java110.entity.service.DataQuery;
+import com.java110.service.context.DataQuery;
 
 /**
  * 公用查询处理

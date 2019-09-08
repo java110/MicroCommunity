@@ -51,6 +51,18 @@ public class CommunityServiceApplicationStart {
         return restTemplate;
     }
 
+    /**
+     * 实例化RestTemplate
+     *
+     * @return restTemplate
+     */
+    @Bean
+    public com.java110.core.client.RestTemplate restTemplateNoLoadBalanced() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        com.java110.core.client.RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(com.java110.core.client.RestTemplate.class);
+        return restTemplate;
+    }
+
     public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(CommunityServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);

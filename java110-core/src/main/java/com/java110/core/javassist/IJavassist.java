@@ -1,6 +1,6 @@
 package com.java110.core.javassist;
 
-import com.java110.entity.service.DataQuery;
+import com.java110.core.context.service.DataQuery;
 
 /**
  * @ClassName IJavassist

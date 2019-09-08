@@ -6,7 +6,7 @@ import com.java110.common.util.Assert;
 import com.java110.core.factory.DataQueryFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
-import com.java110.entity.service.DataQuery;
+import com.java110.service.context.DataQuery;
 import com.java110.service.smo.IQueryServiceSMO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

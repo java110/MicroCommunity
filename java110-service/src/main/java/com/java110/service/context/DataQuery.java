@@ -1,9 +1,14 @@
-package com.java110.entity.service;
+package com.java110.service.context;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.entity.service.ServiceSql;
+import com.java110.service.dao.IQueryServiceDAO;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,5 +124,43 @@ public class DataQuery {
         this.setServiceCode(headers.get("service").toString());
         this.setRequestParams(JSONObject.parseObject(JSONObject.toJSONString(headers.get("params"))));
         return this;
+    }
+
+    /**
+     * 根据SQL查询数据
+     * @param sql sql 语句
+     * @param sqlParam sql 参数
+     * @return 查询结果
+     */
+    public Object queryDataBySql(String sql, List<Object> sqlParam){
+        IQueryServiceDAO queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl",IQueryServiceDAO.class);
+        return queryServiceDAOImpl.executeSql(sql, sqlParam.toArray());
+    }
+
+    /**
+     * 调用服务接口
+     * @param requestEntity 请求实体
+     * @return
+     */
+    public ResponseEntity<String> callService(RequestEntity requestEntity){
+        return callService(requestEntity,false);
+    }
+
+    /**
+     * 调用服务接口
+     * @param requestEntity 请求实体
+     * @param innerService 内部服务 true 外部服务为false
+     * @return
+     */
+    public ResponseEntity<String> callService(RequestEntity requestEntity,Boolean innerService){
+
+        RestTemplate restTemplate = null;
+
+        if(innerService){
+            restTemplate = ApplicationContextFactory.getBean("restTemplate",RestTemplate.class);
+        }else{
+            restTemplate = ApplicationContextFactory.getBean("restTemplateNoLoadBalanced",RestTemplate.class);
+        }
+        return restTemplate.exchange(requestEntity,String.class);
     }
 }
