@@ -92,12 +92,7 @@ public class FloorServiceSMOImpl extends BaseComponentSMO implements IFloorServi
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors?row=" + rows + "&page=" + page + "&communityId="
-                + communityId;
-
-        if (!StringUtil.isEmpty(floorNum)) {
-            apiUrl += "&floorNum=" + floorNum;
-        }
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.queryFloors" + mapToUrlParam(paramIn);
 
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

@@ -8,7 +8,8 @@
                 floorNum:'',
                 remark:'',
                 errorInfo:''
-editFloor        },
+            }
+        },
         watch:{
             "editFloorInfo.floorNum":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){

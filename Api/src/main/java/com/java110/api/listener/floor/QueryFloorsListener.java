@@ -56,9 +56,9 @@ public class QueryFloorsListener extends AbstractServiceApiDataFlowListener {
         JSONObject reqJson = dataFlowContext.getReqJson();
         validateFloorData(reqJson);
 
-        int page = reqJson.getInteger("page");
+        //int page = reqJson.getInteger("page");
         int row = reqJson.getInteger("row");
-        String communityId = reqJson.getString("communityId");
+        //String communityId = reqJson.getString("communityId");
 
         ApiFloorVo apiFloorVo = new ApiFloorVo();
 

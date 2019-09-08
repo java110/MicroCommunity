@@ -147,7 +147,7 @@
             and f.floor_id= #{floorId}
         </if>
         <if test="name !=null and name != ''">
-            and f.name= #{name}
+            and f.name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and f.status_cd= #{statusCd}
@@ -187,7 +187,7 @@
             and f.floor_id= #{floorId}
         </if>
         <if test="name !=null and name != ''">
-            and f.name= #{name}
+            and f.name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and f.status_cd= #{statusCd}
