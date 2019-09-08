@@ -132,7 +132,7 @@ public class DataQuery {
      * @param sqlParam sql 参数
      * @return 查询结果
      */
-    public Object queryDataBySql(String sql, List<Object> sqlParam){
+    public List<Map<String, Object>> queryDataBySql(String sql, List<Object> sqlParam){
         IQueryServiceDAO queryServiceDAOImpl = ApplicationContextFactory.getBean("queryServiceDAOImpl",IQueryServiceDAO.class);
         return queryServiceDAOImpl.executeSql(sql, sqlParam.toArray());
     }

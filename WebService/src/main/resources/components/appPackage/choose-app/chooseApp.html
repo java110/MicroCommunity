@@ -30,10 +30,6 @@
                                         <tr>
                                             <th>应用Id</th>
                                             <th>应用名称</th>
-                                            <th>秘钥</th>
-                                            <th>白名单</th>
-                                            <th>黑名单</th>
-                                            <th>备注</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
@@ -41,10 +37,6 @@
                                         <tr v-for="app in chooseAppInfo.apps">
                                             <td>{{app.appId}}</td>
                                             <td>{{app.name}}</td>
-                                            <td>{{app.securityCode}}</td>
-                                            <td>{{app.whileListIp}}</td>
-                                            <td>{{app.blackListIp}}</td>
-                                            <td>{{app.remark}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-xs" v-on:click="chooseApp(app)">选择</button>
                                             </td>

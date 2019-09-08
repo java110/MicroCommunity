@@ -190,10 +190,6 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
             if (param.endsWith(",")) {
                 param = param.substring(0, param.length() - 1);
             }*/
-
-
-
-
             dataQuery.setResponseInfo(DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_SUCCESS,
                     "成功", JSONObject.parseObject(interpreter.eval("execute(" + dataQuery + ")").toString())));
         } catch (Exception e) {
