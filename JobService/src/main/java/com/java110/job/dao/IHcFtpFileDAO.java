@@ -162,4 +162,5 @@ public interface IHcFtpFileDAO {
 	 */
 	public void insertFileData2Table(String insertSQL);
 
+
 }

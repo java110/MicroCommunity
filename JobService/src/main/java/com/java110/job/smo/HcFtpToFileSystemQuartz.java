@@ -20,7 +20,7 @@ import java.util.*;
  * @author
  * 
  */
-public abstract class HcFtpToFileSystemQuartz implements JobFuLeiQuartz{
+public abstract class HcFtpToFileSystemQuartz{
 
 	protected static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemQuartz.class);
 	@Autowired
@@ -67,6 +67,11 @@ public abstract class HcFtpToFileSystemQuartz implements JobFuLeiQuartz{
 		}
 
 		// 保存任务执行主要日志信息
+		//获取LOGID 默认生成规则为tadkid去掉年月日之前的值+66
+		String id = ftpItemConfigInfo.get("TASKID").toString();
+		id = id.substring(10,id.length());
+		long logid = Long.parseLong (id+"22");
+		ftpItemConfigInfo.put("logid",logid);
 		long taskLogID = insertTaskInfo(ftpItemConfigInfo);
 
 		ftpItemConfigInfo.put("logid", taskLogID);
@@ -223,6 +228,7 @@ public abstract class HcFtpToFileSystemQuartz implements JobFuLeiQuartz{
 	 */
 	protected void saveTaskLogDetail(Map taskInfo) {
 		FtpTaskLogDetail logdetail = new FtpTaskLogDetail();
+		logdetail.setId(Long.valueOf(taskInfo.get("logid").toString()+"66"));
 		logdetail.setLogid(Long.valueOf(taskInfo.get("logid").toString()));
 		logdetail.setTaskid(Long.valueOf(taskInfo.get("taskid").toString()));
 		logdetail.setState((String) taskInfo.get("threadrunstate"));

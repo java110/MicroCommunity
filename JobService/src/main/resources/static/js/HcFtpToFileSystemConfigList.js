@@ -109,7 +109,7 @@ function createHtmlContext(taskInfo){
        trStr = trStr
                 + "<td class='text-center'>"+taskTnum+"</td>"
                 + "<td class='text-center'>"
-                + "            <a class='label label-info' href='../prvncFtpfileConfig!queryTaskLogList.action?taskid="+taskId+"' target='_blank'>日志</a>"
+                /*+ "            <a class='label label-info' href='../prvncFtpfileConfig!queryTaskLogList.action?taskid="+taskId+"' target='_blank'>日志</a>"*/
                 + "</td>";
        // 将后台传过来的数据影藏放到页面上
        trStr = trStr
