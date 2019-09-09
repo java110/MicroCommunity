@@ -69,7 +69,7 @@
             },
             _queryUnitMethod:function(){
                 vc.component._loadUnits({'floorId':vc.component.unitInfo.conditions.floorId});
-            }
+            },
             _moreCondition:function(){
                 if(vc.component.unitInfo.moreCondition){
                     vc.component.unitInfo.moreCondition = false;
