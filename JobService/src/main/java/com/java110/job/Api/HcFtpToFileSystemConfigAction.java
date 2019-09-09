@@ -2,9 +2,7 @@ package com.java110.job.Api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.util.SpringBeanInvoker;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.job.common.CustomizedPropertyPlaceholderConfigurer;
 import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.smo.DownloadFileFromFtpToTable;
 import com.java110.job.task.HcFtpToFileSystemJob;
@@ -22,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 将ftp上的文件保存到支持的文件系统
  *
  * @author wuxw7 add by 20170103
  * 		   shiyj update by 2019.08.29
@@ -36,6 +33,7 @@ public class HcFtpToFileSystemConfigAction {
 	private static final String defaultCronExpression = "0 * * * * ?";// 每分钟执行一次
 
 	private static final String prefixJobName = "HcFtpToSystem_"; // job
+	private static final String triggerNames = "HcFtpToData_"; // job
 	// 名称前缀，防止和其他的job名称产生冲突
 
 	private static final String RUNFLAG_START = "1";
@@ -134,9 +132,9 @@ public class HcFtpToFileSystemConfigAction {
 
 		// 数据规范性校验
 		Object dealClassObj = null;
-		// 在prvncCrm.properties 文件中获取对应处理类
+		//目前写死他
 		if ("DT".equals(paramIn.get("uOrD").toString())) {
-			 dealClassObj = DownloadFileFromFtpToTable.class;
+			 dealClassObj = "downloadFileFromFtpToTable";
 		}else{
 			resultMsg = this.createResultMsg("1999", "对应模板不存在，请联系管理员", "");
 			return resultMsg;
@@ -185,7 +183,7 @@ public class HcFtpToFileSystemConfigAction {
 	 *
 	 * @return
 	 */
-	public String editFtpItem(HttpServletRequest request) {
+	public JSONObject editFtpItem(HttpServletRequest request) {
 
 		// 请求参数为{"taskId":"12","taskName":"经办人照片同步处理","ftpUserName":"weblogic",.....}
 		String ftpItemJson = request.getParameter("ftpItemJson");
@@ -196,18 +194,25 @@ public class HcFtpToFileSystemConfigAction {
 		} catch (Exception e) {
 			logger.error("传入参数格式不正确：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "传入参数格式不正确：" + ftpItemJson, "");
-			return "editFtpItem";
+			return resultMsg;
 		}
 
 		// 将ftpItemJson装为Map保存操作
 		Map paramIn = JSONObject.parseObject(ftpItemJsonObj.getJSONObject("taskInfo").toJSONString(), Map.class);
 
-		// 在prvncCrm.properties 文件中获取对应处理类
-		Object dealClassObj = CustomizedPropertyPlaceholderConfigurer.getContextProperty("task.deal.class." + paramIn.get("uOrD"));
+
+		Object dealClassObj = null;
+		//目前写死他
+		if ("DT".equals(paramIn.get("uOrD").toString())) {
+			dealClassObj = "downloadFileFromFtpToTable";
+		}else{
+			resultMsg = this.createResultMsg("1999", "对应模板不存在，请联系管理员", "");
+			return resultMsg;
+		}
 		// Object dealClassObj = "provInner.DownloadFileFromFtpToTFS";
 		if (dealClassObj == null) {
 			resultMsg = this.createResultMsg("1999", "对应模板不存在，请联系管理员", "");
-			return "editFtpItem";
+			return resultMsg;
 		}
 		String dealClass = dealClassObj.toString();
 
@@ -239,13 +244,13 @@ public class HcFtpToFileSystemConfigAction {
 				} else {
 					resultMsg = this.createResultMsg("1999", "更新属性失败", "");
 				}
-				return "editFtpItem";
+				return resultMsg;
 			}
 			resultMsg = this.createResultMsg("1999", "修改的数据不存在或修改失败", "");
-			return "editFtpItem";
+			return resultMsg;
 		}
 		resultMsg = this.createResultMsg("1999", "未找到对应的数据更新失败【" + paramIn.get("taskId") + "】", "");
-		return "editFtpItem";
+		return resultMsg;
 	}
 
 	/**
@@ -253,7 +258,7 @@ public class HcFtpToFileSystemConfigAction {
 	 *
 	 * @return
 	 */
-	public String deleteFtpItem(HttpServletRequest request) {
+	public JSONObject deleteFtpItem(HttpServletRequest request) {
 
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"DELETE"}
 		String ftpItemJson = request.getParameter("ftpItemJson");
@@ -269,21 +274,21 @@ public class HcFtpToFileSystemConfigAction {
 		} catch (Exception e) {
 			logger.error("传入参数格式不正确：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "传入参数格式不正确：" + ftpItemJson + e, "");
-			return "deleteFtpItem";
+			return resultMsg;
 		}
 
 		// 传入报文不为空
 		if (paramIn == null || !paramIn.containsKey("tasks") || !paramIn.containsKey("state")) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(必须包含tasks 和  state节点)：" + ftpItemJson, "");
-			return "deleteFtpItem";
+			return resultMsg;
 		}
 
 		// 校验当前是否为启动侦听
 		if (!"DELETE".equals(paramIn.get("state"))) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(state的值必须是DELETE)：" + ftpItemJson, "");
-			return "deleteFtpItem";
+			return resultMsg;
 		}
 
 		// 查询需要操作的任务
@@ -304,12 +309,12 @@ public class HcFtpToFileSystemConfigAction {
 		int updateFtpItemFlag = iHcFtpFileDAO.deleteFtpItemByTaskId(paramInfo);
 		if (updateFtpItemFlag > 0) {
 			resultMsg = this.createResultMsg("0000", "成功", ftpItemJson);
-			return "deleteFtpItem";
+			return resultMsg;
 		}
 
 		resultMsg = this.createResultMsg("1999", "删除数据已经不存在，或删除失败", "");
 
-		return "deleteFtpItem";
+		return resultMsg;
 	}
 
 	/**
@@ -425,7 +430,7 @@ public class HcFtpToFileSystemConfigAction {
 	 *
 	 * @return
 	 */
-	public String startJob(HttpServletRequest request) {
+	public JSONObject startJob(HttpServletRequest request) {
 
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"START"}
 		String ftpItemJson = request.getParameter("ftpItemJson");
@@ -439,21 +444,21 @@ public class HcFtpToFileSystemConfigAction {
 		} catch (Exception e) {
 			logger.error("传入参数格式不正确：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "传入参数格式不正确：" + ftpItemJson, "");
-			return "startJob";
+			return resultMsg;
 		}
 
 		// 传入报文不为空
 		if (paramIn == null || !paramIn.containsKey("tasks") || !paramIn.containsKey("state")) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(必须包含tasks 和  state节点)：" + ftpItemJson, "");
-			return "startJob";
+			return resultMsg;
 		}
 
 		// 校验当前是否为启动侦听
 		if (!"START".equals(paramIn.get("state"))) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(state的值必须是START)：" + ftpItemJson, "");
-			return "startJob";
+			return resultMsg;
 		}
 
 		// 查询需要操作的任务
@@ -475,8 +480,6 @@ public class HcFtpToFileSystemConfigAction {
 
 		List<Map> doFtpItems = iHcFtpFileDAO.queryFtpItemsByTaskIds(info);
 
-		// 获取Spring调度器
-		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
 		try {
@@ -496,11 +499,11 @@ public class HcFtpToFileSystemConfigAction {
 
 				String jobName = prefixJobName + taskId;
 
-				String triggerName = prefixJobName + taskId;
+				String triggerName = triggerNames + taskId;
 
 				//设置任务名称
-				JobKey jobKey = new JobKey(jobName);
-				JobDetail jobDetail = scheduler.getJobDetail(jobKey);				// 说明这个没有启动，则需要重新启动，如果启动着不做处理
+				JobKey jobKey = new JobKey(jobName,HcFtpToFileSystemJob.JOB_GROUP_NAME);
+				JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 
 				if (jobDetail == null) {
 					// 任务名称
@@ -513,7 +516,7 @@ public class HcFtpToFileSystemConfigAction {
 					warnJob.getJobDataMap().put(HcFtpToFileSystemJob.JOB_DATA_TASK_ID, taskId);
 
 					// 触发时间点
-					CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName).withSchedule(cronScheduleBuilder).build();
+					CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName+"_group").withSchedule(cronScheduleBuilder).build();
 
 					// 错过执行后，立即执行
 					//warnTrigger(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
@@ -545,13 +548,13 @@ public class HcFtpToFileSystemConfigAction {
 			// TODO Auto-generated catch block
 			logger.error("调度器启动出错：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "调度器启动出错：" + e, "");
-			return "startJob";
+			return resultMsg;
 		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.startJob】出参为：" + resultMsg, resultMsg);
 		}
-		return "startJob";
+		return resultMsg;
 	}
 
 	/**
@@ -559,7 +562,7 @@ public class HcFtpToFileSystemConfigAction {
 	 *
 	 * @return
 	 */
-	public String stopJob(HttpServletRequest request) {
+	public JSONObject stopJob(HttpServletRequest request) {
 
 		// 请求参数为{"tasks":[{"taskId":1},{"taskId":2}],"state":"STOP"}
 		String ftpItemJson = request.getParameter("ftpItemJson");
@@ -573,21 +576,21 @@ public class HcFtpToFileSystemConfigAction {
 		} catch (Exception e) {
 			logger.error("传入参数格式不正确：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "传入参数格式不正确：" + ftpItemJson, "");
-			return "stopJob";
+			return resultMsg;
 		}
 
 		// 传入报文不为空
 		if (paramIn == null || !paramIn.containsKey("tasks") || !paramIn.containsKey("state")) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(必须包含tasks 和  state节点)：" + ftpItemJson, "");
-			return "stopJob";
+			return resultMsg;
 		}
 
 		// 校验当前是否为启动侦听
 		if (!"STOP".equals(paramIn.get("state"))) {
 
 			resultMsg = createResultMsg("1999", "传入参数格式不正确(state的值必须是START)：" + ftpItemJson, "");
-			return "stopJob";
+			return resultMsg;
 		}
 
 		// 查询需要操作的任务
@@ -608,9 +611,6 @@ public class HcFtpToFileSystemConfigAction {
 		info.put("taskIds", taskIds.split(","));
 
 		List<Map> doFtpItems = iHcFtpFileDAO.queryFtpItemsByTaskIds(info);
-
-		// 获取Spring调度器
-		Scheduler scheduler = (Scheduler) SpringBeanInvoker.getBean("schedulerFactoryBean");
 
 		int linstenCount = 0;
 		int updateTaskStateFailCount = 0;
@@ -660,13 +660,13 @@ public class HcFtpToFileSystemConfigAction {
 			// TODO Auto-generated catch block
 			logger.error("调度器停止出错：" + ftpItemJson, e);
 			resultMsg = createResultMsg("1999", "调度器停止出错：" + e, "");
-			return "stopJob";
+			return resultMsg;
 		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.startJob】出参为：" + resultMsg, resultMsg);
 		}
-		return "stopJob";
+		return resultMsg;
 	}
 
 	/**
@@ -721,7 +721,7 @@ public class HcFtpToFileSystemConfigAction {
 			for (Map ftpItemMap : ftpItems) {
 
 				// 处理时间显示和界面显示传输类型
-				ftpItemMap.put("U_OR_D_NAME", CustomizedPropertyPlaceholderConfigurer.getContextProperty("task.tamplete.name." + ftpItemMap.get("U_OR_D")));// 暂且写死，最终还是读取配置
+				ftpItemMap.put("U_OR_D_NAME", ftpItemMap.get("U_OR_D"));// 暂且写死，最终还是读取配置
 				ftpItemMap.put("CREATE_DATE", df.format(ftpItemMap.get("CREATE_DATE")));// 暂且写死，最终还是读取配置
 				rows.add(JSONObject.parseObject(JSONObject.toJSONString(ftpItemMap)));
 			}

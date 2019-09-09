@@ -101,9 +101,9 @@ function createHtmlContext(taskInfo){
                    +"<td class='text-center'>"+taskCreateDate+"</td>"
                    +"<td class='text-center'>"+taskRunStateName+"</td>";
        if(taskRUNFlag == "1"){
-                trStr += "<td class='text-center'><span class='glyphicon glyphicon-ok-sign task_run' ></span></td>";
+                trStr += "<td class='text-center'><span class='glyphicon glyphicon-ok-sign task_run' >运行</span></td>";
        }else{
-                trStr +=  "<td class='text-center'><span class='glyphicon glyphicon-remove-sign task_stop' ></span></td>"
+                trStr +=  "<td class='text-center'><span class='glyphicon glyphicon-remove-sign task_stop' >停止</span></td>"
        }
 
        trStr = trStr
@@ -175,7 +175,7 @@ function startJob(){
     // 请求处理
      $.ajax({
           type: 'POST',
-          url: '../FtpToFileSystem_startJob.action',
+          url: '/HcFtpToFileSystemConfigList/startJob',
           data: {
                 ftpItemJson:requestParam
           },
@@ -248,7 +248,7 @@ function stopJob(){
        // 请求处理
         $.ajax({
              type: 'POST',
-             url: '../FtpToFileSystem_stopJob.action',
+             url: '/HcFtpToFileSystemConfigList/stopJob',
              data: {
                    ftpItemJson:requestParam
              },
@@ -318,7 +318,7 @@ function deleteTask(){
         // 请求处理
          $.ajax({
               type: 'POST',
-              url: '../FtpToFileSystem_deleteFtpItem.action',
+              url: '/HcFtpToFileSystemConfigList/deleteFtpItem',
               data: {
                     ftpItemJson:requestParam
               },
@@ -589,7 +589,7 @@ function saveTaskInfo(doType){
     var taskId = -1;
     var url = "/HcFtpToFileSystemConfigList/addFtpItem";// 新增时的URL
     if(doType == 'Edit'){
-        url = '../FtpToFileSystem_editFtpItem.action';// 编辑时的URL
+        url = '/HcFtpToFileSystemConfigList/editFtpItem';// 编辑时的URL
         taskId = $('#taskId'+doType).val();
     }
     var taskAttrsInputs = $("div[name='taskAttrs"+doType+"'] input");

@@ -4,6 +4,7 @@ import com.java110.job.util.FTPClientTemplate;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -16,12 +17,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 从Ftp文件系统下载文件内容存到对应配置的表中
+ *
  * 
- * 
- * @author wuxw7 2016-01-04
+ * @author
  * 
  */
+@Component
 public class DownloadFileFromFtpToTable extends HcFtpToFileSystemQuartz {
 
 	private static final String ITEM_SPEC_CD_10011 = "10011";// FTP地址

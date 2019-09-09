@@ -88,4 +88,52 @@ public class JobController extends BaseController {
         return JSON.toJSONString();
     }
 
+
+    /**
+     * 根据TaskId 启动任务
+     * @return
+     */
+    @RequestMapping(path = "/startJob")
+    @ResponseBody
+    public String startJob(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("startJob  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.startJob(request);
+        return JSON.toJSONString();
+    }
+
+
+    /**
+     * 根据TaskId 停止任务
+     * @return
+     */
+    @RequestMapping(path = "/stopJob")
+    @ResponseBody
+    public String stopJob(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("stopJob  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.stopJob(request);
+        return JSON.toJSONString();
+    }
+    /**
+     * 根据TaskId 删除任务
+     * @return
+     */
+    @RequestMapping(path = "/deleteFtpItem")
+    @ResponseBody
+    public String deleteFtpItem(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("deleteFtpItem  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.deleteFtpItem(request);
+        return JSON.toJSONString();
+    }
+
+    /**
+     * 根据TaskId 删除任务
+     * @return
+     */
+    @RequestMapping(path = "/editFtpItem")
+    @ResponseBody
+    public String editFtpItem(HttpServletRequest request) {
+        logger.debug("请求流程 {},{}", new StringBuffer("editFtpItem  我看到请求了"), new Date());
+        JSONObject JSON = ftpToFileSystemConfigAction.editFtpItem(request);
+        return JSON.toJSONString();
+    }
 }

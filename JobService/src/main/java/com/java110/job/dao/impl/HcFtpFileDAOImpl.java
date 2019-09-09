@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-@Service("IHcFtpFileDAO")
+@Service("hcFtpFileDAOImpl")
 @Transactional
 public class HcFtpFileDAOImpl extends BaseServiceDao implements IHcFtpFileDAO {
 

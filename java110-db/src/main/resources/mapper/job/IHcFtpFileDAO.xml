@@ -201,7 +201,7 @@
             <!-- 修改ftp配置信息 -->
             <update id="updateFtpItemByTaskId" parameterType="Map">
                 update hc_ftp_task sft
-                set update_date = sysdate
+                set update_date = SYSDATE()
                 <if test="taskName !=null and taskName != ''">,sft.taskname = #{taskName}
                 </if>
                 <if test="fileName !=null and fileName != ''">,sft.file_name = #{fileName}

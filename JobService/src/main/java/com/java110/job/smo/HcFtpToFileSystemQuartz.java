@@ -16,15 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Ftp定时任务执行类，所有的任务都在这里执行，主要为了ftp文件保存到文件系统，业务逻辑单独处理
  * 
- * 特别注意，事前过程调用是没有传递参数的，事后过程调用是需要传递一个param的参数，需要在子类process方法中写入，如果不需要传也要传个""过来，
- * 相应过程需要两个参数，一个是入参一个是出参
- * 
- * @author wuxw7 add by 2016-01-03
+ * @author
  * 
  */
-public abstract class HcFtpToFileSystemQuartz {
+public abstract class HcFtpToFileSystemQuartz implements JobFuLeiQuartz{
 
 	protected static final Logger logger = LoggerFactory.getLogger(HcFtpToFileSystemQuartz.class);
 	@Autowired

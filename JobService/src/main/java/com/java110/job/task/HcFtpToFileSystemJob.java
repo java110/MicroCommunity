@@ -3,6 +3,7 @@ package com.java110.job.task;
 import com.java110.common.util.SpringBeanInvoker;
 import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.smo.HcFtpToFileSystemQuartz;
+import com.java110.job.smo.JobFuLeiQuartz;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -15,9 +16,8 @@ import java.util.Map;
 
 
 /**
- * 将集团文件同步至本地支持的文件系统
  *
- * @author wuxw7
+ * @author
  *
  */
 
@@ -30,8 +30,8 @@ public class HcFtpToFileSystemJob implements Job {
 	public static String JOB_GROUP_NAME = "ftpToFileSystemJobGroup"; // 任务的 分组名称
 	@Autowired
 	private IHcFtpFileDAO iHcFtpFileDAO;
-	@Autowired
-	private HcFtpToFileSystemQuartz hcFtpToFileSystemQuartz;
+
+	private JobFuLeiQuartz jobFuLeiQuartz;
 
 	protected void executeInternal(JobExecutionContext context) {
 		try {
@@ -56,8 +56,8 @@ public class HcFtpToFileSystemJob implements Job {
 			}
 
 			String dealClass = ftpItemConfigInfo.get("DEAL_CLASS").toString();
-			hcFtpToFileSystemQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
-			hcFtpToFileSystemQuartz.startFtpTask(ftpItemConfigInfo);
+			jobFuLeiQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
+			jobFuLeiQuartz.startFtpTask(ftpItemConfigInfo);
 		} catch (Throwable ex) {
 			logger.error("执行任务失败：", ex);
 		}
