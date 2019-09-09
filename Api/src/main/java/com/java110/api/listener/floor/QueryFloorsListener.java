@@ -83,7 +83,7 @@ public class QueryFloorsListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateFloorData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
-        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含page信息");
+        Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.isInteger(reqJson.getString("page"), "page不是有效数字");
         Assert.isInteger(reqJson.getString("row"), "row不是有效数字");
