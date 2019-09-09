@@ -330,8 +330,8 @@ public class HcFtpToFileSystemConfigAction {
 		if (logger.isDebugEnabled()) {
 			logger.debug("---【PrvncFtpToFileSystemConfigAction.queryFtpItemByTaskId】入参为：" + ftpItemJson, ftpItemJson);
 		}
-
 		try {
+
 			// 校验格式是否正确
 			JSONObject.parseObject(ftpItemJson);
 		} catch (Exception e) {
