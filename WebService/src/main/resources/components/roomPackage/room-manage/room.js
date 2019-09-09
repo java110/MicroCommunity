@@ -14,7 +14,17 @@
                 floorId:'',
                 unitId:'',
                 state:'',
-                roomNum:''
+                roomNum:'',
+                moreCondition:false,
+                conditions:{
+                    floorId:'',
+                    floorName:'',
+                    unitId:'',
+                    roomNum:'',
+                    roomId:'',
+                    state:'',
+                    section:''
+                }
             }
         },
         _initMethod:function(){
@@ -22,39 +32,33 @@
             vc.component._loadDataByParam();
         },
         _initEvent:function(){
+            vc.on('room','chooseFloor',function(_param){
+                vc.component.roomInfo.conditions.floorId = _param.floorId;
+                vc.component.roomInfo.conditions.floorName = _param.floorName;
+                vc.component.loadUnits(_param.floorId);
+
+            });
             vc.on('room','listRoom',function(_param){
-                  vc.component.listRoom();
+                  vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             });
             vc.on('room','loadData',function(_param){
-                  vc.component._loadData(_param);
+                  vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             });
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component.listRoom(_currentPage,DEFAULT_ROW);
             });
         },
         methods:{
-            _loadData:function(_param){
-                    vc.component.roomInfo.floorId = _param.floorId;
-                    vc.component.roomInfo.unitId = '';
-                    vc.component.roomInfo.state = '';
-                    vc.component.roomInfo.roomNum = '';
 
-                    vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
-                    vc.component.loadUnits(_param.floorId);
-            },
             listRoom:function(_page,_row){
-                var param = {
-                    params:{
-                        page:_page,
-                        row:_row,
-                        communityId:vc.getCurrentCommunity().communityId,
-                        floorId:vc.component.roomInfo.floorId,
-                        unitId:vc.component.roomInfo.unitId,
-                        state:vc.component.roomInfo.state,
-                        roomNum:vc.component.roomInfo.roomNum
 
-                    }
-                }
+                vc.component.roomInfo.conditions.page=_page;
+                vc.component.roomInfo.conditions.row=_row;
+                vc.component.roomInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
+                var param = {
+                    params:vc.component.roomInfo.conditions
+                };
+
                //发送get请求
                vc.http.get('room',
                             'listRoom',
@@ -79,11 +83,11 @@
                 vc.jumpToPage("/flow/addRoomBindingFlow");
             },
             _openEditRoomModel:function(_room){
-                _room.floorId = vc.component.roomInfo.floorId;
+                _room.floorId = vc.component.roomInfo.conditions.floorId;
                 vc.emit('editRoom','openEditRoomModal',_room);
             },
             _openDelRoomModel:function(_room){
-                 _room.floorId = vc.component.roomInfo.floorId;
+                 _room.floorId = vc.component.roomInfo.conditions.floorId;
                  vc.emit('deleteRoom','openRoomModel',_room);
             },
             /**
@@ -106,12 +110,7 @@
                         if(res.status == 200){
                             var tmpUnits = JSON.parse(json);
                             vc.component.roomUnits = tmpUnits;
-                            /*if(tmpUnits == null || tmpUnits.length == 0){
-                                return ;
-                            }
-                            for(var unitIndex = 0; unitIndex < tmpUnits.length;unitIndex++){
-                               vc.component.addRoomInfo.units[unitIndex] = tmpUnits[unitIndex];
-                            }*/
+
                             return ;
                         }
                         vc.message(json);
@@ -122,7 +121,7 @@
                         vc.message(errInfo);
                      });
             },
-            queryRoomMethod:function(){
+            _queryRoomMethod:function(){
                 vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             },
             showState:function(_state){
@@ -140,18 +139,16 @@
                 }
             },
             _loadDataByParam: function(){
-                vc.component.roomInfo.floorId = vc.getParam("floorId");
+                vc.component.roomInfo.conditions.floorId = vc.getParam("floorId");
                 //如果 floodId 没有传 则，直接结束
-                if(vc.component.roomInfo.floorId == null
-                    || vc.component.roomInfo.floorId == undefined
-                    || vc.component.roomInfo.floorId == ''){
+                /*if(!vc.notNull(vc.component.roomInfo.conditions.floorId)){
                     return ;
-                }
+                }*/
 
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        floorId:vc.component.roomInfo.floorId
+                        floorId:vc.component.roomInfo.conditions.floorId
                     }
                 }
 
@@ -177,6 +174,16 @@
                         vc.message(errInfo);
                      });
 
+            },
+            _moreCondition:function(){
+                if(vc.component.roomInfo.moreCondition){
+                    vc.component.roomInfo.moreCondition = false;
+                }else{
+                    vc.component.roomInfo.moreCondition = true;
+                }
+            },
+            _openChooseFloorMethod:function(){
+                vc.emit('searchFloor','openSearchFloorModel',{});
             }
         }
     });

@@ -81,7 +81,7 @@ public class QueryRoomsListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateRoomData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含communityId信息");
+        //Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含floorId信息");
         Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
 
