@@ -16,16 +16,16 @@
             }
         },
         _initMethod:function(){
-
+            vc.component._loadUnits({'floorId':''});
         },
         _initEvent:function(){
             vc.on('unit','chooseFloor',function(_param){
-                vc.component.conditions.floorId = _param.floorId;
-                vc.component.conditions.floorName = _param.floorName;
+                vc.component.unitInfo.conditions.floorId = _param.floorId;
+                vc.component.unitInfo.conditions.floorName = _param.floorName;
             });
 
             vc.on('unit','loadUnit',function(_param){
-                vc.component.conditions.floorId = _param.floorId;
+                vc.component.unitInfo.conditions.floorId = _param.floorId;
                 vc.component._loadUnits(_param);
             });
             vc.on('unit','loadData',function(_param){

@@ -16,14 +16,17 @@
                     <div class="row">
 
                         <div class="col-sm-4">
-                            <input type="text" placeholder="请选择楼栋"
-                                   v-model="unitInfo.conditions.floorName" class=" form-control">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-primary btn-sm"
-                                        v-on:click="_openChooseFloorMethod()"><i
-                                        class="glyphicon glyphicon-search"></i> 选择
-                                </button>
+                            <div class="form-group input-group">
+                                <input type="text" placeholder="请选择楼栋"
+                                       v-model="unitInfo.conditions.floorName" class=" form-control">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            v-on:click="_openChooseFloorMethod()"><i
+                                            class="glyphicon glyphicon-search"></i> 选择
+                                    </button>
+                                </div>
                             </div>
+
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
