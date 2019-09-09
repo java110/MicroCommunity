@@ -98,7 +98,7 @@ vc 校验 工具类 -method
          * @param {校验文本} text
          */
         num:function(text){
-            var regNum = /^[1-9][0-9]+$/;
+            var regNum = /^[1-9][0-9]*$/;
             return regNum.test(text);
         },
         date:function(str) {
