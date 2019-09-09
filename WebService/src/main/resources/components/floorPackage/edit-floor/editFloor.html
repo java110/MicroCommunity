@@ -1,27 +1,35 @@
-<div id = "editFloorModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div id="editFloorModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <h3 class="m-t-none m-b ">修改小区楼</h3>
+                <h3 class="m-t-none m-b ">修改楼栋</h3>
                 <div class="ibox-content">
                     <div>
                         <p style="color:red;">{{editFloorInfo.errorInfo}}</p>
                         <div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">楼名称</label>
-                                <div class="col-sm-10"><input v-model="editFloorInfo.floorName" type="text" placeholder="必填，请填写名称" class="form-control"></div>
+                                <label class="col-sm-2 col-form-label">楼栋编号</label>
+                                <div class="col-sm-10"><input v-model="editFloorInfo.floorNum" type="number"
+                                                              placeholder="必填，请填写编号" class="form-control"></div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">楼编号</label>
-                                <div class="col-sm-10"><input v-model="editFloorInfo.floorNum" type="email" placeholder="必填，请填写编号" class="form-control"></div>
+                                <label class="col-sm-2 col-form-label">楼栋名称</label>
+                                <div class="col-sm-10"><input v-model="editFloorInfo.floorName" readonly type="text"
+                                                              placeholder="必填，请填写名称" class="form-control"></div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">备注</label>
-                                <div class="col-sm-10"><input v-model="editFloorInfo.remark" type="tel" placeholder="可填，请填写备注" class="form-control"></div>
+                                <div class="col-sm-10"><textarea cols="5" v-model="editFloorInfo.remark" type="tel"
+                                                                 placeholder="可填，请填写备注" class="form-control"></textarea></div>
                             </div>
                             <div class="ibox-content">
-                                <button class="btn btn-primary float-right" type="button" v-on:click="editFloorMethod()" ><i class="fa fa-check"></i>&nbsp;修改</button>
-                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                                <button class="btn btn-primary float-right" type="button"
+                                        v-on:click="editFloorMethod()"><i class="fa fa-check"></i>&nbsp;修改
+                                </button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                        data-dismiss="modal">取消
+                                </button>
                             </div>
                         </div>
                     </div>

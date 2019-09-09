@@ -7,7 +7,12 @@
                 floors:[],
                 total:0,
                 records:1,
-                errorInfo:""
+                errorInfo:"",
+                conditions:{
+                    floorId:'',
+                    floorNum:'',
+                    floorName:''
+                }
             }
         },
         _initMethod:function(){
@@ -23,13 +28,13 @@
         },
         methods:{
             _listFloorData:function(_page,_rows){
+
+                vc.component.listFloorInfo.conditions.page = _page;
+                vc.component.listFloorInfo.conditions.row = _rows;
+                vc.component.listFloorInfo.conditions.communityId=vc.getCurrentCommunity().communityId
                 var param = {
-                    params:{
-                        page:_page,
-                        rows:_rows,
-                        communityId:vc.getCurrentCommunity().communityId
-                    }
-                }
+                    params:vc.component.listFloorInfo.conditions
+                };
 
                //发送get请求
                vc.http.get('listFloor',
@@ -55,11 +60,17 @@
             _openAddFloorModal:function(){ //打开添加框
                 vc.emit('addFloor','openAddFloorModal',{});
             },
+            _openBatchAddFloorModal:function(){ //打开批量添加框
+               vc.emit('batchAddFloor','openBatchAddFloorModal',{});
+            },
             _openDelFloorModel:function(_floor){ // 打开删除对话框
                 vc.emit('deleteFloor','openFloorModel',_floor);
             },
             _openEditFloorModel:function(_floor){
                 vc.emit('editFloor','openEditFloorModal',_floor);
+            },
+            _queryFloorMethod:function(){
+                vc.component._listFloorData(DEFAULT_PAGE, DEFAULT_ROWS);
             }
         }
     })

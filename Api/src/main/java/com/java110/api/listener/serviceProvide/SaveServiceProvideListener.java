@@ -7,6 +7,7 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.service.IServiceInnerServiceSMO;
@@ -39,26 +40,40 @@ public class SaveServiceProvideListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写服务名称");
-        Assert.hasKeyAndValue(reqJson, "serviceCode", "必填，请填写服务编码");
-        Assert.hasKeyAndValue(reqJson, "params", "必填，请填写参数");
-        Assert.hasKeyAndValue(reqJson, "queryModel", "必填，请选择是否显示菜单");
+        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        JSONArray infos = reqJson.getJSONArray("data");
+
+        Assert.hasKeyByFlowData(infos, "Service", "name", "必填，请填写服务名称");
+        Assert.hasKeyByFlowData(infos, "Service", "serviceCode", "必填，请填写服务编码");
+        Assert.hasKeyByFlowData(infos, "devServiceProvideView", "queryModel", "必填，请选择是否显示菜单");
+        Assert.hasKeyByFlowData(infos, "devServiceProvideView", "params", "必填，请填写参数");
 
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        ServiceProvideDto serviceProvideDto = BeanConvertUtil.covertBean(reqJson, ServiceProvideDto.class);
+        JSONArray infos = reqJson.getJSONArray("data");
+
+
+        JSONObject viewServiceInfo = getObj(infos, "Service");
+        JSONObject devServiceProvideView = getObj(infos, "devServiceProvideView");
+        JSONObject serviceProvideRemarkView = getObj(infos, "serviceProvideRemarkView");
+
+
+        ServiceProvideDto serviceProvideDto = BeanConvertUtil.covertBean(viewServiceInfo, ServiceProvideDto.class);
+
+        serviceProvideDto = BeanConvertUtil.covertBean(devServiceProvideView, serviceProvideDto);
+
+        serviceProvideDto = BeanConvertUtil.covertBean(serviceProvideRemarkView, serviceProvideDto);
 
         int count = serviceInnerServiceSMOImpl.saveServiceProvide(serviceProvideDto);
         if (count < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存数据失败");
         }
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(viewServiceInfo.toJSONString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
     }
@@ -85,5 +100,33 @@ public class SaveServiceProvideListener extends AbstractServiceApiListener {
 
     public void setServiceInnerServiceSMOImpl(IServiceInnerServiceSMO serviceInnerServiceSMOImpl) {
         this.serviceInnerServiceSMOImpl = serviceInnerServiceSMOImpl;
+    }
+
+    private boolean hasKey(JSONObject info, String key) {
+        if (!info.containsKey(key)
+                || StringUtil.isEmpty(info.getString(key))
+                || info.getString(key).startsWith("-")) {
+            return false;
+        }
+        return true;
+
+    }
+
+    private JSONObject getObj(JSONArray infos, String flowComponent) {
+
+        JSONObject serviceInfo = null;
+
+        for (int infoIndex = 0; infoIndex < infos.size(); infoIndex++) {
+
+            Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
+
+            if (flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))) {
+                serviceInfo = infos.getJSONObject(infoIndex);
+                Assert.notNull(serviceInfo, "未包含服务信息");
+                return serviceInfo;
+            }
+        }
+
+        throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
     }
 }

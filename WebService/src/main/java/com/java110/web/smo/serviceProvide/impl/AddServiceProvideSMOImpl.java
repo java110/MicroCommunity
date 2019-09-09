@@ -45,9 +45,9 @@ public class AddServiceProvideSMOImpl extends AbstractComponentSMO implements IA
         ResponseEntity<String> responseEntity = null;
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+        /*responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/serviceProvide.saveServiceProvide",
-                HttpMethod.POST);
+                HttpMethod.POST);*/
         return responseEntity;
     }
 

@@ -1,6 +1,6 @@
 package com.java110.order.smo;
 
-import com.java110.entity.service.DataQuery;
+import com.java110.service.context.DataQuery;
 
 import java.util.Map;
 

@@ -10,6 +10,19 @@
                 errorInfo:''
             }
         },
+        watch:{
+            "editFloorInfo.floorNum":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                    if(vc.notNull(val)){
+                        vc.component.editFloorInfo.floorName = vc.component.editFloorInfo.floorNum + "号楼";
+                    }else{
+                        vc.component.editFloorInfo.floorName = "";
+                    }
+
+                },
+                deep:true
+            }
+         },
          _initMethod:function(){
 
          },

@@ -26,7 +26,7 @@
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
+                        row:_rows,
                         communityId:vc.getCurrentCommunity().communityId,
                         floorNum:_floorNum
                     }
