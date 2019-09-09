@@ -67,7 +67,7 @@
                     <h5>单元信息</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm"
-                                v-if="unitInfo。conditions.floorId != null && unitInfo。conditions.floorId != ''"
+                                v-if="unitInfo.conditions.floorId != null && unitInfo.conditions.floorId != ''"
                                 style="margin-left:10px" v-on:click="openAddUnitModel()">
                             <i class="glyphicon glyphicon-plus"></i> 添加单元
                         </button>
@@ -134,14 +134,14 @@
         </div>
     </div>
 
-    <!--<vc:create name="searchFloor"
+    <vc:create name="searchFloor"
                emitChooseFloor="unit"
                emitLoadData="unit"
     ></vc:create>
     <vc:create name="addUnit"
                callBackListener=""
                callBackFunction=""
-    ></vc:create>-->
+    ></vc:create>
     <!-- 删除员工权限 -->
     <vc:create name="editUnit"></vc:create>
     <vc:create name="deleteUnit"></vc:create>
