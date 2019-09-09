@@ -14,10 +14,9 @@
                 name:'',
                 conditions:{
                     businessTypeCd:'',
-name:'',
-invokeType:'',
-messageTopic:'',
-
+                    name:'',
+                    invokeType:'',
+                    messageTopic:'',
                 }
             }
         },
