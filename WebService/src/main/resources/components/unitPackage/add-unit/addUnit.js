@@ -51,9 +51,9 @@
                                     errInfo:"单元编号不能为空"
                                 },
                                 {
-                                    limit:"maxLength",
-                                    param:"12",
-                                    errInfo:"单元编号长度不能超过12位"
+                                    limit:"num",
+                                    param:"",
+                                    errInfo:"单元编号必须为数字"
                                 },
                             ],
                             'addUnitInfo.layerCount':[
