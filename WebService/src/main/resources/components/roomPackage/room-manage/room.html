@@ -1,23 +1,62 @@
 <div id="component">
-    <vc:create name="roomSelectFloor"
+    <!--<vc:create name="roomSelectFloor"
                openAddRoomModelName="addRoom"
-    ></vc:create>
+    ></vc:create>-->
+
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox">
+            <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>房屋信息</h5>
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">更多
+                        </button>
+                    </div>
                 </div>
                 <div class="ibox-content">
-
                     <div class="row">
-                        <div class="col-sm-4 m-b-xs">
-                            <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.unitId">
-                                <option selected  value="">请选择单元</option>
-                                <option v-for="(unit,index) in roomUnits" :key="index" v-bind:value="unit.unitId">{{unit.unitNum}}单元</option>
-                            </select>
+
+                        <div class="col-sm-4">
+                            <div class="form-group input-group">
+                                <input type="text" placeholder="请选择楼栋"
+                                       v-model="unitInfo.conditions.floorName" class=" form-control">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            v-on:click="_openChooseFloorMethod()"><i
+                                            class="glyphicon glyphicon-search"></i> 选择
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="col-sm-3 m-b-xs">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.unitId">
+                                    <option selected  value="">请选择单元</option>
+                                    <option v-for="(unit,index) in roomUnits" :key="index" v-bind:value="unit.unitId">{{unit.unitNum}}单元</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请填写房屋编号" class="form-control form-control-sm" v-model="roomInfo.roomNum">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryUnitMethod()"><i
+                                    class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="row" v-if="unitInfo.moreCondition == true">
+                        <div class="col-sm-4" >
+                            <div class="form-group">
+                                <input type="text" placeholder="请填写房屋ID" class="form-control form-control-sm" v-model="roomInfo.roomId">
+                            </div>
+                        </div>
+                        <div class="col-sm-3" >
                             <select class="form-control-sm form-control input-s-sm inline" v-model="roomInfo.state">
                                 <option selected  value="">请选择状态</option>
                                 <option value="2001">房屋已售</option>
@@ -26,20 +65,32 @@
                                 <option value="2004">已出租</option>
                             </select>
                         </div>
-
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                <input type="text" placeholder="请填写房屋编号" class="form-control form-control-sm" v-model="roomInfo.roomNum">
+                        <div class="col-sm-4" >
+                            <div class="form-group">
+                                <input type="text" placeholder="请填写房屋房间数" class="form-control form-control-sm" v-model="roomInfo.roomNum">
                             </div>
-
                         </div>
+                    </div>
 
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="queryRoomMethod()">
-                                <i class="glyphicon glyphicon-search"></i> 马上查询</button>
-                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>房屋信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                v-if="unitInfo.conditions.floorId != null && unitInfo.conditions.floorId != ''"
+                                style="margin-left:10px" v-on:click="_openAddRoom()">
+                            <i class="glyphicon glyphicon-plus"></i> 添加房屋
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny" style="margin-top:10px" data-page-size="10">
                         <thead>
@@ -54,7 +105,6 @@
                             <th data-hide="phone">单价</th>
                             <th data-hide="phone">房屋状态</th>
                             <th data-hide="phone">创建员工</th>
-                            <th data-hide="phone">备注</th>
                             <th class="text-right">操作</th>
 
                         </tr>
@@ -91,9 +141,6 @@
                             <td>
                                 {{room.userName}}
                             </td>
-                            <td>
-                                {{room.remark}}
-                            </td>
                             <td class="text-right">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditRoomModel(room)">修改</button>
@@ -119,6 +166,11 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="searchFloor"
+               emitChooseFloor="room"
+               emitLoadData="room"
+    ></vc:create>
     <!-- 删除员工权限 -->
     <vc:create name="editRoom"></vc:create>
     <vc:create name="deleteRoom"></vc:create>

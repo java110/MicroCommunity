@@ -1,5 +1,6 @@
 package com.java110.job.task;
 
+import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.SpringBeanInvoker;
 import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.smo.HcFtpToFileSystemQuartz;
@@ -56,7 +57,7 @@ public class HcFtpToFileSystemJob implements Job {
 			}
 
 			String dealClass = ftpItemConfigInfo.get("DEAL_CLASS").toString();
-			jobFuLeiQuartz = (HcFtpToFileSystemQuartz) SpringBeanInvoker.getBean(dealClass);
+			jobFuLeiQuartz =  ApplicationContextFactory.getBean(dealClass,HcFtpToFileSystemQuartz.class);
 			jobFuLeiQuartz.startFtpTask(ftpItemConfigInfo);
 		} catch (Throwable ex) {
 			logger.error("执行任务失败：", ex);

@@ -75,6 +75,9 @@
                              }
                            );
             },
+            _openAddRoom:function(){
+                vc.jumpToPage("/flow/addRoomBindingFlow");
+            },
             _openEditRoomModel:function(_room){
                 _room.floorId = vc.component.roomInfo.floorId;
                 vc.emit('editRoom','openEditRoomModal',_room);
