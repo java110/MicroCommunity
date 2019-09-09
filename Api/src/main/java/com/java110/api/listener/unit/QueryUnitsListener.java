@@ -73,7 +73,7 @@ public class QueryUnitsListener extends AbstractServiceApiDataFlowListener {
      */
     private void validateUnitData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含communityId信息");
+        //Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含floorId信息");
         //校验小区楼ID和小区是否有对应关系
         int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
 
