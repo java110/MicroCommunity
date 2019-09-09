@@ -28,8 +28,11 @@
             }
         },
         _initMethod:function(){
+            vc.component.roomInfo.conditions.floorId = vc.getParam("floorId");
+            vc.component.roomInfo.conditions.floorName = vc.getParam("floorName");
+            vc.component.listRoom(DEFAULT_PAGE,DEFAULT_ROW);
             //根据 参数查询相应数据
-            vc.component._loadDataByParam();
+            //vc.component._loadDataByParam();
         },
         _initEvent:function(){
             vc.on('room','chooseFloor',function(_param){
@@ -140,8 +143,9 @@
             },
             _loadDataByParam: function(){
                 vc.component.roomInfo.conditions.floorId = vc.getParam("floorId");
+                vc.component.roomInfo.conditions.floorId = vc.getParam("floorName");
                 //如果 floodId 没有传 则，直接结束
-                /*if(!vc.notNull(vc.component.roomInfo.conditions.floorId)){
+               /* if(!vc.notNull(vc.component.roomInfo.conditions.floorId)){
                     return ;
                 }*/
 
@@ -160,10 +164,9 @@
                         if(res.status == 200){
                             var _floorInfo = JSON.parse(json);
                             var _tmpFloor = _floorInfo.apiFloorDataVoList[0];
-                            vc.emit('roomSelectFloor','chooseFloor', _tmpFloor);
-                            vc.component._loadData({
-                                floorId: _tmpFloor.floorId
-                            });
+                            /*vc.emit('roomSelectFloor','chooseFloor', _tmpFloor);
+                            */
+
                             return ;
                         }
                         vc.message(json);
