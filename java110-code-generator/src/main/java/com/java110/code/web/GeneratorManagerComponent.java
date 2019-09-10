@@ -130,7 +130,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = fileContext.replace("@@vcCreate@@", vcCreate.toString());
 
         if (tmpConditions.size() > 3) {
-            fileContext = fileContext.replace("@@moreCondition@@", "<button type=\"button\"  class=\"btn btn-link btn-sm\" style=\"margin-right:10px;\"  v-on:click=\"_moreCondition()\">更多</button>");
+            fileContext = fileContext.replace("@@moreCondition@@", "<button type=\"button\"  class=\"btn btn-link btn-sm\" style=\"margin-right:10px;\"  v-on:click=\"_moreCondition()\">{{"+ data.getString("templateCode") +"ManageInfo.moreCondition == true?'隐藏':'更多'}}</button>");
         } else {
             fileContext = fileContext.replace("@@moreCondition@@", "");
 
