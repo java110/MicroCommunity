@@ -104,14 +104,14 @@
                         <tr>
                             <th>房屋ID</th>
                             <th data-hide="phone">房屋编号</th>
+                            <th data-hide="phone">楼栋编号</th>
                             <th data-hide="phone">单元</th>
                             <th data-hide="phone">楼层</th>
-                            <th data-hide="phone">房间数</th>
                             <th data-hide="phone">户型</th>
                             <th data-hide="phone">建筑面积</th>
                             <th data-hide="phone">单价</th>
                             <th data-hide="phone">房屋状态</th>
-                            <th data-hide="phone">创建员工</th>
+
                             <th class="text-right">操作</th>
 
                         </tr>
@@ -125,13 +125,13 @@
                                 {{room.roomNum}}
                             </td>
                             <td>
+                                {{room.floorNum}}
+                            </td>
+                            <td>
                                 {{room.unitNum}}
                             </td>
                             <td>
                                 {{room.layer}}
-                            </td>
-                            <td>
-                                {{room.section}}
                             </td>
                             <td>
                                 {{room.apartment}}
@@ -144,9 +144,6 @@
                             </td>
                             <td>
                                 {{vc.component.showState(room.state)}}
-                            </td>
-                            <td>
-                                {{room.userName}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">

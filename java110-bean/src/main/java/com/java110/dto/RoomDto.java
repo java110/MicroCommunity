@@ -213,4 +213,6 @@ public class RoomDto extends PageDto implements Serializable {
     public void setRoomIds(String[] roomIds) {
         this.roomIds = roomIds;
     }
+
+
 }
