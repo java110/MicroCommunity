@@ -34,8 +34,8 @@
                 vc.component.addRoomBindingInfo.index = vc.component.addRoomBindingInfo.$step.getIndex();
 
                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
-vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
-vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
+                vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+                vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
             },
             _nextStep:function(){
@@ -48,8 +48,8 @@ vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
                 vc.component.addRoomBindingInfo.index = vc.component.addRoomBindingInfo.$step.getIndex();
 
                  vc.emit('viewFloorInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
-vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
-vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
+                vc.emit('viewUnitInfo', 'onIndex', vc.component.addRoomBindingInfo.index);
+                vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
             },
             _finishStep:function(){
@@ -77,7 +77,9 @@ vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
                            vc.message('处理成功',true);
                            //关闭model
-                           vc.jumpToPage("/flow/roomFlow?" + vc.objToGetParam(JSON.parse(json)));
+                           var _tmpResJson = JSON.parse(json);
+                           _tmpResJson[floorName] = vc.component._getFloorName();
+                           vc.jumpToPage("/flow/roomFlow?" + vc.objToGetParam(_tmpResJson));
                            return ;
                        }
                        vc.message(json);
@@ -87,6 +89,18 @@ vc.emit('addRoomView', 'onIndex', vc.component.addRoomBindingInfo.index);
 
                        vc.message(errInfo);
                     });
+            },
+
+            _getFloorName:function(){
+                var _tmpInfos = vc.component.addRoomBindingInfo.infos;
+
+                for(var _tmpIndex = 0 ; _tmpIndex < _tmpInfos.length; _tmpIndex ++){
+                    if(_tmpInfos[_tmpIndex].flowComponent == 'viewFloorInfo'){
+                        return _tmpInfos[_tmpIndex].floorName;
+                    }
+                }
+
+                return "";
             }
         }
     });

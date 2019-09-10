@@ -13,7 +13,7 @@
                 index:0,
                 flowComponent:'viewFloorInfo',
                 floorId:'',
-                name:'',
+                floorName:'',
                 floorNum:'',
                 remark:'',
 
