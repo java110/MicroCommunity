@@ -5,19 +5,23 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;" v-on:click="_moreCondition()">更多</button>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">{{serviceImplManageInfo.moreCondition == true?'隐藏':'更多'}}
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入业务类型" v-model="serviceImplManageInfo.conditions.businessTypeCd" class=" form-control">
+                                <input type="text" placeholder="请输入业务类型"
+                                       v-model="serviceImplManageInfo.conditions.businessTypeCd" class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入业务名称" v-model="serviceImplManageInfo.conditions.name" class=" form-control">
+                                <input type="text" placeholder="请输入业务名称" v-model="serviceImplManageInfo.conditions.name"
+                                       class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -37,7 +41,8 @@
                     <div class="row">
                         <div class="col-sm-4" v-if="serviceImplManageInfo.moreCondition == true">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入kafka主题" v-model="serviceImplManageInfo.conditions.messageTopic" class=" form-control">
+                                <input type="text" placeholder="请输入kafka主题"
+                                       v-model="serviceImplManageInfo.conditions.messageTopic" class=" form-control">
                             </div>
                         </div>
                     </div>
@@ -85,10 +90,14 @@
                             <td class="text-center">{{serviceImpl.invokeType}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditServiceImplModel(serviceImpl)">修改</button>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditServiceImplModel(serviceImpl)">修改
+                                    </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteServiceImplModel(serviceImpl)">删除</button>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeleteServiceImplModel(serviceImpl)">删除
+                                    </button>
                                 </div>
                             </td>
 
