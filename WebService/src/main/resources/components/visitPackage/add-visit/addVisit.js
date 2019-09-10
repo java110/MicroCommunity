@@ -15,7 +15,6 @@
                 visitTime: '',
                 departureTime: '',
                 visitCase: '',
-
             }
         },
         _initMethod: function () {
@@ -50,21 +49,9 @@
                             errInfo: "访客性别不能为空"
                         },
                         {
-                            limit: "maxin",
-                            param: "2,10",
-                            errInfo: "访客姓名必须在2至10字符之间"
-                        },
-                    ],
-                    'addVisitInfo.visitGender': [
-                        {
-                            limit: "required",
+                            limit: "num",
                             param: "",
-                            errInfo: "访客性别不能为空"
-                        },
-                        {
-                            limit: "maxin",
-                            param: "2,10",
-                            errInfo: "访客姓名必须在2至10字符之间"
+                            errInfo: "性别错误"
                         },
                     ],
                     'addVisitInfo.phoneNumber': [
@@ -74,9 +61,9 @@
                             errInfo: "访客联系方式不能为空"
                         },
                         {
-                            limit: "maxin",
-                            param: "11",
-                            errInfo: "访客联系方式必须在11个字符之间"
+                            limit: "phone",
+                            param: "",
+                            errInfo: "不是有效的手机号"
                         },
                     ],
                     'addVisitInfo.visitTime': [
@@ -86,17 +73,17 @@
                             errInfo: "访客拜访时间不能为空"
                         },
                         {
-                            limit: "maxin",
-                            param: "2,10",
-                            errInfo: "访客拜访时间必须在2至10字符之间"
+                            limit: "date",
+                            param: "",
+                            errInfo: "访客拜访时间格式错误，如：2019-09-11"
                         },
                     ],
                     'addVisitInfo.departureTime': [
-                        {
-                            limit: "maxin",
-                            param: "2,10",
-                            errInfo: "访客拜访时间必须在2至10字符之间"
-                        },
+                       {
+                           limit: "date",
+                           param: "",
+                           errInfo: "访客离开时间格式错误，如：2019-09-11"
+                       },
                     ],
                     'addVisitInfo.visitCase': [
                         {

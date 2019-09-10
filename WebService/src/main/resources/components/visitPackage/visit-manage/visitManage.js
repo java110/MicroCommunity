@@ -13,8 +13,11 @@
                 moreCondition:false,
                 name:'',
                 conditions:{
+                    vId:'',
                     name:'',
-
+                    visitGender:'',
+                    visitTime:'',
+                    departureTime:''
                 }
             }
         },

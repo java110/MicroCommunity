@@ -5,15 +5,58 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">{{visitManageInfo.moreCondition == true?'隐藏':'更多'}}
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入访客姓名" v-model="visitManageInfo.conditions.name" class=" form-control">
-                            </div>                        </div></div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入访客ID" v-model="visitManageInfo.conditions.vId"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入访客姓名" v-model="visitManageInfo.conditions.name"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <select class="form-control-sm form-control input-s-sm inline"
+                                        v-model="visitManageInfo.conditions.visitGender">
+                                    <option selected value="">请选择访客性别</option>
+                                    <option value="1">男</option>
+                                    <option value="0">女</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryVisitMethod()"><i
+                                    class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="row"  v-if="visitManageInfo.moreCondition == true">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请选择访客拜访时间" v-model="visitManageInfo.conditions.visitTime"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请选择访客离开时间" v-model="visitManageInfo.conditions.departureTime"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -39,9 +82,8 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">访客记录ID</th>
+                            <th class="text-center">访客记录ID</th>
                             <th class="text-center">访客姓名</th>
-                            <th class="text-center">访客性别</th>
                             <th class="text-center">访客性别</th>
                             <th class="text-center">访客联系方式</th>
                             <th class="text-center">访客拜访时间</th>
@@ -53,19 +95,22 @@
                         </thead>
                         <tbody>
                         <tr v-for="visit in visitManageInfo.visits">
-                                                        <td class="text-center">{{visit.vId}}</td>
+                            <td class="text-center">{{visit.vId}}</td>
                             <td class="text-center">{{visit.name}}</td>
-                            <td class="text-center">{{visit.visitGender}}</td>
                             <td class="text-center">{{visit.visitGender}}</td>
                             <td class="text-center">{{visit.phoneNumber}}</td>
                             <td class="text-center">{{visit.visitTime}}</td>
                             <td class="text-center">{{visit.departureTime}}</td>
-                            <td class="text-center"><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditVisitModel(visit)">修改</button>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openEditVisitModel(visit)">修改
+                                    </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteVisitModel(visit)">删除</button>
-                                </div></td>
+                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteVisitModel(visit)">删除
+                                    </button>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -84,7 +129,6 @@
         </div>
     </div>
 
-    
 
     <vc:create name="addVisit"
                callBackListener=""
