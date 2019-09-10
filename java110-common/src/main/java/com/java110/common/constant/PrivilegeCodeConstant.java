@@ -50,6 +50,7 @@ public final class PrivilegeCodeConstant {
     public static final String PRIVILEGE_CAR = "500201906019";
 
 
+
     //停车费用配置权限
     public static final String PRIVILEGE_PARKING_SPACE_CONFIG_FEE = "500201904021";
 
@@ -73,6 +74,10 @@ public final class PrivilegeCodeConstant {
     public static final String MENU_MANAGE = "502019082521880003";
 
     public static final String BASE_PRIVILEGE = "500201908036";
+    /**
+     * 访客相关权限常量
+     */
+    public static final String AGENT_HAS_LIST_VISIT="500201907033";
 
     /**
      * 服务提供权限编码

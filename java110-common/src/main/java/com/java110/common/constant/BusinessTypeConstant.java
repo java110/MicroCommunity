@@ -432,9 +432,18 @@ public class BusinessTypeConstant {
      * 修改BUSINESSTYPE方法编码
      */
     public static final String BUSINESS_TYPE_UPDATE_BUSINESSTYPE_INFO = "900100040002";
-
-
-
-
+    /**
+     * 保存访客信息
+     * 11开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_VISIT="110100030001";
+    /**
+     *  修改访客信息  11开头  4修改
+     */
+    public static final String BUSINESS_TYPE_UPDATE_VISIT="110100040001";
+    /**
+     *  删除访客信息  11开头  5修改
+     */
+    public static final String BUSINESS_TYPE_DELETE_VISIT ="110100050001";
 
 }

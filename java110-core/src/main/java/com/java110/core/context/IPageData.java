@@ -91,7 +91,7 @@ import org.springframework.http.ResponseEntity;
      * @param componentCode 组件编码
      * @param componentMethod 组件方法
      * @param url 请求url
-     * @param sessionId 回话ID
+     * @param sessionId 会话ID
      * @return IPageData对象
      * @throws IllegalArgumentException 参数错误异常
      */

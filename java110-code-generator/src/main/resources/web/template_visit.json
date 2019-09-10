@@ -1,0 +1,91 @@
+{
+  "templateName":"访客登记",
+  "templateCode":"visit",
+  "templateKey":"vId",
+  "templateKeyName":"访客记录ID",
+  "searchCode": "name",
+  "searchName": "访客姓名",
+  "conditions": [
+    {
+      "name": "访客姓名",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "like"
+    }
+  ],
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"访客姓名",
+      "desc":"必填，请填写访客姓名",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"访客姓名必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"visitGender",
+      "cnCode":"访客性别",
+      "desc":"必填，请填写访客姓名",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"访客姓名必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"phoneNumber",
+      "cnCode":"访客联系方式",
+      "desc":"必填，请填写访客联系方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"11",
+      "limitErrInfo":"访客联系方式必须在11个字符之间",
+      "show": true
+    },
+    {
+      "code":"visitTime",
+      "cnCode":"访客拜访时间",
+      "desc":"必填，请填写访客拜访时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"访客拜访时间必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"departureTime",
+      "cnCode":"访客离开时间",
+      "desc":"必填，请填写访客拜访时间",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,10",
+      "limitErrInfo":"访客拜访时间必须在2至10字符之间",
+      "show": true
+    },
+    {
+      "code":"visitCase",
+      "cnCode":"描述",
+      "desc":"可填，请填写描述",
+      "required":false,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注内容不能超过200",
+      "show": false
+    }
+  ]
+}

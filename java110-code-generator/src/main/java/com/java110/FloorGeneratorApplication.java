@@ -18,6 +18,7 @@ public class FloorGeneratorApplication {
     }
     /**
      *  代码生成器 入口方法
+     *
      * @param args 参数
      */
     public static void main(String[] args) {
