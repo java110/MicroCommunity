@@ -6,12 +6,12 @@
 
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessVisitInfo" parameterType="Map">
-           insert into business_visit_info(
-v_id,departure_time,visit_time,phoneNumber,operate,name,visit_case,visit_gender,owner_id,userId
-) values (
-#{vId},#{departureTime},#{visitTime},#{phoneNumber},#{operate},#{name},#{visitCase},#{visitGender},#{ownerId},#{userId}
-)
-       </insert>
+        insert into business_visit_info(
+        v_id,departure_time,visit_time,phoneNumber,operate,name,visit_case,visit_gender,owner_id,userId
+        ) values (
+        #{vId},#{departureTime},#{visitTime},#{phoneNumber},#{operate},#{name},#{visitCase},#{visitGender},#{ownerId},#{userId}
+        )
+    </insert>
 
 
     <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->

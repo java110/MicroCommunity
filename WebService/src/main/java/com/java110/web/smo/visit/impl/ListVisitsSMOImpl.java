@@ -42,7 +42,7 @@ public class ListVisitsSMOImpl extends AbstractComponentSMO implements IListVisi
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        result.setUserId("");
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 

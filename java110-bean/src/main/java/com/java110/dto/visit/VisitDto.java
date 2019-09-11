@@ -119,4 +119,12 @@ public class VisitDto extends PageDto implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String getvId() {
+        return vId;
+    }
+
+    public void setvId(String vId) {
+        this.vId = vId;
+    }
 }
