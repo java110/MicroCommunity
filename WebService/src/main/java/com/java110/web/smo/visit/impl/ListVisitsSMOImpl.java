@@ -52,7 +52,6 @@ public class ListVisitsSMOImpl extends AbstractComponentSMO implements IListVisi
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
-        System.out.println("请求返回的数据是。。。。。。   "+responseEntity.toString());
         return responseEntity;
     }
 

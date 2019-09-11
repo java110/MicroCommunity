@@ -91,7 +91,7 @@ Assert.hasKeyAndValue(reqJson, "visitTime", "必填，请填写访客拜访时�
         JSONObject businessVisit = new JSONObject();
         businessVisit.putAll(paramInJson);
         businessVisit.put("vId", "-1");
-        //计算 应收金额
+        //计算 应收金额businessVisit
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessVisit", businessVisit);
         return business;
     }
