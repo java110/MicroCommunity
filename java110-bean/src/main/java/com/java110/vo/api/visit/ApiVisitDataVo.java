@@ -8,6 +8,7 @@ public class ApiVisitDataVo implements Serializable {
     private String vId;
     private String name;
     private String visitGender;
+    private String visitGenderName;
     private String phoneNumber;
     private String visitTime;
     private String departureTime;
@@ -69,5 +70,19 @@ public class ApiVisitDataVo implements Serializable {
         this.visitCase = visitCase;
     }
 
+    public String getvId() {
+        return vId;
+    }
 
+    public void setvId(String vId) {
+        this.vId = vId;
+    }
+
+    public String getVisitGenderName() {
+        return visitGenderName;
+    }
+
+    public void setVisitGenderName(String visitGenderName) {
+        this.visitGenderName = visitGenderName;
+    }
 }

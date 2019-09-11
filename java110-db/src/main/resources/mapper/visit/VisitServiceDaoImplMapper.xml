@@ -104,7 +104,16 @@
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
         select t.v_id,t.v_id vId,t.departure_time,t.departure_time departureTime,t.visit_time,t.visit_time
         visitTime,t.phone_number phoneNumber,t.name,t.visit_case,t.visit_case visitCase,t.status_cd,t.status_cd
-        statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id userId,t.b_id,
+        statusCd,t.visit_gender,t.visit_gender visitGender,
+        (CASE
+        WHEN t.`visit_gender` = '1'
+        THEN '男'
+        WHEN t.visit_gender = '0'
+        THEN '女'
+        ELSE
+        '未知'
+        END) visitGenderName ,
+        t.owner_id,t.owner_id ownerId,t.user_id userId,t.b_id,
         t.b_id bId
         from visit_info t
         where 1 =1
