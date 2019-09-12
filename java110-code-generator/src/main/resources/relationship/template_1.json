@@ -32,16 +32,16 @@
       "code":"owner",
       "flowKey": "ownerId",
       "cnCode":"填写业主信息",
-      "vcName":"addOwnerView",
+      "vcName":"addOwner",
       "businessName": "businessOwner",
       "businessType": "BUSINESS_TYPE_SAVE_OWNER_INFO",
       "existsComponent": false
     }
   ],
   "components": {
-      "addOwnerView": {
+      "addOwner": {
         "templateName":"添加业主",
-        "templateCode":"addOwnerView",
+        "templateCode":"addOwner",
         "package": "ownerPackage",
         "columns":[
           {
