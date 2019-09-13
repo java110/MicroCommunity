@@ -10,6 +10,7 @@
                 rooms:[],
                 _currentRoomNum:'',
                 _currentFloorNum:'',
+                floorNumInputReadonly:false
             }
         },
         _initMethod:function(){
@@ -21,6 +22,13 @@
                 $('#searchRoomModel').modal('show');
                 vc.component._refreshSearchRoomData();
                 //vc.component._loadAllRoomInfo(1,10);
+            });
+
+            vc.on('searchRoom','listenerFloorInfo',function(_floorInfo){
+                vc.component.searchRoomInfo._currentFloorNum = _floorInfo.floorNum;
+                vc.component.searchRoomInfo.floorNumInputReadonly = true;
+                vc.component.searchRooms();
+
             });
         },
         methods:{

@@ -1,4 +1,5 @@
-<div id = "chooseFloorModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="chooseFloorModelLabel" aria-hidden="true" >
+<div id="chooseFloorModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="chooseFloorModelLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,12 +15,20 @@
                             <div class="row">
 
                                 <div class="col-sm-7 m-b-xs">
+                                    <div class="input-group">
+                                        <input placeholder="输入楼栋编码" type="text"
+                                               v-model="chooseFloorInfo._currentFloorNum"
+                                               class="form-control form-control-sm">
+                                    </div>
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input placeholder="输入楼名称" type="text" v-model="chooseFloorInfo._currentFloorName" class="form-control form-control-sm">
+                                        <input placeholder="输入楼栋名称" type="text"
+                                               v-model="chooseFloorInfo._currentFloorName"
+                                               class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="queryFloors()">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                        v-on:click="queryFloors()">查询</button>
                                             </span>
                                     </div>
                                 </div>
@@ -27,26 +36,27 @@
                             <div class="table-responsive" style="margin-top:15px">
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
-                                                                        <th class="text-center">楼ID</th>
-                            <th class="text-center">楼名称</th>
-                            <th class="text-center">楼编号</th>
-                            <th class="text-center">备注</th>
-                            <th class="text-center">操作</th>
+                                    <tr>
+                                        <th class="text-center">楼ID</th>
+                                        <th class="text-center">楼名称</th>
+                                        <th class="text-center">楼编号</th>
+                                        <th class="text-center">备注</th>
+                                        <th class="text-center">操作</th>
 
-                                        </tr>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="floor in chooseFloorInfo.floors">
-                                                                        <td class="text-center">{{floor.floorId}}</td>
-                            <td class="text-center">{{floor.floorName}}</td>
-                            <td class="text-center">{{floor.floorNum}}</td>
-                            <td class="text-center">{{floor.remark}}</td>
+                                    <tr v-for="floor in chooseFloorInfo.floors">
+                                        <td class="text-center">{{floor.floorId}}</td>
+                                        <td class="text-center">{{floor.floorName}}</td>
+                                        <td class="text-center">{{floor.floorNum}}</td>
+                                        <td class="text-center">{{floor.remark}}</td>
 
-                                            <td>
-                                                <button class="btn btn-primary btn-xs" v-on:click="chooseFloor(floor)">选择</button>
-                                            </td>
-                                        </tr>
+                                        <td>
+                                            <button class="btn btn-primary btn-xs" v-on:click="chooseFloor(floor)">选择
+                                            </button>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

@@ -14,8 +14,12 @@
             vc.component._initStep();
         },
         _initEvent:function(){
-            vc.on("addOwner", "notify", function(_info){
+            vc.on("addOwnerBinding", "notify", function(_info){
                 vc.component.addOwnerInfo.infos[vc.component.addOwnerInfo.index] = _info;
+
+                if(vc.component.addOwnerInfo.index == 0){
+                    vc.emit('searchRoom','listenerFloorInfo',_info);
+                }
             });
 
         },
@@ -34,8 +38,8 @@
                 vc.component.addOwnerInfo.index = vc.component.addOwnerInfo.$step.getIndex();
 
                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addOwnerInfo.index);
-vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerInfo.index);
-vc.emit('addOwner', 'onIndex', vc.component.addOwnerInfo.index);
+                vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerInfo.index);
+                vc.emit('addOwnerBinding', 'onIndex', vc.component.addOwnerInfo.index);
 
             },
             _nextStep:function(){
@@ -48,8 +52,8 @@ vc.emit('addOwner', 'onIndex', vc.component.addOwnerInfo.index);
                 vc.component.addOwnerInfo.index = vc.component.addOwnerInfo.$step.getIndex();
 
                  vc.emit('viewFloorInfo', 'onIndex', vc.component.addOwnerInfo.index);
-vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerInfo.index);
-vc.emit('addOwner', 'onIndex', vc.component.addOwnerInfo.index);
+                vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerInfo.index);
+                vc.emit('addOwnerBinding', 'onIndex', vc.component.addOwnerInfo.index);
 
             },
             _finishStep:function(){
@@ -62,6 +66,7 @@ vc.emit('addOwner', 'onIndex', vc.component.addOwnerInfo.index);
                 }
 
                 var param = {
+                    communityId:vc.getCurrentCommunity().communityId,
                     data:vc.component.addOwnerInfo.infos
                 }
 

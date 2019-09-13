@@ -7,19 +7,20 @@
     <!-- 选择 应用信息 -->
    <div v-if="addOwnerInfo.index == 0">
         <vc:create name="viewFloorInfo"
-                   callBackListener="addOwner"
+                   callBackListener="addOwnerBinding"
                    callBackFunction="notify"
+                   showAddFloorButton="false"
         ></vc:create>
     </div>
 <div v-if="addOwnerInfo.index == 1">
         <vc:create name="sellRoomSelectRoom"
-                   callBackListener="addOwner"
+                   callBackListener="addOwnerBinding"
                    callBackFunction="notify"
         ></vc:create>
     </div>
 <div v-if="addOwnerInfo.index == 2">
-        <vc:create name="addOwner"
-                   callBackListener="addOwner"
+        <vc:create name="addOwnerView"
+                   callBackListener="addOwnerBinding"
                    callBackFunction="notify"
         ></vc:create>
     </div>

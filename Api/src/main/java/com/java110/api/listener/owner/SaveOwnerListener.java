@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.common.constant.*;
 import com.java110.common.util.Assert;
+import com.java110.common.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -71,6 +72,15 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
             //小区楼添加到小区中
             businesses.add(addCommunityMember(paramObj));
+        }
+
+        //有房屋信息，则直接绑定房屋和 业主的关系
+        if(paramObj.containsKey("roomId")){
+            //添加单元信息
+            businesses.add(sellRoom(paramObj, dataFlowContext));
+
+            //添加物业费用信息
+            businesses.add(addPropertyFee(paramObj, dataFlowContext));
         }
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
@@ -149,6 +159,59 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         return business;
     }
 
+
+    /**
+     * 售卖房屋信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(paramInJson);
+        businessUnit.put("relId", "-1");
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
+
+        return business;
+    }
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
+        businessUnit.put("amount", "-1.00");
+        businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("communityId", paramInJson.getString("communityId"));
+        businessUnit.put("payerObjId", paramInJson.getString("roomId"));
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
+
+        return business;
+    }
+
     /**
      * 数据校验
      * <p>
@@ -170,6 +233,18 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
+
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
+
+        if(paramObj.containsKey("roomId")){
+
+            Assert.jsonObjectHaveKey(paramObj, "state", "请求报文中未包含state节点");
+            Assert.jsonObjectHaveKey(paramObj, "storeId", "请求报文中未包含storeId节点");
+
+            Assert.hasLength(paramObj.getString("roomId"), "roomId不能为空");
+            Assert.hasLength(paramObj.getString("state"), "state不能为空");
+            Assert.hasLength(paramObj.getString("storeId"), "storeId不能为空");
+        }
     }
 
 

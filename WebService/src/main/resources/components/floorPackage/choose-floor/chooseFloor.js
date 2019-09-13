@@ -8,6 +8,7 @@
             chooseFloorInfo:{
                 floors:[],
                 _currentFloorName:'',
+                _currentFloorNum:'',
             }
         },
         _initMethod:function(){
@@ -26,7 +27,8 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        name:_name
+                        name:_name,
+                        floorNum:vc.component.chooseFloorInfo._currentFloorNum
                     }
                 };
 

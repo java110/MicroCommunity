@@ -105,6 +105,10 @@ vc 校验 工具类 -method
             var regDate = /^(\d{4})-(\d{2})-(\d{2})$/;
             return regDate.test(str);
         },
+        dateTime:function(str){
+            var reDateTime = /^(?:19|20|30)[0-9][0-9]-(?:(?:0[1-9])|(?:1[0-2]))-(?:(?:[0-2][1-9])|(?:[1-3][0-1])) (?:(?:[0-2][0-3])|(?:[0-1][0-9])):[0-5][0-9]:[0-5][0-9]$/;
+            return reDateTime.test(reDateTime);
+        },
         /**
             金额校验
         **/
@@ -207,6 +211,9 @@ vc 校验 工具类 -method
 
                     if(configObj.limit == 'date'){
                         validate.setState(validate.date(tmpDataObj),configObj.errInfo);
+                    }
+                    if(configObj.limit == 'dateTime'){
+                        validate.setState(validate.dateTime(tmpDataObj),configObj.errInfo);
                     }
 
                     if(configObj.limit == 'money'){

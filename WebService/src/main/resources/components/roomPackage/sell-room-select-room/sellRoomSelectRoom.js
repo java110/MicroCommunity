@@ -4,8 +4,13 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+           callBackListener:vc.propTypes.string,
+           callBackFunction:vc.propTypes.string
+        },
         data:{
             roomInfo:{
+                flowComponent:'sellRoomSelectRoom',
                 roomId:"",
                 roomNum:"",
                 unitNum:"",
@@ -23,7 +28,7 @@
         _initEvent:function(){
             vc.on('sellRoomSelectRoom','chooseRoom',function(_room){
                 vc.component.roomInfo = _room;
-                vc.emit('sellRoom','notify',_room);
+                vc.emit($props.callBackListener,$props.callBackFunction,_room);
             });
 
         },

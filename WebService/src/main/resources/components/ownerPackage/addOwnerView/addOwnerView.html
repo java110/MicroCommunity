@@ -10,36 +10,38 @@
             <div class="ibox-content">
 
                 <div class="form-group row">
-         <label class="col-sm-2 col-form-label">名称</label>
-         <div class="col-sm-10">
-           <input v-model="addOwnerViewInfo.name"                   type="text" placeholder="必填，请填写名称" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">性别</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="addOwnerViewInfo.sex">
-         <option selected  disabled value="">必填，请选择性别</option>
-         <option  value="1">男</option>
-<option  value="0">女</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">年龄</label>
-         <div class="col-sm-10">
-           <input v-model="addOwnerViewInfo.age"                   type="text" placeholder="必填，请填写年龄" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">手机</label>
-         <div class="col-sm-10">
-<textarea  placeholder="选填，请填写手机" class="form-control" v-model="addOwnerViewInfo.link"></textarea>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">备注</label>
-         <div class="col-sm-10">
-<textarea  placeholder="选填，请填写备注" class="form-control" v-model="addOwnerViewInfo.remark"></textarea>         </div>
-</div>
+                    <label class="col-sm-2 col-form-label">名称</label>
+                    <div class="col-sm-10">
+                        <input v-model="addOwnerViewInfo.name" type="text" placeholder="必填，请填写名称" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">性别</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select" v-model="addOwnerViewInfo.sex">
+                            <option selected disabled value="">必填，请选择性别</option>
+                            <option value="1">男</option>
+                            <option value="0">女</option>
+                        </select></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">年龄</label>
+                    <div class="col-sm-10">
+                        <input v-model="addOwnerViewInfo.age" type="number" placeholder="必填，请填写年龄" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">手机</label>
+                    <div class="col-sm-10">
+                        <input placeholder="选填，请填写手机" type="tel" class="form-control"
+                                  v-model="addOwnerViewInfo.link"></input></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">备注</label>
+                    <div class="col-sm-10">
+                        <textarea cols="5" placeholder="选填，请填写备注" class="form-control"
+                                  v-model="addOwnerViewInfo.remark"></textarea></div>
+                </div>
 
             </div>
         </div>

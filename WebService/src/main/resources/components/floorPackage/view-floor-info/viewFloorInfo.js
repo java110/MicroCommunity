@@ -6,12 +6,14 @@
     vc.extends({
         propTypes: {
            callBackListener:vc.propTypes.string, //父组件名称
-           callBackFunction:vc.propTypes.string //父组件监听方法
+           callBackFunction:vc.propTypes.string, //父组件监听方法
+           showAddFloorButton:vc.propTypes.string = 'true'
         },
         data:{
             viewFloorInfo:{
                 index:0,
                 flowComponent:'viewFloorInfo',
+                showAddFloorButton:$props.showAddFloorButton,
                 floorId:'',
                 floorName:'',
                 floorNum:'',

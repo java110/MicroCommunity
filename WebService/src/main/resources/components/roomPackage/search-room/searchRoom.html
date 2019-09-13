@@ -1,4 +1,5 @@
-<div id = "searchRoomModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchRoomModelLabel" aria-hidden="true" >
+<div id="searchRoomModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchRoomModelLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,14 +16,19 @@
 
                                 <div class="col-sm-6 m-b-xs">
                                     <div class="input-group">
-                                        <input placeholder="输入小区楼编号，必填" type="text" v-model="searchRoomInfo._currentFloorNum" class="form-control form-control-sm">
+                                        <input placeholder="输入小区楼编号，必填" type="text"
+                                               v-bind:readonly="searchRoomInfo.floorNumInputReadonly"
+                                               v-model="searchRoomInfo._currentFloorNum"
+                                               class="form-control form-control-sm">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="input-group">
-                                        <input placeholder="输入房屋编号" type="text" v-model="searchRoomInfo._currentRoomNum" class="form-control form-control-sm">
+                                        <input placeholder="输入房屋编号" type="text" v-model="searchRoomInfo._currentRoomNum"
+                                               class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="searchRooms()">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                        v-on:click="searchRooms()">查询</button>
                                             </span>
                                     </div>
                                 </div>
@@ -66,7 +72,8 @@
                                             {{room.userName}}
                                         </td>
                                         <td>
-                                            <button class="btn btn-primary btn-xs" v-on:click="chooseRoom(room)">选择</button>
+                                            <button class="btn btn-primary btn-xs" v-on:click="chooseRoom(room)">选择
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
