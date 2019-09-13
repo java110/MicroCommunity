@@ -76,6 +76,7 @@ public class QueryOwnersListener extends AbstractServiceApiDataFlowListener {
 
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
 
+
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }

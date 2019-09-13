@@ -6,7 +6,13 @@
             listOwnerInfo:{
                 owners:[],
                 total:0,
-                records:1
+                records:1,
+                conditions:{
+                    ownerTypeCd:'1001',
+                    ownerId:'',
+                    name:'',
+                    link:''
+                }
             }
         },
         _initMethod:function(){
@@ -22,13 +28,12 @@
         },
         methods:{
             _listOwnerData:function(_page,_row){
+
+                vc.component.listOwnerInfo.conditions.page= _page;
+                vc.component.listOwnerInfo.conditions.row= _row;
+                vc.component.listOwnerInfo.conditions.communityId= vc.getCurrentCommunity().communityId;
                 var param = {
-                    params:{
-                        page:_page,
-                        row:_row,
-                        communityId:vc.getCurrentCommunity().communityId,
-                        ownerTypeCd:'1001'
-                    }
+                    params:vc.component.listOwnerInfo.conditions
                 }
 
                //发送get请求
@@ -61,6 +66,9 @@
             },
             _openEditOwnerModel:function(_owner){
                 vc.emit('editOwner','openEditOwnerModal',_owner);
+            },
+            _queryOwnerMethod:function(){
+                vc.component._listOwnerData(DEFAULT_PAGE,DEFAULT_ROWS);
             }
         }
     })

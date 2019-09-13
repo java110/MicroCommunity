@@ -62,7 +62,7 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "110100030001";
 
-    /**
+    /**tia
      * 修改业主
      */
     public static final String BUSINESS_TYPE_UPDATE_OWNER_INFO = "110100040001";
@@ -436,14 +436,14 @@ public class BusinessTypeConstant {
      * 保存访客信息
      * 11开头  3保存
      */
-    public static final String BUSINESS_TYPE_SAVE_VISIT="110100030001";
+    public static final String BUSINESS_TYPE_SAVE_VISIT="120100030001";
     /**
      *  修改访客信息  11开头  4修改
      */
-    public static final String BUSINESS_TYPE_UPDATE_VISIT="110100040001";
+    public static final String BUSINESS_TYPE_UPDATE_VISIT="120100040001";
     /**
      *  删除访客信息  11开头  5修改
      */
-    public static final String BUSINESS_TYPE_DELETE_VISIT ="110100050001";
+    public static final String BUSINESS_TYPE_DELETE_VISIT ="120100050001";
 
 }

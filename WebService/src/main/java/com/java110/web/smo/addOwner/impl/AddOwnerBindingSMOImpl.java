@@ -39,9 +39,9 @@ public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAdd
 
         Assert.hasKeyByFlowData(infos, "viewFloorInfo", "floorId", "必填，未选择楼栋");
         Assert.hasKeyByFlowData(infos, "sellRoomSelectRoom", "roomId", "必填，未选择房屋");
-        Assert.hasKeyByFlowData(infos, "addOwnerBinding", "name", "必填，名称不能为空");
-        Assert.hasKeyByFlowData(infos, "addOwnerBinding", "sex", "必填，请选择性别");
-        Assert.hasKeyByFlowData(infos, "addOwnerBinding", "age", "必填，请填写年龄");
+        Assert.hasKeyByFlowData(infos, "addOwnerView", "name", "必填，名称不能为空");
+        Assert.hasKeyByFlowData(infos, "addOwnerView", "sex", "必填，请选择性别");
+        Assert.hasKeyByFlowData(infos, "addOwnerView", "age", "必填，请填写年龄");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.ADD_OWNER);
@@ -56,7 +56,7 @@ public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAdd
         JSONArray infos = paramIn.getJSONArray("data");
         //JSONObject viewFloorInfo = getObj(infos, "viewFloorInfo");
         JSONObject sellRoomSelectRoom = getObj(infos, "sellRoomSelectRoom");
-        JSONObject addOwner = getObj(infos, "addOwner");
+        JSONObject addOwner = getObj(infos, "addOwnerView");
 
         String communityId = paramIn.getString("communityId");
         addOwner.put("ownerTypeCd", "1001");

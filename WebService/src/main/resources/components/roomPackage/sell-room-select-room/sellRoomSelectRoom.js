@@ -27,8 +27,8 @@
         },
         _initEvent:function(){
             vc.on('sellRoomSelectRoom','chooseRoom',function(_room){
-                vc.component.roomInfo = _room;
-                vc.emit($props.callBackListener,$props.callBackFunction,_room);
+                vc.copyObject(_room, vc.component.roomInfo);
+                vc.emit($props.callBackListener,$props.callBackFunction,vc.component.roomInfo);
             });
 
         },

@@ -1,4 +1,5 @@
-<div id = "searchOwnerModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchOwnerModelLabel" aria-hidden="true" >
+<div id="searchOwnerModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchOwnerModelLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,13 +15,20 @@
                             <div class="row">
 
                                 <div class="col-sm-7 m-b-xs">
-
+                                    <div class="input-group">
+                                        <input placeholder="输入业主ID" type="text"
+                                               v-model="searchOwnerInfo._currentOwnerId"
+                                               class="form-control form-control-sm">
+                                    </div>
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input placeholder="输入业主名称" type="text" v-model="searchOwnerInfo._currentOwnerName" class="form-control form-control-sm">
+                                        <input placeholder="输入业主名称" type="text"
+                                               v-model="searchOwnerInfo._currentOwnerName"
+                                               class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="searchOwners()">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                        v-on:click="searchOwners()">查询</button>
                                             </span>
                                     </div>
                                 </div>
@@ -64,7 +72,8 @@
                                             {{owner.remark}}
                                         </td>
                                         <td>
-                                            <button class="btn btn-primary btn-xs" v-on:click="chooseOwner(owner)">选择</button>
+                                            <button class="btn btn-primary btn-xs" v-on:click="chooseOwner(owner)">选择
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
