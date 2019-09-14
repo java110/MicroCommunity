@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOwnerMethod()"><i
-                                    class="glyphicon glyphicon-search" ></i> 查询
+                                    class="glyphicon glyphicon-search"></i> 查询
                             </button>
                         </div>
 
@@ -93,13 +93,26 @@
                                 {{owner.userName}}
                             </td>
                             <td class="text-right">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditOwnerModel(owner)">修改
+                                <!--<div class="btn-group">
+                                    <button class="btn-white btn btn-xs "
+                                            v-on:click="_openEditOwnerModel(owner)">修改
                                     </button>
-                                </div>
+                                </div>-->
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDelOwnerModel(owner)">删除
+                                    <button class="btn-white btn btn-xs dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">变更业主
                                     </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#"
+                                           v-on:click="_openEditOwnerModel(owner)">修改业主</a>
+                                        <a class="dropdown-item" href="#"
+                                           v-on:click="_openDelOwnerModel(owner)">删除业主</a>
+                                        <a class="dropdown-item" href="#">添加房屋</a>
+                                        <a class="dropdown-item" href="#">删除房屋</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">车位出租</a>
+                                        <a class="dropdown-item" href="#">车位出售</a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -119,10 +132,10 @@
         </div>
     </div>
 
-  <!--  <vc:create
-            name="addOwnerBinding"
+    <vc:create
+            name="addOwner"
             notifyLoadDataComponentName="listOwner"
-    ></vc:create>-->
+    ></vc:create>
     <vc:create
             name="editOwner"
             notifyLoadDataComponentName="listOwner"

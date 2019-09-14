@@ -30,7 +30,7 @@
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
                         name:_name,
-                        ownerId:vc.component.searchOwnerInfo._currentOwnerId
+                        ownerId:vc.component.searchOwnerInfo._currentOwnerId,
                         ownerTypeCd:'1001'
                     }
                 };
