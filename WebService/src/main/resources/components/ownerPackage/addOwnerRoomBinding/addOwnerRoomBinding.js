@@ -40,7 +40,7 @@
                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
                 vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
                 vc.emit('viewOwnerInfo', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
-                if(vc.component.hireParkingSpaceInfo.index == 2){
+                if(vc.component.addOwnerRoomBindingInfo.index == 2){
                     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
                 }
 
@@ -57,7 +57,7 @@
                  vc.emit('viewFloorInfo', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
                 vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
                 vc.emit('viewOwnerInfo', 'onIndex', vc.component.addOwnerRoomBindingInfo.index);
-                if(vc.component.hireParkingSpaceInfo.index == 2){
+                if(vc.component.addOwnerRoomBindingInfo.index == 2){
                     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
                 }
 
