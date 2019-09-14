@@ -5,10 +5,12 @@
 
     vc.extends({
         propTypes: {
-            callBackComponent:vc.propTypes.string
+            callBackComponent:vc.propTypes.string,
+            callBackFunction:vc.propTypes.string
         },
         data:{
             parkingSpaceInfo:{
+                flowComponent:'viewSelectParkingSpace',
                 num:'',
                 typeCd:'',
                 area:'',
@@ -23,8 +25,9 @@
         },
         _initEvent:function(){
             vc.on('viewSelectParkingSpace','chooseParkingSpace',function(_parkingSpace){
-                vc.component.parkingSpaceInfo = _parkingSpace;
-                vc.emit($props.callBackComponent,'notify',_parkingSpace);
+                vc.copyObject(_parkingSpace, vc.component.parkingSpaceInfo);
+                vc.emit($props.callBackComponent,$props.callBackFunction,vc.component.parkingSpaceInfo);
+                vc.emit('hireParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
             });
 
         },

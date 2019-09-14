@@ -2,16 +2,19 @@
 
     <vc:create name="addCar"
                callBackComponent="sellCar"
+               callBackFunction="notify"
     ></vc:create>
 
     <!-- 选择 业主信息 -->
     <vc:create name="sellRoomSelectOwner"
                callBackComponent = "sellCar"
+               callBackFunction="notify"
     ></vc:create>
 
     <!-- 选择停车位 -->
     <vc:create name="viewSelectParkingSpace"
                callBackComponent="sellCar"
+               callBackFunction="notify"
     ></vc:create>
 
     <div class="row">

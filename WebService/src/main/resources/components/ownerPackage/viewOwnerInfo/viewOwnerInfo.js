@@ -25,9 +25,13 @@
         },
         _initEvent:function(){
             vc.on('viewOwnerInfo','onIndex',function(_index){
-                if(_index == 2){
+                /*if(_index == 2){
                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewOwnerInfo);
-                }
+                }*/
+            });
+
+            vc.on('viewOwnerInfo','callBackOwnerInfo',function(_info){
+                vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewOwnerInfo);
             });
 
         },

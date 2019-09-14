@@ -1,5 +1,6 @@
 package com.java110.web.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ResponseConstant;
@@ -90,6 +91,8 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_CAR);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+        JSONArray infos = paramIn.getJSONArray("data");
         String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -102,9 +105,20 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
-        paramIn.put("userId", pd.getUserId());
-        paramIn.put("storeId", storeId);
-        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+
+        JSONObject viewSelectParkingSpace = this.getObj(infos,"viewSelectParkingSpace");
+        JSONObject viewOwnerInfo = this.getObj(infos,"viewOwnerInfo");
+        JSONObject addCar = this.getObj(infos,"addCar");
+        JSONObject hireParkingSpaceFee = this.getObj(infos,"hireParkingSpaceFee");
+        JSONObject newParamIn = new JSONObject();
+        newParamIn.putAll(addCar);
+        newParamIn.putAll(hireParkingSpaceFee);
+        newParamIn.put("communityId", communityId);
+        newParamIn.put("ownerId", viewOwnerInfo.getString("ownerId"));
+        newParamIn.put("psId", viewSelectParkingSpace.getString("psId"));
+        newParamIn.put("userId", pd.getUserId());
+        newParamIn.put("storeId", storeId);
+        responseEntity = this.callCenterService(restTemplate, pd, newParamIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace",
                 HttpMethod.POST);
 
@@ -221,29 +235,43 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
     private void validateSaveCar(IPageData pd) {
 
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "ownerId", "请求报文中未包含ownerId");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "carNum", "请求报文中未包含carNum");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "carBrand", "请求报文中未包含carBrand");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "carType", "请求报文中未包含carType");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "carColor", "未包含carColor");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "psId", "未包含psId");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "receivedAmount", "未包含receivedAmount");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "sellOrHire", "未包含sellOrHire");
 
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(paramIn.getString("ownerId"), "ownerId不能为空");
-        Assert.hasLength(paramIn.getString("psId"), "psId不能为空");
-        Assert.hasLength(paramIn.getString("receivedAmount"), "receivedAmount不能为空");
+        JSONObject info = JSONObject.parseObject(pd.getReqData());
 
-        if(!"H".equals(paramIn.getString("sellOrHire"))
-                && !"S".equals(paramIn.getString("sellOrHire"))){
+        JSONArray infos = info.getJSONArray("data");
+
+        if(infos.size() != 4){
+            throw new IllegalArgumentException("数据被篡改");
+        }
+
+        Assert.hasKeyByFlowData(infos, "viewSelectParkingSpace", "psId", "未包含psId");
+        Assert.hasKeyByFlowData(infos, "viewOwnerInfo", "ownerId", "必填，未包含业主信息");
+        Assert.hasKeyByFlowData(infos, "addCar", "carNum", "请求报文中未包含carNum");
+        Assert.hasKeyByFlowData(infos, "addCar", "carBrand", "请求报文中未包含carBrand");
+        Assert.hasKeyByFlowData(infos, "addCar", "carType", "请求报文中未包含carType");
+        Assert.hasKeyByFlowData(infos, "addCar", "carColor", "未包含carColor");
+        Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "receivedAmount", "未包含receivedAmount");
+        Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "sellOrHire", "未包含sellOrHire");
+
+       JSONObject viewSelectParkingSpace = this.getObj(infos,"viewSelectParkingSpace");
+       JSONObject viewOwnerInfo = this.getObj(infos,"viewOwnerInfo");
+       JSONObject addCar = this.getObj(infos,"addCar");
+       JSONObject hireParkingSpaceFee = this.getObj(infos,"hireParkingSpaceFee");
+
+
+        Assert.hasLength(info.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(viewOwnerInfo.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(viewSelectParkingSpace.getString("psId"), "psId不能为空");
+        Assert.hasLength(hireParkingSpaceFee.getString("receivedAmount"), "receivedAmount不能为空");
+
+        if(!"H".equals(hireParkingSpaceFee.getString("sellOrHire"))
+                && !"S".equals(hireParkingSpaceFee.getString("sellOrHire"))){
             throw new IllegalArgumentException("入参错误，无法识别该操作");
         }
 
-        if("H".equals(paramIn.getString("sellOrHire"))){
-            Assert.jsonObjectHaveKey(pd.getReqData(), "cycles", "未包含cycles");
-            Assert.hasLength(paramIn.getString("cycles"), "cycles不能为空");
+        if("H".equals(hireParkingSpaceFee.getString("sellOrHire"))){
+            Assert.jsonObjectHaveKey(hireParkingSpaceFee, "cycles", "未包含cycles");
+            Assert.hasLength(hireParkingSpaceFee.getString("cycles"), "cycles不能为空");
         }
     }
 
@@ -280,6 +308,25 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
 
+    }
+
+
+    private JSONObject getObj(JSONArray infos, String flowComponent) {
+
+        JSONObject serviceInfo = null;
+
+        for (int infoIndex = 0; infoIndex < infos.size(); infoIndex++) {
+
+            Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
+
+            if (flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))) {
+                serviceInfo = infos.getJSONObject(infoIndex);
+                Assert.notNull(serviceInfo, "未包含服务信息");
+                return serviceInfo;
+            }
+        }
+
+        throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
     }
 
 

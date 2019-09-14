@@ -72,6 +72,9 @@
             },
             _openAddOwnerRoom:function(_owner){
                 vc.jumpToPage("/flow/addOwnerRoomBindingFlow?ownerId="+_owner.ownerId);
+            },
+            _openHireParkingSpace:function(_owner){
+                vc.jumpToPage("/flow/hireParkingSpaceFlow?ownerId="+_owner.ownerId);
             }
         }
     })

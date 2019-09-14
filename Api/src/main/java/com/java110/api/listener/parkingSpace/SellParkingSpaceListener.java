@@ -242,7 +242,6 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         Assert.jsonObjectHaveKey(paramIn, "carColor", "未包含carColor");
         Assert.jsonObjectHaveKey(paramIn, "psId", "未包含psId");
         Assert.jsonObjectHaveKey(paramIn, "storeId", "未包含storeId");
-        Assert.jsonObjectHaveKey(paramIn, "storeId", "未包含storeId");
         Assert.jsonObjectHaveKey(paramIn, "receivedAmount", "未包含receivedAmount");
         Assert.jsonObjectHaveKey(paramIn, "sellOrHire", "未包含sellOrHire");
 

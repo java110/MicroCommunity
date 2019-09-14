@@ -1,66 +1,54 @@
-<div id="component" >
+<div id="component">
 
-    <vc:create name="addCar"
-               callBackComponent="hireParkingSpace"
-    >
-    </vc:create>
-
-    <!-- 选择 业主信息 -->
-    <vc:create name="sellRoomSelectOwner"
-               callBackComponent = "hireParkingSpace"
-    ></vc:create>
-
-    <!-- 选择停车位 -->
-    <vc:create name="viewSelectParkingSpace"
-               callBackComponent="hireParkingSpace"
-    ></vc:create>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>收费信息</h5>
-                </div>
-                <div class="ibox-content">
-                    <div>
-                        <div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">缴费周期</label>
-                                <div class="col-sm-10">
-                                    <select class="custom-select" v-model="hireParkingSpace.cycles">
-                                        <option selected  disabled value="">必填，请选择缴费周期</option>
-                                        <option value="1">1个月</option>
-                                        <option value="2">2个月</option>
-                                        <option value="3">3个月</option>
-                                        <option value="4">4个月</option>
-                                        <option value="5">5个月</option>
-                                        <option value="6">6个月</option>
-                                        <option value="12">一年</option>
-                                        <option value="24">两年</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">应收费用</label>
-                                <div class="col-sm-10">
-                                    <input v-model="hireParkingSpace.receivableAmount" type="text" disabled class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">实收费用</label>
-                                <div class="col-sm-10">
-                                    <input v-model="hireParkingSpace.receivedAmount" type="text" placeholder="必填，请填写实际收取费用" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="java110_step">
+        <div id="step"></div>
     </div>
 
-    <div style="height:50px">
-        <button class="btn btn-primary float-right" type="button" v-on:click="doHireParkingSpace()" ><i class="fa fa-check"></i>&nbsp;我要出租</button>
+    <!-- 选择 应用信息 -->
+    <div v-if="hireParkingSpaceInfo.index == 0">
+
+        <!-- 选择停车位 -->
+        <vc:create name="viewSelectParkingSpace"
+                   callBackComponent="hireParkingSpace"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+    <div v-if="hireParkingSpaceInfo.index == 1">
+        <vc:create name="viewOwnerInfo"
+                   callBackListener="hireParkingSpace"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+    <div v-if="hireParkingSpaceInfo.index == 2">
+        <vc:create name="addCar"
+                   callBackComponent="hireParkingSpace"
+                   callBackFunction="notify"
+        >
+
+        </vc:create>
+    </div>
+
+    <div v-if="hireParkingSpaceInfo.index == 3">
+        <vc:create name="hireParkingSpaceFee"
+                   callBackComponent="hireParkingSpace"
+                   callBackFunction="notify"
+        ></vc:create>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10"></div>
+        <div class="col-md-2 " style="margin-bottom:10px; text-align:right">
+            <button type="button" class="btn btn-secondary" v-on:click="_prevStep()">上一步</button>
+            <button v-if="hireParkingSpaceInfo.index != 3" type="button" class="btn btn-primary"
+                    style="margin-left:10px;"
+                    v-on:click="_nextStep()">下一步
+            </button>
+            <button v-if="hireParkingSpaceInfo.index == 3" type="button" class="btn btn-primary"
+                    style="margin-left:10px;"
+                    v-on:click="_finishStep()">出租
+            </button>
+        </div>
     </div>
 
 </div>
