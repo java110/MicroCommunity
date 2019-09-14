@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
  *
  * add by wuxw 2019-06-30
  */
-public interface IAddOwnerBindingSMO {
+public interface IAddOwnerRoomBindingSMO {
 
     /**
      * 添加添加业主
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    ResponseEntity<String> bindingAddOwner(IPageData pd);
+    ResponseEntity<String> bindingAddOwnerRoom(IPageData pd);
 }

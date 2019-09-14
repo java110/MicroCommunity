@@ -9,7 +9,7 @@ public class ServiceCodeAddOwnerBindingConstant {
     /**
      * 添加 添加业主
      */
-    public static final String BINDING_ADD_OWNER_BINDING = "owner.addOwnerBinding";
+    public static final String BINDING_ADD_OWNER_BINDING = "owner.addOwnerRoomBinding";
 
 
 

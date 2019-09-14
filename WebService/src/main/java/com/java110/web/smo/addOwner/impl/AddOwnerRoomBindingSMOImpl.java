@@ -3,11 +3,10 @@ package com.java110.web.smo.addOwner.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
 import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ServiceCodeAddOwnerBindingConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.web.smo.addOwner.IAddOwnerBindingSMO;
+import com.java110.web.smo.addOwner.IAddOwnerRoomBindingSMO;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;
@@ -20,8 +19,8 @@ import org.springframework.http.ResponseEntity;
  * 添加小区服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("addOwnerBindingSMOImpl")
-public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAddOwnerBindingSMO {
+@Service("addOwnerRoomBindingSMOImpl")
+public class AddOwnerRoomBindingSMOImpl extends AbstractComponentSMO implements IAddOwnerRoomBindingSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -39,12 +38,10 @@ public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAdd
 
         Assert.hasKeyByFlowData(infos, "viewFloorInfo", "floorId", "必填，未选择楼栋");
         Assert.hasKeyByFlowData(infos, "sellRoomSelectRoom", "roomId", "必填，未选择房屋");
-        Assert.hasKeyByFlowData(infos, "addOwnerView", "name", "必填，名称不能为空");
-        Assert.hasKeyByFlowData(infos, "addOwnerView", "sex", "必填，请选择性别");
-        Assert.hasKeyByFlowData(infos, "addOwnerView", "age", "必填，请填写年龄");
+        Assert.hasKeyByFlowData(infos, "viewOwnerInfo", "ownerId", "必填，未包含业主信息");
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.ADD_OWNER);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.ADD_OWNER_ROOM);
 
     }
 
@@ -56,17 +53,17 @@ public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAdd
         JSONArray infos = paramIn.getJSONArray("data");
         //JSONObject viewFloorInfo = getObj(infos, "viewFloorInfo");
         JSONObject sellRoomSelectRoom = getObj(infos, "sellRoomSelectRoom");
-        JSONObject addOwner = getObj(infos, "addOwnerView");
-
+        JSONObject viewOwnerInfo = getObj(infos, "viewOwnerInfo");
+        JSONObject newParamIn = new JSONObject();
         String communityId = paramIn.getString("communityId");
-        addOwner.put("ownerTypeCd", "1001");
-        addOwner.put("roomId", sellRoomSelectRoom.getString("roomId"));
-        addOwner.put("communityId", communityId);
-        addOwner.put("userId", pd.getUserId());
-        addOwner.put("storeId", result.getStoreId());
-        addOwner.put("state", "2002");
-        responseEntity = this.callCenterService(restTemplate, pd, addOwner.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner",
+        newParamIn.put("ownerId", viewOwnerInfo.getString("ownerId"));
+        newParamIn.put("roomId", sellRoomSelectRoom.getString("roomId"));
+        newParamIn.put("communityId", communityId);
+        newParamIn.put("userId", pd.getUserId());
+        newParamIn.put("storeId", result.getStoreId());
+        newParamIn.put("state", "2002");
+        responseEntity = this.callCenterService(restTemplate, pd, newParamIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom",
                 HttpMethod.POST);
         return responseEntity;
     }
@@ -92,7 +89,7 @@ public class AddOwnerBindingSMOImpl extends AbstractComponentSMO implements IAdd
 
 
     @Override
-    public ResponseEntity<String> bindingAddOwner(IPageData pd) {
+    public ResponseEntity<String> bindingAddOwnerRoom(IPageData pd) {
         return super.businessProcess(pd);
     }
 

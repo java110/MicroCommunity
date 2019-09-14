@@ -85,7 +85,7 @@ public final class PrivilegeCodeConstant {
     public static final String SERVICE_PROVIDE = "502019090149430005";
 
 
-    public static final String ADD_OWNER = "502019091322800001";
+    public static final String ADD_OWNER_ROOM = "502019091322800001";
 
 
 }

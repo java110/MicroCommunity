@@ -69,6 +69,9 @@
             },
             _queryOwnerMethod:function(){
                 vc.component._listOwnerData(DEFAULT_PAGE,DEFAULT_ROWS);
+            },
+            _openAddOwnerRoom:function(_owner){
+                vc.jumpToPage("/flow/addOwnerRoomBindingFlow?ownerId="+_owner.ownerId);
             }
         }
     })
