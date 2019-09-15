@@ -3,6 +3,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.common.constant.OwnerTypeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.exception.ListenerExecuteException;
@@ -92,6 +93,8 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         ResponseEntity<String> responseEntity = null;
         if (feeDtos == null || feeDtos.size() == 0) {
             responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
         }
 
         FeeDto feeDto = feeDtos.get(0);
@@ -125,6 +128,7 @@ public class QueryFeeListener extends AbstractServiceApiDataFlowListener {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
         ownerDto.setCommunityId(feeDto.getCommunityId());
+        ownerDto.setOwnerTypeCd(OwnerTypeConstant.OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
 
         if (ownerDtos == null || ownerDtos.size() != 1) {

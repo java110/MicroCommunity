@@ -1,6 +1,8 @@
 package com.java110.web.smo.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.FeeTypeConstant;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
@@ -17,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 房屋服务实现类
@@ -117,6 +122,43 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);
+
+        //fee.queryFee
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
+        JSONObject roomInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray rooms = roomInfo.getJSONArray("rooms");
+
+        Map feeMap = null;
+        JSONObject resultFeeInfo = null;
+        JSONObject roomObj = null;
+        for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
+            roomObj = rooms.getJSONObject(roomIndex);
+            feeMap = new HashMap();
+            feeMap.put("communityId", communityId);
+            feeMap.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+            feeMap.put("roomId", roomObj.getString("roomId"));
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFee" + mapToUrlParam(feeMap);
+            responseEntity = this.callCenterService(restTemplate, pd, "",
+                    apiUrl,
+                    HttpMethod.GET);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                //throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "当前房屋[" + roomObj.getString("roomNum") + "]没有物业费信息，数据错误");
+
+                continue;
+            }
+
+            resultFeeInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+            roomObj.putAll(resultFeeInfo);
+
+        }
+
+        responseEntity = new ResponseEntity(roomInfo.toJSONString(), HttpStatus.OK);
+
         return responseEntity;
     }
 
@@ -338,6 +380,7 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
 
     /**
      * 校验根据业主查询房屋信息
+     *
      * @param pd 页面数据封装
      */
     private void validateListRoomByOwner(IPageData pd) {
