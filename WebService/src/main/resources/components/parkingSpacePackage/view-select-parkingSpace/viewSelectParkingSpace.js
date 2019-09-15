@@ -28,6 +28,7 @@
                 vc.copyObject(_parkingSpace, vc.component.parkingSpaceInfo);
                 vc.emit($props.callBackComponent,$props.callBackFunction,vc.component.parkingSpaceInfo);
                 vc.emit('hireParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
+                vc.emit('sellParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
             });
 
         },
