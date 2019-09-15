@@ -102,7 +102,7 @@
                                     <button class="btn-white btn btn-xs dropdown-toggle" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">变更业主
                                     </button>
-                                    <div class="dropdown-menu">
+                                    <!--<div class="dropdown-menu">
                                         <a class="dropdown-item" href="#"
                                            v-on:click="_openEditOwnerModel(owner)">修改业主</a>
                                         <a class="dropdown-item" href="#"
@@ -114,6 +114,25 @@
                                         <a class="dropdown-item" href="#"
                                             v-on:click="_openHireParkingSpace(owner)">车位出租</a>
                                         <a class="dropdown-item" href="#">车位出售</a>
+                                    </div>-->
+
+                                    <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;">
+                                        <p>
+                                            <a  href="#"
+                                               v-on:click="_openEditOwnerModel(owner)">修改业主</a>
+                                            <a  href="#"
+                                               v-on:click="_openDelOwnerModel(owner)">删除业主</a>
+                                        </p>
+                                        <p>
+                                            <a  href="#"
+                                               v-on:click="_openAddOwnerRoom(owner)">添加房屋</a>
+                                            <a  href="#">删除房屋</a>
+                                        </p>
+                                        <p>
+                                            <a  href="#"
+                                               v-on:click="_openHireParkingSpace(owner)">车位出租</a>
+                                            <a  href="#">车位出售</a>
+                                        </p>
                                     </div>
                                 </div>
                             </td>
