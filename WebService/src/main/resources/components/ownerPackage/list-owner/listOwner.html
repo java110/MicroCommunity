@@ -117,20 +117,23 @@
                                     </div>-->
 
                                     <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;">
-                                        <p>
-                                            <a  href="#"
+                                        <p style="margin:10px 0;">
+                                            <a href="#"
                                                v-on:click="_openEditOwnerModel(owner)">修改业主</a>
+                                            <span >|</span>
                                             <a  href="#"
                                                v-on:click="_openDelOwnerModel(owner)">删除业主</a>
                                         </p>
-                                        <p>
+                                        <p style="margin:10px 0;">
                                             <a  href="#"
                                                v-on:click="_openAddOwnerRoom(owner)">添加房屋</a>
+                                            <span >|</span>
                                             <a  href="#">删除房屋</a>
                                         </p>
-                                        <p>
+                                        <p style="margin:10px 0;">
                                             <a  href="#"
                                                v-on:click="_openHireParkingSpace(owner)">车位出租</a>
+                                            <span >|</span>
                                             <a  href="#">车位出售</a>
                                         </p>
                                     </div>
