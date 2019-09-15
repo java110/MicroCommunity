@@ -92,7 +92,7 @@
                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                        if(res.status == 200){
                            //关闭model
-                           vc.jumpToPage("/flow/ownerParkingSpaceFlow?" + vc.objToGetParam(JSON.parse(json)));
+                           vc.jumpToPage("/flow/ownerFlow?" + vc.objToGetParam(JSON.parse(json)));
                            return ;
                        }
                        vc.message(json);
