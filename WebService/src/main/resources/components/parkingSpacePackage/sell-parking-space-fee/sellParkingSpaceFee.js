@@ -84,6 +84,7 @@
                             if(res.status == 200){
                                 //关闭model
                                 var configFee = JSON.parse(json);
+                                vc.component.sellParkingSpaceFeeInfo.receivableAmount = configFee.additionalAmount;
                                 vc.component.sellParkingSpaceFeeInfo.additionalAmount = configFee.additionalAmount;
                                 vc.component.sellParkingSpaceFeeInfo.receivedAmount = configFee.additionalAmount;
 
