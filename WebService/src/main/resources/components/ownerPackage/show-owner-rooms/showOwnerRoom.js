@@ -12,6 +12,16 @@
         },
         _initMethod:function(){
 
+         //加载 业主信息
+            var _ownerId = vc.getParam('ownerId')
+            if(!vc.notNull(_ownerId)){
+                return ;
+            }
+
+            vc.component.showOwnerRoomInfo.ownerId = _ownerId;
+
+            vc.component.loadRooms();
+
         },
         _initEvent:function(){
             vc.on('showOwnerRoom','notify',function(_owner){

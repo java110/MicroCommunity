@@ -11,7 +11,15 @@
             }
         },
         _initMethod:function(){
+            //加载 业主信息
+            var _ownerId = vc.getParam('ownerId')
+            if(!vc.notNull(_ownerId)){
+                return ;
+            }
 
+            vc.component.showOwnerParkingSpaceInfo.ownerId = _ownerId;
+
+            vc.component.loadParkingSpaces();
         },
         _initEvent:function(){
             vc.on('showOwnerParkingSpace','notify',function(_owner){

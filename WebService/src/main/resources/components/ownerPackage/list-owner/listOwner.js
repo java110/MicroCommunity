@@ -80,7 +80,7 @@
                 vc.jumpToPage("/flow/sellParkingSpaceFlow?ownerId="+_owner.ownerId);
             },
             _openOwnerDetailModel:function(_owner){
-                vc.jumpToPage("/flow/ownerRoomFlow?ownerId="+_owner.ownerId);
+                vc.jumpToPage("/flow/ownerDetailFlow?ownerId="+_owner.ownerId);
             }
         }
     })

@@ -35,7 +35,7 @@
                 vc.component.sellParkingSpaceFeeInfo.index = _index;
             });
 
-            vc.on('sellParkingSpaceFee', 'callBackOwnerInfo', function(_info){
+            vc.on('sellParkingSpaceFee', 'callBackParkingSpaceInfo', function(_info){
                 vc.component.saveSellParkingSpaceFee();
             });
 

@@ -49,7 +49,7 @@
                 }
 
                 if(vc.component.sellParkingSpaceInfo.index == 3){
-                    vc.emit('sellParkingSpaceFee','callBackOwnerInfo',{});
+                    vc.emit('sellParkingSpaceFee','callBackParkingSpaceInfo',{});
                 }
 
             },
@@ -71,7 +71,7 @@
                 }
 
                 if(vc.component.sellParkingSpaceInfo.index == 3){
-                    vc.emit('sellParkingSpaceFee','callBackOwnerInfo',{});
+                    vc.emit('sellParkingSpaceFee','callBackParkingSpaceInfo',{});
                 }
 
             },
