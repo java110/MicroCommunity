@@ -76,7 +76,7 @@
             _openHireParkingSpace:function(_owner){
                 vc.jumpToPage("/flow/hireParkingSpaceFlow?ownerId="+_owner.ownerId);
             },
-            _openHireParkingSpace:function(_owner){
+            _openSellParkingSpace:function(_owner){
                 vc.jumpToPage("/flow/sellParkingSpaceFlow?ownerId="+_owner.ownerId);
             },
             _openOwnerDetailModel:function(_owner){
