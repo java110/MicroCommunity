@@ -32,11 +32,11 @@
         },
         _initEvent:function(){
             vc.on('sellParkingSpaceFee', 'onIndex', function(_index){
-                vc.component.hireParkingSpaceFeeInfo.index = _index;
+                vc.component.sellParkingSpaceFeeInfo.index = _index;
             });
 
             vc.on('sellParkingSpaceFee', 'parkingSpaceInfo',function(_parkingSpaceInfo){
-                vc.component.hireParkingSpaceFeeInfo.typeCd = _parkingSpaceInfo.typeCd;
+                vc.component.sellParkingSpaceFeeInfo.typeCd = _parkingSpaceInfo.typeCd;
                 vc.component._loadFireParkingSpaceFee();
             });
 
