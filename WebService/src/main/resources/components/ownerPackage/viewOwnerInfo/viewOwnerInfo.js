@@ -6,7 +6,8 @@
     vc.extends({
         propTypes: {
            callBackListener:vc.propTypes.string,
-           callBackFunction:vc.propTypes.string
+           callBackFunction:vc.propTypes.string,
+           showCallBackButton:vc.propTypes.string='false'
         },
         data:{
             viewOwnerInfo:{
@@ -18,6 +19,7 @@
                 userName:"",
                 remark:"",
                 link:"",
+                showCallBackButton:$props.showCallBackButton
             }
         },
         _initMethod:function(){
@@ -67,6 +69,9 @@
                              }
                            );
 
+            },
+            _callBackListOwner:function(_ownerId){
+                vc.jumpToPage("/flow/ownerFlow?ownerId="+_ownerId);
             }
 
         }

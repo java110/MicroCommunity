@@ -16,6 +16,12 @@
             }
         },
         _initMethod:function(){
+            //加载 业主信息
+            var _ownerId = vc.getParam('ownerId')
+
+            if(vc.notNull(_ownerId)){
+                vc.component.listOwnerInfo.conditions.ownerId = _ownerId;
+            }
             vc.component._listOwnerData(DEFAULT_PAGE,DEFAULT_ROWS);
         },
         _initEvent:function(){

@@ -83,6 +83,8 @@ public class QueryFeeByParkingSpaceListener extends AbstractServiceApiDataFlowLi
         ResponseEntity<String> responseEntity = null;
         if (feeDtos == null || feeDtos.size() == 0) {
             responseEntity = new ResponseEntity<String>("{}", HttpStatus.OK);
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
         }
 
         FeeDto feeDto = feeDtos.get(0);

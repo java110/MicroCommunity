@@ -1,104 +1,120 @@
-<div class="row" v-for=" roomInfo in showOwnerRoomInfo.rooms">
-    <div class="col-lg-12">
-        <div class="ibox ">
-            <div class="ibox-title">
-                <h5>{{roomInfo.roomNum}}房屋信息</h5>
-                <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm"
-                            v-on:click="ownerExitRoomModel(roomInfo.roomId)">
-                        <i class="glyphicon glyphicon-remove"></i> 我要退房
-                    </button>
+<div v-for=" roomInfo in showOwnerRoomInfo.rooms">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>{{roomInfo.roomNum}}房屋信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                v-on:click="ownerExitRoomModel(roomInfo.roomId)">
+                            <i class="glyphicon glyphicon-remove"></i> 我要退房
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">房屋ID：</label>
+                                <label class="">{{roomInfo.roomId}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">房屋编号：</label>
+                                <label class="">{{roomInfo.roomNum}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">单元：</label>
+                                <label class="">{{roomInfo.unitNum}}</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">楼层：</label>
+                                <label class="">{{roomInfo.layer}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">房间数：</label>
+                                <label class="">{{roomInfo.section}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">户型：</label>
+                                <label class="">{{roomInfo.apartment}}</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">建筑面积：</label>
+                                <label class="">{{roomInfo.builtUpArea}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">单价：</label>
+                                <label class="">{{roomInfo.unitPrice}}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">创建员工：</label>
+                                <label class="">{{roomInfo.userName}}</label>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">房屋ID：</label>
-                            <label class="">{{roomInfo.roomId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">房屋编号：</label>
-                            <label class="">{{roomInfo.roomNum}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">单元：</label>
-                            <label class="">{{roomInfo.unitNum}}</label>
-                        </div>
-                    </div>
+        </div>
+        <vc:create name="ownerExitRoom"></vc:create>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>{{roomInfo.roomNum}}物业费信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
 
+                    </div>
                 </div>
+                <div class="ibox-content">
 
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">楼层：</label>
-                            <label class="">{{roomInfo.layer}}</label>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">物业费ID：</label>
+                                <label class="">{{roomInfo.feeId}}</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">房间数：</label>
-                            <label class="">{{roomInfo.section}}</label>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">物业费开始时间：</label>
+                                <label class="">{{roomInfo.startTime}}</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">户型：</label>
-                            <label class="">{{roomInfo.apartment}}</label>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="col-form-label">物业费结束时间：</label>
+                                <label class="">{{roomInfo.endTime}}</label>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">建筑面积：</label>
-                            <label class="">{{roomInfo.builtUpArea}}</label>
-                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">单价：</label>
-                            <label class="">{{roomInfo.unitPrice}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">创建员工：</label>
-                            <label class="">{{roomInfo.userName}}</label>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">物业费ID：</label>
-                            <label class="">{{roomInfo.feeId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">物业费开始时间：</label>
-                            <label class="">{{roomInfo.startTime}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">物业费结束时间：</label>
-                            <label class="">{{roomInfo.endTime}}</label>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
-    <vc:create name="ownerExitRoom"></vc:create>
 </div>

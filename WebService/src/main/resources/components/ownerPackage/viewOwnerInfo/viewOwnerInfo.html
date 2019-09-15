@@ -4,13 +4,17 @@
             <div class="ibox-title">
                 <h5>业主信息</h5>
                 <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-if="viewOwnerInfo.showCallBackButton=='true'"
+                            v-on:click="_callBackListOwner(viewOwnerInfo.ownerId)">
+                        返回
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >业主ID：</label>
+                            <label class="col-form-label">业主ID：</label>
                             <label class="">{{viewOwnerInfo.ownerId}}</label>
                         </div>
                     </div>
@@ -22,13 +26,13 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >性别：</label>
+                            <label class="col-form-label">性别：</label>
                             <label class="">{{viewOwnerInfo.sex == 0 ? '男' : '女'}}</label>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >年龄：</label>
+                            <label class="col-form-label">年龄：</label>
                             <label class="">{{viewOwnerInfo.age}}</label>
                         </div>
                     </div>
@@ -38,7 +42,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >联系方式：</label>
+                            <label class="col-form-label">联系方式：</label>
                             <label class="">{{viewOwnerInfo.link}}</label>
                         </div>
                     </div>
@@ -50,7 +54,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" >备注：</label>
+                            <label class="col-form-label">备注：</label>
                             <label class="">{{viewOwnerInfo.remark}}</label>
                         </div>
                     </div>
