@@ -106,13 +106,18 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
 
-        JSONObject viewSelectParkingSpace = this.getObj(infos,"viewSelectParkingSpace");
-        JSONObject viewOwnerInfo = this.getObj(infos,"viewOwnerInfo");
-        JSONObject addCar = this.getObj(infos,"addCar");
-        JSONObject hireParkingSpaceFee = this.getObj(infos,"hireParkingSpaceFee");
+        JSONObject viewSelectParkingSpace = this.getObj(infos, "viewSelectParkingSpace");
+        JSONObject viewOwnerInfo = this.getObj(infos, "viewOwnerInfo");
+        JSONObject addCar = this.getObj(infos, "addCar");
+        JSONObject parkingSpaceFee = null;
+        if(hasThisFlowComponent(infos, "hireParkingSpaceFee")) {
+            parkingSpaceFee = this.getObj(infos, "hireParkingSpaceFee");
+        }else{
+            parkingSpaceFee = this.getObj(infos, "sellParkingSpaceFee");
+        }
         JSONObject newParamIn = new JSONObject();
         newParamIn.putAll(addCar);
-        newParamIn.putAll(hireParkingSpaceFee);
+        newParamIn.putAll(parkingSpaceFee);
         newParamIn.put("communityId", communityId);
         newParamIn.put("ownerId", viewOwnerInfo.getString("ownerId"));
         newParamIn.put("psId", viewSelectParkingSpace.getString("psId"));
@@ -240,7 +245,7 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
 
         JSONArray infos = info.getJSONArray("data");
 
-        if(infos.size() != 4){
+        if (infos.size() != 4) {
             throw new IllegalArgumentException("数据被篡改");
         }
 
@@ -250,28 +255,36 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         Assert.hasKeyByFlowData(infos, "addCar", "carBrand", "请求报文中未包含carBrand");
         Assert.hasKeyByFlowData(infos, "addCar", "carType", "请求报文中未包含carType");
         Assert.hasKeyByFlowData(infos, "addCar", "carColor", "未包含carColor");
-        Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "receivedAmount", "未包含receivedAmount");
-        Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "sellOrHire", "未包含sellOrHire");
 
-       JSONObject viewSelectParkingSpace = this.getObj(infos,"viewSelectParkingSpace");
-       JSONObject viewOwnerInfo = this.getObj(infos,"viewOwnerInfo");
-       JSONObject addCar = this.getObj(infos,"addCar");
-       JSONObject hireParkingSpaceFee = this.getObj(infos,"hireParkingSpaceFee");
+        JSONObject parkingSpaceFee = null;
+        if (hasThisFlowComponent(infos, "hireParkingSpaceFee")) {
+            Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "receivedAmount", "未包含receivedAmount");
+            Assert.hasKeyByFlowData(infos, "hireParkingSpaceFee", "sellOrHire", "未包含sellOrHire");
+             parkingSpaceFee = this.getObj(infos, "hireParkingSpaceFee");
+        }else{
+            Assert.hasKeyByFlowData(infos, "sellParkingSpaceFee", "receivedAmount", "未包含receivedAmount");
+            Assert.hasKeyByFlowData(infos, "sellParkingSpaceFee", "sellOrHire", "未包含sellOrHire");
+            parkingSpaceFee = this.getObj(infos, "sellParkingSpaceFee");
+        }
+
+        JSONObject viewSelectParkingSpace = this.getObj(infos, "viewSelectParkingSpace");
+        JSONObject viewOwnerInfo = this.getObj(infos, "viewOwnerInfo");
+        JSONObject addCar = this.getObj(infos, "addCar");
 
 
         Assert.hasLength(info.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(viewOwnerInfo.getString("ownerId"), "ownerId不能为空");
         Assert.hasLength(viewSelectParkingSpace.getString("psId"), "psId不能为空");
-        Assert.hasLength(hireParkingSpaceFee.getString("receivedAmount"), "receivedAmount不能为空");
+        Assert.hasLength(parkingSpaceFee.getString("receivedAmount"), "receivedAmount不能为空");
 
-        if(!"H".equals(hireParkingSpaceFee.getString("sellOrHire"))
-                && !"S".equals(hireParkingSpaceFee.getString("sellOrHire"))){
+        if (!"H".equals(parkingSpaceFee.getString("sellOrHire"))
+                && !"S".equals(parkingSpaceFee.getString("sellOrHire"))) {
             throw new IllegalArgumentException("入参错误，无法识别该操作");
         }
 
-        if("H".equals(hireParkingSpaceFee.getString("sellOrHire"))){
-            Assert.jsonObjectHaveKey(hireParkingSpaceFee, "cycles", "未包含cycles");
-            Assert.hasLength(hireParkingSpaceFee.getString("cycles"), "cycles不能为空");
+        if ("H".equals(parkingSpaceFee.getString("sellOrHire"))) {
+            Assert.jsonObjectHaveKey(parkingSpaceFee, "cycles", "未包含cycles");
+            Assert.hasLength(parkingSpaceFee.getString("cycles"), "cycles不能为空");
         }
     }
 
@@ -297,6 +310,7 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         }
 
     }
+
     /**
      * 校验查询小区楼信息
      *
@@ -327,6 +341,28 @@ public class CarServiceSMOImpl extends BaseComponentSMO implements ICarServiceSM
         }
 
         throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
+    }
+
+    /**
+     * 是否有 这个组件
+     *
+     * @param infos                所有组件信息
+     * @param currentFlowComponent 当前组件
+     * @return
+     */
+    private boolean hasThisFlowComponent(JSONArray infos, String currentFlowComponent) {
+        JSONObject serviceInfo = null;
+
+        for (int infoIndex = 0; infoIndex < infos.size(); infoIndex++) {
+            serviceInfo = infos.getJSONObject(infoIndex);
+
+            if (currentFlowComponent.equals(serviceInfo.getString("flowComponent"))) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 
 
