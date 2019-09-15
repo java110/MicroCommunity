@@ -16,6 +16,7 @@
                 additionalAmount:'0.00',
                 sellOrHire:"S",
                 typeCd:'',
+                flowComponentShow:false
             }
         },
         watch:{
@@ -24,6 +25,7 @@
                 handler:function(){
                     //console.log("hireParkingSpaceFeeInfo 被调用")
                     vc.component.saveSellParkingSpaceFee();
+
                 }
              }
         },
@@ -33,6 +35,10 @@
         _initEvent:function(){
             vc.on('sellParkingSpaceFee', 'onIndex', function(_index){
                 vc.component.sellParkingSpaceFeeInfo.index = _index;
+            });
+
+            vc.on('sellParkingSpaceFee', 'flowComponentShow', function(_flowComponentShow){
+                vc.component.sellParkingSpaceFeeInfo.flowComponentShow = _flowComponentShow;
             });
 
             vc.on('sellParkingSpaceFee', 'callBackParkingSpaceInfo', function(_info){
@@ -65,7 +71,7 @@
                         });
             },
             saveSellParkingSpaceFee:function(){
-                if(vc.component.sellParkingSpaceFeeValidate()){
+                if(vc.component.sellParkingSpaceFeeValidate() && vc.component.sellParkingSpaceFeeInfo.flowComponentShow){
                     //侦听回传
                     vc.emit($props.callBackComponent,$props.callBackFunction, vc.component.sellParkingSpaceFeeInfo);
                     return ;

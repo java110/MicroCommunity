@@ -42,7 +42,7 @@
                 vc.emit('viewSelectParkingSpace', 'onIndex', vc.component.sellParkingSpaceInfo.index);
                 vc.emit('viewOwnerInfo', 'onIndex', vc.component.sellParkingSpaceInfo.index);
                 vc.emit('addCar', 'onIndex', vc.component.sellParkingSpaceInfo.index);
-                vc.emit('parkingSpaceFee', 'onIndex', vc.component.sellParkingSpaceInfo.index);
+                vc.emit('sellParkingSpaceFee', 'onIndex', vc.component.sellParkingSpaceInfo.index);
 
                 if(vc.component.sellParkingSpaceInfo.index == 1){
                     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
@@ -50,6 +50,9 @@
 
                 if(vc.component.sellParkingSpaceInfo.index == 3){
                     vc.emit('sellParkingSpaceFee','callBackParkingSpaceInfo',{});
+                    vc.emit('sellParkingSpaceFee', 'flowComponentShow', true);
+                }else{
+                    vc.emit('sellParkingSpaceFee', 'flowComponentShow', false);
                 }
 
             },
@@ -72,6 +75,9 @@
 
                 if(vc.component.sellParkingSpaceInfo.index == 3){
                     vc.emit('sellParkingSpaceFee','callBackParkingSpaceInfo',{});
+                    vc.emit('sellParkingSpaceFee', 'flowComponentShow', true);
+                }else{
+                    vc.emit('sellParkingSpaceFee', 'flowComponentShow', false);
                 }
 
             },
