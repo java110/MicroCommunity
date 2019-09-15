@@ -48,6 +48,10 @@
                     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
                 }
 
+                if(vc.component.sellParkingSpaceInfo.index == 3){
+                    vc.emit('sellParkingSpaceFee','callBackOwnerInfo',{});
+                }
+
             },
             _nextStep:function(){
                 var _currentData = vc.component.sellParkingSpaceInfo.infos[vc.component.sellParkingSpaceInfo.index];
@@ -64,6 +68,10 @@
                 vc.emit('parkingSpaceFee', 'onIndex', vc.component.sellParkingSpaceInfo.index);
                 if(vc.component.sellParkingSpaceInfo.index == 1){
                     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
+                }
+
+                if(vc.component.sellParkingSpaceInfo.index == 3){
+                    vc.emit('sellParkingSpaceFee','callBackOwnerInfo',{});
                 }
 
             },

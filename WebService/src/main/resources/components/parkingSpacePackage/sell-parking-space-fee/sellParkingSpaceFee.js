@@ -23,7 +23,7 @@
                 deep: true,
                 handler:function(){
                     //console.log("hireParkingSpaceFeeInfo 被调用")
-                    vc.component.saveHireParkingSpaceFee();
+                    vc.component.saveSellParkingSpaceFee();
                 }
              }
         },
@@ -33,6 +33,10 @@
         _initEvent:function(){
             vc.on('sellParkingSpaceFee', 'onIndex', function(_index){
                 vc.component.sellParkingSpaceFeeInfo.index = _index;
+            });
+
+            vc.on('sellParkingSpaceFee', 'callBackOwnerInfo', function(_info){
+                vc.component.saveSellParkingSpaceFee();
             });
 
             vc.on('sellParkingSpaceFee', 'parkingSpaceInfo',function(_parkingSpaceInfo){
