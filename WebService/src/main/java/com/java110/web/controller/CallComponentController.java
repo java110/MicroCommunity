@@ -60,8 +60,8 @@ public class CallComponentController extends BaseController {
             responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd);
 
         } catch (SMOException e) {
-            MultiValueMap<String, String> headers = new HttpHeaders();
-            headers.add("code", e.getResult().getCode());
+            /*MultiValueMap<String, String> headers = new HttpHeaders();
+            headers.add("code", e.getResult().getCode());*/
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             String msg = "";
