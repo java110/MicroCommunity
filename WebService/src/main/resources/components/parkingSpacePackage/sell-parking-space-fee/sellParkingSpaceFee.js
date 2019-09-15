@@ -10,7 +10,7 @@
         },
         data:{
             sellParkingSpaceFeeInfo:{
-                flowComponent:'sellParkingSpaceFeeInfo',
+                flowComponent:'sellParkingSpaceFee',
                 receivableAmount: "0.00",
                 receivedAmount:"0.00",
                 additionalAmount:'0.00',
