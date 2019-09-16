@@ -87,6 +87,9 @@
             },
             _openOwnerDetailModel:function(_owner){
                 vc.jumpToPage("/flow/ownerDetailFlow?ownerId="+_owner.ownerId);
+            },
+            _openDeleteOwnerRoom:function(_owner){
+                vc.jumpToPage("/flow/deleteOwnerRoomFlow?ownerId="+_owner.ownerId);
             }
         }
     })

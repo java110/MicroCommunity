@@ -4,10 +4,14 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+           deleteOwnerRoomFlag:vc.propTypes.string='false'
+        },
         data:{
             showOwnerRoomInfo:{
                 ownerId:'',
-                rooms:[]
+                rooms:[],
+                deleteOwnerRoomFlag:$props.deleteOwnerRoomFlag
             }
         },
         _initMethod:function(){
