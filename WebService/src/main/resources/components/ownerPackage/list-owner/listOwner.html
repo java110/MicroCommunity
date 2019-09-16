@@ -1,4 +1,4 @@
-<div id="component">
+<div id="component" xmlns:vc="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox ">
@@ -138,6 +138,13 @@
                                             <a  href="#"
                                                 v-on:click="_openSellParkingSpace(owner)">车位出售</a>
                                         </p>
+                                        <p style="margin:10px 0;">
+                                            <a  href="#"
+                                                v-on:click="_openHireParkingSpace(owner)">缴物业费</a>
+                                            <span >|</span>
+                                            <a  href="#"
+                                                v-on:click="_openSellParkingSpace(owner)">缴停车费</a>
+                                        </p>
                                     </div>
                                 </div>
 
@@ -176,5 +183,12 @@
     <vc:create name="deleteOwner"
                notifyLoadDataComponentName="listOwner"
     ></vc:create>
+
+    <vc:create
+        name="searchRoom"
+        emitChooseRoom="listOwner"
+        emitLoadData="listOwner"
+        roomFlag="1"
+        ></vc:create>
 
 </div>

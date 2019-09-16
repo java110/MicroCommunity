@@ -7,6 +7,7 @@
                 owners:[],
                 total:0,
                 records:1,
+                _currentOwnerId:'',
                 conditions:{
                     ownerTypeCd:'1001',
                     ownerId:'',
@@ -30,6 +31,10 @@
             });
             vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listOwnerData(_currentPage,DEFAULT_ROWS);
+            });
+
+            vc.on('listOwner','chooseRoom',function(_room){
+                 vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+_currentOwnerId+"&roomId="+_room.roomId);
             });
         },
         methods:{
@@ -90,6 +95,37 @@
             },
             _openDeleteOwnerRoom:function(_owner){
                 vc.jumpToPage("/flow/deleteOwnerRoomFlow?ownerId="+_owner.ownerId);
+            },
+            _openPayPropertyFee:function(_owner){
+                //查看 业主是否有多套房屋，如果有多套房屋，则提示对话框选择，只有一套房屋则直接跳转至交费页面缴费
+
+                vc.component.listOwnerInfo._currentOwnerId = _owner.ownerId; // 暂存如果有多个房屋是回调回来时 ownerId 会丢掉
+                var param = {
+                    params:{
+                        communityId:vc.getCurrentCommunity().communityId,
+                        ownerId:_owner.ownerId
+                    }
+                }
+               vc.http.get('listOwner',
+                            'getRooms',
+                             param,
+                             function(json,res){
+                                var listRoomData =JSON.parse(json);
+
+                                vc.component.listRoomData.total = listRoomData.total;
+                                vc.component.listRoomData.records = listRoomData.records;
+                                vc.component.listRoomData.rooms = listRoomData.rooms;
+                                if(rooms.length == 1){
+                                      vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+_owner.ownerId+"&roomId="+rooms[0].roomId);
+                                }else if(rooms.length == 0){
+                                    vc.message("当前业主未查询到房屋信息");
+                                }else{
+                                    vc.emit('listRoom','',listRoomData);
+                                }
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
             }
         }
     })
