@@ -36,6 +36,10 @@
             vc.on('listOwner','chooseRoom',function(_room){
                  vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+vc.component.listOwnerInfo._currentOwnerId+"&roomId="+_room.roomId);
             });
+
+            vc.on('listOwner','chooseParkingSpace',function(_parkingSpace){
+                 vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId="+vc.component.listOwnerInfo._currentOwnerId+"&psId="+_parkingSpace.psId);
+            });
         },
         methods:{
             _listOwnerData:function(_page,_row){
@@ -119,6 +123,35 @@
                                 }else{
 
                                     vc.emit('searchRoom','showOwnerRooms',rooms);
+                                }
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
+            },
+            _openPayParkingSpaceFee:function(_owner){
+                //查看 业主是否有多套停车位，如果有多套停车位，则提示对话框选择，只有一套停车位则直接跳转至交费页面缴费
+
+                vc.component.listOwnerInfo._currentOwnerId = _owner.ownerId; // 暂存如果有多个停车位是回调回来时 ownerId 会丢掉
+                var param = {
+                    params:{
+                        communityId:vc.getCurrentCommunity().communityId,
+                        ownerId:_owner.ownerId
+                    }
+                }
+               vc.http.get('listOwner',
+                            'getParkingSpace',
+                             param,
+                             function(json,res){
+                                var listParkingSpaceData =JSON.parse(json);
+                                var parkingSpaces = listParkingSpaceData.parkingSpaces;
+                                if(parkingSpaces.length == 1){
+                                      vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId="+_owner.ownerId+"&psId="+parkingSpaces[0].psId);
+                                }else if(parkingSpaces.length == 0){
+                                    vc.message("当前业主未查询到车位信息");
+                                }else{
+
+                                    vc.emit('searchParkingSpace','showOwnerParkingSpaces',parkingSpaces);
                                 }
                              },function(errInfo,error){
                                 console.log('请求失败处理');

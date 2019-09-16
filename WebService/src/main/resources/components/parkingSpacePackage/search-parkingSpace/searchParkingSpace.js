@@ -3,7 +3,8 @@
         propTypes: {
            emitChooseParkingSpace:vc.propTypes.string,
            emitLoadData:vc.propTypes.string,
-           parkingSpaceFlag:vc.propTypes.string // 如果 S 表示查询售卖停车位 H 出租停车位 SH 查询出租和出售车位 F 表示查询未售卖未出租停车位
+           parkingSpaceFlag:vc.propTypes.string, // 如果 S 表示查询售卖停车位 H 出租停车位 SH 查询出租和出售车位 F 表示查询未售卖未出租停车位
+           showSearchCondition:vc.propTypes.string='true'
         },
         data:{
             searchParkingSpaceInfo:{
@@ -12,7 +13,8 @@
                 records:1,
                 num:'',
                 carNum:'',
-                psFlag:$props.parkingSpaceFlag
+                psFlag:$props.parkingSpaceFlag,
+                showSearchCondition:$props.showSearchCondition
             }
         },
         _initMethod:function(){
@@ -24,6 +26,11 @@
                 $('#searchParkingSpaceModel').modal('show');
                 vc.component._refreshSearchParkingSpaceData();
                 vc.component._loadAllParkingSpaceInfo(1,10);
+            });
+
+            vc.on('searchParkingSpace','showOwnerParkingSpaces',function(_parkingSpaces){
+                $('#searchParkingSpaceModel').modal('show');
+                vc.component.searchParkingSpaceInfo.parkingSpaces=_parkingSpaces;
             });
         },
         methods:{

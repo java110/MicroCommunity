@@ -100,7 +100,7 @@
                                 </div>-->
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">变更业主
+                                            aria-haspopup="true" aria-expanded="false">变更
                                     </button>
 
 
@@ -128,10 +128,10 @@
                                         </p>
                                         <p style="margin:10px 0;">
                                             <a  href="#"
-                                                v-on:click="_openPayPropertyFee(owner)">缴物业费</a>
+                                                v-on:click="_openPayPropertyFee(owner)">物业费用</a>
                                             <span >|</span>
                                             <a  href="#"
-                                                v-on:click="_openSellParkingSpace(owner)">缴停车费</a>
+                                                v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
                                         </p>
                                     </div>
                                 </div>
@@ -179,5 +179,12 @@
         roomFlag="1"
         showSearchCondition="false"
         ></vc:create>
+
+    <vc:create name="searchParkingSpace"
+               emitChooseParkingSpace="listOwner"
+               emitLoadData="listOwner"
+               parkingSpaceFlag="SH"
+               showSearchCondition="false"
+    ></vc:create>
 
 </div>

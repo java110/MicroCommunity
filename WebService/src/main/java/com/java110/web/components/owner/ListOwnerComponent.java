@@ -3,6 +3,7 @@ package com.java110.web.components.owner;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFeeServiceSMO;
 import com.java110.web.smo.IOwnerServiceSMO;
+import com.java110.web.smo.IParkingSpaceServiceSMO;
 import com.java110.web.smo.IRoomServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class ListOwnerComponent {
     @Autowired
     private IRoomServiceSMO roomServiceSMOImpl;
 
+    @Autowired
+    private IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl;
+
     /**
      * 查询小区楼信息
      *
@@ -31,8 +35,12 @@ public class ListOwnerComponent {
         return ownerServiceSMOImpl.listOwner(pd);
     }
 
-    public ResponseEntity<String> getRooms(IPageData pd){
+    public ResponseEntity<String> getRooms(IPageData pd) {
         return roomServiceSMOImpl.listRoomByOwner(pd);
+    }
+
+    public ResponseEntity<String> getParkingSpace(IPageData pd) {
+        return parkingSpaceServiceSMOImpl.listParkingSpaceByOwner(pd);
     }
 
 
@@ -50,5 +58,13 @@ public class ListOwnerComponent {
 
     public void setRoomServiceSMOImpl(IRoomServiceSMO roomServiceSMOImpl) {
         this.roomServiceSMOImpl = roomServiceSMOImpl;
+    }
+
+    public IParkingSpaceServiceSMO getParkingSpaceServiceSMOImpl() {
+        return parkingSpaceServiceSMOImpl;
+    }
+
+    public void setParkingSpaceServiceSMOImpl(IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl) {
+        this.parkingSpaceServiceSMOImpl = parkingSpaceServiceSMOImpl;
     }
 }
