@@ -4,10 +4,14 @@
 (function(vc){
 
     vc.extends({
+        propTypes: {
+               deleteOwnerParkingSpaceFlag:vc.propTypes.string='false'
+        },
         data:{
             showOwnerParkingSpaceInfo:{
                 ownerId:'',
-                parkingSpaces:[]
+                parkingSpaces:[],
+                deleteOwnerParkingSpaceFlag:$props.deleteOwnerParkingSpaceFlag
             }
         },
         _initMethod:function(){

@@ -5,7 +5,7 @@
                 <div class="ibox-title">
                     <h5>{{parkingSpaceInfo.num}}车位信息</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-primary btn-sm"
+                        <button type="button" class="btn btn-primary btn-sm" v-if="showOwnerParkingSpaceInfo.deleteOwnerParkingSpaceFlag == 'true'"
                                 v-on:click="ownerExitParkingSpaceModel(parkingSpaceInfo.psId)">
                             <i class="glyphicon glyphicon-remove"></i> 我要退款
                         </button>
@@ -79,10 +79,12 @@
                 </div>
             </div>
         </div>
-        <vc:create name="ownerExitParkingSpace"></vc:create>
+        <div v-if="showOwnerParkingSpaceInfo.deleteOwnerParkingSpaceFlag == 'true'">
+            <vc:create name="ownerExitParkingSpace"></vc:create>
+        </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="showOwnerParkingSpaceInfo.deleteOwnerParkingSpaceFlag == 'false'">
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
