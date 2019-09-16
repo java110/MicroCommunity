@@ -6,7 +6,7 @@
                     <h5>{{roomInfo.roomNum}}房屋信息</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm"
-                                v-if="roomInfo.deleteOwnerRoomFlag == 'true'"
+                                v-if="showOwnerRoomInfo.deleteOwnerRoomFlag == 'true'"
                                 v-on:click="ownerExitRoomModel(roomInfo.roomId)">
                             <i class="glyphicon glyphicon-remove"></i> 我要退房
                         </button>
@@ -80,11 +80,11 @@
                 </div>
             </div>
         </div>
-        <div v-if="roomInfo.deleteOwnerRoomFlag == 'true'">
+        <div v-if="showOwnerRoomInfo.deleteOwnerRoomFlag == 'true'">
             <vc:create name="ownerExitRoom"></vc:create>
         </div>
     </div>
-    <div class="row"  v-if="roomInfo.deleteOwnerRoomFlag == 'false'">
+    <div class="row"  v-if="showOwnerRoomInfo.deleteOwnerRoomFlag == 'false'">
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
