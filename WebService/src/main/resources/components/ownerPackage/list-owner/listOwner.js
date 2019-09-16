@@ -34,7 +34,7 @@
             });
 
             vc.on('listOwner','chooseRoom',function(_room){
-                 vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+_currentOwnerId+"&roomId="+_room.roomId);
+                 vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+vc.component.listOwnerInfo._currentOwnerId+"&roomId="+_room.roomId);
             });
         },
         methods:{
@@ -111,16 +111,14 @@
                              param,
                              function(json,res){
                                 var listRoomData =JSON.parse(json);
-
-                                vc.component.listRoomData.total = listRoomData.total;
-                                vc.component.listRoomData.records = listRoomData.records;
-                                vc.component.listRoomData.rooms = listRoomData.rooms;
+                                var rooms = listRoomData.rooms;
                                 if(rooms.length == 1){
                                       vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+_owner.ownerId+"&roomId="+rooms[0].roomId);
                                 }else if(rooms.length == 0){
                                     vc.message("当前业主未查询到房屋信息");
                                 }else{
-                                    vc.emit('listRoom','',listRoomData);
+
+                                    vc.emit('searchRoom','showOwnerRooms',rooms);
                                 }
                              },function(errInfo,error){
                                 console.log('请求失败处理');

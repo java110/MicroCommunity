@@ -102,19 +102,7 @@
                                     <button class="btn-white btn btn-xs dropdown-toggle" data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">变更业主
                                     </button>
-                                    <!--<div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"
-                                           v-on:click="_openEditOwnerModel(owner)">修改业主</a>
-                                        <a class="dropdown-item" href="#"
-                                           v-on:click="_openDelOwnerModel(owner)">删除业主</a>
-                                        <a class="dropdown-item" href="#"
-                                            v-on:click="_openAddOwnerRoom(owner)">添加房屋</a>
-                                        <a class="dropdown-item" href="#">删除房屋</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#"
-                                            v-on:click="_openHireParkingSpace(owner)">车位出租</a>
-                                        <a class="dropdown-item" href="#">车位出售</a>
-                                    </div>-->
+
 
                                     <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;">
                                         <p style="margin:10px 0;">
@@ -140,7 +128,7 @@
                                         </p>
                                         <p style="margin:10px 0;">
                                             <a  href="#"
-                                                v-on:click="_openHireParkingSpace(owner)">缴物业费</a>
+                                                v-on:click="_openPayPropertyFee(owner)">缴物业费</a>
                                             <span >|</span>
                                             <a  href="#"
                                                 v-on:click="_openSellParkingSpace(owner)">缴停车费</a>
@@ -189,6 +177,7 @@
         emitChooseRoom="listOwner"
         emitLoadData="listOwner"
         roomFlag="1"
+        showSearchCondition="false"
         ></vc:create>
 
 </div>
