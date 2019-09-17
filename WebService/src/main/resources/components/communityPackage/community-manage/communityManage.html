@@ -16,35 +16,38 @@
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                         <thead>
                         <tr>
-                                                        <th>小区ID</th>
+                            <th>小区ID</th>
                             <th>小区名称</th>
                             <th>小区地址</th>
                             <th>附近地标</th>
                             <th>城市编码</th>
                             <th>小区维度</th>
                             <th>小区经度</th>
+                            <th>状态</th>
                             <th class="text-right">操作</th>
-
-
                         </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="community in communityManageInfo.communitys">
-                                                            <td>{{community.communityId}}</td>
+                        <tr v-for="community in communityManageInfo.communitys">
+                            <td>{{community.communityId}}</td>
                             <td>{{community.name}}</td>
                             <td>{{community.address}}</td>
                             <td>{{community.nearbyLandmarks}}</td>
                             <td>{{community.cityCode}}</td>
                             <td>{{community.mapX}}</td>
                             <td>{{community.mapY}}</td>
-                            <td><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditCommunityModel(community)">修改</button>
+                            <td>{{community.stateName}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditCommunityModel(community)">修改
+                                    </button>
                                 </div>
-                               <!-- <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteCommunityModel(community)">删除</button>
-                                </div></td>-->
+                                <!-- <div class="btn-group">
+                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteCommunityModel(community)">删除</button>
+                                 </div></td>-->
 
-                            </tr>
+                        </tr>
                         </tbody>
                         <tfoot>
                         <tr>
