@@ -361,7 +361,14 @@
         select  t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
         t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
-        t.map_x,t.map_x mapX,t.state,if(t.state='1000','待审核','审核完成') stateName
+        t.map_x,t.map_x mapX,t.state,(CASE
+        WHEN t.state='1000'
+        THEN '待审核'
+        WHEN t.state = '1100'
+        THEN '审核完成'
+        ELSE
+        '审核拒绝'
+        END) stateName
         from s_community t
         where 1 =1
         <if test="address !=null and address != ''">
