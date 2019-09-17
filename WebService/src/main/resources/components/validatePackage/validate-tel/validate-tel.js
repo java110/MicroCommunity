@@ -47,8 +47,9 @@
                                   },
                                  function(json,res){
                                     //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+
                                     if(res.status == 200){
-                                        vc.component.errorInfo = json;
+                                        vc.component.registerInfo.validateInfo = json;
                                         return ;
                                     }
                                     vc.component.$emit('errorInfoEvent',json);
