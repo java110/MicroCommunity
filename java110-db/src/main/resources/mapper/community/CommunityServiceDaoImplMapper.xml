@@ -401,6 +401,9 @@
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="memberId !=null and memberId !=''">
             and cm.community_id = t.community_id
             and cm.member_id = #{memberId}
@@ -448,6 +451,9 @@
         </if>
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="memberId !=null and memberId !=''">
             and cm.community_id = t.community_id

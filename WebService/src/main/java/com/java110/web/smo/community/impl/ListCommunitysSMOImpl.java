@@ -37,7 +37,7 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY,PrivilegeCodeConstant.ADMIN_HAS_LIST_COMMUNITY);
     }
 
     @Override
