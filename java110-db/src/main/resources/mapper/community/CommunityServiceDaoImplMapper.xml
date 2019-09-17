@@ -370,6 +370,9 @@
         '审核拒绝'
         END) stateName
         from s_community t
+        <if test="memberId !=null and memberId !=''">
+            ,s_community_member cm
+        </if>
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}
@@ -399,12 +402,9 @@
             and t.map_x= #{mapX}
         </if>
         <if test="memberId !=null and memberId !=''">
-            and exists(
-            select 1 from s_community_member cm
-            where cm.community_id = t.community_id
+            and cm.community_id = t.community_id
             and cm.member_id = #{memberId}
             and cm.status_cd = '0'
-            )
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -418,6 +418,9 @@
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
         select  count(1) count
         from s_community t
+        <if test="memberId !=null and memberId !=''">
+            ,s_community_member cm
+        </if>
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}
@@ -447,12 +450,9 @@
             and t.map_x= #{mapX}
         </if>
         <if test="memberId !=null and memberId !=''">
-            and exists(
-                select 1 from s_community_member cm
-                where cm.community_id = t.community_id
+            and cm.community_id = t.community_id
                 and cm.member_id = #{memberId}
                 and cm.status_cd = '0'
-            )
         </if>
 
 
