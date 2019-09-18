@@ -59,6 +59,7 @@
                 vc.emit('audit','openAuditModal',{});
             },
             _auditCommunityState:function(_auditInfo){
+                _auditInfo.communityId = vc.component.auditCommunityManageInfo.currentCommunityId;
                 vc.http.post(
                     'auditCommunityManage',
                     'audit',
