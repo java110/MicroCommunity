@@ -6,8 +6,8 @@
     
     <!-- 保存小区信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityInfo" parameterType="Map">
-        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,operate)
-        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
+        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,state,operate)
+        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate})
     </insert>
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
@@ -23,7 +23,7 @@
 
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate,s.state
         from business_community s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -73,8 +73,8 @@
 
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
-        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd)
-        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0')
+        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state)
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state})
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -102,7 +102,7 @@
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd,s.state
         from s_community s
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -179,6 +179,9 @@
         </if>
         <if test="mapY != null and mapY != ''">
             ,s.map_y = #{mapY}
+        </if>
+        <if test="state != null and state != ''">
+            ,s.state = #{state}
         </if>
         where 1=1
         <if test="bId != null and bId !=''">

@@ -6,6 +6,7 @@ import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;
+import com.java110.web.smo.community.IAuditCommunitySMO;
 import com.java110.web.smo.community.IEditCommunitySMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 添加小区服务实现类
+ * 审核小区服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("eidtCommunitySMOImpl")
-public class EditCommunitySMOImpl extends AbstractComponentSMO implements IEditCommunitySMO {
+@Service("auditCommunitySMOImpl")
+public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAuditCommunitySMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -29,9 +30,8 @@ public class EditCommunitySMOImpl extends AbstractComponentSMO implements IEditC
         //super.validatePageInfo(pd);
 
         Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
-        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写小区名称");
-        Assert.hasKeyAndValue(paramIn, "address", "必填，请填写小区地址");
-        Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附近地标");
+        Assert.hasKeyAndValue(paramIn, "state", "必填，请填写小区审核状态");
+        Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写小区审核原因");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
@@ -44,13 +44,13 @@ public class EditCommunitySMOImpl extends AbstractComponentSMO implements IEditC
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.updateCommunity",
+                ServiceConstant.SERVICE_API_URL + "/api/community.auditCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }
 
     @Override
-    public ResponseEntity<String> updateCommunity(IPageData pd) {
+    public ResponseEntity<String> auditCommunity(IPageData pd) {
         return super.businessProcess(pd);
     }
 

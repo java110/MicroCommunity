@@ -58,6 +58,9 @@
             </div>
         </div>
     </div>
-    <vc:create name="audit"></vc:create>
+    <vc:create name="audit"
+               callBackListener="auditCommunityManage"
+               callBackFunction="notifyAuditInfo"
+    ></vc:create>
 
 </div>

@@ -9,7 +9,8 @@
             auditCommunityManageInfo:{
                 communitys:[],
                 total:0,
-                records:1
+                records:1,
+                currentCommunityId:''
             }
         },
         _initMethod:function(){
@@ -18,6 +19,9 @@
         _initEvent:function(){
             vc.on('communityManage','listCommunity',function(_param){
                   vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
+            });
+            vc.on('communityManage','notifyAuditInfo',function(_auditInfo){
+                  vc.component._auditCommunityState(_auditInfo);
             });
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listCommunitys(_currentPage,DEFAULT_ROWS);
@@ -50,8 +54,31 @@
                              }
                            );
             },
-            _openAuditCommunityModal:function(){
+            _openAuditCommunityModal:function(_community){
+                vc.component.auditCommunityManageInfo.currentCommunityId = _community.communityId;
                 vc.emit('audit','openAuditModal',{});
+            },
+            _auditCommunityState:function(_auditInfo){
+                vc.http.post(
+                    'auditCommunityManage',
+                    'audit',
+                    JSON.stringify(_auditInfo),
+                    {
+                        emulateJSON:true
+                     },
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            //关闭model
+                             vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+                        vc.message(errInfo);
+                });
             }
 
         }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommunityStateConstant;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.web.smo.community.IAuditCommunitySMO;
 import com.java110.web.smo.community.IListCommunitysSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class AuditCommunityManageComponent {
     @Autowired
     private IListCommunitysSMO listCommunitysSMOImpl;
 
+    @Autowired
+    private IAuditCommunitySMO auditCommunitySMOImpl;
+
     /**
      * 查询小区列表
      *
@@ -41,11 +45,29 @@ public class AuditCommunityManageComponent {
         return listCommunitysSMOImpl.listCommunitys(newPd);
     }
 
+    /**
+     * 审核 小区
+     *
+     * @param pd 页面数据封装
+     * @return 返回 ResponseEntity 对象
+     */
+    public ResponseEntity<String> audit(IPageData pd) {
+        return auditCommunitySMOImpl.auditCommunity(pd);
+    }
+
     public IListCommunitysSMO getListCommunitysSMOImpl() {
         return listCommunitysSMOImpl;
     }
 
     public void setListCommunitysSMOImpl(IListCommunitysSMO listCommunitysSMOImpl) {
         this.listCommunitysSMOImpl = listCommunitysSMOImpl;
+    }
+
+    public IAuditCommunitySMO getAuditCommunitySMOImpl() {
+        return auditCommunitySMOImpl;
+    }
+
+    public void setAuditCommunitySMOImpl(IAuditCommunitySMO auditCommunitySMOImpl) {
+        this.auditCommunitySMOImpl = auditCommunitySMOImpl;
     }
 }

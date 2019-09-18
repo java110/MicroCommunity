@@ -11,6 +11,19 @@
                 remark:''
             }
         },
+        watch:{
+            "auditInfo.state":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                    if(vc.notNull(val) && vc.component.auditInfo.state == '1200'){
+                        vc.component.auditInfo.remark = "同意";
+                    }else{
+                        vc.component.auditInfo.remark = "";
+                    }
+
+                },
+                deep:true
+            }
+         },
          _initMethod:function(){
 
          },
@@ -38,6 +51,11 @@
                     ],
                     'auditInfo.remark':[
                         {
+                            limit:"required",
+                            param:"",
+                            errInfo:"原因内容不能为空"
+                        },
+                        {
                             limit:"maxLength",
                             param:"200",
                             errInfo:"原因内容不能超过200"
@@ -50,12 +68,10 @@
                     vc.message(vc.validate.errInfo);
                     return ;
                 }
-
-                vc.component.addBasePrivilegeInfo.communityId = vc.getCurrentCommunity().communityId;
                 //不提交数据将数据 回调给侦听处理
                 if(vc.notNull($props.callBackListener)){
-                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.addBasePrivilegeInfo);
-                    $('#addBasePrivilegeModel').modal('hide');
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.auditInfo);
+                    $('#auditModel').modal('hide');
                     return ;
                 }
 
