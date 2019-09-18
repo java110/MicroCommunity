@@ -51,7 +51,7 @@
                            );
             },
             _openAuditCommunityModal:function(){
-                vc.emit('auditCommunity','openAuditCommunityModal',{});
+                vc.emit('audit','openAuditModal',{});
             }
 
         }
