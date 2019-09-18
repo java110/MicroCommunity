@@ -17,10 +17,10 @@
             vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
-            vc.on('communityManage','listCommunity',function(_param){
+            vc.on('auditCommunityManage','listCommunity',function(_param){
                   vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
-            vc.on('communityManage','notifyAuditInfo',function(_auditInfo){
+            vc.on('auditCommunityManage','notifyAuditInfo',function(_auditInfo){
                   vc.component._auditCommunityState(_auditInfo);
             });
              vc.on('pagination','page_event',function(_currentPage){
