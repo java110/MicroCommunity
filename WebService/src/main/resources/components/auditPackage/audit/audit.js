@@ -14,7 +14,7 @@
         watch:{
             "auditInfo.state":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
-                    if(vc.notNull(val) && vc.component.auditInfo.state == '1200'){
+                    if(vc.notNull(val) && vc.component.auditInfo.state == '1100'){
                         vc.component.auditInfo.remark = "同意";
                     }else{
                         vc.component.auditInfo.remark = "";
@@ -72,6 +72,8 @@
                 if(vc.notNull($props.callBackListener)){
                     vc.emit($props.callBackListener,$props.callBackFunction,vc.component.auditInfo);
                     $('#auditModel').modal('hide');
+
+                    vc.component.clearAddBasePrivilegeInfo();
                     return ;
                 }
 
