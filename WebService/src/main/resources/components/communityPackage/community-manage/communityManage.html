@@ -40,6 +40,7 @@
                             <td>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
+                                            v-bind:disabled="community.state == '1100'"
                                             v-on:click="_openEditCommunityModel(community)">修改
                                     </button>
                                 </div>
