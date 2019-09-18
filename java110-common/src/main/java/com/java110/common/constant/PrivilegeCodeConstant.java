@@ -88,5 +88,8 @@ public final class PrivilegeCodeConstant {
 
     public static final String ADD_OWNER_ROOM = "502019091322800001";
 
+    //审核权限编码
+    public static final String AUDIT_COMMUNITY = "502019091773700003";
+
 
 }

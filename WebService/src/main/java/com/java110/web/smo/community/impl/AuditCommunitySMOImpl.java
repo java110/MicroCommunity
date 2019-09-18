@@ -34,7 +34,7 @@ public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAudi
         Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写小区审核原因");
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_COMMUNITY);
 
     }
 
