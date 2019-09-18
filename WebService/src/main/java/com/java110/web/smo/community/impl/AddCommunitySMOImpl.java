@@ -31,9 +31,8 @@ public class AddCommunitySMOImpl extends AbstractComponentSMO implements IAddCom
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写小区名称");
-Assert.hasKeyAndValue(paramIn, "address", "必填，请填写小区地址");
-Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附近地标");
-
+        Assert.hasKeyAndValue(paramIn, "address", "必填，请填写小区地址");
+        Assert.hasKeyAndValue(paramIn, "nearbyLandmarks", "必填，请填写小区附近地标");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);

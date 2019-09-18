@@ -65,7 +65,7 @@ public class AuditCommunityListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_COMMUNITY;
+        return ServiceCodeConstant.SERVICE_CODE_AUDIT_COMMUNITY;
     }
 
     @Override

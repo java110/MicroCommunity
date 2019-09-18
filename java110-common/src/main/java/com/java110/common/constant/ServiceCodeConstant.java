@@ -511,6 +511,8 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
 
+    public static final String SERVICE_CODE_AUDIT_COMMUNITY = "community.auditCommunity";
+
 
     /**
      * 保存公告
