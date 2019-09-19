@@ -15,11 +15,10 @@
                         <tr>
                             <th>小区ID</th>
                             <th>小区名称</th>
-                            <th>小区地址</th>
-                            <th>附近地标</th>
-                            <th>城市编码</th>
-                            <th>小区维度</th>
-                            <th>小区经度</th>
+                            <th>商户名称</th>
+                            <th>商户类型</th>
+                            <th>联系电话</th>
+                            <th>商户地址</th>
                             <th>状态</th>
                             <th class="text-right">操作</th>
                         </tr>
@@ -28,11 +27,10 @@
                         <tr v-for="community in auditEnterCommunityManageInfo.communitys">
                             <td>{{community.communityId}}</td>
                             <td>{{community.name}}</td>
+                            <td>{{community.storeName}}</td>
+                            <td>{{community.storeTypeName}}</td>
+                            <td>{{community.tel}}</td>
                             <td>{{community.address}}</td>
-                            <td>{{community.nearbyLandmarks}}</td>
-                            <td>{{community.cityCode}}</td>
-                            <td>{{community.mapX}}</td>
-                            <td>{{community.mapY}}</td>
                             <td>{{community.stateName}}</td>
                             <td>
                                 <div class="btn-group">

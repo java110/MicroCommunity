@@ -3,7 +3,7 @@ package com.java110.vo.api.community;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ApiCommunityDataVo implements Serializable {
+public class ApiCommunityDataVo  implements Serializable {
 
     private String communityId;
     private String name;
@@ -14,6 +14,8 @@ public class ApiCommunityDataVo implements Serializable {
     private String mapY;
     private String state;
     private String stateName;
+    private String memberId;
+    private String storeName;
 
     public String getCommunityId() {
         return communityId;
@@ -85,5 +87,21 @@ public class ApiCommunityDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }
