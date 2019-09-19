@@ -143,6 +143,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunity = new JSONObject();
         businessCommunity.putAll(paramInJson);
+        businessCommunity.put("state","1000");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
         return business;
