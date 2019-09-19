@@ -32,10 +32,10 @@
                                         <tr>
                                             <th>小区ID</th>
                                             <th data-hide="phone">名称</th>
-                                            <th data-hide="phone">联系方式</th>
+                                           <!-- <th data-hide="phone">联系方式</th>-->
                                             <th data-hide="phone">地址</th>
-                                            <th data-hide="phone">地标</th>
-                                            <th data-hide="phone,tablet" >城市编码</th>
+                                           <!-- <th data-hide="phone">地标</th>
+                                            <th data-hide="phone,tablet" >城市编码</th>-->
                                             <th class="text-right">操作</th>
                                         </tr>
                                     </thead>
@@ -47,18 +47,18 @@
                                             <td>
                                                 {{community.name}}
                                             </td>
-                                            <td>
+                                            <!--<td>
                                                 {{community.tel}}
-                                            </td>
+                                            </td>-->
                                             <td>
                                                 {{community.address}}
                                             </td>
-                                            <td>
+                                           <!-- <td>
                                                 {{community.nearbyLandmarks}}
                                             </td>
                                             <td>
                                                 {{community.cityCode}}
-                                            </td>
+                                            </td>-->
                                             <td class="text-right">
                                                 <div class="btn-group">
                                                     <button class="btn-white btn btn-xs" v-on:click="_saveEnterCommunity(community)">申请入驻</button>
