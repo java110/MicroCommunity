@@ -153,7 +153,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("ownerId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
-        businessCommunityMember.put("auditStatusCd", StatusConstant.STATUS_CD_AUDIT_COMPLETE);
+        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
         return business;

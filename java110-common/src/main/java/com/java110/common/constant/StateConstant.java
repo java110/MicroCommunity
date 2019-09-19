@@ -6,26 +6,19 @@ package com.java110.common.constant;
  */
 public class StateConstant {
 
-    /**
-     * 添加数据
-     */
-    public static final String STATE_ADD = "ADD";
+    private StateConstant() {
 
-    /**
-     * 修改数据
-     */
-    public static final String STATE_MOD = "MOD";
+    }
+
+    //未审核
+    public static final String NO_AUDIT = "1000";
 
 
-    /**
-     * 删除数据
-     */
-    public static final String STATE_DEL = "DEL";
+    //审核同意
+    public static final String AGREE_AUDIT = "1100";
 
-    /**
-     * 保持数据
-     */
-    public static final String STATE_KIP = "KIP";
+    //审核拒绝
+    public static final String REJECT_AUDIT = "1200";
 
 
 }

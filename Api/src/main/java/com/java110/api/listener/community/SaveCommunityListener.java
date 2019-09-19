@@ -76,7 +76,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("storeId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.AGENT);
-        businessCommunityMember.put("auditStatusCd", StatusConstant.STATUS_CD_AUDIT_COMPLETE);
+        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
         businesses.add(business);
 
@@ -91,7 +91,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", "400000000000000001");
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OPT);
-        businessCommunityMember.put("auditStatusCd", StatusConstant.STATUS_CD_AUDIT_COMPLETE);
+        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
         businesses.add(business);
 
@@ -104,7 +104,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", "400000000000000002");
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.DEV);
-        businessCommunityMember.put("auditStatusCd", StatusConstant.STATUS_CD_AUDIT_COMPLETE);
+        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
         businesses.add(business);
 
