@@ -11,6 +11,7 @@ import com.java110.store.dao.IStoreServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -22,14 +23,14 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/9/20
  **/
-@Service("StoreInnerServiceSMOImpl")
+@RestController
 public class StoreInnerServiceSMOImpl  extends BaseServiceSMO implements IStoreInnerServiceSMO {
 
     @Autowired
     private IStoreServiceDao storeServiceDaoImpl;
 
     @Override
-    public List<StoreDto> getStores(StoreDto storeDto) {
+    public List<StoreDto> getStores(@RequestBody StoreDto storeDto) {
         //校验是否传了 分页信息
 
         int page = storeDto.getPage();
