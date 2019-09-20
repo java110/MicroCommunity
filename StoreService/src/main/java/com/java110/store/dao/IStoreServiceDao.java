@@ -264,4 +264,14 @@ public interface IStoreServiceDao {
      */
     public void updateStoreUserInstance(Map info) throws DAOException;
 
+
+    /**
+     * 查询商户信息（instance过程）
+     * 根据bId 查询商户信息
+     * @param info bId 信息
+     * @return 商户信息
+     * @throws DAOException
+     */
+    public List<Map> getStores(Map info) throws DAOException;
+
 }

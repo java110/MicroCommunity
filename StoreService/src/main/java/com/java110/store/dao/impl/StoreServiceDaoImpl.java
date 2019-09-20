@@ -500,4 +500,13 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改商户用户信息Instance数据失败："+ JSONObject.toJSONString(info));
         }
     }
+
+    @Override
+    public List<Map> getStores(Map info) throws DAOException {
+        logger.debug("查询商户信息 入参 info : {}",info);
+
+        List<Map> propertyUsers = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStores",info);
+
+        return propertyUsers;
+    }
 }

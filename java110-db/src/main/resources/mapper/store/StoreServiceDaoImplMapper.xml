@@ -442,4 +442,36 @@
         </if>
     </update>
 
+    <!-- 查询商户 -->
+    <select id="getStores" parameterType="Map" resultType="Map">
+        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        from s_store s
+        where s.status_cd = '0'
+        <if test="userId != null and userId != ''">
+            and s.user_id = #{userId}
+        </if>
+        <if test="name != null and name !=''">
+            and s.name like concat('%',#{name},'%')
+        </if>
+        <if test="address != null and address != ''">
+            and s.address like concat('%',#{address},'%')
+        </if>
+        <if test="tel != null and tel != ''">
+            and s.tel = #{tel}
+        </if>
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and s.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+            and s.nearby_landmarks = #{nearbyLandmarks}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and s.store_id = #{storeId}
+        </if>
+        order by s.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>
