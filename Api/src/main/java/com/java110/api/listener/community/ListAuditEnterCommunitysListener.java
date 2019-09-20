@@ -77,7 +77,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener
         List<ApiCommunityDataVo> communitys = null;
 
         if (count > 0) {
-            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityMemberDto), ApiCommunityDataVo.class);
+            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto), ApiCommunityDataVo.class);
         } else {
             communitys = new ArrayList<>();
         }
