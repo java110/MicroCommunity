@@ -2,91 +2,87 @@
 
     vc.extends({
         data: {
-            editAppInfo: {
-                appId: '',
-                name: '',
-                securityCode: '',
-                whileListIp: '',
-                blackListIp: '',
-                remark: '',
+            editVisitInfo: {
 
             }
         },
         _initMethod: function () {
-
         },
         _initEvent: function () {
-            vc.on('editApp', 'openEditAppModal', function (_params) {
+            vc.on('editVisit', 'openEditVisitModel', function (_params) {
                 vc.component.refreshEditAppInfo();
                 $('#editAppModel').modal('show');
-                vc.component.editAppInfo = _params;
-                vc.component.editAppInfo.communityId = vc.getCurrentCommunity().communityId;
+                console.log(_params);
+                vc.component.editVisitInfo = _params;
+
             });
         },
         methods: {
             editAppValidate: function () {
                 return vc.validate.validate({
-                    editAppInfo: vc.component.editAppInfo
+                    editVisitInfo: vc.component.editVisitInfo
                 }, {
-                    'editAppInfo.name': [
+                    'editVisitInfo.name': [
                         {
                             limit: "required",
                             param: "",
-                            errInfo: "应用名称不能为空"
-                        },
-                        {
-                            limit: "maxin",
-                            param: "2,50",
-                            errInfo: "应用名称必须在2至50字符之间"
-                        },
+                            errInfo: "访客姓名不能为空"
+                        }
                     ],
-                    'editAppInfo.securityCode': [
-                        {
-                            limit: "maxLength",
-                            param: "64",
-                            errInfo: "秘钥太长超过64位"
-                        },
-                    ],
-                    'editAppInfo.whileListIp': [
-                        {
-                            limit: "maxLength",
-                            param: "200",
-                            errInfo: "白名单内容不能超过200"
-                        },
-                    ],
-                    'editAppInfo.blackListIp': [
-                        {
-                            limit: "maxLength",
-                            param: "200",
-                            errInfo: "黑名单内容不能超过200"
-                        },
-                    ],
-                    'editAppInfo.remark': [
-                        {
-                            limit: "maxLength",
-                            param: "200",
-                            errInfo: "备注内容不能超过200"
-                        },
-                    ],
-                    'editAppInfo.appId': [
+                    'editVisitInfo.visitGender': [
                         {
                             limit: "required",
                             param: "",
-                            errInfo: "应用Id不能为空"
-                        }]
+                            errInfo: "访客性别不能为空"
+                        },
+                    ],
+                    'editVisitInfo.phoneNumber': [
+                        {
+                            limit: "phone",
+                            param: "",
+                            errInfo: "访客联系方式不能为空"
+                        },
+                        {
+                            limit: "num",
+                            param: "",
+                            errInfo: "访客联系方式必须是数字"
+                        }
+                    ],
+                    'editVisitInfo.visitTime': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "访客到访时间不能为空"
+                        },
+                    ],
+                    'editVisitInfo.departureTime': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "访客到访时间不能为空"
+                        },
+                    ],
+                    'editVisitInfo.visitCase': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "访客到访原因不能为空"
+                        },
+                    ]
+
 
                 });
             },
-            editApp: function () {
+            editVisit: function () {
                 if (!vc.component.editAppValidate()) {
                     vc.message(vc.validate.errInfo);
                     return;
                 }
 
                 vc.http.post(
-                    'editApp',
+                    'editVisit',
                     'update',
-                    JSON.stringify(vc.component.editAppInfo),
+                    JSON.stringify(vc.component.editVisitInfo),
                     {
                         emulateJSON: true
                     },
@@ -108,12 +104,12 @@
             },
             refreshEditAppInfo: function () {
                 vc.component.editAppInfo = {
-                    appId: '',
                     name: '',
-                    securityCode: '',
-                    whileListIp: '',
-                    blackListIp: '',
-                    remark: '',
+                    visitGender: '',
+                    phoneNumber: '',
+                    visitTime: '',
+                    departureTime: '',
+                    visitCase: '',
 
                 }
             }

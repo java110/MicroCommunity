@@ -1,9 +1,9 @@
-<div id="editVisitModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div id="editAppModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <h3 class="m-t-none m-b ">访客修改</h3>
+                <h3 class="m-t-none m-b ">修改访客</h3>
                 <div class="ibox-content">
                     <div>
                         <div>
@@ -17,9 +17,9 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">访客性别</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control-sm form-control input-s-sm inline"
-                                            v-model="editVisitInfo.visitGender">
-                                        <option selected value="">请选择访客性别</option>
+<!--                                    <input v-model="editAppInfo.securityCode" type="text" placeholder="选填，请填访客性别"-->
+<!--                                           class="form-control">-->
+                                    <select v-model="editVisitInfo.visitGender" class="form-control" :value="editVisitInfo.visitGender">
                                         <option value="1">男</option>
                                         <option value="0">女</option>
                                     </select>
@@ -28,28 +28,28 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">访客联系方式</label>
                                 <div class="col-sm-10">
-                                    <input v-model="editVisitInfo.phoneNumber" type="tel" placeholder="必填，请填写访客联系方式"
+                                    <input v-model="editVisitInfo.phoneNumber" type="text" placeholder="选填，请填写联系方式"
                                            class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">访客拜访时间</label>
+                                <label class="col-sm-2 col-form-label">访客来访时间</label>
                                 <div class="col-sm-10">
-                                    <input v-model="editVisitInfo.visitTime" type="datetime-local" placeholder="必填，请填写访客拜访时间"
+                                    <input v-model="editVisitInfo.visitTime" type="date" placeholder="选填，请填写来访时间"
                                            class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">访客离开时间</label>
                                 <div class="col-sm-10">
-                                    <input v-model="editVisitInfo.departureTime" type="datetime-local" placeholder="选填，请填写访客离开时间"
+                                    <input v-model="editVisitInfo.departureTime" type="date" placeholder="选填，请填写离开时间"
                                            class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">描述</label>
+                                <label class="col-sm-2 col-form-label">访客来访事由</label>
                                 <div class="col-sm-10">
-                                    <textarea cols="5" placeholder="选填，请填写描述" class="form-control"
+                                    <textarea placeholder="选填，请填写访客来访事由" class="form-control"
                                               v-model="editVisitInfo.visitCase"></textarea></div>
                             </div>
 

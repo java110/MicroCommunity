@@ -2,7 +2,7 @@
 
     vc.extends({
         data:{
-            deleteVisitInfo:{
+            deleteAppInfo:{
 
             }
         },
@@ -10,20 +10,21 @@
 
          },
          _initEvent:function(){
-             vc.on('deleteVisit','openDeleteVisitModal',function(_params){
-
-                vc.component.deleteVisitInfo = _params;
-                $('#deleteVisitModel').modal('show');
-
-            });
+            //  vc.on('deleteApp','openDeleteAppModal',function(_params){
+            //      alert("监听成功");
+            //      console.log(_params);
+            //     vc.component.deleteAppInfo = _params;
+            //     $('#deleteAppModel').modal('show');
+            //
+            // });
         },
         methods:{
-            deleteVisit:function(){
-                vc.component.deleteVisitInfo.communityId=vc.getCurrentCommunity().communityId;
+            deleteApp:function(){
+                vc.component.deleteAppInfo.communityId=vc.getCurrentCommunity().communityId;
                 vc.http.post(
-                    'deleteVisit',
+                    'deleteApp',
                     'delete',
-                    JSON.stringify(vc.component.deleteVisitInfo),
+                    JSON.stringify(vc.component.deleteAppInfo),
                     {
                         emulateJSON:true
                      },
@@ -31,8 +32,8 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#deleteVisitModel').modal('hide');
-                            vc.emit('visitManage','listVisit',{});
+                            $('#deleteAppModel').modal('hide');
+                            vc.emit('appManage','listApp',{});
                             return ;
                         }
                         vc.message(json);
@@ -43,8 +44,8 @@
 
                      });
             },
-            closeDeleteVisitModel:function(){
-                $('#deleteVisitModel').modal('hide');
+            closeDeleteAppModel:function(){
+                $('#deleteAppModel').modal('hide');
             }
         }
     });
