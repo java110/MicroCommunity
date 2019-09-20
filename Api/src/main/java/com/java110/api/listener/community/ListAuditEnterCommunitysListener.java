@@ -118,6 +118,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener
             apiCommunityDataVo.setStoreTypeCd(storeDtos.get(0).getStoreTypeCd());
             apiCommunityDataVo.setStoreTypeName(storeDtos.get(0).getStoreTypeName());
             apiCommunityDataVo.setTel(storeDtos.get(0).getTel());
+            apiCommunityDataVo.setAddress(storeDtos.get(0).getAddress());
         }
     }
 
