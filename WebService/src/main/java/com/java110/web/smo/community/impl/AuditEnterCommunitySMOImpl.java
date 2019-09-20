@@ -7,7 +7,7 @@ import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;
 import com.java110.web.smo.community.IAuditCommunitySMO;
-import com.java110.web.smo.community.IEditCommunitySMO;
+import com.java110.web.smo.community.IAuditEnterCommunitySMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ import org.springframework.web.client.RestTemplate;
  * 审核小区服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("auditCommunitySMOImpl")
-public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAuditCommunitySMO {
+@Service("auditEnterCommunitySMOImpl")
+public class AuditEnterCommunitySMOImpl extends AbstractComponentSMO implements IAuditEnterCommunitySMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -34,7 +34,7 @@ public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAudi
         Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写小区审核原因");
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_ENTER_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_COMMUNITY);
 
     }
 
@@ -51,7 +51,7 @@ public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAudi
     }
 
     @Override
-    public ResponseEntity<String> auditCommunity(IPageData pd) {
+    public ResponseEntity<String> auditEnterCommunity(IPageData pd) {
         return super.businessProcess(pd);
     }
 

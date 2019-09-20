@@ -1,4 +1,4 @@
-package com.java110.community.listener;
+package com.java110.community.listener.communityMember;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.BusinessTypeConstant;
@@ -7,6 +7,7 @@ import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.community.dao.ICommunityServiceDao;
+import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
@@ -26,11 +27,11 @@ import java.util.Map;
  * 协议地址 ：https://github.com/java110/MicroCommunity/wiki/%E5%88%A0%E9%99%A4%E5%95%86%E6%88%B7%E4%BF%A1%E6%81%AF-%E5%8D%8F%E8%AE%AE
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("memberQuitCommunityListener")
+@Java110Listener("auditCommunityMemberStateListener")
 @Transactional
-public class MemberQuitCommunityListener extends AbstractCommunityBusinessServiceDataFlowListener {
+public class AuditCommunityMemberStateListener extends AbstractCommunityBusinessServiceDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(MemberQuitCommunityListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(AuditCommunityMemberStateListener.class);
     @Autowired
     ICommunityServiceDao communityServiceDaoImpl;
 
@@ -41,7 +42,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
 
     @Override
     public String getBusinessTypeCd() {
-        return BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY;
+        return BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE;
     }
 
     /**
@@ -79,12 +80,13 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         //小区信息
         Map info = new HashMap();
         info.put("bId", business.getbId());
-        info.put("operate", StatusConstant.OPERATE_DEL);
+        info.put("operate", StatusConstant.OPERATE_ADD);
+
 
         //小区信息
         Map businessCommunityMember = communityServiceDaoImpl.getBusinessCommunityMember(info);
         if (businessCommunityMember != null && !businessCommunityMember.isEmpty()) {
-            flushBusinessCommunityMember(businessCommunityMember, StatusConstant.STATUS_CD_INVALID);
+            flushBusinessCommunityMember(businessCommunityMember, StatusConstant.STATUS_CD_VALID);
             communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
             dataFlowContext.addParamOut("communityMemberId", businessCommunityMember.get("member_community_id"));
         }
@@ -103,7 +105,7 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
         info.put("bId", bId);
-        info.put("statusCd", StatusConstant.STATUS_CD_INVALID);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
 
         Map delInfo = new HashMap();
         delInfo.put("bId", business.getbId());
@@ -136,11 +138,13 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
 
         Assert.jsonObjectHaveKey(businessCommunity, "communityMemberId", "doBusinessCommunityMember 节点下没有包含 communityMemberId 节点");
 
-        if (businessCommunity.getString("communityMemberId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "communityMemberId 错误，不能自动生成（必须已经存在的communityMemberId）" + businessCommunity);
-        }
         //自动插入DEL
         autoSaveDelBusinessCommunityMember(business, businessCommunity);
+
+        businessCommunity.put("bId",business.getbId());
+        businessCommunity.put("operate", StatusConstant.OPERATE_ADD);
+        //保存小区信息
+        communityServiceDaoImpl.saveBusinessCommunityMember(businessCommunity);
     }
 
 

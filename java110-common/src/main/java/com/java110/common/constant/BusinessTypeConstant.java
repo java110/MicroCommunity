@@ -221,6 +221,11 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY = "500100040002";
 
     /**
+     * 审核 小区成员
+     */
+    public static final String BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE = "500100040003";
+
+    /**
      * 删除商户信息
      */
     public static final String BUSINESS_TYPE_DELETE_COMMUNITY_INFO = "500100050001";

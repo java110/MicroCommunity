@@ -10,7 +10,7 @@
                 communitys:[],
                 total:0,
                 records:1,
-                currentCommunityId:''
+                currentCommunityMemberId:''
             }
         },
         _initMethod:function(){
@@ -55,11 +55,11 @@
                            );
             },
             _openEnterAuditCommunityModal:function(_community){
-                vc.component.auditEnterCommunityManageInfo.currentCommunityId = _community.communityId;
+                vc.component.auditEnterCommunityManageInfo.currentCommunityMemberId = _community.communityMemberId;
                 vc.emit('audit','openAuditModal',{});
             },
             _auditEnterCommunityState:function(_auditInfo){
-                _auditInfo.communityId = vc.component.auditEnterCommunityManageInfo.currentCommunityId;
+                _auditInfo.communityMemberId = vc.component.auditEnterCommunityManageInfo.currentCommunityMemberId;
                 vc.http.post(
                     'auditEnterCommunityManage',
                     'audit',

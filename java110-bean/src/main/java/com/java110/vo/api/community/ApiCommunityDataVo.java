@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class ApiCommunityDataVo  implements Serializable {
 
+    private String communityMemberId;
     private String communityId;
     private String name;
     private String address;
@@ -130,5 +131,13 @@ public class ApiCommunityDataVo  implements Serializable {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getCommunityMemberId() {
+        return communityMemberId;
+    }
+
+    public void setCommunityMemberId(String communityMemberId) {
+        this.communityMemberId = communityMemberId;
     }
 }

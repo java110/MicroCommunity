@@ -92,5 +92,7 @@ public final class PrivilegeCodeConstant {
     //审核权限编码
     public static final String AUDIT_COMMUNITY = "502019091773700003";
 
+    public static final String AUDIT_ENTER_COMMUNITY = "502019091978690002";
+
 
 }
