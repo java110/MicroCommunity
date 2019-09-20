@@ -3,14 +3,17 @@
         propTypes: {
            emitChooseRoom:vc.propTypes.string,
            emitLoadData:vc.propTypes.string,
-           roomFlag:vc.propTypes.string // 如果 1 表示查询售卖房屋 2 表示查询未售卖房屋
+           roomFlag:vc.propTypes.string, // 如果 1 表示查询售卖房屋 2 表示查询未售卖房屋
+           showSearchCondition:vc.propTypes.string='true'
+
         },
         data:{
             searchRoomInfo:{
                 rooms:[],
                 _currentRoomNum:'',
                 _currentFloorNum:'',
-                floorNumInputReadonly:false
+                floorNumInputReadonly:false,
+                showSearchCondition:$props.showSearchCondition,
             }
         },
         _initMethod:function(){
@@ -28,7 +31,10 @@
                 vc.component.searchRoomInfo._currentFloorNum = _floorInfo.floorNum;
                 vc.component.searchRoomInfo.floorNumInputReadonly = true;
                 vc.component.searchRooms();
-
+            });
+            vc.on('searchRoom','showOwnerRooms',function(_rooms){
+                $('#searchRoomModel').modal('show');
+                vc.component.searchRoomInfo.rooms=_rooms;
             });
         },
         methods:{

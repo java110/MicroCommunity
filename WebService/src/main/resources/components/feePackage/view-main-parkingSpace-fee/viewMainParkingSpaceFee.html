@@ -4,12 +4,16 @@
             <div class="ibox-title">
                 <h5>{{mainParkingSpaceFeeInfo.feeName}}信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择停车位</button>
+                    <!--<button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择停车位</button>-->
                     <button type="button" class="btn btn-primary btn-sm"
                             v-if="mainParkingSpaceFeeInfo.feeId != null && mainParkingSpaceFeeInfo.feeId != '' &&  mainParkingSpaceFeeInfo.amount == '-1.00'"
-                            style="margin-left:10px" v-on:click="openPayModel()">
+                             v-on:click="openPayModel()">
                         <i class="glyphicon glyphicon-plus" ></i> 缴费</button>
+
+                    <button type="button" class="btn btn-primary btn-sm"
+                            style="margin-left:10px" v-on:click="_openCallBackOwner()">
+                        返回</button>
                 </div>
             </div>
             <div class="ibox-content">
@@ -28,31 +32,11 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >车位类型：</label>
-                            <label class="">{{mainParkingSpaceFeeInfo.typeCd}}</label>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" >车牌号：</label>
                             <label class="">{{mainParkingSpaceFeeInfo.carNum}}</label>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >车品牌：</label>
-                            <label class="">{{mainParkingSpaceFeeInfo.carBrand}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">车类型：</label>
-                            <label class="">{{mainParkingSpaceFeeInfo.carType}}</label>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
@@ -78,11 +62,11 @@
             </div>
         </div>
     </div>
-    <vc:create name="searchParkingSpace"
+   <!-- <vc:create name="searchParkingSpace"
                emitChooseParkingSpace="viewMainParkingSpaceFee"
                emitLoadData="propertyFee"
                parkingSpaceFlag="SH"
-    ></vc:create>
+    ></vc:create>-->
     <vc:create name="propertyPay"
                emitReloadFee="viewMainParkingSpaceFee">
 

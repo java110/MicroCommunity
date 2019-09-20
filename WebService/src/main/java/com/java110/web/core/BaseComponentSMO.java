@@ -227,6 +227,32 @@ public class BaseComponentSMO extends BaseServiceSMO {
     }
 
     /**
+     * 校验 员工 商户 关系
+     * <p>
+     * 判断员工和商户是否有关系， 商户和 是否有关系
+     *
+     * @param pd           页面数据封装
+     * @param restTemplate http调用工具
+     * @return ComponentValidateResult 校验对象
+     */
+    protected ComponentValidateResult validateStoreStaffRelationship(IPageData pd, RestTemplate restTemplate) {
+
+        // 校验 员工和商户是否有关系
+        ResponseEntity responseEntity = getStoreInfo(pd, restTemplate);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, responseEntity.getBody() + "");
+        }
+
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
+        Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeTypeCd", "根据用户ID查询商户类型失败，未包含storeTypeCd节点");
+
+        String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
+        String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
+
+        return new ComponentValidateResult(storeId, storeTypeCd, "", pd.getUserId());
+    }
+
+    /**
      * 分页信息校验
      * @param pd 页面数据封装
      */

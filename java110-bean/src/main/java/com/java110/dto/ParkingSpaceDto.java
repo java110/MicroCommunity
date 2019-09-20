@@ -14,18 +14,17 @@ import java.util.Date;
 public class ParkingSpaceDto extends PageDto implements Serializable {
 
     private String area;
-private String typeCd;
-private String num;
-private String psId;
-private String remark;
-private String state;
-private String communityId;
-private String userId;
+    private String typeCd;
+    private String num;
+    private String psId;
+    private String remark;
+    private String state;
+    private String communityId;
+    private String userId;
 
-private String[] psIds;
+    private String[] psIds;
 
-private String[] states;
-
+    private String[] states;
 
 
     private Date createTime;
@@ -36,49 +35,64 @@ private String[] states;
     public String getArea() {
         return area;
     }
-public void setArea(String area) {
+
+    public void setArea(String area) {
         this.area = area;
     }
-public String getTypeCd() {
+
+    public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getNum() {
+
+    public String getNum() {
         return num;
     }
-public void setNum(String num) {
+
+    public void setNum(String num) {
         this.num = num;
     }
-public String getPsId() {
+
+    public String getPsId() {
         return psId;
     }
-public void setPsId(String psId) {
+
+    public void setPsId(String psId) {
         this.psId = psId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

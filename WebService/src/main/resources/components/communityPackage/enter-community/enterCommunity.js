@@ -44,9 +44,9 @@
             _showCommunityStatus(_statusCd){
                 if(_statusCd == '1000'){
                     return "入驻审核";
-                }else if(_statusCd == '1001'){
-                    return "退出审核";
-                }else if(_statusCd == '0000'){
+                }else if(_statusCd == '1200'){
+                    return "入驻失败";
+                }else if(_statusCd == '1100'){
                     return "入驻成功";
                 }
 

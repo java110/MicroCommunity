@@ -497,6 +497,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_LIST_COMMUNITYS = "community.listCommunitys";
 
     /**
+     * 查询需要审核入驻小区商户
+     */
+    public static final String SERVICE_CODE_LIST_AUDIT_ENTER_COMMUNITYS = "community.listAuditEnterCommunitys";
+
+    /**
      * 保存小区
      */
     public static final String SERVICE_CODE_SAVE_COMMUNITY = "community.saveCommunity";
@@ -510,6 +515,8 @@ public class ServiceCodeConstant {
      * 删除小区community.deleteCommunity
      */
     public static final String SERVICE_CODE_DELETE_COMMUNITY = "community.deleteCommunity";
+
+    public static final String SERVICE_CODE_AUDIT_COMMUNITY = "community.auditCommunity";
 
 
     /**

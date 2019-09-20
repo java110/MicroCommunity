@@ -5,7 +5,8 @@
                 username:'',
                 passwd:'',
                 repasswd:'',
-                errorInfo:''
+                errorInfo:'',
+                validateInfo:''
             }
         },
         _initMethod:function(){
@@ -25,7 +26,7 @@
                      });
         },
         methods:{
-            validate(){
+            validate:function(){
                 return vc.validate.validate({
                     registerInfo:vc.component.registerInfo
                 },{
@@ -80,7 +81,7 @@
 
                 });
             },
-            doRegister(){
+            doRegister:function(){
 
                 if(!vc.component.validate()){
                     vc.component.registerInfo.errorInfo = vc.validate.errInfo;
@@ -107,6 +108,15 @@
                                 vc.component.registerInfo.errorInfo = errInfo;
                              });
 
+            },
+            test:function(val){
+                if('username' == val){
+                    vc.messageTips("*用户名长度必须在4位至6位");
+
+                }else if('passwd' == val){
+                    vc.messageTips("*密码长度必须在6位至12位");
+
+                }
             }
         }
     });

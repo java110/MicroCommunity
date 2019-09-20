@@ -59,6 +59,8 @@ public final class PrivilegeCodeConstant {
 
 
     public static final String AGENT_HAS_LIST_COMMUNITY = "500201906025";
+    public static final String ADMIN_HAS_LIST_COMMUNITY = "502019091797230001";
+    public static final String AGENT_HAS_LIST_AUDIT_ENTER_COMMUNITY = "502019091978690002";
     public static final String HAS_LIST_NOTICE = "500201904009";
     public static final String AGENT_HAS_LIST_APP = "500201906026";
     public static final String AGENT_HAS_LIST_SERVICE = "500201906027";
@@ -86,6 +88,9 @@ public final class PrivilegeCodeConstant {
 
 
     public static final String ADD_OWNER_ROOM = "502019091322800001";
+
+    //审核权限编码
+    public static final String AUDIT_COMMUNITY = "502019091773700003";
 
 
 }

@@ -6,8 +6,8 @@
     
     <!-- 保存小区信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityInfo" parameterType="Map">
-        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,operate)
-        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
+        insert into business_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,month,state,operate)
+        values(#{communityId},#{bId},#{name},#{address},#{cityCode},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{state},#{operate})
     </insert>
     <!-- 保存小区属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessCommunityAttr" parameterType="Map">
@@ -23,7 +23,7 @@
 
     <!-- 查询小区信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.operate,s.state
         from business_community s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -73,8 +73,8 @@
 
     <!-- 保存小区信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityInfoInstance" parameterType="Map">
-        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd)
-        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0')
+        insert into s_community(community_id,b_id,name,address,city_code,nearby_landmarks,map_x,map_y,status_cd,state)
+        values(#{community_id},#{b_id},#{name},#{address},#{city_code},#{nearby_landmarks},#{map_x},#{map_y},'0',#{state})
     </insert>
 
     <!-- 保存小区属性信息到 instance add by wuxw 2018-07-03 -->
@@ -102,7 +102,7 @@
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfo" parameterType="Map" resultType="Map">
-        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
+        select s.community_id,s.b_id,s.name,s.address,s.city_code,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd,s.state
         from s_community s
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -179,6 +179,9 @@
         </if>
         <if test="mapY != null and mapY != ''">
             ,s.map_y = #{mapY}
+        </if>
+        <if test="state != null and state != ''">
+            ,s.state = #{state}
         </if>
         where 1=1
         <if test="bId != null and bId !=''">
@@ -276,9 +279,28 @@
     <select id="getCommunityMember" parameterType="Map" resultType="Map">
         select ms.community_member_id ,ms.b_id,ms.community_id,ms.member_id,ms.member_type_cd,ms.status_cd,ms.audit_status_cd,
         ms.community_member_id communityMemberId ,ms.b_id bId,ms.community_id communityId,ms.member_id memberId,ms.member_type_cd memberTypeCd,ms.status_cd statusCd,
-        ms.audit_status_cd auditStatusCd
+        ms.audit_status_cd auditStatusCd,
+        (CASE
+        WHEN ms.audit_status_cd='1000'
+        THEN '待审核'
+        WHEN ms.audit_status_cd = '1100'
+        THEN '审核完成'
+        ELSE
+        '审核拒绝'
+        END) stateName
+        <if test="needCommunityInfo == true">
+            ,sc.name
+        </if>
         from s_community_member ms
+        <if test="needCommunityInfo == true">
+            ,s_community sc
+        </if>
         where 1=1
+        <if test="needCommunityInfo == true">
+            and sc.`community_id` = ms.`community_id`
+            AND sc.`status_cd` = '0'
+            and sc.state='1100'
+        </if>
         <if test="statusCd != null and statusCd != ''">
             and ms.status_cd = #{statusCd}
         </if>
@@ -330,7 +352,15 @@
     <select id="getCommunityMemberCount" parameterType="Map" resultType="Map">
         select count(1) count
         from s_community_member ms
+        <if test="needCommunityInfo == true">
+            ,s_community sc
+        </if>
         where 1=1
+        <if test="needCommunityInfo == true">
+            and sc.`community_id` = ms.`community_id`
+            AND sc.`status_cd` = '0'
+            and sc.state='1100'
+        </if>
         <if test="statusCd != null and statusCd != ''">
             and ms.status_cd = #{statusCd}
         </if>
@@ -358,8 +388,21 @@
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityInfoNew" parameterType="Map" resultType="Map">
-        select  t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,t.map_x,t.map_x mapX
+        select  t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
+        t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,
+        t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
+        t.map_x,t.map_x mapX,t.state,(CASE
+        WHEN t.state='1000'
+        THEN '待审核'
+        WHEN t.state = '1100'
+        THEN '审核完成'
+        ELSE
+        '审核拒绝'
+        END) stateName
         from s_community t
+        <if test="memberId !=null and memberId !=''">
+            ,s_community_member cm
+        </if>
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}
@@ -387,6 +430,14 @@
         </if>
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="memberId !=null and memberId !=''">
+            and cm.community_id = t.community_id
+            and cm.member_id = #{memberId}
+            and cm.status_cd = '0'
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -400,6 +451,9 @@
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
         select  count(1) count
         from s_community t
+        <if test="memberId !=null and memberId !=''">
+            ,s_community_member cm
+        </if>
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}
@@ -427,6 +481,14 @@
         </if>
         <if test="mapX !=null and mapX != ''">
             and t.map_x= #{mapX}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="memberId !=null and memberId !=''">
+            and cm.community_id = t.community_id
+                and cm.member_id = #{memberId}
+                and cm.status_cd = '0'
         </if>
 
 

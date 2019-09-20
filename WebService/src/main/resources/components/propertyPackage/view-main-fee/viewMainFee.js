@@ -27,6 +27,16 @@
             }
         },
         _initMethod:function(){
+             //加载 业主信息
+            var _ownerId = vc.getParam('ownerId')
+            var _roomId = vc.getParam('roomId')
+
+            if(vc.notNull(_roomId)){
+                vc.component.loadMainFeeInfo({
+                    roomId:_roomId,
+                    ownerId:_ownerId,
+                });
+            }
 
         },
         _initEvent:function(){
@@ -79,6 +89,9 @@
                                 console.log('请求失败处理');
                              }
                            );
+            },
+            _openCallBackOwner:function(){
+                vc.jumpToPage("/flow/ownerFlow");
             }
 
         }

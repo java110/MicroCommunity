@@ -12,7 +12,7 @@
             }
         },
          _initMethod:function(){
-
+             vc.component._companyinitDate();
          },
          _initEvent:function(){
                 // 证件信息
@@ -67,7 +67,23 @@
                                                                ]
 
                                                            });
-                    }
+                    },
+            _companyinitDate:function(){
+                $('.company_time').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    minView: "month",
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+
+                });
+                $('.company_time').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".company_time").val();
+                        vc.component.companyCerdentialsInfo.validityPeriod = value;
+                    });
+            }
 
         }
 

@@ -4,15 +4,21 @@
             <div class="ibox-title">
                 <h5>{{mainFeeInfo.feeName}}信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchRoomModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择房屋</button>
+                    <!--<button type="button" class="btn btn-primary btn-sm"
+                            v-on:click="openSearchRoomModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择房屋</button>-->
                     <button type="button" class="btn btn-primary btn-sm"
                             v-if="mainFeeInfo.feeId != null && mainFeeInfo.feeId != ''"
-                            style="margin-left:10px" v-on:click="openPayModel()">
+                            v-on:click="openPayModel()">
                         <i class="glyphicon glyphicon-plus" ></i> 缴费</button>
+
+                    <button type="button" class="btn btn-primary btn-sm"
+                            style="margin-left:10px" v-on:click="_openCallBackOwner()">
+                        返回</button>
                 </div>
             </div>
             <div class="ibox-content">
+
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -22,29 +28,8 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label">小区楼编号：</label>
-                            <label class="">{{mainFeeInfo.floorNum}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >房屋ID：</label>
-                            <label class="">{{mainFeeInfo.roomId}}</label>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" >房屋编号：</label>
                             <label class="">{{mainFeeInfo.roomNum}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >业主ID：</label>
-                            <label class="">{{mainFeeInfo.ownerId}}</label>
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -53,32 +38,15 @@
                             <label class="">{{mainFeeInfo.ownerName}}</label>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >联系电话：</label>
-                            <label class="">{{mainFeeInfo.link}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >建筑面积：</label>
-                            <label class="">{{mainFeeInfo.builtUpArea}} 平方米</label>
-                        </div>
-                    </div>
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >费用开始时间：</label>
                             <label class="">{{mainFeeInfo.startTime}}</label>
                         </div>
                     </div>
-
-
-                </div>
-                <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >费用到期时间：</label>
@@ -91,16 +59,15 @@
                             <label class="">{{mainFeeInfo.amount}}</label>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-    <vc:create name="searchRoom"
+    <!--<vc:create name="searchRoom"
                emitChooseRoom="viewMainFee"
                emitLoadData="propertyFee"
                roomFlag="1"
-    ></vc:create>
+    ></vc:create>-->
     <vc:create name="propertyPay"
                emitReloadFee="viewMainFee"
     ></vc:create>

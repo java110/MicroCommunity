@@ -1,4 +1,4 @@
-<div id="component">
+<div id="component" xmlns:vc="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox ">
@@ -100,21 +100,9 @@
                                 </div>-->
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">变更业主
+                                            aria-haspopup="true" aria-expanded="false">变更
                                     </button>
-                                    <!--<div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"
-                                           v-on:click="_openEditOwnerModel(owner)">修改业主</a>
-                                        <a class="dropdown-item" href="#"
-                                           v-on:click="_openDelOwnerModel(owner)">删除业主</a>
-                                        <a class="dropdown-item" href="#"
-                                            v-on:click="_openAddOwnerRoom(owner)">添加房屋</a>
-                                        <a class="dropdown-item" href="#">删除房屋</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#"
-                                            v-on:click="_openHireParkingSpace(owner)">车位出租</a>
-                                        <a class="dropdown-item" href="#">车位出售</a>
-                                    </div>-->
+
 
                                     <div class="dropdown-menu p-4 text-muted" style="max-width: 200px;">
                                         <p style="margin:10px 0;">
@@ -137,6 +125,13 @@
                                             <span >|</span>
                                             <a  href="#"
                                                 v-on:click="_openSellParkingSpace(owner)">车位出售</a>
+                                        </p>
+                                        <p style="margin:10px 0;">
+                                            <a  href="#"
+                                                v-on:click="_openPayPropertyFee(owner)">物业费用</a>
+                                            <span >|</span>
+                                            <a  href="#"
+                                                v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
                                         </p>
                                     </div>
                                 </div>
@@ -175,6 +170,21 @@
     ></vc:create>
     <vc:create name="deleteOwner"
                notifyLoadDataComponentName="listOwner"
+    ></vc:create>
+
+    <vc:create
+        name="searchRoom"
+        emitChooseRoom="listOwner"
+        emitLoadData="listOwner"
+        roomFlag="1"
+        showSearchCondition="false"
+        ></vc:create>
+
+    <vc:create name="searchParkingSpace"
+               emitChooseParkingSpace="listOwner"
+               emitLoadData="listOwner"
+               parkingSpaceFlag="SH"
+               showSearchCondition="false"
     ></vc:create>
 
 </div>

@@ -16,12 +16,16 @@ import java.util.Date;
 public class CommunityDto extends PageDto implements Serializable {
 
     private String address;
-private String nearbyLandmarks;
-private String cityCode;
-private String name;
-private String communityId;
-private String mapY;
-private String mapX;
+    private String nearbyLandmarks;
+    private String cityCode;
+    private String name;
+    private String communityId;
+    private String mapY;
+    private String mapX;
+    private String memberId;
+    private String state;
+    private String stateName;
+
 
 
     private Date createTime;
@@ -32,43 +36,56 @@ private String mapX;
     public String getAddress() {
         return address;
     }
-public void setAddress(String address) {
+
+    public void setAddress(String address) {
         this.address = address;
     }
-public String getNearbyLandmarks() {
+
+    public String getNearbyLandmarks() {
         return nearbyLandmarks;
     }
-public void setNearbyLandmarks(String nearbyLandmarks) {
+
+    public void setNearbyLandmarks(String nearbyLandmarks) {
         this.nearbyLandmarks = nearbyLandmarks;
     }
-public String getCityCode() {
+
+    public String getCityCode() {
         return cityCode;
     }
-public void setCityCode(String cityCode) {
+
+    public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getMapY() {
+
+    public String getMapY() {
         return mapY;
     }
-public void setMapY(String mapY) {
+
+    public void setMapY(String mapY) {
         this.mapY = mapY;
     }
-public String getMapX() {
+
+    public String getMapX() {
         return mapX;
     }
-public void setMapX(String mapX) {
+
+    public void setMapX(String mapX) {
         this.mapX = mapX;
     }
 
@@ -87,5 +104,29 @@ public void setMapX(String mapX) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

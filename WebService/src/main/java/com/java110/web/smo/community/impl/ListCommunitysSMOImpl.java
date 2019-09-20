@@ -3,6 +3,7 @@ package com.java110.web.smo.community.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
+import com.java110.common.constant.StoreTypeConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.web.smo.community.IListCommunitysSMO;
@@ -36,7 +37,7 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY,PrivilegeCodeConstant.ADMIN_HAS_LIST_COMMUNITY);
     }
 
     @Override
@@ -45,6 +46,11 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
+
+
+        if(!StoreTypeConstant.STORE_TYPE_SYSTEM_MANAGER.equals(result.getStoreTypeCd())) {
+            paramIn.put("memberId", result.getStoreId());
+        }
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listCommunitys" + mapToUrlParam(paramIn);
 
