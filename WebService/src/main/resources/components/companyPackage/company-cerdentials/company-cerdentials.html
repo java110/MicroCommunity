@@ -9,8 +9,9 @@
         </div>
         <div class="col-lg-8">
             <div class="form-group">
-                <label>有效期 *</label>
-                <input v-model="companyCerdentialsInfo.validityPeriod" type="text" class="form-control required email" aria-required="true" />
+                <label>有效期(yyyy-mm-dd) *</label>
+                <input v-model="companyCerdentialsInfo.validityPeriod" size="16" type="text" placeholder="请选择时间"   readonly class="form-control form-control-sm company_time">
+
             </div>
         </div>
         <div class="col-lg-8">
