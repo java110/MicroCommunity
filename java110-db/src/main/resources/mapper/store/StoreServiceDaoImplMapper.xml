@@ -444,9 +444,13 @@
 
     <!-- 查询商户 -->
     <select id="getStores" parameterType="Map" resultType="Map">
-        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.status_cd
-        from s_store s
-        where s.status_cd = '0'
+        select s.store_id,s.b_id,s.user_id,s.name,s.storeName,s.address,s.tel,
+        s.store_type_cd,s.store_type_cd storeTypeCd, s.nearby_landmarks,s.map_x,s.map_y,s.status_cd,
+        st.name storeTypeName
+        from s_store s,store_type st
+        where s.status_cd = '0',
+        and s.store_type_cd = st.store_type_cd
+
         <if test="userId != null and userId != ''">
             and s.user_id = #{userId}
         </if>

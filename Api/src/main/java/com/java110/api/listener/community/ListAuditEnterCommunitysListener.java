@@ -112,7 +112,12 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener
             if(storeDtos.size() != 1){
                 continue;
             }
-            BeanConvertUtil.covertBean(storeDtos.get(0), apiCommunityDataVo);
+            //BeanConvertUtil.covertBean(storeDtos.get(0), apiCommunityDataVo);
+
+            apiCommunityDataVo.setStoreName(storeDtos.get(0).getStoreName());
+            apiCommunityDataVo.setStoreTypeCd(storeDtos.get(0).getStoreTypeCd());
+            apiCommunityDataVo.setStoreTypeName(storeDtos.get(0).getStoreTypeName());
+            apiCommunityDataVo.setTel(storeDtos.get(0).getTel());
         }
     }
 

@@ -26,6 +26,7 @@ public class StoreDto extends PageDto implements Serializable {
     private String mapX;
     private String mapY;
     private String storeName;
+    private String storeTypeName;
 
 
     private Date createTime;
@@ -126,5 +127,13 @@ public class StoreDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStoreTypeName() {
+        return storeTypeName;
+    }
+
+    public void setStoreTypeName(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
     }
 }

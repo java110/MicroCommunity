@@ -16,6 +16,9 @@ public class ApiCommunityDataVo  implements Serializable {
     private String stateName;
     private String memberId;
     private String storeName;
+    private String storeTypeCd;
+    private String storeTypeName;
+    private String tel;
 
     public String getCommunityId() {
         return communityId;
@@ -103,5 +106,29 @@ public class ApiCommunityDataVo  implements Serializable {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
+    }
+
+    public String getStoreTypeName() {
+        return storeTypeName;
+    }
+
+    public void setStoreTypeName(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }
