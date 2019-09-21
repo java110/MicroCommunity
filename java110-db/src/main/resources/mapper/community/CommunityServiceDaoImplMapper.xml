@@ -384,6 +384,11 @@
         <if test="memberId != null and memberId != '' and needCommunityInfo == false">
             and ms.member_id = #{memberId}
         </if>
+
+        <if test="noAuditEnterCommunity == true">
+            ms.member_type_cd not in ('390001200003','390001200005','390001200000')
+        </if>
+
         <if test="memberTypeCd != null and memberTypeCd != ''">
             and ms.member_type_cd = #{memberTypeCd}
         </if>

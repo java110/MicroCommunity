@@ -71,6 +71,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener
         CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson, CommunityMemberDto.class);
 
         communityMemberDto.setNeedCommunityInfo(true);
+        communityMemberDto.setNoAuditEnterCommunity(true);
 
         int count = communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
 

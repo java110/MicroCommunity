@@ -23,6 +23,8 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     private boolean needCommunityInfo;
 
+    private boolean noAuditEnterCommunity;
+
     public String getCommunityMemberId() {
         return communityMemberId;
     }
@@ -77,5 +79,13 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     public void setNeedCommunityInfo(boolean needCommunityInfo) {
         this.needCommunityInfo = needCommunityInfo;
+    }
+
+    public boolean isNoAuditEnterCommunity() {
+        return noAuditEnterCommunity;
+    }
+
+    public void setNoAuditEnterCommunity(boolean noAuditEnterCommunity) {
+        this.noAuditEnterCommunity = noAuditEnterCommunity;
     }
 }
