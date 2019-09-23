@@ -54,11 +54,11 @@
                     return ;
                 }
                 // 导入数据
-                if (!vc.component.checkFileType(tFiles[i].name.split('.')[1])) {
+                if (!vc.component.checkFileType(vc.component.assetImportInfo.excelTemplate.name.split('.')[1])) {
                     vc.message('不是有效的Excel格式');
                     return ;
                 }
-                if (!vc.component.checkFileSize(tFiles[i].size)) {
+                if (!vc.component.checkFileSize(vc.component.assetImportInfo.excelTemplate.size)) {
                     vc.message('Excel文件大小不能超过2M');
                     return ;
                 }
