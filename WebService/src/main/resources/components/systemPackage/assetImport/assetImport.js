@@ -67,7 +67,7 @@
                 param.append('communityId',vc.component.assetImportInfo.communityId);
 
 
-                vc.http.post(
+                vc.http.upload(
                     'assetImport',
                     'importData',
                     param,
