@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>资产导入</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openDownloadHcExcelTemplate()">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                        模板
+                    </button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div>
+                    <div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">选择文件</label>
+                            <div class="col-sm-10">
+                                <input v-model="assetImportInfo.excelTemplate" type="file" placeholder="必填，请选择数据文件"
+                                       class="form-control"
+                                       accept=".xls,.xlsx"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">备注</label>
+                            <div class="col-sm-10">
+                                <textarea v-model="assetImportInfo.remark" type="text" placeholder="请填写备注信息" rows="3"
+                                          class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
