@@ -19,7 +19,7 @@
                                 <input ref="excelTemplate" type="file" placeholder="必填，请选择数据文件"
                                        class="form-control"
                                        name="excelTemplate"
-                                       v-on:change="getExcelTemplate($event)"
+                                       @change="getExcelTemplate($event)"
                                        accept=".xls,.xlsx"
                                 >
                             </div>
