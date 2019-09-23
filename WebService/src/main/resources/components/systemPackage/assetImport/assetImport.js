@@ -40,6 +40,9 @@
             _openDownloadHcExcelTemplate:function(){
                 //下载 模板
                 vc.jumpToPage('/import/hc.xlsx')
+            },
+            getExcelTemplate:function(e){
+               vc.component.assetImportInfo.excelTemplate = e.target.files[0]
             }
 
         }

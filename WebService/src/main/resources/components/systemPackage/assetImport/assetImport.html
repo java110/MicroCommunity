@@ -16,8 +16,10 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">选择文件</label>
                             <div class="col-sm-10">
-                                <input v-model="assetImportInfo.excelTemplate" type="file" placeholder="必填，请选择数据文件"
+                                <input ref="excelTemplate" type="file" placeholder="必填，请选择数据文件"
                                        class="form-control"
+                                       name="excelTemplate"
+                                       v-on:change="getExcelTemplate($event)"
                                        accept=".xls,.xlsx"
                                 >
                             </div>
