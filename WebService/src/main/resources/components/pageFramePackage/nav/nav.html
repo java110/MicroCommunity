@@ -18,8 +18,13 @@
                 {{navCommunityInfo._currentCommunity.name}}
                 <span class="caret"></span>
             </a>
+
             <div class="dropdown-menu" v-for="currentCommunity in navCommunityInfo.communityInfos">
                 <a class="dropdown-item" v-on:click="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
+                <a href="/flow/enterCommunity" class="dropdown-item">
+                    <strong>入驻小区</strong>
+                    <i class="fa fa-angle-right"></i>
+                </a>
             </div>
         </li>
         <li style="padding: 20px">
