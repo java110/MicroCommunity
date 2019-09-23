@@ -42,6 +42,7 @@
                 vc.jumpToPage('/import/hc.xlsx')
             },
             getExcelTemplate:function(e){
+                console.log("getExcelTemplate 开始调用")
                vc.component.assetImportInfo.excelTemplate = e.target.files[0]
             }
 
