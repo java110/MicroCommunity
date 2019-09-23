@@ -1,11 +1,13 @@
 package com.java110.web.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.CommonConstant;
 import com.java110.common.exception.SMOException;
 import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.common.util.Assert;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.web.smo.impl.LoginServiceSMOImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 
 /**
@@ -85,6 +88,7 @@ public class CallComponentController extends BaseController {
 
     /**
      * 调用组件 文件上传
+     * /callComponent/upload/assetImport/importData
      *
      * @return
      */
@@ -97,6 +101,8 @@ public class CallComponentController extends BaseController {
             //@RequestBody String info,
             HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
+        Map formParam = null;
+        IPageData pd = null;
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
@@ -108,18 +114,19 @@ public class CallComponentController extends BaseController {
             Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class, MultipartFile.class);
 
             Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
-
-            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            pd = freshPageDate(request);
 
             logger.debug("组件编码{}，组件方法{}，pd 为{}", componentCode, componentMethod, pd.toString());
 
-            responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd);
+            responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd, uploadFile);
 
         } catch (SMOException e) {
+            logger.error("组件运行异常",e);
             /*MultiValueMap<String, String> headers = new HttpHeaders();
             headers.add("code", e.getResult().getCode());*/
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
+            logger.error("组件运行异常",e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
                 Throwable targetEx = ((InvocationTargetException) e).getTargetException();
@@ -134,6 +141,37 @@ public class CallComponentController extends BaseController {
             logger.debug("组件调用返回信息为{}", responseEntity);
             return responseEntity;
         }
+    }
+
+    /**
+     * 刷新 pd 对象
+     *
+     * @param request HttpServletRequest 对象
+     * @return pd 对象
+     */
+    private IPageData freshPageDate(HttpServletRequest request) {
+        Map<String, String[]> params = request.getParameterMap();
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        String reqData = "";
+        if (params != null && !params.isEmpty()) {
+            JSONObject paramObj = new JSONObject();
+            for (String key : params.keySet()) {
+                if (params.get(key).length > 0) {
+                    String value = "";
+                    for (int paramIndex = 0; paramIndex < params.get(key).length; paramIndex++) {
+                        value = params.get(key)[paramIndex] + ",";
+                    }
+                    value = value.endsWith(",") ? value.substring(0, value.length() - 1) : value;
+                    paramObj.put(key, value);
+                }
+                continue;
+            }
+            reqData = paramObj.toJSONString();
+        }
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(),
+                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
+        return newPd;
     }
 
 

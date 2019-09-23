@@ -1,14 +1,21 @@
 package com.java110.web.components.assetImport;
 
+import com.java110.common.util.ImportExcelUtils;
 import com.java110.core.context.IPageData;
 import com.java110.web.controller.CallComponentController;
 import com.java110.web.smo.app.IAddAppSMO;
+import com.java110.web.smo.assetImport.IAssetImportSMO;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 /**
  * 添加应用组件
@@ -18,25 +25,26 @@ public class AssetImportComponent {
 
     private final static Logger logger = LoggerFactory.getLogger(CallComponentController.class);
 
+
     @Autowired
-    private IAddAppSMO addAppSMOImpl;
+    private IAssetImportSMO assetImportSMOImpl;
 
     /**
      * 添加应用数据
+     *
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    public ResponseEntity<String> importData(IPageData pd){
+    public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception{
 
-        logger.debug("请求参数为：%s", pd.getReqData());
-        return new ResponseEntity<String>("成功", HttpStatus.OK);
+        return assetImportSMOImpl.importExcelData(pd,uploadFile);
     }
 
-    public IAddAppSMO getAddAppSMOImpl() {
-        return addAppSMOImpl;
+    public IAssetImportSMO getAssetImportSMOImpl() {
+        return assetImportSMOImpl;
     }
 
-    public void setAddAppSMOImpl(IAddAppSMO addAppSMOImpl) {
-        this.addAppSMOImpl = addAppSMOImpl;
+    public void setAssetImportSMOImpl(IAssetImportSMO assetImportSMOImpl) {
+        this.assetImportSMOImpl = assetImportSMOImpl;
     }
 }

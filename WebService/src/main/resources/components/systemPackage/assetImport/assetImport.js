@@ -63,7 +63,7 @@
                     return ;
                 }
                 var param = new FormData();
-                param.append("excelTemplate", vc.component.assetImportInfo.excelTemplate);
+                param.append("uploadFile", vc.component.assetImportInfo.excelTemplate);
                 param.append('communityId',vc.component.assetImportInfo.communityId);
 
 
