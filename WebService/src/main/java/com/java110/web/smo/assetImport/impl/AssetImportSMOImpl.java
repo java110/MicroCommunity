@@ -129,13 +129,35 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
     /**
      * 查询存在的房屋信息
+     * room.queryRooms
+     *
      * @param pd
      * @param result
      * @param room
      * @return
      */
     private JSONObject getExistsRoom(IPageData pd, ComponentValidateResult result, ImportRoom room) {
-        return null;
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?communityId=" + result.getCommunityId()
+                + "&floorId=" + room.getFloor().getFloorId() + "&unitId=" + room.getFloor().getUnitId()+"&roomNum="+room.getRoomNum();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody());
+
+
+        if (!savedRoomInfoResults.containsKey("rooms") || savedRoomInfoResults.getJSONArray("rooms").size() != 1) {
+            return null;
+        }
+
+
+        JSONObject savedRoomInfo = savedRoomInfoResults.getJSONArray("rooms").getJSONObject(0);
+
+        return savedRoomInfo;
     }
 
     /**
