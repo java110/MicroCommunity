@@ -16,12 +16,12 @@ import java.util.Date;
 public class AppDto extends PageDto implements Serializable {
 
     private String appId;
-private String blackListIp;
-private String name;
-private String securityCode;
-private String remark;
-private String userId;
-private String whileListIp;
+    private String blackListIp;
+    private String name;
+    private String securityCode;
+    private String remark;
+    private String userId;
+    private String whileListIp;
 
 
     private Date createTime;
@@ -32,43 +32,56 @@ private String whileListIp;
     public String getAppId() {
         return appId;
     }
-public void setAppId(String appId) {
+
+    public void setAppId(String appId) {
         this.appId = appId;
     }
-public String getBlackListIp() {
+
+    public String getBlackListIp() {
         return blackListIp;
     }
-public void setBlackListIp(String blackListIp) {
+
+    public void setBlackListIp(String blackListIp) {
         this.blackListIp = blackListIp;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getSecurityCode() {
+
+    public String getSecurityCode() {
         return securityCode;
     }
-public void setSecurityCode(String securityCode) {
+
+    public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getWhileListIp() {
+
+    public String getWhileListIp() {
         return whileListIp;
     }
-public void setWhileListIp(String whileListIp) {
+
+    public void setWhileListIp(String whileListIp) {
         this.whileListIp = whileListIp;
     }
 

@@ -10,15 +10,15 @@ public class ApiVisitDataVo implements Serializable {
     private String visitGender;
     private String visitGenderName;
     private String phoneNumber;
-    private String visitTime;
-    private String departureTime;
+    private Date visitTime;
+    private Date departureTime;
     private String visitCase;
 
-    public String getVId() {
+    public String getvId() {
         return vId;
     }
 
-    public void setVId(String vId) {
+    public void setvId(String vId) {
         this.vId = vId;
     }
 
@@ -38,6 +38,14 @@ public class ApiVisitDataVo implements Serializable {
         this.visitGender = visitGender;
     }
 
+    public String getVisitGenderName() {
+        return visitGenderName;
+    }
+
+    public void setVisitGenderName(String visitGenderName) {
+        this.visitGenderName = visitGenderName;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -46,19 +54,19 @@ public class ApiVisitDataVo implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getVisitTime() {
+    public Date getVisitTime() {
         return visitTime;
     }
 
-    public void setVisitTime(String visitTime) {
+    public void setVisitTime(Date visitTime) {
         this.visitTime = visitTime;
     }
 
-    public String getDepartureTime() {
+    public Date getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
     }
 
@@ -68,21 +76,5 @@ public class ApiVisitDataVo implements Serializable {
 
     public void setVisitCase(String visitCase) {
         this.visitCase = visitCase;
-    }
-
-    public String getvId() {
-        return vId;
-    }
-
-    public void setvId(String vId) {
-        this.vId = vId;
-    }
-
-    public String getVisitGenderName() {
-        return visitGenderName;
-    }
-
-    public void setVisitGenderName(String visitGenderName) {
-        this.visitGenderName = visitGenderName;
     }
 }

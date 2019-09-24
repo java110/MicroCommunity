@@ -15,16 +15,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * 访客信息 服务侦听 父类
  * Created by wuxw on 2018/7/4.
  */
-public abstract class AbstractVisitBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener{
+public abstract class AbstractVisitBusinessServiceDataFlowListener extends AbstractBusinessServiceDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(AbstractVisitBusinessServiceDataFlowListener.class);
 
 
     /**
      * 获取 DAO工具类
+     *
      * @return
      */
     public abstract IVisitServiceDao getVisitServiceDaoImpl();
@@ -32,61 +32,62 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
     /**
      * 刷新 businessVisitInfo 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
+     *
      * @param businessVisitInfo
      */
-    protected void flushBusinessVisitInfo(Map businessVisitInfo,String statusCd){
+    protected void flushBusinessVisitInfo(Map businessVisitInfo, String statusCd) {
         businessVisitInfo.put("newBId", businessVisitInfo.get("b_id"));
-        businessVisitInfo.put("vId",businessVisitInfo.get("v_id"));
-businessVisitInfo.put("departureTime",businessVisitInfo.get("departure_time"));
-businessVisitInfo.put("visitTime",businessVisitInfo.get("visit_time"));
-businessVisitInfo.put("phoneNumber",businessVisitInfo.get("phoneNumber"));
-businessVisitInfo.put("operate",businessVisitInfo.get("operate"));
-businessVisitInfo.put("name",businessVisitInfo.get("name"));
-businessVisitInfo.put("visitCase",businessVisitInfo.get("visit_case"));
-businessVisitInfo.put("visitGender",businessVisitInfo.get("visit_gender"));
-businessVisitInfo.put("ownerId",businessVisitInfo.get("owner_id"));
-businessVisitInfo.put("userId",businessVisitInfo.get("userId"));
-businessVisitInfo.remove("bId");
+        businessVisitInfo.put("vId", businessVisitInfo.get("v_id"));
+        businessVisitInfo.put("departureTime", businessVisitInfo.get("departure_time"));
+        businessVisitInfo.put("visitTime", businessVisitInfo.get("visit_time"));
+        businessVisitInfo.put("phoneNumber", businessVisitInfo.get("phoneNumber"));
+        businessVisitInfo.put("operate", businessVisitInfo.get("operate"));
+        businessVisitInfo.put("name", businessVisitInfo.get("name"));
+        businessVisitInfo.put("visitCase", businessVisitInfo.get("visit_case"));
+        businessVisitInfo.put("communityId", businessVisitInfo.get("community_id"));
+        businessVisitInfo.put("visitGender", businessVisitInfo.get("visit_gender"));
+        businessVisitInfo.put("ownerId", businessVisitInfo.get("owner_id"));
+        businessVisitInfo.put("userId", businessVisitInfo.get("userId"));
+        businessVisitInfo.remove("bId");
         businessVisitInfo.put("statusCd", statusCd);
     }
 
 
     /**
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
+     *
      * @param businessVisit 访客信息信息
      */
-    protected void autoSaveDelBusinessVisit(Business business, JSONObject businessVisit){
+    protected void autoSaveDelBusinessVisit(Business business, JSONObject businessVisit) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("vId",businessVisit.getString("vId"));
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("vId", businessVisit.getString("vId"));
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentVisitInfos = getVisitServiceDaoImpl().getVisitInfo(info);
-        if(currentVisitInfos == null || currentVisitInfos.size() != 1){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"未找到需要修改数据信息，入参错误或数据有问题，请检查"+info);
+        if (currentVisitInfos == null || currentVisitInfos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
 
         Map currentVisitInfo = currentVisitInfos.get(0);
 
-        currentVisitInfo.put("bId",business.getbId());
+        currentVisitInfo.put("bId", business.getbId());
 
-        currentVisitInfo.put("vId",currentVisitInfo.get("v_id"));
-currentVisitInfo.put("departureTime",currentVisitInfo.get("departure_time"));
-currentVisitInfo.put("visitTime",currentVisitInfo.get("visit_time"));
-currentVisitInfo.put("phoneNumber",currentVisitInfo.get("phoneNumber"));
-currentVisitInfo.put("operate",currentVisitInfo.get("operate"));
-currentVisitInfo.put("name",currentVisitInfo.get("name"));
-currentVisitInfo.put("visitCase",currentVisitInfo.get("visit_case"));
-currentVisitInfo.put("visitGender",currentVisitInfo.get("visit_gender"));
-currentVisitInfo.put("ownerId",currentVisitInfo.get("owner_id"));
-currentVisitInfo.put("userId",currentVisitInfo.get("userId"));
+        currentVisitInfo.put("vId", currentVisitInfo.get("v_id"));
+        currentVisitInfo.put("departureTime", currentVisitInfo.get("departure_time"));
+        currentVisitInfo.put("visitTime", currentVisitInfo.get("visit_time"));
+        currentVisitInfo.put("phoneNumber", currentVisitInfo.get("phoneNumber"));
+        currentVisitInfo.put("operate", currentVisitInfo.get("operate"));
+        currentVisitInfo.put("name", currentVisitInfo.get("name"));
+        currentVisitInfo.put("visitCase", currentVisitInfo.get("visit_case"));
+        currentVisitInfo.put("communityId", currentVisitInfo.get("community_id"));
+        currentVisitInfo.put("visitGender", currentVisitInfo.get("visit_gender"));
+        currentVisitInfo.put("ownerId", currentVisitInfo.get("owner_id"));
+        currentVisitInfo.put("userId", currentVisitInfo.get("userId"));
 
 
-        currentVisitInfo.put("operate",StatusConstant.OPERATE_DEL);
+        currentVisitInfo.put("operate", StatusConstant.OPERATE_DEL);
         getVisitServiceDaoImpl().saveBusinessVisitInfo(currentVisitInfo);
     }
-
-
-
 
 
 }

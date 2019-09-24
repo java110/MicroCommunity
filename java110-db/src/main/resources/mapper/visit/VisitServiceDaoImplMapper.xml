@@ -6,19 +6,20 @@
 
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessVisitInfo" parameterType="Map">
-        insert into business_visit_info(
-        v_id,departure_time,visit_time,phone_number,operate,name,visit_case,visit_gender,owner_id,user_id,b_id
-        ) values (
-        #{vId},#{departureTime},#{visitTime},#{phoneNumber},#{operate},#{name},#{visitCase},#{visitGender},#{ownerId},#{userId},#{bId}
-        )
-    </insert>
+           insert into business_visit_info(
+v_id,departure_time,visit_time,phone_number,operate,name,visit_case,community_id,visit_gender,owner_id,user_id
+) values (
+#{vId},#{departureTime},#{visitTime},#{phoneNumber},#{operate},#{name},#{visitCase},#{communityId},#{visitGender},#{ownerId},#{userId}
+)
+       </insert>
 
 
     <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessVisitInfo" parameterType="Map" resultType="Map">
         select t.v_id,t.v_id vId,t.departure_time,t.departure_time departureTime,t.visit_time,t.visit_time
-        visitTime,t.phone_number phoneNumber,t.operate,t.name,t.visit_case,t.visit_case visitCase,t.visit_gender,t.visit_gender
-        visitGender,t.owner_id,t.owner_id ownerId,t.user_id userId,t.b_id,t.b_id bId
+        visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.name,t.visit_case,t.visit_case
+        visitCase,t.community_id,t.community_id communityId,t.visit_gender,t.visit_gender
+        visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId
         from business_visit_info t
         where 1 =1
         <if test="vId !=null and vId != ''">
@@ -42,6 +43,9 @@
         <if test="visitCase !=null and visitCase != ''">
             and t.visit_case= #{visitCase}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="visitGender !=null and visitGender != ''">
             and t.visit_gender= #{visitGender}
         </if>
@@ -51,19 +55,16 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="bId !=null and bId != ''">
-            and t.b_id= #{bId}
-        </if>
 
     </select>
 
 
     <!-- 保存访客信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfoInstance" parameterType="Map">
-        insert into visit_info(
-        v_id,departure_time,visit_time,phone_number,name,visit_case,status_cd,visit_gender,owner_id,user_id,b_id
+        insert into s_visit_info(
+        v_id,departure_time,visit_time,phone_number,name,visit_case,status_cd,community_id,visit_gender,owner_id,user_id
         ) select
-        t.v_id,t.departure_time,t.visit_time,t.phone_number,t.name,t.visit_case,'0',t.visit_gender,t.owner_id,t.user_id,t.b_id
+        t.v_id,t.departure_time,t.visit_time,t.phone_number,t.name,t.visit_case,'0',t.community_id,t.visit_gender,t.owner_id,t.user_id
         from business_visit_info t where 1=1
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
@@ -84,6 +85,9 @@
         <if test="visitCase !=null and visitCase != ''">
             and t.visit_case= #{visitCase}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="visitGender !=null and visitGender != ''">
             and t.visit_gender= #{visitGender}
         </if>
@@ -93,9 +97,6 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="bId !=null and bId != ''">
-            and t.b_id= #{bId}
-        </if>
 
     </insert>
 
@@ -103,19 +104,10 @@
     <!-- 查询访客信息信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
         select t.v_id,t.v_id vId,t.departure_time,t.departure_time departureTime,t.visit_time,t.visit_time
-        visitTime,t.phone_number phoneNumber,t.name,t.visit_case,t.visit_case visitCase,t.status_cd,t.status_cd
-        statusCd,t.visit_gender,t.visit_gender visitGender,
-        (CASE
-        WHEN t.`visit_gender` = '1'
-        THEN '男'
-        WHEN t.visit_gender = '0'
-        THEN '女'
-        ELSE
-        '未知'
-        END) visitGenderName ,
-        t.owner_id,t.owner_id ownerId,t.user_id userId,t.b_id,
-        t.b_id bId
-        from visit_info t
+        visitTime,t.phone_number,t.phone_number phoneNumber,t.name,t.visit_case,t.visit_case
+        visitCase,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId
+        from s_visit_info t
         where 1 =1
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
@@ -138,6 +130,9 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="visitGender !=null and visitGender != ''">
             and t.visit_gender= #{visitGender}
         </if>
@@ -147,11 +142,8 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="bId !=null and bId != ''">
-            and t.b_id= #{bId}
-        </if>
         <if test="page != -1 and page != null ">
-            limit #{page}, #{row}
+            limit #{page},#{row}
         </if>
 
     </select>
@@ -159,7 +151,7 @@
 
     <!-- 修改访客信息信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitInfoInstance" parameterType="Map">
-        update visit_info t set t.status_cd = #{statusCd}
+        update s_visit_info t set t.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
@@ -178,6 +170,9 @@
         <if test="visitCase !=null and visitCase != ''">
             , t.visit_case= #{visitCase}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
         <if test="visitGender !=null and visitGender != ''">
             , t.visit_gender= #{visitGender}
         </if>
@@ -191,16 +186,13 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-        <if test="bId !=null and bId != ''">
-            and t.b_id= #{bId}
-        </if>
 
     </update>
 
     <!-- 查询访客信息数量 add by wuxw 2018-07-03 -->
     <select id="queryVisitsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from visit_info t
+        from s_visit_info t
         where 1 =1
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
@@ -222,6 +214,9 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="visitGender !=null and visitGender != ''">
             and t.visit_gender= #{visitGender}
