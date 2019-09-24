@@ -91,7 +91,18 @@
                     errorCallback(error.bodyText,error);
                     vc.loading('close');
                 });
-        }
+        },
+        upload:function(componentCode,componentMethod,param,options,successCallback,errorCallback){
+                vc.loading('open');
+                Vue.http.post('/callComponent/upload/'+componentCode +"/"+componentMethod, param, options)
+                .then(function(res){
+                    successCallback(res.bodyText,res);
+                    vc.loading('close');
+                }, function(error){
+                    errorCallback(error.bodyText,error);
+                    vc.loading('close');
+                });
+        },
 
     };
 
