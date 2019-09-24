@@ -36,13 +36,14 @@ public class VisitGeneratorApplication {
         data.setUpdateBusinessTypeCdValue("110100040001");
         data.setDeleteBusinessTypeCdValue("110100050001");
         data.setBusinessTableName("business_visit_info");
-        data.setTableName("visit_info");
+        data.setTableName("s_visit_info");
         Map<String, String> param = new HashMap<String, String>();
         param.put("vId", "v_id");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
         param.put("name", "name");
+        param.put("communityId", "community_id");
         param.put("visitGender", "visit_gender");
-        param.put("phoneNumber", "phoneNumber");
-        param.put("userId", "userId");
+        param.put("phoneNumber", "phone_number");
+        param.put("userId", "user_id");
         param.put("ownerId", "owner_id");
         param.put("visitCase", "visit_case");
         param.put("visitTime", "visit_time");
