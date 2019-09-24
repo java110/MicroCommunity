@@ -8,6 +8,8 @@ package com.java110.entity.assetImport;
  */
 public class ImportOwner {
 
+    private String ownerId;
+
     private String ownerNum;
 
     private String ownerName;
@@ -56,5 +58,13 @@ public class ImportOwner {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

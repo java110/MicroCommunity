@@ -5,7 +5,11 @@ package com.java110.entity.assetImport;
  */
 public class ImportFloor {
 
+    private String floorId;
+
     private String floorNum;
+
+    private String unitId;
 
     private String unitNum;
 
@@ -44,5 +48,21 @@ public class ImportFloor {
 
     public void setLift(String lift) {
         this.lift = lift;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
     }
 }

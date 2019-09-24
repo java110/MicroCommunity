@@ -1,5 +1,6 @@
 package com.java110.web.smo.assetImport.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.util.Assert;
@@ -48,7 +49,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        InputStream is = uploadFile.getInputStream();
+        //InputStream is = uploadFile.getInputStream();
 
         Workbook workbook = null;  //工作簿
         //工作表
@@ -87,7 +88,93 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> dealExcelData(IPageData pd, List<ImportFloor> floors, List<ImportOwner> owners, List<ImportRoom> rooms, List<ImportParkingSpace> parkingSpaces, ComponentValidateResult result) {
         ResponseEntity<String> responseEntity = null;
         //保存单元信息 和 楼栋信息
-        responseEntity = savedFloorAndUnitInfo(pd, floors, result, responseEntity);
+        responseEntity = savedFloorAndUnitInfo(pd, floors, result);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
+        // 保存业主信息
+        responseEntity = savedOwnerInfo(pd, owners, result);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
+        //保存房屋
+        responseEntity = savedRoomInfo(pd,rooms,result);
+        return responseEntity;
+    }
+
+    /**
+     * 保存房屋信息
+     * @param pd
+     * @param rooms
+     * @param result
+     * @return
+     */
+    private ResponseEntity<String> savedRoomInfo(IPageData pd, List<ImportRoom> rooms, ComponentValidateResult result) {
+        String apiUrl = "";
+        JSONObject paramIn = null;
+        ResponseEntity<String> responseEntity = null;
+        for(ImportRoom room : rooms){
+            JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
+
+            if (savedRoomInfo != null) {
+                continue;
+            }
+        }
+
+        return responseEntity;
+    }
+
+    /**
+     * 查询存在的房屋信息
+     * @param pd
+     * @param result
+     * @param room
+     * @return
+     */
+    private JSONObject getExistsRoom(IPageData pd, ComponentValidateResult result, ImportRoom room) {
+        return null;
+    }
+
+    /**
+     * 保存业主信息
+     *
+     * @param pd
+     * @param owners
+     * @param result
+     * @return
+     */
+    private ResponseEntity<String> savedOwnerInfo(IPageData pd, List<ImportOwner> owners, ComponentValidateResult result) {
+        String apiUrl = "";
+        JSONObject paramIn = null;
+        ResponseEntity<String> responseEntity = null;
+
+        for (ImportOwner owner : owners) {
+            JSONObject savedOwnerInfo = getExistsOwner(pd, result, owner);
+
+            if (savedOwnerInfo != null) {
+                continue;
+            }
+            paramIn = new JSONObject();
+
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.saveOwner";
+
+            paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("userId", result.getUserId());
+            paramIn.put("name", owner.getOwnerName());
+            paramIn.put("age", owner.getAge());
+            paramIn.put("link", owner.getTel());
+            paramIn.put("sex", owner.getSex());
+            paramIn.put("ownerTypeCd", "1001");
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                savedOwnerInfo = getExistsOwner(pd, result, owner);
+                owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
+            }
+        }
+
         return responseEntity;
     }
 
@@ -97,22 +184,19 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
      * @param pd
      * @param floors
      * @param result
-     * @param responseEntity
      * @return
      */
-    private ResponseEntity<String> savedFloorAndUnitInfo(IPageData pd, List<ImportFloor> floors, ComponentValidateResult result, ResponseEntity<String> responseEntity) {
+    private ResponseEntity<String> savedFloorAndUnitInfo(IPageData pd, List<ImportFloor> floors, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
+        ResponseEntity<String> responseEntity = null;
         for (ImportFloor importFloor : floors) {
+            paramIn = new JSONObject();
             //先保存 楼栋信息
-            JSONObject savedFloorInfo = getExistsFloor(pd,result,importFloor);
+            JSONObject savedFloorInfo = getExistsFloor(pd, result, importFloor);
             // 如果不存在，才插入
-            if(savedFloorInfo == null) {
+            if (savedFloorInfo == null) {
                 apiUrl = ServiceConstant.SERVICE_API_URL + "/api/floor.saveFloor";
-                Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
-                Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-                Assert.jsonObjectHaveKey(paramIn, "floorNum", "请求报文中未包含floorNum");
-                Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
                 paramIn.put("communityId", result.getCommunityId());
                 paramIn.put("floorNum", importFloor.getFloorNum());
                 paramIn.put("userId", result.getUserId());
@@ -123,13 +207,18 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
 
-            savedFloorInfo = getExistsFloor(pd,result,importFloor);
+            savedFloorInfo = getExistsFloor(pd, result, importFloor);
 
-            if(savedFloorInfo == null){
+            if (savedFloorInfo == null) {
+                continue;
+            }
+            importFloor.setFloorId(savedFloorInfo.getString("floorId"));
+            paramIn.clear();
+            //判断单元信息是否已经存在，如果存在则不保存数据unit.queryUnits
+            if (getExistsUnit(pd, result, importFloor) != null) {
                 continue;
             }
 
-            paramIn.clear();
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.saveUnit";
 
             paramIn.put("communityId", result.getCommunityId());
@@ -138,8 +227,35 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("layerCount", importFloor.getLayerCount());
             paramIn.put("lift", importFloor.getLift());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
+            //将unitId 刷入ImportFloor对象
+            JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
+            importFloor.setUnitId(savedUnitInfo.getString("unitId"));
+
         }
         return responseEntity;
+    }
+
+    private JSONObject getExistsUnit(IPageData pd, ComponentValidateResult result, ImportFloor importFloor) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits?communityId=" + result.getCommunityId()
+                + "&floorId=" + importFloor.getFloorId() + "&unitNum=" + importFloor.getFloorNum();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONArray savedFloorInfoResults = JSONArray.parseArray(responseEntity.getBody());
+
+        if (savedFloorInfoResults == null || savedFloorInfoResults.size() != 1) {
+            return null;
+        }
+
+        JSONObject savedUnitInfo = savedFloorInfoResults.getJSONObject(0);
+
+        return savedUnitInfo;
     }
 
     private JSONObject getExistsFloor(IPageData pd, ComponentValidateResult result, ImportFloor importFloor) {
@@ -161,6 +277,36 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         JSONObject savedFloorInfo = savedFloorInfoResult.getJSONArray("apiFloorDataVoList").getJSONObject(0);
 
         return savedFloorInfo;
+    }
+
+    /**
+     * 查询存在的业主
+     *
+     * @param pd
+     * @param result
+     * @param importOwner
+     * @return
+     */
+    private JSONObject getExistsOwner(IPageData pd, ComponentValidateResult result, ImportOwner importOwner) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/owner.queryOwners?page=1&row=1&communityId=" + result.getCommunityId()
+                + "&ownerTypeCd=1001&name=" + importOwner.getOwnerName() + "&link=" + importOwner.getTel();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedOwnerInfoResult = JSONObject.parseObject(responseEntity.getBody());
+
+        if (!savedOwnerInfoResult.containsKey("owners") || savedOwnerInfoResult.getJSONArray("owners").size() != 1) {
+            return null;
+        }
+
+        JSONObject savedOwnerInfo = savedOwnerInfoResult.getJSONArray("owners").getJSONObject(0);
+
+        return savedOwnerInfo;
     }
 
     /**
