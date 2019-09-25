@@ -9,6 +9,7 @@ import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
 import com.java110.common.util.DateUtil;
 import com.java110.common.util.ImportExcelUtils;
+import com.java110.common.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.dto.FeeConfigDto;
 import com.java110.dto.ParkingSpaceDto;
@@ -529,10 +530,17 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
+            if(StringUtil.isNullOrNone(os[0])){
+                continue;
+            }
             importParkingSpace = new ImportParkingSpace();
             importParkingSpace.setPsNum(os[0].toString());
             importParkingSpace.setTypeCd(os[1].toString());
             importParkingSpace.setArea(Double.parseDouble(os[2].toString()));
+            if(StringUtil.isNullOrNone(os[3])){
+                parkingSpaces.add(importParkingSpace);
+                continue;
+            }
             ImportOwner importOwner = getImportOwner(owners, os[3].toString());
             importParkingSpace.setImportOwner(importOwner);
             if (importOwner != null) {
@@ -564,12 +572,19 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
+            if(StringUtil.isNullOrNone(os[0])){
+                continue;
+            }
             importRoom = new ImportRoom();
             importRoom.setRoomNum(os[0].toString());
             importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
             importRoom.setLayer(Integer.parseInt(os[3].toString()));
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
+            if(StringUtil.isNullOrNone(os[6])){
+                rooms.add(importRoom);
+                continue;
+            }
             importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
             rooms.add(importRoom);
         }
@@ -625,6 +640,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
+            if(StringUtil.isNullOrNone(os[0])){
+                continue;
+            }
             importOwner = new ImportOwner();
             importOwner.setOwnerNum(os[0].toString());
             importOwner.setOwnerName(os[1].toString());
@@ -649,6 +667,10 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
             Object[] os = oList.get(osIndex);
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                continue;
+            }
+
+            if(StringUtil.isNullOrNone(os[0])){
                 continue;
             }
             importFloor = new ImportFloor();
