@@ -35,8 +35,8 @@
                 vc.component.newVisitInfo.$step.prevStep();
                 vc.component.newVisitInfo.index = vc.component.newVisitInfo.$step.getIndex();
 
-                vc.emit('viewSelectParkingSpace', 'onIndex', vc.component.newVisitInfo.index);
-                vc.emit('viewOwnerInfo', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('addVisit', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('viewVisitInfo', 'onIndex', vc.component.newVisitInfo.index);
                 vc.emit('addCar', 'onIndex', vc.component.newVisitInfo.index);
 
                 if(vc.component.newVisitInfo.index == 1){
@@ -45,7 +45,7 @@
 
             },
             _nextStep:function(){
-                var _currentData = vc.component.newVisitInfo.infos[vc.component.newVisitInfo.index];
+                var _currentData = vc.component.newVisitInfo.infos[vc.component.viewVisitInfo.index];
                 if( _currentData == null || _currentData == undefined){
                     vc.message("请选择或填写必选信息");
                     return ;
