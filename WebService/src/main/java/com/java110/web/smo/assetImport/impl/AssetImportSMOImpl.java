@@ -2,10 +2,16 @@ package com.java110.web.smo.assetImport.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.common.constant.FeeTypeConstant;
+import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.ServiceConstant;
+import com.java110.common.exception.ListenerExecuteException;
 import com.java110.common.util.Assert;
+import com.java110.common.util.DateUtil;
 import com.java110.common.util.ImportExcelUtils;
 import com.java110.core.context.IPageData;
+import com.java110.dto.FeeConfigDto;
+import com.java110.dto.ParkingSpaceDto;
 import com.java110.entity.assetImport.ImportFloor;
 import com.java110.entity.assetImport.ImportOwner;
 import com.java110.entity.assetImport.ImportParkingSpace;
@@ -90,23 +96,114 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         //保存单元信息 和 楼栋信息
         responseEntity = savedFloorAndUnitInfo(pd, floors, result);
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+        if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
 
         // 保存业主信息
         responseEntity = savedOwnerInfo(pd, owners, result);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+        if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
 
         //保存房屋
-        responseEntity = savedRoomInfo(pd,rooms,result);
+        responseEntity = savedRoomInfo(pd, rooms, result);
+        if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
+        //保存车位
+        responseEntity = savedParkingSpaceInfo(pd, parkingSpaces, result);
+
+        if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
         return responseEntity;
     }
 
     /**
+     * 保存车位信息
+     *
+     * @param pd
+     * @param parkingSpaces
+     * @param result
+     * @return
+     */
+    private ResponseEntity<String> savedParkingSpaceInfo(IPageData pd, List<ImportParkingSpace> parkingSpaces, ComponentValidateResult result) {
+        String apiUrl = "";
+        JSONObject paramIn = null;
+        ResponseEntity<String> responseEntity = null;
+        ImportOwner owner = null;
+        for (ImportParkingSpace parkingSpace : parkingSpaces) {
+            JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
+            if (savedParkingSpaceInfo != null) {
+                continue;
+            }
+
+            paramIn = new JSONObject();
+
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
+
+            paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("num", parkingSpace.getPsNum());
+            paramIn.put("area", parkingSpace.getArea());
+            paramIn.put("typeCd", parkingSpace.getTypeCd());
+
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                continue;
+            }
+
+            savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
+            if (savedParkingSpaceInfo != null) {
+                continue;
+            }
+
+            //是否有业主信息
+            if (parkingSpace.getImportOwner() == null) {
+                continue;
+            }
+
+            paramIn.clear();
+
+            paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("ownerId", parkingSpace.getImportOwner().getOwnerId());
+            paramIn.put("carNum", parkingSpace.getCarNum());
+            paramIn.put("carBrand", parkingSpace.getCarBrand());
+            paramIn.put("carType", parkingSpace.getCarType());
+            paramIn.put("carColor", parkingSpace.getCarColor());
+            paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
+            paramIn.put("storeId", result.getStoreId());
+            paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
+
+            String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
+                    ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig?communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd;
+            responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                continue;
+            }
+
+            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody());
+            if(!configInfo.containsKey("additionalAmount")){
+                continue;
+            }
+
+            paramIn.put("receivedAmount", configInfo.getString("additionalAmount"));
+
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.sellParkingSpace";
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+        }
+
+        return responseEntity;
+    }
+
+
+    /**
      * 保存房屋信息
+     *
      * @param pd
      * @param rooms
      * @param result
@@ -116,16 +213,90 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = null;
-        for(ImportRoom room : rooms){
+        ImportOwner owner = null;
+        for (ImportRoom room : rooms) {
             JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
-
             if (savedRoomInfo != null) {
                 continue;
             }
+
+            paramIn = new JSONObject();
+
+
+            //保存 房屋
+
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom";
+
+            paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("unitId", room.getFloor().getUnitId());
+            paramIn.put("roomNum", room.getRoomNum());
+            paramIn.put("layer", room.getLayer());
+            paramIn.put("section", room.getSection());
+            paramIn.put("apartment", "1");
+            paramIn.put("state", "1000");
+            paramIn.put("builtUpArea", room.getBuiltUpArea());
+            paramIn.put("unitPrice", "1000.00");
+
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                continue;
+            }
+
+            savedRoomInfo = getExistsRoom(pd, result, room);
+            if (savedRoomInfo == null) {
+                continue;
+            }
+
+            if (room.getImportOwner() == null) {
+                continue;
+            }
+            paramIn.clear();
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.sellRoom";
+            paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("ownerId", room.getImportOwner().getOwnerId());
+            paramIn.put("roomId", savedRoomInfo.getString("roomId"));
+            paramIn.put("state", "2002");
+            paramIn.put("storeId", result.getStoreId());
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+
         }
 
         return responseEntity;
     }
+
+    /**
+     * 查询存在的房屋信息
+     * room.queryRooms
+     *
+     * @param pd
+     * @param result
+     * @param parkingSpace
+     * @return
+     */
+    private JSONObject getExistsParkSpace(IPageData pd, ComponentValidateResult result, ImportParkingSpace parkingSpace) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.queryParkingSpaces?page=1&row=1&communityId=" + result.getCommunityId()
+                + "&num=" + parkingSpace.getPsNum();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedParkingSpaceInfoResults = JSONObject.parseObject(responseEntity.getBody());
+
+
+        if (!savedParkingSpaceInfoResults.containsKey("parkingSpaces") || savedParkingSpaceInfoResults.getJSONArray("parkingSpaces").size() != 1) {
+            return null;
+        }
+
+
+        JSONObject savedParkingSpaceInfo = savedParkingSpaceInfoResults.getJSONArray("parkingSpaces").getJSONObject(0);
+
+        return savedParkingSpaceInfo;
+    }
+
 
     /**
      * 查询存在的房屋信息
@@ -140,7 +311,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?communityId=" + result.getCommunityId()
-                + "&floorId=" + room.getFloor().getFloorId() + "&unitId=" + room.getFloor().getUnitId()+"&roomNum="+room.getRoomNum();
+                + "&floorId=" + room.getFloor().getFloorId() + "&unitId=" + room.getFloor().getUnitId() + "&roomNum=" + room.getRoomNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -369,6 +540,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 importParkingSpace.setCarBrand(os[5].toString());
                 importParkingSpace.setCarType(os[6].toString());
                 importParkingSpace.setCarColor(os[7].toString());
+                importParkingSpace.setSellOrHire(os[8].toString());
             }
 
             parkingSpaces.add(importParkingSpace);

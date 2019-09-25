@@ -23,6 +23,8 @@ public class ImportParkingSpace {
 
     private String carColor;
 
+    private String sellOrHire;
+
 
     public String getPsNum() {
         return psNum;
@@ -86,5 +88,13 @@ public class ImportParkingSpace {
 
     public void setCarColor(String carColor) {
         this.carColor = carColor;
+    }
+
+    public String getSellOrHire() {
+        return sellOrHire;
+    }
+
+    public void setSellOrHire(String sellOrHire) {
+        this.sellOrHire = sellOrHire;
     }
 }
