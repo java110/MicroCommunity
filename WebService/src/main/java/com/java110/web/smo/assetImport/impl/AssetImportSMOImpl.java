@@ -147,6 +147,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
 
             paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("userId", result.getUserId());
             paramIn.put("num", parkingSpace.getPsNum());
             paramIn.put("area", parkingSpace.getArea());
             paramIn.put("typeCd", parkingSpace.getTypeCd());
