@@ -179,6 +179,10 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
 
+            if("H".equals(parkingSpace.getSellOrHire())){
+                paramIn.put("cycles", "0");
+            }
+
             String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
                     ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig?communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd;
