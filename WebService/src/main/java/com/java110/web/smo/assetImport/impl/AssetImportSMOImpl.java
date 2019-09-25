@@ -134,7 +134,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedParkingSpaceInfo(IPageData pd, List<ImportParkingSpace> parkingSpaces, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功",HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
             JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
@@ -158,7 +158,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             }
 
             savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
-            if (savedParkingSpaceInfo != null) {
+            if (savedParkingSpaceInfo == null) {
                 continue;
             }
 
@@ -188,8 +188,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
 
-            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody());
-            if(!configInfo.containsKey("additionalAmount")){
+            JSONObject configInfo = JSONArray.parseArray(responseEntity.getBody()).getJSONObject(0);
+            if (!configInfo.containsKey("additionalAmount")) {
                 continue;
             }
 
@@ -214,7 +214,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedRoomInfo(IPageData pd, List<ImportRoom> rooms, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功",HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportRoom room : rooms) {
             JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
@@ -344,7 +344,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedOwnerInfo(IPageData pd, List<ImportOwner> owners, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功",HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
 
         for (ImportOwner owner : owners) {
             JSONObject savedOwnerInfo = getExistsOwner(pd, result, owner);
@@ -385,7 +385,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedFloorAndUnitInfo(IPageData pd, List<ImportFloor> floors, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功",HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         for (ImportFloor importFloor : floors) {
             paramIn = new JSONObject();
             //先保存 楼栋信息
@@ -412,7 +412,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.clear();
             //判断单元信息是否已经存在，如果存在则不保存数据unit.queryUnits
             JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
-            if ( savedUnitInfo != null) {
+            if (savedUnitInfo != null) {
                 importFloor.setUnitId(savedUnitInfo.getString("unitId"));
                 continue;
             }
@@ -427,7 +427,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
             //将unitId 刷入ImportFloor对象
-             savedUnitInfo = getExistsUnit(pd, result, importFloor);
+            savedUnitInfo = getExistsUnit(pd, result, importFloor);
             importFloor.setUnitId(savedUnitInfo.getString("unitId"));
 
         }
@@ -534,14 +534,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importParkingSpace = new ImportParkingSpace();
             importParkingSpace.setPsNum(os[0].toString());
             importParkingSpace.setTypeCd(os[1].toString());
             importParkingSpace.setArea(Double.parseDouble(os[2].toString()));
-            if(StringUtil.isNullOrNone(os[3])){
+            if (StringUtil.isNullOrNone(os[3])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
@@ -576,7 +576,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importRoom = new ImportRoom();
@@ -585,7 +585,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setLayer(Integer.parseInt(os[3].toString()));
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
-            if(StringUtil.isNullOrNone(os[6])){
+            if (StringUtil.isNullOrNone(os[6])) {
                 rooms.add(importRoom);
                 continue;
             }
@@ -644,7 +644,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importOwner = new ImportOwner();
@@ -674,7 +674,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
 
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importFloor = new ImportFloor();
