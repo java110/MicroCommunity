@@ -4,15 +4,18 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ApiVisitDataVo implements Serializable {
-
     private String vId;
     private String name;
     private String visitGender;
-    private String visitGenderName;
     private String phoneNumber;
+    private String userId;
+    private String communityId;
+    private String ownerId;
+    private String visitCase;
     private Date visitTime;
     private Date departureTime;
-    private String visitCase;
+    private Date createTime;
+    private String statusCd = "0";
 
     public String getvId() {
         return vId;
@@ -38,20 +41,44 @@ public class ApiVisitDataVo implements Serializable {
         this.visitGender = visitGender;
     }
 
-    public String getVisitGenderName() {
-        return visitGenderName;
-    }
-
-    public void setVisitGenderName(String visitGenderName) {
-        this.visitGenderName = visitGenderName;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getVisitCase() {
+        return visitCase;
+    }
+
+    public void setVisitCase(String visitCase) {
+        this.visitCase = visitCase;
     }
 
     public Date getVisitTime() {
@@ -70,11 +97,19 @@ public class ApiVisitDataVo implements Serializable {
         this.departureTime = departureTime;
     }
 
-    public String getVisitCase() {
-        return visitCase;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setVisitCase(String visitCase) {
-        this.visitCase = visitCase;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
