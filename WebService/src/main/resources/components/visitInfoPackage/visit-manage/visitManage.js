@@ -56,7 +56,7 @@
                 );
             },
             _openAddVisitModal: function () {
-                vc.jumpToPage("/flow/viewVisitInfo")
+                vc.jumpToPage("/flow/addNewOneVisit")
                 // vc.emit('addApp','openAddAppModal',{});
             },
             _openEditVisitModel: function (_app) {

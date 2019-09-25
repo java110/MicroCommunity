@@ -17,14 +17,18 @@
             事件监听
      **/
     vc.on = function(_componentName,_value,_callback){
+        // console.log(_componentName+'_'+_value+" 进入");
         vc.component.$on(_componentName+'_'+_value,_callback);
+        // console.log(_componentName+'_'+_value);
     };
 
     /**
             事件触发
     **/
     vc.emit = function(_componentName,_value,_param){
+        console.log(_componentName+'_'+_value+" 进入");
         vc.component.$emit(_componentName+'_'+_value,_param);
+        console.log(_componentName+'_'+_value);
     };
 
 })(window.vc);

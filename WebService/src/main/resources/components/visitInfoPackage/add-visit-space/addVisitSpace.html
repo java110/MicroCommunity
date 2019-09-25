@@ -5,27 +5,25 @@
     </div>
 
     <!-- 选择 应用信息 -->
-    <div v-if="hireParkingSpaceInfo.index == 0">
+    <div v-if="newVisitInfo.index == 0">
 
         <!-- 选择停车位 -->
-        <vc:create name="viewSelectParkingSpace"
+        <vc:create name="viewVisitInfo"
                    callBackComponent="addVisitSpace"
                    callBackFunction="notify"
         ></vc:create>
     </div>
-    <div v-if="hireParkingSpaceInfo.index == 1">
+    <div v-if="newVisitInfo.index == 1">
         <vc:create name="viewOwnerInfo"
                    callBackListener="addVisitSpace"
                    callBackFunction="notify"
         ></vc:create>
     </div>
-    <div v-if="hireParkingSpaceInfo.index == 2">
+    <div v-if="newVisitInfo.index == 2">
         <vc:create name="addCar"
                    callBackComponent="addVisitSpace"
                    callBackFunction="notify"
-        >
-
-        </vc:create>
+        ></vc:create>
     </div>
 
 
@@ -34,11 +32,11 @@
         <div class="col-md-10"></div>
         <div class="col-md-2 " style="margin-bottom:10px; text-align:right">
             <button type="button" class="btn btn-secondary" v-on:click="_prevStep()">上一步</button>
-            <button v-if="hireParkingSpaceInfo.index != 3" type="button" class="btn btn-primary"
+            <button v-if="newVisitInfo.index != 3" type="button" class="btn btn-primary"
                     style="margin-left:10px;"
                     v-on:click="_nextStep()">下一步
             </button>
-            <button v-if="hireParkingSpaceInfo.index == 3" type="button" class="btn btn-primary"
+            <button v-if="newVisitInfo.index == 3" type="button" class="btn btn-primary"
                     style="margin-left:10px;"
                     v-on:click="_addVisitFinish()">出租
             </button>
