@@ -171,6 +171,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
             paramIn.put("communityId", result.getCommunityId());
             paramIn.put("ownerId", parkingSpace.getImportOwner().getOwnerId());
+            paramIn.put("userId", result.getUserId());
             paramIn.put("carNum", parkingSpace.getCarNum());
             paramIn.put("carBrand", parkingSpace.getCarBrand());
             paramIn.put("carType", parkingSpace.getCarType());
