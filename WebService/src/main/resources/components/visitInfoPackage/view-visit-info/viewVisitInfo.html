@@ -15,12 +15,6 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >访客ID：</label>
-                            <label class="">{{viewVisitInfo.appId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label">访客姓名：</label>
                             <label class="">{{viewVisitInfo.name}}</label>
                         </div>
@@ -28,7 +22,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >访客联系方式：</label>
-                            <label class="">{{viewVisitInfo.securityCode}}</label>
+                            <label class="">{{viewVisitInfo.phoneNumber}}</label>
                         </div>
                     </div>
 
@@ -39,15 +33,10 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >访客性别：</label>
-                            <label class="">{{viewVisitInfo.whileListIp}}</label>
+                            <label class="">{{viewVisitInfo.visitGender=="0"?"男":"女"}}</label>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >访客到访事由：</label>
-                            <label class="">{{viewVisitInfo.blackListIp}}</label>
-                        </div>
-                    </div>
+
 <!--                   viewVisitInfo-->
                 </div>
             </div>

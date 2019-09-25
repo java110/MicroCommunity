@@ -9,10 +9,10 @@
             callBackFunction: vc.propTypes.string //父组件监听方法
         },
         data:{
-            viewVisitInfo:{
-                index:0,
-                flowComponent:'visit',
-                needShowAddAppButton:'true'
+            addVisitInfo:{
+                name:'',
+                visitGender:'',
+                phoneNumber:''
             }
         },
         _initMethod:function(){
@@ -23,31 +23,31 @@
                 $("#addNewVisitModel").modal("show");
             });
 
-            // vc.on('viewVisitInfo', 'onIndex', function(_index){
-            //     vc.component.viewVisitInfo.index = _index;
-            // });
+            vc.on('addVisit', 'onIndex', function(_index){
+                vc.component.viewVisitInfo.index = _index;
+            });
 
         },
         methods:{
             addAppValidate() {
                 return vc.validate.validate({
-                    viewVisitInfo: vc.component.viewVisitInfo
+                    addVisitInfo: vc.component.addVisitInfo
                 }, {
-                    'viewVisitInfo.name': [
+                    'addVisitInfo.name': [
                         {
                             limit: "required",
                             param: "",
                             errInfo: "访客姓名不能为空"
                         }
                     ],
-                    'viewVisitInfo.visitGender': [
+                    'addVisitInfo.visitGender': [
                         {
                             limit: "required",
                             param: "",
                             errInfo: "访客性别不能为空"
                         }
                     ],
-                    'viewVisitInfo.phoneNumber': [
+                    'addVisitInfo.phoneNumber': [
                         {
                             limit: "required",
                             param: "",
@@ -71,9 +71,9 @@
 
                     return;
                 }
-                vc.component.addAppInfo.communityId = vc.getCurrentCommunity().communityId;
-                vc.emit($props.callBackListener, $props.callBackFunction, vc.component.viewVisitInfo);
-                $('#addAppModel').modal('hide');
+                vc.component.addVisitInfo.communityId = vc.getCurrentCommunity().communityId;
+                vc.emit("viewVisitInfo", "addNewVisit", vc.component.addVisitInfo);
+                $('#addNewVisitModel').modal('hide');
             },
             _openAddAppInfoModel(){
                 vc.emit('addApp','openAddAppModal',{});

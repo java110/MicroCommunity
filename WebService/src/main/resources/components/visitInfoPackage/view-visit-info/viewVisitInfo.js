@@ -7,7 +7,10 @@
             viewVisitInfo:{
                 index:0,
                 flowComponent:'visit',
-                needShowAddAppButton:'true'
+                needShowAddAppButton:'true',
+                name:'',
+                visitGender:'',
+                phoneNumber:''
             }
         },
         _initMethod:function(){
@@ -16,11 +19,13 @@
         },
         _initEvent:function(){
             vc.on('viewVisitInfo','addNewVisit',function(_app){
-                vc.copyObject(_app, vc.component.viewAppInfo);
-                vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewAppInfo);
+                console.log(_app);
+
+                vc.copyObject(_app, vc.component.viewVisitInfo);
+                vc.emit('addVisitSpace','notify',vc.component.viewVisitInfo);
             });
 
-            vc.on('viewAppInfo', 'onIndex', function(_index){
+            vc.on('viewVisitInfo', 'onIndex', function(_index){
                 vc.component.viewAppInfo.index = _index;
             });
 
