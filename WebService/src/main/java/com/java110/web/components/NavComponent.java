@@ -3,6 +3,7 @@ package com.java110.web.components;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.INavServiceSMO;
+import com.java110.web.smo.notice.IListNoticesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class NavComponent {
     @Autowired
     private INavServiceSMO navServiceSMOImpl;
 
+    @Autowired
+    private IListNoticesSMO listNoticesSMOImpl;
+
 
     /**
      * 查询通知信息
@@ -28,16 +32,7 @@ public class NavComponent {
      */
     public ResponseEntity<String> getNavData(IPageData pd) {
 
-        String result = "{'noticeSize':10,"
-                + "'moreNoticeUrl':'/moreNotice','notices':["
-                + "{'msg':'新系统开发测试','date':'2019-03-19'},"
-                + "{'msg':'权限检查测试','date':'2019-03-21'},"
-                + "{'msg':'系统欲开发测试','date':'2019-03-20'}"
-                + "]}";
-
-        JSONObject nav = JSONObject.parseObject(result);
-
-        return new ResponseEntity<String>(nav.toJSONString(), HttpStatus.OK);
+        return listNoticesSMOImpl.listNotices(pd);
     }
 
 
@@ -97,5 +92,11 @@ public class NavComponent {
         this.navServiceSMOImpl = navServiceSMOImpl;
     }
 
+    public IListNoticesSMO getListNoticesSMOImpl() {
+        return listNoticesSMOImpl;
+    }
 
+    public void setListNoticesSMOImpl(IListNoticesSMO listNoticesSMOImpl) {
+        this.listNoticesSMOImpl = listNoticesSMOImpl;
+    }
 }
