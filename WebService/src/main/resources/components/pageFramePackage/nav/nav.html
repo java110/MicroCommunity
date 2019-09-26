@@ -36,7 +36,7 @@
             </a>
             <ul class="dropdown-menu dropdown-alerts">
                 <li v-for="notice in nav.notices">
-                    <a href="/flow/noticeDetailFlow?noticeId={{notice.noticeId}}" class="dropdown-item">
+                    <a v-bind:href="/flow/noticeDetailFlow?noticeId={{notice.noticeId}}" class="dropdown-item">
                         <div>
                             <i class="fa fa-envelope fa-fw"></i> {{notice.title}}
                             <span class="float-right text-muted small">{{notice.startTime}}</span>
