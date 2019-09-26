@@ -26,7 +26,16 @@ public class VisitDto extends PageDto implements Serializable {
     private Date visitTime;
     private Date departureTime;
     private Date createTime;
+    private String bId;
     private String statusCd = "0";
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
 
     public String getvId() {
         return vId;

@@ -14,13 +14,13 @@
         ></vc:create>
     </div>
     <div v-if="newVisitInfo.index == 1">
-        <vc:create name="viewOwnerInfo"
+        <vc:create name="visitForOwner"
                    callBackListener="addVisitSpace"
                    callBackFunction="notify"
         ></vc:create>
     </div>
     <div v-if="newVisitInfo.index == 2">
-        <vc:create name="addCar"
+        <vc:create name="addVisitCase"
                    callBackComponent="addVisitSpace"
                    callBackFunction="notify"
         ></vc:create>
@@ -32,13 +32,13 @@
         <div class="col-md-10"></div>
         <div class="col-md-2 " style="margin-bottom:10px; text-align:right">
             <button type="button" class="btn btn-secondary" v-on:click="_prevStep()">上一步</button>
-            <button v-if="newVisitInfo.index != 3" type="button" class="btn btn-primary"
+            <button v-if="newVisitInfo.index != 2" type="button" class="btn btn-primary"
                     style="margin-left:10px;"
                     v-on:click="_nextStep()">下一步
             </button>
-            <button v-if="newVisitInfo.index == 3" type="button" class="btn btn-primary"
+            <button v-if="newVisitInfo.index == 2" type="button" class="btn btn-primary"
                     style="margin-left:10px;"
-                    v-on:click="_addVisitFinish()">出租
+                    v-on:click="_addVisitFinish()">添加
             </button>
         </div>
     </div>

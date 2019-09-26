@@ -17,7 +17,14 @@
         _initEvent:function(){
 
            vc.on("addVisitSpace", "notify", function(_info){
+               console.log("侦听到index为 "+_info);
                 vc.component.newVisitInfo.infos[vc.component.newVisitInfo.index] = _info;
+            });
+            vc.on("addVisitSpace", "ownerId", function(_ownerId){
+                vc.component.newVisitInfo.infos[0]["ownerId"] = _ownerId;
+            });
+            vc.on("addVisitSpace", "visitCase", function(_visitCase){
+                vc.component.newVisitInfo.infos[0]["visitCase"] = _visitCase;
             });
 
         },
@@ -36,12 +43,12 @@
                 vc.component.newVisitInfo.index = vc.component.newVisitInfo.$step.getIndex();
 
                 vc.emit('addVisit', 'onIndex', vc.component.newVisitInfo.index);
-                vc.emit('viewVisitInfo', 'onIndex', vc.component.newVisitInfo.index);
-                vc.emit('addCar', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('visitForOwner', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('addVisitCase', 'onIndex', vc.component.newVisitInfo.index);
 
-                if(vc.component.newVisitInfo.index == 1){
-                    vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
-                }
+                // if(vc.component.newVisitInfo.index == 1){
+                //     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
+                // }
 
             },
             _nextStep:function(){
@@ -52,13 +59,13 @@
                 }
                 vc.component.newVisitInfo.$step.nextStep();
                 vc.component.newVisitInfo.index = vc.component.newVisitInfo.$step.getIndex();
+                vc.emit('addVisit', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('visitForOwner', 'onIndex', vc.component.newVisitInfo.index);
+                vc.emit('addVisitCase', 'onIndex', vc.component.newVisitInfo.index);
 
-                vc.emit('viewSelectParkingSpace', 'onIndex', vc.component.newVisitInfo.index);
-                vc.emit('viewOwnerInfo', 'onIndex', vc.component.newVisitInfo.index);
-                vc.emit('addCar', 'onIndex', vc.component.newVisitInfo.index);
-                if(vc.component.newVisitInfo.index == 1){
-                    vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
-                }
+                // if(vc.component.newVisitInfo.index == 1){
+                //     vc.emit('viewOwnerInfo','callBackOwnerInfo',{});
+                // }
 
             },
             _addVisitFinish:function(){
@@ -69,15 +76,20 @@
                     vc.message("请选择或填写必选信息");
                     return ;
                 }
-
+                vc.component.newVisitInfo.infos[0]['communityId']=vc.getCurrentCommunity().communityId;
                 var param = {
-                    communityId:vc.getCurrentCommunity().communityId,
-                    data:vc.component.newVisitInfo.infos
+                    name:vc.component.newVisitInfo.infos[0]['name'],
+                    visitGender:vc.component.newVisitInfo.infos[0]['visitGender'],
+                    phoneNumber:vc.component.newVisitInfo.infos[0]['phoneNumber'],
+                    communityId:vc.component.newVisitInfo.infos[0]['communityId'],
+                    ownerId:vc.component.newVisitInfo.infos[0]['ownerId'],
+                    visitCase:vc.component.newVisitInfo.infos[0]['visitCase'],
+                    visitTime:new Date()
                 }
-
+                console.log(param);
                vc.http.post(
-                   'hireParkingSpace',
-                   'sell',
+                   'addVisit',
+                   'save',
                    JSON.stringify(param),
                    {
                        emulateJSON:true
