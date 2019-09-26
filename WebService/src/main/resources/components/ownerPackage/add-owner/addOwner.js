@@ -2,10 +2,12 @@
 
     vc.extends({
         propTypes: {
-               notifyLoadDataComponentName:vc.propTypes.string
+               notifyLoadDataComponentName:vc.propTypes.string,
+               componentTitle:vc.propTypes.string // 组件名称
         },
         data:{
             addOwnerInfo:{
+                componentTitle:$props.componentTitle,
                 name:'',
                 age:'',
                 link:'',

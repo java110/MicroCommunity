@@ -134,7 +134,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedParkingSpaceInfo(IPageData pd, List<ImportParkingSpace> parkingSpaces, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
             JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
@@ -147,6 +147,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
 
             paramIn.put("communityId", result.getCommunityId());
+            paramIn.put("userId", result.getUserId());
             paramIn.put("num", parkingSpace.getPsNum());
             paramIn.put("area", parkingSpace.getArea());
             paramIn.put("typeCd", parkingSpace.getTypeCd());
@@ -157,7 +158,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             }
 
             savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
-            if (savedParkingSpaceInfo != null) {
+            if (savedParkingSpaceInfo == null) {
                 continue;
             }
 
@@ -170,6 +171,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
             paramIn.put("communityId", result.getCommunityId());
             paramIn.put("ownerId", parkingSpace.getImportOwner().getOwnerId());
+            paramIn.put("userId", result.getUserId());
             paramIn.put("carNum", parkingSpace.getCarNum());
             paramIn.put("carBrand", parkingSpace.getCarBrand());
             paramIn.put("carType", parkingSpace.getCarType());
@@ -177,6 +179,10 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("psId", savedParkingSpaceInfo.getString("psId"));
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
+
+            if("H".equals(parkingSpace.getSellOrHire())){
+                paramIn.put("cycles", "0");
+            }
 
             String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
                     ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
@@ -187,8 +193,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
 
-            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody());
-            if(!configInfo.containsKey("additionalAmount")){
+            JSONObject configInfo = JSONArray.parseArray(responseEntity.getBody()).getJSONObject(0);
+            if (!configInfo.containsKey("additionalAmount")) {
                 continue;
             }
 
@@ -213,7 +219,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedRoomInfo(IPageData pd, List<ImportRoom> rooms, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportRoom room : rooms) {
             JSONObject savedRoomInfo = getExistsRoom(pd, result, room);
@@ -232,9 +238,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("unitId", room.getFloor().getUnitId());
             paramIn.put("roomNum", room.getRoomNum());
             paramIn.put("layer", room.getLayer());
-            paramIn.put("section", room.getSection());
-            paramIn.put("apartment", "1");
-            paramIn.put("state", "1000");
+            paramIn.put("section", "1");
+            paramIn.put("apartment", room.getSection());
+            paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
             paramIn.put("unitPrice", "1000.00");
 
@@ -256,7 +262,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("communityId", result.getCommunityId());
             paramIn.put("ownerId", room.getImportOwner().getOwnerId());
             paramIn.put("roomId", savedRoomInfo.getString("roomId"));
-            paramIn.put("state", "2002");
+            paramIn.put("state", "2001");
             paramIn.put("storeId", result.getStoreId());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
@@ -311,7 +317,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private JSONObject getExistsRoom(IPageData pd, ComponentValidateResult result, ImportRoom room) {
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?communityId=" + result.getCommunityId()
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.queryRooms?page=1&row=1&communityId=" + result.getCommunityId()
                 + "&floorId=" + room.getFloor().getFloorId() + "&unitId=" + room.getFloor().getUnitId() + "&roomNum=" + room.getRoomNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
@@ -343,12 +349,13 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedOwnerInfo(IPageData pd, List<ImportOwner> owners, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
 
         for (ImportOwner owner : owners) {
             JSONObject savedOwnerInfo = getExistsOwner(pd, result, owner);
 
             if (savedOwnerInfo != null) {
+                owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
                 continue;
             }
             paramIn = new JSONObject();
@@ -363,7 +370,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("sex", owner.getSex());
             paramIn.put("ownerTypeCd", "1001");
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
-            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
                 owner.setOwnerId(savedOwnerInfo.getString("ownerId"));
             }
@@ -383,7 +390,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     private ResponseEntity<String> savedFloorAndUnitInfo(IPageData pd, List<ImportFloor> floors, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         for (ImportFloor importFloor : floors) {
             paramIn = new JSONObject();
             //先保存 楼栋信息
@@ -397,7 +404,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("name", importFloor.getFloorNum() + "号楼");
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             }
-            if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
                 continue;
             }
 
@@ -409,7 +416,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importFloor.setFloorId(savedFloorInfo.getString("floorId"));
             paramIn.clear();
             //判断单元信息是否已经存在，如果存在则不保存数据unit.queryUnits
-            if (getExistsUnit(pd, result, importFloor) != null) {
+            JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
+            if (savedUnitInfo != null) {
+                importFloor.setUnitId(savedUnitInfo.getString("unitId"));
                 continue;
             }
 
@@ -423,7 +432,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
 
             //将unitId 刷入ImportFloor对象
-            JSONObject savedUnitInfo = getExistsUnit(pd, result, importFloor);
+            savedUnitInfo = getExistsUnit(pd, result, importFloor);
             importFloor.setUnitId(savedUnitInfo.getString("unitId"));
 
         }
@@ -434,7 +443,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String apiUrl = "";
         ResponseEntity<String> responseEntity = null;
         apiUrl = ServiceConstant.SERVICE_API_URL + "/api/unit.queryUnits?communityId=" + result.getCommunityId()
-                + "&floorId=" + importFloor.getFloorId() + "&unitNum=" + importFloor.getFloorNum();
+                + "&floorId=" + importFloor.getFloorId() + "&unitNum=" + importFloor.getUnitNum();
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -530,14 +539,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importParkingSpace = new ImportParkingSpace();
             importParkingSpace.setPsNum(os[0].toString());
             importParkingSpace.setTypeCd(os[1].toString());
             importParkingSpace.setArea(Double.parseDouble(os[2].toString()));
-            if(StringUtil.isNullOrNone(os[3])){
+            if (StringUtil.isNullOrNone(os[3])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
@@ -572,7 +581,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importRoom = new ImportRoom();
@@ -581,7 +590,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setLayer(Integer.parseInt(os[3].toString()));
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
-            if(StringUtil.isNullOrNone(os[6])){
+            if (StringUtil.isNullOrNone(os[6])) {
                 rooms.add(importRoom);
                 continue;
             }
@@ -640,7 +649,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (osIndex == 0) { // 第一行是 头部信息 直接跳过
                 continue;
             }
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importOwner = new ImportOwner();
@@ -670,14 +679,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
 
-            if(StringUtil.isNullOrNone(os[0])){
+            if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
             importFloor = new ImportFloor();
             importFloor.setFloorNum(os[0].toString());
             importFloor.setUnitNum(os[1].toString());
             importFloor.setLayerCount(os[2].toString());
-            importFloor.setLift("有".equals(os[3].toString()) ? "Y" : "N");
+            importFloor.setLift("有".equals(os[3].toString()) ? "1010" : "2020");
             floors.add(importFloor);
         }
     }

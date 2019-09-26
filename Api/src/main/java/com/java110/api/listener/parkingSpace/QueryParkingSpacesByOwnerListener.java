@@ -74,7 +74,7 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
         //在没有 停车位的情况下 直接返回空
         ResponseEntity<String> responseEntity = null;
         if (ownerCarDtos == null || ownerCarDtos.size() == 0) {
-            responseEntity = new ResponseEntity<String>("[]", HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>("{\"parkingSpaces\":[]}", HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
             return;
         }
