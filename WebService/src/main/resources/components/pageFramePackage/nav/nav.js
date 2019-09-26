@@ -147,7 +147,7 @@
                  vc.setCurrentCommunity(_community);
             },
             _noticeDetail:function(_notice){
-                console.log(_notice.noticeId);
+                //console.log(_notice.noticeId);
                 vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
             }
         }
