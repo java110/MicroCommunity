@@ -27,8 +27,11 @@
             getNavData:function(){
 
                 var param = {
-                    page:1,
-                    row:3
+                    params:{
+                        page:1,
+                        row:3
+                    }
+
                 };
 
                 //发送get请求
