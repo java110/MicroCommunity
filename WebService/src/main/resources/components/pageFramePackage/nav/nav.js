@@ -145,6 +145,10 @@
             },
             changeCommunity:function(_community){
                  vc.setCurrentCommunity(_community);
+            },
+            _noticeDetail:function(_notice){
+                console.log(_notice.noticeId);
+                vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
             }
         }
 
