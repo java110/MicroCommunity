@@ -31,7 +31,7 @@
                                                v-on:change="getExcelTemplate($event)"
                                                accept=".xls,.xlsx"
                                         >
-                                        <label for="excelTemplate" class="custom-file-label">必填，请选择数据文件</label>
+                                        <label for="excelTemplate" class="custom-file-label">{{assetImportInfo.excelTemplate==''?'必填，请选择数据文件':assetImportInfo.excelTemplate.name}}</label>
                                     </div>
                                 </div>
                             </div>
