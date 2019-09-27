@@ -25,6 +25,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -327,8 +329,15 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         paramInJson.put("cycles", cycles);
 
         //计算结束时间
+        String endTime = "2038-01-01 00:00:00";
+        if(isHireParkingSpace(paramInJson)) {
+            Date et = DateUtil.getCurrentDate();
+            Calendar endCalender = Calendar.getInstance();
+            endCalender.setTime(et);
+            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+            endTime = DateUtil.getFormatTimeString(endCalender.getTime(), DateUtil.DATE_FORMATE_STRING_A);
+        }
 
-        String endTime = isHireParkingSpace(paramInJson) ? DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A) : "2038-01-01 00:00:00";
         paramInJson.put("endTime", endTime);
 
     }

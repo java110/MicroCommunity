@@ -9,7 +9,8 @@
             noticeManageInfo:{
                 notices:[],
                 total:0,
-                records:1
+                records:1,
+                componentShow:'noticeList'
             }
         },
         _initMethod:function(){
@@ -17,6 +18,8 @@
         },
         _initEvent:function(){
             vc.on('noticeManage','listNotice',function(_param){
+                  vc.component.noticeManageInfo.componentShow = 'noticeList';
+
                   vc.component._listNotices(DEFAULT_PAGE, DEFAULT_ROWS);
             });
              vc.on('pagination','page_event',function(_currentPage){
@@ -51,7 +54,9 @@
                            );
             },
             _openAddNoticeModal:function(){
-                vc.emit('addNotice','openAddNoticeModal',{});
+                vc.component.noticeManageInfo.componentShow = 'addNoticeView';
+                vc.emit('addNoticeView','openAddNoticeView',{});
+
             },
             _openEditNoticeModel:function(_notice){
                 vc.emit('editNotice','openEditNoticeModal',_notice);

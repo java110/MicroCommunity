@@ -5,7 +5,11 @@
     var vm = new Vue({
         el:'#nav',
         data:{
-            nav:{},
+            nav:{
+                moreNoticeUrl:'/flow/noticeFlow',
+                notices:[],
+                total:0
+            },
             userName:"",
             navCommunityInfo:{
                 _currentCommunity:{
@@ -23,7 +27,11 @@
             getNavData:function(){
 
                 var param = {
-                    msg:'123',
+                    params:{
+                        page:1,
+                        row:3
+                    }
+
                 };
 
                 //发送get请求
@@ -31,7 +39,9 @@
                             'getNavData',
                              param,
                              function(json){
-                                vm.nav = JSON.parse(json);
+                                var _noticeObj = JSON.parse(json);
+                                vm.nav.notices = _noticeObj.notices;
+                                vm.nav.total = _noticeObj.total;
                              },function(){
                                 console.log('请求失败处理');
                              }
@@ -135,6 +145,10 @@
             },
             changeCommunity:function(_community){
                  vc.setCurrentCommunity(_community);
+            },
+            _noticeDetail:function(_notice){
+                //console.log(_notice.noticeId);
+                vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
             }
         }
 

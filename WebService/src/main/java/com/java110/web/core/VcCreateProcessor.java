@@ -72,7 +72,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
             js = dealJs(js, tag);
             js = dealJsAddComponentCode(js, tag);
-            js = "<script type=\"text/javascript\" "+DIV_PROPERTY_COMPONENT+"=\""+componentName+"\">//<![CDATA[ \n" + js + "//]]>\n</script>";
+            js = "<script type=\"text/javascript\" " + DIV_PROPERTY_COMPONENT + "=\"" + componentName + "\">//<![CDATA[ \n" + js + "//]]>\n</script>";
             htmlModel.add(modelFactory.createText(js));
         }
 
@@ -116,11 +116,11 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             return js;
         }
 
-        tmpProTypes = tmpProTypes.contains("\r")? tmpProTypes.replace("\r", "") : tmpProTypes;
+        tmpProTypes = tmpProTypes.contains("\r") ? tmpProTypes.replace("\r", "") : tmpProTypes;
 
         String[] tmpType = tmpProTypes.contains("\n")
-                        ? tmpProTypes.split("\n")
-                        : tmpProTypes.split(",");
+                ? tmpProTypes.split("\n")
+                : tmpProTypes.split(",");
         StringBuffer propsJs = new StringBuffer("\nvar $props = {};\n");
         for (String type : tmpType) {
             if (StringUtils.isEmpty(type) || !type.contains(":")) {
@@ -140,9 +140,9 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
                 throw new TemplateProcessingException("组件[" + componentName + "]未配置组件属性" + attrKey);
             }
             String vcType = tag.getAttributeValue(attrKey);
-            if(!tag.hasAttribute(attrKey) && types[1].contains("=")) {
+            if (!tag.hasAttribute(attrKey) && types[1].contains("=")) {
                 vcType = dealJsPropTypesDefault(types[1]);
-            }else if (types[1].contains("vc.propTypes.string")) {
+            } else if (types[1].contains("vc.propTypes.string")) {
                 vcType = "'" + vcType + "'";
             }
             propsJs.append("$props." + attrKey + "=" + vcType + ";\n");
@@ -160,16 +160,16 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
     }
 
 
-    private String dealJsPropTypesDefault(String typeValue){
-         int startPos = typeValue.indexOf("=") + 1;
-         int endPos = typeValue.length();
-         if(typeValue.contains(",")){
-             endPos = typeValue.indexOf(",");
-         }else if(typeValue.contains("//")){
-             endPos = typeValue.indexOf("//");
-         }
+    private String dealJsPropTypesDefault(String typeValue) {
+        int startPos = typeValue.indexOf("=") + 1;
+        int endPos = typeValue.length();
+        if (typeValue.contains(",")) {
+            endPos = typeValue.indexOf(",");
+        } else if (typeValue.contains("//")) {
+            endPos = typeValue.indexOf("//");
+        }
 
-         return typeValue.substring(startPos,endPos);
+        return typeValue.substring(startPos, endPos);
     }
 
     /**

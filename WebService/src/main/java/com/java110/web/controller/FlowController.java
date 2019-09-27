@@ -34,13 +34,15 @@ public class FlowController extends BaseController {
                        HttpServletRequest request) {
         logger.debug("请求流程 {},{}", flowCode, new Date());
         try {
+            System.out.println("开始寻找组件数据");
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            System.out.println("数据获取成功");
             validateFlowData(flowCode, pd);
 
         } catch (Throwable e) {
             flowCode = "error";
         }
-
+        System.out.println("传入的路径为  "+flowCode);
 
         return flowCode;
     }

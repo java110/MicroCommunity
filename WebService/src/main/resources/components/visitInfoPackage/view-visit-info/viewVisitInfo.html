@@ -2,12 +2,12 @@
     <div class="col-lg-12">
         <div class="ibox ">
             <div class="ibox-title">
-                <h5>应用信息</h5>
+                <h5>新增访客</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" v-if="viewAppInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectAppInfoModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择访客</button>
+<!--                    <button type="button" v-if="viewVisitInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectAppInfoModel()">-->
+<!--                        <i class="glyphicon glyphicon-search"></i> 选择访客</button>-->
 
-                    <button type="button" v-if="viewAppInfo.index != 2 && viewAppInfo.needShowAddAppButton== 'true'" class="btn btn-primary btn-sm" v-on:click="_openAddAppInfoModel()">
+                    <button type="button" v-if="viewVisitInfo.index == 0 && viewVisitInfo.needShowAddAppButton== 'true'" class="btn btn-primary btn-sm" v-on:click="_openAddVisitInfoModel()">
                         <i class="glyphicon glyphicon-plus"></i> 添加访客</button>
                 </div>
             </div>
@@ -15,20 +15,14 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >访客ID：</label>
-                            <label class="">{{viewAppInfo.appId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label">访客姓名：</label>
-                            <label class="">{{viewAppInfo.name}}</label>
+                            <label class="">{{viewVisitInfo.name}}</label>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >访客联系方式：</label>
-                            <label class="">{{viewAppInfo.securityCode}}</label>
+                            <label class="">{{viewVisitInfo.phoneNumber}}</label>
                         </div>
                     </div>
 
@@ -39,29 +33,27 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" >访客性别：</label>
-                            <label class="">{{viewAppInfo.whileListIp}}</label>
+                            <label class="">{{viewVisitInfo.visitGender=="0"?"男":"女"}}</label>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >访客到访事由：</label>
-                            <label class="">{{viewAppInfo.blackListIp}}</label>
-                        </div>
-                    </div>
+
 <!--                   viewVisitInfo-->
                 </div>
             </div>
         </div>
     </div>
 
-    <vc:create name="addApp"
-               callBackListener="viewAppInfo"
-               callBackFunction="chooseApp"
-    ></vc:create>
+<!--    <vc:create name="addApp"-->
+<!--               callBackListener="viewVisitInfo"-->
+<!--               callBackFunction="chooseApp"-->
+<!--    ></vc:create>-->
 
-
-    <vc:create name="chooseApp"
-               emitChooseApp="viewAppInfo"
-               emitLoadData="viewAppInfo"
+    <vc:create name="addVisit"
+               callBackListener="viewVisitInfo"
+               callBackFunction="addNewVisit"
     ></vc:create>
+<!--    <vc:create name="chooseApp"-->
+<!--               emitChooseApp="viewVisitInfo"-->
+<!--               emitLoadData="viewVisitInfo"-->
+<!--    ></vc:create>-->
 </div>

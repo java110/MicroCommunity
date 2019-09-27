@@ -21,7 +21,7 @@
 
             <div class="dropdown-menu" v-for="currentCommunity in navCommunityInfo.communityInfos">
                 <a class="dropdown-item" v-on:click="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
-                <a href="/flow/enterCommunity" class="dropdown-item">
+                <a href="/flow/enterCommunity" class="dropdown-item text-center">
                     <strong>入驻小区</strong>
                     <i class="fa fa-angle-right"></i>
                 </a>
@@ -32,14 +32,14 @@
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                <i class="fa fa-bell"></i> <span class="label label-primary">{{nav.noticeSize}}</span>
+                <i class="fa fa-bell"></i> <span class="label label-primary">{{nav.total}}</span>
             </a>
             <ul class="dropdown-menu dropdown-alerts">
                 <li v-for="notice in nav.notices">
-                    <a href="mailbox.html" class="dropdown-item">
+                    <a v-on:click="_noticeDetail(notice)" class="dropdown-item">
                         <div>
-                            <i class="fa fa-envelope fa-fw"></i> {{notice.msg}}
-                            <span class="float-right text-muted small">{{notice.date}}</span>
+                            <i class="fa fa-envelope fa-fw"></i> {{notice.title}}
+                            <span class="float-right text-muted small">{{notice.startTime}}</span>
                         </div>
                     </a>
                     <div class="dropdown-divider"></div>

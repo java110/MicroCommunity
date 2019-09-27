@@ -1,5 +1,5 @@
 <div id="component" >
-    <div class="row">
+    <div class="row" v-if="noticeManageInfo.componentShow == 'noticeList'">
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
@@ -57,7 +57,9 @@
         </div>
     </div>
 
-    <vc:create name="addNotice"></vc:create>
+    <div v-if="noticeManageInfo.componentShow == 'addNoticeView'">
+        <vc:create name="addNoticeView"></vc:create>
+    </div>
     <vc:create name="editNotice"></vc:create>
     <vc:create name="deleteNotice"></vc:create>
 

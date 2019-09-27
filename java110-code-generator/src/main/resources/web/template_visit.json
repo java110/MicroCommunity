@@ -32,7 +32,7 @@
       "desc":"必填，请填写访客姓名",
       "required":true,
       "hasDefaultValue":false,
-      "inputType":"input",
+      "inputType":"select",
       "limit":"maxin",
       "limitParam":"2,10",
       "limitErrInfo":"访客姓名必须在2至10字符之间",

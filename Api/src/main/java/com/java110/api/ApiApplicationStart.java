@@ -87,6 +87,7 @@ public class ApiApplicationStart {
 
     /**
      * swagger 插件
+     *
      * @return Docket 对象
      */
     @Bean

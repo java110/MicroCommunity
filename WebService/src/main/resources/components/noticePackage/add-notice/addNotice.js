@@ -11,6 +11,7 @@ startTime:'',
             }
         },
          _initMethod:function(){
+            vc.component._initNoticeContextText();
 
          },
          _initEvent:function(){
@@ -121,6 +122,9 @@ context:'',
 startTime:'',
 
                                         };
+            },
+            _initNoticeContextText:function(){
+                $('.summernote').summernote();
             }
         }
     });
