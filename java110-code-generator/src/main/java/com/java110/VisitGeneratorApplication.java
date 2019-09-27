@@ -50,6 +50,7 @@ public class VisitGeneratorApplication {
         param.put("departureTime", "departure_time");
         param.put("statusCd", "status_cd");
         param.put("operate", "operate");
+        param.put("bId", "b_id");
         data.setParams(param);
         GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
         generatorSaveInfoListener.generator(data);

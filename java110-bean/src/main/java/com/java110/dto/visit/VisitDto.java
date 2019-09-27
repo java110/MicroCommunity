@@ -15,42 +15,29 @@ import java.util.Date;
  **/
 public class VisitDto extends PageDto implements Serializable {
 
-    private String vId;
-    private String name;
+    private String departureTime;
     private String visitGender;
-    private String phoneNumber;
-    private String userId;
-    private String communityId;
     private String ownerId;
+    private String userId;
+    private String vId;
+    private String visitTime;
+    private String phoneNumber;
+    private String name;
     private String visitCase;
-    private Date visitTime;
-    private Date departureTime;
+    private String communityId;
+
+
     private Date createTime;
-    private String bId;
+
     private String statusCd = "0";
 
-    public String getbId() {
-        return bId;
+
+    public String getDepartureTime() {
+        return departureTime;
     }
 
-    public void setbId(String bId) {
-        this.bId = bId;
-    }
-
-    public String getvId() {
-        return vId;
-    }
-
-    public void setvId(String vId) {
-        this.vId = vId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
     }
 
     public String getVisitGender() {
@@ -61,12 +48,12 @@ public class VisitDto extends PageDto implements Serializable {
         this.visitGender = visitGender;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getUserId() {
@@ -77,20 +64,36 @@ public class VisitDto extends PageDto implements Serializable {
         this.userId = userId;
     }
 
-    public String getCommunityId() {
-        return communityId;
+    public String getVId() {
+        return vId;
     }
 
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
+    public void setVId(String vId) {
+        this.vId = vId;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getVisitTime() {
+        return visitTime;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setVisitTime(String visitTime) {
+        this.visitTime = visitTime;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getVisitCase() {
@@ -101,21 +104,14 @@ public class VisitDto extends PageDto implements Serializable {
         this.visitCase = visitCase;
     }
 
-    public Date getVisitTime() {
-        return visitTime;
+    public String getCommunityId() {
+        return communityId;
     }
 
-    public void setVisitTime(Date visitTime) {
-        this.visitTime = visitTime;
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 
-    public Date getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(Date departureTime) {
-        this.departureTime = departureTime;
-    }
 
     public Date getCreateTime() {
         return createTime;
