@@ -163,7 +163,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         if (page != PageDto.DEFAULT_PAGE) {
             ownerDto.setPage((page - 1) * ownerDto.getRow());
-            ownerDto.setRow(page * ownerDto.getRow());
         }
         return ownerServiceDaoImpl.queryOwnersCount(BeanConvertUtil.beanCovertMap(ownerDto));
     }
@@ -176,7 +175,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         if (page != PageDto.DEFAULT_PAGE) {
             ownerDto.setPage((page - 1) * ownerDto.getRow());
-            ownerDto.setRow(page * ownerDto.getRow());
         }
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(
                 ownerServiceDaoImpl.getOwnerInfoByCondition(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);

@@ -39,7 +39,6 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             menuGroupDto.setPage((page - 1) * menuGroupDto.getRow());
-            menuGroupDto.setRow(page * menuGroupDto.getRow());
         }
 
         List<MenuGroupDto> menuGroups = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.getMenuGroupInfo(BeanConvertUtil.beanCovertMap(menuGroupDto)), MenuGroupDto.class);
@@ -86,7 +85,6 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             basePrivilegeDto.setPage((page - 1) * basePrivilegeDto.getRow());
-            basePrivilegeDto.setRow(page * basePrivilegeDto.getRow());
         }
 
         List<BasePrivilegeDto> basePrivileges = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.getBasePrivilegeInfo(BeanConvertUtil.beanCovertMap(basePrivilegeDto)), BasePrivilegeDto.class);
@@ -126,7 +124,6 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             menuDto.setPage((page - 1) * menuDto.getRow());
-            menuDto.setRow(page * menuDto.getRow());
         }
 
         List<MenuDto> menus = BeanConvertUtil.covertBeanList(menuServiceDaoImpl.getMenuInfo(BeanConvertUtil.beanCovertMap(menuDto)), MenuDto.class);

@@ -40,7 +40,6 @@ public class RouteInnerServiceSMOImpl extends BaseServiceSMO implements IRouteIn
 
         if (page != PageDto.DEFAULT_PAGE) {
             routeDto.setPage((page - 1) * routeDto.getRow());
-            routeDto.setRow(page * routeDto.getRow());
         }
 
         List<RouteDto> routes = BeanConvertUtil.covertBeanList(routeServiceDaoImpl.getRouteInfo(BeanConvertUtil.beanCovertMap(routeDto)), RouteDto.class);

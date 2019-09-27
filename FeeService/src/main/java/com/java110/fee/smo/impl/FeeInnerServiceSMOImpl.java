@@ -42,7 +42,6 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         if (page != PageDto.DEFAULT_PAGE) {
             feeDto.setPage((page - 1) * feeDto.getRow());
-            feeDto.setRow(page * feeDto.getRow());
         }
 
         List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);

@@ -42,7 +42,6 @@ public class DemoInnerServiceSMOImpl extends BaseServiceSMO implements IDemoInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             demoDto.setPage((page - 1) * demoDto.getRow());
-            demoDto.setRow(page * demoDto.getRow());
         }
 
         List<DemoDto> demos = BeanConvertUtil.covertBeanList(demoServiceDaoImpl.getDemoInfo(BeanConvertUtil.beanCovertMap(demoDto)), DemoDto.class);

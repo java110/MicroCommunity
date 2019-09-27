@@ -42,7 +42,6 @@ public class FeeDetailInnerServiceSMOImpl extends BaseServiceSMO implements IFee
 
         if (page != PageDto.DEFAULT_PAGE) {
             feeDetailDto.setPage((page - 1) * feeDetailDto.getRow());
-            feeDetailDto.setRow(page * feeDetailDto.getRow());
         }
 
         List<FeeDetailDto> feeDetails = BeanConvertUtil.covertBeanList(feeDetailServiceDaoImpl.getFeeDetailInfo(BeanConvertUtil.beanCovertMap(feeDetailDto)), FeeDetailDto.class);

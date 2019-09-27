@@ -87,7 +87,6 @@ public class FloorInnerServiceSMOImpl extends BaseServiceSMO implements IFloorIn
 
         if (page != PageDto.DEFAULT_PAGE) {
             floorDto.setPage((page - 1) * floorDto.getRow());
-            floorDto.setRow(page * floorDto.getRow());
         }
 
 

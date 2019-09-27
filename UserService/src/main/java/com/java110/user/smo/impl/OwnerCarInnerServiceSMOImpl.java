@@ -42,7 +42,6 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
 
         if (page != PageDto.DEFAULT_PAGE) {
             ownerCarDto.setPage((page - 1) * ownerCarDto.getRow());
-            ownerCarDto.setRow(page * ownerCarDto.getRow());
         }
 
         List<OwnerCarDto> ownerCars = BeanConvertUtil.covertBeanList(ownerCarServiceDaoImpl.getOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarDto)), OwnerCarDto.class);

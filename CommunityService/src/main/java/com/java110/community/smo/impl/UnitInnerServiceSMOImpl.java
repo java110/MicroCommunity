@@ -42,7 +42,6 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             unitDto.setPage((page - 1) * unitDto.getRow());
-            unitDto.setRow(page * unitDto.getRow());
         }
 
         List<UnitDto> units = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.getUnitInfo(BeanConvertUtil.beanCovertMap(unitDto)), UnitDto.class);

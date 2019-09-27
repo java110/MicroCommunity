@@ -43,7 +43,6 @@ public class VisitInnerServiceSMOImpl extends BaseServiceSMO implements IVisitIn
 
         if (page != PageDto.DEFAULT_PAGE) {
             visitDto.setPage((page - 1) * visitDto.getRow());
-            visitDto.setRow(page * visitDto.getRow());
         }
 
         List<VisitDto> visits = BeanConvertUtil.covertBeanList(visitServiceDaoImpl.getVisitInfo(BeanConvertUtil.beanCovertMap(visitDto)), VisitDto.class);

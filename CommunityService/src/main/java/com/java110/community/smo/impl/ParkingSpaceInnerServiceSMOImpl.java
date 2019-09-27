@@ -42,7 +42,6 @@ public class ParkingSpaceInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         if (page != PageDto.DEFAULT_PAGE) {
             parkingSpaceDto.setPage((page - 1) * parkingSpaceDto.getRow());
-            parkingSpaceDto.setRow(page * parkingSpaceDto.getRow());
         }
 
         List<ParkingSpaceDto> parkingSpaces = BeanConvertUtil.covertBeanList(parkingSpaceServiceDaoImpl.getParkingSpaceInfo(BeanConvertUtil.beanCovertMap(parkingSpaceDto)), ParkingSpaceDto.class);

@@ -42,7 +42,6 @@ public class NoticeInnerServiceSMOImpl extends BaseServiceSMO implements INotice
 
         if (page != PageDto.DEFAULT_PAGE) {
             noticeDto.setPage((page - 1) * noticeDto.getRow());
-            noticeDto.setRow(page * noticeDto.getRow());
         }
 
         List<NoticeDto> notices = BeanConvertUtil.covertBeanList(noticeServiceDaoImpl.getNoticeInfo(BeanConvertUtil.beanCovertMap(noticeDto)), NoticeDto.class);

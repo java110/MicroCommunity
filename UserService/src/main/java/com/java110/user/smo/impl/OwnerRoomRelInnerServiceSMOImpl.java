@@ -42,7 +42,6 @@ public class OwnerRoomRelInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         if (page != PageDto.DEFAULT_PAGE) {
             ownerRoomRelDto.setPage((page - 1) * ownerRoomRelDto.getRow());
-            ownerRoomRelDto.setRow(page * ownerRoomRelDto.getRow());
         }
 
         List<OwnerRoomRelDto> ownerRoomRels = BeanConvertUtil.covertBeanList(ownerRoomRelServiceDaoImpl.getOwnerRoomRelInfo(BeanConvertUtil.beanCovertMap(ownerRoomRelDto)), OwnerRoomRelDto.class);

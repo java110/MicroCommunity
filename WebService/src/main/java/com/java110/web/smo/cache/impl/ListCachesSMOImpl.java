@@ -52,7 +52,6 @@ public class ListCachesSMOImpl extends AbstractComponentSMO implements IListCach
         paramIn.putAll(paramMap);
         int page = paramIn.getInteger("page");
         paramIn.put("page", ( page - 1)* paramIn.getInteger("row"));
-        paramIn.put("row", page * paramIn.getInteger("row"));
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/query.console.caches" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
