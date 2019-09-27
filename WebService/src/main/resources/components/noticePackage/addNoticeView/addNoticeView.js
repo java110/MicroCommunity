@@ -11,10 +11,11 @@
             }
         },
          _initMethod:function(){
+            vc.component._initNoticeInfo();
          },
          _initEvent:function(){
             vc.on('addNoticeView','openAddNoticeView',function(){
-                vc.component._initNoticeContextText();
+                //vc.component._initNoticeInfo();
 
             });
         },
@@ -115,25 +116,51 @@
             },
             clearaddNoticeViewInfo:function(){
                 vc.component.addNoticeViewInfo = {
-                                            title:'',
-noticeTypeCd:'',
-context:'',
-startTime:'',
+                        title:'',
+                                    noticeTypeCd:'',
+                                    context:'',
+                                    startTime:'',
 
                                         };
             },
-            _initNoticeContextText:function(){
-                console.log('开始渲染福文本')
+            _initNoticeInfo:function(){
+                console.log('开始渲染福文本');
+                 $('.noticeStartTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    minView: "month",
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+
+                });
+                $('.noticeStartTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".noticeStartTime").val();
+                        vc.component.addNoticeViewInfo.startTime = value;
+                    });
                 $('.summernote').summernote({
                     lang:'zh-CN',
                     height: 300,
-                    placeholder:'必填，请输入公告内容'
+                    placeholder:'必填，请输入公告内容',
+                    callbacks : {
+                         onImageUpload: function(files, editor, $editable) {
+                             sendFile(files);
+                         },
+                         onChange:function(contents,$editable){
+                            vc.component.addNoticeViewInfo.context = contents;
+                         }
+                    }
                 });
             },
             closeNoticeInfo:function(){
                  vc.emit('noticeManage','listNotice',{});
 
+            },
+            sendFile:function(files){
+                console.log('上传图片');
             }
+
         }
     });
 

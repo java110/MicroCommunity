@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div v-if="noticeManageInfo.componentShow == 'addNoticeView'">
+    <div  v-bind:class="{no_display:noticeManageInfo.componentShow != 'addNoticeView'}">
         <vc:create name="addNoticeView"></vc:create>
     </div>
     <vc:create name="editNotice"></vc:create>
