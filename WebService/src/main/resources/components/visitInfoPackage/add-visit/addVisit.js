@@ -10,7 +10,7 @@
         },
         data:{
             addVisitInfo:{
-                name:'',
+                vName:'',
                 visitGender:'',
                 phoneNumber:''
             }

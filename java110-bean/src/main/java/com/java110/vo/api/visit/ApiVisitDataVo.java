@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ApiVisitDataVo implements Serializable {
     private String vId;
-    private String name;
+    private String vName;
     private String visitGender;
     private String phoneNumber;
     private String userId;
@@ -25,12 +25,12 @@ public class ApiVisitDataVo implements Serializable {
         this.vId = vId;
     }
 
-    public String getName() {
-        return name;
+    public String getvName() {
+        return vName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setvName(String vName) {
+        this.vName = vName;
     }
 
     public String getVisitGender() {
