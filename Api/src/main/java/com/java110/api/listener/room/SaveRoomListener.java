@@ -125,9 +125,9 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
 
-        if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
+        /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
-        }
+        }*/
 
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))

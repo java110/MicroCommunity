@@ -8,8 +8,10 @@
                 unitId:'',
                 roomNum:'',
                 layer:'',
-                section:'',
+                section:'0',
                 apartment:'',
+                apartment1:'',
+                apartment2:'',
                 builtUpArea:'',
                 unitPrice:'',
                 state:'',
@@ -52,6 +54,12 @@
                         if(res.status == 200){
                             var tmpUnits = JSON.parse(json);
                             vc.component.editRoomUnits = tmpUnits;
+
+                            if('0.00' == vc.component.editRoomInfo.unitPrice){
+                                vc.component.editRoomInfo.unitPrice='';
+                            }
+                            vc.component.editRoomInfo.apartment1=vc.component.editRoomInfo.apartment.substr(0,2);
+                            vc.component.editRoomInfo.apartment2=vc.component.editRoomInfo.apartment.substr(2,5);
                             /*if(tmpUnits == null || tmpUnits.length == 0){
                                 return ;
                             }
@@ -103,7 +111,7 @@
                                     errInfo:"房屋楼层高度必须为数字"
                                 }
                             ],
-                            'editRoomInfo.section':[
+                            /*'editRoomInfo.section':[
                                 {
                                     limit:"required",
                                     param:"",
@@ -114,7 +122,7 @@
                                     param:"",
                                     errInfo:"房间数必须为数字"
                                 }
-                            ],
+                            ],*/
                             'editRoomInfo.state':[
                                 {
                                     limit:"required",
@@ -146,7 +154,7 @@
                                   errInfo:"建筑面积数字长度不能超过6位"
                                 }
                             ],
-                            'editRoomInfo.unitPrice':[
+                            /*'editRoomInfo.unitPrice':[
                                 {
                                     limit:"required",
                                     param:"",
@@ -162,7 +170,7 @@
                                    param:"12",
                                    errInfo:"房屋单价数字长度不能超过12位"
                                  }
-                            ],
+                            ],*/
                             'editRoomInfo.remark':[
                                 {
                                     limit:"maxLength",
@@ -178,7 +186,10 @@
                     vc.message(vc.validate.errInfo);
                     return ;
                 }
-
+                vc.component.editRoomInfo.apartment=vc.component.editRoomInfo.apartment1+vc.component.editRoomInfo.apartment2;
+                if ('' == vc.component.editRoomInfo.unitPrice || null == vc.component.editRoomInfo.unitPrice){
+                    vc.component.editRoomInfo.unitPrice='0';
+                }
                 vc.http.post(
                     'editRoom',
                     'update',
@@ -209,7 +220,7 @@
                   unitId:'',
                   roomNum:'',
                   layer:'',
-                  section:'',
+                  section:'0',
                   apartment:'',
                   builtUpArea:'',
                   unitPrice:'',

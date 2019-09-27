@@ -56,6 +56,9 @@
 
 
                 var _currentData = vc.component.addRoomBindingInfo.infos[vc.component.addRoomBindingInfo.index];
+                if ('' == vc.component.addRoomViewInfo.unitPrice || null == vc.component.addRoomViewInfo.unitPrice){
+                    vc.component.addRoomViewInfo.unitPrice='0';
+                }
                 if( _currentData == null || _currentData == undefined){
                     vc.message("请选择或填写必选信息");
                     return ;
@@ -78,8 +81,8 @@
                            vc.message('处理成功',true);
                            //关闭model
                            var _tmpResJson = JSON.parse(json);
-                           _tmpResJson[floorName] = vc.component._getFloorName();
-                           vc.jumpToPage("/flow/roomFlow?" + vc.objToGetParam(_tmpResJson));
+                          /* _tmpResJson[floorName] = vc.component._getFloorName();*/
+                           vc.jumpToPage("/flow/roomFlow");
                            return ;
                        }
                        vc.message(json);

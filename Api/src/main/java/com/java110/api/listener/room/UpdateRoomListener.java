@@ -115,19 +115,19 @@ public class UpdateRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "unitId", "请求报文中未包含unitId节点");
         Assert.jsonObjectHaveKey(paramIn, "roomNum", "请求报文中未包含roomNum节点");
         Assert.jsonObjectHaveKey(paramIn, "layer", "请求报文中未包含layer节点");
-        Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");
+        /*Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");*/
         Assert.jsonObjectHaveKey(paramIn, "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(paramIn, "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(paramIn, "state", "请求报文中未包含state节点");
-        Assert.jsonObjectHaveKey(paramIn, "unitPrice", "请求报文中未包含unitPrice节点");
+       /* Assert.jsonObjectHaveKey(paramIn, "unitPrice", "请求报文中未包含unitPrice节点");*/
         JSONObject reqJson = JSONObject.parseObject(paramIn);
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
 
-        if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
+        /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
-        }
+        }*/
 
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))

@@ -10,8 +10,10 @@
                 flowComponent:'addRoomView',
                 roomNum:'',
 layer:'',
-section:'',
+section:'0',
 apartment:'',
+apartment1:'',
+apartment2:'',
 builtUpArea:'',
 unitPrice:'',
 state:'2002',
@@ -38,6 +40,7 @@ remark:'',
         },
         methods:{
             addRoomValidate(){
+                vc.component.addRoomViewInfo.apartment=vc.component.addRoomViewInfo.apartment1+vc.component.addRoomViewInfo.apartment2;
                 return vc.validate.validate({
                     addRoomViewInfo:vc.component.addRoomViewInfo
                 },{
@@ -65,18 +68,6 @@ remark:'',
                             errInfo:"房屋楼层高度必须为数字"
                         },
                     ],
-'addRoomViewInfo.section':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"房间数不能为空"
-                        },
- {
-                            limit:"num",
-                            param:"",
-                            errInfo:"房间数必须为数字"
-                        },
-                    ],
 'addRoomViewInfo.apartment':[
 {
                             limit:"required",
@@ -99,18 +90,6 @@ remark:'',
                             limit:"money",
                             param:"",
                             errInfo:"建筑面积错误，如 300.00"
-                        },
-                    ],
-'addRoomViewInfo.unitPrice':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"房屋单价不能为空"
-                        },
- {
-                            limit:"money",
-                            param:"",
-                            errInfo:"房屋单价错误 如 300.00"
                         },
                     ],
 'addRoomViewInfo.state':[

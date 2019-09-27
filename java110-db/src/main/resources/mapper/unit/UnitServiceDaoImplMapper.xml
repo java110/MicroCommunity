@@ -120,10 +120,10 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-        <if test="page != -1 and page != null ">
+       <!-- <if test="page != -1 and page != null ">
             limit #{page}, #{row}
-        </if>
-
+        </if>-->
+            limit 10;
     </select>
 
 

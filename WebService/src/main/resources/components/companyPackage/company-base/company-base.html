@@ -6,13 +6,20 @@
                 <label>公司名称 *</label>
                 <input id="name" v-model="companyBaseInfo.name" type="text" class="form-control required" aria-required="true" />
             </div>
-            <div class="form-group">
+            <div class="dropdown">
                 <label>公司地址 *</label>
+
+                <select id="pro" class="btn btn-secondary dropdown-toggle" >
+                <option value="">请选择省</option>
+            </select>
+                <select id="city" class="btn btn-secondary dropdown-toggle" >
+                    <option value="">请选择市</option>
+                </select>
                 <input  name="address" v-model="companyBaseInfo.address" type="text" class="form-control required" aria-required="true" />
             </div>
             <div class="form-group">
                 <label>联系电话 *</label>
-                <input name="tel" v-model="companyBaseInfo.tel" type="text" class="form-control required" aria-required="true" />
+                <input name="tel" v-model="companyBaseInfo.tel" type="number" class="form-control required" aria-required="true" />
             </div>
             <div class="form-group">
                 <label>公司业务 *</label>

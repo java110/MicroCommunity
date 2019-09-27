@@ -107,7 +107,7 @@
                             <th data-hide="phone">楼栋编号</th>
                             <th data-hide="phone">单元</th>
                             <th data-hide="phone">楼层</th>
-                            <th data-hide="phone">户型</th>
+                            <!--<th data-hide="phone">户型</th>-->
                             <th data-hide="phone">建筑面积</th>
                             <th data-hide="phone">单价</th>
                             <th data-hide="phone">房屋状态</th>
@@ -133,14 +133,14 @@
                             <td>
                                 {{room.layer}}
                             </td>
-                            <td>
+                            <!--<td>
                                 {{room.apartment}}
-                            </td>
+                            </td>-->
                             <td>
                                 {{room.builtUpArea}}
                             </td>
                             <td>
-                                {{room.unitPrice}}
+                                {{room.unitPrice != '0.00'?room.unitPrice:'0'}}
                             </td>
                             <td>
                                 {{vc.component.showState(room.state)}}

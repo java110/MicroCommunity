@@ -33,10 +33,10 @@ public class AddRoomBindingBindingSMOImpl extends AbstractComponentSMO implement
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyByFlowData(infos, "addRoomView", "roomNum", "必填，请填写房屋编号");
         Assert.hasKeyByFlowData(infos, "addRoomView", "layer", "必填，请填写房屋楼层");
-        Assert.hasKeyByFlowData(infos, "addRoomView", "section", "必填，请填写房屋楼层");
+        /*Assert.hasKeyByFlowData(infos, "addRoomView", "section", "必填，请填写房屋楼层");*/
         Assert.hasKeyByFlowData(infos, "addRoomView", "apartment", "必填，请选择房屋户型");
         Assert.hasKeyByFlowData(infos, "addRoomView", "builtUpArea", "必填，请填写房屋建筑面积");
-        Assert.hasKeyByFlowData(infos, "addRoomView", "unitPrice", "必填，请填写房屋每平米单价");
+       /* Assert.hasKeyByFlowData(infos, "addRoomView", "unitPrice", "必填，请填写房屋每平米单价");*/
         Assert.hasKeyByFlowData(infos, "addRoomView", "state", "必填，请选择房屋状态");
 
 

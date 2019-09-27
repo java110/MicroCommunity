@@ -426,11 +426,11 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         Assert.jsonObjectHaveKey(pd.getReqData(), "unitId", "请求报文中未包含unitId节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "roomNum", "请求报文中未包含roomNum节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "layer", "请求报文中未包含layer节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "section", "请求报文中未包含section节点");
+        /*Assert.jsonObjectHaveKey(pd.getReqData(), "section", "请求报文中未包含section节点");*/
         Assert.jsonObjectHaveKey(pd.getReqData(), "apartment", "请求报文中未包含apartment节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(pd.getReqData(), "state", "请求报文中未包含state节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "unitPrice", "请求报文中未包含unitPrice节点");
+        /*Assert.jsonObjectHaveKey(pd.getReqData(), "unitPrice", "请求报文中未包含unitPrice节点");*/
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
 
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
@@ -438,9 +438,9 @@ public class RoomServiceSMOImpl extends BaseComponentSMO implements IRoomService
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
 
-        if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
+       /* if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
-        }
+        }*/
 
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))
