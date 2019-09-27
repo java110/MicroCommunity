@@ -16,13 +16,13 @@ import java.util.Date;
 public class VisitDto extends PageDto implements Serializable {
 
     private String departureTime;
+    private String vName;
     private String visitGender;
     private String ownerId;
     private String userId;
     private String vId;
     private String visitTime;
     private String phoneNumber;
-    private String name;
     private String visitCase;
     private String communityId;
 
@@ -38,6 +38,14 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
+    }
+
+    public String getVName() {
+        return vName;
+    }
+
+    public void setVName(String vName) {
+        this.vName = vName;
     }
 
     public String getVisitGender() {
@@ -86,14 +94,6 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getVisitCase() {

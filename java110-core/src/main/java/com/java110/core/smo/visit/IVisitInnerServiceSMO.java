@@ -1,8 +1,6 @@
 package com.java110.core.smo.visit;
 
 import com.java110.core.feign.FeignConfiguration;
-
-
 import com.java110.dto.visit.VisitDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
