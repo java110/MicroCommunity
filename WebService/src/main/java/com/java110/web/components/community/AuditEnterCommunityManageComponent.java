@@ -6,6 +6,7 @@ import com.java110.common.constant.StateConstant;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.web.smo.community.IAuditCommunitySMO;
+import com.java110.web.smo.community.IAuditEnterCommunitySMO;
 import com.java110.web.smo.community.IListAuditEnterCommunitysSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuditEnterCommunityManageComponent {
     private IListAuditEnterCommunitysSMO listAuditEnterCommunitysSMOImpl;
 
     @Autowired
-    private IAuditCommunitySMO auditCommunitySMOImpl;
+    private IAuditEnterCommunitySMO auditEnterCommunitySMOImpl;
 
     /**
      * 查询小区列表
@@ -52,16 +53,15 @@ public class AuditEnterCommunityManageComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> audit(IPageData pd) {
-        return auditCommunitySMOImpl.auditCommunity(pd);
+        return auditEnterCommunitySMOImpl.auditEnterCommunity(pd);
     }
 
-
-    public IAuditCommunitySMO getAuditCommunitySMOImpl() {
-        return auditCommunitySMOImpl;
+    public IAuditEnterCommunitySMO getAuditEnterCommunitySMOImpl() {
+        return auditEnterCommunitySMOImpl;
     }
 
-    public void setAuditCommunitySMOImpl(IAuditCommunitySMO auditCommunitySMOImpl) {
-        this.auditCommunitySMOImpl = auditCommunitySMOImpl;
+    public void setAuditEnterCommunitySMOImpl(IAuditEnterCommunitySMO auditEnterCommunitySMOImpl) {
+        this.auditEnterCommunitySMOImpl = auditEnterCommunitySMOImpl;
     }
 
     public IListAuditEnterCommunitysSMO getListAuditEnterCommunitysSMOImpl() {
