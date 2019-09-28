@@ -63,6 +63,10 @@
             },
             _openDeleteNoticeModel:function(_notice){
                 vc.emit('deleteNotice','openDeleteNoticeModal',_notice);
+            },
+            _openNoticeDetail:function(_notice){
+                vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
+
             }
         }
     });

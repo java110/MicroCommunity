@@ -70,7 +70,7 @@ startTime:'',
                             errInfo:"开始时间不能为空"
                         },
  {
-                            limit:"date",
+                            limit:"dateTime",
                             param:"",
                             errInfo:"开始时间不是有效的日志"
                         },

@@ -7,6 +7,7 @@
                 noticeTypeCd:'',
                 context:'',
                 startTime:'',
+                endTime:'',
 
             }
         },
@@ -54,22 +55,34 @@
                             param:"",
                             errInfo:"公告内容不能为空"
                         },
- {
+                        {
                             limit:"maxLength",
                             param:"500",
                             errInfo:"公告内容不能超过500个字"
                         },
                     ],
-'addNoticeViewInfo.startTime':[
-{
-                            limit:"required",
+                    'addNoticeViewInfo.startTime':[
+                    {
+                        limit:"required",
+                        param:"",
+                        errInfo:"开始时间不能为空"
+                    },
+                     {
+                            limit:"dateTime",
                             param:"",
-                            errInfo:"开始时间不能为空"
+                            errInfo:"开始时间不是有效的日期"
                         },
- {
-                            limit:"date",
+                    ],
+                    'addNoticeViewInfo.endTime':[
+                    {
+                        limit:"required",
+                        param:"",
+                        errInfo:"开始时间不能为空"
+                    },
+                     {
+                            limit:"dateTime",
                             param:"",
-                            errInfo:"开始时间不是有效的日志"
+                            errInfo:"开始时间不是有效的日期"
                         },
                     ],
 
@@ -124,11 +137,11 @@
                                         };
             },
             _initNoticeInfo:function(){
-                console.log('开始渲染福文本');
+                vc.component.addNoticeViewInfo.startTime = vc.dateFormat(new Date().getTime());
                  $('.noticeStartTime').datetimepicker({
                     language: 'zh-CN',
-                    format: 'yyyy-mm-dd',
-                    minView: "month",
+                    format: 'yyyy-mm-dd HH:i:ss',
+                    initTime: true,
                     initialDate: new Date(),
                     autoClose: 1,
                     todayBtn: true
@@ -138,6 +151,19 @@
                     .on('changeDate', function (ev) {
                         var value = $(".noticeStartTime").val();
                         vc.component.addNoticeViewInfo.startTime = value;
+                    });
+                $('.noticeEndTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd HH:i:ss',
+                    initTime: true,
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+                });
+                $('.noticeEndTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".noticeEndTime").val();
+                        vc.component.addNoticeViewInfo.endTime = value;
                     });
                 $('.summernote').summernote({
                     lang:'zh-CN',
