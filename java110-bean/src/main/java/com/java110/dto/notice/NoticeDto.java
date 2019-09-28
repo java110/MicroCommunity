@@ -16,12 +16,13 @@ import java.util.Date;
 public class NoticeDto extends PageDto implements Serializable {
 
     private String noticeTypeCd;
-private String context;
-private String startTime;
-private String communityId;
-private String title;
-private String userId;
-private String noticeId;
+    private String context;
+    private String startTime;
+    private String endTime;
+    private String communityId;
+    private String title;
+    private String userId;
+    private String noticeId;
 
 
     private Date createTime;
@@ -32,43 +33,56 @@ private String noticeId;
     public String getNoticeTypeCd() {
         return noticeTypeCd;
     }
-public void setNoticeTypeCd(String noticeTypeCd) {
+
+    public void setNoticeTypeCd(String noticeTypeCd) {
         this.noticeTypeCd = noticeTypeCd;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getTitle() {
+
+    public String getTitle() {
         return title;
     }
-public void setTitle(String title) {
+
+    public void setTitle(String title) {
         this.title = title;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getNoticeId() {
+
+    public String getNoticeId() {
         return noticeId;
     }
-public void setNoticeId(String noticeId) {
+
+    public void setNoticeId(String noticeId) {
         this.noticeId = noticeId;
     }
 
@@ -87,5 +101,13 @@ public void setNoticeId(String noticeId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
