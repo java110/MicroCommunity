@@ -59,7 +59,9 @@
 
             },
             _openEditNoticeModel:function(_notice){
-                vc.emit('editNotice','openEditNoticeModal',_notice);
+
+                vc.emit('editNoticeViewInfo','noticeEditNoticeInfo',_notice);
+                vc.component.noticeManageInfo.componentShow = 'editNoticeView';
             },
             _openDeleteNoticeModel:function(_notice){
                 vc.emit('deleteNotice','openDeleteNoticeModal',_notice);

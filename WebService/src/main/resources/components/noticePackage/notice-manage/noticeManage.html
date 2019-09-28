@@ -62,7 +62,9 @@
     <div  v-bind:class="{no_display:noticeManageInfo.componentShow != 'addNoticeView'}">
         <vc:create name="addNoticeView"></vc:create>
     </div>
-    <vc:create name="editNotice"></vc:create>
+    <div  v-bind:class="{no_display:noticeManageInfo.componentShow != 'editNoticeView'}">
+        <vc:create name="editNoticeView"></vc:create>
+    </div>
     <vc:create name="deleteNotice"></vc:create>
 
 </div>
