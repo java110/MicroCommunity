@@ -18,10 +18,12 @@
          _initEvent:function(){
              vc.on('editNoticeViewInfo','openEditNoticeModal',function(_params){
                 vc.component.refreshEditNoticeInfo();
+                _params.context = filterXSS(_params.context);
                 vc.component.editNoticeInfo = _params;
             });
             vc.on('editNoticeViewInfo','noticeEditNoticeInfo',function(_params){
                 vc.component.refreshEditNoticeInfo();
+                _params.context = filterXSS(_params.context);
                 vc.copyObject(_params,vc.component.editNoticeViewInfo);
                 $(".eidtSummernote").summernote('code', vc.component.editNoticeViewInfo.context);
             });
@@ -63,10 +65,10 @@
                             errInfo:"公告内容不能为空"
                         },
  {
-                            limit:"maxLength",
-                            param:"500",
-                            errInfo:"公告内容不能超过500个字"
-                        },
+                             limit:"maxLength",
+                             param:"10000",
+                             errInfo:"公告内容不能超过10000个字"
+                         },
                     ],
                     'editNoticeViewInfo.startTime':[
                     {

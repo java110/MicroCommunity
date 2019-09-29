@@ -57,8 +57,8 @@
                         },
                         {
                             limit:"maxLength",
-                            param:"500",
-                            errInfo:"公告内容不能超过500个字"
+                            param:"10000",
+                            errInfo:"公告内容不能超过10000个字"
                         },
                     ],
                     'addNoticeViewInfo.startTime':[

@@ -45,8 +45,10 @@
                              function(json,res){
                                 var _noticeDetailInfo=JSON.parse(json);
 
-                                var _notices = _noticeManageInfo.notices;
+                                var _notices = _noticeDetailInfo.notices;
                                 if(_notices.length >0){
+                                    //filterXSS
+                                    _notices[0].context = filterXSS(_notices[0].context);
                                     vc.copyObject(_notices[0], vc.component.noticeDetailInfo);
                                 }
 
@@ -55,6 +57,7 @@
                              }
                            );
             }
+
         }
     });
 })(window.vc);
