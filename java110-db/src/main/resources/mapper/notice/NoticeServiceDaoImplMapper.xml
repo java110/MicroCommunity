@@ -127,7 +127,7 @@
             and t.community_id= #{communityId}
         </if>
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like concat('%',#{title},'%')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -207,7 +207,7 @@
             and t.community_id= #{communityId}
         </if>
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like concat('%',#{title},'%')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
