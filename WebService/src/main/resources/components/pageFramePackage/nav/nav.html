@@ -19,8 +19,8 @@
                 <span class="caret"></span>
             </a>
 
-            <div class="dropdown-menu" v-for="currentCommunity in navCommunityInfo.communityInfos">
-                <a class="dropdown-item" v-on:click="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
+            <div class="dropdown-menu" >
+                <a class="dropdown-item" v-for="currentCommunity in navCommunityInfo.communityInfos" v-on:click="changeCommunity(currentCommunity)">{{currentCommunity.name}}</a>
                 <a href="/flow/enterCommunity" class="dropdown-item text-center">
                     <strong>入驻小区</strong>
                     <i class="fa fa-angle-right"></i>
