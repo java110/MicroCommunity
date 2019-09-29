@@ -145,7 +145,9 @@
             },
             changeCommunity:function(_community){
                  vc.setCurrentCommunity(_community);
-                  vm.navCommunityInfo._currentCommunity= _community;
+                 vm.navCommunityInfo._currentCommunity= _community;
+                 //中心加载当前页
+                 location.reload();
             },
             _noticeDetail:function(_notice){
                 //console.log(_notice.noticeId);

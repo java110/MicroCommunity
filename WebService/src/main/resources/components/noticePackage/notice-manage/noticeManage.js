@@ -31,7 +31,8 @@
                 var param = {
                     params:{
                         page:_page,
-                        row:_rows
+                        row:_rows,
+                        communityId:vc.getCurrentCommunity().communityId
                     }
 
                }
