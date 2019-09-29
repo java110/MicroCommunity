@@ -10,7 +10,12 @@
                 notices:[],
                 total:0,
                 records:1,
-                componentShow:'noticeList'
+                componentShow:'noticeList',
+                conditions:{
+                    title:'',
+                    noticeTypeCd:'',
+                    noticeId:''
+                }
             }
         },
         _initMethod:function(){
@@ -28,14 +33,13 @@
         },
         methods:{
             _listNotices:function(_page, _rows){
+                vc.component.noticeManageInfo.conditions.page = _page;
+                vc.component.noticeManageInfo.conditions.row = _rows;
+                vc.component.noticeManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
-                    params:{
-                        page:_page,
-                        row:_rows,
-                        communityId:vc.getCurrentCommunity().communityId
-                    }
+                    params:vc.component.noticeManageInfo.conditions
+               };
 
-               }
                //发送get请求
                vc.http.get('noticeManage',
                             'list',
@@ -69,6 +73,10 @@
             },
             _openNoticeDetail:function(_notice){
                 vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
+
+            },
+            _queryNoticeMethod:function(){
+                vc.component._listNotices(DEFAULT_PAGE, DEFAULT_ROWS);
 
             }
         }
