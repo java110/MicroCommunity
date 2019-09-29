@@ -26,12 +26,6 @@ public class VisitDto extends PageDto implements Serializable {
     private String visitCase;
     private String communityId;
 
-
-    private Date createTime;
-
-    private String statusCd = "0";
-
-
     public String getDepartureTime() {
         return departureTime;
     }
@@ -40,11 +34,11 @@ public class VisitDto extends PageDto implements Serializable {
         this.departureTime = departureTime;
     }
 
-    public String getVName() {
+    public String getvName() {
         return vName;
     }
 
-    public void setVName(String vName) {
+    public void setvName(String vName) {
         this.vName = vName;
     }
 
@@ -72,11 +66,11 @@ public class VisitDto extends PageDto implements Serializable {
         this.userId = userId;
     }
 
-    public String getVId() {
+    public String getvId() {
         return vId;
     }
 
-    public void setVId(String vId) {
+    public void setvId(String vId) {
         this.vId = vId;
     }
 
@@ -110,22 +104,5 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
-    }
-
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
     }
 }

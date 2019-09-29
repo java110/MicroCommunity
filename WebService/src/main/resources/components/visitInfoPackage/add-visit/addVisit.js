@@ -35,7 +35,7 @@
                 return vc.validate.validate({
                     addVisitInfo: vc.component.addVisitInfo
                 }, {
-                    'addVisitInfo.name': [
+                    'addVisitInfo.vName': [
                         {
                             limit: "required",
                             param: "",
