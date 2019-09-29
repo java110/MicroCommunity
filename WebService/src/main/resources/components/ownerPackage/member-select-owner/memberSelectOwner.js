@@ -13,6 +13,7 @@
                 userName:"",
                 remark:"",
                 link:"",
+                sexName:''
             }
         },
         _initMethod:function(){
@@ -20,7 +21,8 @@
         },
         _initEvent:function(){
             vc.on('memberSelectOwner','chooseOwner',function(_owner){
-                vc.component.ownerInfo = _owner;
+                vc.copyObject(_owner,vc.component.ownerInfo);
+                vc.component.ownerInfo.sexName = (vc.component.ownerInfo.sex == 0 ? '男' : '女');
             });
 
         },

@@ -5,18 +5,20 @@
                 <h5>业主信息</h5>
                 <div class="ibox-tools" style="top:10px;">
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchOwnerModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择业主</button>
+                        <i class="glyphicon glyphicon-search"></i> 选择业主
+                    </button>
                     <button type="button" class="btn btn-primary btn-sm"
                             v-if="ownerInfo.ownerId != null && ownerInfo.ownerId != ''"
                             style="margin-left:10px" v-on:click="openAddMemberModel()">
-                        <i class="glyphicon glyphicon-plus" ></i> 添加成员</button>
+                        <i class="glyphicon glyphicon-plus"></i> 添加成员
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >业主ID：</label>
+                            <label class="col-form-label">业主ID：</label>
                             <label class="">{{ownerInfo.ownerId}}</label>
                         </div>
                     </div>
@@ -28,13 +30,13 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >性别：</label>
-                            <label class="">{{ownerInfo.sex == 0 ? '男' : '女'}}</label>
+                            <label class="col-form-label">性别：</label>
+                            <label class="">{{ownerInfo.sexName}}</label>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >年龄：</label>
+                            <label class="col-form-label">年龄：</label>
                             <label class="">{{ownerInfo.age}}</label>
                         </div>
                     </div>
@@ -44,7 +46,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label class="col-form-label" >联系方式：</label>
+                            <label class="col-form-label">联系方式：</label>
                             <label class="">{{ownerInfo.link}}</label>
                         </div>
                     </div>
@@ -56,7 +58,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" >备注：</label>
+                            <label class="col-form-label">备注：</label>
                             <label class="">{{ownerInfo.remark}}</label>
                         </div>
                     </div>

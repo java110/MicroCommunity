@@ -37,7 +37,7 @@
                         <thead>
                         <tr>
                             <th>缴费ID</th>
-                            <th data-hide="phone">周期</th>
+                            <th data-hide="phone" v-if="feeDetailInfo.amount != '-1.00'">周期</th>
                             <th data-hide="phone">应收金额</th>
                             <th data-hide="phone">实收金额</th>
                             <th data-hide="phone">打折率</th>
@@ -50,7 +50,7 @@
                             <td>
                                 {{feeDetail.detailId}}
                             </td>
-                            <td>
+                            <td v-if="feeDetailInfo.amount != '-1.00'">
                                 {{feeDetail.cycles}} 月
                             </td>
                             <td>
