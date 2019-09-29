@@ -30,7 +30,7 @@ public class AddVisitSMOImpl extends AbstractComponentSMO implements IAddVisitSM
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
-        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写访客姓名");
+        Assert.hasKeyAndValue(paramIn, "vName", "必填，请填写访客姓名");
         Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(paramIn, "ownerId", "必填，请填写目标业主ID");
         Assert.hasKeyAndValue(paramIn, "phoneNumber", "必填，请填写访客联系方式");
