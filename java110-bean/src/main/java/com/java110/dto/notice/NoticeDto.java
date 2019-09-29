@@ -27,6 +27,8 @@ public class NoticeDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private String noticeTypeCdName;
+
     private String statusCd = "0";
 
 
@@ -109,5 +111,13 @@ public class NoticeDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getNoticeTypeCdName() {
+        return noticeTypeCdName;
+    }
+
+    public void setNoticeTypeCdName(String noticeTypeCdName) {
+        this.noticeTypeCdName = noticeTypeCdName;
     }
 }

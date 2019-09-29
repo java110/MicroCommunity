@@ -97,7 +97,15 @@
     <select id="getNoticeInfo" parameterType="Map" resultType="Map">
         select t.notice_type_cd,t.notice_type_cd noticeTypeCd,t.context,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.title,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId,t.notice_id,t.notice_id noticeId,t.create_time,t.create_time createTime
+        bId,t.user_id,t.user_id userId,t.notice_id,t.notice_id noticeId,t.create_time,t.create_time createTime,
+        (CASE
+        WHEN t.`notice_type_cd` = '1000'
+        THEN '业主通知'
+        WHEN t.notice_type_cd = '1001'
+        THEN '员工通知'
+        ELSE
+        '小区通知'
+        END) noticeTypeCdName
         from n_notice t
         where 1 =1
         <if test="noticeTypeCd !=null and noticeTypeCd != ''">
