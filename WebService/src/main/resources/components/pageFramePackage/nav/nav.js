@@ -29,7 +29,8 @@
                 var param = {
                     params:{
                         page:1,
-                        row:3
+                        row:3,
+                        communityId:vc.getCurrentCommunity().communityId
                     }
 
                 };
