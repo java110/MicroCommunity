@@ -15,22 +15,22 @@ import java.util.Date;
  **/
 public class VisitDto extends PageDto implements Serializable {
 
-    private String departureTime;
+    private Date departureTime;
     private String vName;
     private String visitGender;
     private String ownerId;
     private String userId;
     private String vId;
-    private String visitTime;
+    private Date visitTime;
     private String phoneNumber;
     private String visitCase;
     private String communityId;
 
-    public String getDepartureTime() {
+    public Date getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
     }
 
@@ -74,11 +74,11 @@ public class VisitDto extends PageDto implements Serializable {
         this.vId = vId;
     }
 
-    public String getVisitTime() {
+    public Date getVisitTime() {
         return visitTime;
     }
 
-    public void setVisitTime(String visitTime) {
+    public void setVisitTime(Date visitTime) {
         this.visitTime = visitTime;
     }
 
