@@ -1,5 +1,5 @@
 <div id="component">
-    <div class="row">
+    <div class="row" v-if="noticeManageInfo.componentShow == 'noticeList'">
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
@@ -80,7 +80,7 @@
                             <td>{{notice.noticeTypeCdName}}</td>
                             <td>{{notice.startTime}}</td>
                             <td>{{notice.endTime}}</td>
-                            <td>
+                            <td class="text-right">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openNoticeDetail(notice)">详情
                                     </button>

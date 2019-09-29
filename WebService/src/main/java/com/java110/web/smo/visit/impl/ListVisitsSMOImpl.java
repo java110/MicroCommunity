@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.constant.PrivilegeCodeConstant;
 import com.java110.common.constant.ServiceConstant;
 import com.java110.common.exception.SMOException;
+import com.java110.common.util.Assert;
 import com.java110.common.util.BeanConvertUtil;
 import com.java110.web.smo.visit.IListVisitsSMO;
 import org.springframework.web.client.RestTemplate;
@@ -35,7 +36,7 @@ public class ListVisitsSMOImpl extends AbstractComponentSMO implements IListVisi
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
-
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_VISIT);
     }
 

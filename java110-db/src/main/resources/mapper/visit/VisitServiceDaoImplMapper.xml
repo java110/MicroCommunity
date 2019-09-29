@@ -5,242 +5,245 @@
 <mapper namespace="visitServiceDaoImpl">
 
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessVisitInfo" parameterType="Map">
-           insert into business_visit_info(
-departure_time,v_name,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,operate,visit_case,community_id,b_id
-) values (
-#{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},NOW(),#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId}
-)
-       </insert>
+    <insert id="saveBusinessVisitInfo" parameterType="Map">
+        insert into business_visit_info(
+        departure_time,v_name,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,operate,visit_case,community_id,b_id
+        ) values (
+        #{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},NOW(),#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId}
+        )
+    </insert>
 
 
-       <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessVisitInfo" parameterType="Map" resultType="Map">
-           select  t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from business_visit_info t 
-where 1 =1 
-<if test="departureTime !=null and departureTime != ''">
-   and t.departure_time= #{departureTime}
-</if> 
-<if test="vName !=null and vName != ''">
-   and t.v_name= #{vName}
-</if> 
-<if test="visitGender !=null and visitGender != ''">
-   and t.visit_gender= #{visitGender}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="vId !=null and vId != ''">
-   and t.v_id= #{vId}
-</if> 
-<if test="visitTime !=null and visitTime != ''">
-   and t.visit_time= #{visitTime}
-</if> 
-<if test="phoneNumber !=null and phoneNumber != ''">
-   and t.phone_number= #{phoneNumber}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="visitCase !=null and visitCase != ''">
-   and t.visit_case= #{visitCase}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessVisitInfo" parameterType="Map" resultType="Map">
+        select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.visit_gender,t.visit_gender
+        visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time
+        visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.visit_case,t.visit_case
+        visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
+        from business_visit_info t
+        where 1 =1
+        <if test="departureTime !=null and departureTime != ''">
+            and t.departure_time= #{departureTime}
+        </if>
+        <if test="vName !=null and vName != ''">
+            and t.v_name= #{vName}
+        </if>
+        <if test="visitGender !=null and visitGender != ''">
+            and t.visit_gender= #{visitGender}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="vId !=null and vId != ''">
+            and t.v_id= #{vId}
+        </if>
+        <if test="visitTime !=null and visitTime != ''">
+            and t.visit_time= #{visitTime}
+        </if>
+        <if test="phoneNumber !=null and phoneNumber != ''">
+            and t.phone_number= #{phoneNumber}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="visitCase !=null and visitCase != ''">
+            and t.visit_case= #{visitCase}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存访客信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfoInstance" parameterType="Map">
         insert into s_visit_info(
-departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id
-) select t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id from business_visit_info t where 1=1
-<if test="departureTime !=null and departureTime != ''">
-   and t.departure_time= #{departureTime}
-</if> 
-<if test="vName !=null and vName != ''">
-   and t.v_name= #{vName}
-</if> 
-<if test="visitGender !=null and visitGender != ''">
-   and t.visit_gender= #{visitGender}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="vId !=null and vId != ''">
-   and t.v_id= #{vId}
-</if> 
-<if test="visitTime !=null and visitTime != ''">
-   and t.visit_time= #{visitTime}
-</if> 
-<if test="phoneNumber !=null and phoneNumber != ''">
-   and t.phone_number= #{phoneNumber}
-</if> 
-   and t.operate= 'ADD'
-<if test="visitCase !=null and visitCase != ''">
-   and t.visit_case= #{visitCase}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+        departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id
+        ) select
+        t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id
+        from business_visit_info t where 1=1
+        <if test="departureTime !=null and departureTime != ''">
+            and t.departure_time= #{departureTime}
+        </if>
+        <if test="vName !=null and vName != ''">
+            and t.v_name= #{vName}
+        </if>
+        <if test="visitGender !=null and visitGender != ''">
+            and t.visit_gender= #{visitGender}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="vId !=null and vId != ''">
+            and t.v_id= #{vId}
+        </if>
+        <if test="visitTime !=null and visitTime != ''">
+            and t.visit_time= #{visitTime}
+        </if>
+        <if test="phoneNumber !=null and phoneNumber != ''">
+            and t.phone_number= #{phoneNumber}
+        </if>
+        and t.operate= 'ADD'
+        <if test="visitCase !=null and visitCase != ''">
+            and t.visit_case= #{visitCase}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询访客信息信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
-        select  t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from s_visit_info t 
-where 1 =1 
-<if test="departureTime !=null and departureTime != ''">
-   and t.departure_time= #{departureTime}
-</if> 
-<if test="vName !=null and vName != ''">
-   and t.v_name= #{vName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="visitGender !=null and visitGender != ''">
-   and t.visit_gender= #{visitGender}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="vId !=null and vId != ''">
-   and t.v_id= #{vId}
-</if> 
-<if test="visitTime !=null and visitTime != ''">
-   and t.visit_time= #{visitTime}
-</if> 
-<if test="phoneNumber !=null and phoneNumber != ''">
-   and t.phone_number= #{phoneNumber}
-</if> 
-<if test="visitCase !=null and visitCase != ''">
-   and t.visit_case= #{visitCase}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd
+        statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
+        userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number
+        phoneNumber,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
+        from s_visit_info t
+        where 1 =1
+        <if test="departureTime !=null and departureTime != ''">
+            and t.departure_time= #{departureTime}
+        </if>
+        <if test="vName !=null and vName != ''">
+            and t.v_name= #{vName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="visitGender !=null and visitGender != ''">
+            and t.visit_gender= #{visitGender}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="vId !=null and vId != ''">
+            and t.v_id= #{vId}
+        </if>
+        <if test="visitTime !=null and visitTime != ''">
+            and t.visit_time= #{visitTime}
+        </if>
+        <if test="phoneNumber !=null and phoneNumber != ''">
+            and t.phone_number= #{phoneNumber}
+        </if>
+        <if test="visitCase !=null and visitCase != ''">
+            and t.visit_case= #{visitCase}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改访客信息信息 add by wuxw 2018-07-03 -->
     <update id="updateVisitInfoInstance" parameterType="Map">
-        update  s_visit_info t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="departureTime !=null and departureTime != ''">
-, t.departure_time= #{departureTime}
-</if> 
-<if test="vName !=null and vName != ''">
-, t.v_name= #{vName}
-</if> 
-<if test="visitGender !=null and visitGender != ''">
-, t.visit_gender= #{visitGender}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-, t.owner_id= #{ownerId}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
-<if test="visitTime !=null and visitTime != ''">
-, t.visit_time= #{visitTime}
-</if> 
-<if test="phoneNumber !=null and phoneNumber != ''">
-, t.phone_number= #{phoneNumber}
-</if> 
-<if test="visitCase !=null and visitCase != ''">
-, t.visit_case= #{visitCase}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="vId !=null and vId != ''">
-and t.v_id= #{vId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update s_visit_info t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="departureTime !=null and departureTime != ''">
+            , t.departure_time= #{departureTime}
+        </if>
+        <if test="vName !=null and vName != ''">
+            , t.v_name= #{vName}
+        </if>
+        <if test="visitGender !=null and visitGender != ''">
+            , t.visit_gender= #{visitGender}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="visitTime !=null and visitTime != ''">
+            , t.visit_time= #{visitTime}
+        </if>
+        <if test="phoneNumber !=null and phoneNumber != ''">
+            , t.phone_number= #{phoneNumber}
+        </if>
+        <if test="visitCase !=null and visitCase != ''">
+            , t.visit_case= #{visitCase}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="vId !=null and vId != ''">
+            and t.v_id= #{vId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询访客信息数量 add by wuxw 2018-07-03 -->
-     <select id="queryVisitsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from s_visit_info t 
-where 1 =1 
-<if test="departureTime !=null and departureTime != ''">
-   and t.departure_time= #{departureTime}
-</if> 
-<if test="vName !=null and vName != ''">
-   and t.v_name= #{vName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="visitGender !=null and visitGender != ''">
-   and t.visit_gender= #{visitGender}
-</if> 
-<if test="ownerId !=null and ownerId != ''">
-   and t.owner_id= #{ownerId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="vId !=null and vId != ''">
-   and t.v_id= #{vId}
-</if> 
-<if test="visitTime !=null and visitTime != ''">
-   and t.visit_time= #{visitTime}
-</if> 
-<if test="phoneNumber !=null and phoneNumber != ''">
-   and t.phone_number= #{phoneNumber}
-</if> 
-<if test="visitCase !=null and visitCase != ''">
-   and t.visit_case= #{visitCase}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <select id="queryVisitsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_visit_info t
+        where 1 =1
+        <if test="departureTime !=null and departureTime != ''">
+            and t.departure_time= #{departureTime}
+        </if>
+        <if test="vName !=null and vName != ''">
+            and t.v_name= #{vName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="visitGender !=null and visitGender != ''">
+            and t.visit_gender= #{visitGender}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="vId !=null and vId != ''">
+            and t.v_id= #{vId}
+        </if>
+        <if test="visitTime !=null and visitTime != ''">
+            and t.visit_time= #{visitTime}
+        </if>
+        <if test="phoneNumber !=null and phoneNumber != ''">
+            and t.phone_number= #{phoneNumber}
+        </if>
+        <if test="visitCase !=null and visitCase != ''">
+            and t.visit_case= #{visitCase}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
