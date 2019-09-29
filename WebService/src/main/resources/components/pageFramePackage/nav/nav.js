@@ -145,6 +145,7 @@
             },
             changeCommunity:function(_community){
                  vc.setCurrentCommunity(_community);
+                 vc.component.navCommunityInfo._currentCommunity= _community;
             },
             _noticeDetail:function(_notice){
                 //console.log(_notice.noticeId);
