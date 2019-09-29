@@ -79,9 +79,7 @@
                              function(json,res){
                                var _fee =JSON.parse(json);
                                vc.copyObject(_fee,vc.component.mainParkingSpaceFeeInfo);
-                               vc.emit('propertyFee','listFeeDetail',{
-                                    feeId:_fee.feeId
-                               });
+                               vc.emit('propertyFee','listFeeDetail',vc.component.mainParkingSpaceFeeInfo);
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

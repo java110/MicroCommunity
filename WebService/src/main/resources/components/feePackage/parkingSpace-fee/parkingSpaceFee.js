@@ -11,6 +11,7 @@
                 total:0,
                 records:1,
                 feeId:'',
+                amount:"-1.00",
                 startTime:'',
                 endTime:''
             }
@@ -21,6 +22,7 @@
         _initEvent:function(){
             vc.on('propertyFee','listFeeDetail',function(_param){
                   vc.component.feeDetailInfo.feeId = _param.feeId;
+                  vc.component.feeDetailInfo.amount = _param.amount;
                   vc.component.listFeeDetail(DEFAULT_PAGE,DEFAULT_ROW);
             });
 
