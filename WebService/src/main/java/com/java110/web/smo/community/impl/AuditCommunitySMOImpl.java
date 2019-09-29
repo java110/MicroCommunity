@@ -29,12 +29,12 @@ public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAudi
 
         //super.validatePageInfo(pd);
 
-        Assert.hasKeyAndValue(paramIn, "communityMemberId", "小区ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
         Assert.hasKeyAndValue(paramIn, "state", "必填，请填写小区审核状态");
         Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写小区审核原因");
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_ENTER_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_COMMUNITY);
 
     }
 
@@ -45,7 +45,7 @@ public class AuditCommunitySMOImpl extends AbstractComponentSMO implements IAudi
         super.validateStoreStaffRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/community.auditEnterCommunity",
+                ServiceConstant.SERVICE_API_URL + "/api/community.auditCommunity",
                 HttpMethod.POST);
         return responseEntity;
     }

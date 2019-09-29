@@ -39,7 +39,7 @@ public class VisitGeneratorApplication {
         data.setTableName("s_visit_info");
         Map<String, String> param = new HashMap<String, String>();
         param.put("vId", "v_id");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
-        param.put("name", "name");
+        param.put("vName", "v_name");
         param.put("communityId", "community_id");
         param.put("visitGender", "visit_gender");
         param.put("phoneNumber", "phone_number");

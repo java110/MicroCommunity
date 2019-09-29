@@ -29,12 +29,12 @@ public class AuditEnterCommunitySMOImpl extends AbstractComponentSMO implements 
 
         //super.validatePageInfo(pd);
 
-        Assert.hasKeyAndValue(paramIn, "communityMemberId", "小区ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityMemberId", "小区成员ID不能为空");
         Assert.hasKeyAndValue(paramIn, "state", "必填，请填写小区审核状态");
         Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写小区审核原因");
 
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_COMMUNITY);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AUDIT_ENTER_COMMUNITY);
 
     }
 

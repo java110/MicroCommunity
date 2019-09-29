@@ -31,9 +31,9 @@
                         <tbody>
                         <tr v-for="visit in appManageInfo.visits">
                             <td>{{visit.vId}}</td>
-                            <td>{{visit.name}}</td>
+                            <td>{{visit.vName}}</td>
                             <td>{{visit.phoneNumber}}</td>
-                            <td>{{visit.visitGenderName}}</td>
+                            <td>{{visit.visitGender=='0'?'男':'女'}}</td>
                             <td>{{visit.visitCase}}</td>
                             <td>{{visit.visitTime}}</td>
                             <td>{{visit.departureTime}}</td>

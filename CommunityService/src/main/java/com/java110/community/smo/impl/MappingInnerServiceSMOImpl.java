@@ -41,7 +41,6 @@ public class MappingInnerServiceSMOImpl extends BaseServiceSMO implements IMappi
 
         if (page != PageDto.DEFAULT_PAGE) {
             mappingDto.setPage((page - 1) * mappingDto.getRow());
-            mappingDto.setRow(page * mappingDto.getRow());
         }
 
         List<MappingDto> mappings = BeanConvertUtil.covertBeanList(mappingServiceDaoImpl.getMappingInfo(BeanConvertUtil.beanCovertMap(mappingDto)), MappingDto.class);

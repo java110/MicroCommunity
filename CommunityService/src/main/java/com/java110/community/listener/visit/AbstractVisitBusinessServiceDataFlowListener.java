@@ -5,10 +5,8 @@ import com.java110.common.constant.ResponseConstant;
 import com.java110.common.constant.StatusConstant;
 import com.java110.common.exception.ListenerExecuteException;
 import com.java110.community.dao.IVisitServiceDao;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +38,7 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
     protected void flushBusinessVisitInfo(Map businessVisitInfo, String statusCd) {
         businessVisitInfo.put("newBId", businessVisitInfo.get("b_id"));
         businessVisitInfo.put("departureTime", businessVisitInfo.get("departure_time"));
+        businessVisitInfo.put("vName", businessVisitInfo.get("v_name"));
         businessVisitInfo.put("visitGender", businessVisitInfo.get("visit_gender"));
         businessVisitInfo.put("ownerId", businessVisitInfo.get("owner_id"));
         businessVisitInfo.put("userId", businessVisitInfo.get("user_id"));
@@ -47,7 +46,6 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         businessVisitInfo.put("visitTime", businessVisitInfo.get("visit_time"));
         businessVisitInfo.put("phoneNumber", businessVisitInfo.get("phone_number"));
         businessVisitInfo.put("operate", businessVisitInfo.get("operate"));
-        businessVisitInfo.put("name", businessVisitInfo.get("name"));
         businessVisitInfo.put("visitCase", businessVisitInfo.get("visit_case"));
         businessVisitInfo.put("communityId", businessVisitInfo.get("community_id"));
         businessVisitInfo.remove("bId");
@@ -75,6 +73,7 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         currentVisitInfo.put("bId", business.getbId());
 
         currentVisitInfo.put("departureTime", currentVisitInfo.get("departure_time"));
+        currentVisitInfo.put("vName", currentVisitInfo.get("v_name"));
         currentVisitInfo.put("visitGender", currentVisitInfo.get("visit_gender"));
         currentVisitInfo.put("ownerId", currentVisitInfo.get("owner_id"));
         currentVisitInfo.put("userId", currentVisitInfo.get("user_id"));
@@ -82,7 +81,6 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
         currentVisitInfo.put("visitTime", currentVisitInfo.get("visit_time"));
         currentVisitInfo.put("phoneNumber", currentVisitInfo.get("phone_number"));
         currentVisitInfo.put("operate", currentVisitInfo.get("operate"));
-        currentVisitInfo.put("name", currentVisitInfo.get("name"));
         currentVisitInfo.put("visitCase", currentVisitInfo.get("visit_case"));
         currentVisitInfo.put("communityId", currentVisitInfo.get("community_id"));
 

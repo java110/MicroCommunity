@@ -7,20 +7,23 @@
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
        <insert id="saveBusinessVisitInfo" parameterType="Map">
            insert into business_visit_info(
-departure_time,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,operate,name,visit_case,community_id,b_id
+departure_time,v_name,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,operate,visit_case,community_id,b_id
 ) values (
-#{departureTime},#{visitGender},#{ownerId},#{userId},#{vId},NOW(),#{phoneNumber},#{operate},#{name},#{visitCase},#{communityId},#{bId}
+#{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},NOW(),#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId}
 )
        </insert>
 
 
        <!-- 查询访客信息信息（Business） add by wuxw 2018-07-03 -->
        <select id="getBusinessVisitInfo" parameterType="Map" resultType="Map">
-           select  t.departure_time,t.departure_time departureTime,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.name,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
+           select  t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.operate,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
 from business_visit_info t 
 where 1 =1 
 <if test="departureTime !=null and departureTime != ''">
    and t.departure_time= #{departureTime}
+</if> 
+<if test="vName !=null and vName != ''">
+   and t.v_name= #{vName}
 </if> 
 <if test="visitGender !=null and visitGender != ''">
    and t.visit_gender= #{visitGender}
@@ -43,9 +46,6 @@ where 1 =1
 <if test="operate !=null and operate != ''">
    and t.operate= #{operate}
 </if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
 <if test="visitCase !=null and visitCase != ''">
    and t.visit_case= #{visitCase}
 </if> 
@@ -65,10 +65,13 @@ where 1 =1
     <!-- 保存访客信息信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveVisitInfoInstance" parameterType="Map">
         insert into s_visit_info(
-departure_time,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,name,visit_case,community_id,b_id
-) select t.departure_time,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.name,t.visit_case,t.community_id,t.b_id from business_visit_info t where 1=1
+departure_time,v_name,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_number,visit_case,community_id,b_id
+) select t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id from business_visit_info t where 1=1
 <if test="departureTime !=null and departureTime != ''">
    and t.departure_time= #{departureTime}
+</if> 
+<if test="vName !=null and vName != ''">
+   and t.v_name= #{vName}
 </if> 
 <if test="visitGender !=null and visitGender != ''">
    and t.visit_gender= #{visitGender}
@@ -89,9 +92,6 @@ departure_time,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_num
    and t.phone_number= #{phoneNumber}
 </if> 
    and t.operate= 'ADD'
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
 <if test="visitCase !=null and visitCase != ''">
    and t.visit_case= #{visitCase}
 </if> 
@@ -108,11 +108,14 @@ departure_time,status_cd,visit_gender,owner_id,user_id,v_id,visit_time,phone_num
 
     <!-- 查询访客信息信息 add by wuxw 2018-07-03 -->
     <select id="getVisitInfo" parameterType="Map" resultType="Map">
-        select  t.departure_time,t.departure_time departureTime,t.status_cd,t.status_cd statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.name,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
+        select  t.departure_time,t.departure_time departureTime,t.v_name,t.v_name vName,t.status_cd,t.status_cd statusCd,t.visit_gender,t.visit_gender visitGender,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id userId,t.v_id,t.v_id vId,t.visit_time,t.visit_time visitTime,t.phone_number,t.phone_number phoneNumber,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
 from s_visit_info t 
 where 1 =1 
 <if test="departureTime !=null and departureTime != ''">
    and t.departure_time= #{departureTime}
+</if> 
+<if test="vName !=null and vName != ''">
+   and t.v_name= #{vName}
 </if> 
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
@@ -134,9 +137,6 @@ where 1 =1
 </if> 
 <if test="phoneNumber !=null and phoneNumber != ''">
    and t.phone_number= #{phoneNumber}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
 </if> 
 <if test="visitCase !=null and visitCase != ''">
    and t.visit_case= #{visitCase}
@@ -165,6 +165,9 @@ where 1 =1
 <if test="departureTime !=null and departureTime != ''">
 , t.departure_time= #{departureTime}
 </if> 
+<if test="vName !=null and vName != ''">
+, t.v_name= #{vName}
+</if> 
 <if test="visitGender !=null and visitGender != ''">
 , t.visit_gender= #{visitGender}
 </if> 
@@ -179,9 +182,6 @@ where 1 =1
 </if> 
 <if test="phoneNumber !=null and phoneNumber != ''">
 , t.phone_number= #{phoneNumber}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
 </if> 
 <if test="visitCase !=null and visitCase != ''">
 , t.visit_case= #{visitCase}
@@ -206,6 +206,9 @@ where 1 =1
 <if test="departureTime !=null and departureTime != ''">
    and t.departure_time= #{departureTime}
 </if> 
+<if test="vName !=null and vName != ''">
+   and t.v_name= #{vName}
+</if> 
 <if test="statusCd !=null and statusCd != ''">
    and t.status_cd= #{statusCd}
 </if> 
@@ -226,9 +229,6 @@ where 1 =1
 </if> 
 <if test="phoneNumber !=null and phoneNumber != ''">
    and t.phone_number= #{phoneNumber}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
 </if> 
 <if test="visitCase !=null and visitCase != ''">
    and t.visit_case= #{visitCase}

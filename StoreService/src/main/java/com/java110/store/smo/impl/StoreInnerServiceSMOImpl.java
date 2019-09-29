@@ -37,7 +37,6 @@ public class StoreInnerServiceSMOImpl  extends BaseServiceSMO implements IStoreI
 
         if (page != PageDto.DEFAULT_PAGE) {
             storeDto.setPage((page - 1) * storeDto.getRow());
-            storeDto.setRow(page * storeDto.getRow());
         }
 
         List<StoreDto> storeDtos = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStores(BeanConvertUtil.beanCovertMap(storeDto)), StoreDto.class);

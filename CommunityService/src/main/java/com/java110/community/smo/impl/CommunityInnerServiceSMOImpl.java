@@ -42,7 +42,6 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         if (page != PageDto.DEFAULT_PAGE) {
             communityMemberDto.setPage((page - 1) * communityMemberDto.getRow());
-            communityMemberDto.setRow(page * communityMemberDto.getRow());
         }
 
         List<Map> communityMembers = communityServiceDaoImpl.getCommunityMembers(BeanConvertUtil.beanCovertMap(communityMemberDto));
@@ -65,7 +64,6 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         if (page != PageDto.DEFAULT_PAGE) {
             communityDto.setPage((page - 1) * communityDto.getRow());
-            communityDto.setRow(page * communityDto.getRow());
         }
 
         List<CommunityDto> communitys = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityInfoNew(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);

@@ -46,7 +46,9 @@
             },
             getExcelTemplate:function(e){
                 //console.log("getExcelTemplate 开始调用")
-               vc.component.assetImportInfo.excelTemplate = e.target.files[0]
+               vc.component.assetImportInfo.excelTemplate = e.target.files[0];
+
+
             },
             _importData:function(){
 

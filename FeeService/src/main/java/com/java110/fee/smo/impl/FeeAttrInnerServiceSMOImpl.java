@@ -42,7 +42,6 @@ public class FeeAttrInnerServiceSMOImpl extends BaseServiceSMO implements IFeeAt
 
         if (page != PageDto.DEFAULT_PAGE) {
             feeAttrDto.setPage((page - 1) * feeAttrDto.getRow());
-            feeAttrDto.setRow(page * feeAttrDto.getRow());
         }
 
         List<FeeAttrDto> feeAttrs = BeanConvertUtil.covertBeanList(feeAttrServiceDaoImpl.getFeeAttrInfo(BeanConvertUtil.beanCovertMap(feeAttrDto)), FeeAttrDto.class);

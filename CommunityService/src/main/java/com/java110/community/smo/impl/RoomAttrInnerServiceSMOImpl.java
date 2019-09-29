@@ -41,7 +41,6 @@ public class RoomAttrInnerServiceSMOImpl extends BaseServiceSMO implements IRoom
 
         if (page != PageDto.DEFAULT_PAGE) {
             roomAttrDto.setPage((page - 1) * roomAttrDto.getRow());
-            roomAttrDto.setRow(page * roomAttrDto.getRow());
         }
 
         List<RoomAttrDto> roomAttrs = BeanConvertUtil.covertBeanList(roomAttrServiceDaoImpl.getRoomAttrInfo(BeanConvertUtil.beanCovertMap(roomAttrDto)), RoomAttrDto.class);

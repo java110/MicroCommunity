@@ -42,7 +42,6 @@ public class ServiceBusinessInnerServiceSMOImpl extends BaseServiceSMO implement
 
         if (page != PageDto.DEFAULT_PAGE) {
             serviceBusinessDto.setPage((page - 1) * serviceBusinessDto.getRow());
-            serviceBusinessDto.setRow(page * serviceBusinessDto.getRow());
         }
 
         List<ServiceBusinessDto> serviceBusinesss = BeanConvertUtil.covertBeanList(serviceBusinessServiceDaoImpl.getServiceBusinessInfo(BeanConvertUtil.beanCovertMap(serviceBusinessDto)), ServiceBusinessDto.class);

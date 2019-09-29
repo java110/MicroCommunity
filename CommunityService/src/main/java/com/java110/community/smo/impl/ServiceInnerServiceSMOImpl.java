@@ -43,7 +43,6 @@ public class ServiceInnerServiceSMOImpl extends BaseServiceSMO implements IServi
 
         if (page != PageDto.DEFAULT_PAGE) {
             serviceDto.setPage((page - 1) * serviceDto.getRow());
-            serviceDto.setRow(page * serviceDto.getRow());
         }
 
         List<ServiceDto> services = BeanConvertUtil.covertBeanList(serviceServiceDaoImpl.getServiceInfo(BeanConvertUtil.beanCovertMap(serviceDto)), ServiceDto.class);
@@ -102,7 +101,6 @@ public class ServiceInnerServiceSMOImpl extends BaseServiceSMO implements IServi
 
         if (page != PageDto.DEFAULT_PAGE) {
             serviceProvideDto.setPage((page - 1) * serviceProvideDto.getRow());
-            serviceProvideDto.setRow(page * serviceProvideDto.getRow());
         }
 
         List<ServiceProvideDto> services = BeanConvertUtil.covertBeanList(serviceServiceDaoImpl.getServiceProvideInfo(BeanConvertUtil.beanCovertMap(serviceProvideDto)), ServiceProvideDto.class);

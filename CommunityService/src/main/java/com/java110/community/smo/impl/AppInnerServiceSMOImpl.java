@@ -42,7 +42,6 @@ public class AppInnerServiceSMOImpl extends BaseServiceSMO implements IAppInnerS
 
         if (page != PageDto.DEFAULT_PAGE) {
             appDto.setPage((page - 1) * appDto.getRow());
-            appDto.setRow(page * appDto.getRow());
         }
 
         List<AppDto> apps = BeanConvertUtil.covertBeanList(appServiceDaoImpl.getAppInfo(BeanConvertUtil.beanCovertMap(appDto)), AppDto.class);

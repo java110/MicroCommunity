@@ -42,7 +42,6 @@ public class CbusinesstypeInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         if (page != PageDto.DEFAULT_PAGE) {
             cbusinesstypeDto.setPage((page - 1) * cbusinesstypeDto.getRow());
-            cbusinesstypeDto.setRow(page * cbusinesstypeDto.getRow());
         }
 
         List<CbusinesstypeDto> cbusinesstypes = BeanConvertUtil.covertBeanList(cbusinesstypeServiceDaoImpl.getCbusinesstypeInfo(BeanConvertUtil.beanCovertMap(cbusinesstypeDto)), CbusinesstypeDto.class);

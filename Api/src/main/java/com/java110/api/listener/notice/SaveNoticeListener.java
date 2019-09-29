@@ -15,8 +15,8 @@ import com.java110.common.constant.ServiceCodeConstant;
 import com.java110.common.constant.BusinessTypeConstant;
 
 
-
 import com.java110.core.annotation.Java110Listener;
+
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
@@ -28,9 +28,11 @@ public class SaveNoticeListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "title", "必填，请填写标题");
-Assert.hasKeyAndValue(reqJson, "noticeTypeCd", "必填，请选择公告类型");
-Assert.hasKeyAndValue(reqJson, "context", "必填，请填写公告内容");
-Assert.hasKeyAndValue(reqJson, "startTime", "必选，请填写开始时间 2019-01-02");
+        Assert.hasKeyAndValue(reqJson, "noticeTypeCd", "必填，请选择公告类型");
+        Assert.hasKeyAndValue(reqJson, "context", "必填，请填写公告内容");
+        Assert.hasKeyAndValue(reqJson, "startTime", "必选，请填写开始时间 ");
+        Assert.hasKeyAndValue(reqJson, "endTime", "必选，请填写结束时间 ");
+
 
     }
 

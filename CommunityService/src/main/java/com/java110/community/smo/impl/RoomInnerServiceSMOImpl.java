@@ -50,7 +50,6 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             roomDto.setPage((page - 1) * roomDto.getRow());
-            roomDto.setRow(page * roomDto.getRow());
         }
 
         List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
@@ -157,7 +156,6 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             roomDto.setPage((page - 1) * roomDto.getRow());
-            roomDto.setRow(page * roomDto.getRow());
         }
 
         List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoWithOutSellByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
@@ -196,7 +194,6 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         if (page != PageDto.DEFAULT_PAGE) {
             roomDto.setPage((page - 1) * roomDto.getRow());
-            roomDto.setRow(page * roomDto.getRow());
         }
 
         List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoWithSellByCommunityId(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);

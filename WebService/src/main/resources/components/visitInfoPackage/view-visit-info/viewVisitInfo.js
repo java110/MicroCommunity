@@ -8,7 +8,7 @@
                 index:0,
                 flowComponent:'visit',
                 needShowAddAppButton:'true',
-                name:'',
+                vName:'',
                 visitGender:'',
                 phoneNumber:''
             }

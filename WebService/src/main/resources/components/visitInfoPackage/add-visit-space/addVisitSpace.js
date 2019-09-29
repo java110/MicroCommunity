@@ -78,7 +78,7 @@
                 }
                 vc.component.newVisitInfo.infos[0]['communityId']=vc.getCurrentCommunity().communityId;
                 var param = {
-                    name:vc.component.newVisitInfo.infos[0]['name'],
+                    vName:vc.component.newVisitInfo.infos[0]['vName'],
                     visitGender:vc.component.newVisitInfo.infos[0]['visitGender'],
                     phoneNumber:vc.component.newVisitInfo.infos[0]['phoneNumber'],
                     communityId:vc.component.newVisitInfo.infos[0]['communityId'],
