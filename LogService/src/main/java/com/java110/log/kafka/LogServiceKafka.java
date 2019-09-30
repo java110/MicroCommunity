@@ -1,24 +1,12 @@
 package com.java110.log.kafka;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.KafkaConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.StatusConstant;
-import com.java110.common.exception.InitConfigDataException;
-import com.java110.common.exception.InitDataFlowContextException;
-import com.java110.common.kafka.KafkaFactory;
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.context.BusinessServiceDataFlow;
-import com.java110.core.factory.DataTransactionFactory;
 import com.java110.log.smo.ILogServiceSMO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * kafka侦听

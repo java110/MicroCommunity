@@ -1,6 +1,6 @@
 package com.java110.event.init;
 
-import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.event.app.AppEventPublishing;
 import com.java110.event.app.AppListener;
 import com.java110.event.listener.common.CommonDispatchListener;

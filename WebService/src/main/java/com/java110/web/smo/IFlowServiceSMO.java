@@ -1,11 +1,7 @@
 package com.java110.web.smo;
 
-import com.java110.common.exception.SMOException;
+import com.java110.utils.exception.SMOException;
 import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 控制类业务接口

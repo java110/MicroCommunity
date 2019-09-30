@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.code.dao.IPrimaryKeyServiceDao;
 import com.java110.code.dao.ISnowflakeldWorker;
 import com.java110.code.smo.IPrimaryKeyServiceSMO;
-import com.java110.common.constant.ResponseConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.CodeDataFlow;
 import com.java110.core.factory.DataTransactionFactory;

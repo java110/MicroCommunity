@@ -1,6 +1,5 @@
 package com.java110.core.base.bmo;
 
-import com.java110.common.log.LoggerEngine;
 import com.java110.core.base.AppBase;
 
 /**

@@ -2,10 +2,9 @@ package com.java110.web.components.community;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.StateConstant;
+import com.java110.utils.constant.StateConstant;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.web.smo.community.IAuditCommunitySMO;
 import com.java110.web.smo.community.IAuditEnterCommunitySMO;
 import com.java110.web.smo.community.IListAuditEnterCommunitysSMO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.code.dao.impl;
 
 import com.java110.code.dao.IPrimaryKeyServiceDao;
-import com.java110.common.log.LoggerEngine;
+import com.java110.utils.log.LoggerEngine;
 import com.java110.core.base.dao.BaseServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,9 +1,9 @@
 package com.java110.user.smo.impl;
 
 
-import com.java110.common.constant.CommunityMemberTypeConstant;
-import com.java110.common.constant.StatusConstant;
-import com.java110.common.util.BeanConvertUtil;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;

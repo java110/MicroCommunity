@@ -1,6 +1,6 @@
 package com.java110.service.init;
 
-import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.utils.factory.ApplicationContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

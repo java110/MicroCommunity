@@ -2,7 +2,7 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.fee.dao.IFeeServiceDao;
-import com.java110.common.util.BeanConvertUtil;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;

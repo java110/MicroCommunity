@@ -1,6 +1,6 @@
 package com.java110.web.smo.notice;
 
-import com.java110.common.exception.SMOException;
+import com.java110.utils.exception.SMOException;
 import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;
 

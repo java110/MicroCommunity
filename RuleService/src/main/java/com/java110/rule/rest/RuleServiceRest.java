@@ -1,13 +1,11 @@
 package com.java110.rule.rest;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.RuleDomain;
-import com.java110.common.log.LoggerEngine;
-import com.java110.common.util.CodeMapUtil;
-import com.java110.common.util.RuleUtil;
+import com.java110.utils.constant.RuleDomain;
+import com.java110.utils.log.LoggerEngine;
+import com.java110.utils.util.CodeMapUtil;
+import com.java110.utils.util.RuleUtil;
 import com.java110.core.base.controller.BaseController;
-import com.java110.entity.rule.ContractRootRule;
-import com.java110.entity.rule.TcpContRule;
 import com.java110.rule.smo.IRuleServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * 规则服务

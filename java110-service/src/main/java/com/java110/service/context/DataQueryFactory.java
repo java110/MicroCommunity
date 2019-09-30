@@ -1,6 +1,6 @@
 package com.java110.service.context;
 
-import com.java110.common.cache.ServiceSqlCache;
+import com.java110.utils.cache.ServiceSqlCache;
 import com.java110.entity.service.ServiceSql;
 
 /**

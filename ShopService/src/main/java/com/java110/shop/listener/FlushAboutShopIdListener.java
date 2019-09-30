@@ -2,8 +2,8 @@ package com.java110.shop.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;

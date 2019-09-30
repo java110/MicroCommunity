@@ -1,7 +1,7 @@
 package com.java110.service.context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.factory.ApplicationContextFactory;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.entity.service.ServiceSql;
 import com.java110.service.dao.IQueryServiceDAO;
 import org.springframework.http.RequestEntity;

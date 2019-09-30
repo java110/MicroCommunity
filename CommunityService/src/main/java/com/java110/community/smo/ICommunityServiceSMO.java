@@ -1,7 +1,7 @@
 package com.java110.community.smo;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.exception.SMOException;
+import com.java110.utils.exception.SMOException;
 import com.java110.core.context.BusinessServiceDataFlow;
 
 /**

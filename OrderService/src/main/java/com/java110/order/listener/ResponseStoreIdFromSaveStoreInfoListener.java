@@ -1,7 +1,7 @@
 package com.java110.order.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.BusinessTypeConstant;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.entity.order.Business;
 import com.java110.event.app.order.Ordered;

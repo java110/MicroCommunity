@@ -1,9 +1,9 @@
 package com.java110.community.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.InitConfigDataException;
-import com.java110.common.exception.InitDataFlowContextException;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.InitConfigDataException;
+import com.java110.utils.exception.InitDataFlowContextException;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataTransactionFactory;

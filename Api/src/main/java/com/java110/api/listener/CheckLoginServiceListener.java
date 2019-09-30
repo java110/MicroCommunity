@@ -1,11 +1,8 @@
 package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.exception.SMOException;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.AuthenticationFactory;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 
 import javax.naming.AuthenticationException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

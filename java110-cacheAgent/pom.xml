@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>com.java110</groupId>
-            <artifactId>java110-common</artifactId>
+            <artifactId>java110-utils</artifactId>
         </dependency>
 
         <dependency>

@@ -3,9 +3,9 @@ package com.java110.community.listener.parkingSpace;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.StatusConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.util.Assert;
 import com.java110.community.dao.IParkingSpaceServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;

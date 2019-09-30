@@ -1,18 +1,11 @@
 package com.java110.web.components;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
 import com.java110.core.context.IPageData;
-import com.java110.core.factory.AuthenticationFactory;
 import com.java110.web.smo.ILoginServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 @Component("login")
 public class LoginComponent {

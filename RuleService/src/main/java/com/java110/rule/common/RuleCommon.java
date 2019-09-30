@@ -2,10 +2,10 @@ package com.java110.rule.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-import com.java110.common.constant.RuleDomain;
-import com.java110.common.log.LoggerEngine;
-import com.java110.common.util.RuleUtil;
-import com.java110.common.util.SpringBeanInvoker;
+import com.java110.utils.constant.RuleDomain;
+import com.java110.utils.log.LoggerEngine;
+import com.java110.utils.util.RuleUtil;
+import com.java110.utils.util.SpringBeanInvoker;
 import com.java110.entity.rule.ContractRootRule;
 import com.java110.entity.rule.Rule;
 import com.java110.entity.rule.RuleCondCfg;

@@ -1,10 +1,10 @@
 package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.MappingConstant;
-import com.java110.common.exception.SMOException;
-import com.java110.common.util.Assert;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.order.dao.IPrivilegeDAO;
 import com.java110.order.smo.IPrivilegeSMO;

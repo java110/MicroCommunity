@@ -1,7 +1,7 @@
 package com.java110.job.task;
 
-import com.java110.common.factory.ApplicationContextFactory;
-import com.java110.common.util.SpringBeanInvoker;
+import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.SpringBeanInvoker;
 import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.smo.HcFtpToFileSystemQuartz;
 import org.quartz.Job;

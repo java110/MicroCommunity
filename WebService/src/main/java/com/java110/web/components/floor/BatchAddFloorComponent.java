@@ -1,11 +1,10 @@
 package com.java110.web.components.floor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.util.Assert;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.web.smo.IFloorServiceSMO;
-import com.java110.web.smo.impl.FloorServiceSMOImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

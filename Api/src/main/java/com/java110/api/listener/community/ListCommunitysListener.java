@@ -2,8 +2,8 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.util.BeanConvertUtil;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.common.constant.CommonConstant;
 
 import java.util.ArrayList;
 import java.util.List;

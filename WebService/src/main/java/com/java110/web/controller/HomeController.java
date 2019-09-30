@@ -1,6 +1,6 @@
 package com.java110.web.controller;
 
-import com.java110.common.constant.CommonConstant;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.base.controller.BaseController;

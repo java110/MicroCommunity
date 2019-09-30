@@ -2,9 +2,9 @@ package com.java110.rule.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-import com.java110.common.constant.RuleDomain;
-import com.java110.common.util.CodeMapUtil;
-import com.java110.common.util.RuleUtil;
+import com.java110.utils.constant.RuleDomain;
+import com.java110.utils.util.CodeMapUtil;
+import com.java110.utils.util.RuleUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.entity.rule.ContractRootRule;
 import com.java110.entity.rule.Rule;

@@ -1,6 +1,6 @@
 package com.java110.user.dao;
 
-import com.java110.common.exception.DAOException;
+import com.java110.utils.exception.DAOException;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;
 import com.java110.entity.user.Cust;

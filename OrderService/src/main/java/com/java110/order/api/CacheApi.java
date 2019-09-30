@@ -1,7 +1,7 @@
 package com.java110.order.api;
 
 import com.java110.order.smo.ICenterServiceCacheSMO;
-import com.java110.common.constant.ResponseConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.core.base.controller.BaseController;
 import com.java110.service.context.DataQueryFactory;
 import com.java110.core.factory.DataTransactionFactory;

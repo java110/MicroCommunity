@@ -1,8 +1,8 @@
 package com.java110.log.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.util.Assert;
-import com.java110.common.util.DateUtil;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.code.ICodeApi;

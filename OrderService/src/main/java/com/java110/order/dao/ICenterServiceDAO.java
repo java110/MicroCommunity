@@ -1,6 +1,6 @@
 package com.java110.order.dao;
 
-import com.java110.common.exception.DAOException;
+import com.java110.utils.exception.DAOException;
 import com.java110.entity.mapping.Mapping;
 
 import java.util.List;

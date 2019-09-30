@@ -1,13 +1,12 @@
 package com.java110.log.dao.impl;
 
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.DAOException;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.DAOException;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.log.dao.LogServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 

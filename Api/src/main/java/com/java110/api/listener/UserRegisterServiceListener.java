@@ -1,21 +1,15 @@
 package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.*;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.*;
+import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
-
-import java.util.Map;
 
 /**
  * 用户注册 侦听

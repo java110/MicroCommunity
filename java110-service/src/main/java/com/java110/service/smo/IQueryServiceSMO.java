@@ -1,6 +1,6 @@
 package com.java110.service.smo;
 
-import com.java110.common.exception.BusinessException;
+import com.java110.utils.exception.BusinessException;
 import com.java110.service.context.DataQuery;
 
 /**

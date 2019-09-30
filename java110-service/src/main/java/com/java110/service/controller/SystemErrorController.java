@@ -1,7 +1,7 @@
 package com.java110.service.controller;
 
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.base.controller.BaseController;
 import com.java110.service.api.BusinessApi;
 import org.slf4j.Logger;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 

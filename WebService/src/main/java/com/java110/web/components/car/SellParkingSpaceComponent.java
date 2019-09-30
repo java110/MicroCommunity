@@ -1,7 +1,7 @@
 package com.java110.web.components.car;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.FeeTypeConstant;
+import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.ICarServiceSMO;
 import com.java110.web.smo.IFeeServiceSMO;

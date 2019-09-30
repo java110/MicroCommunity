@@ -1,27 +1,10 @@
 package com.java110.api.listener;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.*;
-import com.java110.common.exception.ListenerExecuteException;
-import com.java110.common.util.Assert;
-import com.java110.common.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.dto.CommunityMemberDto;
-import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.event.service.api.ServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 主要目的将soService 方法拆分为校验部分 和业务处理部分

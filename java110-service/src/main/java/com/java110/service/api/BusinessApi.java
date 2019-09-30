@@ -1,8 +1,8 @@
 package com.java110.service.api;
 
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.util.Assert;
 import com.java110.service.context.DataQueryFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;

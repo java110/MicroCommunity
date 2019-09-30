@@ -2,10 +2,10 @@ package com.java110.web.smo.addRoomBinding.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ServiceCodeAddRoomBindingConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import com.java110.web.smo.addRoomBinding.IAddRoomBindingBindingSMO;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;

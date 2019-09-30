@@ -1,7 +1,7 @@
 package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.CommonConstant;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.entity.center.AppRoute;
 import org.springframework.http.ResponseEntity;
 

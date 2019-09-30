@@ -2,12 +2,12 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.cache.MappingCache;
-import com.java110.common.constant.AttrCdConstant;
-import com.java110.common.constant.MappingConstant;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.AttrCdConstant;
+import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ICommunityServiceSMO;

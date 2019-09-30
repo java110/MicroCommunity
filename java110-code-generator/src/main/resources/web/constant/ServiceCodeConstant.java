@@ -1,4 +1,4 @@
-package com.java110.common.constant;
+package com.java110.utils.constant;
 
 /**
  * @@templateName@@常量类

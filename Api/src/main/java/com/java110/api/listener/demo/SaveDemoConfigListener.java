@@ -3,15 +3,13 @@ package com.java110.api.listener.demo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ServiceCodeConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.demo.IDemoInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.dto.FeeConfigDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
@@ -20,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 /**
  * @ClassName SaveFeeConfigListener

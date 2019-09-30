@@ -19,7 +19,7 @@ public class VisitGeneratorApplication {
     /**
      * 代码生成器 入口方法
      *  此处生成的mapper文件包含过程表和实例表的sql,所以要求两张表的特殊字段也要写上
-     *   BusinessTypeCd 在java110\common\constant\BusinessTypeConstant.java
+     *   BusinessTypeCd
      * @param args 参数
      */
     public static void main(String[] args) {

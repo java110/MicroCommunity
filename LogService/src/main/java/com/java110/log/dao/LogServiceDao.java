@@ -1,12 +1,7 @@
 package com.java110.log.dao;
 
-import com.java110.common.exception.DAOException;
-import com.java110.entity.order.BusiOrder;
-import com.java110.entity.order.BusiOrderAttr;
-import com.java110.entity.order.OrderList;
-import com.java110.entity.order.OrderListAttr;
+import com.java110.utils.exception.DAOException;
 
-import java.util.List;
 import java.util.Map;
 
 /**

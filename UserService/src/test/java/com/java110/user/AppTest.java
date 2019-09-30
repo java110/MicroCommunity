@@ -1,6 +1,5 @@
 package com.java110.user;
 
-import com.java110.common.util.WebServiceAxisClient;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

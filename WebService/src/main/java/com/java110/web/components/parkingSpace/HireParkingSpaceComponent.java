@@ -1,10 +1,7 @@
 package com.java110.web.components.parkingSpace;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.FeeTypeConstant;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.ICarServiceSMO;
-import com.java110.web.smo.IFeeServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,6 @@
 package com.java110.event.center.init;
 
-import com.java110.common.factory.ApplicationContextFactory;
 import com.java110.event.center.DataFlowEventPublishing;
-import com.java110.event.center.listener.DataFlowListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 

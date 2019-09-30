@@ -1,11 +1,11 @@
 package com.java110.core.base.controller;
 
 
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.NoAuthorityException;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.NoAuthorityException;
 
-import com.java110.common.util.StringUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataFlowFactory;

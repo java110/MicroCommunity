@@ -11,7 +11,7 @@
     <modules>
         <module>java110-bean</module>
         <module>java110-config</module>
-        <module>java110-common</module>
+        <module>java110-utils</module>
         <module>UserService</module>
         <module>LogService</module>
         <module>FeeService</module>
@@ -34,6 +34,7 @@
         <module>java110-code-generator</module>
         <module>java110-db</module>
         <module>JobService</module>
+        <module>CommonService</module>
     </modules>
 
     <parent>
@@ -128,7 +129,7 @@
 
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>java110-common</artifactId>
+                <artifactId>java110-utils</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <dependency>

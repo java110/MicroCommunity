@@ -2,8 +2,8 @@ package com.java110.core.base;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.cache.BaseCache;
-import com.java110.common.log.LoggerEngine;
+import com.java110.utils.cache.BaseCache;
+import com.java110.utils.log.LoggerEngine;
 
 import java.util.List;
 import java.util.Map;

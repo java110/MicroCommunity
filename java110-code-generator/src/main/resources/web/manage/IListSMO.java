@@ -1,8 +1,7 @@
 package com.java110.web.smo.community;
 
-import com.java110.common.exception.SMOException;
+import com.java110.utils.exception.SMOException;
 import com.java110.core.context.IPageData;
-import org.springframework.http.ResponseEntity;
 
 /**
  * @@templateName@@管理服务接口类

@@ -1,7 +1,7 @@
 package com.java110.community.smo.impl;
 
 
-import com.java110.common.util.BeanConvertUtil;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.INoticeServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.notice.INoticeInnerServiceSMO;

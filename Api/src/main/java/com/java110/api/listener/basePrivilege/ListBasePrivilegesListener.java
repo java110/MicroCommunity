@@ -2,8 +2,8 @@ package com.java110.api.listener.basePrivilege;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.common.constant.ServiceCodeBasePrivilegeConstant;
-import com.java110.common.util.BeanConvertUtil;
+import com.java110.utils.constant.ServiceCodeBasePrivilegeConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.menu.IMenuInnerServiceSMO;

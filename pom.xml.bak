@@ -11,7 +11,7 @@
     <modules>
         <module>java110-bean</module>
         <module>java110-config</module>
-        <module>java110-common</module>
+        <module>java110-utils</module>
         <module>UserService</module>
         <module>LogService</module>
         
@@ -132,7 +132,7 @@
 
             <dependency>
                 <groupId>com.java110</groupId>
-                <artifactId>java110-common</artifactId>
+                <artifactId>java110-utils</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <dependency>

@@ -2,10 +2,9 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.constant.StateConstant;
-import com.java110.common.constant.StatusConstant;
-import com.java110.common.util.CommonUtil;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.constant.StateConstant;
+import com.java110.utils.util.CommonUtil;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ICommunityServiceSMO;

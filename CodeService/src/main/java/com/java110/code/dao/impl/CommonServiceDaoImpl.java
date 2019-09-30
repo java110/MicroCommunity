@@ -1,7 +1,7 @@
 package com.java110.code.dao.impl;
 
 import com.java110.code.dao.ICommonServiceDao;
-import com.java110.common.util.SerializeUtil;
+import com.java110.utils.util.SerializeUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.mapping.CodeMapping;
 import org.slf4j.Logger;

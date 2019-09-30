@@ -1,11 +1,7 @@
 package com.java110.fee.dao;
 
 
-import com.java110.common.exception.DAOException;
-import com.java110.entity.merchant.BoMerchant;
-import com.java110.entity.merchant.BoMerchantAttr;
-import com.java110.entity.merchant.Merchant;
-import com.java110.entity.merchant.MerchantAttr;
+import com.java110.utils.exception.DAOException;
 
 
 import java.util.List;

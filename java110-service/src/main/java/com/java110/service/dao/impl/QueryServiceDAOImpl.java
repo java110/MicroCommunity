@@ -1,6 +1,6 @@
 package com.java110.service.dao.impl;
 
-import com.java110.common.util.StringUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.order.ServiceBusiness;
 import com.java110.entity.service.ServiceSql;

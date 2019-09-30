@@ -1,9 +1,9 @@
 package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.DAOException;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.DAOException;
+import com.java110.utils.util.Assert;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.user.BoCust;
 import com.java110.entity.user.BoCustAttr;

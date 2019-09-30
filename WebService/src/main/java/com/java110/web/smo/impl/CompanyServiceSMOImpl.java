@@ -2,10 +2,10 @@ package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.AttrCdConstant;
-import com.java110.common.constant.CredentialsConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.AttrCdConstant;
+import com.java110.utils.constant.CredentialsConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ICompanyServiceSMO;
@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import springfox.documentation.spring.web.json.Json;
 
 /**
  * 初始化公司实现类

@@ -1,7 +1,7 @@
 package com.java110.rule.dao.impl;
 
-import com.java110.common.constant.RuleDomain;
-import com.java110.common.util.SerializeUtil;
+import com.java110.utils.constant.RuleDomain;
+import com.java110.utils.util.SerializeUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.entity.rule.Rule;
 import com.java110.entity.rule.RuleCondCfg;

@@ -1,9 +1,9 @@
 package com.java110.web.smo.basePrivilege.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.AbstractComponentSMO;

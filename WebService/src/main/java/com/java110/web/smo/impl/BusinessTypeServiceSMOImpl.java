@@ -1,15 +1,14 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.constant.PrivilegeCodeConstant;
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.constant.ServiceConstant;
-import com.java110.common.exception.SMOException;
-import com.java110.common.util.Assert;
+import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.web.core.BaseComponentSMO;
 import com.java110.web.smo.ICbusinessTypeServiceSMO;
-import com.java110.web.smo.IDemoServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.common.util.DateUtil;
+import com.java110.utils.util.DateUtil;
 
 /**
  * 创建校验单 请求报文协议

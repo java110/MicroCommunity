@@ -14,17 +14,13 @@ package com.java110.code.dao.impl;
  * SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，SnowFlake每秒能够产生26万ID左右。
  */
 
-import com.java110.common.constant.ResponseConstant;
-import com.java110.common.exception.DAOException;
-import com.java110.common.log.LoggerEngine;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.DAOException;
+import com.java110.utils.log.LoggerEngine;
 import com.java110.code.dao.ISnowflakeldWorker;
-import com.java110.service.init.ServiceInfoListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.net.InetAddress;
 
 /**
  * Created by wuxw on 2018/5/28.

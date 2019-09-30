@@ -2,7 +2,7 @@ package com.java110.api.rest;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.IApiServiceSMO;
-import com.java110.common.constant.CommonConstant;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import io.swagger.annotations.Api;

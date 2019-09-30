@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * Created by wuxw on 2017/7/25.
  */
 @Component
-@ConfigurationProperties(prefix = "java110.common")
-@PropertySource("classpath:config/common.properties")
+@ConfigurationProperties(prefix = "java110.utils")
+@PropertySource("classpath:config/utils.properties")
 public class CommonProperties {
 }

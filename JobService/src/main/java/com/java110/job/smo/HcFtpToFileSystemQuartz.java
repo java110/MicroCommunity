@@ -1,7 +1,7 @@
 package com.java110.job.smo;
-import com.java110.common.constant.RuleDomain;
-import com.java110.common.util.DateUtil;
-import com.java110.common.util.StringUtil;
+import com.java110.utils.constant.RuleDomain;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.job.dao.IHcFtpFileDAO;
 
 import com.java110.job.model.FtpTaskLog;
