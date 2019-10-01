@@ -176,7 +176,19 @@
                          onChange:function(contents,$editable){
                             vc.component.addNoticeViewInfo.context = contents;
                          }
-                    }
+                    },
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['fontname', ['fontname']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture']],
+                        ['view', ['fullscreen', 'codeview']],
+                        ['help', ['help']]
+                      ],
                 });
             },
             closeNoticeInfo:function(){
