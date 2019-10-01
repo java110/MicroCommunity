@@ -16,10 +16,10 @@ import java.util.Date;
 public class DemoDto extends PageDto implements Serializable {
 
     private String demoRemark;
-private String demoName;
-private String demoValue;
-private String demoId;
-private String userId;
+    private String demoName;
+    private String demoValue;
+    private String demoId;
+    private String userId;
 
 
     private Date createTime;
@@ -30,31 +30,40 @@ private String userId;
     public String getDemoRemark() {
         return demoRemark;
     }
-public void setDemoRemark(String demoRemark) {
+
+    public void setDemoRemark(String demoRemark) {
         this.demoRemark = demoRemark;
     }
-public String getDemoName() {
+
+    public String getDemoName() {
         return demoName;
     }
-public void setDemoName(String demoName) {
+
+    public void setDemoName(String demoName) {
         this.demoName = demoName;
     }
-public String getDemoValue() {
+
+    public String getDemoValue() {
         return demoValue;
     }
-public void setDemoValue(String demoValue) {
+
+    public void setDemoValue(String demoValue) {
         this.demoValue = demoValue;
     }
-public String getDemoId() {
+
+    public String getDemoId() {
         return demoId;
     }
-public void setDemoId(String demoId) {
+
+    public void setDemoId(String demoId) {
         this.demoId = demoId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

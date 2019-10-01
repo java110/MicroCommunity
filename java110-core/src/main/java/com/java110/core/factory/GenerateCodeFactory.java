@@ -91,6 +91,9 @@ public class GenerateCodeFactory {
     public static final String MENU = "70";
     public static final String BASE_PRIVILEGE = "50";
     public static final String CODE_PREFIX_vId = "11";
+    public static final String CODE_PREFIX_file_id = "81";
+
+
 
     /**
      * 只有在不调用服务生成ID时有用

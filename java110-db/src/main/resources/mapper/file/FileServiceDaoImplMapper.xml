@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fileServiceDaoImpl">
+
+    <!-- 保存费用信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFile" parameterType="Map">
+        insert into hc_file(
+        file_id,community_id,file_name,context,suffix
+        ) values (
+        #{fileId},#{communityId},#{fileName},#{context},#{suffix}
+        )
+    </insert>
+
+
+
+    <!-- 查询费用信息 add by wuxw 2018-07-03 -->
+    <select id="getFiles" parameterType="Map" resultType="Map">
+        select t.file_id fileId,t.community_id communityId,t.file_name fileName,t.context,t.suffix
+        from hc_file t
+        where 1 =1
+            and t.file_id= #{fileId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+    </select>
+
+</mapper>

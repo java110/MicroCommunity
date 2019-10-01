@@ -34,5 +34,15 @@ public class ServiceCodeServiceConstant {
      */
     public static final String BINDING_SERVICE = "service.bindingService";
 
+    /**
+     * 查询文件
+     */
+    public static final String GET_FILE = "file.getFile";
+
+    /**
+     * 保存文件
+     */
+    public static final String SAVE_FILE = "file.saveFile";
+
 
 }
