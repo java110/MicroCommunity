@@ -94,5 +94,10 @@ public final class PrivilegeCodeConstant {
 
     public static final String AUDIT_ENTER_COMMUNITY = "502019091978690002";
 
+    public static final String GET_FILE = "502019100245350003";
+
+    public static final String SAVE_FILE = "502019100245350003";
+
+
 
 }

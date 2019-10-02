@@ -55,7 +55,10 @@ public class SaveFileListener extends AbstractServiceApiListener {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存数据失败");
         }
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);
+        JSONObject outParam = new JSONObject();
+        outParam.put("fileId", fileDto.getFileId());
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
     }

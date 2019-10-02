@@ -101,7 +101,7 @@
                 vc.component.addNoticeViewInfo.communityId = vc.getCurrentCommunity().communityId;
 
                 vc.http.post(
-                    'addNotice',
+                    'addNoticeView',
                     'save',
                     JSON.stringify(vc.component.addNoticeViewInfo),
                     {
@@ -165,13 +165,13 @@
                         var value = $(".noticeEndTime").val();
                         vc.component.addNoticeViewInfo.endTime = value;
                     });
-                $('.summernote').summernote({
+                var $summernote = $('.summernote').summernote({
                     lang:'zh-CN',
                     height: 300,
                     placeholder:'必填，请输入公告内容',
                     callbacks : {
                          onImageUpload: function(files, editor, $editable) {
-                             sendFile(files);
+                             vc.component.sendFile($summernote,files);
                          },
                          onChange:function(contents,$editable){
                             vc.component.addNoticeViewInfo.context = contents;
@@ -195,8 +195,41 @@
                  vc.emit('noticeManage','listNotice',{});
 
             },
-            sendFile:function(files){
-                console.log('上传图片');
+            sendFile:function($summernote,files){
+                console.log('上传图片',files);
+
+                var param = new FormData();
+                param.append("uploadFile", files);
+                param.append('communityId',vc.getCurrentCommunity().communityId);
+
+                vc.http.upload(
+                    'addNoticeView',
+                    'uploadImage',
+                    param,
+                    {
+                        emulateJSON:true,
+                        //添加请求头
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                     },
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            var data = JSON.parse(json);
+                            //关闭model
+                            $summernote.summernote('insertImage', data, function ($image) {
+                                  $image.attr('src', "/callComponent/download/getFile/file?fileId="+data.fileId +"&communityId="+vc.getCurrentCommunity().communityId);
+                            });
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+                        vc.message(errInfo);
+                     });
+
             }
 
         }

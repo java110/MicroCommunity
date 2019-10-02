@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -134,6 +135,57 @@ public class CallComponentController extends BaseController {
                 msg = e.getMessage();
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("组件调用返回信息为{}", responseEntity);
+            return responseEntity;
+        }
+    }
+
+    /**
+     * 调用组件 文件上传
+     * /callComponent/upload/assetImport/importData
+     *
+     * @return
+     */
+
+    @RequestMapping(path = "/callComponent/download/{componentCode}/{componentMethod}")
+    public ResponseEntity<Object> callComponentDownloadFile(
+            @PathVariable String componentCode,
+            @PathVariable String componentMethod,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        ResponseEntity<Object> responseEntity = null;
+        Map formParam = null;
+        IPageData pd = null;
+        try {
+            Assert.hasLength(componentCode, "参数错误，未传入组件编码");
+            Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
+
+            Object componentInstance = ApplicationContextFactory.getBean(componentCode);
+
+            Assert.notNull(componentInstance, "未找到组件对应的处理类，请确认 " + componentCode);
+
+            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class);
+
+            Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
+            pd = freshPageDate(request);
+            responseEntity = (ResponseEntity<Object>) cMethod.invoke(componentInstance, pd);
+
+        } catch (SMOException e) {
+            logger.error("组件运行异常",e);
+            responseEntity = new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("组件运行异常",e);
+            String msg = "";
+            if (e instanceof InvocationTargetException) {
+                Throwable targetEx = ((InvocationTargetException) e).getTargetException();
+                if (targetEx != null) {
+                    msg = targetEx.getMessage();
+                }
+            } else {
+                msg = e.getMessage();
+            }
+            responseEntity = new ResponseEntity<Object>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.debug("组件调用返回信息为{}", responseEntity);
             return responseEntity;
