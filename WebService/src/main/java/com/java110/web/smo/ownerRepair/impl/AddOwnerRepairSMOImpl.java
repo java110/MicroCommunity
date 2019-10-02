@@ -1,7 +1,6 @@
 package com.java110.web.smo.ownerRepair.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.client.RestTemplate;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 添加小区服务实现类
@@ -29,6 +29,7 @@ public class AddOwnerRepairSMOImpl extends AbstractComponentSMO implements IAddO
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         Assert.hasKeyAndValue(paramIn, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(paramIn, "repairName", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写报修人手机号");

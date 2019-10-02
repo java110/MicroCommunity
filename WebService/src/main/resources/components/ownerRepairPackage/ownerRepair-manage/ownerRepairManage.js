@@ -38,6 +38,7 @@ repairType:'',
 
                 vc.component.ownerRepairManageInfo.conditions.page = _page;
                 vc.component.ownerRepairManageInfo.conditions.row = _rows;
+                vc.component.ownerRepairManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params:vc.component.ownerRepairManageInfo.conditions
                };

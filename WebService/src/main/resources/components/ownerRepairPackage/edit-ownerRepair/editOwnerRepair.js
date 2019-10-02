@@ -115,6 +115,7 @@ context:'',
                     vc.message(vc.validate.errInfo);
                     return ;
                 }
+                vc.component.editOwnerRepairInfo.communityId = vc.getCurrentCommunity().communityId;
 
                 vc.http.post(
                     'editOwnerRepair',

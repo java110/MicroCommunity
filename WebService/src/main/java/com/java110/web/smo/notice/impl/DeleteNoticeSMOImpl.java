@@ -30,6 +30,7 @@ public class DeleteNoticeSMOImpl extends AbstractComponentSMO implements IDelete
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "noticeId", "公告ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
 
 
 

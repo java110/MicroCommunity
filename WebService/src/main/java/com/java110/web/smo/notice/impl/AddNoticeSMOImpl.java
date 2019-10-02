@@ -29,6 +29,7 @@ public class AddNoticeSMOImpl extends AbstractComponentSMO implements IAddNotice
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         Assert.hasKeyAndValue(paramIn, "title", "必填，请填写标题");
         Assert.hasKeyAndValue(paramIn, "noticeTypeCd", "必填，请选择公告类型");
         Assert.hasKeyAndValue(paramIn, "context", "必填，请填写公告内容");

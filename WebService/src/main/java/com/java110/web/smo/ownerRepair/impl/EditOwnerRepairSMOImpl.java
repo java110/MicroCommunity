@@ -27,7 +27,7 @@ public class EditOwnerRepairSMOImpl extends AbstractComponentSMO implements IEdi
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         //super.validatePageInfo(pd);
-
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         Assert.hasKeyAndValue(paramIn, "repairId", "报修ID不能为空");
         Assert.hasKeyAndValue(paramIn, "repairType", "必填，请选择报修类型");
         Assert.hasKeyAndValue(paramIn, "repairName", "必填，请填写报修人名称");

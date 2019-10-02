@@ -1,7 +1,7 @@
 package com.java110.web.smo.ownerRepair.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
@@ -32,6 +32,7 @@ public class DeleteOwnerRepairSMOImpl extends AbstractComponentSMO implements ID
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "repairId", "报修ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
 
 
 
