@@ -37,8 +37,6 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
     public ResponseEntity<Object> getFile(IPageData pd) throws SMOException,IOException {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
-        super.validatePageInfo(pd);
-
         Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         Assert.hasKeyAndValue(paramIn, "fileId", "请求报文中未包含文件ID");
 
@@ -49,7 +47,7 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFile";
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFile"+mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
@@ -68,7 +66,8 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
         } else {
             headers.add("content-type", "application/octet-stream");
         }
-        headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
+        //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
+        headers.add("Accept-Ranges", "bytes");
 
         byte[] context = Base64Convert.base64ToByte(outParam.getString("context"));
 

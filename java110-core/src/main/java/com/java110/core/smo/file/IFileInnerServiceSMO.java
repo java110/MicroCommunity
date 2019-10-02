@@ -3,6 +3,7 @@ package com.java110.core.smo.file;
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.file.FileDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,7 +22,7 @@ public interface IFileInnerServiceSMO {
      * @return true 成功 false 失败
      */
     @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
-    int saveFile(FileDto fileDto);
+    int saveFile(@RequestBody FileDto fileDto);
 
     /**
      * 查询文件信息
@@ -29,5 +30,5 @@ public interface IFileInnerServiceSMO {
      * @return 文件数据对象
      */
     @RequestMapping(value = "/queryFiles", method = RequestMethod.POST)
-    List<FileDto> queryFiles(FileDto fileDto);
+    List<FileDto> queryFiles(@RequestBody FileDto fileDto);
 }

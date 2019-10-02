@@ -33,7 +33,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: utils-service
+    name: common-service
   redis:
     database: 0
     host: dev.redis.java110.com

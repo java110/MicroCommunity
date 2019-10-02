@@ -49,7 +49,7 @@ public class GetFileListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson,"fileId", "未包含文件ID");
         Assert.hasKeyAndValue(reqJson,"communityId", "未包含小区ID");
-        super.validatePageInfo(reqJson);
+        //super.validatePageInfo(reqJson);
     }
 
     @Override

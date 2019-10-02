@@ -46,7 +46,7 @@ public class AddFileSMOImpl extends BaseComponentSMO implements IAddFileSMO {
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         InputStream is = uploadFile.getInputStream();
         String fileContext = Base64Convert.ioToBase64(is);
-        paramIn.put("file", fileContext);
+        paramIn.put("context", fileContext);
         paramIn.put("fileName", uploadFile.getOriginalFilename());
 
 

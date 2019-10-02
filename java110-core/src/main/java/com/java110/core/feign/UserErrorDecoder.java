@@ -39,7 +39,7 @@ public class UserErrorDecoder implements ErrorDecoder {
         }
         // 这里只封装4开头的请求异常ß && response.status() < 500
         if (HTTP_STATUS_400 <= response.status()) {
-            exception = new HystrixBadRequestException("请求参数错误：", exception);
+            exception = new HystrixBadRequestException("请求参数错误："+response.body(), exception);
         } else {
             logger.error(exception.getMessage(), exception);
         }

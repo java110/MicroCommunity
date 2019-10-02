@@ -6,6 +6,7 @@ import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
     private IFileServiceDao fileServiceDaoImpl;
 
     @Override
-    public int saveFile(FileDto fileDto) {
+    public int saveFile(@RequestBody FileDto fileDto) {
 
         int saveFileFlag = fileServiceDaoImpl.saveFile(BeanConvertUtil.beanCovertMap(fileDto));
 
@@ -25,7 +26,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
     }
 
     @Override
-    public List<FileDto> queryFiles(FileDto fileDto) {
+    public List<FileDto> queryFiles(@RequestBody FileDto fileDto) {
         return BeanConvertUtil.covertBeanList(fileServiceDaoImpl.getFiles(BeanConvertUtil.beanCovertMap(fileDto)), FileDto.class);
     }
 

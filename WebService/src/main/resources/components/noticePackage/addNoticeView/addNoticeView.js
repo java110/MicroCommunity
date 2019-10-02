@@ -199,7 +199,7 @@
                 console.log('上传图片',files);
 
                 var param = new FormData();
-                param.append("uploadFile", files);
+                param.append("uploadFile", files[0]);
                 param.append('communityId',vc.getCurrentCommunity().communityId);
 
                 vc.http.upload(
@@ -218,9 +218,7 @@
                         if(res.status == 200){
                             var data = JSON.parse(json);
                             //关闭model
-                            $summernote.summernote('insertImage', data, function ($image) {
-                                  $image.attr('src', "/callComponent/download/getFile/file?fileId="+data.fileId +"&communityId="+vc.getCurrentCommunity().communityId);
-                            });
+                            $summernote.summernote('insertImage', "/callComponent/download/getFile/file?fileId="+data.fileId +"&communityId="+vc.getCurrentCommunity().communityId);
                             return ;
                         }
                         vc.message(json);
