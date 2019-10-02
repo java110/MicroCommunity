@@ -92,6 +92,9 @@ public class GenerateCodeFactory {
     public static final String BASE_PRIVILEGE = "50";
     public static final String CODE_PREFIX_vId = "11";
     public static final String CODE_PREFIX_file_id = "81";
+    public static final String CODE_PREFIX_repairId = "82";
+    public static final String CODE_PREFIX_ruId = "83";
+
 
 
 

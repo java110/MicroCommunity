@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairUserServiceDaoImpl">
+
+    <!-- 保存报修派单信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessRepairUserInfo" parameterType="Map">
+        insert into business_repair_user(
+        operate,context,repair_id,ru_id,state,community_id,b_id,user_id
+        ) values (
+        #{operate},#{context},#{repairId},#{ruId},#{state},#{communityId},#{bId},#{userId}
+        )
+    </insert>
+
+
+    <!-- 查询报修派单信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRepairUserInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.context,t.repair_id,t.repair_id repairId,t.ru_id,t.ru_id
+        ruId,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        from business_repair_user t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="ruId !=null and ruId != ''">
+            and t.ru_id= #{ruId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存报修派单信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairUserInfoInstance" parameterType="Map">
+        insert into r_repair_user(
+        context,repair_id,status_cd,ru_id,state,community_id,b_id,user_id
+        ) select t.context,t.repair_id,'0',t.ru_id,t.state,t.community_id,t.b_id,t.user_id from business_repair_user t
+        where 1=1
+        and t.operate= 'ADD'
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="ruId !=null and ruId != ''">
+            and t.ru_id= #{ruId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询报修派单信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairUserInfo" parameterType="Map" resultType="Map">
+        select t.context,t.repair_id,t.repair_id repairId,t.status_cd,t.status_cd statusCd,t.ru_id,t.ru_id
+        ruId,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        from r_repair_user t
+        where 1 =1
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruId !=null and ruId != ''">
+            and t.ru_id= #{ruId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报修派单信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairUserInfoInstance" parameterType="Map">
+        update r_repair_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            , t.repair_id= #{repairId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1
+        <if test="ruId !=null and ruId != ''">
+            and t.ru_id= #{ruId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询报修派单数量 add by wuxw 2018-07-03 -->
+    <select id="queryRepairUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_user t
+        where 1 =1
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="ruId !=null and ruId != ''">
+            and t.ru_id= #{ruId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+
+    </select>
+
+</mapper>

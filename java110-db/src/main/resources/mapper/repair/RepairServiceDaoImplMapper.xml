@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairServiceDaoImpl">
+
+    <!-- 保存报修信息信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessRepairInfo" parameterType="Map">
+        insert into business_repair_pool(
+        operate,repair_name,appointment_time,repair_type,context,repair_id,tel,state,community_id,b_id,room_id
+        ) values (
+        #{operate},#{repairName},#{appointmentTime},#{repairType},#{context},#{repairId},#{tel},#{state},#{communityId},#{bId},#{roomId}
+        )
+    </insert>
+
+
+    <!-- 查询报修信息信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessRepairInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
+        appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
+        repairId,t.tel,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId
+        from business_repair_pool t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存报修信息信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairInfoInstance" parameterType="Map">
+        insert into r_repair_pool(
+        repair_name,appointment_time,repair_type,context,repair_id,tel,status_cd,state,community_id,b_id,room_id
+        ) select
+        t.repair_name,t.appointment_time,t.repair_type,t.context,t.repair_id,t.tel,'0',t.state,t.community_id,t.b_id,t.room_id
+        from business_repair_pool t where 1=1
+        and t.operate= 'ADD'
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询报修信息信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairInfo" parameterType="Map" resultType="Map">
+        select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
+        appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
+        repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
+        bId,t.room_id,t.room_id roomId
+        from r_repair_pool t
+        where 1 =1
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报修信息信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairInfoInstance" parameterType="Map">
+        update r_repair_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="repairName !=null and repairName != ''">
+            , t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            , t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            , t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            , t.context= #{context}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        where 1=1
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
+    <select id="queryRepairsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_pool t
+        where 1 =1
+        <if test="repairName !=null and repairName != ''">
+            and t.repair_name= #{repairName}
+        </if>
+        <if test="appointmentTime !=null and appointmentTime != ''">
+            and t.appointment_time= #{appointmentTime}
+        </if>
+        <if test="repairType !=null and repairType != ''">
+            and t.repair_type= #{repairType}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+
+
+    </select>
+
+</mapper>

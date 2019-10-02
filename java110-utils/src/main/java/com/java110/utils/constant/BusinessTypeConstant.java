@@ -451,4 +451,34 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_VISIT ="120100050001";
 
+
+    /**
+     * 保存报修信息
+     * 11开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_REPAIR="130100030001";
+    /**
+     *  修改报修信息  11开头  4修改
+     */
+    public static final String BUSINESS_TYPE_UPDATE_REPAIR="130100040001";
+    /**
+     *  删除报修信息  11开头  5修改
+     */
+    public static final String BUSINESS_TYPE_DELETE_REPAIR ="130100050001";
+
+
+    /**
+     * 保存报修信息
+     * 11开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_REPAIR_USER="130200030001";
+    /**
+     *  修改报修信息  11开头  4修改
+     */
+    public static final String BUSINESS_TYPE_UPDATE_REPAIR_USER="130200040001";
+    /**
+     *  删除报修信息  11开头  5修改
+     */
+    public static final String BUSINESS_TYPE_DELETE_REPAIR_USER ="130200050001";
+
 }
