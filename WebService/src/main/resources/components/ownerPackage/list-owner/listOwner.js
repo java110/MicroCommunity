@@ -35,7 +35,7 @@
             });
 
             vc.on('listOwner','chooseRoom',function(_room){
-                if(vc.component.listOwnerData._eventName == 'PayPropertyFee'){
+                if(vc.component.listOwnerInfo._eventName == 'PayPropertyFee'){
                       vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+vc.component.listOwnerInfo._currentOwnerId+"&roomId="+_room.roomId);
                 }else{
                       vc.jumpToPage("/flow/ownerRepairFlow?ownerId="+vc.component.listOwnerInfo._currentOwnerId+"&roomId="+_room.roomId);
@@ -107,7 +107,7 @@
             },
             _openOwnerRepair:function(_owner){
                 //查看 业主是否有多套房屋，如果有多套房屋，则提示对话框选择，只有一套房屋则直接跳转至交费页面缴费
-                vc.component.listOwnerData._eventName="OwnerRepair";
+                vc.component.listOwnerInfo._eventName="OwnerRepair";
                 vc.component.listOwnerInfo._currentOwnerId = _owner.ownerId; // 暂存如果有多个房屋是回调回来时 ownerId 会丢掉
                 var param = {
                     params:{
@@ -136,7 +136,7 @@
             },
             _openPayPropertyFee:function(_owner){
                 //查看 业主是否有多套房屋，如果有多套房屋，则提示对话框选择，只有一套房屋则直接跳转至交费页面缴费
-                vc.component.listOwnerData._eventName="PayPropertyFee";
+                vc.component.listOwnerInfo._eventName="PayPropertyFee";
                 vc.component.listOwnerInfo._currentOwnerId = _owner.ownerId; // 暂存如果有多个房屋是回调回来时 ownerId 会丢掉
                 var param = {
                     params:{
