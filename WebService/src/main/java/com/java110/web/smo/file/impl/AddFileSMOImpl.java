@@ -23,7 +23,7 @@ import java.io.InputStream;
  * 添加小区服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("addNoticeSMOImpl")
+@Service("addFileSMOImpl")
 public class AddFileSMOImpl extends BaseComponentSMO implements IAddFileSMO {
 
     @Autowired
