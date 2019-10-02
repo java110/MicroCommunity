@@ -98,6 +98,8 @@ public final class PrivilegeCodeConstant {
 
     public static final String SAVE_FILE = "502019100245350003";
 
+    public static final String LIST_OWNERREPAIR = "502019100245350003";
+
 
 
 }
