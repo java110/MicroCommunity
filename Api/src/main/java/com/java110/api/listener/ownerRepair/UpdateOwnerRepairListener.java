@@ -90,7 +90,7 @@ public class UpdateOwnerRepairListener extends AbstractServiceApiListener {
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(paramInJson);
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRepair", businessOwnerRepair);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepair", businessOwnerRepair);
         return business;
     }
 

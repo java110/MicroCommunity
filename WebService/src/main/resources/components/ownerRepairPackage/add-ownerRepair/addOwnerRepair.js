@@ -19,7 +19,7 @@
             }
         },
          _initMethod:function(){
-
+            vc.component._initAddOwnerRepairInfo();
          },
          _initEvent:function(){
             vc.on('addOwnerRepair','openAddOwnerRepairModal',function(_ownerInfo){
@@ -184,6 +184,24 @@
                                 console.log('请求失败处理');
                              }
                            );
+            },
+            _initAddOwnerRepairInfo:function(){
+                    vc.component.addOwnerRepairInfo.appointmentTime = vc.dateFormat(new Date().getTime());
+                     $('.addAppointmentTime').datetimepicker({
+                        language: 'zh-CN',
+                        format: 'yyyy-mm-dd HH:ii:ss',
+                        initTime: true,
+                        initialDate: new Date(),
+                        autoClose: 1,
+                        todayBtn: true
+
+                    });
+                    $('.addAppointmentTime').datetimepicker()
+                        .on('changeDate', function (ev) {
+                            var value = $(".addAppointmentTime").val();
+                            vc.component.addOwnerRepairInfo.appointmentTime = value;
+                    });
+
             }
         }
     });

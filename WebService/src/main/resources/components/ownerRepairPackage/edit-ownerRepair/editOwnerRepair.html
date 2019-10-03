@@ -42,19 +42,19 @@
                                 <label class="col-sm-2 col-form-label">预约时间</label>
                                 <div class="col-sm-10">
                                     <input v-model="editOwnerRepairInfo.appointmentTime" type="text"
-                                           placeholder="必填，请填写预约时间" class="form-control">
+                                           placeholder="必填，请填写预约时间" class="form-control editAppointmentTime">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">报修内容</label>
                                 <div class="col-sm-10">
-                                    <textarea placeholder="必填，请填写报修内容" class="form-control"
+                                    <textarea placeholder="必填，请填写报修内容" cols="15" class="form-control"
                                               v-model="editOwnerRepairInfo.context"></textarea></div>
                             </div>
 
                             <div class="ibox-content">
                                 <button class="btn btn-primary float-right" type="button"
-                                        v-on:click="editOwnerRepair()"><i class="fa fa-check"></i>&nbsp;保存
+                                        v-on:click="editOwnerRepair()"><i class="fa fa-check"></i>&nbsp;提交
                                 </button>
                                 <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
                                         data-dismiss="modal">取消

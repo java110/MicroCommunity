@@ -15,7 +15,7 @@
             }
         },
          _initMethod:function(){
-
+               vc.component._initEditOwnerRepairInfo();
          },
          _initEvent:function(){
              vc.on('editOwnerRepair','openEditOwnerRepairModal',function(_params){
@@ -31,19 +31,19 @@
                             editOwnerRepairInfo:vc.component.editOwnerRepairInfo
                         },{
                             'editOwnerRepairInfo.repairType':[
-{
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"报修类型不能为空"
                         },
- {
+                        {
                             limit:"maxin",
                             param:"2,50",
                             errInfo:"报修类型错误"
                         },
                     ],
-'editOwnerRepairInfo.repairName':[
-{
+                        'editOwnerRepairInfo.repairName':[
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"报修人不能为空"
@@ -144,14 +144,32 @@
             refreshEditOwnerRepairInfo:function(){
                 vc.component.editOwnerRepairInfo= {
                   repairId:'',
-repairType:'',
-repairName:'',
-tel:'',
-roomId:'',
-appointmentTime:'',
-context:'',
+                    repairType:'',
+                    repairName:'',
+                    tel:'',
+                    roomId:'',
+                    appointmentTime:'',
+                    context:'',
 
                 }
+            },
+            _initEditOwnerRepairInfo:function(){
+                    //vc.component.editOwnerRepairInfo.startTime = vc.dateFormat(new Date().getTime());
+                     $('.editAppointmentTime').datetimepicker({
+                        language: 'zh-CN',
+                        format: 'yyyy-mm-dd HH:ii:ss',
+                        initTime: true,
+                        initialDate: new Date(),
+                        autoClose: 1,
+                        todayBtn: true
+
+                    });
+                    $('.editAppointmentTime').datetimepicker()
+                        .on('changeDate', function (ev) {
+                            var value = $(".editAppointmentTime").val();
+                            vc.component.editOwnerRepairInfo.appointmentTime = value;
+                    });
+
             }
         }
     });
