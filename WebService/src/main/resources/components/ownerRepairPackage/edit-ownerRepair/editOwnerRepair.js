@@ -148,6 +148,7 @@
                     repairName:'',
                     tel:'',
                     roomId:'',
+                    roomName:'',
                     appointmentTime:'',
                     context:'',
 

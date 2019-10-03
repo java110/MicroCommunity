@@ -9,6 +9,7 @@ import com.java110.web.core.AbstractComponentSMO;
 import com.java110.web.smo.ownerRepair.IEditOwnerRepairSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -46,6 +47,24 @@ public class EditOwnerRepairSMOImpl extends AbstractComponentSMO implements IEdi
         ResponseEntity<String> responseEntity = null;
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        JSONObject newParamIn = new JSONObject();
+        newParamIn.put("communityId", paramIn.getString("communityId"));
+        newParamIn.put("repairId", paramIn.getString("repairId"));
+        newParamIn.put("page", 1);
+        newParamIn.put("row", 1);
+
+        //查询保修状态
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listOwnerRepairs" + mapToUrlParam(newParamIn);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                apiUrl,
+                HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        JSONObject outRepairInfo = JSONObject.parseObject(responseEntity.getBody());
+        JSONObject repairObj = outRepairInfo.getJSONArray("ownerRepairs").getJSONObject(0);
+        paramIn.put("state", repairObj.getString("state"));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.updateOwnerRepair",
                 HttpMethod.POST);

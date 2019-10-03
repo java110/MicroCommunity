@@ -105,7 +105,15 @@
         select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
         repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.room_id,t.room_id roomId
+        bId,t.room_id,t.room_id roomId,
+        (CASE
+        WHEN t.`state` = '1000'
+        THEN '未派单'
+        WHEN t.state = '1100'
+        THEN '处理中'
+        ELSE
+        '处理完成'
+        END) stateName
         from r_repair_pool t
         where 1 =1
         <if test="repairName !=null and repairName != ''">

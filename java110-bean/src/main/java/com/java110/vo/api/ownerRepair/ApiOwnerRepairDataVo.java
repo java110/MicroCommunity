@@ -6,55 +6,84 @@ import java.util.Date;
 public class ApiOwnerRepairDataVo implements Serializable {
 
     private String repairId;
-private String repairType;
-private String repairName;
-private String tel;
-private String roomId;
-private String appointmentTime;
-private String context;
-public String getRepairId() {
+    private String repairType;
+    private String repairName;
+    private String tel;
+    private String roomId;
+    private String appointmentTime;
+    private String context;
+    private String state;
+    private String stateName;
+
+    public String getRepairId() {
         return repairId;
     }
-public void setRepairId(String repairId) {
+
+    public void setRepairId(String repairId) {
         this.repairId = repairId;
     }
-public String getRepairType() {
+
+    public String getRepairType() {
         return repairType;
     }
-public void setRepairType(String repairType) {
+
+    public void setRepairType(String repairType) {
         this.repairType = repairType;
     }
-public String getRepairName() {
+
+    public String getRepairName() {
         return repairName;
     }
-public void setRepairName(String repairName) {
+
+    public void setRepairName(String repairName) {
         this.repairName = repairName;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getAppointmentTime() {
+
+    public String getAppointmentTime() {
         return appointmentTime;
     }
-public void setAppointmentTime(String appointmentTime) {
+
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
 
+    public String getState() {
+        return state;
+    }
 
+    public void setState(String state) {
+        this.state = state;
+    }
 
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
 }

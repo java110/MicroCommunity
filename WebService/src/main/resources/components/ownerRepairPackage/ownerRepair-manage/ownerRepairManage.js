@@ -19,7 +19,8 @@
                     repairType:'',
                     roomId:'',
                     roomName:'',
-                    ownerId:''
+                    ownerId:'',
+                    state:''
                 }
             }
         },
@@ -121,6 +122,9 @@
             },
             _queryOwnerRepairMethod:function(){
                 vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
+
+            },
+            _openDispatchRepair:function(_ownerRepair){
 
             },
             _moreCondition:function(){

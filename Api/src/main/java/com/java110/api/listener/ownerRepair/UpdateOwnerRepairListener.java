@@ -32,6 +32,7 @@ public class UpdateOwnerRepairListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请填写房屋ID");
         Assert.hasKeyAndValue(reqJson, "appointmentTime", "必填，请填写预约时间");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
+        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写报修状态");
 
     }
 
