@@ -166,6 +166,7 @@
                     params:{
                         ownerId:_ownerInfo.ownerId,
                         communityId:vc.getCurrentCommunity().communityId,
+                        ownerTypeCd:'1001',
                         page:1,
                         row:1
                     }
