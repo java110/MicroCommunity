@@ -16,7 +16,7 @@ import java.util.Date;
 public class RepairDto extends PageDto implements Serializable {
 
     private String repairName;
-    private String appointmentTime;
+    private Date appointmentTime;
     private String repairType;
     private String context;
     private String repairId;
@@ -40,11 +40,11 @@ public class RepairDto extends PageDto implements Serializable {
         this.repairName = repairName;
     }
 
-    public String getAppointmentTime() {
+    public Date getAppointmentTime() {
         return appointmentTime;
     }
 
-    public void setAppointmentTime(String appointmentTime) {
+    public void setAppointmentTime(Date appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
 
