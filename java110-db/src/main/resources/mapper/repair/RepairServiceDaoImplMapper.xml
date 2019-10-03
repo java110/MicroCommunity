@@ -27,7 +27,7 @@
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
-        <if test="appointmentTime !=null and appointmentTime != ''">
+        <if test="appointmentTime !=null">
             and t.appointment_time= #{appointmentTime}
         </if>
         <if test="repairType !=null and repairType != ''">
@@ -69,7 +69,7 @@
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
-        <if test="appointmentTime !=null and appointmentTime != ''">
+        <if test="appointmentTime !=null ">
             and t.appointment_time= #{appointmentTime}
         </if>
         <if test="repairType !=null and repairType != ''">
@@ -119,7 +119,7 @@
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
-        <if test="appointmentTime !=null and appointmentTime != ''">
+        <if test="appointmentTime !=null ">
             and t.appointment_time= #{appointmentTime}
         </if>
         <if test="repairType !=null and repairType != ''">
@@ -165,7 +165,7 @@
         <if test="repairName !=null and repairName != ''">
             , t.repair_name= #{repairName}
         </if>
-        <if test="appointmentTime !=null and appointmentTime != ''">
+        <if test="appointmentTime !=null">
             , t.appointment_time= #{appointmentTime}
         </if>
         <if test="repairType !=null and repairType != ''">
@@ -204,7 +204,7 @@
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
-        <if test="appointmentTime !=null and appointmentTime != ''">
+        <if test="appointmentTime !=null ">
             and t.appointment_time= #{appointmentTime}
         </if>
         <if test="repairType !=null and repairType != ''">
