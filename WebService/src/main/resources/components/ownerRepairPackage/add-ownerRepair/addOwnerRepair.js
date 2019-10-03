@@ -12,6 +12,7 @@
                 repairName:'',
                 tel:'',
                 roomId:'',
+                roomName:'',
                 appointmentTime:'',
                 context:'',
 
@@ -21,7 +22,8 @@
 
          },
          _initEvent:function(){
-            vc.on('addOwnerRepair','openAddOwnerRepairModal',function(){
+            vc.on('addOwnerRepair','openAddOwnerRepairModal',function(_ownerInfo){
+                vc.component._freshOwnerInfo(_ownerInfo);
                 $('#addOwnerRepairModel').modal('show');
             });
         },
@@ -31,81 +33,77 @@
                     addOwnerRepairInfo:vc.component.addOwnerRepairInfo
                 },{
                     'addOwnerRepairInfo.repairType':[
-{
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"报修类型不能为空"
                         },
- {
+                        {
                             limit:"maxin",
                             param:"2,50",
                             errInfo:"报修类型错误"
                         },
                     ],
-'addOwnerRepairInfo.repairName':[
-{
+                        'addOwnerRepairInfo.repairName':[
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"报修人不能为空"
                         },
- {
+                        {
                             limit:"maxin",
                             param:"2,50",
                             errInfo:"报修人名称必须在2至50字符之间"
                         },
                     ],
-'addOwnerRepairInfo.tel':[
-{
+                        'addOwnerRepairInfo.tel':[
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"联系方式不能为空"
                         },
- {
+                        {
                             limit:"phone",
                             param:"",
                             errInfo:"联系方式格式不正确"
                         },
                     ],
-'addOwnerRepairInfo.roomId':[
-{
+                    'addOwnerRepairInfo.roomId':[
+                    {
                             limit:"required",
                             param:"",
                             errInfo:"房屋ID不能为空"
                         },
- {
+                    {
                             limit:"num",
                             param:"",
                             errInfo:"房屋ID错误"
                         },
                     ],
-'addOwnerRepairInfo.appointmentTime':[
-{
+                    'addOwnerRepairInfo.appointmentTime':[
+                    {
                             limit:"required",
                             param:"",
                             errInfo:"预约时间不能为空"
                         },
- {
+                        {
                             limit:"dateTime",
                             param:"",
                             errInfo:"预约时间格式错误"
                         },
                     ],
-'addOwnerRepairInfo.context':[
-{
+                    'addOwnerRepairInfo.context':[
+                    {
                             limit:"required",
                             param:"",
                             errInfo:"报修内容不能为空"
                         },
- {
+                        {
                             limit:"maxLength",
                             param:"2000",
                             errInfo:"报修内容不能超过2000"
                         },
                     ],
-
-
-
-
                 });
             },
             saveOwnerRepairInfo:function(){
@@ -152,14 +150,39 @@
             },
             clearAddOwnerRepairInfo:function(){
                 vc.component.addOwnerRepairInfo = {
-                                            repairType:'',
-repairName:'',
-tel:'',
-roomId:'',
-appointmentTime:'',
-context:'',
+                        repairType:'',
+                        repairName:'',
+                        tel:'',
+                        roomId:'',
+                        appointmentTime:'',
+                        context:'',
+                    };
+            },
+            _freshOwnerInfo:function(_ownerInfo){
+                vc.component.addOwnerRepairInfo.roomId = _ownerInfo.roomId;
+                vc.component.addOwnerRepairInfo.roomName = _ownerInfo.roomName;
 
-                                        };
+                var param={
+                    params:{
+                        ownerId:_ownerInfo.ownerId,
+                        communityId:vc.getCurrentCommunity().communityId,
+                        page:1,
+                        row:1
+                    }
+                }
+                //查询房屋信息 业主信息
+               vc.http.get('addOwnerRepair',
+                            'getOwner',
+                             param,
+                             function(json,res){
+                                var _ownerInfos=JSON.parse(json);
+                                var _ownerInfo = _ownerInfos.owners[0];
+                               vc.component.addOwnerRepairInfo.repairName= _ownerInfo.name;
+                                vc.component.addOwnerRepairInfo.tel= _ownerInfo.link;
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
             }
         }
     });

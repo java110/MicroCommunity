@@ -14,15 +14,18 @@
                 repairName:'',
                 conditions:{
                     repairId:'',
-repairName:'',
-tel:'',
-repairType:'',
-
+                    repairName:'',
+                    tel:'',
+                    repairType:'',
+                    roomId:'',
+                    roomName:'',
+                    ownerId:''
                 }
             }
         },
         _initMethod:function(){
-            vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
+            //vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._validateParam();
         },
         _initEvent:function(){
             
@@ -34,8 +37,47 @@ repairType:'',
             });
         },
         methods:{
-            _listOwnerRepairs:function(_page, _rows){
+            _validateParam:function(){
+                var _ownerId = vc.getParam('ownerId')
+                var _roomId = vc.getParam('roomId')
 
+                if(!vc.notNull(_roomId)){
+                    vc.message("非法操作，未找到房屋信息");
+                    vc.jumpToPage('/flow/ownerFlow');
+                    return ;
+                }
+                vc.component.ownerRepairManageInfo.conditions.roomId = _roomId;
+                vc.component.ownerRepairManageInfo.conditions.ownerId = _ownerId;
+                var param={
+                    params:{
+                        roomId:vc.component.ownerRepairManageInfo.conditions.roomId,
+                        communityId:vc.getCurrentCommunity().communityId,
+                        page:1,
+                        row:1
+                    }
+                };
+                //查询房屋信息 业主信息
+               vc.http.get('ownerRepairManage',
+                            'getRoom',
+                             param,
+                             function(json,res){
+                                if(res.status == 200){
+                                    var _roomInfos=JSON.parse(json);
+                                    var _roomInfo = _roomInfos.rooms[0];
+                                    vc.component.ownerRepairManageInfo.conditions.roomName= _roomInfo.floorNum+"楼 "+_roomInfo.unitNum+"单元 "+_roomInfo.roomNum + "室";
+                                    vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
+                                }else{
+                                     vc.message("非法操作，未找到房屋信息");
+                                     vc.jumpToPage('/flow/ownerFlow');
+                                }
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                                vc.message("非法操作，未找到房屋信息");
+                                vc.jumpToPage('/flow/ownerFlow');
+                             }
+                 );
+            },
+            _listOwnerRepairs:function(_page, _rows){
                 vc.component.ownerRepairManageInfo.conditions.page = _page;
                 vc.component.ownerRepairManageInfo.conditions.row = _rows;
                 vc.component.ownerRepairManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
@@ -62,9 +104,11 @@ repairType:'',
                            );
             },
             _openAddOwnerRepairModal:function(){
-                vc.emit('addOwnerRepair','openAddOwnerRepairModal',{});
+                vc.emit('addOwnerRepair','openAddOwnerRepairModal',vc.component.ownerRepairManageInfo.conditions);
             },
             _openEditOwnerRepairModel:function(_ownerRepair){
+                _ownerRepair.roomName = vc.component.ownerRepairManageInfo.conditions.roomName;
+                _ownerRepair.roomId = vc.component.ownerRepairManageInfo.conditions.roomId;
                 vc.emit('editOwnerRepair','openEditOwnerRepairModal',_ownerRepair);
             },
             _openDeleteOwnerRepairModel:function(_ownerRepair){

@@ -21,4 +21,20 @@ public class StateConstant {
     public static final String REJECT_AUDIT = "1200";
 
 
+    /**
+     * 未派单
+     */
+    public static final String REPAIR_NO_DISPATCH = "1000";
+
+    /**
+     * 拍单处理中
+     */
+    public static final String REPAIR_DISPATCHING = "1100";
+
+    /**
+     * 拍单处理完成
+     */
+    public static final String REPAIR_DISPATCH_FINISH = "1200";
+
+
 }

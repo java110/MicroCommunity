@@ -10,6 +10,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
+import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -88,6 +89,8 @@ public class SaveOwnerRepairListener extends AbstractServiceApiListener {
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(paramInJson);
         businessOwnerRepair.put("repairId", "-1");
+        businessOwnerRepair.put("state", StateConstant.REPAIR_NO_DISPATCH);
+
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRepair", businessOwnerRepair);
         return business;

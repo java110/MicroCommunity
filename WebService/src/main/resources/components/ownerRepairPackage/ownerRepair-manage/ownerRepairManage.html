@@ -57,7 +57,7 @@
                 <div class="ibox-title">
                     <h5>报修信息</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOwnerRepairModal()">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOwnerRepairModal()" v-if:click="ownerRepairManageInfo.conditions.roomId != ''">
                             <i class="glyphicon glyphicon-plus"></i>
                             报修登记
                         </button>

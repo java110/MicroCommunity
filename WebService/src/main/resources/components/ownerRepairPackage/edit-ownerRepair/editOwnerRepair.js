@@ -4,12 +4,13 @@
         data:{
             editOwnerRepairInfo:{
                 repairId:'',
-repairType:'',
-repairName:'',
-tel:'',
-roomId:'',
-appointmentTime:'',
-context:'',
+                repairType:'',
+                repairName:'',
+                tel:'',
+                roomId:'',
+                roomName:'',
+                appointmentTime:'',
+                context:'',
 
             }
         },
