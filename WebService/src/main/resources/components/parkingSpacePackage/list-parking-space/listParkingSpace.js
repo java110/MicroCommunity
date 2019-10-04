@@ -7,7 +7,12 @@
                 parkingSpaces:[],
                 total:0,
                 records:1,
-                num:''
+                num:'',
+                conditions:{
+                    psId:'',
+                    area:'',
+                    typeCd:''
+                }
             }
         },
         _initMethod:function(){
@@ -73,6 +78,9 @@
                 }else{
                     return "未知";
                 }
+            },
+            _queryRoomMethod:function(){
+                vc.component._listParkingSpaceData(DEFAULT_PAGE,DEFAULT_ROWS);
             },
             queryParkingSpaceMethod:function(){
                 vc.component._listParkingSpaceData(DEFAULT_PAGE,DEFAULT_ROWS);
