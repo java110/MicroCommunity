@@ -22,4 +22,4 @@ services:
 networks:
   java110_net:
     external:
-      name: hc_net
+      name: java110

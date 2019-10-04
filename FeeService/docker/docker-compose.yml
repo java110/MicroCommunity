@@ -11,7 +11,7 @@ services:
        volumes:
        - ../target/FeeService.jar:/root/target/FeeService.jar
        networks:
-         - java110_net
+       - java110_net
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"
@@ -22,4 +22,4 @@ services:
 networks:
   java110_net:
     external:
-      name: hc_net
+      name: java110
