@@ -34,7 +34,10 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        num:vc.component.listParkingSpaceInfo.num
+                        num:vc.component.listParkingSpaceInfo.num,
+                        psId:vc.component.listParkingSpaceInfo.conditions.psId,
+                        area:vc.component.listParkingSpaceInfo.conditions.area,
+                        typeCd:vc.component.listParkingSpaceInfo.conditions.typeCd
                     }
                 }
 
