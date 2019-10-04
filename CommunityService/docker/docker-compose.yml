@@ -10,6 +10,7 @@ services:
        - "8009:8009"
        volumes:
        - ../target/CommunityService.jar:/root/target/CommunityService.jar
+       network_mode: "host"
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"

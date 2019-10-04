@@ -10,6 +10,7 @@ services:
        - "8002:8002"
        volumes:
        - ../target/UserService.jar:/root/target/UserService.jar
+       network_mode: "host"
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"

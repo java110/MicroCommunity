@@ -14,17 +14,17 @@ import java.util.Date;
 public class FeeDto extends PageDto implements Serializable {
 
     private String amount;
-private String incomeObjId;
-private String feeTypeCd;
-private Date startTime;
-private Date endTime;
-private String communityId;
-private String feeId;
-private String userId;
-private String payerObjId;
-private String[] feeTypeCds;
+    private String incomeObjId;
+    private String feeTypeCd;
+    private Date startTime;
+    private Date endTime;
+    private String communityId;
+    private String feeId;
+    private String userId;
+    private String payerObjId;
+    private String[] feeTypeCds;
 
-private Date arrearsEndTime;
+    private Date arrearsEndTime;
 
 
     private Date createTime;
@@ -35,44 +35,56 @@ private Date arrearsEndTime;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getIncomeObjId() {
+
+    public String getIncomeObjId() {
         return incomeObjId;
     }
-public void setIncomeObjId(String incomeObjId) {
+
+    public void setIncomeObjId(String incomeObjId) {
         this.incomeObjId = incomeObjId;
     }
-public String getFeeTypeCd() {
+
+    public String getFeeTypeCd() {
         return feeTypeCd;
     }
-public void setFeeTypeCd(String feeTypeCd) {
+
+    public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
 
-public String getCommunityId() {
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getPayerObjId() {
+
+    public String getPayerObjId() {
         return payerObjId;
     }
-public void setPayerObjId(String payerObjId) {
+
+    public void setPayerObjId(String payerObjId) {
         this.payerObjId = payerObjId;
     }
 
