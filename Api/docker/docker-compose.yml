@@ -10,7 +10,8 @@ services:
        - "8008:8008"
        volumes:
        - ../target/Api.jar:/root/target/Api.jar
-       network_mode: "none"
+       networks:
+         - java110_net
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"
@@ -18,3 +19,7 @@ services:
 #       - "dev.kafka.java110.com:192.168.1.18"
 #       - "dev.redis.java110.com:192.168.1.18"
 #       - "api.java110.com:92.168.1.18"
+networks:
+  java110_net:
+    external:
+      name: hc_net
