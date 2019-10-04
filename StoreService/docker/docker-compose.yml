@@ -10,7 +10,7 @@ services:
        - "8006:8006"
        volumes:
        - ../target/StoreService.jar:/root/target/StoreService.jar
-       network_mode: "host"
+       network_mode: "none"
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"
