@@ -25,6 +25,7 @@ public class RepairDto extends PageDto implements Serializable {
     private String stateName;
     private String communityId;
     private String roomId;
+    private String repairTypeName;
 
 
     private Date createTime;
@@ -127,5 +128,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getRepairTypeName() {
+        return repairTypeName;
+    }
+
+    public void setRepairTypeName(String repairTypeName) {
+        this.repairTypeName = repairTypeName;
     }
 }

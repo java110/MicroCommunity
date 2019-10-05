@@ -113,7 +113,15 @@
         THEN '处理中'
         ELSE
         '处理完成'
-        END) stateName
+        END) stateName,
+        (CASE
+        WHEN t.`repair_type` = '10001'
+        THEN '卧室报修'
+        WHEN t.repair_type = '10002'
+        THEN '管道报修'
+        ELSE
+        '客厅报修'
+        END) repairTypeName
         from r_repair_pool t
         where 1 =1
         <if test="repairName !=null and repairName != ''">

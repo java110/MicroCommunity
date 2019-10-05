@@ -14,6 +14,7 @@ public class ApiOwnerRepairDataVo implements Serializable {
     private String context;
     private String state;
     private String stateName;
+    private String repairTypeName;
 
     public String getRepairId() {
         return repairId;
@@ -85,5 +86,13 @@ public class ApiOwnerRepairDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getRepairTypeName() {
+        return repairTypeName;
+    }
+
+    public void setRepairTypeName(String repairTypeName) {
+        this.repairTypeName = repairTypeName;
     }
 }
