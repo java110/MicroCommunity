@@ -63,9 +63,13 @@ public class StoreServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(StoreServiceApplicationStart.class, args);
-        ServiceStartInit.initSystemConfig(context);
-        //加载业务侦听
-        //SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+        try {
+            ApplicationContext context = SpringApplication.run(StoreServiceApplicationStart.class, args);
+            ServiceStartInit.initSystemConfig(context);
+            //加载业务侦听
+            //SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 }

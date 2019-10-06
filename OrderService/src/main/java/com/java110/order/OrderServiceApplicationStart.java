@@ -69,16 +69,20 @@ public class OrderServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
+        try {
+            ApplicationContext context = SpringApplication.run(OrderServiceApplicationStart.class, args);
 
-        //服务启动加载
-        ServiceStartInit.initSystemConfig(context);
+            //服务启动加载
+            ServiceStartInit.initSystemConfig(context);
 
-        //加载事件数据
-        //EventConfigInit.initSystemConfig();
+            //加载事件数据
+            //EventConfigInit.initSystemConfig();
 
-        //刷新缓存
-        flushMainCache(args);
+            //刷新缓存
+            flushMainCache(args);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 
 

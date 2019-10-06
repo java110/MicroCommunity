@@ -117,10 +117,14 @@ public class ApiApplicationStart {
 
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
+        try{
+            ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
 
-        //服务启动加载
-        ServiceStartInit.initSystemConfig(context);
+            //服务启动加载
+            ServiceStartInit.initSystemConfig(context);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 
 }

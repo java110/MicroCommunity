@@ -52,7 +52,11 @@ public class FeeServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(FeeServiceApplicationStart.class, args);
-        ServiceStartInit.initSystemConfig(context);
+        try{
+            ApplicationContext context = SpringApplication.run(FeeServiceApplicationStart.class, args);
+            ServiceStartInit.initSystemConfig(context);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 }

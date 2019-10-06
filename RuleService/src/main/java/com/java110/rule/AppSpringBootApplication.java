@@ -29,6 +29,10 @@ public class AppSpringBootApplication {
 
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(AppSpringBootApplication.class, args);
+        try{
+            SpringApplication.run(AppSpringBootApplication.class, args);
+        }catch (Throwable e){
+            logger.error("系统启动失败",e);
+        }
     }
 }
