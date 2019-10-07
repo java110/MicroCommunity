@@ -14,9 +14,9 @@
                 orgName:'',
                 conditions:{
                     orgId:'',
-orgName:'',
-orgLevel:'',
-parentOrgId:'',
+                    orgName:'',
+                    orgLevel:'',
+                    parentOrgId:'',
 
                 }
             }

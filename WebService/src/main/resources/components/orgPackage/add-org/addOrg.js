@@ -9,9 +9,9 @@
             addOrgInfo:{
                 orgId:'',
                 orgName:'',
-orgLevel:'',
-parentOrgId:'',
-description:'',
+                orgLevel:'',
+                parentOrgId:'',
+                description:'',
 
             }
         },

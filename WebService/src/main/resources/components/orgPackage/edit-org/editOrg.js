@@ -4,10 +4,10 @@
         data:{
             editOrgInfo:{
                 orgId:'',
-orgName:'',
-orgLevel:'',
-parentOrgId:'',
-description:'',
+                orgName:'',
+                orgLevel:'',
+                parentOrgId:'',
+                description:'',
 
             }
         },
@@ -39,44 +39,44 @@ description:'',
                             errInfo:"组织名称长度为2至50"
                         },
                     ],
-'editOrgInfo.orgLevel':[
-{
+                        'editOrgInfo.orgLevel':[
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"组织级别不能为空"
                         },
- {
+                        {
                             limit:"maxin",
                             param:"2,50",
                             errInfo:"报修人名称必须在2至50字符之间"
                         },
                     ],
-'editOrgInfo.parentOrgId':[
-{
+                    'editOrgInfo.parentOrgId':[
+                    {
                             limit:"required",
                             param:"",
                             errInfo:"上级ID不能为空"
                         },
- {
+                        {
                             limit:"num",
                             param:"",
                             errInfo:"上级ID不正确"
                         },
                     ],
-'editOrgInfo.description':[
-{
+                        'editOrgInfo.description':[
+                        {
                             limit:"required",
                             param:"",
                             errInfo:"描述不能为空"
                         },
- {
+                     {
                             limit:"maxLength",
                             param:"200",
                             errInfo:"描述不能为空"
                         },
                     ],
-'editOrgInfo.orgId':[
-{
+                    'editOrgInfo.orgId':[
+                    {
                             limit:"required",
                             param:"",
                             errInfo:"组织ID不能为空"
@@ -115,11 +115,11 @@ description:'',
             },
             refreshEditOrgInfo:function(){
                 vc.component.editOrgInfo= {
-                  orgId:'',
-orgName:'',
-orgLevel:'',
-parentOrgId:'',
-description:'',
+                    orgId:'',
+                    orgName:'',
+                    orgLevel:'',
+                    parentOrgId:'',
+                    description:'',
 
                 }
             }
