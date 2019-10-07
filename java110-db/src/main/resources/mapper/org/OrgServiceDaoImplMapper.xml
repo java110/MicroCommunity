@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orgServiceDaoImpl">
+
+    <!-- 保存组织信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessOrgInfo" parameterType="Map">
+           insert into business_org(
+org_name,operate,parent_org_id,description,org_level,store_id,b_id,org_id
+) values (
+#{orgName},#{operate},#{parentOrgId},#{description},#{orgLevel},#{storeId},#{bId},#{orgId}
+)
+       </insert>
+
+
+       <!-- 查询组织信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessOrgInfo" parameterType="Map" resultType="Map">
+           select  t.org_name,t.org_name orgName,t.operate,t.parent_org_id,t.parent_org_id parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId 
+from business_org t 
+where 1 =1 
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="parentOrgId !=null and parentOrgId != ''">
+   and t.parent_org_id= #{parentOrgId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="orgLevel !=null and orgLevel != ''">
+   and t.org_level= #{orgLevel}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存组织信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveOrgInfoInstance" parameterType="Map">
+        insert into u_org(
+org_name,parent_org_id,description,org_level,status_cd,store_id,b_id,org_id
+) select t.org_name,t.parent_org_id,t.description,t.org_level,'0',t.store_id,t.b_id,t.org_id from business_org t where 1=1
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+   and t.operate= 'ADD'
+<if test="parentOrgId !=null and parentOrgId != ''">
+   and t.parent_org_id= #{parentOrgId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="orgLevel !=null and orgLevel != ''">
+   and t.org_level= #{orgLevel}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询组织信息 add by wuxw 2018-07-03 -->
+    <select id="getOrgInfo" parameterType="Map" resultType="Map">
+        select  t.org_name,t.org_name orgName,t.parent_org_id,t.parent_org_id parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId 
+from u_org t 
+where 1 =1 
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+<if test="parentOrgId !=null and parentOrgId != ''">
+   and t.parent_org_id= #{parentOrgId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="orgLevel !=null and orgLevel != ''">
+   and t.org_level= #{orgLevel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改组织信息 add by wuxw 2018-07-03 -->
+    <update id="updateOrgInfoInstance" parameterType="Map">
+        update  u_org t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="orgName !=null and orgName != ''">
+, t.org_name= #{orgName}
+</if> 
+<if test="parentOrgId !=null and parentOrgId != ''">
+, t.parent_org_id= #{parentOrgId}
+</if> 
+<if test="description !=null and description != ''">
+, t.description= #{description}
+</if> 
+<if test="orgLevel !=null and orgLevel != ''">
+, t.org_level= #{orgLevel}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+and t.org_id= #{orgId}
+</if> 
+
+    </update>
+
+    <!-- 查询组织数量 add by wuxw 2018-07-03 -->
+     <select id="queryOrgsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from u_org t 
+where 1 =1 
+<if test="orgName !=null and orgName != ''">
+   and t.org_name= #{orgName}
+</if> 
+<if test="parentOrgId !=null and parentOrgId != ''">
+   and t.parent_org_id= #{parentOrgId}
+</if> 
+<if test="description !=null and description != ''">
+   and t.description= #{description}
+</if> 
+<if test="orgLevel !=null and orgLevel != ''">
+   and t.org_level= #{orgLevel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+
+
+     </select>
+
+</mapper>

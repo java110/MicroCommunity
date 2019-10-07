@@ -94,6 +94,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_file_id = "81";
     public static final String CODE_PREFIX_repairId = "82";
     public static final String CODE_PREFIX_ruId = "83";
+    public static final String CODE_PREFIX_orgId = "84";
 
 
 
