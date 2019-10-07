@@ -484,7 +484,7 @@ public class BusinessTypeConstant {
 
     /**
      *  保存组织
-     * 11开头  3保存
+     * 14开头  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_ORG="140100030001";
     /**

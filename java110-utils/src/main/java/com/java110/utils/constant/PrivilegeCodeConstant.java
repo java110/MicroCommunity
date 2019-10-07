@@ -100,6 +100,8 @@ public final class PrivilegeCodeConstant {
 
     public static final String LIST_OWNERREPAIR = "502019100524950005";
 
+    public static final String LIST_ORG = "502019100524950005";
+
 
 
 }

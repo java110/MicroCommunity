@@ -1,0 +1,115 @@
+{
+  "templateName":"业主报修",
+  "templateCode":"ownerRepair",
+  "templateKey":"repairId",
+  "templateKeyName":"报修ID",
+  "searchCode": "repairName",
+  "searchName": "报修人姓名",
+  "conditions": [
+
+    {
+      "name": "报修ID",
+      "inputType": "input",
+      "code": "repairId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "报修人",
+      "inputType": "input",
+      "code": "repairName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "报修电话",
+      "inputType": "input",
+      "code": "tel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "报修类型",
+      "inputType": "select",
+      "code": "repairType",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"卧室报修,管道报修,客厅报修",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"repairType",
+      "cnCode":"报修类型",
+      "desc":"必填，请选择报修类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"卧室报修,管道报修,客厅报修",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"报修类型错误",
+      "show": true
+    },
+    {
+      "code":"repairName",
+      "cnCode":"报修人",
+      "desc":"必填，请填写报修人名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"报修人名称必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"tel",
+      "cnCode":"联系方式",
+      "desc":"必填，请填写报修人手机号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"联系方式格式不正确",
+      "show": true
+    },
+    {
+      "code":"roomId",
+      "cnCode":"房屋ID",
+      "desc":"必填，请填写房屋ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"房屋ID错误",
+      "show": true
+    },
+    {
+      "code":"appointmentTime",
+      "cnCode":"预约时间",
+      "desc":"必填，请填写预约时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"预约时间格式错误",
+      "show": true
+    },
+    {
+      "code":"context",
+      "cnCode":"报修内容",
+      "desc":"必填，请填写报修内容",
+      "required":true,
+      "hasDefaultValue":false,
+      "defaultValue":"",
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"2000",
+      "limitErrInfo":"报修内容不能超过2000",
+      "show": false
+    }
+  ]
+}
