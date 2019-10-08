@@ -19,8 +19,6 @@
         },
         _initEvent:function(){
             vc.on('viewVisitInfo','addNewVisit',function(_app){
-                console.log(_app);
-
                 vc.copyObject(_app, vc.component.viewVisitInfo);
                 vc.emit('addVisitSpace','notify',vc.component.viewVisitInfo);
             });
@@ -34,7 +32,6 @@
         methods:{
 
             _openSelectAppInfoModel(){
-                alert("打开查询访客模态框");
                 // vc.emit('chooseApp','openChooseAppModel',{});
             },
             _openAddVisitInfoModel(){

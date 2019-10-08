@@ -6,22 +6,27 @@
     vc.extends({
         data:{
             addVisitCase:{
-
                 visitCase:""
             }
         },
         watch:{
-            addVisitCase(val){
-                vc.emit('addVisitSpace', 'visitCase', this.addVisitCase.visitCase);
-            }
+            addVisitCase:{
+                handler:function (val,oldval) {
+
+                },
+                deep:true,
+            },
+            'addVisitCase.visitCase':function (val,oldval) {
+                vc.emit('addVisitSpace', 'visitCase',val);
+            },
+
         },
+
         _initMethod:function(){
 
         },
         _initEvent:function(){
             vc.on('addVisitCase', 'onIndex', function(_index){
-                console.log("侦听到addVisitCase的index为  "+_index);
-                // vc.component.addCarInfo.index = _index;
                 vc.emit('addVisitSpace', 'notify', _index);
             });
 

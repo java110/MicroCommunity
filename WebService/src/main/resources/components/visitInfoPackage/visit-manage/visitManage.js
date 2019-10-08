@@ -40,7 +40,6 @@
                     param,
                     function (json, res) {
                         var _visitManageInfo = JSON.parse(json);
-                        console.log(_visitManageInfo);
                         for (var k in _visitManageInfo.visits){
                             _visitManageInfo.visits[k].visitTime=new Date(_visitManageInfo.visits[k].visitTime).format('yyyy-MM-dd');
                             _visitManageInfo.visits[k].departureTime=new Date(_visitManageInfo.visits[k].departureTime).format('yyyy-MM-dd');
