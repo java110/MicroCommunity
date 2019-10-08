@@ -15,24 +15,17 @@ import java.util.Date;
  **/
 public class VisitDto extends PageDto implements Serializable {
 
-    private Date departureTime;
+    private String departureTime;
     private String vName;
     private String visitGender;
     private String ownerId;
     private String userId;
     private String vId;
-    private Date visitTime;
+    private String visitTime;
     private String phoneNumber;
     private String visitCase;
     private String communityId;
 
-    public Date getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(Date departureTime) {
-        this.departureTime = departureTime;
-    }
 
     public String getvName() {
         return vName;
@@ -74,13 +67,6 @@ public class VisitDto extends PageDto implements Serializable {
         this.vId = vId;
     }
 
-    public Date getVisitTime() {
-        return visitTime;
-    }
-
-    public void setVisitTime(Date visitTime) {
-        this.visitTime = visitTime;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -104,5 +90,21 @@ public class VisitDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public String getVisitTime() {
+        return visitTime;
+    }
+
+    public void setVisitTime(String visitTime) {
+        this.visitTime = visitTime;
     }
 }

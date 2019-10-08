@@ -22,7 +22,7 @@
         visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
         from business_visit_info t
         where 1 =1
-        <if test="departureTime !=null and departureTime != ''">
+        <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
         </if>
         <if test="vName !=null and vName != ''">
@@ -40,7 +40,7 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-        <if test="visitTime !=null and visitTime != ''">
+        <if test="visitTime !=null ">
             and t.visit_time= #{visitTime}
         </if>
         <if test="phoneNumber !=null and phoneNumber != ''">
@@ -69,7 +69,7 @@
         ) select
         t.departure_time,t.v_name,'0',t.visit_gender,t.owner_id,t.user_id,t.v_id,t.visit_time,t.phone_number,t.visit_case,t.community_id,t.b_id
         from business_visit_info t where 1=1
-        <if test="departureTime !=null and departureTime != ''">
+        <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
         </if>
         <if test="vName !=null and vName != ''">
@@ -87,7 +87,7 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-        <if test="visitTime !=null and visitTime != ''">
+        <if test="visitTime !=null ">
             and t.visit_time= #{visitTime}
         </if>
         <if test="phoneNumber !=null and phoneNumber != ''">
@@ -115,7 +115,7 @@
         phoneNumber,t.visit_case,t.visit_case visitCase,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
         from s_visit_info t
         where 1 =1
-        <if test="departureTime !=null and departureTime != ''">
+        <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
         </if>
         <if test="vName !=null and vName != ''">
@@ -136,7 +136,7 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-        <if test="visitTime !=null and visitTime != ''">
+        <if test="visitTime !=null ">
             and t.visit_time= #{visitTime}
         </if>
         <if test="phoneNumber !=null and phoneNumber != ''">
@@ -164,7 +164,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="departureTime !=null and departureTime != ''">
+        <if test="departureTime !=null ">
             , t.departure_time= #{departureTime}
         </if>
         <if test="vName !=null and vName != ''">
@@ -179,7 +179,7 @@
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
         </if>
-        <if test="visitTime !=null and visitTime != ''">
+        <if test="visitTime !=null ">
             , t.visit_time= #{visitTime}
         </if>
         <if test="phoneNumber !=null and phoneNumber != ''">
@@ -206,7 +206,7 @@
         select count(1) count
         from s_visit_info t
         where 1 =1
-        <if test="departureTime !=null and departureTime != ''">
+        <if test="departureTime !=null ">
             and t.departure_time= #{departureTime}
         </if>
         <if test="vName !=null and vName != ''">
@@ -227,7 +227,7 @@
         <if test="vId !=null and vId != ''">
             and t.v_id= #{vId}
         </if>
-        <if test="visitTime !=null and visitTime != ''">
+        <if test="visitTime !=null ">
             and t.visit_time= #{visitTime}
         </if>
         <if test="phoneNumber !=null and phoneNumber != ''">

@@ -12,9 +12,9 @@ public class ApiVisitDataVo implements Serializable {
     private String communityId;
     private String ownerId;
     private String visitCase;
-    private Date visitTime;
-    private Date departureTime;
-    private Date createTime;
+    private String visitTime;
+    private String departureTime;
+    private String createTime;
     private String statusCd = "0";
 
     public String getvId() {
@@ -81,27 +81,27 @@ public class ApiVisitDataVo implements Serializable {
         this.visitCase = visitCase;
     }
 
-    public Date getVisitTime() {
+    public String getVisitTime() {
         return visitTime;
     }
 
-    public void setVisitTime(Date visitTime) {
+    public void setVisitTime(String visitTime) {
         this.visitTime = visitTime;
     }
 
-    public Date getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(Date departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
