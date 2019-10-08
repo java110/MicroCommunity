@@ -107,4 +107,6 @@ public class VisitDto extends PageDto implements Serializable {
     public void setVisitTime(String visitTime) {
         this.visitTime = visitTime;
     }
+
+
 }

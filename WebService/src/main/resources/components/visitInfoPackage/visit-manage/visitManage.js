@@ -40,15 +40,12 @@
                     param,
                     function (json, res) {
                         var _visitManageInfo = JSON.parse(json);
-                        for (var k in _visitManageInfo.visits){
-                            _visitManageInfo.visits[k].visitTime=new Date(_visitManageInfo.visits[k].visitTime).format('yyyy-MM-dd');
-                            _visitManageInfo.visits[k].departureTime=new Date(_visitManageInfo.visits[k].departureTime).format('yyyy-MM-dd');
-                        }
+                        console.log(_visitManageInfo);
                         vc.component.appManageInfo.total = _visitManageInfo.total;
                         vc.component.appManageInfo.records = _visitManageInfo.records;
                         vc.component.appManageInfo.visits = _visitManageInfo.visits;
                         vc.emit('pagination', 'init', {
-                            total: vc.component.appManageInfo.records,
+                            total: _visitManageInfo.total,
                             currentPage: _page
                         });
                     }, function (errInfo, error) {
@@ -71,22 +68,3 @@
         }
     });
 })(window.vc);
-
-Date.prototype.format =function(format){
-    var o = {
-        "M+" : this.getMonth()+1, //month
-        "d+" : this.getDate(), //day
-        "h+" : this.getHours(), //hour
-        "m+" : this.getMinutes(), //minute
-        "s+" : this.getSeconds(), //second
-        "q+" : Math.floor((this.getMonth()+3)/3), //quarter
-        "S" : this.getMilliseconds() //millisecond
-    }
-    if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
-        (this.getFullYear()+"").substr(4- RegExp.$1.length));
-    for(var k in o)if(new RegExp("("+ k +")").test(format))
-        format = format.replace(RegExp.$1,
-            RegExp.$1.length==1? o[k] :
-                ("00"+ o[k]).substr((""+ o[k]).length));
-    return format;
-}

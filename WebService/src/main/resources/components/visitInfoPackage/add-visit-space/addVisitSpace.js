@@ -17,6 +17,7 @@
         _initEvent:function(){
 
            vc.on("addVisitSpace", "notify", function(_info){
+               console.log("侦听到index为 "+_info);
                 vc.component.newVisitInfo.infos[vc.component.newVisitInfo.index] = _info;
             });
             vc.on("addVisitSpace", "ownerId", function(_ownerId){
@@ -83,8 +84,10 @@
                     communityId:vc.component.newVisitInfo.infos[0]['communityId'],
                     ownerId:vc.component.newVisitInfo.infos[0]['ownerId'],
                     visitCase:vc.component.newVisitInfo.infos[0]['visitCase'],
-                    visitTime:new Date().toLocaleTimeString()
+                    visitTime:vc.component.newVisitInfo.infos[0]['visitTime'],
+                    departureTime:vc.component.newVisitInfo.infos[0]['departureTime']
                 }
+                console.log(param);
                vc.http.post(
                    'addVisit',
                    'save',

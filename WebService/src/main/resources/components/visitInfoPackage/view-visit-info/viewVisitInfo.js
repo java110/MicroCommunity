@@ -10,7 +10,9 @@
                 needShowAddAppButton:'true',
                 vName:'',
                 visitGender:'',
-                phoneNumber:''
+                phoneNumber:'',
+                visitTime:'',
+                departureTime:''
             }
         },
         _initMethod:function(){
@@ -19,6 +21,8 @@
         },
         _initEvent:function(){
             vc.on('viewVisitInfo','addNewVisit',function(_app){
+                console.log(_app);
+                vc.component._clearVisitInfo();
                 vc.copyObject(_app, vc.component.viewVisitInfo);
                 vc.emit('addVisitSpace','notify',vc.component.viewVisitInfo);
             });
@@ -32,6 +36,7 @@
         methods:{
 
             _openSelectAppInfoModel(){
+                alert("打开查询访客模态框");
                 // vc.emit('chooseApp','openChooseAppModel',{});
             },
             _openAddVisitInfoModel(){
@@ -39,6 +44,14 @@
                 // $("#addNewVisitModel").model("show");
             },
             _loadAppInfoData:function(){
+
+            },
+            _clearVisitInfo:function(){
+                vc.component.viewVisitInfo.vName='';
+                vc.component.viewVisitInfo.visitGender='';
+                vc.component.viewVisitInfo.phoneNumber='';
+                vc.component.viewVisitInfo.visitTime='';
+                vc.component.viewVisitInfo.departureTime='';
 
             }
         }
