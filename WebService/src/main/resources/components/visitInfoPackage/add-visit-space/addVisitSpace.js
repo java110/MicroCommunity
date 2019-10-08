@@ -82,9 +82,10 @@
                     visitGender:vc.component.newVisitInfo.infos[0]['visitGender'],
                     phoneNumber:vc.component.newVisitInfo.infos[0]['phoneNumber'],
                     communityId:vc.component.newVisitInfo.infos[0]['communityId'],
-                    ownerId:vc.component.newVisitInfo.infos[0]['ownerId'],
-                    visitCase:vc.component.newVisitInfo.infos[0]['visitCase'],
-                    visitTime:new Date()
+                    ownerId:vc.component.newVisitInfo.infos[1]['ownerId'],
+                    visitCase:vc.component.newVisitInfo.infos[2]['visitCase'],
+                    visitTime:vc.component.newVisitInfo.infos[0]['visitTime'],
+                    departureTime:vc.component.newVisitInfo.infos[0]['departureTime']
                 }
                 console.log(param);
                vc.http.post(
