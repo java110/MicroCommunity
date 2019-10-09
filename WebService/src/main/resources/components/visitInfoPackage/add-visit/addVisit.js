@@ -106,7 +106,7 @@
 
             },
             _initAddVisitInfo:function(){
-                vc.component.addVisitInfo.startTime = vc.dateFormat(new Date().getTime());
+                vc.component.addVisitInfo.visitTime = vc.dateFormat(new Date().getTime());
                  $('.addVisitTime').datetimepicker({
                     language: 'zh-CN',
                     format: 'yyyy-mm-dd HH:ii:ss',
