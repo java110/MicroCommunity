@@ -61,7 +61,6 @@
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-config</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

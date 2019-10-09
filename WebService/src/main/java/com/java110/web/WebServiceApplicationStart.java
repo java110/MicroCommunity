@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
         "com.java110.service.controller",
         "com.java110.service.filter",
         "com.java110.service.init",
-        "com.java110.web", "com.java110.core", "com.java110.cache"})
+        "com.java110.web", "com.java110.core", "com.java110.config.properties.code","com.java110.cache"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
