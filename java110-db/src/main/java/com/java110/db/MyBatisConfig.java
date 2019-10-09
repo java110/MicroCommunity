@@ -1,13 +1,13 @@
 package com.java110.db;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.java110.config.properties.code.Java110Properties;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * MyBatis基础配置
@@ -26,6 +29,9 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class MyBatisConfig implements TransactionManagementConfigurer {
+
+    @Autowired
+    private Java110Properties java110Properties;
 
     @Autowired
     DataSource dataSource;
@@ -47,7 +53,14 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            bean.setMapperLocations(resolver.getResources("classpath:mapper/*/*.xml"));
+           // bean.setMapperLocations(resolver.getResources("classpath:mapper/*/*.xml"));
+            Resource[] resources = null;
+            List<Resource> resourceList = new ArrayList<Resource>();
+            for(String path : java110Properties.getMappingPath().split(",")) {
+                resources = resolver.getResources(path);
+                resourceList.addAll(Arrays.asList(resources));
+            }
+            bean.setMapperLocations(resourceList.toArray(new Resource[resourceList.size()]));
             return bean.getObject();
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,5 +79,11 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    public Java110Properties getJava110Properties() {
+        return java110Properties;
+    }
 
+    public void setJava110Properties(Java110Properties java110Properties) {
+        this.java110Properties = java110Properties;
+    }
 }

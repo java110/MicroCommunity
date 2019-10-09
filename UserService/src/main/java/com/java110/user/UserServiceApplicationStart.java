@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(
-        scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.cache", "com.java110.db"},
+        scanBasePackages = {"com.java110.service", "com.java110.user", "com.java110.core", "com.java110.cache","com.java110.config.properties.code", "com.java110.db"},
         excludeName = {"com.java110.core.smo.user"}
 )
 @EnableDiscoveryClient
