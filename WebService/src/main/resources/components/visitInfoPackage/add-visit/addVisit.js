@@ -26,7 +26,6 @@
             });
 
             vc.on('addVisit', 'onIndex', function(_index){
-                console.log("侦听到addVisit的index为  "+_index);
                 // vc.component.newVisitInfo.index = _index;
                 vc.emit('addVisitSpace', 'notify', _index);
             });

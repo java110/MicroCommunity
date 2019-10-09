@@ -13,7 +13,6 @@
         },
         _initEvent:function(){
             vc.on('searchOwner','openSearchOwnerModel',function(_param){
-                console.log("打开业主成员界面")
                 $('#searchOwnerModel').modal('show');
                 vc.component._refreshSearchOwnerData();
                 vc.component._loadAllOwnerInfo(1,10);

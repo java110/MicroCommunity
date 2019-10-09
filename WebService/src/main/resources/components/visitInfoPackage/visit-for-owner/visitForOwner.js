@@ -27,7 +27,6 @@
         },
         _initEvent:function(){
             vc.on('visitForOwner','onIndex',function(_index){
-                console.log("侦听到visitForOwner的index为  "+_index);
                 vc.emit('addVisitSpace', 'notify', _index);
                 /*if(_index == 2){
                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewOwnerInfo);
@@ -36,7 +35,6 @@
 
             vc.on('visitForOwner','ownerInfo',function(_info){
                 vc.component.viewOwnerInfo=_info;
-                console.log(_info);
                 vc.emit('addVisitSpace','ownerId',vc.component.viewOwnerInfo.ownerId);
             });
 
