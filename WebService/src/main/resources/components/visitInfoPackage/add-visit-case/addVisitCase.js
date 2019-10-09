@@ -10,8 +10,11 @@
             }
         },
         watch:{
-            addVisitCase(val){
-                vc.emit('addVisitSpace', 'visitCase', vc.component.addVisitCase.visitCase);
+            addVisitCase:{
+                deep: true,
+                handler:function(){
+                     vc.emit('addVisitSpace', 'visitCase', vc.component.addVisitCase.visitCase);
+                }
             }
         },
         _initMethod:function(){

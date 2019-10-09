@@ -7,9 +7,9 @@
     <!-- 保存访客信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessVisitInfo" parameterType="Map">
         insert into business_visit_info(
-        departure_time,v_name,visit_gender,owner_id,user_id,v_id,phone_number,operate,visit_case,community_id,b_id
+        departure_time,v_name,visit_gender,owner_id,user_id,v_id,phone_number,operate,visit_case,community_id,b_id,visit_time
         ) values (
-        #{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId}
+        #{departureTime},#{vName},#{visitGender},#{ownerId},#{userId},#{vId},#{phoneNumber},#{operate},#{visitCase},#{communityId},#{bId},#{visitTime}
         )
     </insert>
 
