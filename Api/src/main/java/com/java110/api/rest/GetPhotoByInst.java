@@ -26,9 +26,6 @@ public class GetPhotoByInst {
 
     public static void main(String[] args) {
         //读取文件
-
-
-
         Reader reader = null;
         String sb = "";
         try {
@@ -67,7 +64,7 @@ public class GetPhotoByInst {
         String instId = tmpPhotoPaths[0];
         String photoUrl = tmpPhotoPaths[1];
 
-        downloadFromUrl(photoUrl,DEFAULTE_PHOTO_DIR,"qhdx_"+instId+"_47.jpg");
+        downloadFromUrl(photoUrl,DEFAULTE_PHOTO_DIR,"qhdx_"+instId+"_17.jpg");
     }
 
 

@@ -35,8 +35,12 @@ public class Base64Convert {
         return strBase64;
     }
 
+
+   
+
     /**
      * 将base64 转为字节
+     *
      * @param strBase64
      * @return
      * @throws IOException

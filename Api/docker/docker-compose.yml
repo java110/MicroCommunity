@@ -12,7 +12,7 @@ services:
        - ../target/Api.jar:/root/target/Api.jar
        networks:
        - java110-net
-       mem_limit: 1024m
+#       mem_limit: 1024m
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
 #       - "dev.db.java110.com:192.168.1.18"
