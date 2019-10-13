@@ -2,6 +2,7 @@ package com.java110.web.smo.org.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
@@ -43,8 +44,9 @@ public class AddOrgSMOImpl extends AbstractComponentSMO implements IAddOrgSMO {
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
+        paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/org.saveOrg",
                 HttpMethod.POST);

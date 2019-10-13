@@ -34,7 +34,7 @@ public class ListParentOrgsSMOImpl extends AbstractComponentSMO implements IList
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
 
-        super.validatePageInfo(pd);
+        //super.validatePageInfo(pd);
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_ORG);
     }

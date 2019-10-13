@@ -8,6 +8,7 @@ import com.java110.core.smo.org.IOrgInnerServiceSMO;
 import com.java110.dto.org.OrgDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeOrgConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.org.ApiOrgDataVo;
 import com.java110.vo.api.org.ApiOrgVo;
@@ -57,6 +58,7 @@ public class ListOrgsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
     }
 
     @Override

@@ -28,6 +28,7 @@ public class DeleteOrgListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "orgId", "组织ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
 
     }
 
