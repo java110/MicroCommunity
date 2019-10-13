@@ -13,9 +13,23 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-4">
+                            <div class="form-group ">
+                                    <select class="custom-select" v-model="orgManageInfo.conditions.orgLevel">
+                                        <option selected disabled value="">必填，请选择组织级别</option>
+                                        <option value="1">公司级</option>
+                                        <option value="2">分公司级</option>
+                                        <option value="3">部门级</option>
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" >
                             <div class="form-group">
-                                <input type="text" placeholder="请输入组织ID" v-model="orgManageInfo.conditions.orgId"
-                                       class=" form-control">
+                                <select class="custom-select" v-model="orgManageInfo.conditions.parentOrgId">
+                                    <option selected disabled value="">必填，请选择上级组织</option>
+                                    <option value="1">核桃公司</option>
+                                    <option value="2">核桃青海公司</option>
+                                    <option value="3">核桃甘肃公司</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -24,12 +38,7 @@
                                        class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <input type="text" placeholder="请输入组织级别" v-model="orgManageInfo.conditions.orgLevel"
-                                       class=" form-control">
-                            </div>
-                        </div>
+
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOrgMethod()">
                                 <i class="glyphicon glyphicon-search"></i> 查询
@@ -39,7 +48,7 @@
                     <div class="row">
                         <div class="col-sm-4" v-if="orgManageInfo.moreCondition == true">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入上级组织" v-model="orgManageInfo.conditions.parentOrgId"
+                                <input type="text" placeholder="请输入组织ID" v-model="orgManageInfo.conditions.orgId"
                                        class=" form-control">
                             </div>
                         </div>
