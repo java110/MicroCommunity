@@ -71,8 +71,11 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
 
         //校验是否传了 分页信息
 
-        List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
+        List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getParentOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
 
+        if(orgs == null){
+            orgs = new ArrayList<>();
+        }
 
         return orgs;
     }
