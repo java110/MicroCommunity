@@ -91,6 +91,14 @@ public class OrgServiceDaoImpl extends BaseServiceDao implements IOrgServiceDao 
         return businessOrgInfos;
     }
 
+    @Override
+    public List<Map> getParentOrgInfo(Map info) throws DAOException {
+        logger.debug("查询上级组织信息 getParentOrgInfo 入参 info : {}",info);
+
+        List<Map> businessOrgInfos = sqlSessionTemplate.selectList("orgServiceDaoImpl.getParentOrgInfo",info);
+
+        return businessOrgInfos;    }
+
 
     /**
      * 修改组织信息

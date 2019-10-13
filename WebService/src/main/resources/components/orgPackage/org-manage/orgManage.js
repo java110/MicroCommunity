@@ -12,15 +12,23 @@
                 records:1,
                 moreCondition:false,
                 orgName:'',
+                parentOrg:[],
                 conditions:{
                     orgId:'',
                     orgName:'',
                     orgLevel:'',
                     parentOrgId:'',
-
                 }
             }
         },
+        watch:{
+            "orgManageInfo.conditions.orgLevel":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                   vc.component._parentOrgInfo();
+                },
+                deep:true
+            }
+         },
         _initMethod:function(){
             vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
         },
@@ -79,6 +87,28 @@
                 }else{
                     vc.component.orgManageInfo.moreCondition = true;
                 }
+            },
+
+            _parentOrgInfo:function(){
+
+                var param = {
+                    params:{
+                        orgLevel:vc.component.orgManageInfo.conditions.orgLevel
+                    }
+                 };
+
+               //发送get请求
+               vc.http.get('orgManage',
+                            'getParentOrg',
+                             param,
+                             function(json,res){
+                                var _orgManageInfo=JSON.parse(json);
+                                vc.component.orgManageInfo.parentOrg = _orgManageInfo.orgs;
+
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
             }
 
              

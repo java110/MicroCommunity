@@ -11,6 +11,8 @@ import com.java110.user.dao.IOrgServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -54,6 +56,25 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
     @Override
     public int queryOrgsCount(@RequestBody OrgDto orgDto) {
         return orgServiceDaoImpl.queryOrgsCount(BeanConvertUtil.beanCovertMap(orgDto));
+    }
+
+
+    /**
+     * <p>查询上级组织信息</p>
+     *
+     *
+     * @param orgDto 数据对象分享
+     * @return OrgDto 对象数据
+     */
+    @Override
+    public List<OrgDto> queryParentOrgs(@RequestBody OrgDto orgDto) {
+
+        //校验是否传了 分页信息
+
+        List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
+
+
+        return orgs;
     }
 
     public IOrgServiceDao getOrgServiceDaoImpl() {

@@ -27,5 +27,10 @@ public class ServiceCodeOrgConstant {
      */
     public static final String LIST_ORGS = "org.listOrgs";
 
+    /**
+     * 查询 上级组织管理
+     */
+    public static final String LIST_PARENT_ORGS = "org.listParentOrgs";
+
 
 }

@@ -39,4 +39,16 @@ public interface IOrgInnerServiceSMO {
      */
     @RequestMapping(value = "/queryOrgsCount", method = RequestMethod.POST)
     int queryOrgsCount(@RequestBody OrgDto orgDto);
+
+
+
+    /**
+     * <p>查询上级组织信息</p>
+     *
+     *
+     * @param orgDto 数据对象分享
+     * @return OrgDto 对象数据
+     */
+    @RequestMapping(value = "/queryParentOrgs", method = RequestMethod.POST)
+    List<OrgDto> queryParentOrgs(@RequestBody OrgDto orgDto);
 }

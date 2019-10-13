@@ -60,6 +60,15 @@ public interface IOrgServiceDao {
      */
     List<Map> getOrgInfo(Map info) throws DAOException;
 
+    /**
+     * 查询上级组织信息（instance过程）
+     * 根据bId 查询组织信息
+     * @param info bId 信息
+     * @return 组织信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getParentOrgInfo(Map info) throws DAOException;
+
 
 
     /**
