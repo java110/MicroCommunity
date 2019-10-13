@@ -184,14 +184,17 @@
     </select>
     <!-- 查询上级组织信息 -->
     <select id="getParentOrgInfo" parameterType="Map" resultType="Map">
-        SELECT t.org_name,t.org_name orgName,t.parent_org_id,t.parent_org_id
-        parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId
-        FROM u_org o,u_org t
-        WHERE o.`org_level` = #{orgLevel}
-        AND o.`store_id` = t.`store_id`
-        AND o.`parent_org_id` = t.`org_id`
-        AND o.`store_id` = #{storeId}
+        <![CDATA[
+            SELECT t.org_name,t.org_name orgName,t.parent_org_id,t.parent_org_id
+                parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.status_cd,t.status_cd
+                statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId
+            FROM u_org o,u_org t
+            WHERE o.`org_level` = #{orgLevel}
+                AND o.`store_id` = t.`store_id`
+                AND o.`parent_org_id` = t.`org_id`
+                AND o.`org_id` <> o.`parent_org_id`
+                AND o.`store_id` = #{storeId}
+        ]]>
     </select>
 
 </mapper>
