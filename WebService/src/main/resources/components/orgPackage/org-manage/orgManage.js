@@ -12,8 +12,11 @@
                 records:1,
                 moreCondition:false,
                 orgName:'',
-                parentOrg:[],
+                headOrg:[],
+                branchOrg:[],
                 conditions:{
+                    headOrgId:'',
+                    branchOrgId:'',
                     orgId:'',
                     orgName:'',
                     orgLevel:'',
@@ -22,15 +25,16 @@
             }
         },
         watch:{
-            "orgManageInfo.conditions.orgLevel":{//深度监听，可监听到对象、数组的变化
+            "orgManageInfo.conditions.headOrgId":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
-                   vc.component._parentOrgInfo();
+                   vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,2,val);
                 },
                 deep:true
             }
          },
         _initMethod:function(){
             vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,1,'');
         },
         _initEvent:function(){
             
@@ -89,22 +93,28 @@
                 }
             },
 
-            _parentOrgInfo:function(){
+            _getOrgsByOrgLevel:function(_page, _rows,_orgLevel,_parentOrgId){
 
                 var param = {
                     params:{
-                        orgLevel:vc.component.orgManageInfo.conditions.orgLevel
+                        page: _page,
+                        row: _rows,
+                        orgLevel:_orgLevel,
+                        parentOrgId: _parentOrgId
                     }
                  };
 
                //发送get请求
                vc.http.get('orgManage',
-                            'getParentOrg',
+                            'list',
                              param,
                              function(json,res){
                                 var _orgManageInfo=JSON.parse(json);
-                                vc.component.orgManageInfo.parentOrg = _orgManageInfo.orgs;
-
+                                if(_orgLevel == 1){
+                                     vc.component.orgManageInfo.headOrg = _orgManageInfo.orgs;
+                                }else{
+                                     vc.component.orgManageInfo.branchOrg = _orgManageInfo.orgs;
+                                }
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

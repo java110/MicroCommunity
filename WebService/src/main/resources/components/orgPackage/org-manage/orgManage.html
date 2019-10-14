@@ -14,19 +14,17 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group ">
-                                    <select class="custom-select" v-model="orgManageInfo.conditions.orgLevel">
-                                        <option selected disabled value="">必填，请选择组织级别</option>
-                                        <option value="1">公司级</option>
-                                        <option value="2">分公司级</option>
-                                        <option value="3">部门级</option>
+                                    <select class="custom-select" v-model="orgManageInfo.conditions.headOrgId">
+                                        <option selected  value="">必填，请选择总公司</option>
+                                        <option v-for="headOrg in orgManageInfo.headOrg" :value="headOrg.orgId">{{headOrg.name}}</option>
                                     </select>
                             </div>
                         </div>
                         <div class="col-sm-4" >
                             <div class="form-group">
-                                <select class="custom-select" v-model="orgManageInfo.conditions.parentOrgId">
-                                    <option selected disabled value="">必填，请选择上级组织</option>
-                                    <option v-for="parentOrg in orgManageInfo.parentOrg" :value="parentOrg.orgId">{{parentOrg.parentOrgName}}</option>
+                                <select class="custom-select" v-model="orgManageInfo.conditions.branchOrgId">
+                                    <option selected  value="">必填，请选择分公司</option>
+                                    <option v-for="branchOrg in orgManageInfo.branchOrg" :value="branchOrg.orgId">{{branchOrg.name}}</option>
                                 </select>
                             </div>
                         </div>
