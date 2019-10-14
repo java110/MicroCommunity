@@ -42,9 +42,9 @@
                 handler(val, oldVal){
                     if(val == ''){
                         vc.component.orgManageInfo.conditions.parentOrgId = vc.component.orgManageInfo.conditions.headOrgId;
-                        return ;
+                    }else{
+                        vc.component.orgManageInfo.conditions.parentOrgId = val;
                     }
-                   vc.component.orgManageInfo.conditions.parentOrgId = val;
                    vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 },
                 deep:true

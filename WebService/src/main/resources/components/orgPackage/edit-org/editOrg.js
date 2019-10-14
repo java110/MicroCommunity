@@ -21,7 +21,7 @@
             }
          },
          _initMethod:function(){
-
+            vc.component._editOrgListParentOrgInfo();
          },
          _initEvent:function(){
              vc.on('editOrg','openEditOrgModal',function(_params){
