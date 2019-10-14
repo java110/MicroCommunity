@@ -8,9 +8,18 @@
                 orgLevel:'',
                 parentOrgId:'',
                 description:'',
+                parentOrg:[]
 
             }
         },
+        watch:{
+            "editOrgInfo.orgLevel":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                   vc.component._editOrgListParentOrgInfo();
+                },
+                deep:true
+            }
+         },
          _initMethod:function(){
 
          },
@@ -46,9 +55,9 @@
                             errInfo:"组织级别不能为空"
                         },
                         {
-                            limit:"maxin",
-                            param:"2,50",
-                            errInfo:"报修人名称必须在2至50字符之间"
+                            limit:"num",
+                            param:"",
+                            errInfo:"组织级别错误"
                         },
                     ],
                     'editOrgInfo.parentOrgId':[
@@ -64,11 +73,7 @@
                         },
                     ],
                         'editOrgInfo.description':[
-                        {
-                            limit:"required",
-                            param:"",
-                            errInfo:"描述不能为空"
-                        },
+
                      {
                             limit:"maxLength",
                             param:"200",
@@ -120,8 +125,37 @@
                     orgLevel:'',
                     parentOrgId:'',
                     description:'',
-
+                    parentOrg:[]
                 }
+            },
+            _editOrgListParentOrgInfo:function(){
+
+
+                var _tmpOrgLevel = vc.component.editOrgInfo.orgLevel;
+
+                if(_tmpOrgLevel > 1){
+                    _tmpOrgLevel = _tmpOrgLevel-1;
+                }
+
+                var param = {
+                    params:{
+                        orgLevel:_tmpOrgLevel,
+                        page: 1,
+                        row: 30,
+                    }
+                 };
+
+               //发送get请求
+               vc.http.get('editOrg',
+                            'list',
+                             param,
+                             function(json,res){
+                                var _orgManageInfo=JSON.parse(json);
+                                vc.component.editOrgInfo.parentOrg = _orgManageInfo.orgs;
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
             }
         }
     });

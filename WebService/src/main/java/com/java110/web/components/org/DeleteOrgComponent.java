@@ -2,6 +2,7 @@ package com.java110.web.components.org;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.org.IDeleteOrgSMO;
+import com.java110.web.smo.org.IListOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.ResponseEntity;
         import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Component("deleteOrg")
 public class DeleteOrgComponent {
+
+
 
 @Autowired
 private IDeleteOrgSMO deleteOrgSMOImpl;

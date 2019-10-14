@@ -2,6 +2,7 @@ package com.java110.web.components.org;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.org.IAddOrgSMO;
+import com.java110.web.smo.org.IListOrgsSMO;
 import com.java110.web.smo.org.IListParentOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class AddOrgComponent {
     private IAddOrgSMO addOrgSMOImpl;
 
     @Autowired
+    private IListOrgsSMO listOrgsSMOImpl;
+
+    @Autowired
     private IListParentOrgsSMO listParentOrgsSMOImpl;
 
     /**
@@ -27,6 +31,15 @@ public class AddOrgComponent {
     public ResponseEntity<String> save(IPageData pd){
         return addOrgSMOImpl.saveOrg(pd);
     }
+    /**
+     * 查询组织管理列表
+     * @param pd 页面数据封装
+     * @return 返回 ResponseEntity 对象
+     */
+    public ResponseEntity<String> list(IPageData pd){
+        return listOrgsSMOImpl.listOrgs(pd);
+    }
+
 
 
     public ResponseEntity<String> getParentOrg(IPageData pd){
@@ -47,5 +60,13 @@ public class AddOrgComponent {
 
     public void setListParentOrgsSMOImpl(IListParentOrgsSMO listParentOrgsSMOImpl) {
         this.listParentOrgsSMOImpl = listParentOrgsSMOImpl;
+    }
+
+    public IListOrgsSMO getListOrgsSMOImpl() {
+        return listOrgsSMOImpl;
+    }
+
+    public void setListOrgsSMOImpl(IListOrgsSMO listOrgsSMOImpl) {
+        this.listOrgsSMOImpl = listOrgsSMOImpl;
     }
 }

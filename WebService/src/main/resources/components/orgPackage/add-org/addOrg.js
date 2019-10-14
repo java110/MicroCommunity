@@ -56,9 +56,9 @@
                             errInfo:"组织级别不能为空"
                         },
  {
-                            limit:"maxin",
-                            param:"2,50",
-                            errInfo:"报修人名称必须在2至50字符之间"
+                            limit:"num",
+                            param:"",
+                            errInfo:"组织级别错误"
                         },
                     ],
 'addOrgInfo.parentOrgId':[
@@ -74,11 +74,7 @@
                         },
                     ],
 'addOrgInfo.description':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"描述不能为空"
-                        },
+
  {
                             limit:"maxLength",
                             param:"200",
@@ -135,10 +131,11 @@
             },
             clearAddOrgInfo:function(){
                 vc.component.addOrgInfo = {
-                                            orgName:'',
-                                            orgLevel:'',
-                                            parentOrgId:'',
-                                            description:'',
+                    orgName:'',
+                    orgLevel:'',
+                    parentOrgId:'',
+                    description:'',
+                    parentOrg:[]
             };
             },
             _addOrgListParentOrgInfo:function(){
@@ -159,7 +156,7 @@
                  };
 
                //发送get请求
-               vc.http.get('orgManage',
+               vc.http.get('addOrg',
                             'list',
                              param,
                              function(json,res){
