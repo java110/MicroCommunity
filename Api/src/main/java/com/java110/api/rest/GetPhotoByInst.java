@@ -65,6 +65,7 @@ public class GetPhotoByInst {
         String photoUrl = tmpPhotoPaths[1];
 
         downloadFromUrl(photoUrl,DEFAULTE_PHOTO_DIR,"qhdx_"+instId+"_17.jpg");
+        //downloadFromUrl(photoUrl,DEFAULTE_PHOTO_DIR,instId+".jpg");
     }
 
 

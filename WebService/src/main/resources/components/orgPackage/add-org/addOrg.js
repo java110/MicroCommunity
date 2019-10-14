@@ -12,9 +12,18 @@
                 orgLevel:'',
                 parentOrgId:'',
                 description:'',
+                parentOrg:[]
 
             }
         },
+        watch:{
+            "addOrgInfo.orgLevel":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                   vc.component._addOrgListParentOrgInfo();
+                },
+                deep:true
+            }
+         },
          _initMethod:function(){
 
          },
@@ -127,11 +136,31 @@
             clearAddOrgInfo:function(){
                 vc.component.addOrgInfo = {
                                             orgName:'',
-orgLevel:'',
-parentOrgId:'',
-description:'',
+                                            orgLevel:'',
+                                            parentOrgId:'',
+                                            description:'',
+            };
+            },
+            _parentOrgInfo:function(){
 
-                                        };
+                var param = {
+                    params:{
+                        orgLevel:vc.component.addOrgInfo.orgLevel
+                    }
+                 };
+
+               //发送get请求
+               vc.http.get('addOrg',
+                            'getParentOrg',
+                             param,
+                             function(json,res){
+                                var _orgManageInfo=JSON.parse(json);
+                                vc.component.addOrgInfo.parentOrg = _orgManageInfo.orgs;
+
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
             }
         }
     });

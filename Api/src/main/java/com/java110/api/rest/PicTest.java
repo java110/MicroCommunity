@@ -19,7 +19,7 @@ import javax.imageio.stream.FileImageOutputStream;
 public class PicTest {
     public static void main(String[] args) throws IOException {
         long timeStart = System.currentTimeMillis();
-        String imgLocalUrl = "E:\\tp\\abc.jpg";
+        String imgLocalUrl = "D:\\白静雪.jpg";
 
         byte[] imgBytes = getByteByPic(imgLocalUrl);
         byte[] resultImg = compressUnderSize(imgBytes,800 * 1024);
@@ -69,9 +69,7 @@ public class PicTest {
     /**
      * 按照 宽高 比例压缩
      *
-     * @param imgIs 待压缩图片输入流
      * @param scale 压缩刻度
-     * @param out 输出
      * @return 压缩后图片数据
      * @throws IOException 压缩图片过程中出错
      */
