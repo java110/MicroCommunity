@@ -72,6 +72,7 @@
             methods:{
                 loadData:function(_page,_rows){
                        vc.component.staffInfo.conditions.page = _page;
+                       vc.component.staffInfo.conditions.rows = _rows;
                        vc.component.staffInfo.conditions.row = _rows;
                        var param = {
                            params:vc.component.staffInfo.conditions
