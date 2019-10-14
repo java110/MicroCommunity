@@ -1,4 +1,6 @@
 (function(vc){
+    var DEFAULT_PAGE = 1;
+    var DEFAULT_ROWS = 10;
    vc.extends({
             data:{
                 staffInfo:{
