@@ -141,7 +141,7 @@
                                             description:'',
             };
             },
-            _parentOrgInfo:function(){
+            _addOrgListParentOrgInfo:function(){
 
                 var param = {
                     params:{
