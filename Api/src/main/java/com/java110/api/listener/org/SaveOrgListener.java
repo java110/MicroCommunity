@@ -31,7 +31,7 @@ public class SaveOrgListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "orgName", "必填，请填写组织名称");
         Assert.hasKeyAndValue(reqJson, "orgLevel", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(reqJson, "parentOrgId", "必填，请选择上级ID");
-        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
+        //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
 
     }

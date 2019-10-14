@@ -28,6 +28,19 @@
             "orgManageInfo.conditions.headOrgId":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
                    vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,2,val);
+
+                   vc.component.orgManageInfo.conditions.parentOrgId = val;
+
+                   vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
+
+                },
+                deep:true
+            },
+            "orgManageInfo.conditions.branchOrgId":{//深度监听，可监听到对象、数组的变化
+                handler(val, oldVal){
+                   vc.component.orgManageInfo.conditions.parentOrgId = val;
+
+                   vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 },
                 deep:true
             }
