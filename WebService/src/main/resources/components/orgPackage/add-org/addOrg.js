@@ -152,7 +152,9 @@
 
                 var param = {
                     params:{
-                        orgLevel:_tmpOrgLevel
+                        orgLevel:_tmpOrgLevel,
+                        page: 1,
+                        row: 30,
                     }
                  };
 
