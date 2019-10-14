@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <select class="custom-select" v-model="staffInfo.conditions.branchOrgId">
+                                <select class="custom-select" v-model="staffInfo.conditions.departmentOrgId">
                                     <option selected value="">必填，请选择部门</option>
                                     <option v-for="departmentOrg in staffInfo.departmentOrgs" :value="departmentOrg.orgId">
                                         {{departmentOrg.orgName}}
