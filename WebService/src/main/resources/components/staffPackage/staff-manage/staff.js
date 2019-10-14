@@ -103,36 +103,37 @@
                 },
                 openDeleteStaff:function(_staffInfo){
                      vc.component.$emit('delete_staff_event',_staffInfo);
+                },
+                 _getOrgsByOrgLevelStaff:function(_page, _rows,_orgLevel,_parentOrgId){
+
+                    var param = {
+                        params:{
+                            page: _page,
+                            row: _rows,
+                            orgLevel:_orgLevel,
+                            parentOrgId: _parentOrgId
+                        }
+                     };
+
+                   //发送get请求
+                   vc.http.get('staff',
+                                'list',
+                                 param,
+                                 function(json,res){
+                                    var _orgInfo=JSON.parse(json);
+                                    if(_orgLevel == 2){
+                                         vc.component.staffInfo.branchOrgs = _orgInfo.orgs;
+                                    }else{
+                                         vc.component.staffInfo.departmentOrgs = _orgInfo.orgs;
+                                    }
+                                 },function(errInfo,error){
+                                    console.log('请求失败处理');
+                                 }
+                               );
                 }
 
             },
-            _getOrgsByOrgLevelStaff:function(_page, _rows,_orgLevel,_parentOrgId){
 
-                var param = {
-                    params:{
-                        page: _page,
-                        row: _rows,
-                        orgLevel:_orgLevel,
-                        parentOrgId: _parentOrgId
-                    }
-                 };
-
-               //发送get请求
-               vc.http.get('staff',
-                            'list',
-                             param,
-                             function(json,res){
-                                var _orgInfo=JSON.parse(json);
-                                if(_orgLevel == 2){
-                                     vc.component.staffInfo.branchOrgs = _orgInfo.orgs;
-                                }else{
-                                     vc.component.staffInfo.departmentOrgs = _orgInfo.orgs;
-                                }
-                             },function(errInfo,error){
-                                console.log('请求失败处理');
-                             }
-                           );
-            }
 
 
         });
