@@ -143,20 +143,26 @@
             },
             _addOrgListParentOrgInfo:function(){
 
+
+                var _tmpOrgLevel = vc.component.addOrgInfo.orgLevel;
+
+                if(_tmpOrgLevel > 1){
+                    _tmpOrgLevel = _tmpOrgLevel-1;
+                }
+
                 var param = {
                     params:{
-                        orgLevel:vc.component.addOrgInfo.orgLevel
+                        orgLevel:_tmpOrgLevel
                     }
                  };
 
                //发送get请求
-               vc.http.get('addOrg',
-                            'getParentOrg',
+               vc.http.get('orgManage',
+                            'list',
                              param,
                              function(json,res){
                                 var _orgManageInfo=JSON.parse(json);
                                 vc.component.addOrgInfo.parentOrg = _orgManageInfo.orgs;
-
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }

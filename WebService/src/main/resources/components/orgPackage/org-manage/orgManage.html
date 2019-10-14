@@ -16,7 +16,7 @@
                             <div class="form-group ">
                                     <select class="custom-select" v-model="orgManageInfo.conditions.headOrgId">
                                         <option selected  value="">必填，请选择总公司</option>
-                                        <option v-for="headOrg in orgManageInfo.headOrg" :value="headOrg.orgId">{{headOrg.name}}</option>
+                                        <option v-for="headOrg in orgManageInfo.headOrg" :value="headOrg.orgId">{{headOrg.orgName}}</option>
                                     </select>
                             </div>
                         </div>
@@ -24,7 +24,7 @@
                             <div class="form-group">
                                 <select class="custom-select" v-model="orgManageInfo.conditions.branchOrgId">
                                     <option selected  value="">必填，请选择分公司</option>
-                                    <option v-for="branchOrg in orgManageInfo.branchOrg" :value="branchOrg.orgId">{{branchOrg.name}}</option>
+                                    <option v-for="branchOrg in orgManageInfo.branchOrg" :value="branchOrg.orgId">{{branchOrg.orgName}}</option>
                                 </select>
                             </div>
                         </div>
