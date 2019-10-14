@@ -31,6 +31,8 @@
 
                    vc.component.orgManageInfo.conditions.parentOrgId = val;
 
+                   vc.component.orgManageInfo.branchOrg = [];
+
                    vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
 
                 },
@@ -38,8 +40,11 @@
             },
             "orgManageInfo.conditions.branchOrgId":{//深度监听，可监听到对象、数组的变化
                 handler(val, oldVal){
+                    if(val == ''){
+                        vc.component.orgManageInfo.conditions.parentOrgId = headOrgId;
+                        return ;
+                    }
                    vc.component.orgManageInfo.conditions.parentOrgId = val;
-
                    vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 },
                 deep:true

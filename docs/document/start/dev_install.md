@@ -91,19 +91,20 @@ v0.01|初稿|2019-06-17|wuxw
 如果本地没有安装kafka zookeeper Redis mysql 等开源中间件，也可以用演示环境的 kafka zookeeper mysql 和Redis，这样只需要在hosts 中加入
 
 ```
-api.java110.com 127.0.0.1
-dev.java110.com 127.0.0.1
+127.0.0.1 api.java110.com 
+127.0.0.1 dev.java110.com 
 
 ```
 
 如果你本地安装了 kafka zookeeper Redis mysql 开源中间件 则将对应域名改为对应IP
 
 ```
-dev.db.java110.com 这里写mysql的IP
-dev.zk.java110.com 这里写zookeeper的IP
-dev.kafka.java110.com 这里写kafka的IP
-api.java110.com 127.0.0.1
-dev.java110.com 127.0.0.1
+这里写mysql的IP dev.db.java110.com
+这里写zookeeper的IP dev.zk.java110.com
+这里写kafka的IP dev.kafka.java110.com 
+这里写redis的IP dev.redis.java110.com 
+127.0.0.1 api.java110.com 
+127.0.0.1 dev.java110.com 
 
 ```
 
