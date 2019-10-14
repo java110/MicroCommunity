@@ -116,15 +116,15 @@
                  };
 
                //发送get请求
-               vc.http.get('orgManage',
+               vc.http.get('staff',
                             'list',
                              param,
                              function(json,res){
-                                var _orgManageInfo=JSON.parse(json);
-                                if(_orgLevel == 1){
-                                     vc.component.orgManageInfo.headOrg = _orgManageInfo.orgs;
+                                var _orgInfo=JSON.parse(json);
+                                if(_orgLevel == 2){
+                                     vc.component.staffInfo.branchOrgs = _orgInfo.orgs;
                                 }else{
-                                     vc.component.orgManageInfo.branchOrg = _orgManageInfo.orgs;
+                                     vc.component.staffInfo.departmentOrgs = _orgInfo.orgs;
                                 }
                              },function(errInfo,error){
                                 console.log('请求失败处理');

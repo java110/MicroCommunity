@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IStaffServiceSMO;
+import com.java110.web.smo.org.IListOrgsSMO;
+import com.java110.web.smo.org.IListParentOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,19 @@ public class StaffComponent {
 
     @Autowired
     IStaffServiceSMO staffServiceSMOImpl;
+
+    @Autowired
+    private IListOrgsSMO listOrgsSMOImpl;
+
+
+    /**
+     * 查询组织管理列表
+     * @param pd 页面数据封装
+     * @return 返回 ResponseEntity 对象
+     */
+    public ResponseEntity<String> list(IPageData pd){
+        return listOrgsSMOImpl.listOrgs(pd);
+    }
 
     public ResponseEntity<String> loadData(IPageData pd){
         ResponseEntity<String> responseEntity = null;
@@ -38,5 +53,13 @@ public class StaffComponent {
 
     public void setStaffServiceSMOImpl(IStaffServiceSMO staffServiceSMOImpl) {
         this.staffServiceSMOImpl = staffServiceSMOImpl;
+    }
+
+    public IListOrgsSMO getListOrgsSMOImpl() {
+        return listOrgsSMOImpl;
+    }
+
+    public void setListOrgsSMOImpl(IListOrgsSMO listOrgsSMOImpl) {
+        this.listOrgsSMOImpl = listOrgsSMOImpl;
     }
 }
