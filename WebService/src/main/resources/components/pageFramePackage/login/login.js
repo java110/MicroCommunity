@@ -2,8 +2,8 @@
       vc.extends({
         data:{
             loginInfo:{
-                username:'',
-                passwd:'',
+                username:'wuxw',
+                passwd:'admin',
                 errorInfo:''
             }
         },
