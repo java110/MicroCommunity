@@ -124,7 +124,7 @@
                 if(vc.component.addStaffStepInfo.index == 0){
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.branchOrgInfo);
                 }else if(vc.component.addStaffStepInfo.index == 1){
-                    vc.component.addStaffStepInfo.departmemtOrgInfo.parentOrgId = c.component.addStaffStepInfo.branchOrgInfo.orgId;
+                    vc.component.addStaffStepInfo.departmemtOrgInfo.parentOrgId = vc.component.addStaffStepInfo.branchOrgInfo.orgId;
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.departmemtOrgInfo);
                 }
             }
