@@ -95,10 +95,10 @@
 
     <!-- 查询停车位信息 add by wuxw 2018-07-03 -->
     <select id="getParkingSpaceInfo" parameterType="Map" resultType="Map">
-        select t.area,t.type_cd,t.type_cd typeCd,t.num,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd
-        statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
-        from p_parking_space t
-        where 1 =1
+        select t.area,t1.name type_cd,t1.name typeCd,t.num,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd
+        statusCd,t2.name state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        from p_parking_space t,t_dict t1,t_dict t2 where t.type_cd=t1.status_cd and t1.table_name='p_parking_space'
+        and t.state = t2.status_cd and t2.table_name='p_parking_space'
         <if test="area !=null and area != ''">
             and t.area= #{area}
         </if>
