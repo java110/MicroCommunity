@@ -73,7 +73,7 @@
             },
             _finishStep:function(){
 
-                vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1];
+                vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1].orgId;
                vc.http.post(
                    'addStaffStepBinding',
                    'binding',
