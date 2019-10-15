@@ -50,7 +50,9 @@
                 vc.component.addStaffStepInfo.index = vc.component.addStaffStepInfo.$step.getIndex();
 
                 vc.emit('viewOrgInfo', 'onIndex', vc.component.addStaffStepInfo.index);
-                vc.emit('addStaff', 'onIndex', vc.component.addStaffStepInfo.index);
+                vc.emit('addStaffView', 'onIndex', vc.component.addStaffStepInfo.index);
+
+                vc.component._notifyViewOrgInfoComponentData();
 
             },
             _nextStep:function(){
@@ -63,10 +65,14 @@
                 vc.component.addStaffStepInfo.index = vc.component.addStaffStepInfo.$step.getIndex();
 
                  vc.emit('viewOrgInfo', 'onIndex', vc.component.addStaffStepInfo.index);
-                vc.emit('addStaff', 'onIndex', vc.component.addStaffStepInfo.index);
+                vc.emit('addStaffView', 'onIndex', vc.component.addStaffStepInfo.index);
+                vc.component._notifyViewOrgInfoComponentData();
+
 
             },
             _finishStep:function(){
+
+                vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1];
                vc.http.post(
                    'addStaffStepBinding',
                    'binding',
@@ -89,6 +95,40 @@
 
                        vc.message(errInfo);
                     });
+            },
+            _notifyViewOrgInfoComponentData:function(){
+                var _tmpCurrentIndex = vc.component.addStaffStepInfo.index;
+
+                if(_tmpCurrentIndex == 0){
+
+                    var _tmpBranchOrgInfo = {
+                             componentName:'分公司信息',
+                             buttonName:'选择分公司',
+                             orgName:'',
+                             orgLevel:'',
+                             parentOrgId:'',
+                             description:'',
+                    };
+
+                    if(vc.component.addStaffStepInfo.infos.length >0){
+                        _tmpBranchOrgInfo = vc.component.addStaffStepInfo.infos[0];
+                    }
+                    vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
+                }else if(_tmpCurrentIndex == 1){
+                    var _tmpBranchOrgInfo = {
+                             componentName:'部门信息',
+                             buttonName:'选择部门',
+                             orgName:'',
+                             orgLevel:'',
+                             parentOrgId:'',
+                             description:'',
+                    };
+
+                    if(vc.component.addStaffStepInfo.infos.length >1){
+                        _tmpBranchOrgInfo = vc.component.addStaffStepInfo.infos[1];
+                    }
+                    vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
+                }
             }
         }
     });
