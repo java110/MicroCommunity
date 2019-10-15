@@ -8,6 +8,22 @@
                 $step:{},
                 index:0,
                 infos:[],
+                branchOrgInfo:{
+                         componentName:'分公司信息',
+                         buttonName:'选择分公司',
+                         orgName:'',
+                         orgLevel:'2',
+                         parentOrgId:'',
+                         description:'',
+                },
+                departmemtOrgInfo:{
+                         componentName:'部门信息',
+                         buttonName:'选择部门',
+                         orgName:'',
+                         orgLevel:'3',
+                         parentOrgId:vc.component.addStaffStepInfo.infos[0].orgId,
+                         description:'',
+                },
                 staffInfo:{
                     orgId:'',
                     username:'',
@@ -23,15 +39,15 @@
         },
         _initEvent:function(){
             vc.on("addStaffStep", "notify", function(_info){
-                vc.component.addStaffStepInfo.infos[vc.component.addStaffStepInfo.index] = _info;
-
-                if(vc.component.addStaffStepInfo.index == 1){
-                   vc.component.addStaffStepInfo.staffInfo.orgId = _info.orgId
-                }
-
-                if(vc.component.addStaffStepInfo.index == 2){
+                if(vc.component.addStaffStepInfo.index == 0){
+                    vc.copyObject(_info,vc.component.addStaffStepInfo.branchOrgInfo);
+                }else if(vc.component.addStaffStepInfo.index == 1){
+                    vc.copyObject(_info,vc.component.addStaffStepInfo.departmemtOrgInfo);
+                    vc.component.addStaffStepInfo.staffInfo.orgId = _info.orgId
+                }else{
                     vc.copyObject(_info, vc.component.addStaffStepInfo.staffInfo);
                 }
+
             });
 
         },
@@ -100,34 +116,9 @@
             _notifyViewOrgInfoComponentData:function(){
 
                 if(vc.component.addStaffStepInfo.index == 0){
-
-                    var _tmpBranchOrgInfo = {
-                             componentName:'分公司信息',
-                             buttonName:'选择分公司',
-                             orgName:'',
-                             orgLevel:'2',
-                             parentOrgId:'',
-                             description:'',
-                    };
-
-                    if(vc.component.addStaffStepInfo.infos.length >0){
-                        _tmpBranchOrgInfo = vc.component.addStaffStepInfo.infos[0];
-                    }
-                    vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
+                    vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.branchOrgInfo);
                 }else if(vc.component.addStaffStepInfo.index == 1){
-                    var _tmpDepartmemtOrgInfo = {
-                             componentName:'部门信息',
-                             buttonName:'选择部门',
-                             orgName:'',
-                             orgLevel:'3',
-                             parentOrgId:vc.component.addStaffStepInfo.infos[0].orgId,
-                             description:'',
-                    };
-
-                    if(vc.component.addStaffStepInfo.infos.length >1){
-                        _tmpDepartmemtOrgInfo = vc.component.addStaffStepInfo.infos[1];
-                    }
-                    vc.emit('viewOrgInfo', '_initInfo',_tmpDepartmemtOrgInfo);
+                    vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.departmemtOrgInfo);
                 }
             }
         }
