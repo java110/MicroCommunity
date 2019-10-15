@@ -115,7 +115,7 @@
                     }
                     vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
                 }else if(vc.component.addStaffStepInfo.index == 1){
-                    var _tmpBranchOrgInfo = {
+                    var _tmpDepartmemtOrgInfo = {
                              componentName:'部门信息',
                              buttonName:'选择部门',
                              orgName:'',
@@ -125,9 +125,9 @@
                     };
 
                     if(vc.component.addStaffStepInfo.infos.length >1){
-                        _tmpBranchOrgInfo = vc.component.addStaffStepInfo.infos[1];
+                        _tmpDepartmemtOrgInfo = vc.component.addStaffStepInfo.infos[1];
                     }
-                    vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
+                    vc.emit('viewOrgInfo', '_initInfo',_tmpDepartmemtOrgInfo);
                 }
             }
         }
