@@ -9,6 +9,7 @@
                 index:0,
                 infos:[],
                 branchOrgInfo:{
+                        orgId:'',
                          componentName:'分公司信息',
                          buttonName:'选择分公司',
                          orgName:'',
@@ -17,11 +18,12 @@
                          description:'',
                 },
                 departmemtOrgInfo:{
+                         orgId:'',
                          componentName:'部门信息',
                          buttonName:'选择部门',
                          orgName:'',
                          orgLevel:'3',
-                         parentOrgId:vc.component.addStaffStepInfo.infos[0].orgId,
+                         parentOrgId:'',
                          description:'',
                 },
                 staffInfo:{
@@ -41,11 +43,15 @@
             vc.on("addStaffStep", "notify", function(_info){
                 if(vc.component.addStaffStepInfo.index == 0){
                     vc.copyObject(_info,vc.component.addStaffStepInfo.branchOrgInfo);
+                    vc.component.addStaffStepInfo.infos[0] = vc.component.addStaffStepInfo.branchOrgInfo;
                 }else if(vc.component.addStaffStepInfo.index == 1){
                     vc.copyObject(_info,vc.component.addStaffStepInfo.departmemtOrgInfo);
                     vc.component.addStaffStepInfo.staffInfo.orgId = _info.orgId
+                    vc.component.addStaffStepInfo.infos[1] = vc.component.addStaffStepInfo.departmemtOrgInfo;
+
                 }else{
                     vc.copyObject(_info, vc.component.addStaffStepInfo.staffInfo);
+                    vc.component.addStaffStepInfo.infos[2] = vc.component.addStaffStepInfo.staffInfo;
                 }
 
             });
@@ -89,7 +95,7 @@
             },
             _finishStep:function(){
 
-                vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1].orgId;
+                //vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1].orgId;
                vc.http.post(
                    'addStaffStepBinding',
                    'binding',
@@ -118,6 +124,7 @@
                 if(vc.component.addStaffStepInfo.index == 0){
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.branchOrgInfo);
                 }else if(vc.component.addStaffStepInfo.index == 1){
+                    vc.component.addStaffStepInfo.departmemtOrgInfo.parentOrgId = c.component.addStaffStepInfo.branchOrgInfo.orgId;
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.addStaffStepInfo.departmemtOrgInfo);
                 }
             }
