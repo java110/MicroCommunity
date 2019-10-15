@@ -1,6 +1,7 @@
 package com.java110.community.smo.impl;
 
 
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IRoomAttrServiceDao;
@@ -226,6 +227,10 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         if (rooms == null || rooms.size() == 0) {
             return rooms;
+        }
+        //处理下户型转义问题
+        for(RoomDto roomds:rooms){
+            roomds.setApartment(MappingCache.getValue(roomds.getApartment().substring(0,2).toString())+MappingCache.getValue(roomds.getApartment().substring(2,5).toString()));
         }
         String[] roomIds = getRoomIds(rooms);
         Map attrParamInfo = new HashMap();
