@@ -17,7 +17,7 @@
         _initEvent:function(){
             vc.on('chooseOrg','openChooseOrgModel',function(_param){
                 $('#chooseOrgModel').modal('show');
-                vc.copyObject(_param,chooseOrgInfo);
+                vc.copyObject(_param,vc.component.chooseOrgInfo);
                 vc.component._refreshChooseOrgInfo();
                 vc.component._loadAllOrgInfo(1,10,'');
             });
