@@ -2,6 +2,7 @@
     入驻小区
 **/
 (function(vc){
+    var  _tmpCurrentIndex = 0;
     vc.extends({
         data:{
             addStaffStepInfo:{
@@ -44,6 +45,7 @@
                     title: ["选择分公司","选择部门","员工信息"]
                 });
                 vc.component.addStaffStepInfo.index = vc.component.addStaffStepInfo.$step.getIndex();
+                vc.component._notifyViewOrgInfoComponentData();
             },
             _prevStep:function(){
                 vc.component.addStaffStepInfo.$step.prevStep();
@@ -97,7 +99,7 @@
                     });
             },
             _notifyViewOrgInfoComponentData:function(){
-                var _tmpCurrentIndex = vc.component.addStaffStepInfo.index;
+                _tmpCurrentIndex = vc.component.addStaffStepInfo.index;
 
                 if(_tmpCurrentIndex == 0){
 
