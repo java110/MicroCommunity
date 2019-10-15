@@ -120,7 +120,7 @@
                              buttonName:'选择部门',
                              orgName:'',
                              orgLevel:'3',
-                             parentOrgId:vc.component.addStaffStepInfo.infos[0].parentOrgId,
+                             parentOrgId:vc.component.addStaffStepInfo.infos[0].orgId,
                              description:'',
                     };
 
