@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>添加员工</h5>
+                <div class="ibox-tools" style="top:10px;">
+
+                </div>
+            </div>
+            <div class="ibox-content">
+
+                <div class="form-group row">
+         <label class="col-sm-2 col-form-label">员工名称</label>
+         <div class="col-sm-10">
+           <input v-model="addStaffViewInfo.username"                   type="text" placeholder="必填，请填写员工名称" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">员工性别</label>
+         <div class="col-sm-10">
+<select class="custom-select" v-model="addStaffViewInfo.sex">
+         <option selected  disabled value="">必填，请选择员工性别</option>
+         <option  value="1">男</option>
+<option  value="0">女</option>
+  </select>         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">员工邮箱</label>
+         <div class="col-sm-10">
+           <input v-model="addStaffViewInfo.email"                   type="text" placeholder="必填，请填写员工邮箱" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">手机</label>
+         <div class="col-sm-10">
+           <input v-model="addStaffViewInfo.tel"                   type="text" placeholder="选填，请填写手机" class="form-control">
+         </div>
+</div>
+<div class="form-group row">
+         <label class="col-sm-2 col-form-label">家庭住址</label>
+         <div class="col-sm-10">
+           <input v-model="addStaffViewInfo.address"                   type="text" placeholder="必填，请填写家庭住址" class="form-control">
+         </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>

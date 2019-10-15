@@ -17,15 +17,40 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 
 public class PicTest {
+
+    static int a = 0;
     public static void main(String[] args) throws IOException {
-        long timeStart = System.currentTimeMillis();
+        /*long timeStart = System.currentTimeMillis();
         String imgLocalUrl = "D:\\白静雪.jpg";
 
         byte[] imgBytes = getByteByPic(imgLocalUrl);
         byte[] resultImg = compressUnderSize(imgBytes,800 * 1024);
         byte2image(resultImg,"E:\\tp\\timga.jpg");
         long timeEnd = System.currentTimeMillis();
-        System.out.println("耗时："+ (timeEnd - timeStart));
+        System.out.println("耗时："+ (timeEnd - timeStart));*/
+        char i= 8;
+        int j = 0;
+        for (;i >0;j-=3){
+            ++j;
+        }
+        System.out.printf("%d\n",j);
+
+       // System.out.printf("a= "+ fib(5));
+    }
+
+    public static int fib(int i) {
+        a++;
+        if(i == 0){
+            return 1;
+        }else{
+            if(i== 1){
+                return 2;
+            }else{
+                return  fib(i-1)+fib(i-2);
+            }
+
+        }
+
     }
 
     public static byte[] getByteByPic(String imageUrl) throws IOException{
