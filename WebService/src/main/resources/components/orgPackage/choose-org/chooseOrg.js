@@ -8,6 +8,8 @@
             chooseOrgInfo:{
                 orgs:[],
                 _currentOrgName:'',
+                orgLevel:'',
+                parentOrgId:'',
             }
         },
         _initMethod:function(){
@@ -15,6 +17,7 @@
         _initEvent:function(){
             vc.on('chooseOrg','openChooseOrgModel',function(_param){
                 $('#chooseOrgModel').modal('show');
+                vc.copyObject(_param,chooseOrgInfo);
                 vc.component._refreshChooseOrgInfo();
                 vc.component._loadAllOrgInfo(1,10,'');
             });
@@ -26,7 +29,9 @@
                         page:_page,
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
-                        name:_name
+                        name:_name,
+                        orgLevel:vc.component.chooseOrgInfo.orgLevel,
+                        parentOrgId:vc.component.chooseOrgInfo.parentOrgId,
                     }
                 };
 

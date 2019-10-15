@@ -46,7 +46,10 @@
         methods:{
 
             _openSelectOrgInfoModel(){
-                vc.emit('chooseOrg','openChooseOrgModel',{});
+                vc.emit('chooseOrg','openChooseOrgModel',{
+                    orgLevel:vc.component.viewOrgInfo.orgLevel,
+                    parentOrgId:vc.component.viewOrgInfo.parentOrgId,
+                });
             },
             _openAddOrgInfoModel(){
                 vc.emit('addOrg','openAddOrgModal',{});

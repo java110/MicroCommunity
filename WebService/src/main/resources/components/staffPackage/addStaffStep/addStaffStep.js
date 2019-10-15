@@ -2,7 +2,6 @@
     入驻小区
 **/
 (function(vc){
-    var  _tmpCurrentIndex = 0;
     vc.extends({
         data:{
             addStaffStepInfo:{
@@ -99,15 +98,14 @@
                     });
             },
             _notifyViewOrgInfoComponentData:function(){
-                _tmpCurrentIndex = vc.component.addStaffStepInfo.index;
 
-                if(_tmpCurrentIndex == 0){
+                if(vc.component.addStaffStepInfo.index == 0){
 
                     var _tmpBranchOrgInfo = {
                              componentName:'分公司信息',
                              buttonName:'选择分公司',
                              orgName:'',
-                             orgLevel:'',
+                             orgLevel:'2',
                              parentOrgId:'',
                              description:'',
                     };
@@ -116,13 +114,13 @@
                         _tmpBranchOrgInfo = vc.component.addStaffStepInfo.infos[0];
                     }
                     vc.emit('viewOrgInfo', '_initInfo',_tmpBranchOrgInfo);
-                }else if(_tmpCurrentIndex == 1){
+                }else if(vc.component.addStaffStepInfo.index == 1){
                     var _tmpBranchOrgInfo = {
                              componentName:'部门信息',
                              buttonName:'选择部门',
                              orgName:'',
-                             orgLevel:'',
-                             parentOrgId:'',
+                             orgLevel:'3',
+                             parentOrgId:vc.component.addStaffStepInfo.infos[0].parentOrgId,
                              description:'',
                     };
 
