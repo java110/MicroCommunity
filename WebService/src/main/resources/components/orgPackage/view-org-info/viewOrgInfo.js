@@ -40,6 +40,7 @@
             vc.on('viewOrgInfo', '_initInfo', function(_info){
                 //vc.component.viewOrgInfo.index = _index;
                 vc.copyObject(_info,vc.component.viewOrgInfo);
+                console.log(_info);
             });
 
         },
