@@ -14,6 +14,7 @@
                 buttonName:'选择组织',
                 index:0,
                 flowComponent:'viewOrgInfo',
+                orgId:'',
                 orgName:'',
                 orgLevel:'',
                 parentOrgId:'',
