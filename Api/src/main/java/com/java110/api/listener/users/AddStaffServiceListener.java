@@ -118,6 +118,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONArray businessOrgStaffRels = new JSONArray();
         JSONObject businessOrgStaffRel = new JSONObject();
+        businessOrgStaffRel.put("relId","-1");
         businessOrgStaffRel.put("storeId",paramInJson.getString("storeId"));
         businessOrgStaffRel.put("staffId",paramInJson.getString("userId"));
         businessOrgStaffRel.put("orgId",paramInJson.getString("orgId"));
