@@ -13,6 +13,7 @@
                 email:'',
                 tel:'',
                 address:'',
+                relCd:'',
             }
         },
         watch:{
@@ -60,6 +61,18 @@
                             param:"",
                             errInfo:"员工性别不能为空"
                         },
+                    ],
+                    'addStaffViewInfo.relCd':[
+                    {
+                        limit:"required",
+                        param:"",
+                        errInfo:"员工岗位不能为空"
+                    },
+                     {
+                        limit:"num",
+                        param:"",
+                        errInfo:"员工岗位错误"
+                    },
                     ],
 'addStaffViewInfo.email':[
 {

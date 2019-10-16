@@ -42,6 +42,8 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         Assert.jsonObjectHaveKey(pd.getReqData(), "sex", "请求报文格式错误或未包含性别信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "address", "请求报文格式错误或未包含地址信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "orgId", "请求报文格式错误或未包含部门信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "relCd", "请求报文格式错误或未包含员工角色");
+
 
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
 

@@ -113,17 +113,17 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
     private JSONObject addStaffOrg(JSONObject paramInJson) {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL);
         business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessStaffOrgs = new JSONArray();
-        JSONObject businessStaffOrg = new JSONObject();
-        businessStaffOrg.put("storeId",paramInJson.getString("storeId"));
-        businessStaffOrg.put("storeUserId","-1");
-        businessStaffOrg.put("userId",paramInJson.getString("userId"));
-        businessStaffOrg.put("relCd",paramInJson.getString("relCd"));
-        businessStaffOrgs.add(businessStaffOrg);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser",businessStaffOrgs);
+        JSONArray businessOrgStaffRels = new JSONArray();
+        JSONObject businessOrgStaffRel = new JSONObject();
+        businessOrgStaffRel.put("storeId",paramInJson.getString("storeId"));
+        businessOrgStaffRel.put("staffId",paramInJson.getString("userId"));
+        businessOrgStaffRel.put("orgId",paramInJson.getString("orgId"));
+        businessOrgStaffRel.put("relCd",paramInJson.getString("relCd"));
+        businessOrgStaffRels.add(businessOrgStaffRel);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrgStaffRel",businessOrgStaffRels);
 
         return business;
     }
@@ -164,6 +164,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
         Assert.jsonObjectHaveKey(paramObj,"orgId", "请求报文格式错误或未包含部门信息");
         Assert.jsonObjectHaveKey(paramObj,"address", "请求报文格式错误或未包含地址信息");
         Assert.jsonObjectHaveKey(paramObj,"sex", "请求报文格式错误或未包含性别信息");
+        Assert.jsonObjectHaveKey(paramObj,"relCd", "请求报文格式错误或未包含员工角色");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);

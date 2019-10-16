@@ -33,6 +33,7 @@
                     email:'',
                     tel:'',
                     address:'',
+                    relCd:'',
                 }
             }
         },
@@ -108,7 +109,7 @@
 
                            vc.message('处理成功',true);
                            //关闭model
-                           vc.jumpToPage("/flow/staff?" + vc.objToGetParam(JSON.parse(json)));
+                           vc.jumpToPage("/flow/staff");
                            return ;
                        }
                        vc.message(json);

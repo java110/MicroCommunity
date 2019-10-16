@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orgStaffRelServiceDaoImpl">
+
+    <!-- 保存组织员工关系信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessOrgStaffRelInfo" parameterType="Map">
+           insert into business_org_staff_rel(
+rel_id,operate,store_id,b_id,org_id,staff_id,rel_cd
+) values (
+#{relId},#{operate},#{storeId},#{bId},#{orgId},#{staffId},#{relCd}
+)
+       </insert>
+
+
+       <!-- 查询组织员工关系信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessOrgStaffRelInfo" parameterType="Map" resultType="Map">
+           select  t.rel_id,t.rel_id relId,t.operate,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd 
+from business_org_staff_rel t 
+where 1 =1 
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="relCd !=null and relCd != ''">
+   and t.rel_cd= #{relCd}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存组织员工关系信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveOrgStaffRelInfoInstance" parameterType="Map">
+        insert into u_org_staff_rel(
+rel_id,status_cd,store_id,b_id,org_id,staff_id,rel_cd
+) select t.rel_id,'0',t.store_id,t.b_id,t.org_id,t.staff_id,t.rel_cd from business_org_staff_rel t where 1=1
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+   and t.operate= 'ADD'
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="relCd !=null and relCd != ''">
+   and t.rel_cd= #{relCd}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询组织员工关系信息 add by wuxw 2018-07-03 -->
+    <select id="getOrgStaffRelInfo" parameterType="Map" resultType="Map">
+        select  t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,t.staff_id,t.staff_id staffId,t.rel_cd,t.rel_cd relCd 
+from u_org_staff_rel t 
+where 1 =1 
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="relCd !=null and relCd != ''">
+   and t.rel_cd= #{relCd}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改组织员工关系信息 add by wuxw 2018-07-03 -->
+    <update id="updateOrgStaffRelInfoInstance" parameterType="Map">
+        update  u_org_staff_rel t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+, t.org_id= #{orgId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+, t.staff_id= #{staffId}
+</if> 
+<if test="relCd !=null and relCd != ''">
+, t.rel_cd= #{relCd}
+</if> 
+ where 1=1 <if test="relId !=null and relId != ''">
+and t.rel_id= #{relId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询组织员工关系数量 add by wuxw 2018-07-03 -->
+     <select id="queryOrgStaffRelsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from u_org_staff_rel t 
+where 1 =1 
+<if test="relId !=null and relId != ''">
+   and t.rel_id= #{relId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="orgId !=null and orgId != ''">
+   and t.org_id= #{orgId}
+</if> 
+<if test="staffId !=null and staffId != ''">
+   and t.staff_id= #{staffId}
+</if> 
+<if test="relCd !=null and relCd != ''">
+   and t.rel_cd= #{relCd}
+</if> 
+
+
+     </select>
+
+</mapper>

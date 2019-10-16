@@ -35,7 +35,7 @@ public class OrgStaffRelGeneratorApplication {
         data.setNewBusinessTypeCdValue("140200030001");
         data.setUpdateBusinessTypeCdValue("140200040001");
         data.setDeleteBusinessTypeCdValue("140200050001");
-        data.setBusinessTableName("business_org");
+        data.setBusinessTableName("business_org_staff_rel");
         data.setTableName("u_org_staff_rel");
         Map<String, String> param = new HashMap<String, String>();
         param.put("relId", "rel_id");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
