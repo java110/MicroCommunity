@@ -17,6 +17,7 @@ create table business_org_staff_rel(
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     org_id varchar(30) not null comment '组织ID',
     staff_id varchar(30) not null comment '员工ID',
+    store_id varchar(30) not null comment '商户ID，分片建',
     rel_cd varchar(30) not null comment '关系角色，10000 普通员工， 20000部门经理 查看t_dict表',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     operate VARCHAR(3) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -40,6 +41,7 @@ create table u_org_staff_rel(
     b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
     org_id varchar(30) not null comment '组织ID',
     staff_id varchar(30) not null comment '员工ID',
+    store_id varchar(30) not null comment '商户ID，分片建',
     rel_cd varchar(30) not null comment '关系角色，10000 普通员工， 20000部门经理 查看t_dict表',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     status_cd VARCHAR(2) NOT NULL default '0' COMMENT '数据状态，详细参考c_status表，0在用，1失效'

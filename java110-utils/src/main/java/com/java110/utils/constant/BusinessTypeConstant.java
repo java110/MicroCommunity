@@ -496,4 +496,19 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_ORG ="140100050001";
 
+
+    /**
+     *  保存组织
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ORG_STAFF_REL="140200030001";
+    /**
+     *  修改组织
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ORG_STAFF_REL="140200040001";
+    /**
+     *  删除组织
+     */
+    public static final String BUSINESS_TYPE_DELETE_ORG_STAFF_REL ="140200050001";
+
 }
