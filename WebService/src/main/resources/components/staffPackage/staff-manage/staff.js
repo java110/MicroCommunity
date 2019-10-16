@@ -138,6 +138,9 @@
                                     console.log('请求失败处理');
                                  }
                                );
+                },
+                _openAddStaffStepPage:function(){
+                    vc.jumpToPage("/flow/addStaffStepFlow")
                 }
 
             },
