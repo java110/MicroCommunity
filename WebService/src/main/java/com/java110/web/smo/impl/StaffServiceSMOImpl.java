@@ -36,13 +36,14 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     @Override
     public ResponseEntity<String> saveStaff(IPageData pd) {
         logger.debug("保存员工信息入参：{}", pd.toString());
-        Assert.jsonObjectHaveKey(pd.getReqData(), "username", "请求报文格式错误或未包含用户名信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "email", "请求报文格式错误或未包含邮箱信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "tel", "请求报文格式错误或未包含手机信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "sex", "请求报文格式错误或未包含性别信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "address", "请求报文格式错误或未包含地址信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "orgId", "请求报文格式错误或未包含部门信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "relCd", "请求报文格式错误或未包含员工角色");
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        Assert.hasKeyAndValue(reqJson, "username", "请求报文格式错误或未包含用户名信息");
+        Assert.hasKeyAndValue(reqJson, "email", "请求报文格式错误或未包含邮箱信息");
+        Assert.hasKeyAndValue(reqJson, "tel", "请求报文格式错误或未包含手机信息");
+        Assert.hasKeyAndValue(reqJson, "sex", "请求报文格式错误或未包含性别信息");
+        Assert.hasKeyAndValue(reqJson, "address", "请求报文格式错误或未包含地址信息");
+        Assert.hasKeyAndValue(reqJson, "orgId", "请求报文格式错误或未包含部门信息");
+        Assert.hasKeyAndValue(reqJson, "relCd", "请求报文格式错误或未包含员工角色");
 
 
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
@@ -54,7 +55,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
-        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+       // JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("name", reqJson.getString("username"));
         reqJson.put("storeId", storeId);
         reqJson.put("storeTypeCd", storeTypeCd);

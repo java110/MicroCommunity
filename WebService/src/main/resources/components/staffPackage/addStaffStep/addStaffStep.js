@@ -97,6 +97,11 @@
             _finishStep:function(){
 
                 //vc.component.addStaffStepInfo.staffInfo.departmentOrgId = vc.component.addStaffStepInfo.infos[1].orgId;
+                var _currentData = vc.component.addStaffStepInfo.infos[vc.component.addStaffStepInfo.index];
+                if( _currentData == null || _currentData == undefined){
+                    vc.message("请选择或填写必选信息");
+                    return ;
+                }
                vc.http.post(
                    'addStaffStepBinding',
                    'binding',
