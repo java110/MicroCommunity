@@ -44,7 +44,7 @@ public interface IUserInnerServiceSMO {
      *                支持 多个查询
      * @return 用户封装信息
      */
-    @RequestMapping(value = "/getStaffCount", method = RequestMethod.GET)
+    @RequestMapping(value = "/getStaffCount", method = RequestMethod.POST)
     int getStaffCount(@RequestBody UserDto userDto);
 
 
@@ -55,6 +55,6 @@ public interface IUserInnerServiceSMO {
      *                支持 多个查询
      * @return 用户封装信息
      */
-    @RequestMapping(value = "/getStaffs", method = RequestMethod.GET)
+    @RequestMapping(value = "/getStaffs", method = RequestMethod.POST)
     List<UserDto> getStaffs(@RequestBody UserDto userDto);
 }
