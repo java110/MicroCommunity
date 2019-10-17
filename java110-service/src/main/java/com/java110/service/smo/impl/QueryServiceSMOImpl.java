@@ -249,9 +249,9 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
             String currentSql = sqlObj.getString(dataQuery.getTemplateKey());
             //处理 if 判断
-            logger.debug("dealSqlIf开始处理sql中的<if>节点", currentSql, params);
+            logger.debug("dealSqlIf开始处理sql中的<if>节点 "+ currentSql + " 入参:" + params.toJSONString());
             currentSql = dealSqlIf(currentSql, params);
-            logger.debug("dealSqlIf处理完成sql中的<if>节点", currentSql, params);
+            logger.debug("dealSqlIf处理完成sql中的<if>节点 "+ currentSql + " 入参:" + params.toJSONString());
 
 
             String[] sqls = currentSql.split("#");
