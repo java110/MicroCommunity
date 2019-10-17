@@ -453,10 +453,10 @@
             and a.tel= #{tel}
         </if>
         <if test="name !=null and name != ''">
-            and a.name like contact('%',#{name},'%')
+            and a.name like concat('%',#{name},'%')
         </if>
         <if test="staffName !=null and staffName != ''">
-            and a.name like contact('%',#{staffName},'%')
+            and a.name like concat('%',#{staffName},'%')
         </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
@@ -488,10 +488,10 @@
             and u.tel= #{tel}
         </if>
         <if test="name !=null and name != ''">
-            and u.name like contact('%',#{name},'%')
+            and u.name like concat('%',#{name},'%')
         </if>
         <if test="staffName !=null and staffName != ''">
-            and u.name like contact('%',#{staffName},'%')
+            and u.name like concat('%',#{staffName},'%')
         </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
