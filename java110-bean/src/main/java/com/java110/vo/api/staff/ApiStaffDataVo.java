@@ -7,6 +7,7 @@ public class ApiStaffDataVo implements Serializable {
     private String userId;
 
     private String userName;
+    private String name;
 
     private String tel;
 
@@ -124,5 +125,13 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

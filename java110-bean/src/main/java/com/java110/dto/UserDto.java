@@ -16,6 +16,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String userName;
 
+    private String name;
+
     private String tel;
 
     private String email;
@@ -162,5 +164,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

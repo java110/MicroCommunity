@@ -38,11 +38,7 @@
                 },
                 "staffInfo.conditions.departmentOrgId":{//深度监听，可监听到对象、数组的变化
                     handler(val, oldVal){
-                        if(val == ''){
-                            vc.component.staffInfo.conditions.parentOrgId = vc.component.staffInfo.conditions.branchOrgId;
-                        }else{
-                            vc.component.staffInfo.conditions.parentOrgId = val;
-                        }
+                       vc.component.staffInfo.conditions.orgId = val;
                        vc.component.loadData(DEFAULT_PAGE, DEFAULT_ROWS);
                     },
                     deep:true
