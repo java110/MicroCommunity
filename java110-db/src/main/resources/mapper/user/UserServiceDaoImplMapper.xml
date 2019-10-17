@@ -468,36 +468,35 @@
         select uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
             u.age,u.sex,u.tel,u.level_cd,u.b_id
         from
-            u_user a
+            u_user u
             ,u_org uo
             ,u_org_staff_rel uosr
-            where a.level_cd = '01'
-            and a.user_id = uosr.staff_id
+            where u.level_cd = '01'
+            and u.user_id = uosr.staff_id
             and uosr.store_id = #{storeId}
             and uosr.org_id = uo.org_id
         <if test="parentOrgId !=null and parentOrgId != ''">
             and uo.parent_org_id = #{parentOrgId}
         </if>
-            and a.status_cd = '0'
+            and u.status_cd = '0'
             and uo.status_cd = '0'
             and uosr.status_cd = '0'
         <if test="tel !=null and tel != ''">
-            and a.tel= #{tel}
+            and u.tel= #{tel}
         </if>
         <if test="name !=null and name != ''">
-            and a.name like contact('%',#{name},'%')
+            and u.name like contact('%',#{name},'%')
         </if>
         <if test="staffName !=null and staffName != ''">
-            and a.name like contact('%',#{staffName},'%')
+            and u.name like contact('%',#{staffName},'%')
         </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
         </if>
-
+        order by u.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-        order by a.create_time desc
     </select>
 
 </mapper>
