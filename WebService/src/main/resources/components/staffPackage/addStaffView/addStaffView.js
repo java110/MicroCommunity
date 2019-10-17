@@ -56,11 +56,6 @@
                             param:"",
                             errInfo:"员工性别不能为空"
                         },
- {
-                            limit:"num",
-                            param:"",
-                            errInfo:"员工性别不能为空"
-                        },
                     ],
                     'addStaffViewInfo.relCd':[
                     {
