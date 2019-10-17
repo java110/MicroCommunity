@@ -84,7 +84,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         if (rows > 50) {
             return new ResponseEntity<String>("rows 数量不能大于50", HttpStatus.BAD_REQUEST);
         }
-        page = (page - 1) * rows;
+       // page = (page - 1) * rows;
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -92,15 +92,15 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         Assert.jsonObjectHaveKey(responseEntity.getBody().toString(), "storeId", "根据用户ID查询商户ID失败，未包含storeId节点");
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
-        paramIn.put("page", page);
+        //paramIn.put("page", page);
         paramIn.put("storeId", storeId);
-        if (StringUtil.isEmpty(staffName)) {
+        //if (StringUtil.isEmpty(staffName)) {
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos" + super.mapToUrlParam(paramIn), HttpMethod.GET);
-        } else {
+       /* } else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     ServiceConstant.SERVICE_API_URL + "/api/query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId + "&name=" + staffName, HttpMethod.GET);
-        }
+        }*/
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }

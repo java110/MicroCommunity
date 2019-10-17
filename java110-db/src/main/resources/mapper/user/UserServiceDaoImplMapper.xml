@@ -455,6 +455,9 @@
         <if test="name !=null and name != ''">
             and a.name like contact('%',#{name},'%')
         </if>
+        <if test="staffName !=null and staffName != ''">
+            and a.name like contact('%',#{staffName},'%')
+        </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
         </if>
@@ -484,13 +487,17 @@
         <if test="name !=null and name != ''">
             and a.name like contact('%',#{name},'%')
         </if>
+        <if test="staffName !=null and staffName != ''">
+            and a.name like contact('%',#{staffName},'%')
+        </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
         </if>
-        order by desc
+
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+        order by desc
     </select>
 
 </mapper>
