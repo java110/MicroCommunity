@@ -28,6 +28,8 @@
                        vc.component._getOrgsByOrgLevelStaff(DEFAULT_PAGE, DEFAULT_ROWS,3,val);
 
                        vc.component.staffInfo.conditions.branchOrgId = val;
+                       vc.component.staffInfo.conditions.parentOrgId = val;
+
 
                        vc.component.staffInfo.conditions.departmentOrgId = '';
 

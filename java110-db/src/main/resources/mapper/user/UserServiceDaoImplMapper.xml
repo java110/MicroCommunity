@@ -461,6 +461,9 @@
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
         </if>
+        <if test="orgId !=null and orgId != ''">
+            and uo.org_id = #{orgId}
+        </if>
     </select>
 
     <!-- 查询员工总量 -->
@@ -492,6 +495,9 @@
         </if>
         <if test="staffId != null and staffId !=''">
             and uosr.staff_id = #{staffId}
+        </if>
+        <if test="orgId !=null and orgId != ''">
+            and uo.org_id = #{orgId}
         </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
