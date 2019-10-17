@@ -84,12 +84,11 @@
                             <tr>
                                 <th>员工ID</th>
                                 <th>名称</th>
+                                <th>部门</th>
                                 <th>邮箱</th>
                                 <th>地址</th>
                                 <th>性别</th>
                                 <th>手机号</th>
-                                <th>状态</th>
-                                <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -97,12 +96,12 @@
                             <tr class="gradeX" v-for="staff in staffData">
                                 <td>{{staff.userId}}</td>
                                 <td>{{staff.name}}</td>
+                                <td>{{staff.orgName}}</td>
                                 <td>{{staff.email}}</td>
                                 <td>{{staff.address}}</td>
                                 <td>{{staff.sex == 0 ? '男' : '女'}}</td>
                                 <td>{{staff.tel}}</td>
-                                <td>{{staff.statusCd == 0 ? '在用':'停用'}}</td>
-                                <td>{{vc.dateFormat(staff.createTime)}}</td>
+
                                 <td>
                                     <i class="glyphicon glyphicon-edit" style="color: #17a2b8;"
                                        v-on:click="openEditStaff(staff)"></i>

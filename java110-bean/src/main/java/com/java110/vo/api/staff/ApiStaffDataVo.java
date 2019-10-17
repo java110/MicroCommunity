@@ -1,16 +1,8 @@
-package com.java110.dto;
+package com.java110.vo.api.staff;
 
 import java.io.Serializable;
 
-/**
- * @ClassName UserDto
- * @Description 查询 用户信息
- * @Author wuxw
- * @Date 2019/4/24 14:43
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-public class UserDto extends PageDto implements Serializable {
+public class ApiStaffDataVo implements Serializable {
 
     private String userId;
 
@@ -35,6 +27,7 @@ public class UserDto extends PageDto implements Serializable {
     private String storeId;
 
     private String orgName;
+
 
 
     public String getUserId() {
