@@ -106,10 +106,10 @@
                      vc.component.$emit('delete_staff_event',_staffInfo);
                 },
                 _moreCondition:function(){
-                    if(vc.component.orgManageInfo.moreCondition){
-                        vc.component.orgManageInfo.moreCondition = false;
+                    if(vc.component.staffInfo.moreCondition){
+                        vc.component.staffInfo.moreCondition = false;
                     }else{
-                        vc.component.orgManageInfo.moreCondition = true;
+                        vc.component.staffInfo.moreCondition = true;
                     }
                 },
                  _getOrgsByOrgLevelStaff:function(_page, _rows,_orgLevel,_parentOrgId){
@@ -141,6 +141,9 @@
                 },
                 _openAddStaffStepPage:function(){
                     vc.jumpToPage("/flow/addStaffStepFlow")
+                },
+                _queryStaffMethod:function(){
+                    vc.component.loadData(DEFAULT_PAGE,DEFAULT_ROWS)
                 }
 
             },
