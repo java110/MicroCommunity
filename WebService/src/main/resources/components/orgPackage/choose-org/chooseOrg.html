@@ -1,8 +1,9 @@
-<div id = "chooseOrgModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="chooseOrgModelLabel" aria-hidden="true" >
+<div id="chooseOrgModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="chooseOrgModelLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="chooseOrgModelLabel">选择组织管理</h3>
+                <h3 class="modal-title" id="chooseOrgModelLabel">选择组织</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -17,9 +18,11 @@
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input placeholder="输入组织管理名称" type="text" v-model="chooseOrgInfo._currentOrgName" class="form-control form-control-sm">
+                                        <input placeholder="输入组织名称" type="text" v-model="chooseOrgInfo._currentOrgName"
+                                               class="form-control form-control-sm">
                                         <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary" v-on:click="queryOrgs()">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                        v-on:click="queryOrgs()">查询</button>
                                             </span>
                                     </div>
                                 </div>
@@ -27,28 +30,27 @@
                             <div class="table-responsive" style="margin-top:15px">
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
-                                                                        <th class="text-center">组织ID</th>
-                            <th class="text-center">组织名称</th>
-                            <th class="text-center">组织级别</th>
-                            <th class="text-center">上级ID</th>
-                            <th class="text-center">描述</th>
-                            <th class="text-center">操作</th>
+                                    <tr>
+                                        <th class="text-center">组织ID</th>
+                                        <th class="text-center">组织名称</th>
+                                        <th class="text-center">组织级别</th>
+                                        <th class="text-center">上级ID</th>
+                                        <th class="text-center">操作</th>
 
-                                        </tr>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="org in chooseOrgInfo.orgs">
-                                                                        <td class="text-center">{{org.orgId}}</td>
-                            <td class="text-center">{{org.orgName}}</td>
-                            <td class="text-center">{{org.orgLevel}}</td>
-                            <td class="text-center">{{org.parentOrgId}}</td>
-                            <td class="text-center">{{org.description}}</td>
+                                    <tr v-for="org in chooseOrgInfo.orgs">
+                                        <td class="text-center">{{org.orgId}}</td>
+                                        <td class="text-center">{{org.orgName}}</td>
+                                        <td class="text-center">{{org.orgLevelName}}</td>
+                                        <td class="text-center">{{org.parentOrgName}}</td>
 
-                                            <td>
-                                                <button class="btn btn-primary btn-xs" v-on:click="chooseOrg(org)">选择</button>
-                                            </td>
-                                        </tr>
+                                        <td>
+                                            <button class="btn btn-primary btn-xs" v-on:click="chooseOrg(org)">选择
+                                            </button>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

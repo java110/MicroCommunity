@@ -3,6 +3,7 @@ package com.java110.api.listener.store;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
@@ -96,6 +97,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businesses.add(addStore(paramObj));
         //添加员工
         businesses.add(addStaff(paramObj));
+        //添加公司级组织
+        businesses.add(addOrg(paramObj));
 
 
         String paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders()).toJSONString();
@@ -188,7 +191,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONArray businessStoreUsers = new JSONArray();
         JSONObject businessStoreUser = new JSONObject();
-        businessStoreUser.put("storeId", "-1");
+        businessStoreUser.put("storeId", paramInJson.getString("storeId"));
         businessStoreUser.put("storeUserId", "-1");
         businessStoreUser.put("userId", paramInJson.getJSONObject("businessStore").getString("userId"));
         businessStoreUser.put("relCd", StoreUserRelConstant.REL_ADMIN);
@@ -206,9 +209,11 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
      */
     private JSONObject refreshParamIn(JSONObject paramObj) {
 
+        String storeId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_storeId);
+        paramObj.put("storeId",storeId);
         if (paramObj.containsKey("businessStore")) {
             JSONObject businessStoreObj = paramObj.getJSONObject("businessStore");
-            businessStoreObj.put("storeId", "-1");
+            businessStoreObj.put("storeId", storeId);
             if (!businessStoreObj.containsKey("password")) {
                 String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
                 Assert.hasLength(staffDefaultPassword, "映射表中未设置员工默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
@@ -229,7 +234,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
             for (int businessStoreAttrIndex = 0; businessStoreAttrIndex < attrs.size(); businessStoreAttrIndex++) {
                 JSONObject attr = attrs.getJSONObject(businessStoreAttrIndex);
-                attr.put("storeId", "-1");
+                attr.put("storeId", storeId);
                 attr.put("attrId", "-" + (businessStoreAttrIndex + 1));
             }
         }
@@ -239,7 +244,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
             for (int businessStorePhotoIndex = 0; businessStorePhotoIndex < photos.size(); businessStorePhotoIndex++) {
                 JSONObject attr = photos.getJSONObject(businessStorePhotoIndex);
-                attr.put("storeId", "-1");
+                attr.put("storeId", storeId);
                 attr.put("storePhotoId", "-" + (businessStorePhotoIndex + 1));
             }
         }
@@ -249,12 +254,36 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
             for (int businessStoreCerdentialsIndex = 0; businessStoreCerdentialsIndex < cerdentials.size(); businessStoreCerdentialsIndex++) {
                 JSONObject attr = cerdentials.getJSONObject(businessStoreCerdentialsIndex);
-                attr.put("storeId", "-1");
+                attr.put("storeId", storeId);
                 attr.put("storeCerdentialsId", "-" + (businessStoreCerdentialsIndex + 1));
             }
         }
 
         return paramObj;
+    }
+
+    /**
+     * 添加一级组织信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addOrg(JSONObject paramInJson) {
+
+        String orgId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId);
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessOrg = new JSONObject();
+        businessOrg.put("orgName",paramInJson.getJSONObject("businessStore").getString("name"));
+        businessOrg.put("orgLevel","1");
+        businessOrg.put("parentOrgId",orgId);
+        businessOrg.put("orgId", orgId);
+        businessOrg.put("storeId", paramInJson.getString("storeId"));
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
+        return business;
     }
 
 }
