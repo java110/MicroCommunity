@@ -17,7 +17,9 @@
                 orgId:'',
                 orgName:'',
                 orgLevel:'',
+                orgLevelName:'',
                 parentOrgId:'',
+                parentOrgName:'',
                 description:'',
                 branchOrgId:'',
             }

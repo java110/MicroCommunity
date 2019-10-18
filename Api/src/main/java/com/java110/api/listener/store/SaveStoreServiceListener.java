@@ -273,7 +273,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         String orgId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+3);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOrg = new JSONObject();
         businessOrg.put("orgName",paramInJson.getJSONObject("businessStore").getString("name"));
