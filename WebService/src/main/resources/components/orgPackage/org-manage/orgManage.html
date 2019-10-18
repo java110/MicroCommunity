@@ -37,7 +37,7 @@
 
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOrgMethod()">
-                                <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i>
                             </button>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOrgModal()">
                             <i class="glyphicon glyphicon-plus"></i>
-                            添加组织
+                            添加
                         </button>
                     </div>
                 </div>
@@ -85,8 +85,8 @@
                         <tr v-for="org in orgManageInfo.orgs">
                             <td class="text-center">{{org.orgId}}</td>
                             <td class="text-center">{{org.orgName}}</td>
-                            <td class="text-center">{{org.orgLevel}}</td>
-                            <td class="text-center">{{org.parentOrgId}}</td>
+                            <td class="text-center">{{org.orgLevelName}}</td>
+                            <td class="text-center">{{org.orgLevel == 1 ? '无' : org.parentOrgName}}</td>
                             <td class="text-center">
                                 <div class="btn-group" v-if="org.orgLevel != 1">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditOrgModel(org)">修改</button>
