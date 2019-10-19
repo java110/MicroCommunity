@@ -1,10 +1,10 @@
 {
-  "templateName":"添加员工",
-  "templateCode":"addStaffStep",
-  "templateKey":"userId",
-  "templateKeyName":"员工ID",
-  "package": "staffPackage",
-  "successUrl": "/flow/staff",
+  "templateName":"报修派单",
+  "templateCode":"repairDispatchStep",
+  "templateKey":"ruId",
+  "templateKeyName":"派单ID",
+  "package": "ownerRepairPackage",
+  "successUrl": "/flow/repairDispatch",
   "needAffirm": false,
   "flows":[
     {
@@ -31,85 +31,11 @@
       "index": 2,
       "code":"staff",
       "flowKey": "userId",
-      "cnCode":"填写员工信息",
-      "vcName":"addStaff",
+      "cnCode":"选择员工",
+      "vcName":"viewStaffInfo",
       "businessName": "businessStaff",
       "businessType": "BUSINESS_TYPE_SAVE_STAFF_INFO",
-      "existsComponent": false
+      "existsComponent": true
     }
-  ],
-  "components": {
-      "addStaff": {
-        "templateName":"添加员工",
-        "templateCode":"addStaff",
-        "package": "staffPackage",
-        "columns":[
-          {
-            "code":"username",
-            "cnCode":"员工名称",
-            "desc":"必填，员工名称不能为空",
-            "required":true,
-            "hasDefaultValue":false,
-            "inputType":"input",
-            "limit":"maxin",
-            "limitParam":"2,10",
-            "limitErrInfo":"员工名称长度必须在2位至10位",
-            "show": true
-          },
-          {
-            "code":"sex",
-            "cnCode":"员工性别",
-            "desc":"必填，请选择员工性别",
-            "required":true,
-            "hasDefaultValue":false,
-            "inputType":"select",
-            "selectValue":"1,0",
-            "selectValueName":"男,女",
-            "limit":"num",
-            "limitParam":"",
-            "limitErrInfo":"员工性别不能为空",
-            "show": true
-          },
-          {
-            "code":"email",
-            "cnCode":"员工邮箱",
-            "desc":"必填，请填写员工邮箱",
-            "required":true,
-            "hasDefaultValue":false,
-            "defaultValue":"",
-            "inputType":"input",
-            "limit":"email",
-            "limitParam":"",
-            "limitErrInfo":"员工邮箱不是有效邮箱",
-            "show": true
-          },
-          {
-            "code":"tel",
-            "cnCode":"手机",
-            "desc":"必填，请填写联系方式",
-            "required":false,
-            "hasDefaultValue":false,
-            "defaultValue":"",
-            "inputType":"input",
-            "limit":"photo",
-            "limitParam":"",
-            "limitErrInfo":"联系方式不是有效手机",
-            "show": true
-          },
-          {
-            "code":"address",
-            "cnCode":"家庭住址",
-            "desc":"必填，写家庭住址",
-            "required":true,
-            "hasDefaultValue":false,
-            "defaultValue":"",
-            "inputType":"input",
-            "limit":"maxLength",
-            "limitParam":"200",
-            "limitErrInfo":"家庭住址不能超过200位",
-            "show": false
-          }
-        ]
-      }
-  }
+  ]
 }
