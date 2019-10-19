@@ -108,7 +108,7 @@ public class BindingRepairDispatchStepListener extends AbstractServiceApiListene
     private JSONObject modifyBusinessRepair(JSONObject paramInJson, DataFlowContext dataFlowContext){
         //查询报修单
         RepairDto repairDto = new RepairDto();
-        repairDto.setRepairId(paramInJson.getString("paramInJson"));
+        repairDto.setRepairId(paramInJson.getString("repairId"));
 
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
 
