@@ -648,4 +648,25 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "修改用户Instance数据失败：" + JSONObject.toJSONString(businessUserCredentials));
         }
     }
+
+    @Override
+    public int getStaffCount(Map businessUser) throws DAOException {
+        logger.debug("查询组织数据 入参 info : {}",businessUser);
+
+        List<Map> businessStaffInfos = sqlSessionTemplate.selectList("userServiceDaoImpl.getStaffCount", businessUser);
+        if (businessStaffInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessStaffInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getStaffs(Map info) throws DAOException {
+        logger.debug("查询组织信息 入参 info : {}",info);
+
+        List<Map> businessStaffs = sqlSessionTemplate.selectList("userServiceDaoImpl.getStaffs",info);
+
+        return businessStaffs;
+    }
 }

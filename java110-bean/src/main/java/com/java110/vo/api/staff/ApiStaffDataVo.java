@@ -1,21 +1,12 @@
-package com.java110.dto;
+package com.java110.vo.api.staff;
 
 import java.io.Serializable;
 
-/**
- * @ClassName UserDto
- * @Description 查询 用户信息
- * @Author wuxw
- * @Date 2019/4/24 14:43
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-public class UserDto extends PageDto implements Serializable {
+public class ApiStaffDataVo implements Serializable {
 
     private String userId;
 
     private String userName;
-
     private String name;
 
     private String tel;
@@ -37,12 +28,6 @@ public class UserDto extends PageDto implements Serializable {
     private String storeId;
 
     private String orgName;
-
-    private String parentOrgId;
-
-    private String orgId;
-
-    private String staffName;
 
 
 
@@ -140,30 +125,6 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
-    }
-
-    public String getParentOrgId() {
-        return parentOrgId;
-    }
-
-    public void setParentOrgId(String parentOrgId) {
-        this.parentOrgId = parentOrgId;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
-
-    public String getStaffName() {
-        return staffName;
-    }
-
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
     }
 
     public String getName() {

@@ -28,6 +28,8 @@
                        vc.component._getOrgsByOrgLevelStaff(DEFAULT_PAGE, DEFAULT_ROWS,3,val);
 
                        vc.component.staffInfo.conditions.branchOrgId = val;
+                       vc.component.staffInfo.conditions.parentOrgId = val;
+
 
                        vc.component.staffInfo.conditions.departmentOrgId = '';
 
@@ -38,11 +40,7 @@
                 },
                 "staffInfo.conditions.departmentOrgId":{//深度监听，可监听到对象、数组的变化
                     handler(val, oldVal){
-                        if(val == ''){
-                            vc.component.staffInfo.conditions.parentOrgId = vc.component.staffInfo.conditions.branchOrgId;
-                        }else{
-                            vc.component.staffInfo.conditions.parentOrgId = val;
-                        }
+                       vc.component.staffInfo.conditions.orgId = val;
                        vc.component.loadData(DEFAULT_PAGE, DEFAULT_ROWS);
                     },
                     deep:true
@@ -84,7 +82,7 @@
                                  param,
                                  function(json){
                                     var _staffInfo = JSON.parse(json);
-                                    vc.component.staffData = _staffInfo.datas;
+                                    vc.component.staffData = _staffInfo.staffs;
                                     vc.component.$emit('pagination_info_event',{
                                         total:_staffInfo.records,
                                         currentPage:_staffInfo.page
@@ -106,10 +104,10 @@
                      vc.component.$emit('delete_staff_event',_staffInfo);
                 },
                 _moreCondition:function(){
-                    if(vc.component.orgManageInfo.moreCondition){
-                        vc.component.orgManageInfo.moreCondition = false;
+                    if(vc.component.staffInfo.moreCondition){
+                        vc.component.staffInfo.moreCondition = false;
                     }else{
-                        vc.component.orgManageInfo.moreCondition = true;
+                        vc.component.staffInfo.moreCondition = true;
                     }
                 },
                  _getOrgsByOrgLevelStaff:function(_page, _rows,_orgLevel,_parentOrgId){
@@ -138,6 +136,12 @@
                                     console.log('请求失败处理');
                                  }
                                );
+                },
+                _openAddStaffStepPage:function(){
+                    vc.jumpToPage("/flow/addStaffStepFlow")
+                },
+                _queryStaffMethod:function(){
+                    vc.component.loadData(DEFAULT_PAGE,DEFAULT_ROWS)
                 }
 
             },

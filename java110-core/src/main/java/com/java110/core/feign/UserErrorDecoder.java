@@ -34,15 +34,17 @@ public class UserErrorDecoder implements ErrorDecoder {
 
             logger.error("调用方法出现异常了：" + json);
             exception = new RuntimeException(json);
+            // 这里只封装4开头的请求异常ß && response.status() < 500
+            if (HTTP_STATUS_400 <= response.status()) {
+                exception = new HystrixBadRequestException("请求参数错误："+Util.toString(response.body().asReader()), exception);
+            } else {
+                logger.error(exception.getMessage(), exception);
+            }
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
-        // 这里只封装4开头的请求异常ß && response.status() < 500
-        if (HTTP_STATUS_400 <= response.status()) {
-            exception = new HystrixBadRequestException("请求参数错误："+response.body(), exception);
-        } else {
-            logger.error(exception.getMessage(), exception);
-        }
+
+
         return exception;
     }
 }

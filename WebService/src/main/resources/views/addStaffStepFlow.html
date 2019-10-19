@@ -7,9 +7,11 @@
     <meta charset="UTF-8"/>
     <title>添加员工|java110</title>
     <vc:create name="commonTop"></vc:create>
+    <link href="/css/jquery.step.css" rel="stylesheet"/>
+    <script src="/js/jquery.step.min.js" ></script>
 </head>
 <body>
-<vc:create name="loading"></vc:create>
+<vc:create name="bodyTop"></vc:create>
 <div id="wrapper">
     <vc:create name="menu"></vc:create>
 
@@ -22,13 +24,9 @@
             <vc:create name="breadcrumb"></vc:create>
         </div>
         <!-- id="component" -->
-        <div id="component" class="wrapper wrapper-content animated fadeInRight">
-            <vc:create name="staff"></vc:create>
-           <!-- <vc:create name="addStaff"></vc:create>-->
-            <vc:create name="editStaff"></vc:create>
-            <vc:create name="deleteStaff"></vc:create>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <vc:create name="addStaffStep"></vc:create>
         </div>
-
 
         <vc:create name="copyright"></vc:create>
 

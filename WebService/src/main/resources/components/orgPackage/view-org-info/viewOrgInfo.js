@@ -10,18 +10,25 @@
         },
         data:{
             viewOrgInfo:{
+                componentName:'组织管理信息',
+                buttonName:'选择组织',
                 index:0,
                 flowComponent:'viewOrgInfo',
+                orgId:'',
                 orgName:'',
-orgLevel:'',
-parentOrgId:'',
-description:'',
-
+                orgLevel:'',
+                orgLevelName:'',
+                parentOrgId:'',
+                parentOrgName:'',
+                description:'',
+                branchOrgId:'',
             }
         },
         _initMethod:function(){
             //根据请求参数查询 查询 业主信息
             vc.component._loadOrgInfoData();
+
+
         },
         _initEvent:function(){
             vc.on('viewOrgInfo','chooseOrg',function(_app){
@@ -33,11 +40,20 @@ description:'',
                 vc.component.viewOrgInfo.index = _index;
             });
 
+            vc.on('viewOrgInfo', '_initInfo', function(_info){
+                //vc.component.viewOrgInfo.index = _index;
+                vc.copyObject(_info,vc.component.viewOrgInfo);
+                console.log(_info);
+            });
+
         },
         methods:{
 
             _openSelectOrgInfoModel(){
-                vc.emit('chooseOrg','openChooseOrgModel',{});
+                vc.emit('chooseOrg','openChooseOrgModel',{
+                    orgLevel:vc.component.viewOrgInfo.orgLevel,
+                    parentOrgId:vc.component.viewOrgInfo.parentOrgId,
+                });
             },
             _openAddOrgInfoModel(){
                 vc.emit('addOrg','openAddOrgModal',{});

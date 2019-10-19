@@ -6,41 +6,67 @@ import java.util.Date;
 public class ApiOrgDataVo implements Serializable {
 
     private String orgId;
-private String orgName;
-private String orgLevel;
-private String parentOrgId;
-private String description;
-public String getOrgId() {
+    private String orgName;
+    private String orgLevel;
+    private String parentOrgId;
+    private String parentOrgName;
+    private String description;
+
+    private String orgLevelName;
+
+    public String getOrgId() {
         return orgId;
     }
-public void setOrgId(String orgId) {
+
+    public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
-public String getOrgName() {
+
+    public String getOrgName() {
         return orgName;
     }
-public void setOrgName(String orgName) {
+
+    public void setOrgName(String orgName) {
         this.orgName = orgName;
     }
-public String getOrgLevel() {
+
+    public String getOrgLevel() {
         return orgLevel;
     }
-public void setOrgLevel(String orgLevel) {
+
+    public void setOrgLevel(String orgLevel) {
         this.orgLevel = orgLevel;
     }
-public String getParentOrgId() {
+
+    public String getParentOrgId() {
         return parentOrgId;
     }
-public void setParentOrgId(String parentOrgId) {
+
+    public void setParentOrgId(String parentOrgId) {
         this.parentOrgId = parentOrgId;
     }
-public String getDescription() {
+
+    public String getDescription() {
         return description;
     }
-public void setDescription(String description) {
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getOrgLevelName() {
+        return orgLevelName;
+    }
 
+    public void setOrgLevelName(String orgLevelName) {
+        this.orgLevelName = orgLevelName;
+    }
 
+    public String getParentOrgName() {
+        return parentOrgName;
+    }
+
+    public void setParentOrgName(String parentOrgName) {
+        this.parentOrgName = parentOrgName;
+    }
 }

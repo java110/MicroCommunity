@@ -431,4 +431,78 @@
             and uc.credentials_id = #{credentialsId}
         </if>
     </update>
+
+    <!-- 查询员工总量 -->
+    <select id="getStaffCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from
+             u_user a
+            ,u_org uo
+            ,u_org_staff_rel uosr
+        where a.level_cd = '01'
+            and a.user_id = uosr.staff_id
+            and uosr.store_id = #{storeId}
+            and uosr.org_id = uo.org_id
+        <if test="parentOrgId !=null and parentOrgId != ''">
+            and uo.parent_org_id = #{parentOrgId}
+        </if>
+            and a.status_cd = '0'
+            and uo.status_cd = '0'
+            and uosr.status_cd = '0'
+        <if test="tel !=null and tel != ''">
+            and a.tel= #{tel}
+        </if>
+        <if test="name !=null and name != ''">
+            and a.name like concat('%',#{name},'%')
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and a.name like concat('%',#{staffName},'%')
+        </if>
+        <if test="staffId != null and staffId !=''">
+            and uosr.staff_id = #{staffId}
+        </if>
+        <if test="orgId !=null and orgId != ''">
+            and uo.org_id = #{orgId}
+        </if>
+    </select>
+
+    <!-- 查询员工总量 -->
+    <select id="getStaffs" parameterType="Map" resultType="Map">
+        select uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
+            u.age,u.sex,u.tel,u.level_cd,u.b_id
+        from
+            u_user u
+            ,u_org uo
+            ,u_org_staff_rel uosr
+            where u.level_cd = '01'
+            and u.user_id = uosr.staff_id
+            and uosr.store_id = #{storeId}
+            and uosr.org_id = uo.org_id
+        <if test="parentOrgId !=null and parentOrgId != ''">
+            and uo.parent_org_id = #{parentOrgId}
+        </if>
+            and u.status_cd = '0'
+            and uo.status_cd = '0'
+            and uosr.status_cd = '0'
+        <if test="tel !=null and tel != ''">
+            and u.tel= #{tel}
+        </if>
+        <if test="name !=null and name != ''">
+            and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and u.name like concat('%',#{staffName},'%')
+        </if>
+        <if test="staffId != null and staffId !=''">
+            and uosr.staff_id = #{staffId}
+        </if>
+        <if test="orgId !=null and orgId != ''">
+            and uo.org_id = #{orgId}
+        </if>
+        order by u.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>

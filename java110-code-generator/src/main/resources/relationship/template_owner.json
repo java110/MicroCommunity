@@ -1,0 +1,115 @@
+{
+  "templateName":"添加业主",
+  "templateCode":"addOwner",
+  "templateKey":"ownerId",
+  "templateKeyName":"业主ID",
+  "package": "ownerPackage",
+  "successUrl": "/flow/ownerFlow",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"floor",
+      "flowKey": "floorId",
+      "cnCode":"选择楼栋",
+      "vcName":"viewFloorInfo",
+      "businessName": "businessFloor",
+      "businessType": "BUSINESS_TYPE_SAVE_FLOOR_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"room",
+      "flowKey": "roomId",
+      "cnCode":"选择房屋",
+      "vcName":"sellRoomSelectRoom",
+      "businessName": "businessRoom",
+      "businessType": "BUSINESS_TYPE_SAVE_ROOM_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"owner",
+      "flowKey": "ownerId",
+      "cnCode":"填写业主信息",
+      "vcName":"addOwner",
+      "businessName": "businessOwner",
+      "businessType": "BUSINESS_TYPE_SAVE_OWNER_INFO",
+      "existsComponent": false
+    }
+  ],
+  "components": {
+      "addOwner": {
+        "templateName":"添加业主",
+        "templateCode":"addOwner",
+        "package": "ownerPackage",
+        "columns":[
+          {
+            "code":"name",
+            "cnCode":"名称",
+            "desc":"必填，名称不能为空",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"input",
+            "limit":"maxin",
+            "limitParam":"2,10",
+            "limitErrInfo":"名称长度必须在2位至10位",
+            "show": true
+          },
+          {
+            "code":"sex",
+            "cnCode":"性别",
+            "desc":"必填，请选择性别",
+            "required":true,
+            "hasDefaultValue":false,
+            "inputType":"select",
+            "selectValue":"1,0",
+            "selectValueName":"男,女",
+            "limit":"num",
+            "limitParam":"",
+            "limitErrInfo":"性别不能为空",
+            "show": true
+          },
+          {
+            "code":"age",
+            "cnCode":"年龄",
+            "desc":"必填，请填写年龄",
+            "required":true,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"input",
+            "limit":"num",
+            "limitParam":"",
+            "limitErrInfo":"年龄不是有效的数字",
+            "show": false
+          },
+          {
+            "code":"link",
+            "cnCode":"手机",
+            "desc":"必填，请填写联系方式",
+            "required":false,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"textarea",
+            "limit":"maxLength",
+            "limitParam":"2000",
+            "limitErrInfo":"输出模板不能超过2000",
+            "show": false
+          },
+          {
+            "code":"remark",
+            "cnCode":"备注",
+            "desc":"可填，请填写备注",
+            "required":false,
+            "hasDefaultValue":false,
+            "defaultValue":"",
+            "inputType":"textarea",
+            "limit":"maxLength",
+            "limitParam":"200",
+            "limitErrInfo":"备注长度不能超过200位",
+            "show": false
+          }
+        ]
+      }
+  }
+}

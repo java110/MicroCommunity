@@ -3,6 +3,7 @@ package com.java110.core.smo.user;
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,4 +35,26 @@ public interface IUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     List<UserDto> getUserInfo(@RequestParam("userIds") String[] userIds);
+
+
+    /**
+     * 查询员工总数
+     *
+     * @param userDto 用户ID
+     *                支持 多个查询
+     * @return 用户封装信息
+     */
+    @RequestMapping(value = "/getStaffCount", method = RequestMethod.POST)
+    int getStaffCount(@RequestBody UserDto userDto);
+
+
+    /**
+     * 查询员工信息
+     *
+     * @param userDto 用户ID
+     *                支持 多个查询
+     * @return 用户封装信息
+     */
+    @RequestMapping(value = "/getStaffs", method = RequestMethod.POST)
+    List<UserDto> getStaffs(@RequestBody UserDto userDto);
 }

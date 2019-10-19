@@ -48,7 +48,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 演示地址（demo）
 
-[https://demo.java110.com](https://demo.java110.com)
+[http://www.homecommunity.cn](http://www.homecommunity.cn)
 
 物业 账号/密码：wuxw/admin
 

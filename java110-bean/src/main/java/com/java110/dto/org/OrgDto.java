@@ -22,6 +22,10 @@ public class OrgDto extends PageDto implements Serializable {
     private String storeId;
     private String orgId;
 
+    private String parentOrgName;
+
+    private String orgLevelName;
+
 
     private Date createTime;
 
@@ -91,5 +95,21 @@ public class OrgDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getOrgLevelName() {
+        return orgLevelName;
+    }
+
+    public void setOrgLevelName(String orgLevelName) {
+        this.orgLevelName = orgLevelName;
+    }
+
+    public String getParentOrgName() {
+        return parentOrgName;
+    }
+
+    public void setParentOrgName(String parentOrgName) {
+        this.parentOrgName = parentOrgName;
     }
 }

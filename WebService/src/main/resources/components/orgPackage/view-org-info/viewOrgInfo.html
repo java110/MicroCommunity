@@ -2,54 +2,53 @@
     <div class="col-lg-12">
         <div class="ibox ">
             <div class="ibox-title">
-                <h5>组织管理信息</h5>
+                <h5>{{viewOrgInfo.componentName}}</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" v-if="viewOrgInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectOrgInfoModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择组织管理</button>
-
-                    <button type="button" v-if="viewOrgInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddOrgInfoModel()">
-                        <i class="glyphicon glyphicon-plus"></i> 添加组织管理</button>
+                    <button type="button" v-if="viewOrgInfo.index != 2" class="btn btn-primary btn-sm"
+                            style="margin-right:10px;" v-on:click="_openSelectOrgInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> {{viewOrgInfo.buttonName}}
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
-<div class="col-sm-4">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >组织名称：</label>
+                            <label class="col-form-label">组织名称：</label>
                             <label class="">{{viewOrgInfo.orgName}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >组织级别：</label>
-                            <label class="">{{viewOrgInfo.orgLevel}}</label>
+                            <label class="col-form-label">组织级别：</label>
+                            <label class="">{{viewOrgInfo.orgLevelName}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >上级ID：</label>
-                            <label class="">{{viewOrgInfo.parentOrgId}}</label>
+                            <label class="col-form-label">上级组织：</label>
+                            <label class="">{{viewOrgInfo.parentOrgName}}</label>
                         </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >描述：</label>
+                            <label class="col-form-label">组织ID：</label>
+                            <label class="">{{viewOrgInfo.orgId}}</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">描述：</label>
                             <label class="">{{viewOrgInfo.description}}</label>
                         </div>
-</div>
-</div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-
-    <vc:create name="addOrg"
-               callBackListener="viewOrgInfo"
-               callBackFunction="chooseOrg"
-    ></vc:create>
-
 
     <vc:create name="chooseOrg"
                emitChooseOrg="viewOrgInfo"
