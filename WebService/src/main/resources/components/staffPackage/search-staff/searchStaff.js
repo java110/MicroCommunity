@@ -30,7 +30,7 @@
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
+                        row:_rows,
                         staffName:_staffName,
                         orgId:vc.component.searchStaffInfo.orgId
                     }

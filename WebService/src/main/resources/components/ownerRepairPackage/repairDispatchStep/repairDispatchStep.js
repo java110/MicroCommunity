@@ -48,7 +48,7 @@
             vc.component._initStep();
         },
         _initEvent:function(){
-            vc.on("addStaffStep", "notify", function(_info){
+            vc.on("repairDispatchStep", "notify", function(_info){
                 if(vc.component.repairDispatchStepInfo.index == 0){
                     vc.copyObject(_info,vc.component.repairDispatchStepInfo.branchOrgInfo);
                     vc.component.repairDispatchStepInfo.infos[0] = vc.component.repairDispatchStepInfo.branchOrgInfo;
@@ -106,6 +106,8 @@
                     vc.message("请选择或填写必选信息");
                     return ;
                 }
+
+                vc.component.repairDispatchStepInfo.repairDispatchInfo.repairId = vc.component.repairDispatchStepInfo.repairId;
 
                vc.http.post(
                    'repairDispatchStepBinding',
