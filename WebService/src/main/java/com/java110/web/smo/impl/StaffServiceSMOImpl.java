@@ -74,12 +74,12 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
 
 
         Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "rows", "请求报文中未包含rows节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含rows节点");
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.isInteger(paramIn.getString("page"), "page不是数字");
-        Assert.isInteger(paramIn.getString("rows"), "rows不是数字");
+        Assert.isInteger(paramIn.getString("row"), "rows不是数字");
         int page = Integer.parseInt(paramIn.getString("page"));
-        int rows = Integer.parseInt(paramIn.getString("rows"));
+        int rows = Integer.parseInt(paramIn.getString("row"));
         String staffName = paramIn.getString("staffName");
 
         if (rows > 50) {

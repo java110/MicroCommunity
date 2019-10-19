@@ -54,7 +54,7 @@
                     vc.component.repairDispatchStepInfo.infos[0] = vc.component.repairDispatchStepInfo.branchOrgInfo;
                 }else if(vc.component.repairDispatchStepInfo.index == 1){
                     vc.copyObject(_info,vc.component.repairDispatchStepInfo.departmemtOrgInfo);
-                    vc.component.repairDispatchStepInfo.staffInfo.orgId = _info.orgId
+                    vc.component.repairDispatchStepInfo.repairDispatchInfo.orgId = _info.orgId
                     vc.component.repairDispatchStepInfo.infos[1] = vc.component.repairDispatchStepInfo.departmemtOrgInfo;
 
                 }else{
