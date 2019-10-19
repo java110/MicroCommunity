@@ -141,7 +141,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiListener {
         ApiStaffVo apiStaffVo = new ApiStaffVo();
 
         apiStaffVo.setTotal(count);
-        apiStaffVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiStaffVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("rows")));
         apiStaffVo.setStaffs(staffs);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStaffVo), HttpStatus.OK);

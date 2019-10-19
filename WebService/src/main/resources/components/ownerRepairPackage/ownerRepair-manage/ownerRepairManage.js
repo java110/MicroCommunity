@@ -125,6 +125,7 @@
 
             },
             _openDispatchRepair:function(_ownerRepair){
+                 vc.jumpToPage('/flow/repairDispatchStepFlow?repairId=' + _ownerRepair.repairId);
 
             },
             _moreCondition:function(){

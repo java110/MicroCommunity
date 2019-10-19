@@ -7,6 +7,7 @@
             repairDispatchStepInfo:{
                 $step:{},
                 index:0,
+                repairId:'',
                 infos:[],
                 branchOrgInfo:{
                         orgId:'',
@@ -28,16 +29,22 @@
                 },
                 repairDispatchInfo:{
                     orgId:'',
-                    username:'',
-                    sex:'',
+                    userId:'',
+                    name:'',
                     email:'',
                     tel:'',
-                    address:'',
-                    relCd:'',
+                    sex:''
                 }
             }
         },
         _initMethod:function(){
+            vc.component.repairDispatchStepInfo.repairId = vc.getParam('repairId');
+
+            if(!vc.notNull(vc.component.repairDispatchStepInfo.repairId)){
+                vc.message("非法数据，未找到派单信息");
+                vc.jumpToPage("/flow/ownerFlow");
+                return ;
+            }
             vc.component._initStep();
         },
         _initEvent:function(){
