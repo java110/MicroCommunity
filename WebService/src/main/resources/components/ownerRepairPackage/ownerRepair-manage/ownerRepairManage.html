@@ -98,6 +98,7 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
+                                            v-bind:disabled="ownerRepair.state == '1100'"
                                             v-on:click="_openDispatchRepair(ownerRepair)">派单
                                     </button>
                                 </div>
