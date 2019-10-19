@@ -36,5 +36,14 @@ public class StateConstant {
      */
     public static final String REPAIR_DISPATCH_FINISH = "1200";
 
+    //未结单
+    public static final String STAFF_NO_FINISH_ORDER = "10001";
+
+    //结单
+    public static final String STAFF_FINISHED_ORDER = "10002";
+
+    //退单
+    public static final String STAFF_BACK_ORDER = "10003";
+
 
 }

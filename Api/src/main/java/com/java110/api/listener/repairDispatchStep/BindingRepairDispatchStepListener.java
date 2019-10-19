@@ -2,6 +2,10 @@ package com.java110.api.listener.repairDispatchStep;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.smo.repair.IRepairInnerServiceSMO;
+import com.java110.dto.repair.RepairDto;
+import com.java110.utils.constant.StateConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.Assert;
@@ -16,9 +20,12 @@ import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 
 
 import com.java110.core.annotation.Java110Listener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 保存小区侦听
@@ -26,10 +33,17 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("bindingRepairDispatchStepListener")
 public class BindingRepairDispatchStepListener extends AbstractServiceApiListener {
+
+
+    @Autowired
+    private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-        JSONArray infos = reqJson.getJSONArray("data");
+
+        Assert.hasKeyAndValue(reqJson, "userId", "未包含员工信息");
+        Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
 
 
     }
@@ -43,18 +57,12 @@ public class BindingRepairDispatchStepListener extends AbstractServiceApiListene
 
         AppService service = event.getAppService();
 
+        //添加派单员工关联关系
+        businesses.add(addBusinessRepairUser(reqJson, context));
 
-        JSONArray infos = reqJson.getJSONArray("data");
+        //修改报修单状态
+        businesses.add(modifyBusinessRepair(reqJson, context));
 
-
-        JSONObject viewOrgInfo = getObj(infos, "viewOrgInfo");
-        //JSONObject viewOrgInfo = getObj(infos, "viewOrgInfo");
-        JSONObject viewStaffInfo = getObj(infos, "viewStaffInfo");
-        if (!hasKey(viewStaffInfo, "userId")) {
-            viewStaffInfo.put("userId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userId));
-            viewStaffInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-            businesses.add(addBusinessRepairUser(viewStaffInfo, context));
-        }
 
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
@@ -90,39 +98,40 @@ public class BindingRepairDispatchStepListener extends AbstractServiceApiListene
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessObj = new JSONObject();
         businessObj.putAll(paramInJson);
+        businessObj.put("state", StateConstant.STAFF_NO_FINISH_ORDER);
+        businessObj.put("ruId", "-1");
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessObj);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepairUser", businessObj);
+        return business;
+    }
+
+    private JSONObject modifyBusinessRepair(JSONObject paramInJson, DataFlowContext dataFlowContext){
+        //查询报修单
+        RepairDto repairDto = new RepairDto();
+        repairDto.setRepairId(paramInJson.getString("paramInJson"));
+
+        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
+
+        Assert.isOne(repairDtos, "查询到多条数据，repairId="+ repairDto.getRepairId());
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessOwnerRepair = new JSONObject();
+        businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
+        businessOwnerRepair.put("state", StateConstant.REPAIR_DISPATCHING);
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepair", businessOwnerRepair);
         return business;
     }
 
 
-    private boolean hasKey(JSONObject info, String key) {
-        if (!info.containsKey(key)
-                || StringUtil.isEmpty(info.getString(key))
-                || info.getString(key).startsWith("-")) {
-            return false;
-        }
-        return true;
-
+    public IRepairInnerServiceSMO getRepairInnerServiceSMOImpl() {
+        return repairInnerServiceSMOImpl;
     }
 
-    private JSONObject getObj(JSONArray infos, String flowComponent) {
-
-        JSONObject serviceInfo = null;
-
-        for (int infoIndex = 0; infoIndex < infos.size(); infoIndex++) {
-
-            Assert.hasKeyAndValue(infos.getJSONObject(infoIndex), "flowComponent", "未包含服务流程组件名称");
-
-            if (flowComponent.equals(infos.getJSONObject(infoIndex).getString("flowComponent"))) {
-                serviceInfo = infos.getJSONObject(infoIndex);
-                Assert.notNull(serviceInfo, "未包含服务信息");
-                return serviceInfo;
-            }
-        }
-
-        throw new IllegalArgumentException("未找到组件编码为【" + flowComponent + "】数据");
+    public void setRepairInnerServiceSMOImpl(IRepairInnerServiceSMO repairInnerServiceSMOImpl) {
+        this.repairInnerServiceSMOImpl = repairInnerServiceSMOImpl;
     }
-
-
 }
