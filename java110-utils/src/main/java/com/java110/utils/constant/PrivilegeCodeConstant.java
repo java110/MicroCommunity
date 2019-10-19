@@ -104,7 +104,7 @@ public final class PrivilegeCodeConstant {
 
     public static final String ADD_STAFF = "";
 
-    public static final String REPAIRDISPATCHSTEP = "";
+    public static final String REPAIRDISPATCHSTEP = "502019101946430010";
 
 
 

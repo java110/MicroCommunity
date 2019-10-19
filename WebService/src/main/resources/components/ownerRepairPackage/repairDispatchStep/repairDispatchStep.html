@@ -5,13 +5,7 @@
     </div>
 
     <!-- 选择 应用信息 -->
-    <div v-if="repairDispatchStepInfo.index == 0">
-        <vc:create name="viewOrgInfo"
-                   callBackListener="repairDispatchStep"
-                   callBackFunction="notify"
-        ></vc:create>
-    </div>
-    <div v-if="repairDispatchStepInfo.index == 1">
+    <div v-if="repairDispatchStepInfo.index == 0 || repairDispatchStepInfo.index == 1">
         <vc:create name="viewOrgInfo"
                    callBackListener="repairDispatchStep"
                    callBackFunction="notify"

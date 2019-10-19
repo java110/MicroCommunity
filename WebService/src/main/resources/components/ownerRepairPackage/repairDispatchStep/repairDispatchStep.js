@@ -7,15 +7,54 @@
             repairDispatchStepInfo:{
                 $step:{},
                 index:0,
-                infos:[]
+                infos:[],
+                branchOrgInfo:{
+                        orgId:'',
+                         componentName:'分公司信息',
+                         buttonName:'选择分公司',
+                         orgName:'',
+                         orgLevel:'2',
+                         parentOrgId:'',
+                         description:'',
+                },
+                departmemtOrgInfo:{
+                         orgId:'',
+                         componentName:'部门信息',
+                         buttonName:'选择部门',
+                         orgName:'',
+                         orgLevel:'3',
+                         parentOrgId:'',
+                         description:'',
+                },
+                repairDispatchInfo:{
+                    orgId:'',
+                    username:'',
+                    sex:'',
+                    email:'',
+                    tel:'',
+                    address:'',
+                    relCd:'',
+                }
             }
         },
         _initMethod:function(){
             vc.component._initStep();
         },
         _initEvent:function(){
-            vc.on("repairDispatchStep", "notify", function(_info){
-                vc.component.repairDispatchStepInfo.infos[vc.component.repairDispatchStepInfo.index] = _info;
+            vc.on("addStaffStep", "notify", function(_info){
+                if(vc.component.repairDispatchStepInfo.index == 0){
+                    vc.copyObject(_info,vc.component.repairDispatchStepInfo.branchOrgInfo);
+                    vc.component.repairDispatchStepInfo.infos[0] = vc.component.repairDispatchStepInfo.branchOrgInfo;
+                }else if(vc.component.repairDispatchStepInfo.index == 1){
+                    vc.copyObject(_info,vc.component.repairDispatchStepInfo.departmemtOrgInfo);
+                    vc.component.repairDispatchStepInfo.staffInfo.orgId = _info.orgId
+                    vc.component.repairDispatchStepInfo.infos[1] = vc.component.repairDispatchStepInfo.departmemtOrgInfo;
+
+                }else{
+                    vc.copyObject(_info, vc.component.repairDispatchStepInfo.repairDispatchInfo);
+                    vc.component.repairDispatchStepInfo.infos[2] = vc.component.repairDispatchStepInfo.repairDispatchInfo;
+                }
+
             });
 
         },
@@ -28,15 +67,15 @@
                     title: ["选择分公司","选择部门","选择员工"]
                 });
                 vc.component.repairDispatchStepInfo.index = vc.component.repairDispatchStepInfo.$step.getIndex();
+                 vc.component._notifyViewOrgInfoComponentData();
             },
             _prevStep:function(){
                 vc.component.repairDispatchStepInfo.$step.prevStep();
                 vc.component.repairDispatchStepInfo.index = vc.component.repairDispatchStepInfo.$step.getIndex();
 
                 vc.emit('viewOrgInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
-                vc.emit('viewOrgInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
                 vc.emit('viewStaffInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
-
+                vc.component._notifyViewOrgInfoComponentData();
             },
             _nextStep:function(){
                 var _currentData = vc.component.repairDispatchStepInfo.infos[vc.component.repairDispatchStepInfo.index];
@@ -48,8 +87,8 @@
                 vc.component.repairDispatchStepInfo.index = vc.component.repairDispatchStepInfo.$step.getIndex();
 
                  vc.emit('viewOrgInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
-                vc.emit('viewOrgInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
                 vc.emit('viewStaffInfo', 'onIndex', vc.component.repairDispatchStepInfo.index);
+                vc.component._notifyViewOrgInfoComponentData();
 
             },
             _finishStep:function(){
@@ -61,14 +100,10 @@
                     return ;
                 }
 
-                var param = {
-                    data:vc.component.repairDispatchStepInfo.infos
-                }
-
                vc.http.post(
                    'repairDispatchStepBinding',
                    'binding',
-                   JSON.stringify(param),
+                   JSON.stringify(vc.component.repairDispatchStepInfo.repairDispatchInfo),
                    {
                        emulateJSON:true
                     },
@@ -87,6 +122,15 @@
 
                        vc.message(errInfo);
                     });
+            },
+            _notifyViewOrgInfoComponentData:function(){
+
+                if(vc.component.repairDispatchStepInfo.index == 0){
+                    vc.emit('viewOrgInfo', '_initInfo',vc.component.repairDispatchStepInfo.branchOrgInfo);
+                }else if(vc.component.repairDispatchStepInfo.index == 1){
+                    vc.component.repairDispatchStepInfo.departmemtOrgInfo.parentOrgId = vc.component.repairDispatchStepInfo.branchOrgInfo.orgId;
+                    vc.emit('viewOrgInfo', '_initInfo',vc.component.repairDispatchStepInfo.departmemtOrgInfo);
+                }
             }
         }
     });
