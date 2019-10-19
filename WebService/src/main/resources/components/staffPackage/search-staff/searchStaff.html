@@ -33,7 +33,6 @@
                                         <th>员工名称</th>
                                         <th>手机号</th>
                                         <th>性别</th>
-                                        <th>创建时间</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -43,7 +42,6 @@
                                         <td>{{staff.name}}</td>
                                         <td>{{staff.tel}}</td>
                                         <td>{{staff.sex == 0 ? '男' : (staff.sex == 1 ?'女':'')}}</td>
-                                        <td>{{vc.dateFormat(staff.createTime)}}</td>
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseStaff(staff)">选择</button>
                                         </td>

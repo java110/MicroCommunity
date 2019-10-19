@@ -139,6 +139,8 @@
                 }else if(vc.component.repairDispatchStepInfo.index == 1){
                     vc.component.repairDispatchStepInfo.departmemtOrgInfo.parentOrgId = vc.component.repairDispatchStepInfo.branchOrgInfo.orgId;
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.repairDispatchStepInfo.departmemtOrgInfo);
+                }else{
+                    vc.emit('viewStaffInfo', '_initInfo',vc.component.repairDispatchStepInfo.departmemtOrgInfo);
                 }
             }
         }
