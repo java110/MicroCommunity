@@ -20,6 +20,8 @@ import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 
 
 import com.java110.core.annotation.Java110Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +35,9 @@ import java.util.List;
  */
 @Java110Listener("bindingRepairDispatchStepListener")
 public class BindingRepairDispatchStepListener extends AbstractServiceApiListener {
+
+    private static Logger logger = LoggerFactory.getLogger(BindingRepairDispatchStepListener.class);
+
 
 
     @Autowired
@@ -114,6 +119,8 @@ public class BindingRepairDispatchStepListener extends AbstractServiceApiListene
 
         Assert.isOne(repairDtos, "查询到多条数据，repairId="+ repairDto.getRepairId());
 
+        logger.debug("查询报修单结果："+JSONObject.toJSONString(repairDtos.get(0)));
+
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
@@ -123,6 +130,8 @@ public class BindingRepairDispatchStepListener extends AbstractServiceApiListene
         businessOwnerRepair.put("state", StateConstant.REPAIR_DISPATCHING);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepair", businessOwnerRepair);
+        logger.debug("拼装修改 报修单状态报文："+business.toJSONString());
+
         return business;
     }
 
