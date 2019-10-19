@@ -150,7 +150,7 @@ public class Assert extends org.springframework.util.Assert {
      * @param message
      */
     public static void isOne(List<?> targetList, String message) {
-        Assert.isNull(targetList, message);
+        Assert.notNull(targetList, message);
 
         if (targetList.size() != 1) {
             throw new IllegalArgumentException(message);
