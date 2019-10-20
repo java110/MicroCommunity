@@ -25,7 +25,7 @@
             }
         },
         _initMethod:function(){
-            //vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
             //vc.component._validateParam();
         },
         _initEvent:function(){
