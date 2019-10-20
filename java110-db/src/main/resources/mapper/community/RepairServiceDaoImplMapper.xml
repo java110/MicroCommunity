@@ -223,7 +223,7 @@
     <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
     <select id="queryRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from r_repair_pool t,
+        from r_repair_pool t
         <if test="staffId != null and staffId != ''">
             ,r_repair_user rru
             ,t_dict td
