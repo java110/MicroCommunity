@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
  * 添加小区服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("repairDispatchStepBindingSMOImpl")
+@Service("closeRepairDispatchSMOImpl")
 public class CloseRepairDispatchSMOImpl extends AbstractComponentSMO implements ICloseRepairDispatchSMO {
 
     @Autowired
