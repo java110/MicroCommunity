@@ -103,10 +103,7 @@
                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                        if(res.status == 200){
                            //关闭model
-                           $('#addNoticeModel').modal('hide');
-                           vc.component.clearAddNoticeInfo();
-                           vc.emit('noticeManage','listNotice',{});
-
+                           vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
                            return ;
                        }
                        vc.message(json);
