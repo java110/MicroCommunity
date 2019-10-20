@@ -89,11 +89,11 @@
                             <td class="text-center">{{ownerRepair.repairName}}</td>
                             <td class="text-center">{{ownerRepair.tel}}</td>
                             <td class="text-center">{{ownerRepair.appointmentTime}}</td>
-                            <td class="text-center">{{ownerRepair.repairDispatchState}}</td>
+                            <td class="text-center">{{ownerRepair.repairDispatchStateName}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
-                                            v-bind:disabled="ownerRepair.state == '1100'"
+                                            v-bind:disabled="ownerRepair.repairDispatchState == '10002' || ownerRepair.repairDispatchState == '10003'"
                                             v-on:click="_openDealRepair(ownerRepair)">办理
                                     </button>
                                 </div>
