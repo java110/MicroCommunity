@@ -116,6 +116,9 @@
 
                     });
 
+            },
+            _queryMyRepairDispatchMethod:function(){
+                vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
             }
 
              
