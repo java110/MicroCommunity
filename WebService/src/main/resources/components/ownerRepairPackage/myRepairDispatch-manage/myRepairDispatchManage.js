@@ -26,8 +26,7 @@
             }
         },
         _initMethod:function(){
-            //vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
-            vc.component._validateParam();
+            vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
             
@@ -39,42 +38,7 @@
             });
         },
         methods:{
-            _validateParam:function(){
 
-                var param={
-                    params:{
-                        roomId:vc.component.myRepairDispatchInfo.conditions.roomId,
-                        communityId:vc.getCurrentCommunity().communityId,
-                        page:1,
-                        row:1
-                    }
-                };
-                //查询房屋信息 业主信息
-               vc.http.get('myRepairDispatch',
-                            'getRoom',
-                             param,
-                             function(json,res){
-                                if(res.status == 200){
-                                    var _roomInfos=JSON.parse(json);
-                                    if(!_roomInfos.hasOwnProperty("rooms")){
-                                         vc.message("非法操作，未找到房屋信息");
-                                         vc.jumpToPage('/flow/ownerFlow');
-                                         return ;
-                                    }
-                                    var _roomInfo = _roomInfos.rooms[0];
-                                    vc.component.myRepairDispatchInfo.conditions.roomName= _roomInfo.floorNum+"号楼 "+_roomInfo.unitNum+"单元 "+_roomInfo.roomNum + "室";
-                                    vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
-                                }else{
-                                     vc.message("非法操作，未找到房屋信息");
-                                     vc.jumpToPage('/flow/ownerFlow');
-                                }
-                             },function(errInfo,error){
-                                console.log('请求失败处理');
-                                vc.message("非法操作，未找到房屋信息");
-                                vc.jumpToPage('/flow/ownerFlow');
-                             }
-                 );
-            },
             _listOwnerRepairs:function(_page, _rows){
                 vc.component.myRepairDispatchInfo.conditions.page = _page;
                 vc.component.myRepairDispatchInfo.conditions.row = _rows;
