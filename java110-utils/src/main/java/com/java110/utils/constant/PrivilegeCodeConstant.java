@@ -106,6 +106,8 @@ public final class PrivilegeCodeConstant {
 
     public static final String REPAIRDISPATCHSTEP = "502019101946430010";
 
+    public static final String CLOSE_REPAIR_DISPATCH = "502019102010870005";
+
 
 
 

@@ -12,6 +12,7 @@
                 records:1,
                 moreCondition:false,
                 repairName:'',
+                currentRepairId:'',
                 conditions:{
                     pageFlag:'myRepairDispatch',
                     repairId:'',
@@ -36,6 +37,9 @@
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listOwnerRepairs(_currentPage,DEFAULT_ROWS);
             });
+            vc.on('myRepairDispatch','notifyData',_param){
+                vc.component._closeRepairDispatchOrder(_param);
+            }
         },
         methods:{
 
@@ -65,8 +69,9 @@
                              }
                            );
             },
-            _openDealRepair:function(){
-                vc.emit('addOwnerRepair','openAddOwnerRepairModal',vc.component.myRepairDispatchInfo.conditions);
+            _openDealRepair:function(_ownerRepair){
+                vc.component.myRepairDispatchInfo.currentRepairId = _ownerRepair.repairId;
+                vc.emit('closeOrder','openCloseOrderModal',{});
             },
             _moreCondition:function(){
                 if(vc.component.myRepairDispatchInfo.moreCondition){
@@ -74,6 +79,46 @@
                 }else{
                     vc.component.myRepairDispatchInfo.moreCondition = true;
                 }
+            },
+            _closeRepairDispatchOrder:function(_orderInfo){
+                var _repairDispatchParam = {
+                    repairId:vc.component.myRepairDispatchInfo.currentRepairId,
+                    context:_orderInfo.remark,
+                    communityId:vc.getCurrentCommunity().communityId
+                };
+                if(_orderInfo.state == '1100'){
+                    _repairDispatchParam.state = '10002';
+                }else{
+                    _repairDispatchParam.state = '10003';
+                }
+
+               vc.http.post(
+                   'myRepairDispatch',
+                   'closeOrder',
+                   JSON.stringify(_repairDispatchParam),
+                   {
+                       emulateJSON:true
+                    },
+                    function(json,res){
+                       //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                       if(res.status == 200){
+                           //关闭model
+                           $('#addNoticeModel').modal('hide');
+                           vc.component.clearAddNoticeInfo();
+                           vc.emit('noticeManage','listNotice',{});
+
+                           return ;
+                       }
+                       vc.message(json);
+
+                    },
+                    function(errInfo,error){
+                       console.log('请求失败处理');
+
+                       vc.message(errInfo);
+
+                    });
+
             }
 
              
