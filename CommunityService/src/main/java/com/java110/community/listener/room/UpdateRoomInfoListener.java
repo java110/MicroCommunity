@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -168,10 +169,32 @@ public class UpdateRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "roomId 错误，不能自动生成（必须已经存在的roomId）" + businessRoom);
         }
         //自动保存DEL
-        autoSaveDelBusinessRoom(business, businessRoom);
+        Map<String,String> currentRoomInfo = autoSaveDelBusinessRoom(business, businessRoom);
 
         businessRoom.put("bId", business.getbId());
         businessRoom.put("operate", StatusConstant.OPERATE_ADD);
+        Map<String,String> needInsert = new HashMap<>();
+        //将不需要改变的数据写到businessRoom中
+        for (Map.Entry<String, String> currentRoomInfoEntry : currentRoomInfo.entrySet()) {
+            Iterator iter = businessRoom.entrySet().iterator();
+            boolean writeFlag = true;
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                //key值比对
+                if (currentRoomInfoEntry.getKey().equals(entry.getKey().toString())){
+                    writeFlag = false;
+                    break;
+                }
+            }
+            if (writeFlag){
+                needInsert.put(currentRoomInfoEntry.getKey(),currentRoomInfoEntry.getValue());
+            }
+        }
+        //写入businessRoom
+        for (Map.Entry<String, String> needInsertMap : needInsert.entrySet()) {
+            businessRoom.put(needInsertMap.getKey(),needInsertMap.getValue());
+        }
+
         //保存小区房屋信息
         roomServiceDaoImpl.saveBusinessRoomInfo(businessRoom);
 

@@ -45,6 +45,7 @@ public class RoomGeneratorApplication {
         param.put("apartment", "apartment");
         param.put("userId", "user_id");
         param.put("statusCd", "status_cd");
+        param.put("state", "state");
         param.put("remark", "remark");
         param.put("operate", "operate");
         data.setParams(param);
