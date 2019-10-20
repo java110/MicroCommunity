@@ -49,6 +49,10 @@ public class ListOwnerRepairsSMOImpl extends AbstractComponentSMO implements ILi
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
+        if(paramIn.containsKey("pageFlag") && "myRepairDispatch".equals(paramIn.getString("pageFlag"))){
+            paramIn.put("staffId", result.getUserId());
+        }
+
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/ownerRepair.listOwnerRepairs" + mapToUrlParam(paramIn);
 
 

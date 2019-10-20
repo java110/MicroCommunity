@@ -122,8 +122,24 @@
         ELSE
         '客厅报修'
         END) repairTypeName
+        <if test="staffId != null and staffId != ''">
+            ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
+        </if>
         from r_repair_pool t
+        <if test="staffId != null and staffId != ''">
+            ,r_repair_user rru
+            ,t_dict td
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and t.repair_id = rru.repair_id
+            and user_id = #{staffId}
+            and community_id = #{communityId}
+            and status_cd = '0'
+            and td.`table_name` = 'r_repair_user'
+            AND td.`table_columns` = 'state'
+            AND td.`status_cd` = rru.state
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -207,8 +223,21 @@
     <!-- 查询报修信息数量 add by wuxw 2018-07-03 -->
     <select id="queryRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from r_repair_pool t
+        from r_repair_pool t,
+        <if test="staffId != null and staffId != ''">
+            ,r_repair_user rru
+            ,t_dict td
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and t.repair_id = rru.repair_id
+            and user_id = #{staffId}
+            and community_id = #{communityId}
+            and status_cd = '0'
+            and td.`table_name` = 'r_repair_user'
+            AND td.`table_columns` = 'state'
+            AND td.`status_cd` = rru.state
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
