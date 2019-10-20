@@ -133,9 +133,8 @@
         where 1 =1
         <if test="staffId != null and staffId != ''">
             and t.repair_id = rru.repair_id
-            and user_id = #{staffId}
-            and community_id = #{communityId}
-            and status_cd = '0'
+            and rru.user_id = #{staffId}
+            and rru.status_cd = '0'
             and td.`table_name` = 'r_repair_user'
             AND td.`table_columns` = 'state'
             AND td.`status_cd` = rru.state
@@ -231,9 +230,8 @@
         where 1 =1
         <if test="staffId != null and staffId != ''">
             and t.repair_id = rru.repair_id
-            and user_id = #{staffId}
-            and community_id = #{communityId}
-            and status_cd = '0'
+            and rru.user_id = #{staffId}
+            and rru.status_cd = '0'
             and td.`table_name` = 'r_repair_user'
             AND td.`table_columns` = 'state'
             AND td.`status_cd` = rru.state
