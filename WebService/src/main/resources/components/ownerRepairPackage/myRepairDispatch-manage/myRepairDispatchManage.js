@@ -37,9 +37,9 @@
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listOwnerRepairs(_currentPage,DEFAULT_ROWS);
             });
-            vc.on('myRepairDispatch','notifyData',_param){
+            vc.on('myRepairDispatch','notifyData',function(_param){
                 vc.component._closeRepairDispatchOrder(_param);
-            }
+            });
         },
         methods:{
 
