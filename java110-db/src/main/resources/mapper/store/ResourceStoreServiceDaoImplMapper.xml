@@ -93,7 +93,7 @@
         from resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
-            and t.res_name= #{resName}
+            and t.res_name like concat('%',#{resName},'%')
         </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
@@ -166,7 +166,7 @@
         from resource_store t
         where 1 =1
         <if test="resName !=null and resName != ''">
-            and t.res_name= #{resName}
+            and t.res_name like concat('%',#{resName},'%')
         </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
