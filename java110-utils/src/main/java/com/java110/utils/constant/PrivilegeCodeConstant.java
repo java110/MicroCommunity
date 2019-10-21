@@ -109,6 +109,10 @@ public final class PrivilegeCodeConstant {
     public static final String CLOSE_REPAIR_DISPATCH = "502019102010870005";
 
 
+    //资源商品
+    public static final String AGENT_HAS_LIST_RESOURCESTORE = "502019102151130004";
+
+
 
 
 }
