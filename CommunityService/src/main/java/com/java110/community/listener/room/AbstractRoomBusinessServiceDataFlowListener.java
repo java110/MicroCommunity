@@ -59,7 +59,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
      *
      * @param businessRoom 小区房屋信息
      */
-    protected void autoSaveDelBusinessRoom(Business business, JSONObject businessRoom) {
+    protected Map<String,String> autoSaveDelBusinessRoom(Business business, JSONObject businessRoom) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("roomId", businessRoom.getString("roomId"));
@@ -89,6 +89,9 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
 
         currentRoomInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRoomServiceDaoImpl().saveBusinessRoomInfo(currentRoomInfo);
+
+        //便于更新数据
+        return currentRoomInfo;
     }
 
 

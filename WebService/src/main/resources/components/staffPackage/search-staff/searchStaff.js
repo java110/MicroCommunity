@@ -1,9 +1,14 @@
 (function(vc){
     vc.extends({
+        propTypes: {
+           callBackListener:vc.propTypes.string='privilegeStaffInfo', //父组件名称
+           callBackFunction:vc.propTypes.string='chooseStaff' //父组件监听方法
+        },
         data:{
             searchStaffInfo:{
                 staffs:[],
                 _currentStaffName:'',
+                orgId:'',
             }
         },
         _initMethod:function(){
@@ -14,6 +19,9 @@
                 console.log("打开定位员工界面")
                 $('#searchStaffModel').modal('show');
                 vc.component._refreshSearchStaffData();
+                if(_param.hasOwnProperty('orgId')){
+                    vc.component.searchStaffInfo.orgId = _param.orgId;
+                }
                 vc.component._loadAllStaffInfo(1,10);
             });
         },
@@ -22,8 +30,9 @@
                 var param = {
                     params:{
                         page:_page,
-                        rows:_rows,
-                        staffName:_staffName
+                        row:_rows,
+                        staffName:_staffName,
+                        orgId:vc.component.searchStaffInfo.orgId
                     }
                 };
 
@@ -33,14 +42,16 @@
                              param,
                              function(json){
                                 var _staffInfo = JSON.parse(json);
-                                vc.component.searchStaffInfo.staffs = _staffInfo.datas;
+                                vc.component.searchStaffInfo.staffs = _staffInfo.staffs;
                              },function(){
                                 console.log('请求失败处理');
                              }
                            );
             },
             chooseStaff:function(_staff){
-                vc.emit('privilegeStaffInfo','chooseStaff',_staff);
+                //vc.emit('privilegeStaffInfo','chooseStaff',_staff);
+                vc.emit($props.callBackListener,$props.callBackFunction,_staff);
+
                 vc.emit('staffPrivilege','_loadStaffPrivileges',{
                     staffId:_staff.userId
                 });

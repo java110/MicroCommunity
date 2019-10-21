@@ -119,7 +119,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson,"page","请求报文中未包含page节点");
-        Assert.hasKeyAndValue(reqJson,"rows","请求报文中未包含rows节点");
+        Assert.hasKeyAndValue(reqJson,"row","请求报文中未包含rows节点");
         Assert.hasKeyAndValue(reqJson,"storeId","请求报文中未包含storeId节点");
     }
 

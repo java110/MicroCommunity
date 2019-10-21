@@ -16,7 +16,7 @@ import java.util.Date;
 public class RepairDto extends PageDto implements Serializable {
 
     private String repairName;
-    private Date appointmentTime;
+    private String appointmentTime;
     private String repairType;
     private String context;
     private String repairId;
@@ -27,6 +27,11 @@ public class RepairDto extends PageDto implements Serializable {
     private String roomId;
     private String repairTypeName;
 
+    private String staffId;
+
+    private String repairDispatchState;
+    private String repairDispatchContext;
+    private String repairDispatchStateName;
 
     private Date createTime;
 
@@ -41,11 +46,11 @@ public class RepairDto extends PageDto implements Serializable {
         this.repairName = repairName;
     }
 
-    public Date getAppointmentTime() {
+    public String getAppointmentTime() {
         return appointmentTime;
     }
 
-    public void setAppointmentTime(Date appointmentTime) {
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
 
@@ -136,5 +141,38 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairTypeName(String repairTypeName) {
         this.repairTypeName = repairTypeName;
+    }
+
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getRepairDispatchState() {
+        return repairDispatchState;
+    }
+
+    public void setRepairDispatchState(String repairDispatchState) {
+        this.repairDispatchState = repairDispatchState;
+    }
+
+    public String getRepairDispatchContext() {
+        return repairDispatchContext;
+    }
+
+    public void setRepairDispatchContext(String repairDispatchContext) {
+        this.repairDispatchContext = repairDispatchContext;
+    }
+
+    public String getRepairDispatchStateName() {
+        return repairDispatchStateName;
+    }
+
+    public void setRepairDispatchStateName(String repairDispatchStateName) {
+        this.repairDispatchStateName = repairDispatchStateName;
     }
 }

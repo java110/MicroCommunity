@@ -122,8 +122,23 @@
         ELSE
         '客厅报修'
         END) repairTypeName
+        <if test="staffId != null and staffId != ''">
+            ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
+        </if>
         from r_repair_pool t
+        <if test="staffId != null and staffId != ''">
+            ,r_repair_user rru
+            ,t_dict td
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and t.repair_id = rru.repair_id
+            and rru.user_id = #{staffId}
+            and rru.status_cd = '0'
+            and td.`table_name` = 'r_repair_user'
+            AND td.`table_columns` = 'state'
+            AND td.`status_cd` = rru.state
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>
@@ -208,7 +223,19 @@
     <select id="queryRepairsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from r_repair_pool t
+        <if test="staffId != null and staffId != ''">
+            ,r_repair_user rru
+            ,t_dict td
+        </if>
         where 1 =1
+        <if test="staffId != null and staffId != ''">
+            and t.repair_id = rru.repair_id
+            and rru.user_id = #{staffId}
+            and rru.status_cd = '0'
+            and td.`table_name` = 'r_repair_user'
+            AND td.`table_columns` = 'state'
+            AND td.`status_cd` = rru.state
+        </if>
         <if test="repairName !=null and repairName != ''">
             and t.repair_name= #{repairName}
         </if>

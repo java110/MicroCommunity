@@ -72,6 +72,10 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         //添加单元信息
         businesses.add(sellRoom(paramObj, dataFlowContext));
 
+        //更新房屋信息为售出
+        businesses.add(updateRoom(paramObj, dataFlowContext));
+
+
         //添加物业费用信息
         businesses.add(addPropertyFee(paramObj, dataFlowContext));
 
@@ -159,6 +163,28 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         Assert.hasLength(paramObj.getString("state"), "state不能为空");
 
         super.communityHasOwner(paramObj, communityInnerServiceSMOImpl);
+    }
+
+    /**
+     * 添加小区楼信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject updateRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ROOM_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(paramInJson);
+        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRoom", businessUnit);
+
+        return business;
     }
 
 

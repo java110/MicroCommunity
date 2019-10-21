@@ -7,6 +7,7 @@
             repairDispatchStepInfo:{
                 $step:{},
                 index:0,
+                repairId:'',
                 infos:[],
                 branchOrgInfo:{
                         orgId:'',
@@ -28,26 +29,32 @@
                 },
                 repairDispatchInfo:{
                     orgId:'',
-                    username:'',
-                    sex:'',
+                    userId:'',
+                    name:'',
                     email:'',
                     tel:'',
-                    address:'',
-                    relCd:'',
+                    sex:''
                 }
             }
         },
         _initMethod:function(){
+            vc.component.repairDispatchStepInfo.repairId = vc.getParam('repairId');
+
+            if(!vc.notNull(vc.component.repairDispatchStepInfo.repairId)){
+                vc.message("非法数据，未找到派单信息");
+                vc.jumpToPage("/flow/ownerFlow");
+                return ;
+            }
             vc.component._initStep();
         },
         _initEvent:function(){
-            vc.on("addStaffStep", "notify", function(_info){
+            vc.on("repairDispatchStep", "notify", function(_info){
                 if(vc.component.repairDispatchStepInfo.index == 0){
                     vc.copyObject(_info,vc.component.repairDispatchStepInfo.branchOrgInfo);
                     vc.component.repairDispatchStepInfo.infos[0] = vc.component.repairDispatchStepInfo.branchOrgInfo;
                 }else if(vc.component.repairDispatchStepInfo.index == 1){
                     vc.copyObject(_info,vc.component.repairDispatchStepInfo.departmemtOrgInfo);
-                    vc.component.repairDispatchStepInfo.staffInfo.orgId = _info.orgId
+                    vc.component.repairDispatchStepInfo.repairDispatchInfo.orgId = _info.orgId
                     vc.component.repairDispatchStepInfo.infos[1] = vc.component.repairDispatchStepInfo.departmemtOrgInfo;
 
                 }else{
@@ -100,6 +107,9 @@
                     return ;
                 }
 
+                vc.component.repairDispatchStepInfo.repairDispatchInfo.repairId = vc.component.repairDispatchStepInfo.repairId;
+                vc.component.repairDispatchStepInfo.repairDispatchInfo.communityId = vc.getCurrentCommunity().communityId;
+
                vc.http.post(
                    'repairDispatchStepBinding',
                    'binding',
@@ -130,6 +140,8 @@
                 }else if(vc.component.repairDispatchStepInfo.index == 1){
                     vc.component.repairDispatchStepInfo.departmemtOrgInfo.parentOrgId = vc.component.repairDispatchStepInfo.branchOrgInfo.orgId;
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.repairDispatchStepInfo.departmemtOrgInfo);
+                }else{
+                    vc.emit('viewStaffInfo', '_initInfo',vc.component.repairDispatchStepInfo.departmemtOrgInfo);
                 }
             }
         }
