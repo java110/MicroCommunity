@@ -509,4 +509,20 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_ORG_STAFF_REL ="140200050001";
 
+    /**
+     *  保存 资源
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_RESOURCE_STORE="150200030001";
+
+    /**
+     * 修改资源
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RESOURCE_STORE="150200040001";
+    /**
+     *  删除资源
+     */
+    public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE ="150200050001";
+
+
 }
