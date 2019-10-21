@@ -11,7 +11,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="ibox-content">
+                <div class="ibox-content" v-if="listParkingSpaceInfo.moreCondition">
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -33,13 +33,19 @@
                                        v-model="listParkingSpaceInfo.conditions.area">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请填写车位编号" class=" form-control" v-model="listParkingSpaceInfo.num">
+                            </div>
+                        </div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryRoomMethod()"><i
                                     class="glyphicon glyphicon-search"></i> 查询
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -54,14 +60,6 @@
 
                         <form>
                             <div class="form-row">
-                                <div class="col-8 input-group input-group-sm">
-                                    <input type="text" placeholder="请填写车位编号" class=" form-control" v-model="listParkingSpaceInfo.num">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="btn btn-primary btn-sm"  v-on:click="queryParkingSpaceMethod()">
-                                            <i class="glyphicon glyphicon-search"></i> 马上查询</button>
-                                    </div>
-                                </div>
-
                                 <div class="col">
                                     <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddParkingSpaceModal(-1)">
                                         <i class="glyphicon glyphicon-plus"></i>
@@ -84,10 +82,7 @@
                             <th data-hide="phone">车位类型</th>
                             <th data-hide="phone">车位状态</th>
                             <th data-hide="phone">面积</th>
-                            <th data-hide="phone">创建员工</th>
-                            <th data-hide="phone">备注</th>
                             <th class="text-right">操作</th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -100,19 +95,13 @@
                                 {{parkingSpace.num}}
                             </td>
                             <td>
-                                {{parkingSpace.typeCd == '1001'?'地上停车位':'地下停车位'}}
+                                {{vc.component._viewParkingTypeCd(parkingSpace.typeCd)}}
                             </td>
                             <td>
                                 {{vc.component._viewParkingSpaceState(parkingSpace.state)}}
                             </td>
                             <td>
                                 {{parkingSpace.area}}
-                            </td>
-                            <td>
-                                {{parkingSpace.userName}}
-                            </td>
-                            <td>
-                                {{parkingSpace.remark}}
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
