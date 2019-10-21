@@ -3,6 +3,8 @@ package com.java110.api.listener.resourceStore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.smo.resourceStore.IResourceStoreInnerServiceSMO;
+import com.java110.dto.resourceStore.ResourceStoreDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -12,9 +14,12 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 保存物品管理侦听
@@ -22,6 +27,10 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("updateResourceStoreListener")
 public class UpdateResourceStoreListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -29,8 +38,8 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "resName", "必填，请填写物品名称");
         //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
-        Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
-        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
+        //Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
+        //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
         Assert.hasKeyAndValue(reqJson, "storeId", "商户信息不能为空");
 
     }
@@ -82,6 +91,14 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
      */
     private JSONObject updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+        resourceStoreDto.setResId(paramInJson.getString("resId"));
+        resourceStoreDto.setStoreId(paramInJson.getString("storeId"));
+
+        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+
+        Assert.isOne(resourceStoreDtos, "查询到多条物品 或未查到物品，resId=" + resourceStoreDto.getResId());
+
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
@@ -89,9 +106,17 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(paramInJson);
+        businessResourceStore.put("stock", resourceStoreDtos.get(0).getStock());
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
         return business;
     }
 
+    public IResourceStoreInnerServiceSMO getResourceStoreInnerServiceSMOImpl() {
+        return resourceStoreInnerServiceSMOImpl;
+    }
+
+    public void setResourceStoreInnerServiceSMOImpl(IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl) {
+        this.resourceStoreInnerServiceSMOImpl = resourceStoreInnerServiceSMOImpl;
+    }
 }

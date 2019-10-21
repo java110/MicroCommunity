@@ -34,8 +34,8 @@ public class AddResourceStoreSMOImpl extends AbstractComponentSMO implements IAd
         Assert.hasKeyAndValue(paramIn, "resName", "必填，请填写物品名称");
         //Assert.hasKeyAndValue(paramIn, "resCode", "必填，请填写物品编码");
         Assert.hasKeyAndValue(paramIn, "price", "必填，请填写物品价格");
-        Assert.hasKeyAndValue(paramIn, "stock", "必填，请填写物品库存");
-        Assert.hasKeyAndValue(paramIn, "description", "必填，请填写描述");
+        //Assert.hasKeyAndValue(paramIn, "stock", "必填，请填写物品库存");
+        //Assert.hasKeyAndValue(paramIn, "description", "必填，请填写描述");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_RESOURCESTORE);
