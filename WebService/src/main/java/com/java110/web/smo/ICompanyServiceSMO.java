@@ -23,4 +23,11 @@ public interface ICompanyServiceSMO {
      * @return
      */
     public ResponseEntity<String> saveCompanyInfo(IPageData pd);
+
+    /**
+     * 查询所有省市
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> getAreas(IPageData pd);
 }

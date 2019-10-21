@@ -9,11 +9,23 @@
             <div class="dropdown">
                 <label>公司地址 *</label>
 
-                <select id="pro" class="btn btn-secondary dropdown-toggle" >
-                <option value="">请选择省</option>
-            </select>
-                <select id="city" class="btn btn-secondary dropdown-toggle" >
-                    <option value="">请选择市</option>
+                <select id="pro" class="form-control form-control-sm" style="width: 10vw;display: inline;"
+                        v-model="selectProv"
+                        @change="getProv($event)" >
+                    <option value='' disabled selected style='display:none;'>请选择省</option>
+                <option v-for="item in provs"
+                        :label="item.label"
+                        :value="item.id">{{item.label}}</option>
+
+                </select>
+                <select id="city" class="form-control form-control-sm" style="width: 10vw;display: inline;"
+                        v-if="selectProv!=''"
+                        v-model="selectCity"
+                        @change="getCity($event)" >
+                    <option value='' disabled selected style='display:none;'>请选择城市</option>
+                    <option v-for="item in citys"
+                            :label="item.label"
+                            :value="item.id">{{item.label}}</option>
                 </select>
                 <input  name="address" v-model="companyBaseInfo.address" type="text" class="form-control required" aria-required="true" />
             </div>

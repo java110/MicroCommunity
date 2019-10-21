@@ -48,7 +48,21 @@ public class CompanyComponent {
             return responseEntity;
         }
     }
-
+    /**
+     * 功能描述: 查询所有省市
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> getAreas(IPageData pd){
+        ResponseEntity<String> responseEntity = null;
+        try{
+            responseEntity =  companyServiceSMOImpl.getAreas(pd);
+        }catch (Exception e){
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }finally {
+            return responseEntity;
+        }
+    }
 
     public ICompanyServiceSMO getCompanyServiceSMOImpl() {
         return companyServiceSMOImpl;

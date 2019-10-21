@@ -13,7 +13,13 @@
                 tel:"",
                 storeTypeCd:"",
                 nearbyLandmarks:""
-            }
+            },
+            areas:[],
+            provs:[],
+            citys: [],
+            selectProv: '',
+            selectCity: '',
+            allCity:[]
         },
          _initMethod:function(){
              vc.component.initStoreType();
@@ -34,6 +40,21 @@
              }
         },
         methods:{
+            getProv: function (prov) {
+                let tempCity=[];
+                this.citys=[];
+                this.selectCity='';
+                for (var val of this.allCity){
+                    if (prov.currentTarget.value == val.pid){
+                        tempCity.push({label: val.label, id: val.id})
+                    }
+                }
+                this.citys = tempCity;
+            },
+            getCity: function (city) {
+                console.log(this.selectCity);
+                console.log(this.selectProv);
+            },
             initStoreType:function(){
                 var param = {
                                     params:{
@@ -53,6 +74,26 @@
                                 console.log('请求失败处理',errInfo,error);
                                 vc.component.$emit('errorInfoEvent',errInfo);
                              });
+                vc.http.get('company','getAreas',
+                    JSON.stringify(param),
+                    function(json,res){
+                        if(res.status == 200){
+                            vc.component.areas = JSON.parse(json);
+                            for (var i=0;i<vc.component.areas.length;i++){
+                                if(vc.component.areas[i].level==1){
+                                    vc.component.provs.push(vc.component.areas[i])
+                                }
+                                if(vc.component.areas[i].level==2){
+                                    vc.component.allCity.push(vc.component.areas[i])
+                                }
+                            }
+                            return ;
+                        }
+                        //vc.component.$emit('errorInfoEvent',json);
+                    },function(errInfo,error){
+                        console.log('请求失败处理',errInfo,error);
+                        vc.component.$emit('errorInfoEvent',errInfo);
+                    });
             },
             validateBase:function(){
                 return vc.validate.validate({

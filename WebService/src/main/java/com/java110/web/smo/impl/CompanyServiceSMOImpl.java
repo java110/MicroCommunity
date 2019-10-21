@@ -130,6 +130,26 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         return responseEntity;
     }
 
+    /**
+     * 查询 所有省市
+     * @param pd
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> getAreas(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+
+        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/api.queryAreas", HttpMethod.GET);
+
+        if(responseEntity.getStatusCode() == HttpStatus.OK){
+            Assert.jsonObjectHaveKey(responseEntity.getBody(),"areas","查询中心服务异常，不是有效json或未包含areas节点");
+            //将areas 返回出去
+            responseEntity = new ResponseEntity<String>(JSONObject.parseObject(responseEntity.getBody()).getJSONArray("areas").toJSONString(),HttpStatus.OK);
+        }
+        return responseEntity;
+    }
+
 
     /**
      * 校验公司信息
