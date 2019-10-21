@@ -58,7 +58,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
     protected void autoSaveDelBusinessResourceStore(Business business, JSONObject businessResourceStore) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("resourceResourceStoreId", businessResourceStore.getString("resourceResourceStoreId"));
+        info.put("resId", businessResourceStore.getString("resId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentResourceStoreInfos = getResourceStoreServiceDaoImpl().getResourceStoreInfo(info);
         if (currentResourceStoreInfos == null || currentResourceStoreInfos.size() != 1) {

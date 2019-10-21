@@ -5,197 +5,195 @@
 <mapper namespace="resourceResourceStoreServiceDaoImpl">
 
     <!-- 保存资源信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
-           insert into business_resource_store(
-res_name,operate,price,res_code,description,store_id,stock,b_id,res_id
-) values (
-#{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{bId},#{resId}
-)
-       </insert>
+    <insert id="saveBusinessResourceStoreInfo" parameterType="Map">
+        insert into business_resource_store(
+        res_name,operate,price,res_code,description,store_id,stock,b_id,res_id
+        ) values (
+        #{resName},#{operate},#{price},#{resCode},#{description},#{storeId},#{stock},#{bId},#{resId}
+        )
+    </insert>
 
 
-       <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessResourceStoreInfo" parameterType="Map" resultType="Map">
-           select  t.res_name,t.res_name resName,t.operate,t.price,t.res_code,t.res_code resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId 
-from business_resource_store t 
-where 1 =1 
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="resCode !=null and resCode != ''">
-   and t.res_code= #{resCode}
-</if> 
-<if test="description !=null and description != ''">
-   and t.description= #{description}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
+    <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessResourceStoreInfo" parameterType="Map" resultType="Map">
+        select t.res_name,t.res_name resName,t.operate,t.price,t.res_code,t.res_code
+        resCode,t.description,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        from business_resource_store t
+        where 1 =1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存资源信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreInfoInstance" parameterType="Map">
         insert into resource_store(
-res_name,price,res_code,description,status_cd,store_id,stock,b_id,res_id
-) select t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.b_id,t.res_id from business_resource_store t where 1=1
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-   and t.operate= 'ADD'
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="resCode !=null and resCode != ''">
-   and t.res_code= #{resCode}
-</if> 
-<if test="description !=null and description != ''">
-   and t.description= #{description}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
+        res_name,price,res_code,description,status_cd,store_id,stock,b_id,res_id
+        ) select t.res_name,t.price,t.res_code,t.description,'0',t.store_id,t.stock,t.b_id,t.res_id from
+        business_resource_store t where 1=1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        and t.operate= 'ADD'
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreInfo" parameterType="Map" resultType="Map">
-        select  t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId 
-from resource_store t 
-where 1 =1 
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="resCode !=null and resCode != ''">
-   and t.res_code= #{resCode}
-</if> 
-<if test="description !=null and description != ''">
-   and t.description= #{description}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.res_name,t.res_name resName,t.price,t.res_code,t.res_code resCode,t.description,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.stock,t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        from resource_store t
+        where 1 =1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改资源信息 add by wuxw 2018-07-03 -->
     <update id="updateResourceStoreInfoInstance" parameterType="Map">
-        update  resource_store t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="resName !=null and resName != ''">
-, t.res_name= #{resName}
-</if> 
-<if test="price !=null and price != ''">
-, t.price= #{price}
-</if> 
-<if test="resCode !=null and resCode != ''">
-, t.res_code= #{resCode}
-</if> 
-<if test="description !=null and description != ''">
-, t.description= #{description}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-, t.stock= #{stock}
-</if> 
- where 1=1 <if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
-<if test="resId !=null and resId != ''">
-and t.res_id= #{resId}
-</if> 
+        update resource_store t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="resName !=null and resName != ''">
+            , t.res_name= #{resName}
+        </if>
+        <if test="price !=null and price != ''">
+            , t.price= #{price}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            , t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            , t.description= #{description}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            , t.stock= #{stock}
+        </if>
+        where 1=1
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
 
     </update>
 
     <!-- 查询资源数量 add by wuxw 2018-07-03 -->
-     <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from resource_store t 
-where 1 =1 
-<if test="resName !=null and resName != ''">
-   and t.res_name= #{resName}
-</if> 
-<if test="price !=null and price != ''">
-   and t.price= #{price}
-</if> 
-<if test="resCode !=null and resCode != ''">
-   and t.res_code= #{resCode}
-</if> 
-<if test="description !=null and description != ''">
-   and t.description= #{description}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="stock !=null and stock != ''">
-   and t.stock= #{stock}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="resId !=null and resId != ''">
-   and t.res_id= #{resId}
-</if> 
+    <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from resource_store t
+        where 1 =1
+        <if test="resName !=null and resName != ''">
+            and t.res_name= #{resName}
+        </if>
+        <if test="price !=null and price != ''">
+            and t.price= #{price}
+        </if>
+        <if test="resCode !=null and resCode != ''">
+            and t.res_code= #{resCode}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="stock !=null and stock != ''">
+            and t.stock= #{stock}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

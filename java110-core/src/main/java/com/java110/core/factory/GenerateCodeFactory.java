@@ -96,7 +96,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_ruId = "83";
     public static final String CODE_PREFIX_orgId = "84";
     public static final String CODE_PREFIX_relId = "84";
-    public static final String CODE_PREFIX_resourceResourceStoreId = "85";
+    public static final String CODE_PREFIX_resId = "85";
 
 
 

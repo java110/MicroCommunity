@@ -78,7 +78,7 @@ public class DeleteResourceStoreInfoListener extends AbstractResourceStoreBusine
                     JSONObject businessResourceStore = businessResourceStores.getJSONObject(_resourceResourceStoreIndex);
                     doBusinessResourceStore(business, businessResourceStore);
                     if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("resourceResourceStoreId", businessResourceStore.getString("resourceResourceStoreId"));
+                        dataFlowContext.addParamOut("resId", businessResourceStore.getString("resId"));
                     }
                 }
             }
@@ -110,7 +110,7 @@ public class DeleteResourceStoreInfoListener extends AbstractResourceStoreBusine
                 Map businessResourceStoreInfo = businessResourceStoreInfos.get(_resourceResourceStoreIndex);
                 flushBusinessResourceStoreInfo(businessResourceStoreInfo, StatusConstant.STATUS_CD_INVALID);
                 resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(businessResourceStoreInfo);
-                dataFlowContext.addParamOut("resourceResourceStoreId", businessResourceStoreInfo.get("resourceResourceStore_id"));
+                dataFlowContext.addParamOut("resId", businessResourceStoreInfo.get("res_id"));
             }
         }
 
@@ -161,10 +161,10 @@ public class DeleteResourceStoreInfoListener extends AbstractResourceStoreBusine
      */
     private void doBusinessResourceStore(Business business, JSONObject businessResourceStore) {
 
-        Assert.jsonObjectHaveKey(businessResourceStore, "resourceResourceStoreId", "businessResourceStore 节点下没有包含 resourceResourceStoreId 节点");
+        Assert.jsonObjectHaveKey(businessResourceStore, "resId", "businessResourceStore 节点下没有包含 resId 节点");
 
-        if (businessResourceStore.getString("resourceResourceStoreId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "resourceResourceStoreId 错误，不能自动生成（必须已经存在的resourceResourceStoreId）" + businessResourceStore);
+        if (businessResourceStore.getString("resId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "resId 错误，不能自动生成（必须已经存在的resId）" + businessResourceStore);
         }
         //自动插入DEL
         autoSaveDelBusinessResourceStore(business, businessResourceStore);
