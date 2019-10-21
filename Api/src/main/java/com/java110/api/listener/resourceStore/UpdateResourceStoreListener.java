@@ -27,7 +27,7 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
 
         Assert.hasKeyAndValue(reqJson, "resId", "物品ID不能为空");
         Assert.hasKeyAndValue(reqJson, "resName", "必填，请填写物品名称");
-        Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
+        //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
         Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
