@@ -28,6 +28,7 @@ public class DeleteResourceStoreListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "resId", "物品ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "storeId", "商户信息不能为空");
 
     }
 

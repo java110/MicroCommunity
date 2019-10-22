@@ -45,6 +45,7 @@ public class ListResourceStoresSMOImpl extends AbstractComponentSMO implements I
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
+        paramIn.put("storeId",result.getStoreId());
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/resourceStore.listResourceStores" + mapToUrlParam(paramIn);
 

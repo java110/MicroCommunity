@@ -30,6 +30,7 @@ CREATE TABLE `business_resource_store` (
 create table resource_order(
 	res_order_id varchar(30) not null comment '订单ID',
 	`b_id` varchar(30) NOT NULL COMMENT '业务Id',
+	`store_id` VARCHAR(30) NOT NULL COMMENT '商户ID',
 	res_order_type varchar(8) not null comment '出库类型 10000 入库 20000 出库 在t_dict表查看',
 	state varchar(8) not null comment '审核状态',
 	`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -41,6 +42,7 @@ create table resource_order(
 create table business_resource_order(
 	res_order_id varchar(30) not null comment '订单ID',
 	`b_id` varchar(30) NOT NULL COMMENT '业务Id',
+	`store_id` VARCHAR(30) NOT NULL COMMENT '商户ID',
 	res_order_type varchar(8) not null comment '出库类型 10000 入库 20000 出库 在t_dict表查看',
 	state varchar(8) not null comment '审核状态',
 	`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -52,9 +54,10 @@ create table resource_item(
 	res_item_id varchar(30) not null comment '订单项ID',
 	res_order_id varchar(30) not null comment '订单ID',
 	`b_id` varchar(30) NOT NULL COMMENT '业务Id',
+	`store_id` VARCHAR(30) NOT NULL COMMENT '商户ID',
 	`res_id` varchar(30) NOT NULL COMMENT '资源ID',
   `res_count` int(11) DEFAULT NULL COMMENT '数量',
-	remark varchar(200) comment '备注'
+	remark varchar(200) comment '备注',
 	`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	status_cd varchar(2) not null default '0' COMMENT '数据状态，详细参考t_dict表，0, 在用 1失效'
 );
@@ -65,6 +68,7 @@ create table business_resource_item(
 	res_item_id varchar(30) not null comment '订单项ID',
 	res_order_id varchar(30) not null comment '订单ID',
 	`b_id` varchar(30) NOT NULL COMMENT '业务Id',
+	`store_id` VARCHAR(30) NOT NULL COMMENT '商户ID',
 	`res_id` varchar(30) NOT NULL COMMENT '资源ID',
   `res_count` int(11) DEFAULT NULL COMMENT '数量',
 	remark varchar(200) comment '备注',

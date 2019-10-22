@@ -4,11 +4,10 @@
         data:{
             editResourceStoreInfo:{
                 resId:'',
-resName:'',
-resCode:'',
-price:'',
-stock:'',
-description:'',
+                resName:'',
+                resCode:'',
+                price:'',
+                description:'',
 
             }
         },
@@ -41,15 +40,10 @@ description:'',
                         },
                     ],
 'editResourceStoreInfo.resCode':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"物品编码不能为空"
-                        },
  {
-                            limit:"maxin",
-                            param:"2,50",
-                            errInfo:"物品编码必须在2至50字符之间"
+                            limit:"maxLength",
+                            param:"50",
+                            errInfo:"物品编码不能超过50位"
                         },
                     ],
 'editResourceStoreInfo.price':[
@@ -64,24 +58,8 @@ description:'',
                             errInfo:"物品价格格式错误"
                         },
                     ],
-'editResourceStoreInfo.stock':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"物品库存不能为空"
-                        },
- {
-                            limit:"num",
-                            param:"",
-                            errInfo:"物品库存不是有效数字"
-                        },
-                    ],
+
 'editResourceStoreInfo.description':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"描述不能为空"
-                        },
  {
                             limit:"maxLength",
                             param:"200",
@@ -129,11 +107,10 @@ description:'',
             refreshEditResourceStoreInfo:function(){
                 vc.component.editResourceStoreInfo= {
                   resId:'',
-resName:'',
-resCode:'',
-price:'',
-stock:'',
-description:'',
+                    resName:'',
+                    resCode:'',
+                    price:'',
+                    description:'',
 
                 }
             }

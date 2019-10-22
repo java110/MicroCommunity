@@ -68,7 +68,7 @@ public class SaveResourceStoreInfoListener extends AbstractResourceStoreBusiness
                 JSONObject businessResourceStore = businessResourceStores.getJSONObject(bResourceStoreIndex);
                 doBusinessResourceStore(business, businessResourceStore);
                 if (bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("resourceResourceStoreId", businessResourceStore.getString("resourceResourceStoreId"));
+                    dataFlowContext.addParamOut("resId", businessResourceStore.getString("resId"));
                 }
             }
         }
@@ -94,7 +94,7 @@ public class SaveResourceStoreInfoListener extends AbstractResourceStoreBusiness
             reFreshShareColumn(info, businessResourceStoreInfo.get(0));
             resourceResourceStoreServiceDaoImpl.saveResourceStoreInfoInstance(info);
             if (businessResourceStoreInfo.size() == 1) {
-                dataFlowContext.addParamOut("resourceResourceStoreId", businessResourceStoreInfo.get(0).get("resourceResourceStore_id"));
+                dataFlowContext.addParamOut("resId", businessResourceStoreInfo.get(0).get("resId"));
             }
         }
     }
@@ -152,13 +152,13 @@ public class SaveResourceStoreInfoListener extends AbstractResourceStoreBusiness
      */
     private void doBusinessResourceStore(Business business, JSONObject businessResourceStore) {
 
-        Assert.jsonObjectHaveKey(businessResourceStore, "resourceResourceStoreId", "businessResourceStore 节点下没有包含 resourceResourceStoreId 节点");
+        Assert.jsonObjectHaveKey(businessResourceStore, "resId", "businessResourceStore 节点下没有包含 resId 节点");
 
-        if (businessResourceStore.getString("resourceResourceStoreId").startsWith("-")) {
+        if (businessResourceStore.getString("resId").startsWith("-")) {
             //刷新缓存
             //flushResourceStoreId(business.getDatas());
 
-            businessResourceStore.put("resourceResourceStoreId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resourceResourceStoreId));
+            businessResourceStore.put("resId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
 
         }
 

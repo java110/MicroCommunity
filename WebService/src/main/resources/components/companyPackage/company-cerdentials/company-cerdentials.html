@@ -3,13 +3,13 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="form-group">
-                <label>证件号码 *</label>
+                <label>证件号码</label> <span class="required">*</span>
                 <input v-model="companyCerdentialsInfo.value" type="text" class="form-control required" aria-required="true" />
             </div>
         </div>
         <div class="col-lg-8">
             <div class="form-group">
-                <label>有效期*</label>
+                <label>有效期</label> <span class="required">*</span>
                 <input v-model="companyCerdentialsInfo.validityPeriod" size="16" type="text" placeholder="请选择时间(yyyy-mm-dd)"   readonly class="form-control form-control-sm company_time">
 
             </div>

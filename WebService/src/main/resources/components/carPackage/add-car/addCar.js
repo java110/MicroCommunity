@@ -16,7 +16,21 @@
                 carType:'',
                 carColor:'',
                 carRemark:""
-            }
+            },
+            carTypes:[
+                {
+                    key:'9901',
+                    value:'家用小汽车'
+                },
+                {
+                    key:'9902',
+                    value:'客车'
+                },
+                {
+                    key:'9903',
+                    value:'货车'
+                }
+            ]
         },
         watch:{
             addCarInfo:{
@@ -27,7 +41,24 @@
              }
         },
         _initMethod:function(){
+            var param={
+                params: {
+                    name: 'owner_car',
+                    type: 'car_type'
+                }
+            }
+            //发送get请求
+            vc.http.get('hireParkingSpace',
+                'listCarType',
+                param,
+                function (json, res) {
+                    var carTypes = JSON.parse(json);
 
+                    vc.component.carTypes = carTypes;
+                }, function (errInfo, error) {
+                    console.log('请求失败处理');
+                }
+            );
         },
         _initEvent:function(){
             vc.on('addCar', 'onIndex', function(_index){

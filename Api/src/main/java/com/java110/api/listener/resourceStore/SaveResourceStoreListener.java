@@ -13,8 +13,6 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeResourceStoreConstant;
 
 
-
-
 import com.java110.core.annotation.Java110Listener;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,10 +29,11 @@ public class SaveResourceStoreListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "resName", "必填，请填写物品名称");
-Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
-Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
-Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
-Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户信息");
+        //Assert.hasKeyAndValue(reqJson, "resCode", "必填，请填写物品编码");
+        Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
+        /*Assert.hasKeyAndValue(reqJson, "stock", "必填，请填写物品库存");
+        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");*/
 
     }
 
@@ -93,6 +92,7 @@ Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(paramInJson);
         businessResourceStore.put("resId", "-1");
+        businessResourceStore.put("stock", "0");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
         return business;
