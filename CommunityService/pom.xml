@@ -32,6 +32,8 @@
             <groupId>com.java110</groupId>
             <artifactId>java110-event</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>

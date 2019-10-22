@@ -1,5 +1,6 @@
 package com.java110.common;
 
+import com.java110.common.activity.DeploymentActivity;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -29,7 +31,9 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.common",
-        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code", "com.java110.db"},
+        exclude = {LiquibaseAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.service.common.listener"})
@@ -67,5 +71,8 @@ public class CommonServiceApplicationStart {
     public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(CommonServiceApplicationStart.class, args);
         ServiceStartInit.initSystemConfig(context);
+
+        //初始化 activity 流程
+        //DeploymentActivity.deploymentProcess();
     }
 }

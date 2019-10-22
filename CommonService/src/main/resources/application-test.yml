@@ -62,6 +62,8 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     maxActive: 20
     username: TT
+  activiti:
+    database-schema-update: true
 
 #============== kafka ===================
 kafka:

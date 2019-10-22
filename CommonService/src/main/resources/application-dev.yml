@@ -44,6 +44,13 @@ spring:
       max-idle: 100
       min-idle: 0
       timeout: 0
+  activiti:
+    database-schema-update: true
+#  false：false为默认值，设置为该值后，Activiti在启动时，会对比数据库表中保存的版本，如果版本不匹配时，将在启动时抛出异常。
+#  true：设置为该值后，Activiti会对数据库中所有的表进行更新，如果表不存在，则Activiti会自动创建。
+#  create-drop：Activiti启动时，会执行数据库表的创建操作，在Activiti关闭时，执行数据库表的删除操作。
+#  drop-create：Activiti启动时，执行数据库表的删除操作在Activiti关闭时，会执行数据库表的创建操作。
+
 #  datasource:
 #    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
 #    minIdle: 5
