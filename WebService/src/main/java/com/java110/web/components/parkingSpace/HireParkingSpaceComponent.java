@@ -27,6 +27,10 @@ public class HireParkingSpaceComponent {
         return carServiceSMOImpl.saveCar(pd);
     }
 
+    public ResponseEntity<String> listCarType(IPageData pd){
+        return this.carServiceSMOImpl.listCarType(pd);
+    }
+
 
     public ICarServiceSMO getCarServiceSMOImpl() {
         return carServiceSMOImpl;
