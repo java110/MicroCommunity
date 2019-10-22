@@ -537,5 +537,9 @@ public class ServiceCodeConstant {
 
     public static final String SERVICE_CODE_LIST_NOTICES = "notice.listNotices";
 
+    /**
+     * 查询数据字典
+     */
+    public static final String SERVICE_CODE_DICT_TYPE="dict.type";
 
 }

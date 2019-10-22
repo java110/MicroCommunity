@@ -59,3 +59,8 @@
     width:80%;
     margin: 20px auto 50px auto;
 }
+
+.form-group span.required {
+    color: #f00;
+    font-size: 100%;
+}

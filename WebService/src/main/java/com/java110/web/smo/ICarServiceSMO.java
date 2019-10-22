@@ -40,4 +40,11 @@ public interface ICarServiceSMO {
      * @return 返回 ResponseEntity对象包含 http状态 信息 body信息
      */
     ResponseEntity<String> deleteCar(IPageData pd);
+
+    /**
+     * 获取车辆类型
+     * @param pd 页面请求数据封装
+     * @return
+     */
+    ResponseEntity<String> listCarType(IPageData pd);
 }
