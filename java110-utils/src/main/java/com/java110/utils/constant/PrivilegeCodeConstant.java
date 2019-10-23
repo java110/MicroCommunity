@@ -113,6 +113,6 @@ public final class PrivilegeCodeConstant {
     public static final String AGENT_HAS_LIST_RESOURCESTORE = "502019102151130004";
 
 
-
+    public static final String ITEMOUT="5020191023000001";
 
 }
