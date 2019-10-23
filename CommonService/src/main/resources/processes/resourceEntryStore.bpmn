@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1571755308737" name="" targetNamespace="http://www.activiti.org/testm1571755308737" typeLanguage="http://www.w3.org/2001/XMLSchema">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/testm1571755308737" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1571755308737" name="" targetNamespace="http://www.activiti.org/testm1571755308737" typeLanguage="http://www.w3.org/2001/XMLSchema">
   <process id="resourceEntry" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="departmentManager">
       <extensionElements>
         <activiti:taskListener event="create"/>
+        <activiti:executionListener class="com.java110.common.activity.ResourceEntryListener" event="start"/>
       </extensionElements>
     </userTask>
     <userTask activiti:exclusive="true" id="_4" name="Finance">
       <extensionElements>
         <activiti:taskListener event="create"/>
+        <activiti:executionListener class="com.java110.common.activity.ResourceEntryListener" event="start"/>
       </extensionElements>
     </userTask>
     <sequenceFlow id="_5" sourceRef="_3" targetRef="_4"/>
