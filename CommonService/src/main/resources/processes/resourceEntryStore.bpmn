@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1571755308737" name="" targetNamespace="http://www.activiti.org/testm1571755308737" typeLanguage="http://www.w3.org/2001/XMLSchema">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/testm1571755308737" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1571755308737" name="" targetNamespace="http://www.activiti.org/testm1571755308737" typeLanguage="http://www.w3.org/2001/XMLSchema">
   <process id="resourceEntry" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="departmentManager">
@@ -32,20 +32,20 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_4" id="Shape-_4">
-        <dc:Bounds height="55.0" width="85.0" x="390.0" y="95.0"/>
+        <dc:Bounds height="55.0" width="85.0" x="440.0" y="125.0"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_7" id="Shape-_7">
-        <dc:Bounds height="32.0" width="32.0" x="600.0" y="110.0"/>
+        <dc:Bounds height="32.0" width="32.0" x="670.0" y="135.0"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_3" targetElement="_4">
         <di:waypoint x="330.0" y="142.5"/>
-        <di:waypoint x="390.0" y="122.5"/>
+        <di:waypoint x="440.0" y="152.5"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
@@ -58,8 +58,8 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="_4" targetElement="_7">
-        <di:waypoint x="475.0" y="122.5"/>
-        <di:waypoint x="600.0" y="126.0"/>
+        <di:waypoint x="525.0" y="152.5"/>
+        <di:waypoint x="670.0" y="151.0"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
