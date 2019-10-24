@@ -70,7 +70,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.community.CommunityServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.common.CommonServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>
