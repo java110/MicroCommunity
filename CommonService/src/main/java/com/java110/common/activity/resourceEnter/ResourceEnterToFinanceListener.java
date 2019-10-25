@@ -1,9 +1,12 @@
-package com.java110.common.activity;
+package com.java110.common.activity.resourceEnter;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 
-public class ResourceEntryListener implements TaskListener {
+/**
+ * 财务审核 监听类
+ */
+public class ResourceEnterToFinanceListener implements TaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
 
