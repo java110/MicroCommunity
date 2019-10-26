@@ -26,7 +26,7 @@ public class DeleteAuditUserListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "auditUserId", "审核ID不能为空");
 
     }

@@ -29,6 +29,7 @@ public class SaveAuditUserListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户");
         Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写用户名称");
         Assert.hasKeyAndValue(reqJson, "auditLink", "必填，请选择审核环节");
         Assert.hasKeyAndValue(reqJson, "objCode", "必填，请填写流程对象");

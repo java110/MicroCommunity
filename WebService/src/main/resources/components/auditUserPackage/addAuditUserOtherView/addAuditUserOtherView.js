@@ -36,7 +36,7 @@
                 vc.component.addAuditUserOtherViewInfo= {
                     flowComponent: 'addAuditUserOtherView',
                     userId: _staffInfo.userId,
-                    userName: _staffInfo.userName,
+                    userName: _staffInfo.name,
                     auditLink: '',
                     objCode: '',
                 };

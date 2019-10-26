@@ -8,6 +8,7 @@ import com.java110.core.smo.auditUser.IAuditUserInnerServiceSMO;
 import com.java110.dto.auditUser.AuditUserDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeAuditUserConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.auditUser.ApiAuditUserDataVo;
 import com.java110.vo.api.auditUser.ApiAuditUserVo;
@@ -56,6 +57,8 @@ public class ListAuditUsersListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
+
         super.validatePageInfo(reqJson);
     }
 

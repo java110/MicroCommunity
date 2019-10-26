@@ -41,10 +41,12 @@ public class ListAuditUsersSMOImpl extends AbstractComponentSMO implements IList
 
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
-        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        /*ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+        paramIn.putAll(paramMap);*/
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("storeId",result.getStoreId());
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditUsers" + mapToUrlParam(paramIn);
 

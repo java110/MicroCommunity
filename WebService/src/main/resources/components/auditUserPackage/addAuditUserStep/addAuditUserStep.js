@@ -128,10 +128,7 @@
                     return;
                 }
 
-                var param = {
-                    data: vc.component.addAuditUserStepInfo.infos
-                }
-
+              
                 vc.http.post(
                     'addAuditUserStepBinding',
                     'binding',
