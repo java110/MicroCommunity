@@ -20,7 +20,7 @@ public class AddAuditUserStepBindingComponent {
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    public ResponseEntity<String> save(IPageData pd){
+    public ResponseEntity<String> binding(IPageData pd){
         return addAuditUserSMOImpl.saveAuditUser(pd);
     }
 
