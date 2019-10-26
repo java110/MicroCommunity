@@ -6,8 +6,8 @@
             callBackFunction: vc.propTypes.string //父组件监听方法
         },
         data: {
-            addAuditUserInfo: {
-                auditUserId: '',
+            addAuditUserOtherViewInfo: {
+                flowComponent: 'addAuditUserOtherView',
                 userId: '',
                 userName: '',
                 auditLink: '',
@@ -15,20 +15,39 @@
 
             }
         },
+        watch: {
+            addAuditUserOtherViewInfo: {
+                deep: true,
+                handler: function () {
+                    vc.component.saveAddAuditUserOtherInfo();
+                }
+            }
+        },
         _initMethod: function () {
 
         },
         _initEvent: function () {
-            vc.on('addAuditUser', 'openAddAuditUserModal', function () {
-                $('#addAuditUserModel').modal('show');
+
+            vc.on('addAuditUserOtherViewInfo', 'onIndex', function (_index) {
+                vc.component.addAuditUserOtherViewInfo.index = _index;
+            });
+
+            vc.on('addAuditUserOtherViewInfo', '_clear', function (_staffInfo) {
+                vc.component.addAuditUserOtherViewInfo= {
+                    flowComponent: 'addAuditUserOtherView',
+                    userId: _staffInfo.userId,
+                    userName: _staffInfo.userName,
+                    auditLink: '',
+                    objCode: '',
+                };
             });
         },
         methods: {
-            addAuditUserValidate() {
+            addAuditUserOtherValidate() {
                 return vc.validate.validate({
-                    addAuditUserInfo: vc.component.addAuditUserInfo
+                    addAuditUserOtherViewInfo: vc.component.addAuditUserOtherViewInfo
                 }, {
-                    'addAuditUserInfo.userId': [
+                    'addAuditUserOtherViewInfo.userId': [
                         {
                             limit: "required",
                             param: "",
@@ -40,7 +59,7 @@
                             errInfo: "用户ID必须为数字"
                         },
                     ],
-                    'addAuditUserInfo.userName': [
+                    'addAuditUserOtherViewInfo.userName': [
                         {
                             limit: "required",
                             param: "",
@@ -52,7 +71,7 @@
                             errInfo: "用户名称必须在2至50字符之间"
                         },
                     ],
-                    'addAuditUserInfo.auditLink': [
+                    'addAuditUserOtherViewInfo.auditLink': [
                         {
                             limit: "required",
                             param: "",
@@ -64,7 +83,7 @@
                             errInfo: "审核环节格式错误"
                         },
                     ],
-                    'addAuditUserInfo.objCode': [
+                    'addAuditUserOtherViewInfo.objCode': [
                         {
                             limit: "required",
                             param: "",
@@ -77,59 +96,14 @@
                         },
                     ],
 
-
                 });
             },
-            saveAuditUserInfo: function () {
-                if (!vc.component.addAuditUserValidate()) {
-                    vc.message(vc.validate.errInfo);
-
+            saveAddAuditUserOtherInfo: function () {
+                if (vc.component.addAuditUserOtherValidate()) {
+                    //侦听回传
+                    vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addAuditUserOtherViewInfo);
                     return;
                 }
-
-                vc.component.addAuditUserInfo.communityId = vc.getCurrentCommunity().communityId;
-                //不提交数据将数据 回调给侦听处理
-                if (vc.notNull($props.callBackListener)) {
-                    vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addAuditUserInfo);
-                    $('#addAuditUserModel').modal('hide');
-                    return;
-                }
-
-                vc.http.post(
-                    'addAuditUser',
-                    'save',
-                    JSON.stringify(vc.component.addAuditUserInfo),
-                    {
-                        emulateJSON: true
-                    },
-                    function (json, res) {
-                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if (res.status == 200) {
-                            //关闭model
-                            $('#addAuditUserModel').modal('hide');
-                            vc.component.clearAddAuditUserInfo();
-                            vc.emit('auditUserManage', 'listAuditUser', {});
-
-                            return;
-                        }
-                        vc.message(json);
-
-                    },
-                    function (errInfo, error) {
-                        console.log('请求失败处理');
-
-                        vc.message(errInfo);
-
-                    });
-            },
-            clearAddAuditUserInfo: function () {
-                vc.component.addAuditUserInfo = {
-                    userId: '',
-                    userName: '',
-                    auditLink: '',
-                    objCode: '',
-
-                };
             }
         }
     });

@@ -40,6 +40,20 @@
                 console.log(_info);
             });
 
+            vc.on('viewStaffInfo', '_clear', function(_info){
+                //vc.component.viewStaffInfo.index = _index;
+                vc.component.viewStaffInfo = {
+                    index:0,
+                    flowComponent:'viewStaffInfo',
+                    userId:'',
+                    name:'',
+                    email:'',
+                    tel:'',
+                    sex:'',
+                    orgId:''
+                };
+            });
+
         },
         methods:{
 

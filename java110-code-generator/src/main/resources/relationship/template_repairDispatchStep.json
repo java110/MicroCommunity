@@ -1,0 +1,41 @@
+{
+  "templateName":"报修派单",
+  "templateCode":"repairDispatchStep",
+  "templateKey":"ruId",
+  "templateKeyName":"派单ID",
+  "package": "ownerRepairPackage",
+  "successUrl": "/flow/repairDispatch",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"branchOrg",
+      "flowKey": "branchOrgId",
+      "cnCode":"选择分公司",
+      "vcName":"viewOrgInfo",
+      "businessName": "businessOrg",
+      "businessType": "BUSINESS_TYPE_SAVE_ORG_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"departmentOrg",
+      "flowKey": "departmentOrgId",
+      "cnCode":"选择部门",
+      "vcName":"viewOrgInfo",
+      "businessName": "businessOrg",
+      "businessType": "BUSINESS_TYPE_SAVE_ORG_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"staff",
+      "flowKey": "userId",
+      "cnCode":"选择员工",
+      "vcName":"viewStaffInfo",
+      "businessName": "businessStaff",
+      "businessType": "BUSINESS_TYPE_SAVE_STAFF_INFO",
+      "existsComponent": true
+    }
+  ]
+}

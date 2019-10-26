@@ -115,6 +115,7 @@ public final class PrivilegeCodeConstant {
 
     public static final String ITEMOUT="5020191023000001";
 
-    public static final String AGENT_HAS_LIST_AUDITUSER = "";
+    //審核人員 审核人员
+    public static final String AGENT_HAS_LIST_AUDITUSER = "502019102639930001";
 
 }

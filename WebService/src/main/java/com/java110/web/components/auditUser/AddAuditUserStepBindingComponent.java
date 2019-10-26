@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
- * 添加审核人员组件
+ * 添加添加审核人员组件
  */
-@Component("addAuditUser")
-public class AddAuditUserComponent {
+@Component("addAuditUserStepBinding")
+public class AddAuditUserStepBindingComponent {
 
     @Autowired
     private IAddAuditUserSMO addAuditUserSMOImpl;

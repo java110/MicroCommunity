@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>添加审核人员</h5>
+                <div class="ibox-tools" style="top:10px;">
+
+                </div>
+            </div>
+            <div class="ibox-content">
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">用户ID</label>
+                    <div class="col-sm-10">
+                        <input v-model="addAuditUserOtherViewInfo.userId" readonly type="text" placeholder="必填，请填写用户ID"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">用户名称</label>
+                    <div class="col-sm-10">
+                        <input v-model="addAuditUserOtherViewInfo.userName" readonly type="text" placeholder="必填，请填写用户名称"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">审核环节</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select" v-model="addAuditUserOtherViewInfo.auditLink">
+                            <option selected disabled value="">必填，请选择审核环节</option>
+                            <option value="809001">部门主管</option>
+                            <option value="809002">财务主管</option>
+                            <option value="809003">采购人员</option>
+                        </select></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">流程对象</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select" v-model="addAuditUserOtherViewInfo.objCode">
+                            <option selected disabled value="">必填，请选择审核流程</option>
+                            <option value="resourceEntry">采购流程</option>
+                            <option value="resourceOut">出库流程</option>
+                        </select></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
