@@ -115,4 +115,6 @@ public final class PrivilegeCodeConstant {
 
     public static final String ITEMOUT="5020191023000001";
 
+    public static final String AGENT_HAS_LIST_AUDITUSER = "";
+
 }

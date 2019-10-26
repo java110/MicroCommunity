@@ -1,90 +1,82 @@
 {
   "templateName":"审核人员",
-  "templateCode":"resourceStore",
-  "templateKey":"resId",
-  "templateKeyName":"物品ID",
-  "searchCode": "resName",
-  "searchName": "物品名称",
+  "templateCode":"auditUser",
+  "templateKey":"auditUserId",
+  "templateKeyName":"审核ID",
+  "searchCode": "userName",
+  "searchName": "用户名称",
   "conditions": [
 
     {
-      "name": "物品ID",
+      "name": "审核ID",
       "inputType": "input",
-      "code": "resId",
+      "code": "auditUserId",
       "whereCondition": "equal"
     },
     {
-      "name": "物品名称",
+      "name": "审核人员",
       "inputType": "input",
-      "code": "resName",
+      "code": "userName",
       "whereCondition": "equal"
     },
     {
-      "name": "物品编码",
-      "inputType": "input",
-      "code": "resCode",
+      "name": "审核环节",
+      "inputType": "select",
+      "code": "auditLink",
+      "selectValue":"809001,809002,809003",
+      "selectValueName":"部门主管,财务主管,采购人员",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"resName",
-      "cnCode":"物品名称",
-      "desc":"必填，请填写物品名称",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"2,100",
-      "limitErrInfo":"物品名称长度为2至100",
-      "show": true
-    },
-    {
-      "code":"resCode",
-      "cnCode":"物品编码",
-      "desc":"必填，请填写物品编码",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"2,50",
-      "limitErrInfo":"物品编码必须在2至50字符之间",
-      "show": true
-    },
-    {
-      "code":"price",
-      "cnCode":"物品价格",
-      "desc":"必填，请填写物品价格",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"money",
-      "limitParam":"",
-      "limitErrInfo":"物品价格格式错误",
-      "show": true
-    },
-    {
-      "code":"stock",
-      "cnCode":"物品库存",
-      "desc":"必填，请填写物品库存",
+      "code":"userId",
+      "cnCode":"用户ID",
+      "desc":"必填，请填写用户ID",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"物品库存不是有效数字",
+      "limitErrInfo":"用户ID必须为数字",
       "show": true
     },
     {
-      "code":"description",
-      "cnCode":"描述",
-      "desc":"必填，请填写描述",
+      "code":"userName",
+      "cnCode":"用户名称",
+      "desc":"必填，请填写用户名称",
       "required":true,
       "hasDefaultValue":false,
-      "inputType":"textarea",
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"用户名称必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"auditLink",
+      "cnCode":"审核环节",
+      "desc":"必填，请选择审核环节",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"809001,809002,809003",
+      "selectValueName":"部门主管,财务主管,采购人员",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"审核环节格式错误",
+      "show": true
+    },
+    {
+      "code":"objCode",
+      "cnCode":"流程对象",
+      "desc":"必填，请填写流程对象",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
       "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"描述不能为空",
+      "limitParam":"64",
+      "limitErrInfo":"物品库存不能大于64位",
       "show": false
     }
   ]

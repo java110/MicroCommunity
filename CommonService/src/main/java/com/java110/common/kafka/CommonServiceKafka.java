@@ -32,7 +32,7 @@ public class CommonServiceKafka extends BaseController {
     @Autowired
     private ICommonServiceSMO commonServiceSMOImpl;
 
-    @KafkaListener(topics = {"communityServiceTopic"})
+    @KafkaListener(topics = {"commonServiceTopic"})
     public void listen(ConsumerRecord<?, ?> record) {
         logger.info("kafka的key: " + record.key());
         logger.info("kafka的value: " + record.value().toString());
