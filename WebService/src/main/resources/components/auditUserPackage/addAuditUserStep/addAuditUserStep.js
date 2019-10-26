@@ -70,7 +70,7 @@
                     vc.component.addAuditUserStepInfo.infos[0] = vc.component.addAuditUserStepInfo.branchOrgInfo;
                 }else if(vc.component.addAuditUserStepInfo.index == 1){
                     vc.copyObject(_info,vc.component.addAuditUserStepInfo.departmemtOrgInfo);
-                    vc.component.addAuditUserStepInfo.repairDispatchInfo.orgId = _info.orgId
+                    vc.component.addAuditUserStepInfo.viewStaffInfo.orgId = _info.orgId
                     vc.component.addAuditUserStepInfo.infos[1] = vc.component.addAuditUserStepInfo.departmemtOrgInfo;
                 }else if(vc.component.addAuditUserStepInfo.index == 2){
                     vc.copyObject(_info,vc.component.addAuditUserStepInfo.viewStaffInfo);
@@ -162,6 +162,8 @@
                 }else if(vc.component.addAuditUserStepInfo.index == 1){
                     vc.component.addAuditUserStepInfo.departmemtOrgInfo.parentOrgId = vc.component.addAuditUserStepInfo.branchOrgInfo.orgId;
                     vc.emit('viewOrgInfo', '_initInfo',vc.component.addAuditUserStepInfo.departmemtOrgInfo);
+                }else if(vc.component.addAuditUserStepInfo.index == 2){
+                    vc.emit('viewStaffInfo', '_initInfo',vc.component.addAuditUserStepInfo.viewStaffInfo);
                 }
             }
         }
