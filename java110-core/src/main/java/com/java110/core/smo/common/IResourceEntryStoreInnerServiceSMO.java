@@ -29,7 +29,7 @@ public interface IResourceEntryStoreInnerServiceSMO {
      *  获取用户任务
      * @param user 用户信息
      */
-    @RequestMapping(value = "/startProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/getUserTasks", method = RequestMethod.POST)
     public List<ResourceOrderDto> getUserTasks(@RequestBody AuditUser user);
 
     /**
