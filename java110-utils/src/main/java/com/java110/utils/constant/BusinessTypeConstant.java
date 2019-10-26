@@ -525,4 +525,20 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_RESOURCE_STORE ="150200050001";
 
 
+    /**
+     *  保存 审核用户
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_AUDIT_USER="160200030001";
+
+    /**
+     * 修改 审核用户
+     */
+    public static final String BUSINESS_TYPE_UPDATE_AUDIT_USER="160200040001";
+    /**
+     *  删除 审核用户
+     */
+    public static final String BUSINESS_TYPE_DELETE_AUDIT_USER ="160200050001";
+
+
 }

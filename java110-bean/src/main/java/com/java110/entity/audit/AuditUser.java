@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class AuditUser implements Serializable {
 
+    private String auditUserId;
+
     // 审核用户ID
     private String userId;
 
@@ -49,5 +51,13 @@ public class AuditUser implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getAuditUserId() {
+        return auditUserId;
+    }
+
+    public void setAuditUserId(String auditUserId) {
+        this.auditUserId = auditUserId;
     }
 }
