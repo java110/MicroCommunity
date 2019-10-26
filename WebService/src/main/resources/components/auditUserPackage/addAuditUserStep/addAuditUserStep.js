@@ -54,7 +54,7 @@
             'addAuditUserStepInfo.viewStaffInfo': {
                 deep: true,
                 handler: function () {
-                    vc.emit('auditUserInfo', '_clear',vc.component.addAuditUserStepInfo.viewStaffInfo);
+                    vc.emit('addAuditUserOtherViewInfo', '_clear',vc.component.addAuditUserStepInfo.viewStaffInfo);
                 }
             },
         },
