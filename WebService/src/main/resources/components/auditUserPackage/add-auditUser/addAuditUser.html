@@ -1,4 +1,5 @@
-<div id = "addAuditUserModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div id="addAuditUserModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -20,37 +21,44 @@
                             </div>-->
 
                             <div class="form-group row">
-         <label class="col-sm-2 col-form-label">用户ID</label>
-         <div class="col-sm-10">
-           <input v-model="addAuditUserInfo.userId"                   type="text" placeholder="必填，请填写用户ID" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">用户名称</label>
-         <div class="col-sm-10">
-           <input v-model="addAuditUserInfo.userName"                   type="text" placeholder="必填，请填写用户名称" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">审核环节</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="addAuditUserInfo.auditLink">
-         <option selected  disabled value="">必填，请选择审核环节</option>
-         <option  value="809001">部门主管</option>
-<option  value="809002">财务主管</option>
-<option  value="809003">采购人员</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">流程对象</label>
-         <div class="col-sm-10">
-           <input v-model="addAuditUserInfo.objCode"                   type="text" placeholder="必填，请填写流程对象" class="form-control">
-         </div>
-</div>
+                                <label class="col-sm-2 col-form-label">用户ID</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addAuditUserInfo.userId" type="text" placeholder="必填，请填写用户ID"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">用户名称</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addAuditUserInfo.userName" type="text" placeholder="必填，请填写用户名称"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">审核环节</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="addAuditUserInfo.auditLink">
+                                        <option selected disabled value="">必填，请选择审核环节</option>
+                                        <option value="809001">部门主管</option>
+                                        <option value="809002">财务主管</option>
+                                        <option value="809003">采购人员</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">流程对象</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addAuditUserInfo.objCode" type="text" placeholder="必填，请填写流程对象"
+                                           class="form-control">
+                                </div>
+                            </div>
 
                             <div class="ibox-content">
-                                <button class="btn btn-primary float-right" type="button" v-on:click="saveAuditUserInfo()" ><i class="fa fa-check"></i>&nbsp;保存</button>
-                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                                <button class="btn btn-primary float-right" type="button"
+                                        v-on:click="saveAuditUserInfo()"><i class="fa fa-check"></i>&nbsp;保存
+                                </button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                        data-dismiss="modal">取消
+                                </button>
                             </div>
                         </div>
                     </div>

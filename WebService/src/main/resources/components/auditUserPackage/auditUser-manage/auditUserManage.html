@@ -5,28 +5,36 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        
+
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入审核ID" v-model="auditUserManageInfo.conditions.auditUserId" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入审核人员" v-model="auditUserManageInfo.conditions.userName" class=" form-control">
-                            </div>                        </div><div class="col-sm-3" >
-<select class="custom-select" v-model="auditUserManageInfo.conditions.auditLink">
-         <option selected  value="">请选择审核环节</option>
-         <option  value="809001">部门主管</option>
-<option  value="809002">财务主管</option>
-<option  value="809003">采购人员</option>
-  </select>                        </div><div class="col-sm-1">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入审核ID"
+                                       v-model="auditUserManageInfo.conditions.auditUserId" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入审核人员"
+                                       v-model="auditUserManageInfo.conditions.userName" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="custom-select" v-model="auditUserManageInfo.conditions.auditLink">
+                                <option selected value="">请选择审核环节</option>
+                                <option value="809001">部门主管</option>
+                                <option value="809002">财务主管</option>
+                                <option value="809003">采购人员</option>
+                            </select></div>
+                        <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryAuditUserMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -52,7 +60,7 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">审核ID</th>
+                            <th class="text-center">审核ID</th>
                             <th class="text-center">用户ID</th>
                             <th class="text-center">用户名称</th>
                             <th class="text-center">审核环节</th>
@@ -63,16 +71,17 @@
                         </thead>
                         <tbody>
                         <tr v-for="auditUser in auditUserManageInfo.auditUsers">
-                                                        <td class="text-center">{{auditUser.auditUserId}}</td>
+                            <td class="text-center">{{auditUser.auditUserId}}</td>
                             <td class="text-center">{{auditUser.userId}}</td>
                             <td class="text-center">{{auditUser.userName}}</td>
                             <td class="text-center">{{auditUser.auditLink}}</td>
-                            <td class="text-center"><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditAuditUserModel(auditUser)">修改</button>
-                                </div>
+                            <td class="text-center">
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteAuditUserModel(auditUser)">删除</button>
-                                </div></td>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeleteAuditUserModel(auditUser)">删除
+                                    </button>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -91,13 +100,11 @@
         </div>
     </div>
 
-    
 
     <vc:create name="addAuditUser"
                callBackListener=""
                callBackFunction=""
     ></vc:create>
-    <vc:create name="editAuditUser"></vc:create>
     <vc:create name="deleteAuditUser"></vc:create>
 
 </div>

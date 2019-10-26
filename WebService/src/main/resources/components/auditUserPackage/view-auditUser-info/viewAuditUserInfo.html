@@ -4,42 +4,46 @@
             <div class="ibox-title">
                 <h5>审核人员信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" v-if="viewAuditUserInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectAuditUserInfoModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择审核人员</button>
+                    <button type="button" v-if="viewAuditUserInfo.index != 2" class="btn btn-primary btn-sm"
+                            style="margin-right:10px;" v-on:click="_openSelectAuditUserInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择审核人员
+                    </button>
 
-                    <button type="button" v-if="viewAuditUserInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddAuditUserInfoModel()">
-                        <i class="glyphicon glyphicon-plus"></i> 添加审核人员</button>
+                    <button type="button" v-if="viewAuditUserInfo.index != 2" class="btn btn-primary btn-sm"
+                            v-on:click="_openAddAuditUserInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加审核人员
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
-<div class="col-sm-4">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >用户ID：</label>
+                            <label class="col-form-label">用户ID：</label>
                             <label class="">{{viewAuditUserInfo.userId}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >用户名称：</label>
+                            <label class="col-form-label">用户名称：</label>
                             <label class="">{{viewAuditUserInfo.userName}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >审核环节：</label>
+                            <label class="col-form-label">审核环节：</label>
                             <label class="">{{viewAuditUserInfo.auditLink}}</label>
                         </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >流程对象：</label>
+                            <label class="col-form-label">流程对象：</label>
                             <label class="">{{viewAuditUserInfo.objCode}}</label>
                         </div>
-</div>
-</div>
+                    </div>
+                </div>
 
             </div>
         </div>
