@@ -21,6 +21,8 @@ public class AuditUserDto extends PageDto implements Serializable {
     private String userName;
     private String userId;
     private String auditLink;
+    private String auditLinkName;
+    private String objCodeName;
 
 
     private Date createTime;
@@ -91,5 +93,21 @@ public class AuditUserDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getAuditLinkName() {
+        return auditLinkName;
+    }
+
+    public void setAuditLinkName(String auditLinkName) {
+        this.auditLinkName = auditLinkName;
+    }
+
+    public String getObjCodeName() {
+        return objCodeName;
+    }
+
+    public void setObjCodeName(String objCodeName) {
+        this.objCodeName = objCodeName;
     }
 }

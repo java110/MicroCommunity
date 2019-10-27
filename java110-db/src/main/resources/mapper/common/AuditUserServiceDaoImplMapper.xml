@@ -5,182 +5,194 @@
 <mapper namespace="auditUserServiceDaoImpl">
 
     <!-- 保存审核人员信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessAuditUserInfo" parameterType="Map">
+    <insert id="saveBusinessAuditUserInfo" parameterType="Map">
            insert into business_audit_user(
-obj_code,audit_user_id,operate,store_id,user_name,b_id,user_id,audit_link
-) values (
-#{objCode},#{auditUserId},#{operate},#{storeId},#{userName},#{bId},#{userId},#{auditLink}
-)
+            obj_code,audit_user_id,operate,store_id,user_name,b_id,user_id,audit_link
+            ) values (
+            #{objCode},#{auditUserId},#{operate},#{storeId},#{userName},#{bId},#{userId},#{auditLink}
+            )
        </insert>
 
 
-       <!-- 查询审核人员信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessAuditUserInfo" parameterType="Map" resultType="Map">
-           select  t.obj_code,t.obj_code objCode,t.audit_user_id,t.audit_user_id auditUserId,t.operate,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.audit_link,t.audit_link auditLink 
-from business_audit_user t 
-where 1 =1 
-<if test="objCode !=null and objCode != ''">
-   and t.obj_code= #{objCode}
-</if> 
-<if test="auditUserId !=null and auditUserId != ''">
-   and t.audit_user_id= #{auditUserId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userName !=null and userName != ''">
-   and t.user_name= #{userName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="auditLink !=null and auditLink != ''">
-   and t.audit_link= #{auditLink}
-</if> 
+    <!-- 查询审核人员信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAuditUserInfo" parameterType="Map" resultType="Map">
+        select t.obj_code,t.obj_code objCode,t.audit_user_id,t.audit_user_id auditUserId,t.operate,t.store_id,t.store_id
+        storeId,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.audit_link,t.audit_link
+        auditLink
+        from business_audit_user t
+        where 1 =1
+        <if test="objCode !=null and objCode != ''">
+            and t.obj_code= #{objCode}
+        </if>
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存审核人员信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAuditUserInfoInstance" parameterType="Map">
         insert into audit_user(
-obj_code,audit_user_id,status_cd,store_id,user_name,b_id,user_id,audit_link
-) select t.obj_code,t.audit_user_id,'0',t.store_id,t.user_name,t.b_id,t.user_id,t.audit_link from business_audit_user t where 1=1
-<if test="objCode !=null and objCode != ''">
-   and t.obj_code= #{objCode}
-</if> 
-<if test="auditUserId !=null and auditUserId != ''">
-   and t.audit_user_id= #{auditUserId}
-</if> 
-   and t.operate= 'ADD'
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userName !=null and userName != ''">
-   and t.user_name= #{userName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="auditLink !=null and auditLink != ''">
-   and t.audit_link= #{auditLink}
-</if> 
+        obj_code,audit_user_id,status_cd,store_id,user_name,b_id,user_id,audit_link
+        ) select t.obj_code,t.audit_user_id,'0',t.store_id,t.user_name,t.b_id,t.user_id,t.audit_link from
+        business_audit_user t where 1=1
+        <if test="objCode !=null and objCode != ''">
+            and t.obj_code= #{objCode}
+        </if>
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询审核人员信息 add by wuxw 2018-07-03 -->
     <select id="getAuditUserInfo" parameterType="Map" resultType="Map">
-        select  t.obj_code,t.obj_code objCode,t.audit_user_id,t.audit_user_id auditUserId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.audit_link,t.audit_link auditLink 
-from audit_user t 
-where 1 =1 
-<if test="objCode !=null and objCode != ''">
-   and t.obj_code= #{objCode}
-</if> 
-<if test="auditUserId !=null and auditUserId != ''">
-   and t.audit_user_id= #{auditUserId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userName !=null and userName != ''">
-   and t.user_name= #{userName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="auditLink !=null and auditLink != ''">
-   and t.audit_link= #{auditLink}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.obj_code,t.obj_code objCode,t.audit_user_id,t.audit_user_id auditUserId,t.status_cd,t.status_cd
+        statusCd,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.b_id,t.b_id bId,t.user_id,t.user_id
+        userId,t.audit_link,t.audit_link auditLink,d1.name auditLinkName,d2.name objCodeName
+        from audit_user t,t_dict d1,t_dict d2
+        where 1 =1
+        and t.audit_link = d1.status_cd
+        and d1.table_name='audit_user'
+        and d1.table_columns='audit_link'
+        and t.obj_code = d2.status_cd
+        and d2.table_name='audit_user'
+        and d2.table_columns='obj_code'
+        <if test="objCode !=null and objCode != ''">
+            and t.obj_code= #{objCode}
+        </if>
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改审核人员信息 add by wuxw 2018-07-03 -->
     <update id="updateAuditUserInfoInstance" parameterType="Map">
-        update  audit_user t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="objCode !=null and objCode != ''">
-, t.obj_code= #{objCode}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="userName !=null and userName != ''">
-, t.user_name= #{userName}
-</if> 
-<if test="userId !=null and userId != ''">
-, t.user_id= #{userId}
-</if> 
-<if test="auditLink !=null and auditLink != ''">
-, t.audit_link= #{auditLink}
-</if> 
- where 1=1 <if test="auditUserId !=null and auditUserId != ''">
-and t.audit_user_id= #{auditUserId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update audit_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="objCode !=null and objCode != ''">
+            , t.obj_code= #{objCode}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            , t.audit_link= #{auditLink}
+        </if>
+        where 1=1
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询审核人员数量 add by wuxw 2018-07-03 -->
-     <select id="queryAuditUsersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from audit_user t 
-where 1 =1 
-<if test="objCode !=null and objCode != ''">
-   and t.obj_code= #{objCode}
-</if> 
-<if test="auditUserId !=null and auditUserId != ''">
-   and t.audit_user_id= #{auditUserId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="userName !=null and userName != ''">
-   and t.user_name= #{userName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="userId !=null and userId != ''">
-   and t.user_id= #{userId}
-</if> 
-<if test="auditLink !=null and auditLink != ''">
-   and t.audit_link= #{auditLink}
-</if> 
+    <select id="queryAuditUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from audit_user t,t_dict d1,t_dict d2
+        where 1 =1
+        and t.audit_link = d1.status_cd
+        and d1.table_name='audit_user'
+        and d1.table_columns='audit_link'
+        and t.obj_code = d2.status_cd
+        and d2.table_name='audit_user'
+        and d2.table_columns='obj_code'
+        <if test="objCode !=null and objCode != ''">
+            and t.obj_code= #{objCode}
+        </if>
+        <if test="auditUserId !=null and auditUserId != ''">
+            and t.audit_user_id= #{auditUserId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="auditLink !=null and auditLink != ''">
+            and t.audit_link= #{auditLink}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
