@@ -63,7 +63,7 @@ spring:
     maxActive: 20
     username: TT
   activiti:
-    database-schema-update: true
+    database-schema-update: false
 
 #============== kafka ===================
 kafka:
