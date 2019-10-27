@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用户服务类
+ * 公共服务类
  * Created by wuxw on 2018/5/14.
  */
 @RestController
@@ -31,18 +31,19 @@ public class CommonApi extends BaseController {
     @Autowired
     ICommonServiceSMO commonServiceSMOImpl;
 
-    @RequestMapping(path = "/commonApi/service",method= RequestMethod.GET)
+    @RequestMapping(path = "/commonApi/service", method = RequestMethod.GET)
     public String serviceGet(HttpServletRequest request) {
-        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR,"不支持Get方法请求").toJSONString();
+        return DataTransactionFactory.createBusinessResponseJson(ResponseConstant.RESULT_CODE_ERROR, "不支持Get方法请求").toJSONString();
     }
 
     /**
      * 用户服务统一处理接口
+     *
      * @param orderInfo
      * @param request
      * @return
      */
-    @RequestMapping(path = "/commonApi/service",method= RequestMethod.POST)
+    @RequestMapping(path = "/commonApi/service", method = RequestMethod.POST)
     public String servicePost(@RequestBody String orderInfo, HttpServletRequest request) {
         BusinessServiceDataFlow businessServiceDataFlow = null;
         JSONObject responseJson = null;
@@ -53,23 +54,25 @@ public class CommonApi extends BaseController {
             preValiateOrderInfo(orderInfo);
             businessServiceDataFlow = this.writeDataToDataFlowContext(orderInfo, headers);
             responseJson = commonServiceSMOImpl.service(businessServiceDataFlow);
-        }catch (InitDataFlowContextException e){
-            logger.error("请求报文错误,初始化 BusinessServiceDataFlow失败"+orderInfo,e);
-            responseJson = DataTransactionFactory.createNoBusinessTypeBusinessResponseJson(orderInfo,ResponseConstant.RESULT_PARAM_ERROR,e.getMessage(),null);
-        }catch (InitConfigDataException e){
-            logger.error("请求报文错误,加载配置信息失败"+orderInfo,e);
-            responseJson = DataTransactionFactory.createNoBusinessTypeBusinessResponseJson(orderInfo,ResponseConstant.RESULT_PARAM_ERROR,e.getMessage(),null);
-        }catch (Exception e){
-            logger.error("请求订单异常",e);
-            responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow,ResponseConstant.RESULT_CODE_ERROR,e.getMessage()+e,
+        } catch (InitDataFlowContextException e) {
+            logger.error("请求报文错误,初始化 BusinessServiceDataFlow失败" + orderInfo, e);
+            responseJson = DataTransactionFactory.createNoBusinessTypeBusinessResponseJson(orderInfo, ResponseConstant.RESULT_PARAM_ERROR, e.getMessage(), null);
+        } catch (InitConfigDataException e) {
+            logger.error("请求报文错误,加载配置信息失败" + orderInfo, e);
+            responseJson = DataTransactionFactory.createNoBusinessTypeBusinessResponseJson(orderInfo, ResponseConstant.RESULT_PARAM_ERROR, e.getMessage(), null);
+        } catch (Exception e) {
+            logger.error("请求订单异常", e);
+            responseJson = DataTransactionFactory.createBusinessResponseJson(businessServiceDataFlow, ResponseConstant.RESULT_CODE_ERROR, e.getMessage() + e,
                     null);
-        }finally {
+        } finally {
+            logger.debug("common服务请求报文：" + orderInfo + " 返回报文：" + responseJson.toJSONString());
             return responseJson.toJSONString();
         }
     }
 
     /**
      * 这里预校验，请求报文中不能有 dataFlowId
+     *
      * @param orderInfo
      */
     private void preValiateOrderInfo(String orderInfo) {
@@ -80,17 +83,18 @@ public class CommonApi extends BaseController {
 
     /**
      * 获取请求信息
+     *
      * @param request
      * @param headers
      * @throws RuntimeException
      */
-    private void getRequestInfo(HttpServletRequest request,Map headers) throws Exception{
-        try{
-            super.initHeadParam(request,headers);
-            super.initUrlParam(request,headers);
-        }catch (Exception e){
-            logger.error("加载头信息失败",e);
-            throw new InitConfigDataException(ResponseConstant.RESULT_PARAM_ERROR,"加载头信息失败");
+    private void getRequestInfo(HttpServletRequest request, Map headers) throws Exception {
+        try {
+            super.initHeadParam(request, headers);
+            super.initUrlParam(request, headers);
+        } catch (Exception e) {
+            logger.error("加载头信息失败", e);
+            throw new InitConfigDataException(ResponseConstant.RESULT_PARAM_ERROR, "加载头信息失败");
         }
     }
 

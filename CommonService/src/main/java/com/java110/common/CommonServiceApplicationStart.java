@@ -36,7 +36,7 @@ import java.nio.charset.Charset;
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
-        basePackages = {"com.java110.service.common.listener"})
+        basePackages = {"com.java110.common.listener"})
 @EnableFeignClients(basePackages = {"com.java110.core.smo.user"})
 public class CommonServiceApplicationStart {
 
