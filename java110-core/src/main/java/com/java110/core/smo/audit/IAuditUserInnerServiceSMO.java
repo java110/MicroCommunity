@@ -1,4 +1,4 @@
-package com.java110.core.smo.auditUser;
+package com.java110.core.smo.audit;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.auditUser.AuditUserDto;

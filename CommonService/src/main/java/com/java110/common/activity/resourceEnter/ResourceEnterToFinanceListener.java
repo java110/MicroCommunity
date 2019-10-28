@@ -1,6 +1,6 @@
 package com.java110.common.activity.resourceEnter;
 
-import com.java110.core.smo.auditUser.IAuditUserInnerServiceSMO;
+import com.java110.core.smo.audit.IAuditUserInnerServiceSMO;
 import com.java110.dto.auditUser.AuditUserDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;

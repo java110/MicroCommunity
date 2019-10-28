@@ -13,7 +13,7 @@ create table audit_message(
   KEY `idx_audit_message_id` (`audit_message_id`)
 );
 
-CREATE TABLE `business_audit_user` (
+CREATE TABLE `business_audit_message` (
     `audit_message_id` varchar(30) NOT NULL COMMENT '审核ID',
   `b_id` varchar(30) NOT NULL COMMENT '业务Id',
   `store_id` varchar(30) NOT NULL COMMENT '商户ID,用来做分区',

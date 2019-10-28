@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auditMessageServiceDaoImpl">
+
+    <!-- 保存审核原因信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessAuditMessageInfo" parameterType="Map">
+           insert into business_audit_message(
+            audit_order_type,operate,audit_message_id,audit_order_id,state,store_id,user_name,message,b_id,user_id
+            ) values (
+            #{auditOrderType},#{operate},#{auditMessageId},#{auditOrderId},#{state},#{storeId},#{userName},#{message},#{bId},#{userId}
+            )
+       </insert>
+
+
+    <!-- 查询审核原因信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessAuditMessageInfo" parameterType="Map" resultType="Map">
+        select t.audit_order_type,t.audit_order_type auditOrderType,t.operate,t.audit_message_id,t.audit_message_id
+        auditMessageId,t.audit_order_id,t.audit_order_id auditOrderId,t.state,t.store_id,t.store_id
+        storeId,t.user_name,t.user_name userName,t.message,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        from business_audit_message t
+        where 1 =1
+        <if test="auditOrderType !=null and auditOrderType != ''">
+            and t.audit_order_type= #{auditOrderType}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="auditMessageId !=null and auditMessageId != ''">
+            and t.audit_message_id= #{auditMessageId}
+        </if>
+        <if test="auditOrderId !=null and auditOrderId != ''">
+            and t.audit_order_id= #{auditOrderId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存审核原因信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveAuditMessageInfoInstance" parameterType="Map">
+        insert into audit_message(
+        audit_order_type,audit_message_id,audit_order_id,status_cd,state,store_id,user_name,message,b_id,user_id
+        ) select
+        t.audit_order_type,t.audit_message_id,t.audit_order_id,'0',t.state,t.store_id,t.user_name,t.message,t.b_id,t.user_id
+        from business_audit_message t where 1=1
+        <if test="auditOrderType !=null and auditOrderType != ''">
+            and t.audit_order_type= #{auditOrderType}
+        </if>
+        and t.operate= 'ADD'
+        <if test="auditMessageId !=null and auditMessageId != ''">
+            and t.audit_message_id= #{auditMessageId}
+        </if>
+        <if test="auditOrderId !=null and auditOrderId != ''">
+            and t.audit_order_id= #{auditOrderId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询审核原因信息 add by wuxw 2018-07-03 -->
+    <select id="getAuditMessageInfo" parameterType="Map" resultType="Map">
+        select t.audit_order_type,t.audit_order_type auditOrderType,t.audit_message_id,t.audit_message_id
+        auditMessageId,t.audit_order_id,t.audit_order_id auditOrderId,t.status_cd,t.status_cd
+        statusCd,t.state,t.store_id,t.store_id storeId,t.user_name,t.user_name userName,t.message,t.b_id,t.b_id
+        bId,t.user_id,t.user_id userId
+        from audit_message t
+        where 1 =1
+        <if test="auditOrderType !=null and auditOrderType != ''">
+            and t.audit_order_type= #{auditOrderType}
+        </if>
+        <if test="auditMessageId !=null and auditMessageId != ''">
+            and t.audit_message_id= #{auditMessageId}
+        </if>
+        <if test="auditOrderId !=null and auditOrderId != ''">
+            and t.audit_order_id= #{auditOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改审核原因信息 add by wuxw 2018-07-03 -->
+    <update id="updateAuditMessageInfoInstance" parameterType="Map">
+        update audit_message t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="auditOrderType !=null and auditOrderType != ''">
+            , t.audit_order_type= #{auditOrderType}
+        </if>
+        <if test="auditOrderId !=null and auditOrderId != ''">
+            , t.audit_order_id= #{auditOrderId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="message !=null and message != ''">
+            , t.message= #{message}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        where 1=1
+        <if test="auditMessageId !=null and auditMessageId != ''">
+            and t.audit_message_id= #{auditMessageId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询审核原因数量 add by wuxw 2018-07-03 -->
+    <select id="queryAuditMessagesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from audit_message t
+        where 1 =1
+        <if test="auditOrderType !=null and auditOrderType != ''">
+            and t.audit_order_type= #{auditOrderType}
+        </if>
+        <if test="auditMessageId !=null and auditMessageId != ''">
+            and t.audit_message_id= #{auditMessageId}
+        </if>
+        <if test="auditOrderId !=null and auditOrderId != ''">
+            and t.audit_order_id= #{auditOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="message !=null and message != ''">
+            and t.message= #{message}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -1,4 +1,4 @@
-package com.java110.common.listener;
+package com.java110.common.listener.auditUser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IAuditUserServiceDao;
