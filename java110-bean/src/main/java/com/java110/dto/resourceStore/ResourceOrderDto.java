@@ -26,6 +26,11 @@ public class ResourceOrderDto extends PageDto implements Serializable {
     // 资源状态
     private String state;
 
+    //
+    private String auditCode;
+
+    private String auditMessage;
+
 
     public String getProcessInstanceId() {
         return processInstanceId;
@@ -73,5 +78,21 @@ public class ResourceOrderDto extends PageDto implements Serializable {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
     }
 }

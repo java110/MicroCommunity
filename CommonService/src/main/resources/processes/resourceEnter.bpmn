@@ -10,10 +10,34 @@
     <userTask activiti:exclusive="true" id="_4" name="finance"/>
     <endEvent id="_5" name="EndEvent"/>
     <sequenceFlow id="_6" sourceRef="_2" targetRef="_3"/>
-    <sequenceFlow id="_7" sourceRef="_3" targetRef="_4"/>
+    <sequenceFlow id="_7" sourceRef="_3" targetRef="_4">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${auditFlag==true}]]>
+      </conditionExpression>
+    </sequenceFlow>
     <userTask activiti:exclusive="true" id="_9" name="buyer"/>
-    <sequenceFlow id="_10" sourceRef="_4" targetRef="_9"/>
+    <sequenceFlow id="_10" sourceRef="_4" targetRef="_9">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${auditFlag==true}]]>
+      </conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="_11" sourceRef="_9" targetRef="_5"/>
+    <sequenceFlow id="_8" sourceRef="_3" targetRef="_5">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${auditFlag == false}]]>
+      </conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_12" sourceRef="_4" targetRef="_5">
+      <conditionExpression xsi:type="tFormalExpression">
+        <![CDATA[${auditFlag==false}]]>
+      </conditionExpression>
+    </sequenceFlow>
+    <textAnnotation id="_13" textFormat="text/plain">
+      <text>fail</text>
+    </textAnnotation>
+    <textAnnotation id="_14" textFormat="text/plain">
+      <text>fail</text>
+    </textAnnotation>
   </process>
   <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
     <bpmndi:BPMNPlane bpmnElement="resourceEntry">
@@ -24,7 +48,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_3" id="Shape-_3">
-        <omgdc:Bounds height="55.0" width="85.0" x="220.0" y="150.0"/>
+        <omgdc:Bounds height="55.0" width="85.0" x="205.0" y="150.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
@@ -47,6 +71,26 @@
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_13" id="Shape-_13">
+        <omgdc:Bounds height="55.0" width="100.0" x="405.0" y="305.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="100.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" id="Shape-_14">
+        <omgdc:Bounds height="55.0" width="100.0" x="120.0" y="330.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="100.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12" sourceElement="_4" targetElement="_5">
+        <omgdi:waypoint x="215.0" y="292.5"/>
+        <omgdi:waypoint x="160.0" y="390.0"/>
+        <omgdi:waypoint x="250.0" y="486.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="_2" targetElement="_3">
         <omgdi:waypoint x="261.0" y="87.0"/>
         <omgdi:waypoint x="261.0" y="150.0"/>
@@ -55,8 +99,16 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="_3" targetElement="_4">
-        <omgdi:waypoint x="260.0" y="205.0"/>
-        <omgdi:waypoint x="260.0" y="265.0"/>
+        <omgdi:waypoint x="252.5" y="205.0"/>
+        <omgdi:waypoint x="252.5" y="265.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="_3" targetElement="_5">
+        <omgdi:waypoint x="290.0" y="177.5"/>
+        <omgdi:waypoint x="375.0" y="345.0"/>
+        <omgdi:waypoint x="282.0" y="486.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>

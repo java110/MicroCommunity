@@ -33,6 +33,23 @@ public interface IResourceEntryStoreInnerServiceSMO {
     public List<ResourceOrderDto> getUserTasks(@RequestBody AuditUser user);
 
     /**
+     * 同意
+     * @param resourceOrderDto
+     * @return
+     */
+    @RequestMapping(value = "/agreeCompleteTask", method = RequestMethod.POST)
+    public boolean agreeCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto);
+
+
+    /**
+     * 反驳
+     * @param resourceOrderDto
+     * @return
+     */
+    @RequestMapping(value = "/refuteCompleteTask", method = RequestMethod.POST)
+    public boolean refuteCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto);
+
+    /**
      * 完成任务
      * @param resourceOrderDto
      */

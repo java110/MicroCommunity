@@ -80,6 +80,22 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         return resourceOrderDtos;
     }
 
+    public boolean agreeCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto) {
+        TaskService taskService = processEngine.getTaskService();
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("auditFlag", true);
+        taskService.complete(resourceOrderDto.getTaskId(), variables);
+        return true;
+    }
+
+    public boolean refuteCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto) {
+        TaskService taskService = processEngine.getTaskService();
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("auditFlag", true);
+        taskService.complete(resourceOrderDto.getTaskId(), variables);
+        return true;
+    }
+
     /**
      * 审核 当前任务
      *
