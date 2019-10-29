@@ -48,7 +48,6 @@
                     param,
                     function (json, res) {
                         var _resourceStoreManageInfo = JSON.parse(json);
-                        console.log(_resourceStoreManageInfo);
                         vc.component.resourceStoreManageInfo.total = _resourceStoreManageInfo.total;
                         vc.component.resourceStoreManageInfo.records = _resourceStoreManageInfo.records;
                         vc.component.resourceStoreManageInfo.resourceStores = _resourceStoreManageInfo.resourceStores;
