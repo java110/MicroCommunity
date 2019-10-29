@@ -77,7 +77,7 @@
 
                 });
             },
-            editResourceStore: function () {
+            editResourceStoreForStock: function () {
                 if (!vc.component.editResourceStoreValidate()) {
                     vc.message(vc.validate.errInfo);
                     return;
