@@ -1,3 +1,4 @@
+console.log("JS加载开始");
 (function (vc, vm) {
 
     vc.extends({
