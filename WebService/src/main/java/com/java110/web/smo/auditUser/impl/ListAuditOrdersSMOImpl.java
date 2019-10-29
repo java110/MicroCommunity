@@ -44,7 +44,7 @@ public class ListAuditOrdersSMOImpl extends AbstractComponentSMO implements ILis
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", result.getUserId());
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditOrder.listAuditOrders" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/auditUser.listAuditOrders" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
