@@ -65,8 +65,8 @@ public class ListAuditOrdersListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
-        Assert.hasKeyAndValue(reqJson, "row", "必填，请填写用户ID");
-        Assert.hasKeyAndValue(reqJson, "page", "必填，请填写用户ID");
+        Assert.hasKeyAndValue(reqJson, "row", "必填，请填写每页显示数");
+        Assert.hasKeyAndValue(reqJson, "page", "必填，请填写页数");
 
         super.validatePageInfo(reqJson);
     }
