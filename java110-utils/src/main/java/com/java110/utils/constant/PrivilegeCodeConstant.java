@@ -118,6 +118,7 @@ public final class PrivilegeCodeConstant {
     //審核人員 审核人员
     public static final String AGENT_HAS_LIST_AUDITUSER = "502019102639930001";
 
-    public static final String AGENT_HAS_LIST_AUDITORDER = "";
+    //审核工单
+    public static final String AGENT_HAS_LIST_AUDITORDER = "502019102911270009";
 
 }

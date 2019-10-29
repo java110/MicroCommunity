@@ -2,6 +2,7 @@ package com.java110.web.components.auditUser;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.web.smo.auditUser.IListAuditOrdersSMO;
 import com.java110.web.smo.auditUser.IListAuditUsersSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class MyAuditOrdersComponent {
 
     @Autowired
-    private IListAuditUsersSMO listAuditUsersSMOImpl;
+    private IListAuditOrdersSMO listAuditOrdersSMOImpl;
 
     /**
      * 查询审核人员列表
@@ -28,14 +29,14 @@ public class MyAuditOrdersComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listAuditUsersSMOImpl.listAuditUsers(pd);
+        return listAuditOrdersSMOImpl.listAuditOrders(pd);
     }
 
-    public IListAuditUsersSMO getListAuditUsersSMOImpl() {
-        return listAuditUsersSMOImpl;
+    public IListAuditOrdersSMO getListAuditOrdersSMOImpl() {
+        return listAuditOrdersSMOImpl;
     }
 
-    public void setListAuditUsersSMOImpl(IListAuditUsersSMO listAuditUsersSMOImpl) {
-        this.listAuditUsersSMOImpl = listAuditUsersSMOImpl;
+    public void setListAuditOrdersSMOImpl(IListAuditOrdersSMO listAuditOrdersSMOImpl) {
+        this.listAuditOrdersSMOImpl = listAuditOrdersSMOImpl;
     }
 }
