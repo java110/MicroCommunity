@@ -94,7 +94,7 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if (res.status == 200) {
                             //关闭model
-                            $('#editResourceStoreModel').modal('hide');
+                            $('#editItemNumberStoreModel').modal('hide');
                             vc.emit('resourceStoreManage', 'listResourceStore', {});
                             return;
                         }
