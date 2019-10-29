@@ -16,6 +16,7 @@
                     resId: '',
                     resName: '',
                     resCode: '',
+                    stock:''
 
                 }
             }
