@@ -79,6 +79,8 @@
             },
             editResourceStoreForStock: function () {
                 if (!vc.component.editResourceStoreValidate()) {
+                    console.log("开始判断!");
+
                     vc.message(vc.validate.errInfo);
                     return;
                 }
