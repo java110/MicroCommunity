@@ -17,6 +17,7 @@
          },
          _initEvent:function(){
              vc.on('editItemNumberStore','openEditItemNumberStoreModal',function(_params){
+                 console.log(_params);
                 vc.component.refreshEditResourceStoreInfo();
                 $('#editItemNumberStoreModel').modal('show');
                 vc.copyObject(_params, vc.component.editResourceStoreInfo );
