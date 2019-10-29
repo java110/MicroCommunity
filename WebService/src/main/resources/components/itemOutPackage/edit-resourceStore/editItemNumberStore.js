@@ -8,6 +8,7 @@
                 resCode:'',
                 price:'',
                 description:'',
+                stock:''
 
             }
         },
