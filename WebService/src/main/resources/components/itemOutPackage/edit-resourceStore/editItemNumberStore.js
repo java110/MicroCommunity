@@ -82,7 +82,7 @@
                     vc.message(vc.validate.errInfo);
                     return;
                 }
-
+                console.log("开始向后台发送请求!");
                 vc.http.post(
                     'editResourceStore',
                     'update',
@@ -92,6 +92,9 @@
                     },
                     function (json, res) {
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        console.log("请求结果为：");
+                        console.log(res);
+                        console.log(json);
                         if (res.status == 200) {
                             //关闭model
                             $('#editItemNumberStoreModel').modal('hide');
