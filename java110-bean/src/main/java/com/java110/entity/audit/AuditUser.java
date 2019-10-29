@@ -1,11 +1,13 @@
 package com.java110.entity.audit;
 
+import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 
 /**
  * 审核用户
  */
-public class AuditUser implements Serializable {
+public class AuditUser extends PageDto implements Serializable {
 
     private String auditUserId;
 

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.common.IResourceEntryStoreInnerServiceSMO;
+import com.java110.dto.PageDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;
 import org.activiti.engine.ProcessEngine;
@@ -57,6 +58,19 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
     }
 
     /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    public long getUserTaskCount(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery();
+        query.taskAssignee(user.getUserId());
+        return query.count();
+    }
+
+    /**
      * 获取用户任务
      *
      * @param user 用户信息
@@ -66,7 +80,12 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
         TaskQuery query = taskService.createTaskQuery();
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
-        List<Task> list = query.list();
+        List<Task> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage(user.getPage(), user.getRow());
+        }else{
+            list = query.list();
+        }
 
         List<ResourceOrderDto> resourceOrderDtos = new ArrayList<>();
 

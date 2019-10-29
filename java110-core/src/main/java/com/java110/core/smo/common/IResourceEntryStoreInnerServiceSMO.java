@@ -26,6 +26,14 @@ public interface IResourceEntryStoreInnerServiceSMO {
 
 
     /**
+     * 查询用户任务数
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/getUserTaskCount", method = RequestMethod.POST)
+    public long getUserTaskCount(@RequestBody AuditUser user);
+
+    /**
      *  获取用户任务
      * @param user 用户信息
      */
