@@ -556,5 +556,12 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_AUDIT_MESSAGE ="170200050001";
 
+    /**
+     * 启动工作流流程
+     */
+    public static final String BUSINESS_TYPE_START_PROCESS ="180200030001";
+   /* public static final String BUSINESS_TYPE_DELETE_AUDIT_MESSAGE ="170200050001";
+    public static final String BUSINESS_TYPE_DELETE_AUDIT_MESSAGE ="170200050001";
+*/
 
 }

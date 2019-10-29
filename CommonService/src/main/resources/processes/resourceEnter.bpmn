@@ -12,24 +12,24 @@
     <sequenceFlow id="_6" sourceRef="_2" targetRef="_3"/>
     <sequenceFlow id="_7" sourceRef="_3" targetRef="_4">
       <conditionExpression xsi:type="tFormalExpression">
-        <![CDATA[${auditFlag==true}]]>
+        <![CDATA[${auditCode==10000}]]>
       </conditionExpression>
     </sequenceFlow>
     <userTask activiti:exclusive="true" id="_9" name="buyer"/>
     <sequenceFlow id="_10" sourceRef="_4" targetRef="_9">
       <conditionExpression xsi:type="tFormalExpression">
-        <![CDATA[${auditFlag==true}]]>
+        <![CDATA[${auditCode==10000}]]>
       </conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="_11" sourceRef="_9" targetRef="_5"/>
     <sequenceFlow id="_8" sourceRef="_3" targetRef="_5">
       <conditionExpression xsi:type="tFormalExpression">
-        <![CDATA[${auditFlag == false}]]>
+        <![CDATA[${auditCode==20000}]]>
       </conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="_12" sourceRef="_4" targetRef="_5">
       <conditionExpression xsi:type="tFormalExpression">
-        <![CDATA[${auditFlag==false}]]>
+        <![CDATA[${auditCode==20000}]]>
       </conditionExpression>
     </sequenceFlow>
     <textAnnotation id="_13" textFormat="text/plain">

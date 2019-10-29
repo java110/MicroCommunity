@@ -83,7 +83,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
     public boolean agreeCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto) {
         TaskService taskService = processEngine.getTaskService();
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditFlag", true);
+        variables.put("auditCode", resourceOrderDto.getAuditCode());
         taskService.complete(resourceOrderDto.getTaskId(), variables);
         return true;
     }
@@ -91,7 +91,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
     public boolean refuteCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto) {
         TaskService taskService = processEngine.getTaskService();
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditFlag", true);
+        variables.put("auditCode", resourceOrderDto.getAuditCode());
         taskService.complete(resourceOrderDto.getTaskId(), variables);
         return true;
     }
