@@ -32,8 +32,22 @@
         },
         methods: {
             _initDate:function(){
-                $(".start_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "day"});
-                $(".end_time").datetimepicker({format: 'yyyy-mm-dd', language: 'zh-CN',minView: "hour"});
+                $(".start_time").datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    minView: "month",
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+                });
+                $(".end_time").datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    minView: "month",
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+                });
                 $('.start_time').datetimepicker()
                     .on('changeDate', function (ev) {
                         var value = $(".start_time").val();

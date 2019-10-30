@@ -5,9 +5,9 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <!--<button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
                                 v-on:click="_moreCondition()">{{payFeeManageInfo.moreCondition == true?'隐藏':'更多'}}
-                        </button>-->
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -23,23 +23,23 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input size="16" type="text" placeholder="请选择开始时间"   readonly class="form-control form-control-sm start_time">
+                                <input size="16" type="text" placeholder="请选择开始时间"   readonly class="form-control  start_time">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input size="16" type="text" placeholder="请选择结束时间"  readonly class="form-control form-control-sm end_time">
+                                <input size="16" type="text" placeholder="请选择结束时间"  readonly class="form-control  end_time">
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryPayFeeMethod()">
-                                <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" v-if="payFeeManageInfo.moreCondition == true">
                         <div class="col-sm-4">
-                            <input size="16" type="text" placeholder="请填写员工编码"  v-model="payFeeManageInfo.conditions.userCode" readonly class="form-control form-control-sm">
+                            <input size="16" type="text" placeholder="请填写员工编码"  v-model="payFeeManageInfo.conditions.userCode" class="form-control">
                         </div>
                     </div>
                 </div>
