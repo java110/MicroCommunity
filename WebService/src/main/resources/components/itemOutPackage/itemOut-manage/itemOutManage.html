@@ -84,13 +84,15 @@
                             </td>
                             <td>{{resourceStore.price}}</td>
                             <td width="65">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">-</button>
-                                </span>
-                                <input type="text" class="form-control" :placeholder="resourceStore.stock">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">+</button>
-                                </span>
+                                <div class="input-group">
+                                     <span class="input-group-btn">
+                                       <button class="btn btn-default" type="button">-</button>
+                                     </span>
+                                    <input type="text" class="form-control" :placeholder="resourceStore.stock">
+                                    <span class="input-group-btn">
+                                       <button class="btn btn-default" type="button">+</button>
+                                     </span>
+                                </div>
                             </td>
                             <td>
                                 <h4>
