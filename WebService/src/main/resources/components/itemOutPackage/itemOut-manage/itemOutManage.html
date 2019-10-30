@@ -46,49 +46,66 @@
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>物品信息</h5>
-<!--                    <div class="ibox-tools" style="top:10px;">-->
-<!--                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddResourceStoreModal()">-->
-<!--                            <i class="glyphicon glyphicon-plus"></i>-->
-<!--                            添加-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div class="ibox-tools" style="top:10px;">-->
+                    <!--                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddResourceStoreModal()">-->
+                    <!--                            <i class="glyphicon glyphicon-plus"></i>-->
+                    <!--                            添加-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                 </div>
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny"
+                    <table class="table shoping-cart-table"
                            data-page-size="15"
                     >
-                        <thead>
-                        <tr>
-                            <th class="text-center">物品ID</th>
-                            <th class="text-center">物品名称</th>
-                            <th class="text-center">物品编码</th>
-                            <th class="text-center">物品价格</th>
-                            <th class="text-center">物品库存</th>
-                            <th class="text-center">操作</th>
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th class="text-center">物品ID</th>-->
+<!--                            <th class="text-center">物品名称</th>-->
+<!--                            <th class="text-center">物品编码</th>-->
+<!--                            <th class="text-center">物品价格</th>-->
+<!--                            <th class="text-center">物品库存</th>-->
+<!--                            <th class="text-center">操作</th>-->
 
 
-                        </tr>
-                        </thead>
+<!--                        </tr>-->
+<!--                        </thead>-->
                         <tbody>
                         <tr v-for="resourceStore in resourceStoreManageInfo.resourceStores">
-                            <td class="text-center">{{resourceStore.resId}}</td>
-                            <td class="text-center">{{resourceStore.resName}}</td>
-                            <td class="text-center">{{resourceStore.resCode}}</td>
-                            <td class="text-center">{{resourceStore.price}}</td>
-                            <td class="text-center">{{resourceStore.stock}}</td>
-                            <td class="text-center">
-                                <div class="btn-group">
-                                    <button class="btn-white btn btn-xs"
-                                            v-on:click="_openEditResourceStoreModel(resourceStore)">修改
-                                    </button>
-                                </div>
+                            <td class="desc">
+                                <h3>
+                                    <a class="text-navy">
+                                        {{resourceStore.resName}}
+                                    </a>
+                                </h3>
+                                <p class="small">
+                                    {{resourceStore.resCode}}
+                                </p>
+                            </td>
+                            <td>{{resourceStore.price}}</td>
+                            <td width="65"></td>
+                            <td>
+                                <h4>
+                                    {{resourceStore.price}}
+                                </h4>
+                            </td>
+<!--                            <td class="text-center">{{resourceStore.resId}}</td>-->
+<!--                            <td class="text-center">{{resourceStore.resName}}</td>-->
+<!--                            <td class="text-center">{{resourceStore.resCode}}</td>-->
+<!--                            <td class="text-center">{{resourceStore.price}}</td>-->
+<!--                            <td class="text-center">{{resourceStore.stock}}</td>-->
+<!--                            <td class="text-center">-->
 <!--                                <div class="btn-group">-->
 <!--                                    <button class="btn-white btn btn-xs"-->
-<!--                                            v-on:click="_openDeleteResourceStoreModel(resourceStore)">删除-->
+<!--                                            v-on:click="_openEditResourceStoreModel(resourceStore)">修改-->
 <!--                                    </button>-->
 <!--                                </div>-->
-                            </td>
+                                <!--                                <div class="btn-group">-->
+                                <!--                                    <button class="btn-white btn btn-xs"-->
+                                <!--                                            v-on:click="_openDeleteResourceStoreModel(resourceStore)">删除-->
+                                <!--                                    </button>-->
+                                <!--                                </div>-->
+<!--                            </td>-->
 
                         </tr>
                         </tbody>
@@ -108,11 +125,11 @@
     </div>
 
 
-<!--    <vc:create name="addResourceStore"-->
-<!--               callBackListener=""-->
-<!--               callBackFunction=""-->
-<!--    ></vc:create>-->
+    <!--    <vc:create name="addResourceStore"-->
+    <!--               callBackListener=""-->
+    <!--               callBackFunction=""-->
+    <!--    ></vc:create>-->
     <vc:create name="editItemNumberStore"></vc:create>
-<!--    <vc:create name="deleteResourceStore"></vc:create>-->
+    <!--    <vc:create name="deleteResourceStore"></vc:create>-->
 
 </div>
