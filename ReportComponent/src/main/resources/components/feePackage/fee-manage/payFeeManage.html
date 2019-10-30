@@ -13,7 +13,7 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-4">
-                            <select class="custom-select" v-model="basePrivilegeManageInfo.conditions.feeTypeCd">
+                            <select class="custom-select" v-model="payFeeManageInfo.conditions.feeTypeCd">
                                 <option selected value="">请选择费用类型</option>
                                 <option value="800900000001">运营团队</option>
                                 <option value="800900000002">代理商</option>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            <input size="16" type="text" placeholder="请填写员工编码"  v-model="basePrivilegeManageInfo.conditions.userCode" readonly class="form-control form-control-sm">
+                            <input size="16" type="text" placeholder="请填写员工编码"  v-model="payFeeManageInfo.conditions.userCode" readonly class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
