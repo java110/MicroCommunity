@@ -47,7 +47,7 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
 
 //        Map paramMap = BeanConvertUtil.beanCovertMap(result);
 //        paramIn.putAll(paramMap);
-        paramIn.put("storeId", result.getUserId());
+        paramIn.put("storeId", result.getStoreId());
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPayFee" + mapToUrlParam(paramIn);
 
