@@ -35,6 +35,7 @@
         <module>java110-db</module>
         <module>JobService</module>
         <module>CommonService</module>
+        <module>ReportService</module>
     </modules>
 
     <parent>
