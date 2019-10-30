@@ -58,18 +58,6 @@
                     <table class="table shoping-cart-table"
                            data-page-size="15"
                     >
-                        <!--                        <thead>-->
-                        <!--                        <tr>-->
-                        <!--                            <th class="text-center">物品ID</th>-->
-                        <!--                            <th class="text-center">物品名称</th>-->
-                        <!--                            <th class="text-center">物品编码</th>-->
-                        <!--                            <th class="text-center">物品价格</th>-->
-                        <!--                            <th class="text-center">物品库存</th>-->
-                        <!--                            <th class="text-center">操作</th>-->
-
-
-                        <!--                        </tr>-->
-                        <!--                        </thead>-->
                         <tbody>
                         <tr v-for="resourceStore in resourceStoreManageInfo.resourceStores">
                             <td class="desc">
@@ -84,15 +72,8 @@
                             </td>
                             <td>{{resourceStore.price}}</td>
                             <td width="65">
-                                <div class="input-group">
-                                     <span class="input-group-btn">
-                                       <button class="btn btn-default" type="button">-</button>
-                                     </span>
-                                    <input type="text" class="form-control" :placeholder="resourceStore.stock">
-                                    <span class="input-group-btn">
-                                       <button class="btn btn-default" type="button">+</button>
-                                     </span>
-                                </div>
+                                <input type="text" class="form-control" :placeholder="resourceStore.stock" v-model="resourceStore.stock">
+                                <button class="btn btn-default" type="button" @click="_resourceStoreLess(resourceStore.stock)">-</button>
                             </td>
                             <td>
                                 <h4>
