@@ -343,6 +343,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
 
         String[] oSqls = oldSql.split("</if>");
         for (String oSql : oSqls) {
+            logger.debug("处理if 节点，当前处理的oSql=" + oSql + "总的oSqls = " + oSqls);
             if (!oSql.startsWith("<if")) {
                 newSql.append(oSql.substring(0, oSql.indexOf("<if")));
             }
