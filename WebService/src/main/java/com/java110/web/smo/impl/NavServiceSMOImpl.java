@@ -6,7 +6,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.CommonUtil;
 import com.java110.core.context.IPageData;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.ICommunityServiceSMO;
 import com.java110.web.smo.INavServiceSMO;
 import org.slf4j.Logger;

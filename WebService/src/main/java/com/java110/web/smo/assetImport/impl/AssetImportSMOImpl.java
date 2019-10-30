@@ -12,7 +12,7 @@ import com.java110.entity.assetImport.ImportOwner;
 import com.java110.entity.assetImport.ImportParkingSpace;
 import com.java110.entity.assetImport.ImportRoom;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.assetImport.IAssetImportSMO;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;

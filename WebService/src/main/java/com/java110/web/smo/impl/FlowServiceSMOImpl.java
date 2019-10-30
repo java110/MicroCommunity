@@ -8,7 +8,7 @@ import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.context.IPageData;
 import com.java110.utils.util.Assert;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.IFlowServiceSMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import org.slf4j.Logger;

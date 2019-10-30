@@ -121,4 +121,6 @@ public final class PrivilegeCodeConstant {
     //审核工单
     public static final String AGENT_HAS_LIST_AUDITORDER = "502019102911270009";
 
+    public static final String LIST_PAY_FEE = "";
+
 }

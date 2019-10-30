@@ -1,4 +1,4 @@
-package com.java110.web.core;
+package com.java110.core.component;
 
 
 import com.alibaba.fastjson.JSONObject;

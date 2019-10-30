@@ -36,6 +36,7 @@
         <module>JobService</module>
         <module>CommonService</module>
         <module>ReportService</module>
+        <module>ReportComponent</module>
     </modules>
 
     <parent>

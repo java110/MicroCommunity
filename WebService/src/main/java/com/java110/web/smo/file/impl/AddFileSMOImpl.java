@@ -7,7 +7,7 @@ import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.file.IAddFileSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

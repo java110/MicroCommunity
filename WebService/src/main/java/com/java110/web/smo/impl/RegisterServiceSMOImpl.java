@@ -9,7 +9,7 @@ import com.java110.utils.util.StringUtil;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AliSendMessageFactory;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.IRegisterServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,7 @@ import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.context.IPageData;
-import com.java110.web.core.BaseComponentSMO;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.web.smo.IFeeServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

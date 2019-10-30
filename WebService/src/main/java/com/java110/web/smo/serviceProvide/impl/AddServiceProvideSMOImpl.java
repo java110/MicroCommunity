@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
-import com.java110.web.core.AbstractComponentSMO;
+import com.java110.core.component.AbstractComponentSMO;
 import com.java110.web.smo.serviceProvide.IAddServiceProvideSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

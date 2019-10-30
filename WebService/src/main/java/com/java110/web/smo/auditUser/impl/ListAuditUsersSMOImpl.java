@@ -6,16 +6,13 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.web.core.AbstractComponentSMO;
+import com.java110.core.component.AbstractComponentSMO;
 import com.java110.web.smo.auditUser.IListAuditUsersSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 /**
  * 查询auditUser服务类
