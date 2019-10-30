@@ -36,7 +36,7 @@
         },
         methods: {
             _resourceStoreLess:function(stock){
-                resourceStoreManageInfo.conditions.stock=parseInt(stock--);
+                vc.component.$data.resourceStoreManageInfo.conditions.stock=parseInt(stock--);
             },
 
             _listResourceStores: function (_page, _rows) {
