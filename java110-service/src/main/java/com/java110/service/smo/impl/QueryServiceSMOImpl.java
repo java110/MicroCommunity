@@ -284,7 +284,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
                         param = params.getInteger(sqls[sqlIndex]);
                     }
                     //这里对 page 和 rows 特殊处理 ，目前没有想到其他的办法
-                    if (StringUtils.isNumeric(param.toString()) && "page,rows".contains(sqls[sqlIndex])) {
+                    if (StringUtils.isNumeric(param.toString()) && "page,rows,row".contains(sqls[sqlIndex])) {
                         param = Integer.parseInt(param.toString());
                     }
                     currentParams.add(param);
@@ -345,6 +345,7 @@ public class QueryServiceSMOImpl extends LoggerEngine implements IQueryServiceSM
         for (String oSql : oSqls) {
             logger.debug("处理if 节点，当前处理的oSql=" + oSql + "总的oSqls = " + oSqls);
             if(StringUtil.isNullOrNone(oSql) || !oSql.contains("<if")){
+                newSql.append(oSql);
                 continue;
             }
             if (!oSql.startsWith("<if")) {

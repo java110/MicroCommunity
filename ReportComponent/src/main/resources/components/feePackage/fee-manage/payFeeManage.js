@@ -74,7 +74,7 @@
                     function (json, res) {
                         var _payFeeManageInfo = JSON.parse(json);
                         vc.component.payFeeManageInfo.total = _payFeeManageInfo.total;
-                        vc.component.payFeeManageInfo.records = _payFeeManageInfo.records;
+                        vc.component.payFeeManageInfo.records = parseInt(_payFeeManageInfo.total/_rows +1);
                         vc.component.payFeeManageInfo.payFees = _payFeeManageInfo.payFees;
                         vc.emit('pagination', 'init', {
                             total: vc.component.payFeeManageInfo.records,
