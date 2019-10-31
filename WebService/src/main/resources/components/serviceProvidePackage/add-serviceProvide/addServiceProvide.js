@@ -29,7 +29,7 @@
             });
         },
         methods: {
-            addServiceProvideValidate() {
+            addServiceProvideValidate: function() {
                 return vc.validate.validate({
                     addServiceProvideInfo: vc.component.addServiceProvideInfo
                 }, {
