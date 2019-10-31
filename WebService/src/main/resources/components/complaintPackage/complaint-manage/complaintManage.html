@@ -103,6 +103,11 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditComplaintModel(complaint)">修改
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
                                             v-on:click="_openDeleteComplaintModel(complaint)">删除
                                     </button>
                                 </div>
@@ -130,7 +135,7 @@
                callBackListener=""
                callBackFunction=""
     ></vc:create>
-    <!--<vc:create name="editComplaint"></vc:create>-->
+    <vc:create name="editComplaint"></vc:create>
     <vc:create name="deleteComplaint"></vc:create>
 
 </div>
