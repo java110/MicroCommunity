@@ -5,6 +5,7 @@ import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.report.smo.fee.IListPayFeeSMO;
+import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
@@ -50,10 +51,18 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         int page = paramIn.getInteger("page");
         int row = paramIn.getInteger("row");
         paramIn.put("storeId", result.getStoreId());
-        paramIn.put("page",(page-1)*row);
-        paramIn.put("row",page*row);
+        paramIn.put("page", (page - 1) * row);
+        paramIn.put("row", page * row);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPayFee" + mapToUrlParam(paramIn);
+        String apiUrl = "";
+        if (!paramIn.containsKey("feeTypeCd") || FeeTypeConstant.FEE_TYPE_PROPERTY.equals(paramIn.getString("feeTypeCd"))) {
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPropertyPayFee" + mapToUrlParam(paramIn);
+        } else if (FeeTypeConstant.FEE_TYPE_HIRE_PARKING_SPACE.equals(paramIn.getString("feeTypeCd"))) {
+            paramIn.put("feeTypeCd", "");
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
+        }else{
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
+        }
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
