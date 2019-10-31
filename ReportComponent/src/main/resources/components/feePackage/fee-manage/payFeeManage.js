@@ -15,7 +15,7 @@
                 name: '',
                 conditions: {
                     communityId: vc.getCurrentCommunity().communityId,
-                    feeTypeCd: '',
+                    feeTypeCd: '888800010001',
                     startTime: '',
                     endTime: '',
                     userCode:''
