@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="complaintServiceDaoImpl">
+
+    <!-- 保存投诉建议信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessComplaintInfo" parameterType="Map">
+           insert into business_complaint(
+operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id
+) values (
+#{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId}
+)
+       </insert>
+
+
+       <!-- 查询投诉建议信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessComplaintInfo" parameterType="Map" resultType="Map">
+           select  t.operate,t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd typeCd,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.state,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId 
+from business_complaint t 
+where 1 =1 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="complaintId !=null and complaintId != ''">
+   and t.complaint_id= #{complaintId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="complaintName !=null and complaintName != ''">
+   and t.complaint_name= #{complaintName}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存投诉建议信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveComplaintInfoInstance" parameterType="Map">
+        insert into complaint(
+complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id
+) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id from business_complaint t where 1=1
+   and t.operate= 'ADD'
+<if test="complaintId !=null and complaintId != ''">
+   and t.complaint_id= #{complaintId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="complaintName !=null and complaintName != ''">
+   and t.complaint_name= #{complaintName}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询投诉建议信息 add by wuxw 2018-07-03 -->
+    <select id="getComplaintInfo" parameterType="Map" resultType="Map">
+        select  t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd typeCd,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId 
+from complaint t 
+where 1 =1 
+<if test="complaintId !=null and complaintId != ''">
+   and t.complaint_id= #{complaintId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="complaintName !=null and complaintName != ''">
+   and t.complaint_name= #{complaintName}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改投诉建议信息 add by wuxw 2018-07-03 -->
+    <update id="updateComplaintInfoInstance" parameterType="Map">
+        update  complaint t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="complaintName !=null and complaintName != ''">
+, t.complaint_name= #{complaintName}
+</if> 
+<if test="tel !=null and tel != ''">
+, t.tel= #{tel}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+, t.store_id= #{storeId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+, t.room_id= #{roomId}
+</if> 
+ where 1=1 <if test="complaintId !=null and complaintId != ''">
+and t.complaint_id= #{complaintId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询投诉建议数量 add by wuxw 2018-07-03 -->
+     <select id="queryComplaintsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from complaint t 
+where 1 =1 
+<if test="complaintId !=null and complaintId != ''">
+   and t.complaint_id= #{complaintId}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="complaintName !=null and complaintName != ''">
+   and t.complaint_name= #{complaintName}
+</if> 
+<if test="tel !=null and tel != ''">
+   and t.tel= #{tel}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="storeId !=null and storeId != ''">
+   and t.store_id= #{storeId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="roomId !=null and roomId != ''">
+   and t.room_id= #{roomId}
+</if> 
+
+
+     </select>
+
+</mapper>

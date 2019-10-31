@@ -1,82 +1,137 @@
 {
-  "templateName":"审核人员",
-  "templateCode":"auditUser",
-  "templateKey":"auditUserId",
-  "templateKeyName":"审核ID",
-  "searchCode": "userName",
-  "searchName": "用户名称",
+  "templateName":"投诉建议",
+  "templateCode":"complaint",
+  "templateKey":"complaintId",
+  "templateKeyName":"投诉ID",
+  "searchCode": "complaintName",
+  "searchName": "投诉人名称",
   "conditions": [
-
     {
-      "name": "审核ID",
+      "name": "投诉ID",
       "inputType": "input",
-      "code": "auditUserId",
+      "code": "complaintId",
       "whereCondition": "equal"
     },
     {
-      "name": "审核人员",
-      "inputType": "input",
-      "code": "userName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "审核环节",
+      "name": "投诉类型",
       "inputType": "select",
-      "code": "auditLink",
-      "selectValue":"809001,809002,809003",
-      "selectValueName":"部门主管,财务主管,采购人员",
+      "code": "typeCd",
+      "selectValue":"809001,809002",
+      "selectValueName":"投诉,建议",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "投诉人",
+      "inputType": "input",
+      "code": "complaintName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "联系电话",
+      "inputType": "input",
+      "code": "tel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "房屋编号",
+      "inputType": "input",
+      "code": "roomId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "投诉状态",
+      "inputType": "select",
+      "code": "state",
+      "selectValue":"1100,1200",
+      "selectValueName":"派单,结单",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"userId",
-      "cnCode":"用户ID",
-      "desc":"必填，请填写用户ID",
+      "code":"storeId",
+      "cnCode":"商户ID",
+      "desc":"必填，请填写商户ID",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"用户ID必须为数字",
+      "limitErrInfo":"商户ID必须为数字",
+      "show": false
+    },
+    {
+      "code": "typeCd",
+      "cnCode":"投诉类型",
+      "desc":"必填，请选择投诉类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"809001,809002",
+      "selectValueName":"投诉,建议",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"投诉类型格式错误",
       "show": true
     },
     {
-      "code":"userName",
-      "cnCode":"用户名称",
-      "desc":"必填，请填写用户名称",
+      "code":"roomId",
+      "cnCode":"房屋编号",
+      "desc":"必填，请选择房屋编号",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"2,50",
-      "limitErrInfo":"用户名称必须在2至50字符之间",
-      "show": true
-    },
-    {
-      "code":"auditLink",
-      "cnCode":"审核环节",
-      "desc":"必填，请选择审核环节",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"select",
-      "selectValue":"809001,809002,809003",
-      "selectValueName":"部门主管,财务主管,采购人员",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"审核环节格式错误",
+      "limitErrInfo":"房屋编号格式错误",
       "show": true
     },
     {
-      "code":"objCode",
-      "cnCode":"流程对象",
-      "desc":"必填，请填写流程对象",
+      "code":"complaintName",
+      "cnCode":"投诉人",
+      "desc":"必填，请填写投诉人",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxLength",
-      "limitParam":"64",
-      "limitErrInfo":"物品库存不能大于64位",
+      "limitParam":"200",
+      "limitErrInfo":"投诉人不能大于200位",
+      "show": false
+    },
+    {
+      "code":"tel",
+      "cnCode":"投诉电话",
+      "desc":"必填，请填写投诉电话",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"投诉电话格式错误",
+      "show": true
+    },
+    {
+      "code":"state",
+      "cnCode":"投诉状态",
+      "desc":"必填，请填写投诉状态",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"投诉状态格式错误",
+      "show": true
+    },
+    {
+      "code":"context",
+      "cnCode":"投诉内容",
+      "desc":"必填，请填写投诉内容",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"textarea",
+      "limit":"maxLength",
+      "limitParam":"4000",
+      "limitErrInfo":"投诉状态超过4000位",
       "show": false
     }
   ]

@@ -1,0 +1,83 @@
+{
+  "templateName":"审核人员",
+  "templateCode":"auditUser",
+  "templateKey":"auditUserId",
+  "templateKeyName":"审核ID",
+  "searchCode": "userName",
+  "searchName": "用户名称",
+  "conditions": [
+
+    {
+      "name": "审核ID",
+      "inputType": "input",
+      "code": "auditUserId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "审核人员",
+      "inputType": "input",
+      "code": "userName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "审核环节",
+      "inputType": "select",
+      "code": "auditLink",
+      "selectValue":"809001,809002,809003",
+      "selectValueName":"部门主管,财务主管,采购人员",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"userId",
+      "cnCode":"用户ID",
+      "desc":"必填，请填写用户ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"用户ID必须为数字",
+      "show": true
+    },
+    {
+      "code":"userName",
+      "cnCode":"用户名称",
+      "desc":"必填，请填写用户名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"2,50",
+      "limitErrInfo":"用户名称必须在2至50字符之间",
+      "show": true
+    },
+    {
+      "code":"auditLink",
+      "cnCode":"审核环节",
+      "desc":"必填，请选择审核环节",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"809001,809002,809003",
+      "selectValueName":"部门主管,财务主管,采购人员",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"审核环节格式错误",
+      "show": true
+    },
+    {
+      "code":"objCode",
+      "cnCode":"流程对象",
+      "desc":"必填，请填写流程对象",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"物品库存不能大于64位",
+      "show": false
+    }
+  ]
+}

@@ -123,4 +123,9 @@ public final class PrivilegeCodeConstant {
 
     public static final String LIST_PAY_FEE = "502019103056060006";
 
+    //投诉建议 权限编码
+    public static final String AGENT_HAS_LIST_COMPLAINT = "502019103114270018";
+
+
+
 }

@@ -99,6 +99,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_resId = "85";
     public static final String CODE_PREFIX_auditUserId = "86";
     public static final String CODE_PREFIX_auditMessageId = "87";
+    public static final String CODE_PREFIX_complaintId = "88";
 
 
 

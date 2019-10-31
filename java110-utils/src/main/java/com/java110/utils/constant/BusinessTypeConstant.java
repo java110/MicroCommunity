@@ -564,4 +564,19 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_AUDIT_MESSAGE ="170200050001";
 */
 
+    /**
+     *  保存 投诉意见
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_COMPLAINT="190200030001";
+
+    /**
+     * 修改 投诉意见
+     */
+    public static final String BUSINESS_TYPE_UPDATE_COMPLAINT="190200040001";
+    /**
+     *  删除 投诉意见
+     */
+    public static final String BUSINESS_TYPE_DELETE_COMPLAINT ="190200050001";
+
 }

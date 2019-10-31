@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>投诉建议信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" v-if="viewComplaintInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectComplaintInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择投诉建议</button>
+
+                    <button type="button" v-if="viewComplaintInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddComplaintInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加投诉建议</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >商户ID：</label>
+                            <label class="">{{viewComplaintInfo.storeId}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >投诉类型：</label>
+                            <label class="">{{viewComplaintInfo.typeCd}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >房屋编号：</label>
+                            <label class="">{{viewComplaintInfo.roomId}}</label>
+                        </div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >投诉人：</label>
+                            <label class="">{{viewComplaintInfo.complaintName}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >投诉电话：</label>
+                            <label class="">{{viewComplaintInfo.tel}}</label>
+                        </div>
+</div>
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >投诉状态：</label>
+                            <label class="">{{viewComplaintInfo.state}}</label>
+                        </div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" >投诉内容：</label>
+                            <label class="">{{viewComplaintInfo.context}}</label>
+                        </div>
+</div>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+    <vc:create name="addComplaint"
+               callBackListener="viewComplaintInfo"
+               callBackFunction="chooseComplaint"
+    ></vc:create>
+
+
+    <vc:create name="chooseComplaint"
+               emitChooseComplaint="viewComplaintInfo"
+               emitLoadData="viewComplaintInfo"
+    ></vc:create>
+</div>
