@@ -15,10 +15,7 @@
                         <div class="col-sm-4">
                             <select class="custom-select" v-model="payFeeManageInfo.conditions.feeTypeCd">
                                 <option selected value="">请选择费用类型</option>
-                                <option value="800900000001">运营团队</option>
-                                <option value="800900000002">代理商</option>
-                                <option value="800900000003">物业</option>
-                                <option value="800900000000">开发团队</option>
+                                <option v-for="(item,index) in payFeeManageInfo.payFeeTypes" :key="index" v-bind:value="item.statusCd">{{item.name}}</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
