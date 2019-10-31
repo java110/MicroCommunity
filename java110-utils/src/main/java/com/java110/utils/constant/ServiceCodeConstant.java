@@ -540,6 +540,6 @@ public class ServiceCodeConstant {
     /**
      * 查询数据字典
      */
-    public static final String SERVICE_CODE_DICT_TYPE="dict.type";
+    public static final String SERVICE_CODE_DICT_TYPE="dict.queryDict";
 
 }

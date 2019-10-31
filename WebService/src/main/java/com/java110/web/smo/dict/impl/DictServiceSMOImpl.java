@@ -43,7 +43,7 @@ public class DictServiceSMOImpl extends BaseComponentSMO implements IDictService
         //获取请求参数
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
         //拉取数据
-        String url=ServiceConstant.SERVICE_API_URL.concat("/api/dict.type").concat(mapToUrlParam(reqParam));
+        String url=ServiceConstant.SERVICE_API_URL.concat("/api/dict.queryDict").concat(mapToUrlParam(reqParam));
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",url , HttpMethod.GET);
         return responseEntity;
     }

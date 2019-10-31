@@ -25,6 +25,7 @@
         _initMethod: function () {
             vc.component._initDate();
             vc.component._listpayFees(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._listFeeType();
         },
         _initEvent: function () {
             vc.on('pagination', 'page_event', function (_currentPage) {
@@ -100,7 +101,7 @@
             _exportExcel:function () {
 
             },
-            _listpayFees: function (_page, _rows) {
+            _listFeeType: function () {
                 var param = {
                     params:{
                         "hc":"cc@cc"
