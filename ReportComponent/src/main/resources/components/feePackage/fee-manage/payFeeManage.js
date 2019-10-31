@@ -8,6 +8,7 @@
         data: {
             payFeeManageInfo: {
                 payFees: [],
+                payFeeTypes:[],
                 total: 0,
                 records: 1,
                 moreCondition: false,
@@ -98,7 +99,27 @@
             },
             _exportExcel:function () {
 
-            }
+            },
+            _listpayFees: function (_page, _rows) {
+                var param = {
+                    params:{
+                        "hc":"cc@cc"
+                    }
+                };
+
+                //发送get请求
+                vc.http.get('payFeeManage',
+                    'listFeeType',
+                    param,
+                    function (json, res) {
+                        var _feeTypesInfo = JSON.parse(json);
+                        vc.component.payFeeManageInfo.payFeeTypes = _feeTypesInfo;
+
+                    }, function (errInfo, error) {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
         }
     });
 })(window.vc);
