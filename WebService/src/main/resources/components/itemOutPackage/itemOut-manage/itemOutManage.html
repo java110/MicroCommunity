@@ -73,7 +73,11 @@
                             <td>{{resourceStore.price}}</td>
                             <td width="65">
                                 <input type="text" class="form-control" :placeholder="resourceStore.stock" v-model="resourceStore.stock">
+<!--                                <button class="btn btn-default" type="button" @click="_resourceStoreLess(resourceStore.stock)">-</button>-->
+                            </td>
+                            <td>
                                 <button class="btn btn-default" type="button" @click="_resourceStoreLess(resourceStore.stock)">-</button>
+
                             </td>
                             <td>
                                 <h4>
