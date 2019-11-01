@@ -126,6 +126,9 @@ public final class PrivilegeCodeConstant {
     //投诉建议 权限编码
     public static final String AGENT_HAS_LIST_COMPLAINT = "502019103114270018";
 
+    //员工收费
+    public static final String LIST_STAFF_FEE = "502019103108450011";
+
 
 
 }

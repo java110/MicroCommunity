@@ -3,6 +3,7 @@ package com.java110.report.components.fee;
 
 import com.java110.core.context.IPageData;
 import com.java110.report.smo.fee.IListPayFeeSMO;
+import com.java110.report.smo.fee.IListStaffFeeSMO;
 import com.java110.report.smo.feeType.IFeeTypeSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class StaffFeeManageComponent {
 
     @Autowired
-    private IListPayFeeSMO listPayFeeSMOImpl;
+    private IListStaffFeeSMO listStaffFeeSMOImpl;
 
     /**
      * 查询应用列表
@@ -29,14 +30,7 @@ public class StaffFeeManageComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listPayFeeSMOImpl.list(pd);
+        return listStaffFeeSMOImpl.list(pd);
     }
 
-    public IListPayFeeSMO getListPayFeeSMOImpl() {
-        return listPayFeeSMOImpl;
-    }
-
-    public void setListPayFeeSMOImpl(IListPayFeeSMO listPayFeeSMOImpl) {
-        this.listPayFeeSMOImpl = listPayFeeSMOImpl;
-    }
 }
