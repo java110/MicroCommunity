@@ -8,10 +8,12 @@ public class ApiComplaintDataVo implements Serializable {
     private String complaintId;
     private String storeId;
     private String typeCd;
+    private String typeCdName;
     private String roomId;
     private String complaintName;
     private String tel;
     private String state;
+    private String stateName;
     private String context;
     private String roomNum;
     private String unitNum;
@@ -113,5 +115,21 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
     }
 }

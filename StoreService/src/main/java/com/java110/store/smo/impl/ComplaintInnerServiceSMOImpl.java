@@ -72,7 +72,10 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     private void refreshRoomInfo(ComplaintDto complainDto, List<RoomDto> roomDtos) {
         for (RoomDto room : roomDtos) {
             if (room.getRoomId().equals(complainDto.getRoomId())) {
-                BeanConvertUtil.covertBean(room, complainDto);
+                //BeanConvertUtil.covertBean(room, complainDto);
+                complainDto.setFloorNum(room.getFloorNum());
+                complainDto.setRoomNum(room.getRoomNum());
+                complainDto.setUnitNum(room.getUnitNum());
             }
         }
     }

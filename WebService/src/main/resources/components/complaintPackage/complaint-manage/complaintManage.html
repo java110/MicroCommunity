@@ -97,13 +97,13 @@
                         <tbody>
                         <tr v-for="complaint in complaintManageInfo.complaints">
                             <td class="text-center">{{complaint.complaintId}}</td>
-                            <td class="text-center">{{complaint.typeCd}}</td>
+                            <td class="text-center">{{complaint.typeCdName}}</td>
                             <td class="text-center">
                                 {{complaint.floorNum}}号楼{{complaint.unitNum}}单元{{complaint.roomNum}}室
                             </td>
                             <td class="text-center">{{complaint.complaintName}}</td>
                             <td class="text-center">{{complaint.tel}}</td>
-                            <td class="text-center">{{complaint.state}}</td>
+                            <td class="text-center">{{complaint.stateName}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"

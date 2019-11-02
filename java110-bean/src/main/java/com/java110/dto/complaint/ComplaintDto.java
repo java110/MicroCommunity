@@ -17,10 +17,12 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     private String complaintId;
     private String typeCd;
+    private String typeCdName;
     private String context;
     private String complaintName;
     private String tel;
     private String state;
+    private String stateName;
     private String storeId;
     private String roomId;
     private String roomNum;
@@ -127,6 +129,14 @@ public class ComplaintDto extends PageDto implements Serializable {
         return floorNum;
     }
 
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
     public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
     }
@@ -145,5 +155,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
     }
 }
