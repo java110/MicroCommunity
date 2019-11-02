@@ -3,8 +3,12 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
+import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.FeeDto;
 import com.java110.dto.PageDto;
+import com.java110.dto.RoomDto;
+import com.java110.dto.UserDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.store.dao.IComplaintServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +36,9 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
     @Override
     public List<ComplaintDto> queryComplaints(@RequestBody ComplaintDto complaintDto) {
 
@@ -43,8 +51,38 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
         }
 
         List<ComplaintDto> complaints = BeanConvertUtil.covertBeanList(complaintServiceDaoImpl.getComplaintInfo(BeanConvertUtil.beanCovertMap(complaintDto)), ComplaintDto.class);
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(getRoomIds(complaints));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        for (ComplaintDto tmpComplainDto : complaints) {
+            refreshRoomInfo(tmpComplainDto, roomDtos);
+        }
 
         return complaints;
+    }
+
+    /**
+     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
+     *
+     * @param complainDto 小区费用信息
+     * @param roomDtos 用户列表
+     */
+    private void refreshRoomInfo(ComplaintDto complainDto, List<RoomDto> roomDtos) {
+        for (RoomDto room : roomDtos) {
+            if (room.getRoomId().equals(complainDto.getRoomId())) {
+                BeanConvertUtil.covertBean(room, complainDto);
+            }
+        }
+    }
+
+    private String[] getRoomIds(List<ComplaintDto> complaints) {
+        List<String> roomIds = new ArrayList<String>();
+        for (ComplaintDto complaint : complaints) {
+            roomIds.add(complaint.getRoomId());
+        }
+
+        return roomIds.toArray(new String[roomIds.size()]);
     }
 
 
@@ -67,5 +105,13 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
     public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
         this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+    public IRoomInnerServiceSMO getRoomInnerServiceSMOImpl() {
+        return roomInnerServiceSMOImpl;
+    }
+
+    public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
+        this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
     }
 }

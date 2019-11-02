@@ -40,6 +40,7 @@
 
                 vc.component.complaintManageInfo.conditions.page = _page;
                 vc.component.complaintManageInfo.conditions.row = _rows;
+                vc.component.complaintManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params: vc.component.complaintManageInfo.conditions
                 };

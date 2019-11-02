@@ -85,7 +85,7 @@
                         <tr>
                             <th class="text-center">投诉ID</th>
                             <th class="text-center">投诉类型</th>
-                            <th class="text-center">房屋编号</th>
+                            <th class="text-center">房屋</th>
                             <th class="text-center">投诉人</th>
                             <th class="text-center">投诉电话</th>
                             <th class="text-center">投诉状态</th>
@@ -98,7 +98,9 @@
                         <tr v-for="complaint in complaintManageInfo.complaints">
                             <td class="text-center">{{complaint.complaintId}}</td>
                             <td class="text-center">{{complaint.typeCd}}</td>
-                            <td class="text-center">{{complaint.roomId}}</td>
+                            <td class="text-center">
+                                {{complaint.floorNum}}号楼{{complaint.unitNum}}单元{{complaint.roomNum}}室
+                            </td>
                             <td class="text-center">{{complaint.complaintName}}</td>
                             <td class="text-center">{{complaint.tel}}</td>
                             <td class="text-center">{{complaint.state}}</td>

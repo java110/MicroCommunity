@@ -7,6 +7,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.web.smo.complaint.IListComplaintsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class ListComplaintsSMOImpl extends AbstractComponentSMO implements IList
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请求报文中未包含小区信息");
+
 
         super.validatePageInfo(pd);
 

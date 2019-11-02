@@ -8,6 +8,7 @@ import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
@@ -56,6 +57,7 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
         super.validatePageInfo(reqJson);
     }
 
