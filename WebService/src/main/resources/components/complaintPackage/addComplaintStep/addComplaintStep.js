@@ -35,7 +35,7 @@
 
                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addComplaintStepInfo.index);
                 vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addComplaintStepInfo.index);
-                vc.emit('addComplain', 'onIndex', vc.component.addComplaintStepInfo.index);
+                vc.emit('addComplainView', 'onIndex', vc.component.addComplaintStepInfo.index);
 
             },
             _nextStep: function () {
@@ -49,7 +49,7 @@
 
                 vc.emit('viewFloorInfo', 'onIndex', vc.component.addComplaintStepInfo.index);
                 vc.emit('sellRoomSelectRoom', 'onIndex', vc.component.addComplaintStepInfo.index);
-                vc.emit('addComplain', 'onIndex', vc.component.addComplaintStepInfo.index);
+                vc.emit('addComplainView', 'onIndex', vc.component.addComplaintStepInfo.index);
 
             },
             _finishStep: function () {
@@ -61,14 +61,15 @@
                     return;
                 }
 
-                var param = {
+                /*var param = {
                     data: vc.component.addComplaintStepInfo.infos
-                }
+                }*/
+                vc.component.addComplaintStepInfo.infos[2].roomId = vc.component.addComplaintStepInfo.infos[1].roomId;
 
                 vc.http.post(
                     'addComplaintStepBinding',
                     'binding',
-                    JSON.stringify(param),
+                    JSON.stringify(vc.component.addComplaintStepInfo.infos[2]),
                     {
                         emulateJSON: true
                     },

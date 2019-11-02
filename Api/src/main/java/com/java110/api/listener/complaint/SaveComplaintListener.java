@@ -33,7 +33,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请选择房屋编号");
         Assert.hasKeyAndValue(reqJson, "complaintName", "必填，请填写投诉人");
         Assert.hasKeyAndValue(reqJson, "tel", "必填，请填写投诉电话");
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写投诉状态");
+        //Assert.hasKeyAndValue(reqJson, "state", "必填，请填写投诉状态");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写投诉内容");
 
     }
@@ -93,6 +93,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
         JSONObject businessComplaint = new JSONObject();
         businessComplaint.putAll(paramInJson);
         businessComplaint.put("complaintId", "-1");
+        businessComplaint.put("state", "10001");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessComplaint", businessComplaint);
         return business;
