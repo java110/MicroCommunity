@@ -16,6 +16,9 @@
         _initEvent: function () {
             vc.on("addComplaintStep", "notify", function (_info) {
                 vc.component.addComplaintStepInfo.infos[vc.component.addComplaintStepInfo.index] = _info;
+                if(vc.component.addComplaintStepInfo.index == 0){
+                    vc.emit('searchRoom','listenerFloorInfo',_info);
+                }
             });
 
         },
