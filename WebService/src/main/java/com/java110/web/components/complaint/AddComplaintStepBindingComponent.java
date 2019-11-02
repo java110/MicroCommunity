@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 添加投诉建议组件
  */
 @Component("addComplaint")
-public class AddComplaintComponent {
+public class AddComplaintStepBindingComponent {
 
     @Autowired
     private IAddComplaintSMO addComplaintSMOImpl;

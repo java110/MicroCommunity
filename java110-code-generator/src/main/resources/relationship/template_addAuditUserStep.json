@@ -1,0 +1,110 @@
+{
+  "templateName":"添加审核人员",
+  "templateCode":"addAuditUserStep",
+  "templateKey":"auditUserId",
+  "templateKeyName":"审核人员Id",
+  "package": "auditUserPackage",
+  "successUrl": "/flow/auditUserFlow",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"branchOrg",
+      "flowKey": "branchOrgId",
+      "cnCode":"选择分公司",
+      "vcName":"viewOrgInfo",
+      "businessName": "businessOrg",
+      "businessType": "BUSINESS_TYPE_SAVE_ORG_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"departmentOrg",
+      "flowKey": "departmentOrgId",
+      "cnCode":"选择部门",
+      "vcName":"viewOrgInfo",
+      "businessName": "businessOrg",
+      "businessType": "BUSINESS_TYPE_SAVE_ORG_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"staff",
+      "flowKey": "userId",
+      "cnCode":"选择员工",
+      "vcName":"viewStaffInfo",
+      "businessName": "businessStaff",
+      "businessType": "BUSINESS_TYPE_SAVE_STAFF_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 3,
+      "code":"addAuditUserOther",
+      "flowKey": "auditUserId",
+      "cnCode":"扩展信息",
+      "vcName":"addAuditUserOther",
+      "businessName": "addAuditUserOther",
+      "businessType": "BUSINESS_TYPE_SAVE_AUDIT_USER_INFO",
+      "existsComponent": false
+    }
+  ],
+  "components": {
+    "addAuditUserOther": {
+      "templateName": "扩展信息",
+      "templateCode": "addAuditUserOther",
+      "package": "auditUserPackage",
+      "columns": [
+        {
+          "code":"userId",
+          "cnCode":"用户ID",
+          "desc":"必填，请填写用户ID",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"num",
+          "limitParam":"",
+          "limitErrInfo":"用户ID必须为数字",
+          "show": true
+        },
+        {
+          "code":"userName",
+          "cnCode":"用户名称",
+          "desc":"必填，请填写用户名称",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"maxin",
+          "limitParam":"2,50",
+          "limitErrInfo":"用户名称必须在2至50字符之间",
+          "show": true
+        },
+        {
+          "code":"auditLink",
+          "cnCode":"审核环节",
+          "desc":"必填，请选择审核环节",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"select",
+          "selectValue":"809001,809002,809003",
+          "selectValueName":"部门主管,财务主管,采购人员",
+          "limit":"num",
+          "limitParam":"",
+          "limitErrInfo":"审核环节格式错误",
+          "show": true
+        },
+        {
+          "code":"objCode",
+          "cnCode":"流程对象",
+          "desc":"必填，请填写流程对象",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"maxLength",
+          "limitParam":"64",
+          "limitErrInfo":"物品库存不能大于64位",
+          "show": false
+        }
+      ]
+    }
+  }
+}
