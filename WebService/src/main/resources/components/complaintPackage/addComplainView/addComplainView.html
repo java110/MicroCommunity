@@ -10,31 +10,34 @@
             <div class="ibox-content">
 
                 <div class="form-group row">
-         <label class="col-sm-2 col-form-label">投诉类型</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="addComplainViewInfo.typeCd">
-         <option selected  disabled value="">必填，请选择投诉类型</option>
-         <option  value="809001">投诉</option>
-<option  value="809002">建议</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">投诉人</label>
-         <div class="col-sm-10">
-           <input v-model="addComplainViewInfo.complaintName"                   type="text" placeholder="必填，请填写投诉人" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">投诉电话</label>
-         <div class="col-sm-10">
-           <input v-model="addComplainViewInfo.tel"                   type="text" placeholder="必填，请填写投诉电话" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">投诉内容</label>
-         <div class="col-sm-10">
-<textarea  placeholder="必填，请填写投诉内容" class="form-control" v-model="addComplainViewInfo.context"></textarea>         </div>
-</div>
+                    <label class="col-sm-2 col-form-label">投诉类型</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select" v-model="addComplainViewInfo.typeCd">
+                            <option selected disabled value="">必填，请选择投诉类型</option>
+                            <option value="809001">投诉</option>
+                            <option value="809002">建议</option>
+                        </select></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">投诉人</label>
+                    <div class="col-sm-10">
+                        <input v-model="addComplainViewInfo.complaintName" type="text" placeholder="必填，请填写投诉人"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">投诉电话</label>
+                    <div class="col-sm-10">
+                        <input v-model="addComplainViewInfo.tel" type="text" placeholder="必填，请填写投诉电话"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">投诉内容</label>
+                    <div class="col-sm-10">
+                        <textarea placeholder="必填，请填写投诉内容" class="form-control"
+                                  v-model="addComplainViewInfo.context"></textarea></div>
+                </div>
 
             </div>
         </div>

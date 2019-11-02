@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * 添加投诉建议组件
  */
-@Component("addComplaint")
+@Component("addComplaintStepBinding")
 public class AddComplaintStepBindingComponent {
 
     @Autowired
@@ -20,7 +20,7 @@ public class AddComplaintStepBindingComponent {
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    public ResponseEntity<String> save(IPageData pd){
+    public ResponseEntity<String> binding(IPageData pd){
         return addComplaintSMOImpl.saveComplaint(pd);
     }
 
