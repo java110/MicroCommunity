@@ -52,6 +52,7 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         List<ComplaintDto> complaints = BeanConvertUtil.covertBeanList(complaintServiceDaoImpl.getComplaintInfo(BeanConvertUtil.beanCovertMap(complaintDto)), ComplaintDto.class);
         RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(complaintDto.getCommunityId());
         roomDto.setRoomIds(getRoomIds(complaints));
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
