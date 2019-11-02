@@ -103,9 +103,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         and t.state = td.status_cd
         and td.table_name = 'complaint'
         and td.table_columns = 'state'
-        and t.type_cd = td.status_cd
-        and td.table_name = 'complaint'
-        and td.table_columns = 'type_cd'
+        and t.type_cd = td2.status_cd
+        and td2.table_name = 'complaint'
+        and td2.table_columns = 'type_cd'
         <if test="complaintId !=null and complaintId != ''">
             and t.complaint_id= #{complaintId}
         </if>
