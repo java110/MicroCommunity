@@ -63,7 +63,8 @@
                 );
             },
             _openAddComplaintModal: function () {
-                vc.emit('addComplaint', 'openAddComplaintModal', {});
+                //vc.emit('addComplaint', 'openAddComplaintModal', {});
+                vc.jumpToPage("/flow/addComplaintStepFlow")
             },
             _openEditComplaintModel: function (_complaint) {
                 vc.emit('editComplaint', 'openEditComplaintModal', _complaint);
