@@ -3,6 +3,7 @@ package com.java110.web.smo.complaint.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
@@ -29,12 +30,12 @@ public class EditComplaintSMOImpl extends AbstractComponentSMO implements IEditC
         //super.validatePageInfo(pd);
 
         Assert.hasKeyAndValue(paramIn, "complaintId", "投诉ID不能为空");
-        Assert.hasKeyAndValue(paramIn, "storeId", "必填，请填写商户ID");
+        //Assert.hasKeyAndValue(paramIn, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择投诉类型");
-        Assert.hasKeyAndValue(paramIn, "roomId", "必填，请选择房屋编号");
+        //Assert.hasKeyAndValue(paramIn, "roomId", "必填，请选择房屋编号");
         Assert.hasKeyAndValue(paramIn, "complaintName", "必填，请填写投诉人");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写投诉电话");
-        Assert.hasKeyAndValue(paramIn, "state", "必填，请填写投诉状态");
+        //Assert.hasKeyAndValue(paramIn, "state", "必填，请填写投诉状态");
         Assert.hasKeyAndValue(paramIn, "context", "必填，请填写投诉内容");
 
 
@@ -45,8 +46,8 @@ public class EditComplaintSMOImpl extends AbstractComponentSMO implements IEditC
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/complaint.updateComplaint",
                 HttpMethod.POST);
