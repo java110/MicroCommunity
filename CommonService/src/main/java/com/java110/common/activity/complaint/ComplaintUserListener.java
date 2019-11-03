@@ -8,6 +8,7 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
+import org.apache.commons.collections.ListUtils;
 
 import java.util.List;
 
@@ -23,17 +24,21 @@ public class ComplaintUserListener implements TaskListener {
 
         auditUserInnerServiceSMOImpl = ApplicationContextFactory.getBean("auditUserInnerServiceSMOImpl", IAuditUserInnerServiceSMO.class);
         AuditUserDto auditUserDto = new AuditUserDto();
-        ComplaintDto complaintDto = (ComplaintDto)delegateTask.getVariable("complaintDto");
+        ComplaintDto complaintDto = (ComplaintDto) delegateTask.getVariable("complaintDto");
         auditUserDto.setStoreId(complaintDto.getStoreId());
         auditUserDto.setObjCode("complaint");
         auditUserDto.setAuditLink("809004");
         List<AuditUserDto> auditUserDtos = auditUserInnerServiceSMOImpl.queryAuditUsers(auditUserDto);
 
+
         for (AuditUserDto tmpAuditUser : auditUserDtos) {
             AuditUser auditUser = BeanConvertUtil.covertBean(tmpAuditUser, AuditUser.class);
-
             delegateTask.setVariable(auditUser.getUserId(), auditUser);
-
         }
+
+        if (auditUserDtos == null || auditUserDtos.size() < 1) {
+            return;
+        }
+        delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
     }
 }
