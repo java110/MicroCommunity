@@ -14,6 +14,10 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class ComplaintDto extends PageDto implements Serializable {
+    //工作流实例ID
+    private String processInstanceId;
+
+    private String taskId;
 
     private String complaintId;
     private String typeCd;
@@ -29,6 +33,11 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String unitNum;
     private String floorNum;
     private String communityId;
+
+    //
+    private String auditCode;
+
+    private String auditMessage;
 
 
     private Date createTime;
@@ -163,5 +172,37 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setTypeCdName(String typeCdName) {
         this.typeCdName = typeCdName;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
     }
 }
