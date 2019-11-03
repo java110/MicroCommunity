@@ -4,7 +4,7 @@
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="complaitUser">
       <extensionElements>
-        <activiti:executionListener class="com.java110.common.activity.complaint.ComplaintUserListener" event="start"/>
+        <activiti:taskListener class="com.java110.common.activity.complaint.ComplaintUserListener" event="create"/>
       </extensionElements>
     </userTask>
     <endEvent id="_4" name="EndEvent"/>
