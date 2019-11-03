@@ -52,12 +52,6 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         complaintDto.setProcessInstanceId(processInstanceId);
 
-        //处理流程任务
-        TaskService taskService = processEngine.getTaskService();
-
-        taskService.complete(complaintDto.getTaskId());
-
-
         return complaintDto;
     }
 
