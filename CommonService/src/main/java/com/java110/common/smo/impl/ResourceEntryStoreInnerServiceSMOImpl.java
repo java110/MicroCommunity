@@ -65,7 +65,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEntry");
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -77,7 +77,7 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
      */
     public List<ResourceOrderDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEntry");
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;

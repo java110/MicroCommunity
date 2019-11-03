@@ -63,7 +63,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public long getUserTaskCount(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
         query.taskAssignee(user.getUserId());
         return query.count();
     }
@@ -75,7 +75,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public List<ComplaintDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");;
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;

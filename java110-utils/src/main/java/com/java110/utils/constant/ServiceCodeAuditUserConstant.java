@@ -33,5 +33,10 @@ public class ServiceCodeAuditUserConstant {
      */
     public static final String LIST_AUDITORDERS = "auditUser.listAuditOrders";
 
+    /**
+     * 查询 审核投诉
+     */
+    public static final String LIST_AUDIT_COMPLAINTS = "auditUser.listAuditComplaints";
+
 
 }

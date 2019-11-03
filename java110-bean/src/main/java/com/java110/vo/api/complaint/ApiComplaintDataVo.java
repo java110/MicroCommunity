@@ -5,6 +5,10 @@ import java.util.Date;
 
 public class ApiComplaintDataVo implements Serializable {
 
+    //工作流实例ID
+    private String processInstanceId;
+
+    private String taskId;
     private String complaintId;
     private String storeId;
     private String typeCd;
@@ -19,6 +23,10 @@ public class ApiComplaintDataVo implements Serializable {
     private String unitNum;
     private String floorNum;
     private String communityId;
+    //
+    private String auditCode;
+
+    private String auditMessage;
 
 
     public String getComplaintId() {
@@ -131,5 +139,37 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setTypeCdName(String typeCdName) {
         this.typeCdName = typeCdName;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
     }
 }
