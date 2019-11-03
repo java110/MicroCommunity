@@ -15,60 +15,11 @@ import java.util.Date;
  **/
 public class AuditMessageDto extends PageDto implements Serializable {
 
-    private String auditOrderType;
-    private String auditMessageId;
-    private String auditOrderId;
-    private String state;
-    private String storeId;
     private String userName;
     private String message;
     private String userId;
 
-
     private Date createTime;
-
-    private String statusCd = "0";
-
-
-    public String getAuditOrderType() {
-        return auditOrderType;
-    }
-
-    public void setAuditOrderType(String auditOrderType) {
-        this.auditOrderType = auditOrderType;
-    }
-
-    public String getAuditMessageId() {
-        return auditMessageId;
-    }
-
-    public void setAuditMessageId(String auditMessageId) {
-        this.auditMessageId = auditMessageId;
-    }
-
-    public String getAuditOrderId() {
-        return auditOrderId;
-    }
-
-    public void setAuditOrderId(String auditOrderId) {
-        this.auditOrderId = auditOrderId;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
 
     public String getUserName() {
         return userName;
@@ -103,11 +54,4 @@ public class AuditMessageDto extends PageDto implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
-    }
 }

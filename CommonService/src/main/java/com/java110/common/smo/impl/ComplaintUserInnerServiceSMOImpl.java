@@ -4,12 +4,16 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.complaint.IComplaintUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.entity.audit.AuditUser;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +49,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("complaintDto", complaintDto);
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("complaint", variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("complaint", complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
@@ -75,13 +79,14 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public List<ComplaintDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");;
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
+        ;
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());
-        }else{
+        } else {
             list = query.list();
         }
 
@@ -97,33 +102,42 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         return complaintDtos;
     }
 
-    public boolean agreeCompleteTask(@RequestBody ComplaintDto complaintDto) {
+    public boolean completeTask(@RequestBody ComplaintDto complaintDto) {
         TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(complaintDto.getTaskId()).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        Authentication.setAuthenticatedUserId(complaintDto.getCurrentUserId());
+        taskService.addComment(complaintDto.getTaskId(), processInstanceId, complaintDto.getAuditMessage());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", complaintDto.getAuditCode());
         taskService.complete(complaintDto.getTaskId(), variables);
-        return true;
+
+        ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        if (pi == null) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean refuteCompleteTask(@RequestBody ComplaintDto complaintDto) {
-        TaskService taskService = processEngine.getTaskService();
-        Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("auditCode", complaintDto.getAuditCode());
-        taskService.complete(complaintDto.getTaskId(), variables);
-        return true;
-    }
+    public List<AuditMessageDto> getAuditMessage(@RequestBody ComplaintDto complaintDto) {
 
-    /**
-     * 审核 当前任务
-     *
-     * @param complaintDto 资源订单
-     * @return
-     */
-    public boolean complete(@RequestBody ComplaintDto complaintDto) {
         TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(complaintDto.getTaskId()).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        List<Comment> comments = taskService.getProcessInstanceComments(processInstanceId);
+        List<AuditMessageDto> auditMessageDtos = new ArrayList<>();
+        if (comments == null || comments.size() < 1) {
+            return auditMessageDtos;
+        }
+        AuditMessageDto messageDto = null;
+        for (Comment comment : comments) {
+            messageDto = new AuditMessageDto();
+            messageDto.setCreateTime(comment.getTime());
+            messageDto.setUserId(comment.getUserId());
+            messageDto.setMessage(comment.getFullMessage());
+        }
 
-        taskService.complete(complaintDto.getTaskId());
-        return true;
+        return auditMessageDtos;
     }
 
 
