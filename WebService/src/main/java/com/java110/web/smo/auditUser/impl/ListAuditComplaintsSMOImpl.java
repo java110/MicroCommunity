@@ -33,7 +33,7 @@ public class ListAuditComplaintsSMOImpl extends AbstractComponentSMO implements 
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDITORDER);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDIT_COMPLAINT);
     }
 
     @Override

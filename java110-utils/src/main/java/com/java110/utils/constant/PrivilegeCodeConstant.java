@@ -130,5 +130,9 @@ public final class PrivilegeCodeConstant {
     public static final String LIST_STAFF_FEE = "502019103108450011";
 
 
+    //审核工单
+    public static final String AGENT_HAS_LIST_AUDIT_COMPLAINT = "502019110360380006";
+
+
 
 }
