@@ -130,6 +130,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             taskBusinessKeyMap.put(business_key,task.getId());
         }
 
+        if(complaintIds == null || complaintIds.size() == 0){
+            return new ArrayList<>();
+        }
+
         //查询 投诉信息
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setStoreId(user.getStoreId());

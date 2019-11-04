@@ -83,6 +83,7 @@ public class AuditComplaintListener extends AbstractServiceApiListener {
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setTaskId(reqJson.getString("taskId"));
         complaintDto.setCommunityId(reqJson.getString("communityId"));
+        complaintDto.setStoreId(reqJson.getString("storeId"));
         complaintDto.setAuditCode(reqJson.getString("state"));
         complaintDto.setAuditMessage(reqJson.getString("remark"));
         complaintDto.setCurrentUserId(reqJson.getString("userId"));
