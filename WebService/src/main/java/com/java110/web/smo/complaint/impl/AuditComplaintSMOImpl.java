@@ -42,7 +42,7 @@ public class AuditComplaintSMOImpl extends AbstractComponentSMO implements IAudi
         Assert.hasKeyAndValue(paramIn, "remark", "必填，请求报文中未包含审核信息");
 
 
-        super.validatePageInfo(pd);
+        //super.validatePageInfo(pd);
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMPLAINT);
     }
