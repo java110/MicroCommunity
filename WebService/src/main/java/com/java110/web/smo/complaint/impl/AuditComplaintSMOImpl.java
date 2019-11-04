@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * 查询complaint服务类
  */
-@Service("listComplaintsSMOImpl")
+@Service("auditComplaintSMOImpl")
 public class AuditComplaintSMOImpl extends AbstractComponentSMO implements IAuditComplaintSMO {
 
     @Autowired

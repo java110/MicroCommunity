@@ -4,6 +4,7 @@ package com.java110.web.components.auditUser;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.auditUser.IListAuditComplaintsSMO;
 import com.java110.web.smo.auditUser.IListAuditOrdersSMO;
+import com.java110.web.smo.complaint.IAuditComplaintSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class MyAuditComplaintsComponent {
     @Autowired
     private IListAuditComplaintsSMO listAuditComplaintsSMOImpl;
 
+    @Autowired
+    private IAuditComplaintSMO auditComplaintSMOImpl;
+
     /**
      * 查询审核人员列表
      *
@@ -39,7 +43,7 @@ public class MyAuditComplaintsComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> audit(IPageData pd) {
-        return listAuditComplaintsSMOImpl.listAuditComplaints(pd);
+        return auditComplaintSMOImpl.auditComplaint(pd);
     }
 
     public IListAuditComplaintsSMO getListAuditComplaintsSMOImpl() {
@@ -48,5 +52,13 @@ public class MyAuditComplaintsComponent {
 
     public void setListAuditComplaintsSMOImpl(IListAuditComplaintsSMO listAuditComplaintsSMOImpl) {
         this.listAuditComplaintsSMOImpl = listAuditComplaintsSMOImpl;
+    }
+
+    public IAuditComplaintSMO getAuditComplaintSMOImpl() {
+        return auditComplaintSMOImpl;
+    }
+
+    public void setAuditComplaintSMOImpl(IAuditComplaintSMO auditComplaintSMOImpl) {
+        this.auditComplaintSMOImpl = auditComplaintSMOImpl;
     }
 }
