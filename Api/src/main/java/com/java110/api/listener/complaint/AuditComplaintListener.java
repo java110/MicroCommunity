@@ -47,7 +47,7 @@ public class AuditComplaintListener extends AbstractServiceApiListener {
 
     @Override
     public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
+        return HttpMethod.POST;
     }
 
 
