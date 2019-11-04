@@ -44,7 +44,7 @@ public class AuditComplaintSMOImpl extends AbstractComponentSMO implements IAudi
 
         //super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMPLAINT);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDIT_COMPLAINT);
     }
 
     @Override
