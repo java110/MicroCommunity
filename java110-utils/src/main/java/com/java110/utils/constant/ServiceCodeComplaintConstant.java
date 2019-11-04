@@ -26,6 +26,7 @@ public class ServiceCodeComplaintConstant {
      * 查询 投诉建议
      */
     public static final String LIST_COMPLAINTS = "complaint.listComplaints";
+    public static final String AUDIT_COMPLAINT = "complaint.auditComplaint";
 
 
 }

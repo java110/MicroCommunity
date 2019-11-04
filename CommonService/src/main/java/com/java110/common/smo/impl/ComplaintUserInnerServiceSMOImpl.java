@@ -119,6 +119,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<String> complaintIds = new ArrayList<>();
+        Map<String,String> taskBusinessKeyMap = new HashMap<>();
         for (Task task : list) {
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
@@ -126,6 +127,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             complaintIds.add(business_key);
+            taskBusinessKeyMap.put(business_key,task.getId());
         }
 
         //查询 投诉信息
@@ -134,6 +136,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         complaintDto.setCommunityId(user.getCommunityId());
         complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
         List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+
+        for(ComplaintDto tmpComplaintDto : tmpComplaintDtos){
+            tmpComplaintDto.setTaskId(taskBusinessKeyMap.get(tmpComplaintDto.getComplaintId()));
+        }
         return tmpComplaintDtos;
     }
 

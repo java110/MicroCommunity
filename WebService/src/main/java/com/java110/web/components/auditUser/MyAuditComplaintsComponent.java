@@ -32,6 +32,16 @@ public class MyAuditComplaintsComponent {
         return listAuditComplaintsSMOImpl.listAuditComplaints(pd);
     }
 
+    /**
+     * 审核任务
+     *
+     * @param pd 页面数据封装
+     * @return 返回 ResponseEntity 对象
+     */
+    public ResponseEntity<String> audit(IPageData pd) {
+        return listAuditComplaintsSMOImpl.listAuditComplaints(pd);
+    }
+
     public IListAuditComplaintsSMO getListAuditComplaintsSMOImpl() {
         return listAuditComplaintsSMOImpl;
     }

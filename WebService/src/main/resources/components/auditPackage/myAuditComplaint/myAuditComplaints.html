@@ -37,7 +37,7 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
-                                            v-on:click="_openAuditComplaintModel(complaint)">审批
+                                            v-on:click="_openAuditComplaintModel(complaint)">审核
                                     </button>
                                 </div>
                             </td>
@@ -58,4 +58,10 @@
             </div>
         </div>
     </div>
+    <vc:create name="audit"
+               callBackListener="myAuditComplaints"
+               callBackFunction="auditMessage"
+               >
+
+    </vc:create>
 </div>
