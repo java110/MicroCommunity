@@ -64,8 +64,10 @@ public class CallComponentController extends BaseController {
         } catch (SMOException e) {
             /*MultiValueMap<String, String> headers = new HttpHeaders();
             headers.add("code", e.getResult().getCode());*/
+            logger.error("调用组件异常", e);
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
+            logger.error("调用组件异常", e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
                 Throwable targetEx = ((InvocationTargetException) e).getTargetException();
