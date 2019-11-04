@@ -118,6 +118,7 @@ public class AuditComplaintListener extends AbstractServiceApiListener {
 
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setStoreId(paramInJson.getString("storeId"));
+        complaintDto.setCommunityId(paramInJson.getString("communityId"));
         complaintDto.setComplaintId(paramInJson.getString("complaintId"));
         List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
 
