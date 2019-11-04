@@ -69,17 +69,17 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     /**
      * 自动提交第一步
      */
-    private void autoFinishFirstTask(ComplaintDto complaintDto){
+    private void autoFinishFirstTask(ComplaintDto complaintDto) {
         Task task = null;
         TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(complaintDto.getCurrentUserId()).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
         for (Task tmp : todoList) {
-            if(tmp.getProcessInstanceId().equals(complaintDto.getProcessInstanceId())){
+            if (tmp.getProcessInstanceId().equals(complaintDto.getProcessInstanceId())) {
                 task = tmp;//获取当前流程实例，当前申请人的待办任务
                 break;
             }
         }
-        Assert.notNull(task, "未找到当前用户任务userId = "+ complaintDto.getCurrentUserId());
+        Assert.notNull(task, "未找到当前用户任务userId = " + complaintDto.getCurrentUserId());
         complaintDto.setTaskId(task.getId());
         complaintDto.setAuditCode("10000");
         complaintDto.setAuditMessage("提交");
@@ -113,13 +113,13 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
-            list = query.listPage(user.getPage(), user.getRow());
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
         } else {
             list = query.list();
         }
 
         List<String> complaintIds = new ArrayList<>();
-        Map<String,String> taskBusinessKeyMap = new HashMap<>();
+        Map<String, String> taskBusinessKeyMap = new HashMap<>();
         for (Task task : list) {
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
@@ -127,10 +127,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             complaintIds.add(business_key);
-            taskBusinessKeyMap.put(business_key,task.getId());
+            taskBusinessKeyMap.put(business_key, task.getId());
         }
 
-        if(complaintIds == null || complaintIds.size() == 0){
+        if (complaintIds == null || complaintIds.size() == 0) {
             return new ArrayList<>();
         }
 
@@ -141,7 +141,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
         List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
 
-        for(ComplaintDto tmpComplaintDto : tmpComplaintDtos){
+        for (ComplaintDto tmpComplaintDto : tmpComplaintDtos) {
             tmpComplaintDto.setTaskId(taskBusinessKeyMap.get(tmpComplaintDto.getComplaintId()));
         }
         return tmpComplaintDtos;
