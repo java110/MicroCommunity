@@ -74,7 +74,7 @@ public class AuditComplaintListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
         Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
-        super.validatePageInfo(reqJson);
+        //super.validatePageInfo(reqJson);
     }
 
     @Override
