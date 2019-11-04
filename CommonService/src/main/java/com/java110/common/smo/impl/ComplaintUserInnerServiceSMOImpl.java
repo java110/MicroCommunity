@@ -2,7 +2,9 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.complaint.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
+import com.java110.core.smo.complaintUser.IComplaintUserInnerServiceSMO;
+import com.java110.dto.FeeDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
@@ -13,7 +15,6 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -38,6 +39,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
 
 
     /**
@@ -114,16 +118,22 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
             list = query.list();
         }
 
-        List<ComplaintDto> complaintDtos = new ArrayList<>();
-
+        List<String> complaintIds = new ArrayList<>();
         for (Task task : list) {
-            String id = task.getId();
-            //System.out.println("tasks:" + JSONObject.toJSONString(task));
-            ComplaintDto complaintDto = (ComplaintDto) taskService.getVariable(id, "complaintDto");
-            complaintDto.setTaskId(id);
-            complaintDtos.add(complaintDto);
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            complaintIds.add(business_key);
         }
-        return complaintDtos;
+
+        //查询 投诉信息
+        ComplaintDto complaintDto = new ComplaintDto();
+        complaintDto.setStoreId(user.getStoreId());
+        complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
+        List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+        return tmpComplaintDtos;
     }
 
     public boolean completeTask(@RequestBody ComplaintDto complaintDto) {
@@ -165,4 +175,35 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     }
 
 
+    public ProcessEngine getProcessEngine() {
+        return processEngine;
+    }
+
+    public void setProcessEngine(ProcessEngine processEngine) {
+        this.processEngine = processEngine;
+    }
+
+    public RuntimeService getRuntimeService() {
+        return runtimeService;
+    }
+
+    public void setRuntimeService(RuntimeService runtimeService) {
+        this.runtimeService = runtimeService;
+    }
+
+    public TaskService getTaskService() {
+        return taskService;
+    }
+
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
+    }
+
+    public IComplaintInnerServiceSMO getComplaintInnerServiceSMOImpl() {
+        return complaintInnerServiceSMOImpl;
+    }
+
+    public void setComplaintInnerServiceSMOImpl(IComplaintInnerServiceSMO complaintInnerServiceSMOImpl) {
+        this.complaintInnerServiceSMOImpl = complaintInnerServiceSMOImpl;
+    }
 }

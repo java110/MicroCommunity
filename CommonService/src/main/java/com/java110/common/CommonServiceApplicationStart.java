@@ -30,14 +30,22 @@ import java.nio.charset.Charset;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.common",
-        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code", "com.java110.db"},
+@SpringBootApplication(scanBasePackages = {
+        "com.java110.service",
+        "com.java110.common",
+        "com.java110.core",
+        "com.java110.cache",
+        "com.java110.config.properties.code",
+        "com.java110.db"},
         exclude = {LiquibaseAutoConfiguration.class,
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.common.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo.user"})
+@EnableFeignClients(basePackages = {
+        "com.java110.core.smo.user",
+        "com.java110.core.smo.complaint"
+})
 public class CommonServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(CommonServiceApplicationStart.class);

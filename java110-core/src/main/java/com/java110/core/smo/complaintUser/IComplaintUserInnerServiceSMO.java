@@ -1,4 +1,4 @@
-package com.java110.core.smo.complaint;
+package com.java110.core.smo.complaintUser;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.auditMessage.AuditMessageDto;

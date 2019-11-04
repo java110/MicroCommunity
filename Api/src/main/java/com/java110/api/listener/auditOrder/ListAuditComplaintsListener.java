@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.common.IResourceEntryStoreInnerServiceSMO;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
-import com.java110.core.smo.complaint.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.complaintUser.IComplaintUserInnerServiceSMO;
 import com.java110.entity.audit.AuditUser;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeAuditUserConstant;
@@ -15,8 +12,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
-import com.java110.vo.api.resourceOrder.ApiResourceOrderDataVo;
-import com.java110.vo.api.resourceOrder.ApiResourceOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -75,6 +70,7 @@ public class ListAuditComplaintsListener extends AbstractServiceApiListener {
 
         AuditUser auditUser = new AuditUser();
         auditUser.setUserId(reqJson.getString("userId"));
+        auditUser.setStoreId(reqJson.getString("storeId"));
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
 

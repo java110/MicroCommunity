@@ -109,6 +109,12 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         <if test="complaintId !=null and complaintId != ''">
             and t.complaint_id= #{complaintId}
         </if>
+        <if test="complaintIds != null ">
+            and t.complaint_id in
+            <foreach collection="complaintIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="typeCd !=null and typeCd != ''">
             and t.type_cd= #{typeCd}
         </if>
@@ -187,6 +193,12 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         where 1 =1
         <if test="complaintId !=null and complaintId != ''">
             and t.complaint_id= #{complaintId}
+        </if>
+        <if test="complaintIds != null ">
+            and t.complaint_id in
+            <foreach collection="complaintIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="typeCd !=null and typeCd != ''">
             and t.type_cd= #{typeCd}

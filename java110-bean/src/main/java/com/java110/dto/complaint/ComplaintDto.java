@@ -20,6 +20,7 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String taskId;
 
     private String complaintId;
+    private String[] complaintIds;
     private String typeCd;
     private String typeCdName;
     private String context;
@@ -214,5 +215,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setCurrentUserId(String currentUserId) {
         this.currentUserId = currentUserId;
+    }
+
+    public String[] getComplaintIds() {
+        return complaintIds;
+    }
+
+    public void setComplaintIds(String[] complaintIds) {
+        this.complaintIds = complaintIds;
     }
 }
