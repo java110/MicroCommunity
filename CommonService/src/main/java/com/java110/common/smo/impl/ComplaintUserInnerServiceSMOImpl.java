@@ -7,6 +7,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.entity.audit.AuditUser;
+import com.java110.utils.util.Assert;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -56,8 +57,30 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
 
         complaintDto.setProcessInstanceId(processInstanceId);
-
+        //第一个节点自动提交
+        autoFinishFirstTask(complaintDto);
         return complaintDto;
+    }
+
+    /**
+     * 自动提交第一步
+     */
+    private void autoFinishFirstTask(ComplaintDto complaintDto){
+        Task task = null;
+        TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(complaintDto.getCurrentUserId()).active();
+        List<Task> todoList = query.list();//获取申请人的待办任务列表
+        for (Task tmp : todoList) {
+            if(tmp.getProcessInstanceId().equals(complaintDto.getProcessInstanceId())){
+                task = tmp;//获取当前流程实例，当前申请人的待办任务
+                break;
+            }
+        }
+        Assert.notNull(task, "未找到当前用户任务userId = "+ complaintDto.getCurrentUserId());
+        complaintDto.setTaskId(task.getId());
+        complaintDto.setAuditCode("10000");
+        complaintDto.setAuditMessage("提交");
+        completeTask(complaintDto);
+
     }
 
     /**

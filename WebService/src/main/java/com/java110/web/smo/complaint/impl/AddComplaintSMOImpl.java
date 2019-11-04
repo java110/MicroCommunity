@@ -49,6 +49,7 @@ public class AddComplaintSMOImpl extends AbstractComponentSMO implements IAddCom
         ResponseEntity<String> responseEntity = null;
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         paramIn.put("storeId", result.getStoreId());
+        paramIn.put("userId", result.getUserId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/complaint.saveComplaint",
                 HttpMethod.POST);

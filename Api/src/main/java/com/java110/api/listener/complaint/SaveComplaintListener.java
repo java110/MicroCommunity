@@ -43,6 +43,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请选择房屋编号");
         Assert.hasKeyAndValue(reqJson, "complaintName", "必填，请填写投诉人");
         Assert.hasKeyAndValue(reqJson, "tel", "必填，请填写投诉电话");
+        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
         //Assert.hasKeyAndValue(reqJson, "state", "必填，请填写投诉状态");
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写投诉内容");
 
@@ -69,6 +70,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
 
         if(HttpStatus.OK == responseEntity.getStatusCode()){
             ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
+            complaintDto.setCurrentUserId(reqJson.getString("userId"));
             complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
         }
 
