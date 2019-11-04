@@ -131,7 +131,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         //查询 投诉信息
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setStoreId(user.getStoreId());
-        complaintDto.setComplaintId(user.getCommunityId());
+        complaintDto.setCommunityId(user.getCommunityId());
         complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
         List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
         return tmpComplaintDtos;
