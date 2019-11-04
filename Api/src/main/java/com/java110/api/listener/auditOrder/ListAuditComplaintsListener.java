@@ -59,6 +59,7 @@ public class ListAuditComplaintsListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(reqJson, "row", "必填，请填写每页显示数");
         Assert.hasKeyAndValue(reqJson, "page", "必填，请填写页数");
 
@@ -71,6 +72,7 @@ public class ListAuditComplaintsListener extends AbstractServiceApiListener {
         AuditUser auditUser = new AuditUser();
         auditUser.setUserId(reqJson.getString("userId"));
         auditUser.setStoreId(reqJson.getString("storeId"));
+        auditUser.setCommunityId(reqJson.getString("communityId"));
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
 

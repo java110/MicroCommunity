@@ -33,6 +33,7 @@
 
                 vc.component.myAuditComplaintsInfo.conditions.page = _page;
                 vc.component.myAuditComplaintsInfo.conditions.row = _rows;
+                vc.component.myAuditComplaintsInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params: vc.component.myAuditComplaintsInfo.conditions
                 };

@@ -7,6 +7,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.web.smo.auditUser.IListAuditComplaintsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,9 @@ public class ListAuditComplaintsSMOImpl extends AbstractComponentSMO implements 
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
+
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区信息");
+
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDIT_COMPLAINT);
     }

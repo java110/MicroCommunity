@@ -17,6 +17,8 @@ public class AuditUser extends PageDto implements Serializable {
     //商户ID
     private String storeId;
 
+    private String communityId;
+
     private String userName;
 
     // 审核环节 如部门经理审核 ， 财务审核 ，采购人员采购
@@ -72,5 +74,13 @@ public class AuditUser extends PageDto implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
