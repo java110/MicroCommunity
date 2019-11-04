@@ -48,6 +48,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("complaintDto", complaintDto);
+        variables.put("userId", complaintDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("complaint", complaintDto.getComplaintId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
