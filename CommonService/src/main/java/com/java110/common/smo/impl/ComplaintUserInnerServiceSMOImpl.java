@@ -137,6 +137,44 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         return tmpComplaintDtos;
     }
 
+    /**
+     * 获取用户审批的任务
+     *
+     * @param user 用户信息
+     */
+    public List<ComplaintDto> getUserHistoryTasks(@RequestBody AuditUser user) {
+        TaskService taskService = processEngine.getTaskService();
+        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
+        ;
+        query.taskAssignee(user.getUserId());
+        query.orderByTaskCreateTime().desc();
+        List<Task> list = null;
+        if (user.getPage() != PageDto.DEFAULT_PAGE) {
+            list = query.listPage(user.getPage(), user.getRow());
+        } else {
+            list = query.list();
+        }
+
+        List<String> complaintIds = new ArrayList<>();
+        for (Task task : list) {
+            String processInstanceId = task.getProcessInstanceId();
+            //3.使用流程实例，查询
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            //4.使用流程实例对象获取BusinessKey
+            String business_key = pi.getBusinessKey();
+            complaintIds.add(business_key);
+        }
+
+        //查询 投诉信息
+        ComplaintDto complaintDto = new ComplaintDto();
+        complaintDto.setStoreId(user.getStoreId());
+        complaintDto.setCommunityId(user.getCommunityId());
+        complaintDto.setComplaintIds(complaintIds.toArray(new String[complaintIds.size()]));
+        List<ComplaintDto> tmpComplaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+        return tmpComplaintDtos;
+    }
+
+
     public boolean completeTask(@RequestBody ComplaintDto complaintDto) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(complaintDto.getTaskId()).singleResult();
