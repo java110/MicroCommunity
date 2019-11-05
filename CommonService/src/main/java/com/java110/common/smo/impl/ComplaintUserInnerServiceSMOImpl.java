@@ -215,6 +215,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", complaintDto.getAuditCode());
         //variables.put("userId", complaintDto.getCurrentUserId());
+        taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
         taskService.complete(complaintDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
