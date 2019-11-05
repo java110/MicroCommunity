@@ -166,6 +166,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
                 .taskAssignee(user.getUserId());
         return query.count();
     }
+
     /**
      * 获取用户审批的任务
      *
@@ -174,10 +175,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
     public List<ComplaintDto> getUserHistoryTasks(@RequestBody AuditUser user) {
         HistoryService historyService = processEngine.getHistoryService();
         Query query = historyService.createHistoricTaskInstanceQuery()
-                                                .processDefinitionKey("complaint")
-                                                .taskAssignee(user.getUserId())
-                                                .orderByHistoricTaskInstanceStartTime()
-                                                .desc();
+                .processDefinitionKey("complaint")
+                .taskAssignee(user.getUserId())
+                .orderByHistoricTaskInstanceStartTime()
+                .desc();
 
         List<HistoricTaskInstance> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
@@ -216,6 +217,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         variables.put("auditCode", complaintDto.getAuditCode());
         //variables.put("userId", complaintDto.getCurrentUserId());
         //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
+        taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(complaintDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
