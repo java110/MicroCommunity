@@ -181,7 +181,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         List<HistoricTaskInstance> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
-            list = query.listPage(user.getPage(), user.getRow());
+            list = query.listPage((user.getPage() - 1) * user.getRow(), user.getRow());
         } else {
             list = query.list();
         }
