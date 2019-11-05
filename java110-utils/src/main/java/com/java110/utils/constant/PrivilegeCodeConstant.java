@@ -132,6 +132,7 @@ public final class PrivilegeCodeConstant {
 
     //审核工单
     public static final String AGENT_HAS_LIST_AUDIT_COMPLAINT = "502019110360380006";
+    public static final String AGENT_HAS_LIST_AUDIT_HISTORY_COMPLAINT = "502019110534240006";
 
 
 

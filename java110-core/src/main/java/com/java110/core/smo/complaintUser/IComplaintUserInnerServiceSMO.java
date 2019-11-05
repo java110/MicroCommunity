@@ -40,6 +40,22 @@ public interface IComplaintUserInnerServiceSMO {
     @RequestMapping(value = "/getUserTasks", method = RequestMethod.POST)
     public List<ComplaintDto> getUserTasks(@RequestBody AuditUser user);
 
+    /**
+     * 查询用户处理任务数
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/getUserHistoryTaskCount", method = RequestMethod.POST)
+    public long getUserHistoryTaskCount(@RequestBody AuditUser user);
+    /**
+     * 获取用户处理审批的任务
+     *
+     * @param user 用户信息
+     */
+    @RequestMapping(value = "/getUserHistoryTasks", method = RequestMethod.POST)
+    public List<ComplaintDto> getUserHistoryTasks(@RequestBody AuditUser user);
+
 
     /**
      * 处理任务

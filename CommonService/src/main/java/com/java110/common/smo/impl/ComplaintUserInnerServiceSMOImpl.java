@@ -10,10 +10,15 @@ import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.query.Query;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -147,18 +152,34 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         return tmpComplaintDtos;
     }
 
+
+    /**
+     * 查询用户任务数
+     *
+     * @param user
+     * @return
+     */
+    public long getUserHistoryTaskCount(@RequestBody AuditUser user) {
+        HistoryService historyService = processEngine.getHistoryService();
+        Query query = historyService.createHistoricTaskInstanceQuery()
+                .processDefinitionKey("complaint")
+                .taskAssignee(user.getUserId());
+        return query.count();
+    }
     /**
      * 获取用户审批的任务
      *
      * @param user 用户信息
      */
     public List<ComplaintDto> getUserHistoryTasks(@RequestBody AuditUser user) {
-        TaskService taskService = processEngine.getTaskService();
-        TaskQuery query = taskService.createTaskQuery().processDefinitionKey("complaint");
-        ;
-        query.taskAssignee(user.getUserId());
-        query.orderByTaskCreateTime().desc();
-        List<Task> list = null;
+        HistoryService historyService = processEngine.getHistoryService();
+        Query query = historyService.createHistoricTaskInstanceQuery()
+                                                .processDefinitionKey("complaint")
+                                                .taskAssignee(user.getUserId())
+                                                .orderByHistoricTaskInstanceStartTime()
+                                                .desc();
+
+        List<HistoricTaskInstance> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());
         } else {
@@ -166,7 +187,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         }
 
         List<String> complaintIds = new ArrayList<>();
-        for (Task task : list) {
+        for (HistoricTaskInstance task : list) {
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
             ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
