@@ -38,7 +38,7 @@ public class ComplaintUserListener implements TaskListener {
         if (auditUserDtos == null || auditUserDtos.size() < 1) {
             return;
         }
-        delegateTask.setVariable("complaintUserId", auditUserDtos.get(0).getUserId());
+
         delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
     }
 }
