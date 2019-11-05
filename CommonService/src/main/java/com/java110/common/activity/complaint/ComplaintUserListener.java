@@ -40,12 +40,13 @@ public class ComplaintUserListener implements TaskListener , ExecutionListener {
         if (auditUserDtos == null || auditUserDtos.size() < 1) {
             return;
         }
+        delegateTask.addCandidateUser(auditUserDtos.get(0).getUserId());
 
         delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
     }
 
     @Override
     public void notify(DelegateExecution execution) {
-        
+
     }
 }
