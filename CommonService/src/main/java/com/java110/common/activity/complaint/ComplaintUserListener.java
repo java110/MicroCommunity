@@ -8,7 +8,6 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
-import org.apache.commons.collections.ListUtils;
 
 import java.util.List;
 
@@ -39,6 +38,7 @@ public class ComplaintUserListener implements TaskListener {
         if (auditUserDtos == null || auditUserDtos.size() < 1) {
             return;
         }
+        delegateTask.setVariable("complaintUserId", auditUserDtos.get(0).getUserId());
         delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
     }
 }

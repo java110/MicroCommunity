@@ -214,7 +214,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         taskService.addComment(complaintDto.getTaskId(), processInstanceId, complaintDto.getAuditMessage());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", complaintDto.getAuditCode());
-        variables.put("userId", complaintDto.getCurrentUserId());
+        //variables.put("userId", complaintDto.getCurrentUserId());
         taskService.complete(complaintDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
