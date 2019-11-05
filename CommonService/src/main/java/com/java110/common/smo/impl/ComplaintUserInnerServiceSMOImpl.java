@@ -190,7 +190,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         for (HistoricTaskInstance task : list) {
             String processInstanceId = task.getProcessInstanceId();
             //3.使用流程实例，查询
-            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            HistoricProcessInstance pi = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             //4.使用流程实例对象获取BusinessKey
             String business_key = pi.getBusinessKey();
             complaintIds.add(business_key);
