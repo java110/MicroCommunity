@@ -218,6 +218,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         //variables.put("userId", complaintDto.getCurrentUserId());
         //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
+        taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(complaintDto.getTaskId(), variables);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
