@@ -78,4 +78,10 @@ public interface IAuditUserServiceDao {
      */
     int queryAuditUsersCount(Map info);
 
+    /**
+     * 刷新表 委托人
+     * @param info
+     */
+    void freshActHiTaskInstAssignee(Map info);
+
 }

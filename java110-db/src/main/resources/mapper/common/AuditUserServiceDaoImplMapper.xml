@@ -195,4 +195,10 @@
 
     </select>
 
+    <update id="freshActHiTaskInstAssignee" parameterType="Map">
+        UPDATE ACT_HI_TASKINST T SET T.`ASSIGNEE_` = #{userId}
+        WHERE T.`ID_` = #{taskId}
+
+    </update>
+
 </mapper>

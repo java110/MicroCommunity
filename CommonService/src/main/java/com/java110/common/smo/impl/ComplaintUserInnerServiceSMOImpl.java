@@ -215,7 +215,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         taskService.addComment(complaintDto.getTaskId(), processInstanceId, complaintDto.getAuditMessage());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", complaintDto.getAuditCode());
-        //variables.put("userId", complaintDto.getCurrentUserId());
+        variables.put("currentUserId", complaintDto.getCurrentUserId());
         //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(complaintDto.getTaskId(), variables);

@@ -130,5 +130,16 @@ public class AuditUserServiceDaoImpl extends BaseServiceDao implements IAuditUse
         return Integer.parseInt(businessAuditUserInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public void freshActHiTaskInstAssignee(Map info) {
+        logger.debug("freshActHiTaskInstAssignee 入参 info : {}", info);
+
+        int saveFlag = sqlSessionTemplate.update("auditUserServiceDaoImpl.freshActHiTaskInstAssignee", info);
+
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "freshActHiTaskInstAssignee数据失败：" + JSONObject.toJSONString(info));
+        }
+    }
+
 
 }
