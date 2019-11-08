@@ -579,4 +579,19 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_COMPLAINT ="190200050001";
 
+
+    /**
+     *  保存 设备
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_MACHINE="200200030001";
+
+    /**
+     * 修改 设备
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MACHINE="200200040001";
+    /**
+     *  删除 设备
+     */
+    public static final String BUSINESS_TYPE_DELETE_MACHINE ="200200050001";
 }
