@@ -1,10 +1,10 @@
 {
-  "templateName":"设备",
-  "templateCode":"machine",
-  "templateKey":"machineId",
-  "templateKeyName":"设备ID",
-  "searchCode": "machineName",
-  "searchName": "设备名称",
+  "templateName":"投诉建议",
+  "templateCode":"complaint",
+  "templateKey":"complaintId",
+  "templateKeyName":"投诉ID",
+  "searchCode": "complaintName",
+  "searchName": "投诉人名称",
   "conditions": [
     {
       "name": "投诉ID",
