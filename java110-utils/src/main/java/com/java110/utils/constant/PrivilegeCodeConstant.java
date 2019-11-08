@@ -134,6 +134,9 @@ public final class PrivilegeCodeConstant {
     public static final String AGENT_HAS_LIST_AUDIT_COMPLAINT = "502019110360380006";
     public static final String AGENT_HAS_LIST_AUDIT_HISTORY_COMPLAINT = "502019110534240006";
 
+    //设备信息
+    public static final String AGENT_HAS_LIST_MACHINE = "502019110809250044";
+
 
 
 }

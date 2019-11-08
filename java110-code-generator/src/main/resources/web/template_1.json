@@ -7,132 +7,124 @@
   "searchName": "设备名称",
   "conditions": [
     {
-      "name": "投诉ID",
+      "name": "设备编码",
       "inputType": "input",
-      "code": "complaintId",
+      "code": "machineCode",
       "whereCondition": "equal"
     },
     {
-      "name": "投诉类型",
+      "name": "设备类型",
       "inputType": "select",
-      "code": "typeCd",
-      "selectValue":"809001,809002",
-      "selectValueName":"投诉,建议",
+      "code": "machineTypeCd",
+      "selectValue":"9999,9998",
+      "selectValueName":"锐目门禁,其他",
       "whereCondition": "equal"
     },
     {
-      "name": "投诉人",
+      "name": "设备名称",
       "inputType": "input",
-      "code": "complaintName",
+      "code": "machineName",
       "whereCondition": "equal"
     },
     {
-      "name": "联系电话",
+      "name": "设备IP",
       "inputType": "input",
-      "code": "tel",
+      "code": "machineIp",
       "whereCondition": "equal"
     },
     {
-      "name": "房屋编号",
+      "name": "设备MAC",
       "inputType": "input",
-      "code": "roomId",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "投诉状态",
-      "inputType": "select",
-      "code": "state",
-      "selectValue":"1100,1200",
-      "selectValueName":"派单,结单",
+      "code": "machineMac",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"storeId",
-      "cnCode":"商户ID",
-      "desc":"必填，请填写商户ID",
+      "code":"machineCode",
+      "cnCode":"设备编码",
+      "desc":"必填，请填写设备编码",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"商户ID必须为数字",
-      "show": false
+      "limit":"maxin",
+      "limitParam":"1,30",
+      "limitErrInfo":"设备编码不能超过30位",
+      "show": true
     },
     {
-      "code": "typeCd",
-      "cnCode":"投诉类型",
-      "desc":"必填，请选择投诉类型",
+      "code": "machineVersion",
+      "cnCode":"版本号",
+      "desc":"必填，请填写设备版本号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,30",
+      "limitParam":"",
+      "limitErrInfo":"设备版本号不能超过30位",
+      "show": true
+    },
+    {
+      "code": "machineName",
+      "cnCode":"设备名称",
+      "desc":"必填，请填写设备名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,200",
+      "limitParam":"",
+      "limitErrInfo":"设备名称不能超过200位",
+      "show": true
+    },
+    {
+      "code":"machineTypeCd",
+      "cnCode":"设备类型",
+      "desc":"必填，请选择设备类型",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "select",
-      "selectValue":"809001,809002",
-      "selectValueName":"投诉,建议",
+      "selectValue":"9999,9998",
+      "selectValueName":"锐目门禁,其他",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"投诉类型格式错误",
+      "limitErrInfo":"设备类型格式错误",
       "show": true
     },
     {
-      "code":"roomId",
-      "cnCode":"房屋编号",
-      "desc":"必填，请选择房屋编号",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"房屋编号格式错误",
-      "show": true
-    },
-    {
-      "code":"complaintName",
-      "cnCode":"投诉人",
-      "desc":"必填，请填写投诉人",
+      "code":"authCode",
+      "cnCode":"鉴权编码",
+      "desc":"必填，请填写鉴权编码",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"maxLength",
-      "limitParam":"200",
-      "limitErrInfo":"投诉人不能大于200位",
+      "limitParam":"64",
+      "limitErrInfo":"鉴权编码不能大于64位",
       "show": false
     },
     {
-      "code":"tel",
-      "cnCode":"投诉电话",
-      "desc":"必填，请填写投诉电话",
-      "required":true,
+      "code":"machineIp",
+      "cnCode":"设备IP",
+      "desc":"可选，请填写设备IP",
+      "required":false,
       "hasDefaultValue":false,
       "inputType":"input",
-      "limit":"phone",
-      "limitParam":"",
-      "limitErrInfo":"投诉电话格式错误",
-      "show": true
-    },
-    {
-      "code":"state",
-      "cnCode":"投诉状态",
-      "desc":"必填，请填写投诉状态",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"num",
-      "limitParam":"",
-      "limitErrInfo":"投诉状态格式错误",
-      "show": true
-    },
-    {
-      "code":"context",
-      "cnCode":"投诉内容",
-      "desc":"必填，请填写投诉内容",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType":"textarea",
       "limit":"maxLength",
-      "limitParam":"4000",
-      "limitErrInfo":"投诉状态超过4000位",
-      "show": false
+      "limitParam":"64",
+      "limitErrInfo":"设备IP格式错误",
+      "show": true
+    },
+    {
+      "code":"machineMac",
+      "cnCode":"设备MAC",
+      "desc":"可选，请填写设备MAC",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"设备MAC 格式错误",
+      "show": true
     }
   ]
 }

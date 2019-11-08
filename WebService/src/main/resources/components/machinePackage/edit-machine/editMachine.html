@@ -1,0 +1,76 @@
+<div id="editMachineModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="m-t-none m-b ">修改设备</h3>
+                <div class="ibox-content">
+                    <div>
+                        <div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">设备编码</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.machineCode" type="text" placeholder="必填，请填写设备编码"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">版本号</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.machineVersion" type="text" placeholder="必填，请填写版本号"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">设备名称</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.machineName" type="text" placeholder="必填，请填写设备名称"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">设备类型</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="editMachineInfo.machineTypeCd">
+                                        <option selected disabled value="">必填，请选择设备类型</option>
+                                        <option value="9999">锐目门禁</option>
+                                        <option value="9998">其他</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">鉴权编码</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.authCode" type="text" placeholder="必填，请填写鉴权编码"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">设备IP</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.machineIp" type="text" placeholder="选填，请填写设备IP"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">设备MAC</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editMachineInfo.machineMac" type="text" placeholder="选填，请填写设备MAC"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="ibox-content">
+                                <button class="btn btn-primary float-right" type="button" v-on:click="editMachine()"><i
+                                        class="fa fa-check"></i>&nbsp;保存
+                                </button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                        data-dismiss="modal">取消
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
