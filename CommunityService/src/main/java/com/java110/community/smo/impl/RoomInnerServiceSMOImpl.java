@@ -13,6 +13,8 @@ import com.java110.dto.PageDto;
 import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.UserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,8 @@ import java.util.Map;
  **/
 @RestController
 public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInnerServiceSMO {
+
+    private static final Logger logger = LoggerFactory.getLogger(RoomInnerServiceSMOImpl.class);
 
     @Autowired
     private IRoomServiceDao roomServiceDaoImpl;
@@ -241,7 +245,11 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         for (RoomDto room : rooms) {
             //处理下户型转义问题
-            room.setApartment(MappingCache.getValue(room.getApartment().substring(0,2).toString())+MappingCache.getValue(room.getApartment().substring(2,5).toString()));
+            try {
+                room.setApartment(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+            } catch (Exception e) {
+                logger.error("设置房屋户型失败", e);
+            }
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
