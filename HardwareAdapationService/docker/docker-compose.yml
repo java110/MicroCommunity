@@ -7,7 +7,7 @@ services:
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "8010:8010"
+       - "8011:8011"
        volumes:
        - ../target/HardwareAdapationService.jar:/root/target/HardwareAdapationService.jar
        networks:
