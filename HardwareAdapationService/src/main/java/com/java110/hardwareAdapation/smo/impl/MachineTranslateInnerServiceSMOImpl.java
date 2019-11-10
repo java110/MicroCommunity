@@ -54,7 +54,7 @@ public class MachineTranslateInnerServiceSMOImpl extends BaseServiceSMO implemen
     }
 
     @Override
-    public int updateMachineTranslateState(MachineTranslateDto machineTranslateDto) {
+    public int updateMachineTranslateState(@RequestBody MachineTranslateDto machineTranslateDto) {
         return machineTranslateServiceDaoImpl.updateMachineTranslateState(BeanConvertUtil.beanCovertMap(machineTranslateDto));
     }
 

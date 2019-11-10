@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * 调用地址
+ * http://api.demo.winqi.cn/api/machineTranslate.machineHeartbeart?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1
  * 硬件心跳检测类
  */
 @Java110Listener("machineHeartbeatListener")
@@ -94,7 +96,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         int machineCount = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
         if (machineCount < 1) {
             outParam.put("code", -1);
-            outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + reqJson.getString("communityId") + "】注册");
+            outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + communityId + "】注册");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return;
