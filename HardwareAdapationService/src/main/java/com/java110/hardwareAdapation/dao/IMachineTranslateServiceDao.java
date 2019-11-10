@@ -78,4 +78,11 @@ public interface IMachineTranslateServiceDao {
      */
     int queryMachineTranslatesCount(Map info);
 
+    /**
+     * 修改设备状态
+     * @param info
+     * @return
+     */
+    int updateMachineTranslateState(Map info);
+
 }

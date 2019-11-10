@@ -27,5 +27,10 @@ public class ServiceCodeMachineTranslateConstant {
      */
     public static final String LIST_MACHINETRANSLATES = "machineTranslate.listMachineTranslates";
 
+    /**
+     * 心跳检测类
+     */
+    public static final String MACHINE_HEARTBEAT = "machineTranslate.machineHeartbeart";
+
 
 }

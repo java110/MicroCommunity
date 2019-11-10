@@ -38,4 +38,8 @@ public interface IMachineTranslateInnerServiceSMO {
      */
     @RequestMapping(value = "/queryMachineTranslatesCount", method = RequestMethod.POST)
     int queryMachineTranslatesCount(@RequestBody MachineTranslateDto machineTranslateDto);
+
+
+    @RequestMapping(value = "/updateMachineTranslateState", method = RequestMethod.POST)
+    int updateMachineTranslateState(@RequestBody MachineTranslateDto machineTranslateDto);
 }

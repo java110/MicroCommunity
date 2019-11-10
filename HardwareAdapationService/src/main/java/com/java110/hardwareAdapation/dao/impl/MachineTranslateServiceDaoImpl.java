@@ -125,5 +125,14 @@ public class MachineTranslateServiceDaoImpl extends BaseServiceDao implements IM
         return Integer.parseInt(businessMachineTranslateInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int updateMachineTranslateState(Map info) {
+        logger.debug("updateMachineTranslateState 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.update("machineTranslateServiceDaoImpl.updateMachineTranslateState",info);
+
+        return saveFlag;
+    }
+
 
 }
