@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
+import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.hardwareAdapation.MachineTranslateDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
@@ -29,6 +31,9 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
     /**
      * {
@@ -73,9 +78,24 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             }
         }
 
-        //查询设备是否同步
+        //检查设备是否合法
+        MachineDto machineDto = new MachineDto();
+        machineDto.setMachineCode(reqJson.getString("machineCode"));
+        machineDto.setCommunityId(reqJson.getString("communityId"));
+        int machineCount = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
+        if (machineCount < 1) {
+            outParam.put("code", -1);
+            outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + reqJson.getString("communityId") + "】注册");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return ;
+        }
+
+
+        //查询删除的业主信息
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineCode(reqJson.getString("machineCode"));
+        machineTranslateDto.setMachineCode(reqJson.getString("communityId"));
         machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<MachineTranslateDto> machineTranslateDtos = machineTranslateInnerServiceSMOImpl.queryMachineTranslates(machineTranslateDto);
         //如果有失效数据，则告诉设备删除
@@ -90,6 +110,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             }
         }
 
+        //查询待同步的业主数据
         machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
         machineTranslateDto.setState("10000");
         //鉴权码先不做判断，后期判断
@@ -146,5 +167,13 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
 
     public void setMachineTranslateInnerServiceSMOImpl(IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl) {
         this.machineTranslateInnerServiceSMOImpl = machineTranslateInnerServiceSMOImpl;
+    }
+
+    public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
+        return machineInnerServiceSMOImpl;
+    }
+
+    public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
+        this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
     }
 }
