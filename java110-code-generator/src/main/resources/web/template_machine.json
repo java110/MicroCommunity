@@ -1,0 +1,130 @@
+{
+  "templateName":"设备",
+  "templateCode":"machine",
+  "templateKey":"machineId",
+  "templateKeyName":"设备ID",
+  "searchCode": "machineName",
+  "searchName": "设备名称",
+  "conditions": [
+    {
+      "name": "设备编码",
+      "inputType": "input",
+      "code": "machineCode",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备类型",
+      "inputType": "select",
+      "code": "machineTypeCd",
+      "selectValue":"9999,9998",
+      "selectValueName":"锐目门禁,其他",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备名称",
+      "inputType": "input",
+      "code": "machineName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备IP",
+      "inputType": "input",
+      "code": "machineIp",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备MAC",
+      "inputType": "input",
+      "code": "machineMac",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"machineCode",
+      "cnCode":"设备编码",
+      "desc":"必填，请填写设备编码",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,30",
+      "limitErrInfo":"设备编码不能超过30位",
+      "show": true
+    },
+    {
+      "code": "machineVersion",
+      "cnCode":"版本号",
+      "desc":"必填，请填写设备版本号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,30",
+      "limitParam":"",
+      "limitErrInfo":"设备版本号不能超过30位",
+      "show": true
+    },
+    {
+      "code": "machineName",
+      "cnCode":"设备名称",
+      "desc":"必填，请填写设备名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,200",
+      "limitParam":"",
+      "limitErrInfo":"设备名称不能超过200位",
+      "show": true
+    },
+    {
+      "code":"machineTypeCd",
+      "cnCode":"设备类型",
+      "desc":"必填，请选择设备类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"9999,9998",
+      "selectValueName":"锐目门禁,其他",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"设备类型格式错误",
+      "show": true
+    },
+    {
+      "code":"authCode",
+      "cnCode":"鉴权编码",
+      "desc":"必填，请填写鉴权编码",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"鉴权编码不能大于64位",
+      "show": false
+    },
+    {
+      "code":"machineIp",
+      "cnCode":"设备IP",
+      "desc":"可选，请填写设备IP",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"设备IP格式错误",
+      "show": true
+    },
+    {
+      "code":"machineMac",
+      "cnCode":"设备MAC",
+      "desc":"可选，请填写设备MAC",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"64",
+      "limitErrInfo":"设备MAC 格式错误",
+      "show": true
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package com.java110.api.listener.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -75,13 +76,17 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         }
 
         //有房屋信息，则直接绑定房屋和 业主的关系
-        if(paramObj.containsKey("roomId")){
+        if (paramObj.containsKey("roomId")) {
             //添加单元信息
             businesses.add(sellRoom(paramObj, dataFlowContext));
 
             //添加物业费用信息
             businesses.add(addPropertyFee(paramObj, dataFlowContext));
         }
+
+        /*if ("ON".equals(MappingCache.getValue("SAVE_MACHINE_TRANSLATE_FLAG"))) {
+            addMachineTranslate(paramObj, dataFlowContext);
+        }*/
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -236,7 +241,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
-        if(paramObj.containsKey("roomId")){
+        if (paramObj.containsKey("roomId")) {
 
             Assert.jsonObjectHaveKey(paramObj, "state", "请求报文中未包含state节点");
             Assert.jsonObjectHaveKey(paramObj, "storeId", "请求报文中未包含storeId节点");
