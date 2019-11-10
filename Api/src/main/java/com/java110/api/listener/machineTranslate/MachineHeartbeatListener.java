@@ -2,6 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -56,7 +57,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备编码");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+        //Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "authCode", "请求报文中未包含设备鉴权码");
     }
 
@@ -71,31 +72,39 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         outParam.put("message", "success");
         JSONArray data = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
+
         HttpHeaders headers = new HttpHeaders();
-        if (reqHeader != null && !reqHeader.isEmpty()) {
-            for (String key : reqHeader.keySet()) {
-                headers.add(key, reqHeader.get(key));
-            }
+        if (reqHeader == null || !reqHeader.containsKey("communityId") || StringUtils.isEmpty(reqHeader.get("communityId"))) {
+            outParam.put("code", -1);
+            outParam.put("message", "请求地址中未包含小区信息");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
         }
+        for (String key : reqHeader.keySet()) {
+            headers.add(key, reqHeader.get(key));
+        }
+
+        String communityId = reqHeader.get("communityId");
 
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqJson.getString("machineCode"));
-        machineDto.setCommunityId(reqJson.getString("communityId"));
+        machineDto.setCommunityId(communityId);
         int machineCount = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
         if (machineCount < 1) {
             outParam.put("code", -1);
             outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + reqJson.getString("communityId") + "】注册");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
-            return ;
+            return;
         }
 
 
         //查询删除的业主信息
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineCode(reqJson.getString("machineCode"));
-        machineTranslateDto.setMachineCode(reqJson.getString("communityId"));
+        machineTranslateDto.setCommunityId(communityId);
         machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
         List<MachineTranslateDto> machineTranslateDtos = machineTranslateInnerServiceSMOImpl.queryMachineTranslates(machineTranslateDto);
         //如果有失效数据，则告诉设备删除
