@@ -216,7 +216,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
 
     </select>
 
-    <update id="updateMachineTranslateState" parameterMap="Map">
+    <update id="updateMachineTranslateState" parameterType="Map">
         update machine_translate t set t.state = #{state}
         where
         t.machine_code= #{machineCode}
