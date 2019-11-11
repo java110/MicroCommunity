@@ -30,7 +30,7 @@ public class ServiceCodeMachineTranslateConstant {
     /**
      * 心跳检测类
      */
-    public static final String MACHINE_HEARTBEAT = "machineTranslate.machineHeartbeart";
+    public static final String MACHINE_HEARTBEAT = "machineTranslate.machineQueryUserInfo";
 
 
 }
