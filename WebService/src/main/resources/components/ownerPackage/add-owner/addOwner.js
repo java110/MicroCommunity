@@ -14,7 +14,8 @@
                 sex:'',
                 remark:'',
                 ownerId:'',
-                ownerPhoto:''
+                ownerPhoto:'',
+                videoPlaying:false
             }
         },
          _initMethod:function(){
@@ -140,7 +141,7 @@
             },
             _initAddOwnerMedia:function () {
                 if(vc.component._addUserMedia()){
-                    var videoPlaying = false;
+                    vc.component.addOwnerInfo.videoPlaying = false;
                     var constraints = {
                         video: true,
                         audio: false
@@ -155,7 +156,7 @@
                             video.srcObject = stream;
                         }
                         video.play();
-                        videoPlaying = true;
+                        vc.component.addOwnerInfo.videoPlaying = true;
                     }, function (error) {
                         console.log("ERROR");
                         console.log(error);
@@ -165,7 +166,7 @@
                 }
             },
             _takePhoto:function () {
-                if (videoPlaying) {
+                if (vc.component.addOwnerInfo.videoPlaying) {
                     var canvas = document.getElementById('canvas');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
