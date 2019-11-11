@@ -168,6 +168,7 @@
             _takePhoto:function () {
                 if (vc.component.addOwnerInfo.videoPlaying) {
                     var canvas = document.getElementById('canvas');
+                    var video = document.getElementById('ownerPhoto');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
