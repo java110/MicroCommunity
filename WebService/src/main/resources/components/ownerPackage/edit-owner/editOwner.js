@@ -25,7 +25,7 @@
                 vc.copyObject(_owner,vc.component.editOwnerInfo);
                 //根据memberId 查询 照片信息
                 vc.component.editOwnerInfo.ownerPhoto = "https://hc.demo.winqi.cn/callComponent/download/getFileByObjId/file?objId="+
-                   vc.component.editOwnerInfo.memberId +"&communityId="+vc.getCommunitys().communityId;
+                   vc.component.editOwnerInfo.memberId +"&communityId="+vc.getCurrentCommunity().communityId+"fileTypeCd=10000";
                 $('#editOwnerModel').modal('show');
                 vc.component._initAddOwnerMediaForEdit();
             });
