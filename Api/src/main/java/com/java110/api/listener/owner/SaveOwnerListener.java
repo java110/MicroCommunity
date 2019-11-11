@@ -3,8 +3,11 @@ package com.java110.api.listener.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.dto.file.FileDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
@@ -12,11 +15,16 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import javax.activation.FileDataSource;
+import javax.xml.ws.soap.Addressing;
 
 /**
  * @ClassName SaveOwnerListener
@@ -33,6 +41,8 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
 
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     private static Logger logger = LoggerFactory.getLogger(SaveOwnerListener.class);
 
@@ -83,6 +93,21 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             //添加物业费用信息
             businesses.add(addPropertyFee(paramObj, dataFlowContext));
         }
+        if (paramObj.containsKey("ownerPhoto") && !StringUtils.isEmpty(paramObj.getString("ownerPhoto"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(paramObj.getString("ownerPhoto"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId("communityId");
+            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
+            }
+            paramObj.put("ownerPhotoId", fileDto.getFileId());
+
+            businesses.add(addOwnerPhoto(paramObj, dataFlowContext));
+
+        }
 
         /*if ("ON".equals(MappingCache.getValue("SAVE_MACHINE_TRANSLATE_FLAG"))) {
             addMachineTranslate(paramObj, dataFlowContext);
@@ -92,6 +117,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
         //将 rest header 信息传递到下层服务中去
         super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
+
 
         ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
 
@@ -218,6 +244,33 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
     }
 
     /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("fileRelId", "-1");
+        businessUnit.put("relTypeCd", "10000");
+        businessUnit.put("saveWay", "table");
+        businessUnit.put("objId", paramInJson.getString("ownerId"));
+        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+
+        return business;
+    }
+
+
+    /**
      * 数据校验
      * <p>
      * name:'',
@@ -258,4 +311,12 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         return 0;
     }
 
+
+    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
+        return fileInnerServiceSMOImpl;
+    }
+
+    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
+        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
+    }
 }
