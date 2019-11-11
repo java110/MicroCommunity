@@ -1,6 +1,7 @@
 package com.java110.web.smo.file.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
@@ -9,8 +10,7 @@ import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.web.smo.file.IGetFileSMO;
+import com.java110.web.smo.file.IGetFileByObjIdSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,18 +26,19 @@ import java.util.Map;
 /**
  * 查询notice服务类
  */
-@Service("getFileSMOImpl")
-public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
+@Service("getFileByObjIdSMOImpl")
+public class GetFileByObjIdSMOImpl extends BaseComponentSMO implements IGetFileByObjIdSMO {
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public ResponseEntity<Object> getFile(IPageData pd) throws SMOException, IOException {
+    public ResponseEntity<Object> getFileByObjId(IPageData pd) throws SMOException, IOException {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
         Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
-        Assert.hasKeyAndValue(paramIn, "fileId", "请求报文中未包含文件ID");
+        Assert.hasKeyAndValue(paramIn, "objId", "请求报文中未包含文件ID");
+        Assert.hasKeyAndValue(paramIn, "fileTypeCd", "请求报文中未包含文件类型");
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.GET_FILE);
 
@@ -46,7 +47,7 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFile" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFileByObjId" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),

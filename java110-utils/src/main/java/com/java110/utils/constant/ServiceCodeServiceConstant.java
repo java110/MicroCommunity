@@ -40,6 +40,11 @@ public class ServiceCodeServiceConstant {
     public static final String GET_FILE = "file.getFile";
 
     /**
+     * 查询文件
+     */
+    public static final String GET_FILE_BY_OBJ_ID = "file.getFileByObjId";
+
+    /**
      * 保存文件
      */
     public static final String SAVE_FILE = "file.saveFile";

@@ -99,7 +99,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             fileDto.setFileName(fileDto.getFileId());
             fileDto.setContext(paramObj.getString("ownerPhoto"));
             fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId("communityId");
+            fileDto.setCommunityId(paramObj.getString("communityId"));
             if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
             }

@@ -12,7 +12,9 @@
                 age:'',
                 link:'',
                 sex:'',
-                remark:''
+                remark:'',
+                ownerPhoto:'',
+                videoPlaying:false
             }
         },
          _initMethod:function(){
@@ -21,7 +23,11 @@
          _initEvent:function(){
             vc.on('editOwner','openEditOwnerModal',function(_owner){
                 vc.copyObject(_owner,vc.component.editOwnerInfo);
+                //根据memberId 查询 照片信息
+                vc.component.editOwnerInfo.ownerPhoto = "https://hc.demo.winqi.cn/callComponent/download/getFileByObjId/file?objId="+
+                   vc.component.editOwnerInfo.memberId +"&communityId="+vc.getCommunitys().communityId;
                 $('#editOwnerModel').modal('show');
+                vc.component._initAddOwnerMediaForEdit();
             });
         },
         methods:{
@@ -83,6 +89,7 @@
 
                 });
             },
+
             editOwnerMethod:function(){
 
                 if(!vc.component.editOwnerValidate()){
@@ -125,8 +132,54 @@
                     age:'',
                     link:'',
                     sex:'',
-                    remark:''
+                    remark:'',
+                    ownerPhoto:'',
+                    videoPlaying:false
                 };
+            },
+            _editUserMedia:function() {
+                return navigator.getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia || null;
+            },
+            _initAddOwnerMediaForEdit:function () {
+                if(vc.component._editUserMedia()){
+                    vc.component.editOwnerInfo.videoPlaying = false;
+                    var constraints = {
+                        video: true,
+                        audio: false
+                    };
+                    var video = document.getElementById('ownerPhotoForEdit');
+                    var media = navigator.getUserMedia(constraints, function (stream) {
+                        var url = window.URL || window.webkitURL;
+                        //video.src = url ? url.createObjectURL(stream) : stream;
+                        try {
+                            video.src = url ? url.createObjectURL(stream) : stream;
+                        } catch (error) {
+                            video.srcObject = stream;
+                        }
+                        video.play();
+                        vc.component.editOwnerInfo.videoPlaying = true;
+                    }, function (error) {
+                        console.log("ERROR");
+                        console.log(error);
+                    });
+                }else{
+                    console.log("初始化视频失败");
+                }
+            },
+            _takePhotoForEdit:function () {
+                if (vc.component.editOwnerInfo.videoPlaying) {
+                    var canvas = document.getElementById('canvasForEdit');
+                    var video = document.getElementById('ownerPhotoForEdit');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var data = canvas.toDataURL('image/webp');
+                    vc.component.editOwnerInfo.ownerPhoto = data;
+                    //document.getElementById('photo').setAttribute('src', data);
+                }
             }
         }
     });
