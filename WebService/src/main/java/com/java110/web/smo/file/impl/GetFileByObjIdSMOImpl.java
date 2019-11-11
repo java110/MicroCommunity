@@ -69,7 +69,11 @@ public class GetFileByObjIdSMOImpl extends BaseComponentSMO implements IGetFileB
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
         headers.add("Accept-Ranges", "bytes");
 
-        byte[] context = Base64Convert.base64ToByte(outParam.getString("context").replace("data:image/webp;base64,", ""));
+        byte[] context = Base64Convert.base64ToByte(outParam.getString("context")
+                .replace("data:image/webp;base64,", "")
+                .replace("data:image/png;base64,", "")
+                .replace("data:image/jpeg;base64,", "")
+        );
 
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
