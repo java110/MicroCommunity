@@ -13,7 +13,8 @@
                 link:'',
                 sex:'',
                 remark:'',
-                ownerId:''
+                ownerId:'',
+                ownerPhoto:''
             }
         },
          _initMethod:function(){
@@ -25,10 +26,11 @@
                     vc.component.addOwnerInfo.ownerId = _ownerId;
                 }
                 $('#addOwnerModel').modal('show');
+                vc.component._initAddOwnerMedia();
             });
         },
         methods:{
-            addOwnerValidate(){
+            addOwnerValidate:function(){
                 return vc.validate.validate({
                     addOwnerInfo:vc.component.addOwnerInfo
                 },{
@@ -129,6 +131,49 @@
                                             sex:'',
                                             remark:''
                                         };
+            },
+            _addUserMedia:function() {
+                return navigator.getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia || null;
+            },
+            _initAddOwnerMedia:function () {
+                if(vc.component._addUserMedia()){
+                    var videoPlaying = false;
+                    var constraints = {
+                        video: true,
+                        audio: false
+                    };
+                    var video = document.getElementById('ownerPhoto');
+                    var media = navigator.getUserMedia(constraints, function (stream) {
+                        var url = window.URL || window.webkitURL;
+                        //video.src = url ? url.createObjectURL(stream) : stream;
+                        try {
+                            video.src = url ? url.createObjectURL(stream) : stream;
+                        } catch (error) {
+                            video.srcObject = stream;
+                        }
+                        video.play();
+                        videoPlaying = true;
+                    }, function (error) {
+                        console.log("ERROR");
+                        console.log(error);
+                    });
+                }else{
+                    console.log("初始化视频失败");
+                }
+            },
+            _takePhoto:function () {
+                if (videoPlaying) {
+                    var canvas = document.getElementById('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var data = canvas.toDataURL('image/webp');
+                    vc.component.addOwnerInfo.ownerPhoto = data;
+                    //document.getElementById('photo').setAttribute('src', data);
+                }
             }
         }
     });
