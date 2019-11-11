@@ -261,7 +261,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "10000");
         businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("ownerId"));
+        businessUnit.put("objId", paramInJson.getString("memberId"));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
