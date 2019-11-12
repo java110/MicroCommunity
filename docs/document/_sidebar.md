@@ -17,6 +17,7 @@
   * [服务端开发](develop/service.md)
   * [添加服务](develop/addService)
   * [用户权限校验](develop/checkPrivilege.md)
+  * [硬件对接](develop/machine.md)
 
 * 字典数据
 

@@ -73,6 +73,8 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 硬件接入
 
+![流程图](docs/document/images/machineFlow.png)
+
 目前对接锐目门禁系统，如果您想将您的硬件对接到此项目，请加qq群号827669685 联系我们
 
 ### 二次开发视频
