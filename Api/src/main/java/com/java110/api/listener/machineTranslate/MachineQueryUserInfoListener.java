@@ -91,7 +91,7 @@ public class MachineQueryUserInfoListener extends AbstractServiceApiListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-        if(!reqHeader.containsKey("MachineCode") || StringUtils.isEmpty(reqHeader.get("MachineCode"))){
+        if(!reqHeader.containsKey("machinecode") || StringUtils.isEmpty(reqHeader.get("machinecode"))){
             outParam.put("code", -1);
             outParam.put("message", "请求头中未包含设备编码");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
@@ -106,12 +106,12 @@ public class MachineQueryUserInfoListener extends AbstractServiceApiListener {
 
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();
-        machineDto.setMachineCode(reqHeader.get("MachineCode"));
+        machineDto.setMachineCode(reqHeader.get("machinecode"));
         machineDto.setCommunityId(communityId);
         int machineCount = machineInnerServiceSMOImpl.queryMachinesCount(machineDto);
         if (machineCount < 1) {
             outParam.put("code", -1);
-            outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + communityId + "】注册");
+            outParam.put("message", "该设备【" + reqJson.getString("machinecode") + "】未在该小区【" + communityId + "】注册");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return;
