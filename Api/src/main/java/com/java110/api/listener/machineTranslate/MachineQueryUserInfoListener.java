@@ -99,6 +99,9 @@ public class MachineQueryUserInfoListener extends AbstractServiceApiListener {
             return;
         }
         for (String key : reqHeader.keySet()) {
+            if(key.toLowerCase().equals("Content-Length")){
+                continue;
+            }
             headers.add(key, reqHeader.get(key));
         }
 
