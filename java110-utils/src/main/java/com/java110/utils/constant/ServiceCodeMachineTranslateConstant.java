@@ -37,5 +37,15 @@ public class ServiceCodeMachineTranslateConstant {
      */
     public static final String MACHINE_QUERY_USER_INFO = "machineTranslate.machineQueryUserInfo";
 
+    /**
+     * 上传刷脸记录
+     */
+    public static final String MACHINE_UPLOAD_FACE_LOG = "machineTranslate.machineUploadFaceLog";
+
+    /**
+     * 结果上报
+     */
+    public static final String MACHINE_CMD_RESULT = "machineTranslate.machineCmdResult";
+
 
 }
