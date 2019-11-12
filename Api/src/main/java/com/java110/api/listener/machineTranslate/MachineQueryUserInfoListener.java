@@ -91,6 +91,13 @@ public class MachineQueryUserInfoListener extends AbstractServiceApiListener {
             context.setResponseEntity(responseEntity);
             return;
         }
+        if(!reqHeader.containsKey("MachineCode") || StringUtils.isEmpty(reqHeader.get("MachineCode"))){
+            outParam.put("code", -1);
+            outParam.put("message", "请求头中未包含设备编码");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
         for (String key : reqHeader.keySet()) {
             headers.add(key, reqHeader.get(key));
         }
