@@ -189,7 +189,7 @@ public class MachineQueryUserInfoListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeMachineTranslateConstant.MACHINE_HEARTBEAT;
+        return ServiceCodeMachineTranslateConstant.MACHINE_QUERY_USER_INFO;
     }
 
     @Override
