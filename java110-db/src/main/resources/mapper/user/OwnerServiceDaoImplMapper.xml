@@ -102,7 +102,7 @@
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
         select t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.create_time createTime
         from building_owner t
         where 1 =1
         <if test="sex !=null">
