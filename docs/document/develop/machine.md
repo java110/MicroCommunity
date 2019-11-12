@@ -37,27 +37,29 @@ v0.01|初稿|2019-11-12|wuxw
 
 |父元素名称|参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|machineCode|1|String|10|系统ID|由中心服务提供|
-|devGroup|1|String|30|交互流水|appId+'00'+YYYYMMDD+10位序列|
-|name|1|String|30|用户ID|已有用户ID|
-|authCode|1|String|4|订单类型|查看订单类型说明|
-|ip|1|String|14|请求时间|YYYYMMDDhhmmss|
-|mac|1|String|200|备注|备注|
-|remarks|?|String|64|签名|查看加密说明|
-|faceNum|?|Array|-|订单属性|-|
-|lastOnTime|1|String|12|规格编码|由中心服务提供|
-|statCode|1|String|50|属性值|-|
-|deviceType|1|Object|-|返回结果节点|-|
-|versionCode|1|String|4|返回状态|查看状态说明|
+|machineCode|1|String|30|设备编码|门禁编码|
+|devGroup|1|String|30|分组|-|
+|name|1|String|30|设备名称|-|
+|authCode|1|String|30|授权码|-|
+|ip|?|String|30|设备IP|-|
+|mac|1|String|30|设备mac|-|
+|remarks|?|String|200|设备备注|-|
+|faceNum|?|int|-|当前人脸数|-|
+|lastOnTime|?|int|-|最后请求时间|由中心服务提供|
+|statCode|?|String|50|设备授权状态|-|
+|deviceType|?|String|12|设备类型|-|
+|versionCode|?|String|4|设备版本号|-|
 
 ###### 返回协议
 
-当http返回状态不为200 时请求处理失败 body内容为失败的原因
-
-当http返回状态为200时请求处理成功，body内容为返回内容，
-
-
-
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|-|code|1|String|30|状态编码|0成功，-1 失败|
+|-|msg|1|String|200|描述|失败或成功时的描述|
+|-|data|1|Array|-|数据节点|-|
+|data|taskcmd|1|String|30|任务指令| 101： 增加/更新人脸， 102： 删除人脸， 103： 清空人脸库|
+|data|taskid|1|String|30|任务id|一般为uuid|
+|data|taskinfo|1|String|30|附带信息|101 时业主ID|
 
 
 ###### 举例
@@ -83,6 +85,224 @@ Content-Type:application/json
 }
 
 返回报文：
- {"code":-1,"message":"该设备【AC_20191110001】未在该小区【7020181217000001】注册"}
+ {"code":0,"data":[{"taskinfo":"772019092507000013","taskcmd":101,"taskId":"74ec26a4c3a94c579050c0651c7f6929"}],"message":"success"}
 
+```
+
+## 2、查询用户信息
+
+###### 接口功能
+> 门禁查询用户信息，其中包含照片信息
+
+###### URL
+> [http://api.demo.winqi.cn/api/machineTranslate.machineQueryUserInfo](http://api.demo.winqi.cn/api/machineTranslate.machineQueryUserInfo)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 协议接口
+
+header 信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|MachineCode|1|String|30|设备编码|门禁编码|
+
+body信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|faceid|1|String|30|用户ID|业主ID|
+
+
+###### 返回协议
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|-|code|1|String|30|状态编码|0成功，-1 失败|
+|-|msg|1|String|200|描述|失败或成功时的描述|
+|-|data|1|Object|-|数据节点|-|
+|data|userid|1|String|30|用户ID| 业主ID |
+|data|groupid|1|String|30|分组ID|返回小区ID|
+|data|group|1|String|30|分组|返回小区名称|
+|data|name|1|String|30|用户名称|业主名称|
+|data|faceBase64|1|String|-|用户base64照片|业主base64照片|
+|data|idcNumber|1|String|30|用户身份证|-|
+|data|startTime|1|int|-|开始时间|-|
+|data|endTime|1|int|-|结束时间|-|
+|data|remarks|1|String|200|备注|-|
+|data|reserved|1|String|200|备注|-|
+
+
+###### 举例
+> 地址：[http://api.demo.winqi.cn/api/machineTranslate.machineQueryUserInfo?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1](http://api.demo.winqi.cn/api/machineTranslate.machineQueryUserInfo?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+MachineCode:AC_20191110002
+
+请求报文：
+{
+"faceid":"772019092507000013"
+}
+
+返回报文：
+ {
+     "code": 0,
+     "data": {
+         "reserved": "772019092507000013",
+         "groupid": "7020181217000001",
+         "name": "吴学文",
+         "startTime": 1569373402000,
+         "faceBase64": "照片base64 太多删除了",
+         "endTime": 32503651200000,
+         "idNumber": "772019092507000013",
+         "userid": "772019092507000013",
+         "remarks": "HC小区管理系统",
+         "group": "万博家博园（城西区）"
+     },
+     "message": "success"
+ }
+```
+
+## 3 设备执行命令上报
+
+###### 接口功能
+> 设备执行命令上报
+
+###### URL
+> [http://api.demo.winqi.cn/api/machineTranslate.machineCmdResult](http://api.demo.winqi.cn/api/machineTranslate.machineCmdResult)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 协议接口
+
+header 信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|MachineCode|1|String|30|设备编码|门禁编码|
+
+body信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|commandid|1|String|30|命令ID|-|
+|taskid|1|String|30|任务执行后的当前值|-|
+|msg|1|String|200|附带信息|-|
+|errorcode|1|String|30|错误码（ 0： 无错误， -1:出错）|-|
+
+
+###### 返回协议
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|-|code|1|String|30|状态编码|0成功，-1 失败|
+|-|msg|1|String|200|描述|失败或成功时的描述|
+|-|data|1|Object|-|数据节点|-|
+
+
+###### 举例
+> 地址：[http://api.demo.winqi.cn/api/machineTranslate.machineCmdResult?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1](http://api.demo.winqi.cn/api/machineTranslate.machineCmdResult?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+MachineCode:AC_20191110002
+
+请求报文：
+{
+"commandid":"xxxxxxxxxx",
+"taskid":"xxxxxxxxxx",
+"taskinfo":"error",
+"msg":"error",
+"errorcode":-1
+}
+
+返回报文：
+ {
+     "code": 0,
+     "data": {
+         "$ref": "@"
+     },
+     "message": "success"
+ }
+```
+
+## 3 刷脸记录上报
+
+###### 接口功能
+> 刷脸记录上报
+
+###### URL
+> [http://api.demo.winqi.cn/api/machineTranslate.machineUploadFaceLog](http://api.demo.winqi.cn/api/machineTranslate.machineUploadFaceLog)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 协议接口
+
+header 信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|MachineCode|1|String|30|设备编码|门禁编码|
+
+body信息：
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|userID|1|String|30|命令ID|-|
+|machineCode|1|String|30|设备编码|-|
+|similar|1|String|200|相似度|-|
+|screenId|1|String|30|屏幕ID|-|
+|photo|1|String|30|base64照片|-|
+|dateTime|1|String|30|日期|YYYY.MM.DD hh:mm:ss|
+
+
+###### 返回协议
+
+|父元素名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|-|code|1|String|30|状态编码|0成功，-1 失败|
+|-|msg|1|String|200|描述|失败或成功时的描述|
+|-|data|1|Object|-|数据节点|-|
+
+
+###### 举例
+> 地址：[http://api.demo.winqi.cn/api/machineTranslate.machineUploadFaceLog?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1](http://api.demo.winqi.cn/api/machineTranslate.machineUploadFaceLog?app_id=992019111002270001&communityId=7020181217000001&transaction_id=-1&req_time=20181113225612&user_id=-1)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+MachineCode:AC_20191110002
+
+请求报文：
+{
+"userID":"test-1111",
+"machineCode":"test-MachineCode","screenId":1,
+"similar":0.77,
+"photo":"data:image/jpeg;base64,/9j/4AAQSLf//Z",
+"dateTime":"2017.11.30 16:37:00"
+}
+
+返回报文：
+ {
+     "code": 0,
+     "data": {
+         "$ref": "@"
+     },
+     "message": "success"
+ }
 ```
