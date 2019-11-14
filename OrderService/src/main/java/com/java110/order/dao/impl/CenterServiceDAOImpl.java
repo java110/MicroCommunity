@@ -287,8 +287,8 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOwenrOrders");
     }
 
-    public int updateBusinessStatusCd(Map Info){
-        return sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessStatusCd");
+    public int updateBusinessStatusCd(Map info){
+        return sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessStatusCd",info);
     }
 
     /**
