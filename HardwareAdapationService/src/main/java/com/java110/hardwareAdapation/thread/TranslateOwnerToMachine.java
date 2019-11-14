@@ -1,5 +1,6 @@
 package com.java110.hardwareAdapation.thread;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
@@ -68,6 +69,7 @@ public class TranslateOwnerToMachine implements Runnable {
         List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryOwenrOrders(orderDto);
         for (OrderDto tmpOrderDto : orderDtos) {
             try {
+                logger.debug("开始处理订单"+ JSONObject.toJSONString(tmpOrderDto));
                 //根据bId 查询业主信息
                 ownerDto = new OwnerDto();
                 ownerDto.setbId(tmpOrderDto.getbId());
@@ -78,6 +80,8 @@ public class TranslateOwnerToMachine implements Runnable {
                 dealData(tmpOrderDto, ownerDtos.get(0));
                 //刷新 状态为C1
                 orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
+                logger.debug("处理订单结束"+ JSONObject.toJSONString(tmpOrderDto));
+
             } catch (Exception e) {
                 logger.error("执行订单任务失败", e);
             }
