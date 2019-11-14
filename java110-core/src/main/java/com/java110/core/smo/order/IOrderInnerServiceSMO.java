@@ -17,8 +17,8 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "order-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/orderApi")
+/*@FeignClient(name = "order-service", configuration = {FeignConfiguration.class})
+@RequestMapping("/orderApi")*/
 public interface IOrderInnerServiceSMO {
 
     /**
