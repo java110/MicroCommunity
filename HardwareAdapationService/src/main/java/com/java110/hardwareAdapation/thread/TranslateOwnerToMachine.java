@@ -36,7 +36,7 @@ public class TranslateOwnerToMachine implements Runnable {
     private IMachineTranslateServiceDao machineTranslateServiceDaoImpl;
 
     public TranslateOwnerToMachine() {
-        orderInnerServiceSMOImpl = ApplicationContextFactory.getBean("orderInnerServiceSMOImpl", IOrderInnerServiceSMO.class);
+        orderInnerServiceSMOImpl = ApplicationContextFactory.getBean(IOrderInnerServiceSMO.class.getName(), IOrderInnerServiceSMO.class);
         ownerInnerServiceSMOImpl = ApplicationContextFactory.getBean("ownerInnerServiceSMOImpl", IOwnerInnerServiceSMO.class);
         machineInnerServiceSMOImpl = ApplicationContextFactory.getBean("machineInnerServiceSMOImpl", IMachineInnerServiceSMO.class);
         machineTranslateServiceDaoImpl = ApplicationContextFactory.getBean("machineTranslateServiceDaoImpl", IMachineTranslateServiceDao.class);
