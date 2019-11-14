@@ -76,6 +76,9 @@ public class TranslateOwnerToMachine implements Runnable {
                 ownerDto.setbId(tmpOrderDto.getbId());
                 List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
                 if (ownerDtos == null || ownerDtos.size() == 0) {
+                    //刷新 状态为C1
+                    orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
+                    logger.debug("没有数据数据直接刷为C1"+ JSONObject.toJSONString(tmpOrderDto));
                     continue;
                 }
                 dealData(tmpOrderDto, ownerDtos.get(0));

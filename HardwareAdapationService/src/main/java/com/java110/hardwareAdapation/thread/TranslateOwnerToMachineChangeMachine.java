@@ -1,5 +1,6 @@
 package com.java110.hardwareAdapation.thread;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
@@ -74,6 +75,9 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
                 machineDto.setbId(tmpOrderDto.getbId());
                 List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
                 if (machineDtos == null || machineDtos.size() == 0) {
+                    //刷新 状态为C1
+                    orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
+                    logger.debug("没有数据数据直接刷为C1"+ JSONObject.toJSONString(tmpOrderDto));
                     continue;
                 }
                 dealData(tmpOrderDto, machineDtos.get(0));
