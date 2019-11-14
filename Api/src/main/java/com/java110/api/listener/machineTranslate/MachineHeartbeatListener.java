@@ -290,7 +290,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         dataObj.put("groupid", communityId);
         dataObj.put("group", communityDtos.get(0).getName());
         dataObj.put("name", ownerDtos.get(0).getName());
-        dataObj.put("faceBase64", fileDtos.get(0).getContext()
+        dataObj.put("faceBase64", "data:image/jpeg;base64," + fileDtos.get(0).getContext()
                 .replace("data:image/webp;base64,", "")
                 .replace("data:image/png;base64,", "")
                 .replace("data:image/jpeg;base64,", ""));
