@@ -119,7 +119,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         }
 
         String communityId = reqHeader.get("communityId");
-        String command = reqHeader.get("communityId");
+        String command = reqHeader.get("command");
 
 
         //检查设备是否合法
