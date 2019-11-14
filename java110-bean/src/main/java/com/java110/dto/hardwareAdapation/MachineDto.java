@@ -24,7 +24,7 @@ public class MachineDto extends PageDto implements Serializable {
     private String machineName;
     private String machineTypeCd;
     private String machineIp;
-
+    private String bId;
 
     private Date createTime;
 
@@ -118,5 +118,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

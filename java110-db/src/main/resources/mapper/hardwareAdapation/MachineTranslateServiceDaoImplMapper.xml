@@ -4,6 +4,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="machineTranslateServiceDaoImpl">
 
+
+    <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
+    <insert id="saveMachineTranslate" parameterType="Map">
+    insert into machine_translate(
+    machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id
+    ) values (
+    #{machineId},#{machineCode},'0',#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId}
+    )
+ </insert>
+    <update id="updateMachineTranslate" parameterType="Map">
+        update machine_translate t set
+        <if test="statusCd !=null and statusCd != ''">
+             t.status_cd= #{statusCd},
+        </if>
+        <if test="state !=null and state != ''">
+             t.state= #{state}
+        </if>
+        where 1=1
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+    </update>
     <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineTranslateInfo" parameterType="Map">
            insert into business_machine_translate(

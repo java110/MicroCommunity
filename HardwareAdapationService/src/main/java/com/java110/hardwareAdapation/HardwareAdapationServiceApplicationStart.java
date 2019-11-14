@@ -2,6 +2,7 @@ package com.java110.hardwareAdapation;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.hardwareAdapation.thread.TranslateOwnerToMachineFactory;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +30,15 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.hardwareAdapation",
-        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.hardwareAdapation.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo.user"})
+@EnableFeignClients(basePackages = {
+        "com.java110.core.smo.user",
+        "com.java110.core.smo.order",
+        "com.java110.core.smo.owner"
+})
 public class HardwareAdapationServiceApplicationStart {
 
     private static Logger logger = LoggerFactory.getLogger(HardwareAdapationServiceApplicationStart.class);
@@ -53,11 +58,14 @@ public class HardwareAdapationServiceApplicationStart {
     }
 
     public static void main(String[] args) throws Exception {
-        try{
+        try {
             ApplicationContext context = SpringApplication.run(HardwareAdapationServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+
+            //启动线程
+            TranslateOwnerToMachineFactory.startOwnerToMachine();
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 }

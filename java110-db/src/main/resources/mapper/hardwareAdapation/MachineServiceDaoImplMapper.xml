@@ -5,7 +5,7 @@
 <mapper namespace="machineServiceDaoImpl">
 
     <!-- 保存设备信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessMachineInfo" parameterType="Map">
+    <insert id="saveBusinessMachineInfo" parameterType="Map">
            insert into business_machine(
 machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,machine_name,machine_type_cd,machine_ip
 ) values (
@@ -14,218 +14,222 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
        </insert>
 
 
-       <!-- 查询设备信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessMachineInfo" parameterType="Map" resultType="Map">
-           select  t.machine_mac,t.machine_mac machineMac,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code machineCode,t.auth_code,t.auth_code authCode,t.operate,t.machine_version,t.machine_version machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp 
-from business_machine t 
-where 1 =1 
-<if test="machineMac !=null and machineMac != ''">
-   and t.machine_mac= #{machineMac}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="machineCode !=null and machineCode != ''">
-   and t.machine_code= #{machineCode}
-</if> 
-<if test="authCode !=null and authCode != ''">
-   and t.auth_code= #{authCode}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="machineVersion !=null and machineVersion != ''">
-   and t.machine_version= #{machineVersion}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
-<if test="machineTypeCd !=null and machineTypeCd != ''">
-   and t.machine_type_cd= #{machineTypeCd}
-</if> 
-<if test="machineIp !=null and machineIp != ''">
-   and t.machine_ip= #{machineIp}
-</if> 
+    <!-- 查询设备信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessMachineInfo" parameterType="Map" resultType="Map">
+        select t.machine_mac,t.machine_mac machineMac,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
+        machineCode,t.auth_code,t.auth_code authCode,t.operate,t.machine_version,t.machine_version
+        machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name
+        machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp
+        from business_machine t
+        where 1 =1
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存设备信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMachineInfoInstance" parameterType="Map">
         insert into machine(
-machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,community_id,b_id,machine_name,machine_type_cd,machine_ip
-) select t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,t.machine_name,t.machine_type_cd,t.machine_ip from business_machine t where 1=1
-<if test="machineMac !=null and machineMac != ''">
-   and t.machine_mac= #{machineMac}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="machineCode !=null and machineCode != ''">
-   and t.machine_code= #{machineCode}
-</if> 
-<if test="authCode !=null and authCode != ''">
-   and t.auth_code= #{authCode}
-</if> 
-   and t.operate= 'ADD'
-<if test="machineVersion !=null and machineVersion != ''">
-   and t.machine_version= #{machineVersion}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
-<if test="machineTypeCd !=null and machineTypeCd != ''">
-   and t.machine_type_cd= #{machineTypeCd}
-</if> 
-<if test="machineIp !=null and machineIp != ''">
-   and t.machine_ip= #{machineIp}
-</if> 
+        machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,community_id,b_id,machine_name,machine_type_cd,machine_ip
+        ) select
+        t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,t.machine_name,t.machine_type_cd,t.machine_ip
+        from business_machine t where 1=1
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        and t.operate= 'ADD'
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询设备信息 add by wuxw 2018-07-03 -->
     <select id="getMachineInfo" parameterType="Map" resultType="Map">
-        select  t.machine_mac,t.machine_mac machineMac,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code machineCode,t.auth_code,t.auth_code authCode,t.machine_version,t.machine_version machineVersion,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp 
-from machine t 
-where 1 =1 
-<if test="machineMac !=null and machineMac != ''">
-   and t.machine_mac= #{machineMac}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="machineCode !=null and machineCode != ''">
-   and t.machine_code= #{machineCode}
-</if> 
-<if test="authCode !=null and authCode != ''">
-   and t.auth_code= #{authCode}
-</if> 
-<if test="machineVersion !=null and machineVersion != ''">
-   and t.machine_version= #{machineVersion}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
-<if test="machineTypeCd !=null and machineTypeCd != ''">
-   and t.machine_type_cd= #{machineTypeCd}
-</if> 
-<if test="machineIp !=null and machineIp != ''">
-   and t.machine_ip= #{machineIp}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.machine_mac,t.machine_mac machineMac,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
+        machineCode,t.auth_code,t.auth_code authCode,t.machine_version,t.machine_version
+        machineVersion,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id
+        bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
+        machineTypeCd,t.machine_ip,t.machine_ip machineIp
+        from machine t
+        where 1 =1
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改设备信息 add by wuxw 2018-07-03 -->
     <update id="updateMachineInfoInstance" parameterType="Map">
-        update  machine t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="machineMac !=null and machineMac != ''">
-, t.machine_mac= #{machineMac}
-</if> 
-<if test="machineCode !=null and machineCode != ''">
-, t.machine_code= #{machineCode}
-</if> 
-<if test="authCode !=null and authCode != ''">
-, t.auth_code= #{authCode}
-</if> 
-<if test="machineVersion !=null and machineVersion != ''">
-, t.machine_version= #{machineVersion}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-, t.machine_name= #{machineName}
-</if> 
-<if test="machineTypeCd !=null and machineTypeCd != ''">
-, t.machine_type_cd= #{machineTypeCd}
-</if> 
-<if test="machineIp !=null and machineIp != ''">
-, t.machine_ip= #{machineIp}
-</if> 
- where 1=1 <if test="machineId !=null and machineId != ''">
-and t.machine_id= #{machineId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update machine t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineMac !=null and machineMac != ''">
+            , t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            , t.auth_code= #{authCode}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            , t.machine_version= #{machineVersion}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            , t.machine_name= #{machineName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            , t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            , t.machine_ip= #{machineIp}
+        </if>
+        where 1=1
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询设备数量 add by wuxw 2018-07-03 -->
-     <select id="queryMachinesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from machine t 
-where 1 =1 
-<if test="machineMac !=null and machineMac != ''">
-   and t.machine_mac= #{machineMac}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="machineCode !=null and machineCode != ''">
-   and t.machine_code= #{machineCode}
-</if> 
-<if test="authCode !=null and authCode != ''">
-   and t.auth_code= #{authCode}
-</if> 
-<if test="machineVersion !=null and machineVersion != ''">
-   and t.machine_version= #{machineVersion}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="machineName !=null and machineName != ''">
-   and t.machine_name= #{machineName}
-</if> 
-<if test="machineTypeCd !=null and machineTypeCd != ''">
-   and t.machine_type_cd= #{machineTypeCd}
-</if> 
-<if test="machineIp !=null and machineIp != ''">
-   and t.machine_ip= #{machineIp}
-</if> 
+    <select id="queryMachinesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from machine t
+        where 1 =1
+        <if test="machineMac !=null and machineMac != ''">
+            and t.machine_mac= #{machineMac}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="authCode !=null and authCode != ''">
+            and t.auth_code= #{authCode}
+        </if>
+        <if test="machineVersion !=null and machineVersion != ''">
+            and t.machine_version= #{machineVersion}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and t.machine_name= #{machineName}
+        </if>
+        <if test="machineTypeCd !=null and machineTypeCd != ''">
+            and t.machine_type_cd= #{machineTypeCd}
+        </if>
+        <if test="machineIp !=null and machineIp != ''">
+            and t.machine_ip= #{machineIp}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

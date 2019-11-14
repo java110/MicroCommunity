@@ -60,6 +60,15 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryOwenrOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
     }
 
+    public int updateBusinessStatusCd(@RequestBody OrderDto orderDto){
+        return centerServiceDAOImpl.updateBusinessStatusCd(BeanConvertUtil.beanCovertMap(orderDto));
+    }
+
+    @Override
+    public List<OrderDto> queryMachineOrders(@RequestBody OrderDto orderDto) {
+        return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryManchineOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
+    }
+
 
     public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
         return userInnerServiceSMOImpl;

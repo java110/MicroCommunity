@@ -38,7 +38,19 @@ import java.nio.charset.Charset;
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
         basePackages = {"com.java110.order.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo.code","com.java110.core.smo.user"})
+@EnableFeignClients(basePackages = {
+        "com.java110.core.smo.code",
+        "com.java110.core.smo.user",
+        "com.java110.core.smo.app",
+        "com.java110.core.smo.common",
+        "com.java110.core.smo.community",
+        "com.java110.core.smo.fee",
+        "com.java110.core.smo.floor",
+        "com.java110.core.smo.menu",
+        "com.java110.core.smo.owner",
+        "com.java110.core.smo.room",
+        "com.java110.core.smo.unit",
+})
 public class OrderServiceApplicationStart {
 
     private  static Logger logger = LoggerFactory.getLogger(OrderServiceApplicationStart.class);

@@ -24,8 +24,8 @@ import java.util.Map;
  * 从订单中同步业主信息至设备中间表
  * add by wuxw 2019-11-14
  */
-public class TranslateOwnerToMachine implements Runnable {
-    Logger logger = LoggerFactory.getLogger(TranslateOwnerToMachine.class);
+public class TranslateOwnerToMachineChangeMachine implements Runnable {
+    Logger logger = LoggerFactory.getLogger(TranslateOwnerToMachineChangeMachine.class);
     public static final long DEFAULT_WAIT_SECOND = 5000 * 6; // 默认30秒执行一次
     public static boolean TRANSLATE_STATE = false;
 
@@ -35,7 +35,7 @@ public class TranslateOwnerToMachine implements Runnable {
 
     private IMachineTranslateServiceDao machineTranslateServiceDaoImpl;
 
-    public TranslateOwnerToMachine() {
+    public TranslateOwnerToMachineChangeMachine() {
         orderInnerServiceSMOImpl = ApplicationContextFactory.getBean("orderInnerServiceSMOImpl", IOrderInnerServiceSMO.class);
         ownerInnerServiceSMOImpl = ApplicationContextFactory.getBean("ownerInnerServiceSMOImpl", IOwnerInnerServiceSMO.class);
         machineInnerServiceSMOImpl = ApplicationContextFactory.getBean("machineInnerServiceSMOImpl", IMachineInnerServiceSMO.class);
@@ -62,20 +62,20 @@ public class TranslateOwnerToMachine implements Runnable {
      * 执行任务
      */
     private void executeTask() {
-        OwnerDto ownerDto = null;
+        MachineDto machineDto = null;
         //查询订单信息
         OrderDto orderDto = new OrderDto();
         List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryOwenrOrders(orderDto);
         for (OrderDto tmpOrderDto : orderDtos) {
             try {
-                //根据bId 查询业主信息
-                ownerDto = new OwnerDto();
-                ownerDto.setbId(tmpOrderDto.getbId());
-                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                if (ownerDtos == null || ownerDtos.size() == 0) {
+                //根据bId 查询硬件信息
+                machineDto = new MachineDto();
+                machineDto.setbId(tmpOrderDto.getbId());
+                List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+                if (machineDtos == null || machineDtos.size() == 0) {
                     continue;
                 }
-                dealData(tmpOrderDto, ownerDtos.get(0));
+                dealData(tmpOrderDto, machineDtos.get(0));
                 //刷新 状态为C1
                 orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
             } catch (Exception e) {
@@ -88,25 +88,25 @@ public class TranslateOwnerToMachine implements Runnable {
      * 将业主数据同步给所有该小区设备
      *
      * @param tmpOrderDto
-     * @param ownerDto
+     * @param machineDto
      */
-    private void dealData(OrderDto tmpOrderDto, OwnerDto ownerDto) {
+    private void dealData(OrderDto tmpOrderDto, MachineDto machineDto) {
 
         //拿到小区ID
-        String communityId = ownerDto.getCommunityId();
+        String communityId = machineDto.getCommunityId();
 
         //根据小区ID查询现有设备
-        MachineDto machineDto = new MachineDto();
-        machineDto.setCommunityId(communityId);
-        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(communityId);
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
-        for (MachineDto tmpMachineDto : machineDtos) {
-            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
-                saveMachineTranslate(tmpMachineDto, ownerDto);
-            } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
-                updateMachineTranslate(tmpMachineDto, ownerDto);
-            } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
-                deleteMachineTranslate(tmpMachineDto, ownerDto);
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
+            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
+                saveMachineTranslate(machineDto, tmpOwnerDto);
+            } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
+                updateMachineTranslate(machineDto, tmpOwnerDto);
+            } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
+                deleteMachineTranslate(machineDto, tmpOwnerDto);
             } else {
 
             }

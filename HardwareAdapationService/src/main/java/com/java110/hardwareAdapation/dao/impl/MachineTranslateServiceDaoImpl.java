@@ -134,5 +134,17 @@ public class MachineTranslateServiceDaoImpl extends BaseServiceDao implements IM
         return saveFlag;
     }
 
+    @Override
+    public void saveMachineTranslate(Map info) throws DAOException {
+        logger.debug("saveMachineTranslate 入参 info : {}",info);
+         sqlSessionTemplate.update("machineTranslateServiceDaoImpl.saveMachineTranslate",info);
+    }
+
+    @Override
+    public void updateMachineTranslate(Map info) throws DAOException {
+        logger.debug("updateMachineTranslate 入参 info : {}",info);
+        sqlSessionTemplate.update("machineTranslateServiceDaoImpl.updateMachineTranslate",info);
+    }
+
 
 }

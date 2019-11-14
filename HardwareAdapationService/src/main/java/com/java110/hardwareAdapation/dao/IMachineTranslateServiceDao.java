@@ -85,4 +85,23 @@ public interface IMachineTranslateServiceDao {
      */
     int updateMachineTranslateState(Map info);
 
+
+    /**
+     * 保存 硬件传输
+     * @param info
+     * @throws DAOException
+     */
+    void saveMachineTranslate(Map info) throws DAOException;
+
+
+    /**
+     * 修改 硬件传输
+     * @param info
+     * @throws DAOException
+     */
+    void updateMachineTranslate(Map info) throws DAOException;
+
+
+
+
 }
