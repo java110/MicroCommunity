@@ -67,7 +67,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         MachineDto machineDto = null;
         //查询订单信息
         OrderDto orderDto = new OrderDto();
-        List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryOwenrOrders(orderDto);
+        List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryMachineOrders(orderDto);
         for (OrderDto tmpOrderDto : orderDtos) {
             try {
                 //根据bId 查询硬件信息
