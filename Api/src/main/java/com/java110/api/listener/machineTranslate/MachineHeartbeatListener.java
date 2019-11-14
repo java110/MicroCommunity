@@ -23,6 +23,7 @@ import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -87,7 +88,11 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         Map<String, String> reqHeader = context.getRequestHeaders();
         Assert.hasKeyAndValue(reqHeader, "machinecode", "请求报文中未包含设备编码");
         Assert.hasKeyAndValue(reqHeader, "communityId", "请求报文中未包含小区信息");
-        Assert.hasKeyAndValue(reqHeader, "command", "请求报文中未包含设备编码");
+        //Assert.hasKeyAndValue(reqHeader, "command", "请求报文中未包含设备编码");
+
+        if (StringUtil.isEmpty(reqHeader.get("command"))) {
+            reqHeader.put("command", "gettask");
+        }
 
     }
 
