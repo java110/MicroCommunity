@@ -120,6 +120,15 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
     }
 
     private void saveMachineTranslate(MachineDto tmpMachineDto, OwnerDto ownerDto) {
+        Map paramInfo = new HashMap();
+        paramInfo.put("machineId", tmpMachineDto.getMachineId());
+        paramInfo.put("objId", ownerDto.getMemberId());
+
+        int count = machineTranslateServiceDaoImpl.queryMachineTranslatesCount(paramInfo);
+        if(count >0){
+            updateMachineTranslate(tmpMachineDto,ownerDto);
+            return ;
+        }
         Map info = new HashMap();
         //machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id
         info.put("machineTranslateId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));

@@ -74,7 +74,7 @@ public class TranslateOwnerToMachine implements Runnable {
                 //根据bId 查询业主信息
                 ownerDto = new OwnerDto();
                 ownerDto.setbId(tmpOrderDto.getbId());
-                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
                 if (ownerDtos == null || ownerDtos.size() == 0) {
                     //刷新 状态为C1
                     orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
@@ -123,6 +123,15 @@ public class TranslateOwnerToMachine implements Runnable {
     }
 
     private void saveMachineTranslate(MachineDto tmpMachineDto, OwnerDto ownerDto) {
+        Map paramInfo = new HashMap();
+        paramInfo.put("machineId", tmpMachineDto.getMachineId());
+        paramInfo.put("objId", ownerDto.getMemberId());
+
+        int count = machineTranslateServiceDaoImpl.queryMachineTranslatesCount(paramInfo);
+        if(count >0){
+            updateMachineTranslate(tmpMachineDto,ownerDto);
+            return ;
+        }
         Map info = new HashMap();
         //machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id
         info.put("machineTranslateId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
