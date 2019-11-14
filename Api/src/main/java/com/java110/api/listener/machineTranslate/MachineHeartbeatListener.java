@@ -6,20 +6,30 @@ import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.dto.OwnerDto;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.hardwareAdapation.MachineTranslateDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,6 +47,18 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     /**
      * {
@@ -58,9 +80,15 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
      */
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备编码");
+       /* Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备编码");
         //Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "authCode", "请求报文中未包含设备鉴权码");
+        Assert.hasKeyAndValue(reqJson, "authCode", "请求报文中未包含设备鉴权码");*/
+        DataFlowContext context = event.getDataFlowContext();
+        Map<String, String> reqHeader = context.getRequestHeaders();
+        Assert.hasKeyAndValue(reqHeader, "machinecode", "请求报文中未包含设备编码");
+        Assert.hasKeyAndValue(reqHeader, "communityId", "请求报文中未包含小区信息");
+        Assert.hasKeyAndValue(reqHeader, "command", "请求报文中未包含设备编码");
+
     }
 
     @Override
@@ -84,13 +112,15 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             return;
         }
         for (String key : reqHeader.keySet()) {
-            if(key.toLowerCase().equals("content-length")){
+            if (key.toLowerCase().equals("content-length")) {
                 continue;
             }
             headers.add(key, reqHeader.get(key));
         }
 
         String communityId = reqHeader.get("communityId");
+        String command = reqHeader.get("communityId");
+
 
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();
@@ -105,7 +135,46 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             return;
         }
 
+        //获取任务
+        if ("gettask".equals(command)) {
+            this.getTask(event, context, reqJson, reqHeader, headers);
+            return;
+        } else if ("getface".equals(command)) {
+            this.getFace(event, context, reqJson, reqHeader, headers);
+            return;
+        } else if ("record".equals(command)) {
+            this.record(event, context, reqJson, reqHeader, headers);
+            return;
+        } else if ("report".equals(command)) {
+            this.report(event, context, reqJson, reqHeader, headers);
+            return;
+        } else {
+            outParam.put("code", -1);
+            outParam.put("message", "当前不支持该命令" + command);
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
 
+
+    }
+
+    /**
+     * 获取任务
+     *
+     * @param event
+     * @param context
+     * @param reqJson
+     */
+    private void getTask(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, Map<String, String> reqHeader, HttpHeaders headers) {
+        JSONObject outParam = null;
+        ResponseEntity<String> responseEntity = null;
+
+        outParam = new JSONObject();
+        outParam.put("code", 0);
+        outParam.put("message", "success");
+        JSONArray data = null;
+        String communityId = reqHeader.get("communityId");
         //查询删除的业主信息
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineCode(reqJson.getString("machineCode"));
@@ -160,6 +229,132 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         context.setResponseEntity(responseEntity);
     }
 
+    private void getFace(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, Map<String, String> reqHeader, HttpHeaders headers) {
+        JSONObject outParam = null;
+        ResponseEntity<String> responseEntity = null;
+
+        outParam = new JSONObject();
+        outParam.put("code", 0);
+        outParam.put("message", "success");
+        JSONArray data = null;
+        String communityId = reqHeader.get("communityId");
+
+        //检查是否存在该用户
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(communityId);
+        ownerDto.setOwnerId(reqJson.getString("faceid"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+
+        if (ownerDtos == null || ownerDtos.size() != 1) {
+            outParam.put("code", -1);
+            outParam.put("message", "未找到相应业主信息");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(communityId);
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        if (communityDtos == null || communityDtos.size() != 1) {
+            outParam.put("code", -1);
+            outParam.put("message", "未找到相应小区信息");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(reqJson.getString("faceid"));
+        fileRelDto.setRelTypeCd("10000");
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        if (fileRelDtos == null || fileRelDtos.size() != 1) {
+            outParam.put("code", -1);
+            outParam.put("message", "未找到业主照片，可能未录入照片");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+        FileDto fileDto = new FileDto();
+        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
+        fileDto.setCommunityId(communityId);
+        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
+        if (fileDtos == null || fileDtos.size() != 1) {
+            outParam.put("code", -1);
+            outParam.put("message", "未找到业主照片，可能未录入照片");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+
+        JSONObject dataObj = new JSONObject();
+        dataObj.put("userid", ownerDtos.get(0).getOwnerId());
+        dataObj.put("groupid", communityId);
+        dataObj.put("group", communityDtos.get(0).getName());
+        dataObj.put("name", ownerDtos.get(0).getName());
+        dataObj.put("faceBase64", fileDtos.get(0).getContext()
+                .replace("data:image/webp;base64,", "")
+                .replace("data:image/png;base64,", "")
+                .replace("data:image/jpeg;base64,", ""));
+        dataObj.put("idNumber", ownerDtos.get(0).getOwnerId());
+        dataObj.put("startTime", ownerDtos.get(0).getCreateTime().getTime());
+        try {
+            dataObj.put("endTime", DateUtil.getLastDate().getTime());
+        } catch (ParseException e) {
+            dataObj.put("endTime", 2145891661);
+        }
+        dataObj.put("remarks", "HC小区管理系统");
+        dataObj.put("reserved", ownerDtos.get(0).getOwnerId());
+        outParam.put("data", dataObj);
+
+        //将 设备 待同步 改为同步中
+        MachineTranslateDto tmpMtDto = new MachineTranslateDto();
+        tmpMtDto.setMachineCode(reqHeader.get("machinecode"));
+        tmpMtDto.setCommunityId(communityId);
+        tmpMtDto.setState("20000");
+        machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
+
+        responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
+    }
+
+    private void record(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, Map<String, String> reqHeader, HttpHeaders headers) {
+        JSONObject outParam = null;
+        ResponseEntity<String> responseEntity = null;
+
+        outParam = new JSONObject();
+        outParam.put("code", 0);
+        outParam.put("message", "success");
+        JSONArray data = null;
+        String communityId = reqHeader.get("communityId");
+        outParam.put("data", data);
+
+        responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 执行结果上报
+     *
+     * @param event
+     * @param context
+     * @param reqJson
+     * @param reqHeader
+     * @param headers
+     */
+    private void report(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, Map<String, String> reqHeader, HttpHeaders headers) {
+        JSONObject outParam = null;
+        ResponseEntity<String> responseEntity = null;
+
+        outParam = new JSONObject();
+        outParam.put("code", 0);
+        outParam.put("message", "success");
+        JSONArray data = null;
+        String communityId = reqHeader.get("communityId");
+        outParam.put("data", data);
+
+        responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
+    }
+
     @Override
     public String getServiceCode() {
         return ServiceCodeMachineTranslateConstant.MACHINE_HEARTBEAT;
@@ -189,5 +384,37 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
 
     public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
         this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
+    }
+
+    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
+        return ownerInnerServiceSMOImpl;
+    }
+
+    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
+        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
+    }
+
+    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
+        return communityInnerServiceSMOImpl;
+    }
+
+    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
+        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
+    }
+
+    public IFileRelInnerServiceSMO getFileRelInnerServiceSMOImpl() {
+        return fileRelInnerServiceSMOImpl;
+    }
+
+    public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
+        this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
+    }
+
+    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
+        return fileInnerServiceSMOImpl;
+    }
+
+    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
+        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
     }
 }
