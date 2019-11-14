@@ -6,6 +6,7 @@ import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.order.OrderDto;
 import com.java110.order.dao.ICenterServiceDAO;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,7 +57,7 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
 
     @Override
     public List<OrderDto> queryOwenrOrders(@RequestBody OrderDto orderDto) {
-        return null;
+        return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryOwenrOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
     }
 
 

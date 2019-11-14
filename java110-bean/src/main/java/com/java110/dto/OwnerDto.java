@@ -31,6 +31,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String psId;
     private String num;
 
+    private String bId;
+
     private String userName;
 
 
@@ -42,49 +44,64 @@ public class OwnerDto extends PageDto implements Serializable {
     public String getSex() {
         return sex;
     }
-public void setSex(String sex) {
+
+    public void setSex(String sex) {
         this.sex = sex;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getLink() {
+
+    public String getLink() {
         return link;
     }
-public void setLink(String link) {
+
+    public void setLink(String link) {
         this.link = link;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getAge() {
+
+    public String getAge() {
         return age;
     }
-public void setAge(String age) {
+
+    public void setAge(String age) {
         this.age = age;
     }
-public String getMemberId() {
+
+    public String getMemberId() {
         return memberId;
     }
-public void setMemberId(String memberId) {
+
+    public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
 
@@ -168,5 +185,13 @@ public void setMemberId(String memberId) {
 
     public void setNum(String num) {
         this.num = num;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

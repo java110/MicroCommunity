@@ -7,9 +7,9 @@
     <!-- 保存业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerInfo" parameterType="Map">
         insert into business_building_owner(
-        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
+        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id
         ) values (
-        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd}
+        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <!-- 查询业主信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessOwnerInfo" parameterType="Map" resultType="Map">
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId
         from business_building_owner t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -37,6 +37,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -60,8 +63,8 @@
     <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfoInstance" parameterType="Map">
         insert into building_owner(
-        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd
-        ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd
+        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id
+        ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd,t.community_id communityId
         from business_building_owner t where 1=1
         and t.operate= 'ADD'
         <if test="sex !=null">
@@ -78,6 +81,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -102,7 +108,7 @@
     <select id="getOwnerInfo" parameterType="Map" resultType="Map">
         select t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.create_time createTime
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,t.community_id communityId
         from building_owner t
         where 1 =1
         <if test="sex !=null">
@@ -122,6 +128,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -182,6 +191,9 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
@@ -210,6 +222,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -257,6 +272,9 @@
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -281,7 +299,7 @@
     <select id="getOwnerInfoByCondition" parameterType="Map" resultType="Map">
         select t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
         bId,
-        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd
+        t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId
         FROM building_owner t , s_community_member cm
         WHERE t.`member_id` = cm.`member_id`
         AND cm.`community_id` = #{communityId}
@@ -304,6 +322,9 @@
         </if>
         <if test="ownerId !=null and ownerId != ''">
             and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -354,7 +375,7 @@
         SELECT t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
         bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
-        r.`room_id` roomId,r.`room_num` roomNum
+        r.`room_id` roomId,r.`room_num` roomNum,t.community_id,t.community_id communityId
         FROM building_room r,building_owner_room_rel orr,building_owner t
         WHERE r.`room_id` = orr.`room_id`
         AND orr.`owner_id` = t.`owner_id`
@@ -366,6 +387,9 @@
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         AND r.`status_cd` = '0'
         AND orr.`status_cd` = '0'
@@ -393,6 +417,7 @@
         <if test="psId !=null and psId != ''">
             AND ps.`ps_id` = #{psId}
         </if>
+
     </select>
 
 

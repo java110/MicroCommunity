@@ -32,7 +32,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
     /**
      * 刷新 businessOwnerInfo 数据
      * 主要将 数据库 中字段和 接口传递字段建立关系
-     *
+     *,t.community_id,t.community_id communityId
      * @param businessOwnerInfo
      */
     protected void flushBusinessOwnerInfo(Map businessOwnerInfo, String statusCd) {
@@ -47,6 +47,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         businessOwnerInfo.put("age", businessOwnerInfo.get("age"));
         businessOwnerInfo.put("memberId", businessOwnerInfo.get("member_id"));
         businessOwnerInfo.put("ownerTypeCd", businessOwnerInfo.get("owner_type_cd"));
+        businessOwnerInfo.put("communityId", businessOwnerInfo.get("community_id"));
         businessOwnerInfo.remove("bId");
         businessOwnerInfo.put("statusCd", statusCd);
     }
@@ -81,6 +82,7 @@ public abstract class AbstractOwnerBusinessServiceDataFlowListener extends Abstr
         currentOwnerInfo.put("age", currentOwnerInfo.get("age"));
         currentOwnerInfo.put("memberId", currentOwnerInfo.get("member_id"));
         currentOwnerInfo.put("ownerTypeCd", currentOwnerInfo.get("owner_type_cd"));
+        currentOwnerInfo.put("communityId", currentOwnerInfo.get("community_id"));
 
 
         currentOwnerInfo.put("operate", StatusConstant.OPERATE_DEL);

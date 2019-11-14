@@ -171,10 +171,8 @@
 
     <!---->
     <select id="queryOwenrOrders" parameterType="map">
-        select cb.b_id bId,co.o_id,cb.business_type_cd businessTypeCd oId  from c_orders co,c_business cb where co.o_id = cb.o_id
+        select cb.b_id bId,co.o_id oId,cb.business_type_cd businessTypeCd  from c_orders co,c_business cb where co.o_id = cb.o_id
         and cb.business_type_cd in ('110100030001','110100040001','110100050001')
-        and co.status_cd = ''
-
     </select>
 
 </mapper>

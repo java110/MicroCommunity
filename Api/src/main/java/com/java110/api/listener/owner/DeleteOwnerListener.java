@@ -96,6 +96,8 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.put("memberId", paramInJson.getString("memberId"));
+        businessOwner.put("communityId", paramInJson.getString("communityId"));
+
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;
