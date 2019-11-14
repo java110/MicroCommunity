@@ -94,6 +94,25 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
         return businessOwnerInfos;
     }
 
+    /**
+     * 查询业主信息（instance）
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public int getOwnerInfoCount(Map info) throws DAOException {
+        logger.debug("查询业主信息 入参 info : {}", info);
+        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfoCount", info);
+        if (businessOwnerInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+    }
+
+
 
     /**
      * 修改业主信息

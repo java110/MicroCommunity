@@ -2,6 +2,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -49,7 +50,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         //communityInnerServiceSMOImpl.getCommunityMembers()
         //调用 小区服务查询 小区成员业主信息
-        CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(ownerDto, CommunityMemberDto.class);
+       /* CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(ownerDto, CommunityMemberDto.class);
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
         if (StringUtils.isEmpty(communityMemberDto.getMemberId()) && !StringUtils.isEmpty(ownerDto.getOwnerId())) {
             communityMemberDto.setMemberId(ownerDto.getOwnerId());
@@ -58,11 +59,13 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         if (communityMemberDtos == null || communityMemberDtos.size() < 1) {
             return null;
-        }
+        }*/
 
-        Map ownerInfo = new HashMap();
-        ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
-        ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
+        Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
+        ownerInfo.put("communityId",ownerDto.getCommunityId());
+        ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
+       // ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
+        //ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
         ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(ownerInfo), OwnerDto.class);
@@ -147,10 +150,19 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
 
         //调用 小区服务查询 小区成员业主信息
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        /*CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(ownerDto.getCommunityId());
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
-        return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
+        return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);*/
+
+        Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
+        ownerInfo.put("communityId",ownerDto.getCommunityId());
+        ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
+        // ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
+        //ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
+        ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
+
+        return ownerServiceDaoImpl.getOwnerInfoCount(ownerInfo);
 
     }
 

@@ -55,6 +55,15 @@ public interface IOwnerServiceDao {
      */
     List<Map> getOwnerInfo(Map info) throws DAOException;
 
+    /**
+     * 查询业主信息（instance过程）
+     * 根据bId 查询业主信息
+     * @param info bId 信息
+     * @return 业主信息
+     * @throws DAOException DAO异常
+     */
+    int getOwnerInfoCount(Map info) throws DAOException;
+
 
 
     /**

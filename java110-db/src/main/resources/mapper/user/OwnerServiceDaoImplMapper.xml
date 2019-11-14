@@ -159,6 +159,56 @@
 
     </select>
 
+    <!-- 查询业主信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerInfoCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_owner t
+        where 1 =1
+        <if test="sex !=null">
+            and t.sex= #{sex}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="ownerIds != null and ownerIds != ''">
+            and t.owner_id in
+            <foreach collection="ownerIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+
+    </select>
+
 
     <!-- 修改业主信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerInfoInstance" parameterType="Map">
