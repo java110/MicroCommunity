@@ -198,7 +198,7 @@
     </select>
 
     <!---->
-    <select id="queryOwenrOrders" parameterType="map">
+    <select id="queryOwenrOrders" parameterType="map" resultType="map">
         <![CDATA[
 
                     select cb.b_id bId,co.o_id oId,cb.business_type_cd businessTypeCd  from c_orders co,c_business cb where co.o_id = cb.o_id
@@ -208,7 +208,7 @@
         ]]>
     </select>
 
-    <select id="queryManchineOrders" parameterType="map">
+    <select id="queryManchineOrders" parameterType="map" resultType="map">
         <![CDATA[
 
                 select cb.b_id bId,co.o_id oId,cb.business_type_cd businessTypeCd  from c_orders co,c_business cb where co.o_id = cb.o_id
@@ -218,7 +218,7 @@
         ]]>
     </select>
 
-    <update id="updateBusinessStatusCd" parameterType="Map">
+    <update id="updateBusinessStatusCd" parameterType="Map" >
         update c_business cb set cb.status_cd = 'C1'
         where cb.b_id = #{bId}
     </update>
