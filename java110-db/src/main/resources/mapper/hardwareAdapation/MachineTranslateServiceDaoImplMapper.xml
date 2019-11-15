@@ -251,6 +251,9 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
     </update>
 
 </mapper>
