@@ -220,14 +220,16 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             tmpData.put("taskId", UUID.randomUUID().toString().replace("-", ""));
             tmpData.put("taskinfo", tmpMachineTranslate.getObjId());
             data.add(tmpData);
+            //将 设备 待同步 改为同步中
+            MachineTranslateDto tmpMtDto = new MachineTranslateDto();
+            tmpMtDto.setMachineCode(machineTranslateDto.getMachineCode());
+            tmpMtDto.setCommunityId(machineTranslateDto.getCommunityId());
+            tmpMtDto.setObjId(tmpMachineTranslate.getObjId());
+            tmpMtDto.setState("30000");
+            machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
         }
 
-        //将 设备 待同步 改为同步中
-        MachineTranslateDto tmpMtDto = new MachineTranslateDto();
-        tmpMtDto.setMachineCode(machineTranslateDto.getMachineCode());
-        tmpMtDto.setCommunityId(machineTranslateDto.getCommunityId());
-        tmpMtDto.setState("30000");
-        machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
+
         outParam.put("data", data);
 
         responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
@@ -247,8 +249,8 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         //检查是否存在该用户
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
-        ownerDto.setOwnerId(reqJson.getString("faceid"));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        ownerDto.setMemberId(reqJson.getString("faceid"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
         if (ownerDtos == null || ownerDtos.size() != 1) {
             outParam.put("code", -1);
@@ -291,7 +293,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
         }
 
         JSONObject dataObj = new JSONObject();
-        dataObj.put("userid", ownerDtos.get(0).getOwnerId());
+        dataObj.put("userid", ownerDtos.get(0).getMemberId());
         dataObj.put("groupid", communityId);
         dataObj.put("group", communityDtos.get(0).getName());
         dataObj.put("name", ownerDtos.get(0).getName());
@@ -299,7 +301,7 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
                 .replace("data:image/webp;base64,", "")
                 .replace("data:image/png;base64,", "")
                 .replace("data:image/jpeg;base64,", ""));
-        dataObj.put("idNumber", ownerDtos.get(0).getOwnerId());
+        dataObj.put("idNumber", ownerDtos.get(0).getMemberId());
         dataObj.put("startTime", ownerDtos.get(0).getCreateTime().getTime());
         try {
             dataObj.put("endTime", DateUtil.getLastDate().getTime());
@@ -307,13 +309,14 @@ public class MachineHeartbeatListener extends AbstractServiceApiListener {
             dataObj.put("endTime", 2145891661);
         }
         dataObj.put("remarks", "HC小区管理系统");
-        dataObj.put("reserved", ownerDtos.get(0).getOwnerId());
+        dataObj.put("reserved", ownerDtos.get(0).getMemberId());
         outParam.put("data", dataObj);
 
         //将 设备 待同步 改为同步中
         MachineTranslateDto tmpMtDto = new MachineTranslateDto();
         tmpMtDto.setMachineCode(reqHeader.get("machinecode"));
         tmpMtDto.setCommunityId(communityId);
+        tmpMtDto.setObjId(ownerDtos.get(0).getMemberId());
         tmpMtDto.setState("20000");
         machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
 
