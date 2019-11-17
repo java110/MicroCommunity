@@ -1,4 +1,4 @@
-package com.java110.web.controller;
+package com.java110.front.controller;
 
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;

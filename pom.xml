@@ -38,6 +38,8 @@
         <module>ReportService</module>
         <module>ReportComponent</module>
         <module>HardwareAdapationService</module>
+        <module>AppFrontService</module>
+        <module>java110-front</module>
     </modules>
 
     <parent>
@@ -177,6 +179,11 @@
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>java110-db</artifactId>
+                <version>${microcommunity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.java110</groupId>
+                <artifactId>java110-front</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
             <dependency>

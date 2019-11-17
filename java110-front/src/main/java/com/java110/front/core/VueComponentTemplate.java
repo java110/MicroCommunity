@@ -1,4 +1,4 @@
-package com.java110.web.core;
+package com.java110.front.core;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;

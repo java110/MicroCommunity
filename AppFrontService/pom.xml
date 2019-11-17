@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>WebService</artifactId>
+    <artifactId>AppFrontService</artifactId>
 
-    <name>WebService</name>
+    <name>AppFrontService</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -22,7 +22,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-front</artifactId>
@@ -36,18 +35,12 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-config</artifactId>
             <scope>provided</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.java110</groupId>
-            <artifactId>ReportComponent</artifactId>
-        </dependency>
 
 
         <dependency>
@@ -59,16 +52,7 @@
     </dependencies>
 
     <build>
-        <finalName>WebService</finalName>
-       <!-- <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/components/**</include>
-                </includes>
-            </resource>
-        </resources>-->
+        <finalName>AppService</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -100,7 +84,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.web.WebServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.app.AppApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>

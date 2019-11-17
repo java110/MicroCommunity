@@ -1,0 +1,92 @@
+project:
+  name: test
+
+jedis:
+  pool:
+    config:
+      maxTotal: 100
+      maxIdle: 20
+      maxWaitMillis: 20000
+    host: test.redis.java110.com
+    port: 6379
+    timeout: 3000
+    password:
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+    preferIpAddress: true
+    instanceId: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://test.java110.com:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8012
+  session:
+    cookie:
+      http-only: true
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  application:
+    name: app-front-service
+  redis:
+    database: 0
+    host: test.redis.java110.com
+    port: 6379
+    pool:
+      max-active: 300
+      max-wait: 10000
+      max-idle: 100
+      min-idle: 0
+      timeout: 0
+
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+    prefix: classpath:/views/
+    encoding: UTF-8
+    suffix: .html
+    content-type: text/html
+
+#============== kafka ===================
+kafka:
+  consumer:
+    zookeeper:
+      connect: test.zk.java110.com:2181
+    servers: test.kafka.java110.com:9092
+    enable:
+      auto:
+        commit: true
+    session:
+      timeout: 6000
+    auto:
+      commit:
+        interval: 100
+      offset:
+        reset: latest
+    topic: test
+    group:
+      id: appFrontService
+    concurrency: 10
+
+  producer:
+    zookeeper:
+      connect: test.zk.java110.com:2181
+    servers: test.kafka.java110.com:9092
+    retries: 0
+    batch:
+      size: 4096
+    linger: 1
+    buffer:
+      memory: 40960
+
+

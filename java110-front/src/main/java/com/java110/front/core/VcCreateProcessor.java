@@ -1,4 +1,4 @@
-package com.java110.web.core;
+package com.java110.front.core;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;

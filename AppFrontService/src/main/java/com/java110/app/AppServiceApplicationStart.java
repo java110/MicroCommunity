@@ -1,4 +1,4 @@
-package com.java110.web;
+package com.java110.app;
 
 import com.java110.service.init.ServiceStartInit;
 import com.java110.front.core.VueComponentTemplate;
@@ -36,15 +36,14 @@ import java.nio.charset.Charset;
         "com.java110.core",
         "com.java110.config.properties.code",
         "com.java110.cache",
-        "com.java110.report",
-        "com.java110.front"
+        "com.java110.report"
 })
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-public class WebServiceApplicationStart {
+public class AppServiceApplicationStart {
 
-    private static Logger logger = LoggerFactory.getLogger(WebServiceApplicationStart.class);
+    private static Logger logger = LoggerFactory.getLogger(AppServiceApplicationStart.class);
 
 
     /**
@@ -63,7 +62,7 @@ public class WebServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
-            ApplicationContext context = SpringApplication.run(WebServiceApplicationStart.class, args);
+            ApplicationContext context = SpringApplication.run(AppServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
             VueComponentTemplate.initComponent(VueComponentTemplate.DEFAULT_COMPONENT_PACKAGE_PATH);
         }catch (Throwable e){
