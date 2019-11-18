@@ -2,20 +2,15 @@ package com.java110.app.smo.wxLogin.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.java110.app.controller.WxLogin;
 import com.java110.app.properties.WechatAuthProperties;
 import com.java110.app.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

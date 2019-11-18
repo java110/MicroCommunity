@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
  * 微信小程序登录处理类
  */
 @RestController
-public class WxLogin extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(WxLogin.class);
+public class WxLoginController extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(WxLoginController.class);
 
     @Autowired
     private IWxLoginSMO wxLoginSMOImpl;
