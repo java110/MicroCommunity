@@ -669,4 +669,25 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         return businessStaffs;
     }
+
+    @Override
+    public int getUserCount(Map businessUser) throws DAOException {
+        logger.debug("查询组织数据 入参 info : {}",businessUser);
+
+        List<Map> businessStaffInfos = sqlSessionTemplate.selectList("userServiceDaoImpl.getUserCount", businessUser);
+        if (businessStaffInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessStaffInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getUsers(Map info) throws DAOException {
+        logger.debug("查询组织信息 入参 info : {}",info);
+
+        List<Map> businessStaffs = sqlSessionTemplate.selectList("userServiceDaoImpl.getUsers",info);
+
+        return businessStaffs;
+    }
 }

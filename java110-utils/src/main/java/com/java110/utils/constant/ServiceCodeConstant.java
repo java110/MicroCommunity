@@ -116,6 +116,12 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_QUERY_USER_USERINFO = "query.user.userInfo";
 
+
+    /**
+     * 查询 组织管理
+     */
+    public static final String LIST_USERS = "user.listUsers";
+
     /**
      * 保存商户信息
      */

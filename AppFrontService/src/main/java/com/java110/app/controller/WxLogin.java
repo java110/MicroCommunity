@@ -1,10 +1,15 @@
 package com.java110.app.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.app.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.base.controller.BaseController;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.dto.wxLogin.UserInfo;
 import com.java110.dto.wxLogin.WxLoginInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class WxLogin extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(WxLogin.class);
+
+    @Autowired
+    private IWxLoginSMO wxLoginSMOImpl;
 
 
     /**
@@ -40,17 +48,19 @@ public class WxLogin extends BaseController {
         }
         String sessionKey = null;
         String openId = null;
-        try {
-            /*WxMaJscode2SessionResult result = this.wxMaService.getUserService().getSessionInfo(code);
-            sessionKey = result.getSessionKey();
-            openId = result.getOpenid();*/
-        } catch (Exception e) {
-            logger.error("login fail by wx", e);
-            e.printStackTrace();
-        }
-        if (sessionKey == null || openId == null) {
-            responseEntity = new ResponseEntity<>("code is null", HttpStatus.BAD_REQUEST);
-        }
+//        try {
+//            /*WxMaJscode2SessionResult result = this.wxMaService.getUserService().getSessionInfo(code);
+//            sessionKey = result.getSessionKey();
+//            openId = result.getOpenid();*/
+//        } catch (Exception e) {
+//            logger.error("login fail by wx", e);
+//            e.printStackTrace();
+//        }
+
+        IPageData pd = PageData.newInstance().builder("","", JSONObject.toJSONString(wxLoginInfo),"","","","");
+
+       return wxLoginSMOImpl.doLogin(pd);
+
         //login first
         /*User user = userService.queryByOpenid(openId);
         if (user == null) {
@@ -90,7 +100,7 @@ public class WxLogin extends BaseController {
         //LogUtil.info(jsonObject);
         return ResponseUtil.ok(jsonObject);*/
 
-        return new ResponseEntity<>("",HttpStatus.OK);
+        //return new ResponseEntity<>("",HttpStatus.OK);
 
 
     }

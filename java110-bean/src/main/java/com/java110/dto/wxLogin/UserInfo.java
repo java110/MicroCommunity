@@ -9,7 +9,7 @@ public class UserInfo implements Serializable {
     private String province;
     private String city;
     private String language;
-    private Byte gender;
+    private String gender;
 
     public String getCountry() {
         return country;
@@ -43,11 +43,11 @@ public class UserInfo implements Serializable {
         this.language = language;
     }
 
-    public Byte getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Byte gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

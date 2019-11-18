@@ -68,6 +68,30 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
     }
 
 
+
+    @Override
+    public int getUserCount(@RequestBody UserDto userDto) {
+
+        return userServiceDaoImpl.getUserCount(BeanConvertUtil.beanCovertMap(userDto));
+    }
+
+    @Override
+    public List<UserDto> getUsers(@RequestBody UserDto userDto) {
+        //校验是否传了 分页信息
+
+        int page = userDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            userDto.setPage((page - 1) * userDto.getRow());
+        }
+
+        List<UserDto> staffs = BeanConvertUtil.covertBeanList(userServiceDaoImpl.getUsers(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
+
+
+        return staffs;
+    }
+
+
     public IUserServiceDao getUserServiceDaoImpl() {
         return userServiceDaoImpl;
     }

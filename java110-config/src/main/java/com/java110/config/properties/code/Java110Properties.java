@@ -14,11 +14,31 @@ public class Java110Properties {
 
     private String mappingPath;
 
+    private String wxAppId;
+
+    private String wxAppSecret;
+
     public String getMappingPath() {
         return mappingPath;
     }
 
     public void setMappingPath(String mappingPath) {
         this.mappingPath = mappingPath;
+    }
+
+    public String getWxAppId() {
+        return wxAppId;
+    }
+
+    public void setWxAppId(String wxAppId) {
+        this.wxAppId = wxAppId;
+    }
+
+    public String getWxAppSecret() {
+        return wxAppSecret;
+    }
+
+    public void setWxAppSecret(String wxAppSecret) {
+        this.wxAppSecret = wxAppSecret;
     }
 }

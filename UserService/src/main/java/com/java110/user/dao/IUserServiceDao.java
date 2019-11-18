@@ -367,4 +367,23 @@ public interface IUserServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getStaffs(Map info) throws DAOException;
+
+
+    /**
+     * 查询用户总量
+     * @param businessUser
+     * @return
+     * @throws DAOException
+     */
+    public int getUserCount(Map businessUser) throws DAOException;
+
+
+    /**
+     * 查询用户信息（instance过程）
+     * 根据bId 查询组织信息
+     * @param info bId 信息
+     * @return 组织信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getUsers(Map info) throws DAOException;
 }

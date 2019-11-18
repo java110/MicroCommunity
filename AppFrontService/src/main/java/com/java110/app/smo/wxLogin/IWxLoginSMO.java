@@ -18,5 +18,5 @@ public interface IWxLoginSMO {
      * @return ResponseEntity 对象数据
      * @throws SMOException 业务代码层
      */
-    ResponseEntity<String> getSessionInfo(IPageData pd) throws SMOException;
+    ResponseEntity<String> doLogin(IPageData pd) throws SMOException;
 }
