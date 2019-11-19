@@ -92,7 +92,16 @@
         unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id
         bId,t.user_id,t.user_id userId
         from building_unit t
+        <if test="communityId!=null and communityId != ''">
+            ,f_floor ff ,s_community_member cm
+        </if>
         where 1 =1
+        <if test="communityId!=null and communityId != ''">
+            and bu.`floor_id` = ff.`floor_id`
+            AND ff.`floor_id` = cm.`member_id`
+            AND cm.`member_type_cd` = '390001200004'
+            and cm.community_id = #{communityId}
+        </if>
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
         </if>
