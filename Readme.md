@@ -47,6 +47,8 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     
 ### 系统功能（function） 
 
+   ![image](docs/images/hc_function.png)
+   
    主要系统功能请查看
      
    [http://www.homecommunity.cn/document/#/func/funcation](http://www.homecommunity.cn/document/#/func/funcation)
