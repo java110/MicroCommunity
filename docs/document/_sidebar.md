@@ -13,7 +13,6 @@
 * 系统功能
 
   * [功能列表](func/funcation.md)
-  * [生产环境部署](start/prod_install.md)
 
 * 二次开发
 
