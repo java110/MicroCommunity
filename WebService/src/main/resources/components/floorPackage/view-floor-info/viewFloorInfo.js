@@ -32,6 +32,9 @@
                 vc.emit('chooseUnit', 'onFloorInfo', {
                     floorId: vc.component.viewFloorInfo.floorId
                 });
+                vc.emit('addUnit', 'onFloorInfo', {
+                    floorId: vc.component.viewFloorInfo.floorId
+                });
                 vc.emit('viewUnitInfo', 'onFloorInfo', {
                     floorId: vc.component.viewFloorInfo.floorId
                 });

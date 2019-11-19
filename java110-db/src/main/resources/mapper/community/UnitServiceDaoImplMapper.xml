@@ -97,7 +97,7 @@
         </if>
         where 1 =1
         <if test="communityId!=null and communityId != ''">
-            and bu.`floor_id` = ff.`floor_id`
+            and t.`floor_id` = ff.`floor_id`
             AND ff.`floor_id` = cm.`member_id`
             AND cm.`member_type_cd` = '390001200004'
             and cm.community_id = #{communityId}

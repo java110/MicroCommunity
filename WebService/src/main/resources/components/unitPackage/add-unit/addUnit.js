@@ -31,6 +31,10 @@
                 vc.component.addUnitInfo.floorId = _params.floorId;
                 vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
             });
+             vc.on("addUnit",'onFloorInfo',function (_params) {
+                 vc.component.addUnitInfo.floorId = _params.floorId;
+                 vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
+             })
         },
         methods:{
             addUnitValidate:function(){
