@@ -17,6 +17,9 @@
             事件监听
      **/
     vc.on = function(_componentName,_value,_callback){
+        if(vc.cosoleFlag){
+            console.log("监听ON事件",_componentName,_value);
+        }
         vc.component.$on(_componentName+'_'+_value,_callback);
     };
 
@@ -24,6 +27,9 @@
             事件触发
     **/
     vc.emit = function(_componentName,_value,_param){
+        if(vc.cosoleFlag){
+            console.log("监听emit事件",_componentName,_value,_param);
+        }
         vc.component.$emit(_componentName+'_'+_value,_param);
     };
 
