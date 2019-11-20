@@ -46,7 +46,10 @@
                 vc.emit('chooseUnit','openChooseUnitModel',{});
             },
             _openAddUnitInfoModel(){
-                vc.emit('addUnit','openAddUnitModal',{});
+                var _tmpFloorId = vc.notNull(vc.component.viewUnitInfo.floorId)?vc.component.viewUnitInfo.floorId:"-1";
+                vc.emit('addUnit','openAddUnitModal',{
+                    "floorId":_tmpFloorId
+                });
             },
             _loadUnitInfoData:function(){
 
