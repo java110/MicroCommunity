@@ -1,4 +1,4 @@
-<div id = "searchParkingSpaceModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchParkingSpaceModelLabel" aria-hidden="true" >
+<div id="searchParkingSpaceModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="searchParkingSpaceModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -36,8 +36,7 @@
                                         <th data-hide="phone">车位类型</th>
                                         <th data-hide="phone">车位状态</th>
                                         <th data-hide="phone">面积</th>
-                                        <th data-hide="phone">创建员工</th>
-                                        <th data-hide="phone">备注</th>
+
                                         <th class="text-right">操作</th>
                                     </tr>
                                     </thead>
@@ -54,18 +53,13 @@
                                             {{parkingSpace.typeCd == '1001'?'地上停车位':'地下停车位'}}
                                         </td>
                                         <td>
-                                           <!-- {{vc.component._viewParkingSpaceState(parkingSpace.state)}}-->
+                                            <!-- {{vc.component._viewParkingSpaceState(parkingSpace.state)}}-->
                                             {{parkingSpace.stateName}}
                                         </td>
                                         <td>
                                             {{parkingSpace.area}}
                                         </td>
-                                        <td>
-                                            {{parkingSpace.userName}}
-                                        </td>
-                                        <td>
-                                            {{parkingSpace.remark}}
-                                        </td>
+
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseParkingSpace(parkingSpace)">选择</button>
                                         </td>
