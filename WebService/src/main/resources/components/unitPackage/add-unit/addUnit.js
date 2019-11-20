@@ -22,17 +22,24 @@
              vc.on('addUnit','openAddUnitModal',function(_params){
                  vc.component.refreshAddUnitInfo();
                 $('#addUnitModel').modal('show');
-                vc.component.addUnitInfo.floorId = _params.floorId;
+                 if(_params.hasOwnProperty("floorId") && vc.notNull(_params.floorId)){
+                     vc.component.addUnitInfo.floorId = _params.floorId;
+                 }
                 vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
              });
              vc.on('addUnit','addUnitModel',function(_params){
                 vc.component.refreshAddUnitInfo();
+
                 $('#addUnitModel').modal('show');
-                vc.component.addUnitInfo.floorId = _params.floorId;
+                if(_params.hasOwnProperty("floorId") && vc.notNull(_params.floorId)){
+                    vc.component.addUnitInfo.floorId = _params.floorId;
+                }
                 vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
             });
              vc.on('addUnit','onFloorInfo',function (_params) {
-                 vc.component.addUnitInfo.floorId = _params.floorId;
+                 if(_params.hasOwnProperty("floorId") && vc.notNull(_params.floorId)){
+                     vc.component.addUnitInfo.floorId = _params.floorId;
+                 }
                  vc.component.addUnitInfo.communityId = vc.getCurrentCommunity().communityId;
              });
         },
