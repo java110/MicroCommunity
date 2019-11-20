@@ -153,7 +153,8 @@
                                 if(rooms.length == 1){
                                       vc.jumpToPage("/flow/propertyFeeFlow?ownerId="+_owner.ownerId+"&roomId="+rooms[0].roomId);
                                 }else if(rooms.length == 0){
-                                    vc.message("当前业主未查询到房屋信息");
+                                    //vc.message("当前业主未查询到房屋信息");
+                                    vc.toast("当前业主未查询到房屋信息");
                                 }else{
 
                                     vc.emit('searchRoom','showOwnerRooms',rooms);
@@ -182,7 +183,9 @@
                                 if(parkingSpaces.length == 1){
                                       vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId="+_owner.ownerId+"&psId="+parkingSpaces[0].psId);
                                 }else if(parkingSpaces.length == 0){
-                                    vc.message("当前业主未查询到车位信息");
+                                    //vc.message("当前业主未查询到车位信息");
+                                    vc.toast("当前业主未查询到车位信息");
+
                                 }else{
 
                                     vc.emit('searchParkingSpace','showOwnerParkingSpaces',parkingSpaces);
