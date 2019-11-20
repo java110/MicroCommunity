@@ -19,11 +19,11 @@
     vc.on = function(_componentName,_value,_callback){
 
         vc.component.$on(_componentName+'_'+_value,
-            function (){
+            function (param){
                     if(vc.consoleFlag){
                         console.log("监听ON事件",_componentName,_value);
                     }
-                    _callback();
+                    _callback(param);
                 }
             );
     };
