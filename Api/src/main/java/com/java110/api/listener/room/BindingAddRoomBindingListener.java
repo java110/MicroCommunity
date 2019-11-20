@@ -3,7 +3,7 @@ package com.java110.api.listener.room;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.constant.ServiceCodeAddRoomBindingConstant;
+import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.context.DataFlowContext;
@@ -14,8 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.BusinessTypeConstant;
 
 import com.java110.core.annotation.Java110Listener;
 
@@ -60,11 +58,12 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             businesses.add(addBusinessFloor(viewFloorInfo, context));
+            businesses.add(addCommunityMember(viewFloorInfo, context));
         }
         if (!hasKey(viewUnitInfo, "unitId")) {
             viewUnitInfo.put("unitId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
             viewUnitInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-            viewUnitInfo.put("unitId", viewFloorInfo.getString("floorId"));
+            viewUnitInfo.put("floorId", viewFloorInfo.getString("floorId"));
             businesses.add(addBusinessUnit(viewUnitInfo, context));
         }
         if (!hasKey(addRoomView, "roomId")) {
@@ -118,6 +117,30 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
         businessObj.putAll(paramInJson);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessObj);
+        return business;
+    }
+
+    /**
+     * 添加小区成员
+     *
+     * @param paramInJson 组装 楼小区关系
+     * @return 小区成员信息
+     */
+    private JSONObject addCommunityMember(JSONObject paramInJson,DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessCommunityMember = new JSONObject();
+        businessCommunityMember.put("communityMemberId", "-1");
+        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
+        businessCommunityMember.put("memberId", paramInJson.getString("floorId"));
+        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
+        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+
         return business;
     }
 

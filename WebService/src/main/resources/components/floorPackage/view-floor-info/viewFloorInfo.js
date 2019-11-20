@@ -19,6 +19,7 @@
                 name:'',
                 floorNum:'',
                 remark:'',
+                communityId:vc.getCurrentCommunity().communityId
 
             }
         },

@@ -4,7 +4,7 @@
             <div class="ibox-title">
                 <h5>单元信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" v-if="viewUnitInfo.index != 2 && viewUnitInfo.floorId !=''"
+                    <button type="button" v-if="viewUnitInfo.index != 2 && viewUnitInfo.floorId !='' && viewUnitInfo.floorId !='-1'"
                             class="btn btn-primary btn-sm" style="margin-right:10px;"
                             v-on:click="_openSelectUnitInfoModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择单元
