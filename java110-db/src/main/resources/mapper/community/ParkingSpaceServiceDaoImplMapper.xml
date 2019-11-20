@@ -112,13 +112,17 @@
             t.b_id bId,
             t.user_id,
             t.user_id userId,
-            td.name stateName
+            td.name stateName,
+            td1.name typeCdName
         FROM
-          p_parking_space t,t_dict td
+          p_parking_space t,t_dict td,t_dict td1
         <where>
             t.state = td.status_cd
             and td.table_name='p_parking_space'
             and td.table_columns='state'
+            and t.type_cd = td1.status_cd
+            and td1.table_name='p_parking_space'
+            and td1.table_columns='type_cd'
             <if test="area !=null and area != ''">
                 and t.area= #{area}
             </if>

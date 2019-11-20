@@ -14,14 +14,15 @@ import java.util.Date;
 public class OwnerCarDto extends PageDto implements Serializable {
 
     private String carColor;
-private String carBrand;
-private String carType;
-private String carNum;
-private String psId;
-private String remark;
-private String ownerId;
-private String userId;
-private String carId;
+    private String carBrand;
+    private String carType;
+    private String carTypeName;
+    private String carNum;
+    private String psId;
+    private String remark;
+    private String ownerId;
+    private String userId;
+    private String carId;
 
 
     private Date createTime;
@@ -32,55 +33,72 @@ private String carId;
     public String getCarColor() {
         return carColor;
     }
-public void setCarColor(String carColor) {
+
+    public void setCarColor(String carColor) {
         this.carColor = carColor;
     }
-public String getCarBrand() {
+
+    public String getCarBrand() {
         return carBrand;
     }
-public void setCarBrand(String carBrand) {
+
+    public void setCarBrand(String carBrand) {
         this.carBrand = carBrand;
     }
-public String getCarType() {
+
+    public String getCarType() {
         return carType;
     }
-public void setCarType(String carType) {
+
+    public void setCarType(String carType) {
         this.carType = carType;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getPsId() {
+
+    public String getPsId() {
         return psId;
     }
-public void setPsId(String psId) {
+
+    public void setPsId(String psId) {
         this.psId = psId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getCarId() {
+
+    public String getCarId() {
         return carId;
     }
-public void setCarId(String carId) {
+
+    public void setCarId(String carId) {
         this.carId = carId;
     }
 
@@ -99,5 +117,13 @@ public void setCarId(String carId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
     }
 }

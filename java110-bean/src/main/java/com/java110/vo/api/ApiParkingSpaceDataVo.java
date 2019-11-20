@@ -16,6 +16,7 @@ public class ApiParkingSpaceDataVo extends Vo {
      */
     private String area;
     private String typeCd;
+    private String typeCdName;
     private String num;
     private String psId;
     private String state;
@@ -34,6 +35,7 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     private String carBrand;
     private String carType;
+    private String carTypeName;
 
     public String getArea() {
         return area;
@@ -153,5 +155,21 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
     }
 }
