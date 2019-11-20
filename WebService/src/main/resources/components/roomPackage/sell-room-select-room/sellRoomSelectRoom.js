@@ -17,6 +17,7 @@
                 layer:"",
                 section:"",
                 apartment:"",
+                apartmentName:"",
                 builtUpArea:"",
                 unitPrice:"",
                 userName:"",
