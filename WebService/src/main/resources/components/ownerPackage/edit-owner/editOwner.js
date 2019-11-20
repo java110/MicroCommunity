@@ -101,7 +101,7 @@
                 vc.component.editOwnerInfo.communityId = vc.getCurrentCommunity().communityId;
 
                 //编辑时 ownerPhoto 中内容不是照片内容，则清空
-                if(vc.component.editOwnerInfo.ownerPhoto.indexOf(_fileUrl) == -1){
+                if(vc.component.editOwnerInfo.ownerPhoto.indexOf(_fileUrl) != -1){
                     vc.component.editOwnerInfo.ownerPhoto = "";
                 }
                 vc.http.post(
