@@ -16,6 +16,7 @@
                 showAddFloorButton:$props.showAddFloorButton,
                 floorId:'',
                 floorName:'',
+                name:'',
                 floorNum:'',
                 remark:'',
 
