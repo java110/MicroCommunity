@@ -9,6 +9,7 @@ import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.UnitDto;
 import com.java110.dto.UserDto;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,7 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
         if (page != PageDto.DEFAULT_PAGE) {
             unitDto.setPage((page - 1) * unitDto.getRow());
         }
+
 
         List<UnitDto> units = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.getUnitInfo(BeanConvertUtil.beanCovertMap(unitDto)), UnitDto.class);
 

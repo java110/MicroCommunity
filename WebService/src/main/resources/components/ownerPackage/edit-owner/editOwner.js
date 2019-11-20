@@ -1,5 +1,5 @@
 (function(vc){
-
+    var _fileUrl = 'https://hc.demo.winqi.cn/callComponent/download/getFile/fileByObjId';
     vc.extends({
         propTypes: {
             notifyLoadDataComponentName:vc.propTypes.string
@@ -24,7 +24,7 @@
             vc.on('editOwner','openEditOwnerModal',function(_owner){
                 vc.copyObject(_owner,vc.component.editOwnerInfo);
                 //根据memberId 查询 照片信息
-                vc.component.editOwnerInfo.ownerPhoto = "https://hc.demo.winqi.cn/callComponent/download/getFile/fileByObjId?objId="+
+                vc.component.editOwnerInfo.ownerPhoto = _fileUrl+"?objId="+
                    vc.component.editOwnerInfo.memberId +"&communityId="+vc.getCurrentCommunity().communityId+"&fileTypeCd=10000&time="+new Date();
                 $('#editOwnerModel').modal('show');
                 vc.component._initAddOwnerMediaForEdit();
@@ -99,6 +99,11 @@
                 }
 
                 vc.component.editOwnerInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                //编辑时 ownerPhoto 中内容不是照片内容，则清空
+                if(vc.component.editOwnerInfo.ownerPhoto.indexOf(_fileUrl) == -1){
+                    vc.component.editOwnerInfo.ownerPhoto = "";
+                }
                 vc.http.post(
                     'editOwner',
                     'changeOwner',

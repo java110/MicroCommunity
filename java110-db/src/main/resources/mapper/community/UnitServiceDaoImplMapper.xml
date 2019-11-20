@@ -120,9 +120,6 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="statusCd ==null or statusCd == ''">
-            and t.status_cd= '0'
-        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
