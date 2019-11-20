@@ -54,10 +54,10 @@
                             <i class="glyphicon glyphicon-plus"></i>
                             添加楼栋
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openBatchAddFloorModal()">
+                        <!--<button type="button" class="btn btn-primary btn-sm" v-on:click="_openBatchAddFloorModal()">
                             <i class="glyphicon glyphicon-plus"></i>
                             批量生成
-                        </button>
+                        </button>-->
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -94,6 +94,9 @@
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDelFloorModel(floor)">删除</button>
                                 </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openAddUnit(floor)">添加单元</button>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -116,10 +119,10 @@
                callBackListener=""
                callBackFunction=""
     ></vc:create>
-    <vc:create name="batchAddFloor"
+    <!--<vc:create name="batchAddFloor"
                callBackListener=""
                callBackFunction=""
-    ></vc:create>
+    ></vc:create>-->
     <vc:create name="editFloor"></vc:create>
     <vc:create name="deleteFloor"></vc:create>
 

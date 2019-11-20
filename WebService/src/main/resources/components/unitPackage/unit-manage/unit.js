@@ -16,7 +16,13 @@
             }
         },
         _initMethod:function(){
-            vc.component._loadUnits({'floorId':''});
+            var _paramFloorId = vc.getParam("floorId");
+            var _paramFloorName = vc.getParam("floorName");
+            if(vc.notNull(_paramFloorId)){
+                vc.component.unitInfo.conditions.floorId = _paramFloorId;
+                vc.component.unitInfo.conditions.floorName = _paramFloorName;
+            }
+            vc.component._loadUnits({'floorId':_paramFloorId});
         },
         _initEvent:function(){
             vc.on('unit','chooseFloor',function(_param){
