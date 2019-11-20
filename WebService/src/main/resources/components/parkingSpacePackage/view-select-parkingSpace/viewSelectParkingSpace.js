@@ -15,6 +15,7 @@
                 typeCd:'',
                 area:'',
                 state:'',
+                stateName:'',
                 remark:'',
                 psId:''
             }

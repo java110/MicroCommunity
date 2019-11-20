@@ -19,6 +19,7 @@ public class ApiParkingSpaceDataVo extends Vo {
     private String num;
     private String psId;
     private String state;
+    private String stateName;
     private String communityId;
     private String userId;
 
@@ -144,5 +145,13 @@ public class ApiParkingSpaceDataVo extends Vo {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

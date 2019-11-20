@@ -54,7 +54,8 @@
                                             {{parkingSpace.typeCd == '1001'?'地上停车位':'地下停车位'}}
                                         </td>
                                         <td>
-                                            {{vc.component._viewParkingSpaceState(parkingSpace.state)}}
+                                           <!-- {{vc.component._viewParkingSpaceState(parkingSpace.state)}}-->
+                                            {{parkingSpace.stateName}}
                                         </td>
                                         <td>
                                             {{parkingSpace.area}}

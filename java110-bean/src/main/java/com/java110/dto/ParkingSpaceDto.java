@@ -19,6 +19,7 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     private String psId;
     private String remark;
     private String state;
+    private String stateName;
     private String communityId;
     private String userId;
 
@@ -128,5 +129,13 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public void setPsIds(String[] psIds) {
         this.psIds = psIds;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
