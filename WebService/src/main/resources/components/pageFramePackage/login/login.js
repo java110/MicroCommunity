@@ -4,6 +4,7 @@
             loginInfo:{
                 username:'wuxw',
                 passwd:'admin',
+                validateCode:'',
                 errorInfo:''
             }
         },
@@ -31,6 +32,18 @@
                 vc.clearCacheData();
             },
             doLogin:function(){
+                if(!vc.notNull(vc.component.loginInfo.username)){
+                    vc.toast('用户名不能为空');
+                    return ;
+                }
+                if(!vc.notNull(vc.component.loginInfo.passwd)){
+                    vc.toast('密码不能为空');
+                    return ;
+                }
+                if(!vc.notNull(vc.component.loginInfo.validateCode)){
+                    vc.toast('验证码不能为空');
+                    return ;
+                }
                 vc.http.post(
                             'login',
                             'doLogin',
