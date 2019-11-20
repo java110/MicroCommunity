@@ -74,6 +74,11 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (RoomDto room : rooms) {
+            try {
+                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+            } catch (Exception e) {
+                logger.error("设置房屋户型失败", e);
+            }
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
@@ -180,6 +185,11 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (RoomDto room : rooms) {
+            try {
+                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+            } catch (Exception e) {
+                logger.error("设置房屋户型失败", e);
+            }
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
@@ -218,6 +228,12 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (RoomDto room : rooms) {
+            //处理下户型转义问题
+            try {
+                room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+            } catch (Exception e) {
+                logger.error("设置房屋户型失败", e);
+            }
             refreshRoom(room, users, roomAttrDtos);
         }
         return rooms;
