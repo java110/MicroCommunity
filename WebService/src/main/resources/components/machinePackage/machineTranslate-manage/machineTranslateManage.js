@@ -17,7 +17,7 @@
                     typeCd: '',
                     objName: '',
                     objId: '',
-
+                    communityId:vc.getCurrentCommunity().communityId
                 }
             }
         },
