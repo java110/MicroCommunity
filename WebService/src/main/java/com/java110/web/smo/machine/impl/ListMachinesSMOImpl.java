@@ -7,6 +7,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.web.smo.machine.IListMachinesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ListMachinesSMOImpl extends AbstractComponentSMO implements IListMa
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
+        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含小区信息");
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_MACHINE);
     }

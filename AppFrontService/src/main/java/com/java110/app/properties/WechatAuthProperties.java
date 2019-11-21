@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "java110")
-@PropertySource("classpath:java110.auth.wechat.properties")
+@ConfigurationProperties(prefix = "java110.auth.wechat")
+@PropertySource("classpath:wechatAuth.properties")
 public class WechatAuthProperties {
 
     private String sessionHost;

@@ -31,7 +31,7 @@
             });
         },
         methods:{
-            editOwnerValidate(){
+            editOwnerValidate:function(){
                 return vc.validate.validate({
                     editOwnerInfo:vc.component.editOwnerInfo
                 },{
