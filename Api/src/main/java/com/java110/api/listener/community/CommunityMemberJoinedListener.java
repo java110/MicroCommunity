@@ -108,12 +108,19 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
         Assert.jsonObjectHaveKey(paramIn, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(paramIn, "memberTypeCd", "请求报文中未包含memberTypeCd");
+        JSONObject paramObj = JSONObject.parseObject(paramIn);
+
+        if(!CommunityMemberTypeConstant.PROPERTY.equals(paramObj.getString("memberTypeCd"))){
+            return ;
+        }
 
         //当 memberTypeCd 为物业时 小区只要有入驻 则 不能再次入驻优化
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
         String[] auditStatusCds = new String[]{"1000", "1100"};
         communityMemberDto.setAuditStatusCds(auditStatusCds);
+        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
+        communityMemberDto.setCommunityId(paramObj.getString("communityId"));
         int count = communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
         if (count > 0) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区已经被物业入驻");
