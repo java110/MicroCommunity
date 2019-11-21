@@ -5,35 +5,45 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button"  class="btn btn-link btn-sm" style="margin-right:10px;"  v-on:click="_moreCondition()">{{machineManageInfo.moreCondition == true?'隐藏':'更多'}}</button>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;" v-on:click="_moreCondition()">{{machineManageInfo.moreCondition == true?'隐藏':'更多'}}</button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入设备编码" v-model="machineManageInfo.conditions.machineCode" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<select class="custom-select" v-model="machineManageInfo.conditions.machineTypeCd">
-         <option selected  value="">请选择设备类型</option>
-         <option  value="9999">锐目门禁</option>
-<option  value="9998">其他</option>
-  </select>                        </div><div class="col-sm-3" >
-<div class="form-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="custom-select" v-model="machineManageInfo.conditions.machineTypeCd">
+                                <option selected value="">请选择设备类型</option>
+                                <option value="9999">锐目门禁</option>
+                                <option value="9998">其他</option>
+                            </select></div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入设备名称" v-model="machineManageInfo.conditions.machineName" class=" form-control">
-                            </div>                        </div><div class="col-sm-1">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryMachineMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
-<div class="row">
-<div class="col-sm-4" v-if="machineManageInfo.moreCondition == true">
-<div class="form-group">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" v-if="machineManageInfo.moreCondition == true">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入设备IP" v-model="machineManageInfo.conditions.machineIp" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" v-if="machineManageInfo.moreCondition == true">
-<div class="form-group">
+                            </div>
+                        </div>
+                        <div class="col-sm-4" v-if="machineManageInfo.moreCondition == true">
+                            <div class="form-group">
                                 <input type="text" placeholder="请输入设备MAC" v-model="machineManageInfo.conditions.machineMac" class=" form-control">
-                            </div>                        </div></div>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -59,7 +69,7 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">设备ID</th>
+                            <th class="text-center">设备ID</th>
                             <th class="text-center">设备编码</th>
                             <th class="text-center">版本号</th>
                             <th class="text-center">设备名称</th>
@@ -73,19 +83,21 @@
                         </thead>
                         <tbody>
                         <tr v-for="machine in machineManageInfo.machines">
-                                                        <td class="text-center">{{machine.machineId}}</td>
+                            <td class="text-center">{{machine.machineId}}</td>
                             <td class="text-center">{{machine.machineCode}}</td>
                             <td class="text-center">{{machine.machineVersion}}</td>
                             <td class="text-center">{{machine.machineName}}</td>
-                            <td class="text-center">{{machine.machineTypeCd}}</td>
+                            <td class="text-center">{{machine.machineTypeCdName}}</td>
                             <td class="text-center">{{machine.machineIp}}</td>
                             <td class="text-center">{{machine.machineMac}}</td>
-                            <td class="text-center"><div class="btn-group">
+                            <td class="text-center">
+                                <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openEditMachineModel(machine)">修改</button>
                                 </div>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteMachineModel(machine)">删除</button>
-                                </div></td>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -104,7 +116,6 @@
         </div>
     </div>
 
-    
 
     <vc:create name="addMachine"
                callBackListener=""

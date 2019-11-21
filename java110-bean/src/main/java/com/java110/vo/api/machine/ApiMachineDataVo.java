@@ -6,62 +6,84 @@ import java.util.Date;
 public class ApiMachineDataVo implements Serializable {
 
     private String machineId;
-private String machineCode;
-private String machineVersion;
-private String machineName;
-private String machineTypeCd;
-private String authCode;
-private String machineIp;
-private String machineMac;
-public String getMachineId() {
+    private String machineCode;
+    private String machineVersion;
+    private String machineName;
+    private String machineTypeCd;
+    private String machineTypeCdName;
+    private String authCode;
+    private String machineIp;
+    private String machineMac;
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getMachineCode() {
+
+    public String getMachineCode() {
         return machineCode;
     }
-public void setMachineCode(String machineCode) {
+
+    public void setMachineCode(String machineCode) {
         this.machineCode = machineCode;
     }
-public String getMachineVersion() {
+
+    public String getMachineVersion() {
         return machineVersion;
     }
-public void setMachineVersion(String machineVersion) {
+
+    public void setMachineVersion(String machineVersion) {
         this.machineVersion = machineVersion;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
-public String getMachineTypeCd() {
+
+    public String getMachineTypeCd() {
         return machineTypeCd;
     }
-public void setMachineTypeCd(String machineTypeCd) {
+
+    public void setMachineTypeCd(String machineTypeCd) {
         this.machineTypeCd = machineTypeCd;
     }
-public String getAuthCode() {
+
+    public String getAuthCode() {
         return authCode;
     }
-public void setAuthCode(String authCode) {
+
+    public void setAuthCode(String authCode) {
         this.authCode = authCode;
     }
-public String getMachineIp() {
+
+    public String getMachineIp() {
         return machineIp;
     }
-public void setMachineIp(String machineIp) {
+
+    public void setMachineIp(String machineIp) {
         this.machineIp = machineIp;
     }
-public String getMachineMac() {
+
+    public String getMachineMac() {
         return machineMac;
     }
-public void setMachineMac(String machineMac) {
+
+    public void setMachineMac(String machineMac) {
         this.machineMac = machineMac;
     }
 
+    public String getMachineTypeCdName() {
+        return machineTypeCdName;
+    }
 
-
+    public void setMachineTypeCdName(String machineTypeCdName) {
+        this.machineTypeCdName = machineTypeCdName;
+    }
 }

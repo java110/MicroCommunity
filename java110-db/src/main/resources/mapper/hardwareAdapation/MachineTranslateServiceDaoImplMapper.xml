@@ -128,9 +128,15 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         select t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code machineCode,t.type_cd,t.type_cd
         typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId
-        from machine_translate t
+        communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName
+        from machine_translate t,t_dict td,t_dict td1
         where 1 =1
+        and t.machine_type_cd=td.status_cd
+        and td.table_name='machine_translate'
+        and td.table_columns='type_cd'
+        and t.state=td1.status_cd
+        and td1.table_name='machine_translate'
+        and td1.table_columns='state'
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>
@@ -208,8 +214,14 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
     <!-- 查询设备同步数量 add by wuxw 2018-07-03 -->
     <select id="queryMachineTranslatesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from machine_translate t
+        from machine_translate t,t_dict td,t_dict td1
         where 1 =1
+        and t.machine_type_cd=td.status_cd
+        and td.table_name='machine_translate'
+        and td.table_columns='type_cd'
+        and t.state=td1.status_cd
+        and td1.table_name='machine_translate'
+        and td1.table_columns='state'
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
         </if>

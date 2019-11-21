@@ -107,9 +107,12 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         machineCode,t.auth_code,t.auth_code authCode,t.machine_version,t.machine_version
         machineVersion,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id
         bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
-        machineTypeCd,t.machine_ip,t.machine_ip machineIp
-        from machine t
+        machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName
+        from machine t,t_dict td
         where 1 =1
+        and t.machine_type_cd=td.status_cd
+        and td.table_name='machine'
+        and td.table_columns='machine_type_cd'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>
@@ -193,8 +196,11 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
     <!-- 查询设备数量 add by wuxw 2018-07-03 -->
     <select id="queryMachinesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from machine t
+        from machine t,t_dict td
         where 1 =1
+        and t.machine_type_cd=td.status_cd
+        and td.table_name='machine'
+        and td.table_columns='machine_type_cd'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>

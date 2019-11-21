@@ -90,21 +90,21 @@
                             <td class="text-center">{{machineTranslate.machineTranslateId}}</td>
                             <td class="text-center">{{machineTranslate.machineCode}}</td>
                             <td class="text-center">{{machineTranslate.machineId}}</td>
-                            <td class="text-center">{{machineTranslate.typeCd}}</td>
+                            <td class="text-center">{{machineTranslate.typeCdName}}</td>
                             <td class="text-center">{{machineTranslate.objName}}</td>
                             <td class="text-center">{{machineTranslate.objId}}</td>
-                            <td class="text-center">{{machineTranslate.state}}</td>
+                            <td class="text-center">{{machineTranslate.stateName}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openEditMachineTranslateModel(machineTranslate)">修改
                                     </button>
                                 </div>
-                               <!-- <div class="btn-group">
-                                    <button class="btn-white btn btn-xs"
-                                            v-on:click="_openDeleteMachineTranslateModel(machineTranslate)">删除
-                                    </button>
-                                </div>-->
+                                <!-- <div class="btn-group">
+                                     <button class="btn-white btn btn-xs"
+                                             v-on:click="_openDeleteMachineTranslateModel(machineTranslate)">删除
+                                     </button>
+                                 </div>-->
                             </td>
 
                         </tr>
@@ -130,6 +130,6 @@
                callBackFunction=""
     ></vc:create>
     <vc:create name="editMachineTranslate"></vc:create>
-   <!-- <vc:create name="deleteMachineTranslate"></vc:create>-->
+    <!-- <vc:create name="deleteMachineTranslate"></vc:create>-->
 
 </div>

@@ -23,6 +23,7 @@ public class MachineDto extends PageDto implements Serializable {
     private String communityId;
     private String machineName;
     private String machineTypeCd;
+    private String machineTypeCdName;
     private String machineIp;
     private String bId;
 
@@ -126,5 +127,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getMachineTypeCdName() {
+        return machineTypeCdName;
+    }
+
+    public void setMachineTypeCdName(String machineTypeCdName) {
+        this.machineTypeCdName = machineTypeCdName;
     }
 }
