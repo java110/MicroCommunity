@@ -52,7 +52,7 @@
     </dependencies>
 
     <build>
-        <finalName>AppService</finalName>
+        <finalName>AppFrontService</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
