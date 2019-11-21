@@ -88,13 +88,13 @@ public class CommunityServiceSMOImpl extends BaseComponentSMO implements ICommun
         //修改用户信息
         if (StringUtils.isEmpty(communityName)) {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMember?memberId=" + storeId +
-                            "&memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd),
+                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMember?"
+                            +"memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd),
                     HttpMethod.GET);
         } else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMemberAndName?memberId=" + storeId +
-                            "&memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd)
+                    ServiceConstant.SERVICE_API_URL + "/api/query.noEnterCommunity.byMemberAndName?"
+                            +"memberTypeCd=" + MappingCache.getValue(MappingConstant.DOMAIN_STORE_TYPE_2_COMMUNITY_MEMBER_TYPE, storeTypeCd)
                             + "&name=" + communityName,
                     HttpMethod.GET);
         }
