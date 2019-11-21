@@ -1,5 +1,6 @@
 package com.java110.front.core;
 
+import com.java110.front.listener.ReloadComponentFileListenerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
@@ -51,6 +52,9 @@ public class VueComponentTemplate extends PackageScanner {
         vueComponentTemplate.packageScanner(scanPath, COMPONENT_JS);
         vueComponentTemplate.packageScanner(scanPath, COMPONENT_HTML);
         vueComponentTemplate.packageScanner(scanPath, COMPONENT_CSS);
+
+        //启动 组件热加载功能
+        ReloadComponentFileListenerFactory.startReloadComponentFileListener();
     }
 
 
@@ -110,5 +114,14 @@ public class VueComponentTemplate extends PackageScanner {
                 }
             }
         }
+    }
+
+    /**
+     * 刷入 组件内容
+     * @param componentKey
+     * @param componentContext
+     */
+    public static void refreshComponent(String componentKey,String componentContext){
+        componentTemplate.put(componentKey, componentContext);
     }
 }

@@ -18,6 +18,8 @@ public class Java110Properties {
 
     private String wxAppSecret;
 
+    private boolean autoReloadComponent = false;
+
     public String getMappingPath() {
         return mappingPath;
     }
@@ -40,5 +42,13 @@ public class Java110Properties {
 
     public void setWxAppSecret(String wxAppSecret) {
         this.wxAppSecret = wxAppSecret;
+    }
+
+    public boolean getAutoReloadComponent() {
+        return autoReloadComponent;
+    }
+
+    public void setAutoReloadComponent(boolean autoReloadComponent) {
+        this.autoReloadComponent = autoReloadComponent;
     }
 }
