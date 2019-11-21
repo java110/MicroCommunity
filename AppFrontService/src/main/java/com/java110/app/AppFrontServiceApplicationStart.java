@@ -32,18 +32,17 @@ import java.nio.charset.Charset;
         "com.java110.service.controller",
         "com.java110.service.filter",
         "com.java110.service.init",
-        "com.java110.web",
+        "com.java110.app",
         "com.java110.core",
         "com.java110.config.properties.code",
-        "com.java110.cache",
-        "com.java110.report"
+        "com.java110.cache"
 })
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-public class AppServiceApplicationStart {
+public class AppFrontServiceApplicationStart {
 
-    private static Logger logger = LoggerFactory.getLogger(AppServiceApplicationStart.class);
+    private static Logger logger = LoggerFactory.getLogger(AppFrontServiceApplicationStart.class);
 
 
     /**
@@ -62,7 +61,7 @@ public class AppServiceApplicationStart {
 
     public static void main(String[] args) throws Exception {
         try {
-            ApplicationContext context = SpringApplication.run(AppServiceApplicationStart.class, args);
+            ApplicationContext context = SpringApplication.run(AppFrontServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
             VueComponentTemplate.initComponent(VueComponentTemplate.DEFAULT_COMPONENT_PACKAGE_PATH);
         }catch (Throwable e){

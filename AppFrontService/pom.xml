@@ -84,7 +84,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.app.AppApplicationStart</mainClass>
+                    <mainClass>com.java110.app.AppFrontServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>

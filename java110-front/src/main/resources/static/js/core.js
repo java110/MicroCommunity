@@ -45,6 +45,7 @@
         initEvent:_initEvent,
         component:_component,
         destroyedMethod:_destroyedMethod,
+        debug:false,
         timers:_timers
     };
    //通知window对象
@@ -274,6 +275,10 @@
             return false;
         }
         return true;
+    }
+    //设置debug 模式
+    vc.setDebug = function (_param) {
+       vc.debug = _param;
     }
 
 
