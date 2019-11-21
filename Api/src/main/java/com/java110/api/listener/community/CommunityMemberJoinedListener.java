@@ -3,8 +3,11 @@ package com.java110.api.listener.community;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -13,6 +16,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,9 @@ import org.springframework.http.ResponseEntity;
 @Java110Listener("communityMemberJoinedListener")
 public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(CommunityMemberJoinedListener.class);
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
 
     @Override
@@ -101,10 +108,30 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
         Assert.jsonObjectHaveKey(paramIn, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(paramIn, "memberTypeCd", "请求报文中未包含memberTypeCd");
+
+        //当 memberTypeCd 为物业时 小区只要有入驻 则 不能再次入驻优化
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
+        String[] auditStatusCds = new String[]{"1000", "1100"};
+        communityMemberDto.setAuditStatusCds(auditStatusCds);
+        int count = communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);
+        if (count > 0) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区已经被物业入驻");
+        }
+
+
     }
 
     @Override
     public int getOrder() {
         return 0;
+    }
+
+    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
+        return communityInnerServiceSMOImpl;
+    }
+
+    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
+        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
     }
 }

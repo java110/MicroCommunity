@@ -19,6 +19,8 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     private String auditStatusCd;
 
+    private String[] auditStatusCds;
+
     private String statusCd;
 
     private boolean needCommunityInfo;
@@ -87,5 +89,13 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     public void setNoAuditEnterCommunity(boolean noAuditEnterCommunity) {
         this.noAuditEnterCommunity = noAuditEnterCommunity;
+    }
+
+    public String[] getAuditStatusCds() {
+        return auditStatusCds;
+    }
+
+    public void setAuditStatusCds(String[] auditStatusCds) {
+        this.auditStatusCds = auditStatusCds;
     }
 }

@@ -399,6 +399,12 @@
             and ms.audit_status_cd = #{auditStatusCd}
         </if>
 
+        <if test="auditStatusCds != null and auditStatusCds != null">
+            and ms.audit_status_cd in
+            <foreach collection="auditStatusCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId != null and communityId != ''">
             and ms.community_id = #{communityId}
         </if>
