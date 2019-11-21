@@ -131,7 +131,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName
         from machine_translate t,t_dict td,t_dict td1
         where 1 =1
-        and t.machine_type_cd=td.status_cd
+        and t.type_cd=td.status_cd
         and td.table_name='machine_translate'
         and td.table_columns='type_cd'
         and t.state=td1.status_cd
@@ -216,7 +216,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         select count(1) count
         from machine_translate t,t_dict td,t_dict td1
         where 1 =1
-        and t.machine_type_cd=td.status_cd
+        and t.type_cd=td.status_cd
         and td.table_name='machine_translate'
         and td.table_columns='type_cd'
         and t.state=td1.status_cd
