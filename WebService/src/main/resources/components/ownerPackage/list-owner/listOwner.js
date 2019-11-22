@@ -69,6 +69,7 @@
 
                                 vc.emit('pagination','init',{
                                     total:vc.component.listOwnerInfo.records,
+                                    dataCount: vc.component.listOwnerInfo.total,
                                     currentPage:_page
                                 });
                              },function(errInfo,error){

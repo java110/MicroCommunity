@@ -49,6 +49,7 @@
 
                         vc.emit('pagination', 'init', {
                             total: vc.component.listFloorInfo.records,
+                            dataCount: vc.component.listFloorInfo.total,
                             currentPage: _page
                         });
                     }, function (errInfo, error) {

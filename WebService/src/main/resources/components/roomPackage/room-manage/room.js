@@ -75,6 +75,7 @@
 
                                 vc.emit('pagination','init',{
                                     total:vc.component.roomInfo.records,
+                                    dataCount: vc.component.roomInfo.total,
                                     currentPage:_page
                                 });
                              },function(errInfo,error){

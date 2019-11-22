@@ -55,6 +55,7 @@
 
                         vc.emit('pagination', 'init', {
                             total: vc.component.listParkingSpaceInfo.records,
+                            dataCount: vc.component.listParkingSpaceInfo.total,
                             currentPage: _page
                         });
                     }, function (errInfo, error) {
