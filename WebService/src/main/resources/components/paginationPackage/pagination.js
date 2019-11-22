@@ -5,7 +5,8 @@
     vc.extends({
         data: {
             paginationInfo: {
-                total: 0,
+                total:0,
+                dataCount: 0,
                 currentPage: 1,
                 pageList: []
             }
@@ -13,12 +14,14 @@
         _initEvent: function () {
             vc.component.$on('pagination_info_event', function (_paginationInfo) {
                 vc.component.paginationInfo.total = _paginationInfo.total;
+                vc.component.paginationInfo.dataCount = _paginationInfo.dataCount;
                 vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
                 vc.component._freshPageList();
             });
 
             vc.on('pagination', 'init', function (_paginationInfo) {
                 vc.component.paginationInfo.total = _paginationInfo.total;
+                vc.component.paginationInfo.dataCount = _paginationInfo.dataCount;
                 vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
                 vc.component._freshPageList();
             });

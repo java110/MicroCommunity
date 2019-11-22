@@ -58,6 +58,7 @@
                         vc.component.serviceRegisterManageInfo.serviceRegisters = _serviceRegisterManageInfo.serviceRegisters;
                         vc.emit('pagination', 'init', {
                             total: vc.component.serviceRegisterManageInfo.records,
+                            dataCount: vc.component.serviceRegisterManageInfo.total,
                             currentPage: _page
                         });
                     }, function (errInfo, error) {
