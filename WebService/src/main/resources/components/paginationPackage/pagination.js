@@ -14,7 +14,9 @@
         _initEvent: function () {
             vc.component.$on('pagination_info_event', function (_paginationInfo) {
                 vc.component.paginationInfo.total = _paginationInfo.total;
-                vc.component.paginationInfo.dataCount = _paginationInfo.dataCount;
+                if(_paginationInfo.hasOwnProperty("dataCount")){
+                    vc.component.paginationInfo.dataCount = _paginationInfo.dataCount;
+                }
                 vc.component.paginationInfo.currentPage = _paginationInfo.currentPage;
                 vc.component._freshPageList();
             });
