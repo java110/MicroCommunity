@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * 微信小程序登录处理类
  */
 @RestController
+@RequestMapping(path = "/app")
 public class WxLoginController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(WxLoginController.class);
 
@@ -33,21 +34,22 @@ public class WxLoginController extends BaseController {
     /**
      * 微信登录接口
      *
-     * @param wxLoginInfo
+     * @param postInfo
      * @param request
      */
     @RequestMapping(path = "/loginWx", method = RequestMethod.POST)
-    public ResponseEntity<String> loginWx(@RequestBody WxLoginInfo wxLoginInfo, HttpServletRequest request) {
+    public ResponseEntity<String> loginWx(@RequestBody String postInfo, HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
-        String code = wxLoginInfo.getCode();
-        UserInfo userInfo = wxLoginInfo.getUserInfo();
+        JSONObject postObj = JSONObject.parseObject(postInfo);
+        String code = JSONObject.parseObject(postInfo).getString("code");
+        JSONObject userInfo = postObj.getJSONObject("userInfo");
         if (code == null || userInfo == null) {
             logger.error("code is null");
             responseEntity = new ResponseEntity<>("code is null", HttpStatus.BAD_REQUEST);
             return responseEntity;
         }
-        String sessionKey = null;
-        String openId = null;
+        /*String sessionKey = null;
+        String openId = null;*/
 //        try {
 //            /*WxMaJscode2SessionResult result = this.wxMaService.getUserService().getSessionInfo(code);
 //            sessionKey = result.getSessionKey();
@@ -57,7 +59,7 @@ public class WxLoginController extends BaseController {
 //            e.printStackTrace();
 //        }
 
-        IPageData pd = PageData.newInstance().builder("","", JSONObject.toJSONString(wxLoginInfo),"","","","");
+        IPageData pd = PageData.newInstance().builder("","", postInfo,"","","","");
 
        return wxLoginSMOImpl.doLogin(pd);
 
