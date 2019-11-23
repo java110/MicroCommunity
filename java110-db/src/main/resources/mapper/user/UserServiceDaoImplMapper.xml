@@ -506,7 +506,7 @@
     </select>
 
     <!-- 查询用户 -->
-    <select id="getUsers" parameterType="Map">
+    <select id="getUsers" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd,u.b_id
         from u_user u
