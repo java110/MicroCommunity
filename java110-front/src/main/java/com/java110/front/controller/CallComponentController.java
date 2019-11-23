@@ -221,7 +221,7 @@ public class CallComponentController extends BaseController {
         }
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(),
-                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
+                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),"");
         return newPd;
     }
 

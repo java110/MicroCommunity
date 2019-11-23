@@ -12,17 +12,18 @@ import java.util.UUID;
  * 页面请求数据封装
  * Created by wuxw on 2018/5/2.
  */
-public class PageData implements IPageData,Serializable {
+public class PageData implements IPageData, Serializable {
 
 
-
-    public PageData(){
+    public PageData() {
 
         this.setTransactionId(UUID.randomUUID().toString());
     }
 
 
-    private String userId ;
+    private String userId;
+
+    private String appId;
 
     //会话ID
     private String sessionId;
@@ -138,20 +139,45 @@ public class PageData implements IPageData,Serializable {
 
     /**
      * 初始化 PageData
+     *
      * @return
      */
-    public static IPageData newInstance(){
+    public static IPageData newInstance() {
         return new PageData();
     }
 
-    public IPageData builder(Map param) throws IllegalArgumentException{
+    public IPageData builder(Map param) throws IllegalArgumentException {
         JSONObject reqJson = null;
 
         return this;
     }
 
-    public IPageData builder(String userId,String token,String reqData,String componentCode,String componentMethod,String url,String sessionId)
-            throws IllegalArgumentException{
+    public IPageData builder(String userId,
+                             String token,
+                             String reqData,
+                             String componentCode,
+                             String componentMethod,
+                             String url,
+                             String sessionId) {
+        return builder(userId,
+                token,
+                reqData,
+                componentCode,
+                componentMethod,
+                url,
+                sessionId,
+                "");
+    }
+
+    public IPageData builder(String userId,
+                             String token,
+                             String reqData,
+                             String componentCode,
+                             String componentMethod,
+                             String url,
+                             String sessionId,
+                             String appId)
+            throws IllegalArgumentException {
         this.setComponentCode(componentCode);
         this.setComponentMethod(componentMethod);
         this.setReqData(reqData);
@@ -160,11 +186,21 @@ public class PageData implements IPageData,Serializable {
         this.setToken(token);
         this.setUrl(url);
         this.setSessionId(sessionId);
+        this.setAppId(appId);
 
         return this;
     }
 
-    public String toString(){
+    public String toString() {
         return JSONObject.toJSONString(this);
+    }
+
+    @Override
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }

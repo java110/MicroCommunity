@@ -3,6 +3,7 @@ package com.java110.app.smo.wxLogin.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.app.properties.WechatAuthProperties;
+import com.java110.app.smo.AppAbstractComponentSMO;
 import com.java110.app.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
@@ -27,7 +28,7 @@ import java.util.Map;
  * wx登录
  */
 @Service("wxLoginSMOImpl")
-public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO {
+public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginSMO {
 
     private final static Logger logger = LoggerFactory.getLogger(WxLoginSMOImpl.class);
 

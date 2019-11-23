@@ -53,7 +53,9 @@ public class PageProcessAspect {
         IPageData pd = null;
         String reqData = "";
         String userId = "";
+        String appId = "";
         String sessionId = request.getSession().getId();
+        appId = request.getHeader("APP_ID");
         if ("POST,PUT".contains(request.getMethod())) {
             InputStream in = request.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -111,8 +113,7 @@ public class PageProcessAspect {
                 componentCode = urls[4];
             }
         }
-
-        pd = PageData.newInstance().builder(userId, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId);
+        pd = PageData.newInstance().builder(userId, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
 
     }

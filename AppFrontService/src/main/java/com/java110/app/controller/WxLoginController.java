@@ -59,9 +59,11 @@ public class WxLoginController extends BaseController {
 //            e.printStackTrace();
 //        }
 
-        IPageData pd = PageData.newInstance().builder("","", postInfo,"","","","");
+        IPageData pd = PageData.newInstance().builder("", "", postInfo,
+                "", "", "", "",
+                request.getHeader("APP_ID"));
 
-       return wxLoginSMOImpl.doLogin(pd);
+        return wxLoginSMOImpl.doLogin(pd);
 
         //login first
         /*User user = userService.queryByOpenid(openId);
