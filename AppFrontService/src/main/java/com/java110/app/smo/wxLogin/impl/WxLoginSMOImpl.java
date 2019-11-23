@@ -57,13 +57,14 @@ public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO 
         logger.debug("doLogin入参：" + paramIn.toJSONString());
         ResponseEntity<String> responseEntity;
         String code = paramIn.getString("code");
-        String urlString = "?appid={appid}&secret={srcret}&js_code={code}&grant_type={grantType}";
+        String urlString = "?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
         String response = restTemplate.getForObject(
                 wechatAuthProperties.getSessionHost() + urlString, String.class,
                 wechatAuthProperties.getAppId(),
                 wechatAuthProperties.getSecret(),
                 code,
                 wechatAuthProperties.getGrantType());
+
         logger.debug("微信返回报文：" + response);
 
         Assert.jsonObjectHaveKey(response, "errcode", "返回报文中未包含 错误编码，接口出错");
