@@ -44,6 +44,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String staffName;
 
+    private String openId;
+
 
 
     public String getUserId() {
@@ -172,5 +174,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }
