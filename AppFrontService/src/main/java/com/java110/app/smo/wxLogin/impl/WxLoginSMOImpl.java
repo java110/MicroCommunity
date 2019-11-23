@@ -69,10 +69,10 @@ public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO 
 
         logger.debug("微信返回报文：" + response);
 
-        Assert.jsonObjectHaveKey(response, "errcode", "返回报文中未包含 错误编码，接口出错");
+        //Assert.jsonObjectHaveKey(response, "errcode", "返回报文中未包含 错误编码，接口出错");
         JSONObject responseObj = JSONObject.parseObject(response);
 
-        if (!"0".equals(responseObj.getString("errcode"))) {
+        if (responseObj.containsKey("errcode") && !"0".equals(responseObj.getString("errcode"))) {
             throw new IllegalArgumentException("微信验证失败，可能是code失效");
         }
 
