@@ -94,7 +94,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
      * @return
      */
     protected ResponseEntity<String> getUserInfoByOpenId(IPageData pd, RestTemplate restTemplate,String openId) {
-        Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
+        //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/user.listUsers?openId=" + openId+"&page=1&row=1", HttpMethod.GET);
