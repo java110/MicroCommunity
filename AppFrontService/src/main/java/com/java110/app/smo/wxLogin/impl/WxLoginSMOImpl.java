@@ -90,11 +90,11 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
         int total = userResult.getIntValue("total");
 
+        JSONObject userInfo = paramIn.getJSONObject("userInfo");
+
         if (total == 0) {
             //保存用户信息
             JSONObject registerInfo = new JSONObject();
-
-            JSONObject userInfo = paramIn.getJSONObject("userInfo");
 
             //设置默认密码
             String userDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
@@ -150,8 +150,9 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
             userResult = JSONObject.parseObject(responseEntity.getBody());
         }
 
-        JSONObject userInfo = userResult.getJSONArray("users").getJSONObject(0);
+        JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
         userInfo.put("password", "");
+        userInfo.putAll(realUserInfo);
 
         try {
             Map userMap = new HashMap();
