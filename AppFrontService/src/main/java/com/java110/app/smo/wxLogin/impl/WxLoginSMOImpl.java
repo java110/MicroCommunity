@@ -65,6 +65,8 @@ public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO 
                 code,
                 wechatAuthProperties.getGrantType());
 
+        logger.debug("wechatAuthProperties:" + JSONObject.toJSONString(wechatAuthProperties));
+
         logger.debug("微信返回报文：" + response);
 
         Assert.jsonObjectHaveKey(response, "errcode", "返回报文中未包含 错误编码，接口出错");
@@ -129,13 +131,13 @@ public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO 
             registerInfo.put("password", userDefaultPassword);
             JSONArray userAttr = new JSONArray();
             JSONObject userAttrObj = new JSONObject();
-            userAttrObj.put("attrId","-1");
-            userAttrObj.put("specCd","100201911001");
-            userAttrObj.put("value",openId);
+            userAttrObj.put("attrId", "-1");
+            userAttrObj.put("specCd", "100201911001");
+            userAttrObj.put("value", openId);
             userAttr.add(userAttrObj);
             registerInfo.put("businessUserAttr", userAttr);
             responseEntity = this.callCenterService(restTemplate, pd, registerInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.register", HttpMethod.POST);
-            if(responseEntity.getStatusCode() != HttpStatus.OK){
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 throw new IllegalArgumentException("保存用户信息失败");
             }
             responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
@@ -144,21 +146,21 @@ public class WxLoginSMOImpl extends AbstractComponentSMO implements IWxLoginSMO 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
             }
-             userResult = JSONObject.parseObject(responseEntity.getBody());
+            userResult = JSONObject.parseObject(responseEntity.getBody());
         }
 
         try {
             Map userMap = new HashMap();
-            userMap.put(CommonConstant.LOGIN_USER_ID,userResult.getString("userId"));
+            userMap.put(CommonConstant.LOGIN_USER_ID, userResult.getString("userId"));
             String token = AuthenticationFactory.createAndSaveToken(userMap);
             JSONObject paramOut = new JSONObject();
             paramOut.putAll(userResult);
-            paramOut.put("token",token);
-            paramOut.put("sessionKey",sessionKey);
+            paramOut.put("token", token);
+            paramOut.put("sessionKey", sessionKey);
             pd.setToken(token);
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.OK);
-        }catch (Exception e){
-            logger.error("登录异常：",e);
+        } catch (Exception e) {
+            logger.error("登录异常：", e);
             throw new IllegalArgumentException("鉴权失败");
         }
         //根据openId 查询用户信息，是否存在用户
