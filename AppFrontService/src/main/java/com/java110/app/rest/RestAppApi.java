@@ -1,13 +1,8 @@
-package com.java110.app.controller;
+package com.java110.app.rest;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.app.smo.api.IApiSMO;
-import com.java110.app.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.base.controller.BaseController;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-import com.java110.dto.wxLogin.UserInfo;
-import com.java110.dto.wxLogin.WxLoginInfo;
 import com.java110.utils.constant.CommonConstant;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -32,9 +27,9 @@ import java.util.Map;
  * add by wuxw 2019-11-19
  */
 @RestController
-@RequestMapping(path = "/api")
-public class AppApiController extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(AppApiController.class);
+@RequestMapping(path = "/appApi")
+public class RestAppApi extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(RestAppApi.class);
 
     @Autowired
     private IApiSMO apiSMOImpl;
