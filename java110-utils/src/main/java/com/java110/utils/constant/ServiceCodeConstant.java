@@ -548,4 +548,9 @@ public class ServiceCodeConstant {
      */
     public static final String SERVICE_CODE_DICT_TYPE="dict.queryDict";
 
+    /**
+     * 查询 地区
+     */
+    public static final String LIST_AREAS = "app.listAreas";
+
 }

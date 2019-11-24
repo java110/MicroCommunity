@@ -151,8 +151,8 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         }
 
         JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
-        userInfo.put("password", "");
         userInfo.putAll(realUserInfo);
+        userInfo.put("password", "");
 
         try {
             Map userMap = new HashMap();

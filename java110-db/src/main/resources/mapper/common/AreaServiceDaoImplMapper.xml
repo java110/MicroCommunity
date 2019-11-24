@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="areaServiceDaoImpl">
+
+    <!--查询地区数据-->
+    <select id="getAreas" resultType="Map" parameterType="Map">
+        select
+            t.id ,
+            t.area_code areaCode,
+            t.area_name areaName,
+            t.area_level areaLevel,
+            t.parent_area_code parentAreaCode,
+            t.parent_area_name parentAreaName,
+            t.lon,
+            t.lat,
+            t.create_time createTime
+        from city_area t
+        where 1=1
+        <if test="areaCode != null and areaCode !=''">
+            and t.area_code = #{areaCode}
+        </if>
+        <if test="areaName != null and areaName != ''">
+            and t.area_name like concat('%',#{areaName},'%')
+        </if>
+        <if test="areaLevel != null and areaLevel !=''">
+            and t.area_level = #{areaLevel}
+        </if>
+        <if test="parentAreaCode != null and parentAreaCode !=''">
+            and t.parent_area_code = #{parentAreaCode}
+        </if>
+        <if test="parentAreaName != null and parentAreaName !=''">
+            and t.parent_area_name like concat('%',#{parentAreaName},'%')
+        </if>
+    </select>
+
+
+</mapper>
