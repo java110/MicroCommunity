@@ -31,7 +31,7 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
 
         logger.debug("api请求头" + headers + ";请求内容：" + body);
         HttpMethod method = null;
-        String url = ServiceConstant.SERVICE_API_URL + headers.get(CommonConstant.HTTP_SERVICE);
+        String url = ServiceConstant.SERVICE_API_URL +"/api/"+ headers.get(CommonConstant.HTTP_SERVICE);
         if (CommonConstant.HTTP_METHOD_POST.equals(headers.get(CommonConstant.HTTP_METHOD))) {
             method = HttpMethod.POST;
         } else if (CommonConstant.HTTP_METHOD_GET.equals(headers.get(CommonConstant.HTTP_METHOD))) {

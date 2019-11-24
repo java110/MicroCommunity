@@ -551,6 +551,6 @@ public class ServiceCodeConstant {
     /**
      * 查询 地区
      */
-    public static final String LIST_AREAS = "app.listAreas";
+    public static final String LIST_AREAS = "area.listAreas";
 
 }
