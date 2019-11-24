@@ -52,7 +52,8 @@ public class ListAreasListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+
+        //super.validatePageInfo(reqJson);
     }
 
     @Override
