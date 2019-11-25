@@ -16,59 +16,71 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">业主ID：</label>
-                            <label class="">{{ownerInfo.ownerId}}</label>
-                        </div>
+                    <div class="col-sm-2">
+                        <image width="120px" height="140px" v-bind:src="ownerInfo.ownerPhoto" @error="errorLoadImg"/>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">名称：</label>
-                            <label class="">{{ownerInfo.name}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">性别：</label>
-                            <label class="">{{ownerInfo.sexName}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">年龄：</label>
-                            <label class="">{{ownerInfo.age}}</label>
-                        </div>
-                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">业主ID：</label>
+                                    <label class="">{{ownerInfo.ownerId}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">名称：</label>
+                                    <label class="">{{ownerInfo.name}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">性别：</label>
+                                    <label class="">{{ownerInfo.sexName}}</label>
+                                </div>
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">身份证：</label>
-                            <label class="">{{ownerInfo.idCard}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">联系方式：</label>
-                            <label class="">{{ownerInfo.link}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">创建员工：</label>
-                            <label class="">{{ownerInfo.userName}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="col-form-label">备注：</label>
-                            <label class="">{{ownerInfo.remark}}</label>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">年龄：</label>
+                                    <label class="">{{ownerInfo.age}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">身份证：</label>
+                                    <label class="">{{ownerInfo.idCard}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">联系方式：</label>
+                                    <label class="">{{ownerInfo.link}}</label>
+                                </div>
+                            </div>
 
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">创建员工：</label>
+                                    <label class="">{{ownerInfo.userName}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">备注：</label>
+                                    <label class="">{{ownerInfo.remark}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

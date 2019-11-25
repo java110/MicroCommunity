@@ -13,7 +13,7 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-2">
-                        <image width="120px" height="140px" v-bind:src="viewOwnerInfo.ownerPhoto"/>
+                        <image width="120px" height="140px" v-bind:src="viewOwnerInfo.ownerPhoto" @error="errorLoadImg"/>
                     </div>
                     <div class="col-sm-9">
                         <div class="row">

@@ -5,11 +5,9 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <div class="ibox-tools" style="top:10px;">
-                            <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
-                                    v-on:click="_moreCondition()">{{listOwnerInfo.moreCondition == true?'隐藏':'更多'}}
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">{{listOwnerInfo.moreCondition == true?'隐藏':'更多'}}
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -125,35 +123,35 @@
                                         <p style="margin:10px 0;">
                                             <a href="#"
                                                v-on:click="_openEditOwnerModel(owner)">修改业主</a>
-                                            <span >|</span>
-                                            <a  href="#"
+                                            <span>|</span>
+                                            <a href="#"
                                                v-on:click="_openDelOwnerModel(owner)">删除业主</a>
                                         </p>
                                         <p style="margin:10px 0;">
-                                            <a  href="#"
+                                            <a href="#"
                                                v-on:click="_openAddOwnerRoom(owner)">添加房屋</a>
-                                            <span >|</span>
-                                            <a  href="#"
-                                                v-on:click="_openDeleteOwnerRoom(owner)">删除房屋</a>
+                                            <span>|</span>
+                                            <a href="#"
+                                               v-on:click="_openDeleteOwnerRoom(owner)">删除房屋</a>
                                         </p>
                                         <p style="margin:10px 0;">
-                                            <a  href="#"
+                                            <a href="#"
                                                v-on:click="_openHireParkingSpace(owner)">车位出租</a>
-                                            <span >|</span>
-                                            <a  href="#"
-                                                v-on:click="_openSellParkingSpace(owner)">车位出售</a>
+                                            <span>|</span>
+                                            <a href="#"
+                                               v-on:click="_openSellParkingSpace(owner)">车位出售</a>
                                         </p>
                                         <p style="margin:10px 0;">
-                                            <a  href="#"
-                                                v-on:click="_openPayPropertyFee(owner)">物业费用</a>
-                                            <span >|</span>
-                                            <a  href="#"
-                                                v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
+                                            <a href="#"
+                                               v-on:click="_openPayPropertyFee(owner)">物业费用</a>
+                                            <span>|</span>
+                                            <a href="#"
+                                               v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
                                         </p>
                                         <p style="margin:10px 0;">
-                                            <a  href="#"
-                                                v-on:click="_openOwnerRepair(owner)">业主报修</a>
-                                            <span >|</span>
+                                            <a href="#"
+                                               v-on:click="_openOwnerRepair(owner)">业主报修</a>
+                                            <span>|</span>
 
                                         </p>
                                     </div>
@@ -197,12 +195,12 @@
     ></vc:create>
 
     <vc:create
-        name="searchRoom"
-        emitChooseRoom="listOwner"
-        emitLoadData="listOwner"
-        roomFlag="1"
-        showSearchCondition="false"
-        ></vc:create>
+            name="searchRoom"
+            emitChooseRoom="listOwner"
+            emitLoadData="listOwner"
+            roomFlag="1"
+            showSearchCondition="false"
+    ></vc:create>
 
     <vc:create name="searchParkingSpace"
                emitChooseParkingSpace="listOwner"

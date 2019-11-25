@@ -80,6 +80,9 @@
             _loadOwnerPhoto:function(){
                 vc.component.viewOwnerInfo.ownerPhoto = _fileUrl+"?objId="+
                                vc.component.viewOwnerInfo.ownerId +"&communityId="+vc.getCurrentCommunity().communityId+"&fileTypeCd=10000&time="+new Date();
+            },
+            errorLoadImg:function(){
+                vc.component.viewOwnerInfo.ownerPhoto="/img/noPhoto.gif";
             }
 
         }
