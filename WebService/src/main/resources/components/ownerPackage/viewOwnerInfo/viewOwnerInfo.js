@@ -2,7 +2,7 @@
     权限组
 **/
 (function(vc){
-
+    var _fileUrl = '/callComponent/download/getFile/fileByObjId';
     vc.extends({
         propTypes: {
            callBackListener:vc.propTypes.string,

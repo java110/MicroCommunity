@@ -15,7 +15,7 @@
                 sex:'',
                 remark:'',
                 ownerPhoto:'',
-                idCard：'',
+                idCard:'',
                 videoPlaying:false
             }
         },
