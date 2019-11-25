@@ -18,7 +18,9 @@
                 sex:"",
                 userName:"",
                 remark:"",
+                idCard:"",
                 link:"",
+                ownerPhoto:"/img/noPhoto.gif",
                 showCallBackButton:$props.showCallBackButton
             }
         },
@@ -64,6 +66,8 @@
                              function(json,res){
                                 var listOwnerData =JSON.parse(json);
                                 vc.copyObject(listOwnerData.owners[0],vc.component.viewOwnerInfo);
+                                //加载图片
+                                vc.component._loadOwnerPhoto();
                              },function(errInfo,error){
                                 console.log('请求失败处理');
                              }
@@ -72,6 +76,10 @@
             },
             _callBackListOwner:function(_ownerId){
                 vc.jumpToPage("/flow/ownerFlow?ownerId="+_ownerId);
+            },
+            _loadOwnerPhoto:function(){
+                vc.component.viewOwnerInfo.ownerPhoto = _fileUrl+"?objId="+
+                               vc.component.viewOwnerInfo.ownerId +"&communityId="+vc.getCurrentCommunity().communityId+"&fileTypeCd=10000&time="+new Date();
             }
 
         }

@@ -7,13 +7,15 @@
                 owners:[],
                 total:0,
                 records:1,
+                moreCondition: false,
                 _currentOwnerId:'',
                 _eventName:'',
                 conditions:{
                     ownerTypeCd:'1001',
                     ownerId:'',
                     name:'',
-                    link:''
+                    link:'',
+                    idCard:''
                 }
             }
         },
@@ -195,6 +197,13 @@
                                 console.log('请求失败处理');
                              }
                            );
+            },
+             _moreCondition: function () {
+                if (vc.component.listOwnerInfo.moreCondition) {
+                    vc.component.listOwnerInfo.moreCondition = false;
+                } else {
+                    vc.component.listOwnerInfo.moreCondition = true;
+                }
             }
         }
     })

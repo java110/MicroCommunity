@@ -12,6 +12,7 @@
                 sex:"",
                 userName:"",
                 remark:"",
+                idCard:"",
                 link:"",
                 sexName:''
             }

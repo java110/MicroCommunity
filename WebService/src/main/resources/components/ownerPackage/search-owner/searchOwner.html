@@ -41,9 +41,9 @@
                                         <th>名称</th>
                                         <th>性别</th>
                                         <th>年龄</th>
+                                        <th>身份证</th>
                                         <th>联系方式</th>
                                         <th>创建员工</th>
-                                        <th>备注</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -63,13 +63,13 @@
                                             {{owner.age}}
                                         </td>
                                         <td>
+                                            {{owner.idCard}}
+                                        </td>
+                                        <td>
                                             {{owner.link}}
                                         </td>
                                         <td>
                                             {{owner.userName}}
-                                        </td>
-                                        <td>
-                                            {{owner.remark}}
                                         </td>
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseOwner(owner)">选择

@@ -1,5 +1,6 @@
 (function(vc){
-    var _fileUrl = 'https://hc.demo.winqi.cn/callComponent/download/getFile/fileByObjId';
+    //var _fileUrl = 'https://hc.demo.winqi.cn/callComponent/download/getFile/fileByObjId';
+    var _fileUrl = '/callComponent/download/getFile/fileByObjId';
     vc.extends({
         propTypes: {
             notifyLoadDataComponentName:vc.propTypes.string
@@ -14,6 +15,7 @@
                 sex:'',
                 remark:'',
                 ownerPhoto:'',
+                idCard：'',
                 videoPlaying:false
             }
         },
@@ -64,6 +66,18 @@
                             limit:"required",
                             param:"",
                             errInfo:"性别不能为空"
+                        }
+                    ],
+                    'editOwnerInfo.idCard':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"身份证号不能为空"
+                        },
+                        {
+                            limit:"idCard",
+                            param:"",
+                            errInfo:"不是有效的身份证号"
                         }
                     ],
                     'editOwnerInfo.link':[

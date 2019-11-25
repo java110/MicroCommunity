@@ -15,6 +15,7 @@
                 remark:'',
                 ownerId:'',
                 ownerPhoto:'',
+                idCard:'',
                 videoPlaying:false
             }
         },
@@ -64,6 +65,18 @@
                             limit:"required",
                             param:"",
                             errInfo:"性别不能为空"
+                        }
+                    ],
+                    'addOwnerInfo.idCard':[
+                        {
+                            limit:"required",
+                            param:"",
+                            errInfo:"身份证号不能为空"
+                        },
+                        {
+                            limit:"idCard",
+                            param:"",
+                            errInfo:"不是有效的身份证号"
                         }
                     ],
                     'addOwnerInfo.link':[

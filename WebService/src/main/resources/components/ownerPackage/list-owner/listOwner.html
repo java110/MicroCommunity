@@ -5,9 +5,11 @@
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <!-- <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
-                                 v-on:click="_moreCondition()">更多
-                         </button>-->
+                        <div class="ibox-tools" style="top:10px;">
+                            <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                    v-on:click="_moreCondition()">{{listOwnerInfo.moreCondition == true?'隐藏':'更多'}}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -38,6 +40,17 @@
                         </div>
 
                     </div>
+                    <div class="row" v-if="listOwnerInfo.moreCondition == true">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入业主身份证号"
+                                       v-model="listOwnerInfo.conditions.idCard" class=" form-control">
+                            </div>
+                        </div>
+
+
+                    </div>
 
 
                 </div>
@@ -65,6 +78,7 @@
                             <th data-hide="phone">名称</th>
                             <th data-hide="phone">性别</th>
                             <th data-hide="phone">年龄</th>
+                            <th data-hide="phone">身份证</th>
                             <th data-hide="phone">联系方式</th>
                             <th data-hide="phone">创建员工</th>
                             <th class="text-right">操作</th>
@@ -85,6 +99,9 @@
                             </td>
                             <td>
                                 {{owner.age}}
+                            </td>
+                            <td>
+                                {{owner.idCard}}
                             </td>
                             <td>
                                 {{owner.link}}
