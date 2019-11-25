@@ -14,7 +14,7 @@
                 remark:"",
                 idCard:"",
                 link:"",
-                ownerPhoto:"",
+                ownerPhoto:"/img/noPhoto.gif",
                 sexName:''
             }
         },
@@ -43,7 +43,7 @@
                                vc.component.ownerInfo.ownerId +"&communityId="+vc.getCurrentCommunity().communityId+"&fileTypeCd=10000&time="+new Date();
             },
             errorLoadImg:function(){
-                vc.component.viewOwnerInfo.ownerPhoto="/img/noPhoto.gif";
+                vc.component.ownerInfo.ownerPhoto="/img/noPhoto.gif";
             }
         }
     });
