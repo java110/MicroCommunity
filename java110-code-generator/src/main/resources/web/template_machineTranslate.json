@@ -1,0 +1,114 @@
+{
+  "templateName":"设备同步",
+  "templateCode":"machineTranslate",
+  "templateKey":"machineTranslateId",
+  "templateKeyName":"同步ID",
+  "searchCode": "machineName",
+  "searchName": "设备名称",
+  "conditions": [
+    {
+      "name": "设备编码",
+      "inputType": "input",
+      "code": "machineCode",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "同步类型",
+      "inputType": "select",
+      "code": "typeCd",
+      "selectValue":"8899,9988",
+      "selectValueName":"业主,小区",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "对象名称",
+      "inputType": "input",
+      "code": "objName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "对象ID",
+      "inputType": "input",
+      "code": "objId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"machineCode",
+      "cnCode":"设备编码",
+      "desc":"必填，请填写设备编码",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,30",
+      "limitErrInfo":"设备编码不能超过30位",
+      "show": true
+    },
+    {
+      "code": "machineId",
+      "cnCode":"设备ID",
+      "desc":"必填，请填写设备版本号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,30",
+      "limitParam":"",
+      "limitErrInfo":"设备ID不能超过30位",
+      "show": true
+    },
+    {
+      "code": "typeCd",
+      "cnCode":"对象类型",
+      "desc":"必填，请选择对象类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"8899,9988",
+      "selectValueName":"业主,小区",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"对象类型格式错误",
+      "show": true
+    },
+    {
+      "code": "objName",
+      "cnCode":"对象名称",
+      "desc":"必填，请填写设备名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limitParam":"1,200",
+      "limitParam":"",
+      "limitErrInfo":"对象名称不能超过200位",
+      "show": true
+    },
+    {
+      "code":"objId",
+      "cnCode":"对象Id",
+      "desc":"必填，请填写对象Id",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"对象Id必须为数字",
+      "show": true
+    },
+    {
+      "code": "state",
+      "cnCode":"状态",
+      "desc":"必填，请选择状态",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"10000,20000",
+      "selectValueName":"未同步,已同步",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"状态格式错误",
+      "show": true
+    }
+  ]
+}

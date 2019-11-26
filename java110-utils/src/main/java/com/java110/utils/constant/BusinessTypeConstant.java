@@ -625,4 +625,20 @@ public class BusinessTypeConstant {
      *  删除 文件保存关系
      */
     public static final String BUSINESS_TYPE_DELETE_FILE_REL ="220200050001";
+
+    /**
+     *  保存 文件保存关系
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_MACHINE_RECORD="230200030001";
+
+    /**
+     * 修改 文件保存关系
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MACHINE_RECORD="230200040001";
+    /**
+     *  删除 文件保存关系
+     */
+    public static final String BUSINESS_TYPE_DELETE_MACHINE_RECORD ="230200050001";
+
 }

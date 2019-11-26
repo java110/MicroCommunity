@@ -10,7 +10,7 @@ create table business_machine_record(
   tel varchar(11) not null comment '手机号',
   id_card varchar(20) not null comment '用户身份证',
   file_id varchar(64) comment '文件ID',
-  file_time timestamp not null default  CURRENT_TIMESTAMP COMMENT '文件生成时间',
+  file_time timestamp  default  CURRENT_TIMESTAMP COMMENT '文件生成时间',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
 );
@@ -26,7 +26,7 @@ create table machine_record(
   tel varchar(11) not null comment '手机号',
   id_card varchar(20) not null comment '用户身份证',
   file_id varchar(64) comment '文件ID',
-  file_time timestamp not null default  CURRENT_TIMESTAMP COMMENT '文件生成时间',
+  file_time timestamp  default  CURRENT_TIMESTAMP COMMENT '文件生成时间',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
   UNIQUE KEY (machine_record_id)

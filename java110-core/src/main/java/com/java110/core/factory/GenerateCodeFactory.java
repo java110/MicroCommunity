@@ -103,6 +103,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_machineId = "89";
     public static final String CODE_PREFIX_machineTranslateId = "90";
     public static final String CODE_PREFIX_fileRelId = "91";
+    public static final String CODE_PREFIX_machineRecordId = "92";
 
 
     /**

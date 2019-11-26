@@ -1,35 +1,49 @@
 {
-  "templateName":"设备同步",
-  "templateCode":"machineTranslate",
-  "templateKey":"machineTranslateId",
-  "templateKeyName":"同步ID",
-  "searchCode": "machineName",
-  "searchName": "设备名称",
+  "templateName":"开门记录",
+  "templateCode":"machineRecord",
+  "templateKey":"machineRecordId",
+  "templateKeyName":"开门记录ID",
+  "searchCode": "name",
+  "searchName": "名称",
   "conditions": [
+    {
+      "name": "用户名称",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "开门方式",
+      "inputType": "select",
+      "code": "openTypeCd",
+      "selectValue":"1000,2000",
+      "selectValueName":"人脸开门,钥匙开门",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "用户手机",
+      "inputType": "input",
+      "code": "tel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "用户类型",
+      "inputType": "select",
+      "code": "ownerTypeCd",
+      "selectValue":"1001,1002",
+      "selectValueName":"业主,业主成员",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备名称",
+      "inputType": "input",
+      "code": "machineName",
+      "whereCondition": "equal"
+    },
     {
       "name": "设备编码",
       "inputType": "input",
       "code": "machineCode",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "同步类型",
-      "inputType": "select",
-      "code": "typeCd",
-      "selectValue":"8899,9988",
-      "selectValueName":"业主,小区",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "对象名称",
-      "inputType": "input",
-      "code": "objName",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "对象ID",
-      "inputType": "input",
-      "code": "objId",
       "whereCondition": "equal"
     }
   ],
@@ -53,61 +67,58 @@
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
+      "limit":"num",
       "limitParam":"1,30",
-      "limitParam":"",
       "limitErrInfo":"设备ID不能超过30位",
       "show": true
     },
     {
-      "code": "typeCd",
-      "cnCode":"对象类型",
-      "desc":"必填，请选择对象类型",
+      "code": "name",
+      "cnCode":"用户名称",
+      "desc":"必填，请选择用户名称",
       "required":true,
       "hasDefaultValue":false,
-      "inputType": "select",
-      "selectValue":"8899,9988",
-      "selectValueName":"业主,小区",
+      "inputType": "input",
       "limit":"num",
       "limitParam":"",
       "limitErrInfo":"对象类型格式错误",
       "show": true
     },
     {
-      "code": "objName",
-      "cnCode":"对象名称",
-      "desc":"必填，请填写设备名称",
+      "code": "openTypeCd",
+      "cnCode":"开门方式",
+      "desc":"必填，请选择开门方式",
       "required":true,
       "hasDefaultValue":false,
-      "inputType": "input",
-      "limitParam":"1,200",
+      "selectValue":"1000,2000",
+      "selectValueName":"人脸开门,钥匙开门",
+      "limit":"1,200",
       "limitParam":"",
-      "limitErrInfo":"对象名称不能超过200位",
+      "limitErrInfo":"开门方式不能超过200位",
       "show": true
     },
     {
-      "code":"objId",
-      "cnCode":"对象Id",
-      "desc":"必填，请填写对象Id",
+      "code":"tel",
+      "cnCode":"用户手机号",
+      "desc":"必填，请填写用户手机号",
       "required":true,
       "hasDefaultValue":false,
       "inputType":"input",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"对象Id必须为数字",
+      "limitErrInfo":"用户手机号必须为数字",
       "show": true
     },
     {
-      "code": "state",
-      "cnCode":"状态",
-      "desc":"必填，请选择状态",
+      "code": "idCard",
+      "cnCode":"身份证",
+      "desc":"必填，请填写身份证",
       "required":true,
       "hasDefaultValue":false,
-      "inputType": "select",
-      "selectValue":"10000,20000",
-      "selectValueName":"未同步,已同步",
-      "limit":"num",
+      "inputType": "input",
+      "limit":"idCard",
       "limitParam":"",
-      "limitErrInfo":"状态格式错误",
+      "limitErrInfo":"身份证格式错误",
       "show": true
     }
   ]
