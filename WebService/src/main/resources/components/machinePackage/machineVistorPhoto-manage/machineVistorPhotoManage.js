@@ -6,7 +6,7 @@
     var DEFAULT_ROWS = 10;
     vc.extends({
         data: {
-            machineRecordManageInfo: {
+            machineVistorPhotoManageInfo: {
                 machineRecords: [],
                 total: 0,
                 records: 1,
@@ -28,7 +28,7 @@
         },
         _initEvent: function () {
 
-            vc.on('machineRecordManage', 'listMachineRecord', function (_param) {
+            vc.on('machineVistorPhotoManage', 'listMachineRecord', function (_param) {
                 vc.component._listMachineRecords(DEFAULT_PAGE, DEFAULT_ROWS);
             });
             vc.on('pagination', 'page_event', function (_currentPage) {
@@ -38,24 +38,24 @@
         methods: {
             _listMachineRecords: function (_page, _rows) {
 
-                vc.component.machineRecordManageInfo.conditions.page = _page;
-                vc.component.machineRecordManageInfo.conditions.row = _rows;
+                vc.component.machineVistorPhotoManageInfo.conditions.page = _page;
+                vc.component.machineVistorPhotoManageInfo.conditions.row = _rows;
                 var param = {
-                    params: vc.component.machineRecordManageInfo.conditions
+                    params: vc.component.machineVistorPhotoManageInfo.conditions
                 };
 
                 //发送get请求
-                vc.http.get('machineRecordManage',
+                vc.http.get('machineVistorPhotoManage',
                     'list',
                     param,
                     function (json, res) {
-                        var _machineRecordManageInfo = JSON.parse(json);
-                        vc.component.machineRecordManageInfo.total = _machineRecordManageInfo.total;
-                        vc.component.machineRecordManageInfo.records = _machineRecordManageInfo.records;
-                        vc.component.machineRecordManageInfo.machineRecords = _machineRecordManageInfo.machineRecords;
+                        var _machineVistorPhotoManageInfo = JSON.parse(json);
+                        vc.component.machineVistorPhotoManageInfo.total = _machineVistorPhotoManageInfo.total;
+                        vc.component.machineVistorPhotoManageInfo.records = _machineVistorPhotoManageInfo.records;
+                        vc.component.machineVistorPhotoManageInfo.machineRecords = _machineVistorPhotoManageInfo.machineRecords;
                         vc.emit('pagination', 'init', {
-                            total: vc.component.machineRecordManageInfo.records,
-                            dataCount: vc.component.machineRecordManageInfo.total,
+                            total: vc.component.machineVistorPhotoManageInfo.records,
+                            dataCount: vc.component.machineVistorPhotoManageInfo.total,
                             currentPage: _page
                         });
                     }, function (errInfo, error) {
@@ -70,10 +70,10 @@
                 vc.emit('machineRecordDetail', 'openMachineRecordDetailModal',_machineRecord);
             },
             _moreCondition: function () {
-                if (vc.component.machineRecordManageInfo.moreCondition) {
-                    vc.component.machineRecordManageInfo.moreCondition = false;
+                if (vc.component.machineVistorPhotoManageInfo.moreCondition) {
+                    vc.component.machineVistorPhotoManageInfo.moreCondition = false;
                 } else {
-                    vc.component.machineRecordManageInfo.moreCondition = true;
+                    vc.component.machineVistorPhotoManageInfo.moreCondition = true;
                 }
             }
 

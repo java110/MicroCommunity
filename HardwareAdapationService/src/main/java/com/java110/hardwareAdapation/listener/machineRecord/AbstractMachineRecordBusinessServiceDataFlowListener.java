@@ -48,6 +48,7 @@ public abstract class AbstractMachineRecordBusinessServiceDataFlowListener exten
         businessMachineRecordInfo.put("tel", businessMachineRecordInfo.get("tel"));
         businessMachineRecordInfo.put("communityId", businessMachineRecordInfo.get("community_id"));
         businessMachineRecordInfo.put("fileId", businessMachineRecordInfo.get("file_id"));
+        businessMachineRecordInfo.put("recordTypeCd", businessMachineRecordInfo.get("record_type_cd"));
         businessMachineRecordInfo.remove("bId");
         businessMachineRecordInfo.put("statusCd", statusCd);
     }
@@ -83,6 +84,7 @@ public abstract class AbstractMachineRecordBusinessServiceDataFlowListener exten
         currentMachineRecordInfo.put("tel", currentMachineRecordInfo.get("tel"));
         currentMachineRecordInfo.put("communityId", currentMachineRecordInfo.get("community_id"));
         currentMachineRecordInfo.put("fileId", currentMachineRecordInfo.get("file_id"));
+        currentMachineRecordInfo.put("recordTypeCd", currentMachineRecordInfo.get("record_type_cd"));
 
 
         currentMachineRecordInfo.put("operate", StatusConstant.OPERATE_DEL);

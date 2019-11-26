@@ -25,6 +25,7 @@ public class MachineRecordDto extends PageDto implements Serializable {
     private String tel;
     private String communityId;
     private String fileId;
+    private String recordTypeCd;
 
 
     private Date createTime;
@@ -127,5 +128,13 @@ public class MachineRecordDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getRecordTypeCd() {
+        return recordTypeCd;
+    }
+
+    public void setRecordTypeCd(String recordTypeCd) {
+        this.recordTypeCd = recordTypeCd;
     }
 }

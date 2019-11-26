@@ -4,7 +4,6 @@ package com.java110.web.components.machineRecord;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
-import com.java110.utils.constant.StateConstant;
 import com.java110.web.smo.machineRecord.IListMachineRecordsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * 2019-06-29
  */
 @Component("machineRecordManage")
-public class MachineRecordManageComponent {
+public class MachineVistorPhotoManageComponent {
 
     @Autowired
     private IListMachineRecordsSMO listMachineRecordsSMOImpl;
@@ -31,12 +30,13 @@ public class MachineRecordManageComponent {
      */
     public ResponseEntity<String> list(IPageData pd){
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
-        reqParam.put("recordTypeCd", "8888");
+        reqParam.put("recordTypeCd", "6666");
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(),
                 reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
 
         return listMachineRecordsSMOImpl.listMachineRecords(newPd);
+
     }
 
     public IListMachineRecordsSMO getListMachineRecordsSMOImpl() {
