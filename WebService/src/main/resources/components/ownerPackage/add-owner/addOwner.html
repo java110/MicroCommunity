@@ -11,6 +11,10 @@
                             <canvas id="canvas" style="display:none;"></canvas>
                             <div style="margin-top:20px">
                                 <button class="btn btn-primary" type="button" v-on:click="_takePhoto()"><span class="glyphicon glyphicon-camera"></span> 拍照</button>
+                                <span class="btn btn-default btn-file">
+                                    <span class="fileinput-new" >上传照片</span>
+                                </span>
+                                <input type="file" class="file" accept="images/*" name="..." v-on:change="_choosePhoto($event)">
                             </div>
                         </div>
                         <div class="col-sm-6">

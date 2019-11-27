@@ -189,7 +189,23 @@
                     vc.component.addOwnerInfo.ownerPhoto = data;
                     //document.getElementById('photo').setAttribute('src', data);
                 }
-            }
+            },
+            _choosePhoto:function(event){
+                var photoFiles = event.target.files;
+                if (photoFiles && photoFiles.length > 0) {
+                    // 获取目前上传的文件
+                    var file = photoFiles[0];// 文件大小校验的动作
+                    if(file.size > 1024 * 1024 * 1) {
+                        vc.toast("图片大小不能超过 2MB!")
+                        return false;
+                    }
+                    var reader = new FileReader(); //新建FileReader对象
+                    reader.readAsDataURL(file); //读取为base64
+                    reader.onloadend = function(e) {
+                        vc.component.addOwnerInfo.ownerPhoto = reader.result;
+                    }
+                }
+            },
         }
     });
 
