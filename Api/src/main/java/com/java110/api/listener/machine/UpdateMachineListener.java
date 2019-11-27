@@ -5,12 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeMachineConstant;
 import com.java110.utils.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,10 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("updateMachineListener")
 public class UpdateMachineListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -30,6 +37,8 @@ public class UpdateMachineListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "machineName", "必填，请填写设备名称");
         Assert.hasKeyAndValue(reqJson, "machineTypeCd", "必填，请选择设备类型");
         Assert.hasKeyAndValue(reqJson, "authCode", "必填，请填写鉴权编码");
+        Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，请选择位置类型");
+        Assert.hasKeyAndValue(reqJson, "locationObjId", "必填，请填写位置对象ID");
 
     }
 
@@ -87,9 +96,18 @@ public class UpdateMachineListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessMachine = new JSONObject();
         businessMachine.putAll(paramInJson);
+        businessMachine.put("state", "1000");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachine", businessMachine);
         return business;
     }
 
+
+    public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
+        return machineInnerServiceSMOImpl;
+    }
+
+    public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
+        this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
+    }
 }

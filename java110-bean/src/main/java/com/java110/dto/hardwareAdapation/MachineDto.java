@@ -26,6 +26,10 @@ public class MachineDto extends PageDto implements Serializable {
     private String machineTypeCdName;
     private String machineIp;
     private String bId;
+    private String locationTypeCd;
+    private String locationObjId;
+    private String state;
+
 
     private Date createTime;
 
@@ -135,5 +139,30 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setMachineTypeCdName(String machineTypeCdName) {
         this.machineTypeCdName = machineTypeCdName;
+    }
+
+
+    public String getLocationTypeCd() {
+        return locationTypeCd;
+    }
+
+    public void setLocationTypeCd(String locationTypeCd) {
+        this.locationTypeCd = locationTypeCd;
+    }
+
+    public String getLocationObjId() {
+        return locationObjId;
+    }
+
+    public void setLocationObjId(String locationObjId) {
+        this.locationObjId = locationObjId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

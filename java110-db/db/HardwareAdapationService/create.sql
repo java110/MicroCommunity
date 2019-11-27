@@ -10,6 +10,9 @@ create table business_machine(
   auth_code varchar(64) not null comment '授权码',
   machine_ip varchar(64) comment '设备IP',
   machine_mac varchar(64) comment '设备mac',
+  location_type_cd varchar(12) not null default '1000' comment '位置类型，1000 东大门  1001 西大门 1002 北大门 1003 南大门 2000 单元门 3000 房屋门',
+  location_obj_id varchar(30) not null default '-1' comment '对象ID，大门时小区ID，单元门 时单元ID 房屋时房屋ID',
+  state varchar(12) not null default '1000' comment '设备状态，设备配置同步状态 1000 未同步 1100 同步中 1200 已同步',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
 );
@@ -27,6 +30,9 @@ create table machine(
   auth_code varchar(64) not null comment '授权码',
   machine_ip varchar(64) comment '设备IP',
   machine_mac varchar(64) comment '设备mac',
+  location_type_cd varchar(12) not null default '1000' comment '位置类型，1000 东大门  1001 西大门 1002 北大门 1003 南大门 2000 单元门 3000 房屋门',
+  location_obj_id varchar(30) not null default '-1' comment '对象ID，大门时小区ID，单元门 时单元ID 房屋时房屋ID',
+  state varchar(12) not null default '1000' comment '设备状态，设备配置同步状态 1000 未同步 1100 同步中 1200 已同步',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
   UNIQUE KEY (machine_id)

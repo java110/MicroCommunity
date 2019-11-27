@@ -15,7 +15,13 @@
                 authCode: '',
                 machineIp: '',
                 machineMac: '',
-
+                floorId:'',
+                floorNum:'',
+                floorName:'',
+                unitId:'',
+                unitName:'',
+                roomId:'',
+                roomName:''
             }
         },
         _initMethod: function () {
@@ -153,6 +159,29 @@
                     machineMac: '',
 
                 };
+            },
+            _initAddMachineData:function () {
+                $('.floorSelector').select2({
+                    placeholder: '必填，请选择楼栋',
+                    ajax: {
+                        url: "sdata.json",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                floorNum: vc.component.addMachineInfo.floorNum,
+                               /* page:*/
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 2
+                });
             }
         }
     });

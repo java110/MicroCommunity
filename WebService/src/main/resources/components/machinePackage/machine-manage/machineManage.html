@@ -69,13 +69,15 @@
                     >
                         <thead>
                         <tr>
-                            <th class="text-center">设备ID</th>
+                            <!--<th class="text-center">设备ID</th>-->
                             <th class="text-center">设备编码</th>
                             <th class="text-center">版本号</th>
                             <th class="text-center">设备名称</th>
                             <th class="text-center">设备类型</th>
                             <th class="text-center">设备IP</th>
                             <th class="text-center">设备MAC</th>
+                            <th class="text-center">设备位置</th>
+
                             <th class="text-center">操作</th>
 
 
@@ -83,12 +85,13 @@
                         </thead>
                         <tbody>
                         <tr v-for="machine in machineManageInfo.machines">
-                            <td class="text-center">{{machine.machineId}}</td>
+                            <!--<td class="text-center">{{machine.machineId}}</td>-->
                             <td class="text-center">{{machine.machineCode}}</td>
                             <td class="text-center">{{machine.machineVersion}}</td>
                             <td class="text-center">{{machine.machineName}}</td>
                             <td class="text-center">{{machine.machineTypeCdName}}</td>
                             <td class="text-center">{{machine.machineIp}}</td>
+                            <td class="text-center">{{machine.machineMac}}</td>
                             <td class="text-center">{{machine.machineMac}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
@@ -96,6 +99,9 @@
                                 </div>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteMachineModel(machine)">删除</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openMachineDetailModel(machine)">详情</button>
                                 </div>
                             </td>
 

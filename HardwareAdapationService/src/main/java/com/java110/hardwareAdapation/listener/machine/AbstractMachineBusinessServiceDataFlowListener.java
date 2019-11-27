@@ -47,6 +47,10 @@ public abstract class AbstractMachineBusinessServiceDataFlowListener extends Abs
         businessMachineInfo.put("machineName", businessMachineInfo.get("machine_name"));
         businessMachineInfo.put("machineTypeCd", businessMachineInfo.get("machine_type_cd"));
         businessMachineInfo.put("machineIp", businessMachineInfo.get("machine_ip"));
+        businessMachineInfo.put("locationTypeCd", businessMachineInfo.get("location_type_cd"));
+        businessMachineInfo.put("locationObjId", businessMachineInfo.get("location_obj_id"));
+        businessMachineInfo.put("state", businessMachineInfo.get("state"));
+
         businessMachineInfo.remove("bId");
         businessMachineInfo.put("statusCd", statusCd);
     }
@@ -81,6 +85,9 @@ public abstract class AbstractMachineBusinessServiceDataFlowListener extends Abs
         currentMachineInfo.put("machineName", currentMachineInfo.get("machine_name"));
         currentMachineInfo.put("machineTypeCd", currentMachineInfo.get("machine_type_cd"));
         currentMachineInfo.put("machineIp", currentMachineInfo.get("machine_ip"));
+        currentMachineInfo.put("locationTypeCd", currentMachineInfo.get("location_type_cd"));
+        currentMachineInfo.put("locationObjId", currentMachineInfo.get("location_obj_id"));
+        currentMachineInfo.put("state", currentMachineInfo.get("state"));
 
 
         currentMachineInfo.put("operate", StatusConstant.OPERATE_DEL);

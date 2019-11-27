@@ -14,6 +14,9 @@ public class ApiMachineDataVo implements Serializable {
     private String authCode;
     private String machineIp;
     private String machineMac;
+    private String locationTypeCd;
+    private String locationObjId;
+    private String state;
 
     public String getMachineId() {
         return machineId;
@@ -85,5 +88,29 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setMachineTypeCdName(String machineTypeCdName) {
         this.machineTypeCdName = machineTypeCdName;
+    }
+
+    public String getLocationTypeCd() {
+        return locationTypeCd;
+    }
+
+    public void setLocationTypeCd(String locationTypeCd) {
+        this.locationTypeCd = locationTypeCd;
+    }
+
+    public String getLocationObjId() {
+        return locationObjId;
+    }
+
+    public void setLocationObjId(String locationObjId) {
+        this.locationObjId = locationObjId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

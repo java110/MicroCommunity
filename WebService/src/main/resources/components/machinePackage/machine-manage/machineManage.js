@@ -81,6 +81,9 @@
                 } else {
                     vc.component.machineManageInfo.moreCondition = true;
                 }
+            },
+            _openMachineDetailModel:function (_machine) {
+                
             }
 
 

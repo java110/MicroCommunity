@@ -7,9 +7,12 @@
     <!-- 保存设备信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineInfo" parameterType="Map">
            insert into business_machine(
-machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,machine_name,machine_type_cd,machine_ip
+machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,
+machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
 ) values (
-#{machineMac},#{machineId},#{machineCode},#{authCode},#{operate},#{machineVersion},#{communityId},#{bId},#{machineName},#{machineTypeCd},#{machineIp}
+#{machineMac},#{machineId},#{machineCode},#{authCode},#{operate},#{machineVersion},
+#{communityId},#{bId},#{machineName},#{machineTypeCd},#{machineIp},
+#{locationTypeCd},#{locationObjId},#{state}
 )
        </insert>
 
@@ -19,7 +22,8 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         select t.machine_mac,t.machine_mac machineMac,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
         machineCode,t.auth_code,t.auth_code authCode,t.operate,t.machine_version,t.machine_version
         machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name
-        machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp
+        machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp,
+        t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId
         from business_machine t
         where 1 =1
         <if test="machineMac !=null and machineMac != ''">
@@ -56,15 +60,29 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
             and t.machine_ip= #{machineIp}
         </if>
 
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
+        </if>
+
     </select>
 
 
     <!-- 保存设备信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMachineInfoInstance" parameterType="Map">
         insert into machine(
-        machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,community_id,b_id,machine_name,machine_type_cd,machine_ip
+        machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,
+        community_id,b_id,machine_name,machine_type_cd,machine_ip,
+        location_type_cd,location_obj_id,state
         ) select
-        t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,t.machine_name,t.machine_type_cd,t.machine_ip
+        t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,
+        t.machine_name,t.machine_type_cd,t.machine_ip,
+        t.location_type_cd,t.location_obj_id,t.state
         from business_machine t where 1=1
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
@@ -98,6 +116,16 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
             and t.machine_ip= #{machineIp}
         </if>
 
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
+        </if>
+
     </insert>
 
 
@@ -107,7 +135,8 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         machineCode,t.auth_code,t.auth_code authCode,t.machine_version,t.machine_version
         machineVersion,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id
         bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
-        machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName
+        machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
+        t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId
         from machine t,t_dict td
         where 1 =1
         and t.machine_type_cd=td.status_cd
@@ -146,6 +175,15 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         <if test="machineIp !=null and machineIp != ''">
             and t.machine_ip= #{machineIp}
         </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -182,6 +220,15 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         </if>
         <if test="machineIp !=null and machineIp != ''">
             , t.machine_ip= #{machineIp}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            , t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            , t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state = #{state}
         </if>
         where 1=1
         <if test="machineId !=null and machineId != ''">
@@ -233,6 +280,15 @@ machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_
         </if>
         <if test="machineIp !=null and machineIp != ''">
             and t.machine_ip= #{machineIp}
+        </if>
+        <if test="locationTypeCd !=null and locationTypeCd != ''">
+            and t.location_type_cd= #{locationTypeCd}
+        </if>
+        <if test="locationObjId !=null and locationObjId != ''">
+            and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
         </if>
 
 
