@@ -1,9 +1,9 @@
 (function(vc){
     vc.extends({
-        propTypes: {
+       /* propTypes: {
            emitFloorSelect2:vc.propTypes.string,
            emitLoadData:vc.propTypes.string
-        },
+        },*/
         data:{
             floorSelect2Info:{
                 floors:[],
