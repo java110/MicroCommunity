@@ -13,6 +13,10 @@
                                 <button class="btn btn-primary" type="button" v-on:click="_takePhotoForEdit()"><span
                                         class="glyphicon glyphicon-camera"></span> 拍照
                                 </button>
+                                <span class="btn btn-default btn-file" v-on:click="_uploadEditPhoto($event)">
+                                    <span class="fileinput-new" >上传照片</span>
+                                </span>
+                                <input type="file" class="file" accept="images/*" id="uploadEditOwnerPhoto" hidden v-on:change="_chooseEditPhoto($event)">
                             </div>
                         </div>
                         <div class="col-sm-6">
