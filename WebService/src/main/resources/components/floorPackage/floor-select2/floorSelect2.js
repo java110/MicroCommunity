@@ -9,6 +9,7 @@
             }
         },
         _initMethod:function(){
+            vc.component._initFloorSelect2();
         },
         _initEvent:function(){
 
@@ -23,7 +24,7 @@
                         delay: 250,
                         data: function (params) {
                             return {
-                                floorNum: vc.component.addMachineInfo.floorNum,
+                                floorNum: vc.component.floorSelect2Info.floorNum,
                                 page: 1,
                                 row:10,
                                 communityId:vc.getCurrentCommunity().communityId
