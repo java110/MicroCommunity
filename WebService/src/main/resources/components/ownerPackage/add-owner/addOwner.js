@@ -190,6 +190,9 @@
                     //document.getElementById('photo').setAttribute('src', data);
                 }
             },
+            _uploadPhoto:function(event){
+                $("#uploadOwnerPhoto").trigger("click")
+            },
             _choosePhoto:function(event){
                 var photoFiles = event.target.files;
                 if (photoFiles && photoFiles.length > 0) {
