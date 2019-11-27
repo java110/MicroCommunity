@@ -200,7 +200,7 @@
                     //document.getElementById('photo').setAttribute('src', data);
                 }
             },
-            uploadEditPhoto:function(event){
+            _uploadEditPhoto:function(event){
                 $("#uploadEditOwnerPhoto").trigger("click")
             },
             _chooseEditPhoto:function(event){
