@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  *
  * 2019-06-29
  */
-@Component("machineRecordManage")
+@Component("machineVistorPhotoRecordManage")
 public class MachineVistorPhotoManageComponent {
 
     @Autowired
