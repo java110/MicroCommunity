@@ -9,13 +9,18 @@
             }
         },
         _initMethod:function(){
-            vc.component._initFloorSelect2();
+
         },
         _initEvent:function(){
+
+            vc.on('floorSelect2','_initFloorSelect2',function (_param) {
+                vc.component._initFloorSelect2();
+            });
 
         },
         methods: {
             _initFloorSelect2: function () {
+                console.log("调用_initFloorSelect2 方法");
                 $('.floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
                     ajax: {

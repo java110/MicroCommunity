@@ -76,12 +76,12 @@ public class ReloadComponentFileListener extends PackageScanner implements Runna
     }
 
     private void reloadComponent() {
-        logger.debug("开始扫描是否有组件添加或修改");
+        //logger.debug("开始扫描是否有组件添加或修改");
         VueComponentTemplate vueComponentTemplate = new VueComponentTemplate();
         vueComponentTemplate.packageScanner(DEFAULT_COMPONENT_PACKAGE_PATH, COMPONENT_JS);
         vueComponentTemplate.packageScanner(DEFAULT_COMPONENT_PACKAGE_PATH, COMPONENT_HTML);
         vueComponentTemplate.packageScanner(DEFAULT_COMPONENT_PACKAGE_PATH, COMPONENT_CSS);
-        logger.debug("扫描完成是否有组件添加或修改");
+        //logger.debug("扫描完成是否有组件添加或修改");
 
     }
 
