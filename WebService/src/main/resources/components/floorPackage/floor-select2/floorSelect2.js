@@ -13,17 +13,18 @@
         },
         _initMethod:function(){
                 vc.component._initFloorSelect2();
-
         },
         _initEvent:function(){
             //监听 modal 打开
-            $('#'+$props.parentModal).on('show.bs.modal', function () {
+           /* $('#'+$props.parentModal).on('show.bs.modal', function () {
                  vc.component._initFloorSelect2();
-            })
+            })*/
         },
         methods: {
             _initFloorSelect2: function () {
                 console.log("调用_initFloorSelect2 方法");
+                $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+                $.fn.select2.defaults.set('width', '100%');
                 $('.floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
                     ajax: {
@@ -31,16 +32,22 @@
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
+                            console.log("param", params);
+                            var _term = "";
+                            if(params.hasOwnProperty("term")){
+                                _term = params.term;
+                            }
                             return {
-                                floorNum: vc.component.floorSelect2Info.floorNum,
+                                floorName: _term,
                                 page: 1,
                                 row:10,
                                 communityId:vc.getCurrentCommunity().communityId
                             };
                         },
                         processResults: function (data) {
+                            console.log(data, vc.component._filterFloorData(data.apiFloorDataVoList));
                             return {
-                                results: data
+                                results: vc.component._filterFloorData(data.apiFloorDataVoList)
                             };
                         },
                         cache: true
@@ -49,7 +56,9 @@
                 $('.floorSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
-                    console.log('select',evt)
+                    console.log('select',evt);
+                    vc.component.floorSelect2Info.floorId = evt.params.data.id;
+                    vc.component.floorSelect2Info.floorName = evt.params.data.text;
                 });
 
                 $('.floorSelector').on("select2:unselect", function (evt) {
@@ -58,6 +67,17 @@
                     console.log('unselect',evt)
 
                 });
+            },
+            _filterFloorData:function (_floors) {
+                var _tmpFloors = [];
+                for (var i = 0; i < _floors.length; i++) {
+                    var _tmpFloor = {
+                        id:_floors[i].floorId,
+                        text:_floors[i].floorName
+                    };
+                    _tmpFloors.push(_tmpFloor);
+                }
+                return _tmpFloors;
             }
         }
     });

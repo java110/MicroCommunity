@@ -149,6 +149,9 @@
         <if test="name !=null and name != ''">
             and f.name like concat('%',#{name},'%')
         </if>
+        <if test="floorName !=null and floorName != ''">
+            and f.name like concat('%',#{floorName},'%')
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and f.status_cd= #{statusCd}
         </if>
@@ -188,6 +191,9 @@
         </if>
         <if test="name !=null and name != ''">
             and f.name like concat('%',#{name},'%')
+        </if>
+        <if test="floorName !=null and floorName != ''">
+            and f.name like concat('%',#{floorName},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and f.status_cd= #{statusCd}

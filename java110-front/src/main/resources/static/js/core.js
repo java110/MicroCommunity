@@ -10,6 +10,7 @@
    var _component = {};
    var _destroyedMethod = [];
    var _timers = [];//定时器
+   var _map = [];// 共享数据存储
 
    _vmOptions = {
         el:'#component',
@@ -46,7 +47,8 @@
         component:_component,
         destroyedMethod:_destroyedMethod,
         debug:false,
-        timers:_timers
+        timers:_timers,
+        _map:{}
     };
    //通知window对象
    window.vc = vc;
@@ -268,18 +270,26 @@
            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
           }
          return str.join("&");
-    }
+    };
     //空判断 true 为非空 false 为空
     vc.notNull = function(_paramObj){
         if(_paramObj == null || _paramObj == undefined || _paramObj.trim() == ''){
             return false;
         }
         return true;
-    }
+    };
     //设置debug 模式
     vc.setDebug = function (_param) {
        vc.debug = _param;
-    }
+    };
+    //数据共享存放 主要为了组件间传递数据
+    vc.put = function (_key, _value) {
+        vc.map[_key] = _value;
+    };
+    //数据共享 获取 主要为了组件间传递数据
+    vc.get = function (_key) {
+        return vc.map[_key];
+    };
 
 
 
