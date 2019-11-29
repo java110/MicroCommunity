@@ -52,7 +52,7 @@
                                 _term = params.term;
                             }
                             return {
-                                unitName: _term,
+                                unitNum: _term,
                                 page: 1,
                                 row:10,
                                 floorId:vc.component.unitSelect2Info.floorId,
@@ -60,9 +60,9 @@
                             };
                         },
                         processResults: function (data) {
-                            console.log(data, vc.component._filterUnitData(data.units));
+                            console.log(data, vc.component._filterUnitData(data));
                             return {
-                                results: vc.component._filterUnitData(data.units)
+                                results: vc.component._filterUnitData(data)
                             };
                         },
                         cache: true
@@ -88,7 +88,7 @@
                 for (var i = 0; i < _units.length; i++) {
                     var _tmpUnit = {
                         id:_units[i].unitId,
-                        text:_units[i].unitName
+                        text:_units[i].unitNum
                     };
                     _tmpUnits.push(_tmpUnit);
                 }
