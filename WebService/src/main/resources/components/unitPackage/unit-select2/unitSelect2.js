@@ -92,7 +92,7 @@
                     };
                     _tmpUnits.push(_tmpUnit);
                 }
-                return _tmpUnit;
+                return _tmpUnits;
             }
         }
     });
