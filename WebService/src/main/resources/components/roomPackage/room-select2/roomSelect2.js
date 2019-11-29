@@ -23,7 +23,7 @@
             }
         },
         _initMethod:function(){
-                vc.component._initUnitSelect2();
+                vc.component._initRoomSelect2();
         },
         _initEvent:function(){
             //监听 modal 打开
@@ -35,7 +35,7 @@
            });
         },
         methods: {
-            _initUnitSelect2: function () {
+            _initRoomSelect2: function () {
                 console.log("调用_initRoomSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
