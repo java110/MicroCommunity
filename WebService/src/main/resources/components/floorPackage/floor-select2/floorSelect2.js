@@ -6,9 +6,17 @@
         data:{
             floorSelect2Info:{
                 floors:[],
-                floorId:'',
+                floorId:'-1',
                 floorNum:'',
                 floorName:'',
+            }
+        },
+        watch:{
+            floorSelect2Info:{
+                deep: true,
+                handler:function(){
+                    vc.emit('unitSelect2', "transferFloor" ,vc.component.floorSelect2Info);
+                }
             }
         },
         _initMethod:function(){

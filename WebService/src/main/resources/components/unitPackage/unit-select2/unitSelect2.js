@@ -8,7 +8,7 @@
         data:{
             unitSelect2Info:{
                 units:[],
-                floorId:'',
+                floorId:'-1',
                 unitId:'',
                 unitNum:'',
                 unitName:'',
@@ -39,10 +39,6 @@
                 console.log("调用_initUnitSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                if(!vc.notNull(vc.component.unitSelect2Info.floorId)){
-                    vc.toast("未选择楼栋信息，请先选择楼栋");
-                    return ;
-                }
                 $('.unitSelector').select2({
                     placeholder: '必填，请选择单元',
                     ajax: {
