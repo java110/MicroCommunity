@@ -1,6 +1,7 @@
 package com.java110.community.smo.impl;
 
 
+import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IUnitServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -100,6 +102,12 @@ public class UnitInnerServiceSMOImpl extends BaseServiceSMO implements IUnitInne
     public List<UnitDto> queryUnitsByCommunityId(@RequestBody UnitDto unitDto) {
         List<UnitDto> units = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.queryUnitsByCommunityId(BeanConvertUtil.beanCovertMap(unitDto)), UnitDto.class);
         return units;
+    }
+
+    @Override
+    public List<FloorAndUnitDto> getFloorAndUnitInfo(@RequestBody FloorAndUnitDto floorAndUnitDto) {
+        List<FloorAndUnitDto> floors = BeanConvertUtil.covertBeanList(unitServiceDaoImpl.getFloorAndUnitInfo(BeanConvertUtil.beanCovertMap(floorAndUnitDto)), FloorAndUnitDto.class);
+        return floors;
     }
 
 

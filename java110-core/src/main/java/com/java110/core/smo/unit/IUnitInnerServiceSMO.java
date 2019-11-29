@@ -2,12 +2,15 @@ package com.java110.core.smo.unit;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.UnitDto;
+import com.java110.dto.unit.FloorAndUnitDto;
+import com.java110.utils.exception.DAOException;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IFloorInnerServiceSMO
@@ -47,4 +50,15 @@ public interface IUnitInnerServiceSMO {
      */
     @RequestMapping(value = "/queryUnitsByCommunityId", method = RequestMethod.POST)
     List<UnitDto> queryUnitsByCommunityId(@RequestBody UnitDto unitDto);
+
+    /**
+     * 查询小区单元信息（instance过程）
+     * 根据bId 查询小区单元信息
+     *
+     * @param floorAndUnitDto bId 信息
+     * @return 小区单元信息
+     * @throws DAOException
+     */
+    @RequestMapping(value = "/getFloorAndUnitInfo", method = RequestMethod.POST)
+    public List<FloorAndUnitDto> getFloorAndUnitInfo(@RequestBody FloorAndUnitDto floorAndUnitDto);
 }

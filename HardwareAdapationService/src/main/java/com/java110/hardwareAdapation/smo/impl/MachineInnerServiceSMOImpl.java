@@ -2,9 +2,13 @@ package com.java110.hardwareAdapation.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.UserDto;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.demo.DemoDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.hardwareAdapation.dao.IMachineServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +49,36 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
 
         List<MachineDto> machines = BeanConvertUtil.covertBeanList(machineServiceDaoImpl.getMachineInfo(BeanConvertUtil.beanCovertMap(machineDto)), MachineDto.class);
 
-
         return machines;
+    }
+
+    /**
+     * 获取批量userId
+     *
+     * @param demos 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getUserIds(List<DemoDto> demos) {
+        List<String> userIds = new ArrayList<String>();
+        for (DemoDto demo : demos) {
+            userIds.add(demo.getUserId());
+        }
+
+        return userIds.toArray(new String[userIds.size()]);
+    }
+
+    /**
+     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
+     *
+     * @param demo  小区demo信息
+     * @param users 用户列表
+     */
+    private void refreshDemo(DemoDto demo, List<UserDto> users) {
+        for (UserDto user : users) {
+            if (demo.getUserId().equals(user.getUserId())) {
+                BeanConvertUtil.covertBean(user, demo);
+            }
+        }
     }
 
     @Override

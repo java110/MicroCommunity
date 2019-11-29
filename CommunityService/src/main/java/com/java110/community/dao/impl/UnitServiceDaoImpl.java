@@ -140,5 +140,21 @@ public class UnitServiceDaoImpl extends BaseServiceDao implements IUnitServiceDa
         return units;
     }
 
+    /**
+     * 查询小区单元信息（instance）
+     *
+     * @param info bId 信息
+     * @return
+     * @throws DAOException
+     */
+    @Override
+    public List<Map> getFloorAndUnitInfo(Map info) throws DAOException {
+        logger.debug("查询小区单元信息 入参 info : {}", info);
+
+        List<Map> businessUnitInfos = sqlSessionTemplate.selectList("unitServiceDaoImpl.getFloorAndUnitInfo", info);
+
+        return businessUnitInfos;
+    }
+
 
 }

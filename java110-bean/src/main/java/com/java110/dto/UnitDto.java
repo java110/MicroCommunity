@@ -19,6 +19,8 @@ public class UnitDto extends PageDto implements Serializable {
      */
     private String unitId;
 
+    private String[] unitIds;
+
     private String communityId;
 
     /**
@@ -130,5 +132,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String[] getUnitIds() {
+        return unitIds;
+    }
+
+    public void setUnitIds(String[] unitIds) {
+        this.unitIds = unitIds;
     }
 }

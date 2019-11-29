@@ -252,4 +252,37 @@
         </if>
     </select>
 
+    <select id="getFloorAndUnitInfo" parameterType="Map" resultType="Map">
+        SELECT
+          bu.`unit_id` unitId,
+          bu.`unit_num` unitNum,
+          f.`floor_id` floorId,
+          f.`floor_num` floorNum
+        FROM
+          f_floor f,
+          building_unit bu
+        WHERE f.`floor_id` = bu.`floor_id`
+          AND f.`status_cd` = '0'
+          AND bu.`status_cd` = '0'
+          <if test="floorId != null and floorId !=''">
+              and bu.floor_id = #{floorId}
+          </if>
+        <if test="floorNum != null and floorNum !=''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitId != null and unitId !=''">
+            and bu.unit_id = #{unitId}
+        </if>
+        <if test="unitIds != null">
+            and bu.unit_id in
+            <foreach collection="unitIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="unitNum != null and unitNum !=''">
+            and bu.unit_num = #{unitNum}
+        </if>
+
+    </select>
+
 </mapper>

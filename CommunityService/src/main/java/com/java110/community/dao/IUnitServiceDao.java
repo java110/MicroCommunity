@@ -81,4 +81,15 @@ public interface IUnitServiceDao {
      */
     List<Map> queryUnitsByCommunityId(Map info);
 
+
+    /**
+     * 查询小区单元信息（instance过程）
+     * 根据bId 查询小区单元信息
+     *
+     * @param info bId 信息
+     * @return 小区单元信息
+     * @throws DAOException
+     */
+    public List<Map> getFloorAndUnitInfo(Map info) throws DAOException;
+
 }
