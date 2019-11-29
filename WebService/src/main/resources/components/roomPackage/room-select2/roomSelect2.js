@@ -6,20 +6,19 @@
             callBackFunction:vc.propTypes.string //父组件监听方法
         },
         data:{
-            unitSelect2Info:{
+            roomSelect2Info:{
                 units:[],
                 floorId:'-1',
                 unitId:'-1',
-                unitNum:'',
+                roomId:'',
                 unitName:'',
             }
         },
         watch:{
-            unitSelect2Info:{
+            roomSelect2Info:{
                 deep: true,
                 handler:function(){
-                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.unitSelect2Info);
-                    vc.emit('roomSelect2', "transferUnit" ,vc.component.floorSelect2Info);
+                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.roomSelect2Info);
                 }
             }
         },
@@ -31,19 +30,19 @@
            /* $('#'+$props.parentModal).on('show.bs.modal', function () {
                  vc.component._initUnitSelect2();
             })*/
-           vc.on('unitSelect2', "transferFloor",function (_param) {
-                vc.copyObject(_param, vc.component.unitSelect2Info);
+           vc.on('roomSelect2', "transferUnit",function (_param) {
+                vc.copyObject(_param, vc.component.roomSelect2Info);
            });
         },
         methods: {
             _initUnitSelect2: function () {
-                console.log("调用_initUnitSelect2 方法");
+                console.log("调用_initRoomSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                $('.unitSelector').select2({
-                    placeholder: '必填，请选择单元',
+                $('.roomSelector').select2({
+                    placeholder: '必填，请选择房屋',
                     ajax: {
-                        url: "/callComponent/unitSelect2/loadUnits",
+                        url: "/callComponent/roomSelect2/loadRooms",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -53,17 +52,17 @@
                                 _term = params.term;
                             }
                             return {
-                                unitNum: _term,
+                                roomNum: _term,
                                 page: 1,
                                 row:10,
-                                floorId:vc.component.unitSelect2Info.floorId,
+                                unitId:vc.component.roomSelect2Info.unitId,
                                 communityId:vc.getCurrentCommunity().communityId
                             };
                         },
                         processResults: function (data) {
-                            console.log(data, vc.component._filterUnitData(data));
+                            console.log(data, vc.component._filterRoomData(data));
                             return {
-                                results: vc.component._filterUnitData(data)
+                                results: vc.component._filterRoomData(data)
                             };
                         },
                         cache: true
@@ -73,8 +72,8 @@
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
-                    vc.component.unitSelect2Info.unitId = evt.params.data.id;
-                    vc.component.unitSelect2Info.unitName = evt.params.data.text;
+                    vc.component.roomSelect2Info.roomId = evt.params.data.id;
+                    vc.component.roomSelect2Info.roomNum = evt.params.data.text;
                 });
 
                 $('.floorSelector').on("select2:unselect", function (evt) {
@@ -84,16 +83,16 @@
 
                 });
             },
-            _filterUnitData:function (_units) {
-                var _tmpUnits = [];
-                for (var i = 0; i < _units.length; i++) {
-                    var _tmpUnit = {
-                        id:_units[i].unitId,
-                        text:_units[i].unitNum
+            _filterRoomData:function (_rooms) {
+                var _tmpRooms = [];
+                for (var i = 0; i < _rooms.length; i++) {
+                    var _tmpRoom = {
+                        id:_rooms[i].roomId,
+                        text:_rooms[i].roomNum
                     };
-                    _tmpUnits.push(_tmpUnit);
+                    _tmpRooms.push(_tmpRoom);
                 }
-                return _tmpUnits;
+                return _tmpRooms;
             }
         }
     });

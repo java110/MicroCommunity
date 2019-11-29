@@ -42,6 +42,10 @@
                 if (_param.hasOwnProperty("unitId")) {
                     vc.component.addMachineInfo.unitId = _param.unitId;
                 }
+
+                if(_param.hasOwnProperty("roomId")){
+                    vc.component.addMachineInfo.roomId = _param.roomId;
+                }
             });
         },
         methods: {
