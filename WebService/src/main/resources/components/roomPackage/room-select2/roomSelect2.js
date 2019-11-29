@@ -42,7 +42,7 @@
                 $('.roomSelector').select2({
                     placeholder: '必填，请选择房屋',
                     ajax: {
-                        url: "/callComponent/roomSelect2/loadRooms",
+                        url: "/callComponent/roomSelect2/listRoom",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -68,7 +68,7 @@
                         cache: true
                     }
                 });
-                $('.floorSelector').on("select2:select", function (evt) {
+                $('.roomSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
@@ -76,7 +76,7 @@
                     vc.component.roomSelect2Info.roomNum = evt.params.data.text;
                 });
 
-                $('.floorSelector').on("select2:unselect", function (evt) {
+                $('.roomSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
                     console.log('unselect',evt)
