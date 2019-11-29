@@ -15,13 +15,13 @@
                 authCode: '',
                 machineIp: '',
                 machineMac: '',
-                floorId:'',
-                floorNum:'',
-                floorName:'',
-                unitId:'',
-                unitName:'',
-                roomId:'',
-                roomName:''
+                floorId: '',
+                floorNum: '',
+                floorName: '',
+                unitId: '',
+                unitName: '',
+                roomId: '',
+                roomName: ''
             }
         },
         _initMethod: function () {
@@ -31,9 +31,19 @@
             vc.on('addMachine', 'openAddMachineModal', function () {
                 $('#addMachineModel').modal('show');
             });
+
+            vc.on("addMachine", "notify", function (_param) {
+                if (_param.hasOwnProperty("floorId")) {
+                    vc.component.addMachineInfo.floorId = _param.floorId;
+                }
+
+                if (_param.hasOwnProperty("unitId")) {
+                    vc.component.addMachineInfo.unitId = _param.unitId;
+                }
+            });
         },
         methods: {
-            addMachineValidate() {
+            addMachineValidate: function () {
                 return vc.validate.validate({
                     addMachineInfo: vc.component.addMachineInfo
                 }, {
@@ -160,7 +170,7 @@
 
                 };
             },
-            _initAddMachineData:function () {
+            _initAddMachineData: function () {
                 $('.floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
                     ajax: {
@@ -170,7 +180,7 @@
                         data: function (params) {
                             return {
                                 floorNum: vc.component.addMachineInfo.floorNum,
-                               /* page:*/
+                                /* page:*/
                             };
                         },
                         processResults: function (data) {
