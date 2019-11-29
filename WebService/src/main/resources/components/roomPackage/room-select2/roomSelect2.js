@@ -60,9 +60,9 @@
                             };
                         },
                         processResults: function (data) {
-                            console.log(data, vc.component._filterRoomData(data));
+                            console.log(data, vc.component._filterRoomData(data.rooms));
                             return {
-                                results: vc.component._filterRoomData(data)
+                                results: vc.component._filterRoomData(data.rooms)
                             };
                         },
                         cache: true
