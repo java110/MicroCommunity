@@ -139,14 +139,6 @@
                 });
             },
             saveMachineInfo: function () {
-                if (!vc.component.addMachineValidate()) {
-                    vc.message(vc.validate.errInfo);
-
-                    return;
-                }
-
-                vc.component.addMachineInfo.communityId = vc.getCurrentCommunity().communityId;
-
                 if (vc.component.addMachineInfo.locationTypeCd != '2000' && vc.component.addMachineInfo.locationTypeCd != '3000') { //大门时直接写 小区ID
                     vc.component.addMachineInfo.locationObjId = vc.component.addMachineInfo.communityId;
                 } else if (vc.component.addMachineInfo.locationTypeCd == '2000') {
@@ -157,6 +149,16 @@
                     vc.toast("设备位置值错误");
                     return;
                 }
+
+                if (!vc.component.addMachineValidate()) {
+                    vc.message(vc.validate.errInfo);
+
+                    return;
+                }
+
+                vc.component.addMachineInfo.communityId = vc.getCurrentCommunity().communityId;
+
+
 
 
                 //不提交数据将数据 回调给侦听处理

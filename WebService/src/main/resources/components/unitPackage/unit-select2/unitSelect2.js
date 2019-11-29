@@ -19,7 +19,7 @@
                 deep: true,
                 handler:function(){
                     vc.emit($props.callBackListener,$props.callBackFunction,vc.component.unitSelect2Info);
-                    vc.emit('roomSelect2', "transferUnit" ,vc.component.floorSelect2Info);
+                    vc.emit('roomSelect2', "transferRoom" ,vc.component.unitSelect2Info);
                 }
             }
         },

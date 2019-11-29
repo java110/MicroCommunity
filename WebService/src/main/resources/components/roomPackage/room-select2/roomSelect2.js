@@ -30,7 +30,7 @@
            /* $('#'+$props.parentModal).on('show.bs.modal', function () {
                  vc.component._initUnitSelect2();
             })*/
-           vc.on('roomSelect2', "transferUnit",function (_param) {
+           vc.on('roomSelect2', "transferRoom",function (_param) {
                 vc.copyObject(_param, vc.component.roomSelect2Info);
            });
         },
