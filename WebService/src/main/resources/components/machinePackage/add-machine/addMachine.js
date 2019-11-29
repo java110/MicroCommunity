@@ -21,6 +21,8 @@
                 unitId: '',
                 unitName: '',
                 roomId: '',
+                locationTypeCd: '',
+                locationObjId: '',
                 roomName: ''
             }
         },
@@ -113,6 +115,22 @@
                                 param: "64",
                                 errInfo: "设备MAC 格式错误"
                             }
+                        ],
+                    'addMachineInfo.locationTypeCd':
+                        [
+                            {
+                                limit: "required",
+                                param: "",
+                                errInfo: "请选择设备位置"
+                            }
+                        ],
+                    'addMachineInfo.locationObjId':
+                        [
+                            {
+                                limit: "required",
+                                param: "",
+                                errInfo: "请选择位置"
+                            }
                         ]
                 });
             },
@@ -124,6 +142,19 @@
                 }
 
                 vc.component.addMachineInfo.communityId = vc.getCurrentCommunity().communityId;
+
+                if (vc.component.addMachineInfo.locationTypeCd != '2000' && vc.component.addMachineInfo.locationTypeCd != '3000') { //大门时直接写 小区ID
+                    vc.component.addMachineInfo.locationObjId = vc.component.addMachineInfo.communityId;
+                } else if (vc.component.addMachineInfo.locationTypeCd == '2000') {
+                    vc.component.addMachineInfo.locationObjId = vc.component.addMachineInfo.unitId;
+                } else if (vc.component.addMachineInfo.locationTypeCd == '3000') {
+                    vc.component.addMachineInfo.locationObjId = vc.component.addMachineInfo.roomId;
+                } else {
+                    vc.toast("设备位置值错误");
+                    return;
+                }
+
+
                 //不提交数据将数据 回调给侦听处理
                 if (vc.notNull($props.callBackListener)) {
                     vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addMachineInfo);
