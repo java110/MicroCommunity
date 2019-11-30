@@ -207,15 +207,16 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         String namespace = "";
         if (!tag.hasAttribute("namespace")) {
             namespace = DEFAULT_NAMESPACE;
+        }else {
+            namespace = tag.getAttributeValue("namespace");
         }
-        namespace = tag.getAttributeValue("namespace");
 
         //js对象中插入namespace 值
         int extPos = js.indexOf("vc.extends");
         String tmpProTypes = js.substring(extPos);
         int pos = tmpProTypes.indexOf("{") + 1;
         js = js.substring(0, extPos) + tmpProTypes.substring(0, pos).trim()
-                + "\nnamespace:" + namespace.trim() + ",\n" + tmpProTypes.substring(pos, tmpProTypes.length());
+                + "\nnamespace:'" + namespace.trim() + "',\n" + tmpProTypes.substring(pos, tmpProTypes.length());
         int position = js.indexOf("{");
         String propsJs = "\n$namespace='" + namespace.trim() + "';\n";
         js = new StringBuffer(js).insert(position + 1, propsJs).toString();
