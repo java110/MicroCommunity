@@ -20,7 +20,7 @@
             }
         },
         _initMethod:function(){
-                vc.component._initFloorSelect2();
+            this._initFloorSelect2();
         },
         _initEvent:function(){
             //监听 modal 打开
@@ -68,8 +68,8 @@
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
-                    vc.component.floorSelect2Info.floorId = evt.params.data.id;
-                    vc.component.floorSelect2Info.floorName = evt.params.data.text;
+                    this.floorSelect2Info.floorId = evt.params.data.id;
+                    this.floorSelect2Info.floorName = evt.params.data.text;
                 });
 
                 $('.floorSelector').on("select2:unselect", function (evt) {

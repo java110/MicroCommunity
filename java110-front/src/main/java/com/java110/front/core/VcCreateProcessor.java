@@ -59,7 +59,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         //将组建名称写入组建HTML 第一个标签中
         addDataComponent(elements, componentName);
 
-        htmlModel.addModel(modelFactory.parse(context.getTemplateData(), doc.body().children().toString()));
+        htmlModel.addModel(modelFactory.parse(context.getTemplateData(), dealHtmlThis(tag, doc.body().children().toString())));
 
         String css = VueComponentTemplate.findTemplateByComponentCode(componentName + "." + VueComponentTemplate.COMPONENT_CSS);
         if (css != null) {
@@ -74,12 +74,34 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
             js = dealNameSpace(js, tag);
             js = dealJsAddComponentCode(js, tag);
             js = "<script type=\"text/javascript\" " + DIV_PROPERTY_COMPONENT + "=\"" + componentName + "\">//<![CDATA[ \n" + js + "//]]>\n</script>";
-            htmlModel.add(modelFactory.createText(js));
+            htmlModel.add(modelFactory.createText(dealHtmlJs(tag, js)));
         }
 
         logger.debug("解析完成组件{},{}", componentName, new Date().getTime());
         structureHandler.replaceWith(htmlModel, true);
 
+    }
+
+    private String dealHtmlThis(IProcessableElementTag tag, String html) {
+
+        if (!tag.hasAttribute("namespace")) {
+            return html;
+        }
+
+        String namespace = tag.getAttributeValue("namespace");
+
+        return html.replace("this.", namespace + "@");
+    }
+
+    private String dealHtmlJs(IProcessableElementTag tag, String js) {
+
+        if (!tag.hasAttribute("namespace")) {
+            return js;
+        }
+
+        String namespace = tag.getAttributeValue("namespace");
+
+        return js.replace("this.", "vc.component."+namespace + "@");
     }
 
 
@@ -207,7 +229,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         String namespace = "";
         if (!tag.hasAttribute("namespace")) {
             namespace = DEFAULT_NAMESPACE;
-        }else {
+        } else {
             namespace = tag.getAttributeValue("namespace");
         }
 
