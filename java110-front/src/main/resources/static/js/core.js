@@ -122,12 +122,17 @@
         }
 
         //处理 data 对象
+
         if (_vmOptions.hasOwnProperty('data')) {
             for (var dataAttr in _vmOptions.data) {
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.data[dataAttr] = _vmOptions.data[dataAttr];
                 } else {
-                    vmOptions.data[nameSpace][dataAttr] = _vmOptions.data[dataAttr];
+                    if(!vmOptions.data.hasOwnProperty(nameSpace)){
+                        vmOptions.data[nameSpace] = {};
+                    }
+                    var dataNameSpace = vmOptions.data[nameSpace];
+                    dataNameSpace[dataAttr] = _vmOptions.data[dataAttr];
                 }
             }
         }
@@ -137,7 +142,12 @@
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.methods[methodAttr] = _vmOptions.methods[methodAttr];
                 } else {
-                    vmOptions.methods[nameSpace][methodAttr] = _vmOptions.methods[methodAttr];
+                    if(!vmOptions.methods.hasOwnProperty(nameSpace)){
+                        vmOptions.methods[nameSpace] = {};
+                    }
+                    var methodNameSpace = vmOptions.methods[nameSpace];
+                    methodNameSpace[methodAttr] = _vmOptions.data[methodAttr];
+                    /*vmOptions.methods[nameSpace][methodAttr] = _vmOptions.methods[methodAttr];*/
                 }
             }
         }
