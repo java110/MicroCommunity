@@ -50,5 +50,8 @@
     vc.initMethod.forEach(function (callback) {
         callback();
     });
+    vc.namespace.forEach(function (_param) {
+        vc[_param.namespace] = vc.component[_param.namespace];
+    });
 })(window.vc);
 

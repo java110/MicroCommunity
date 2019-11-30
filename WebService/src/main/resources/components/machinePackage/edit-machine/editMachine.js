@@ -11,6 +11,15 @@
                 authCode: '',
                 machineIp: '',
                 machineMac: '',
+                floorId: '',
+                floorNum: '',
+                floorName: '',
+                unitId: '',
+                unitNum: '',
+                roomId: '',
+                locationTypeCd: '',
+                locationObjId: '',
+                roomNum: ''
 
             }
         },
@@ -22,7 +31,53 @@
                 vc.component.refreshEditMachineInfo();
                 $('#editMachineModel').modal('show');
                 vc.copyObject(_params, vc.component.editMachineInfo);
+                //根据位置类型 传输数据
+                if (vc.component.editMachineInfo.locationTypeCd == '2000') {
+                    vc.emit('floorSelect2','setFloor',{
+                        floorId:vc.component.editMachineInfo.floorId,
+                        floorNum:vc.component.editMachineInfo.floorNum
+                    });
+                    vc.emit('unitSelect2','setUnit',{
+                        floorId:vc.component.editMachineInfo.floorId,
+                        floorNum:vc.component.editMachineInfo.floorNum,
+                        unitId:vc.component.editMachineInfo.unitId,
+                        unitNum:vc.component.editMachineInfo.unitNum,
+                    });
+                } else if (vc.component.editMachineInfo.locationTypeCd == '3000') {
+                    vc.emit('floorSelect2','setFloor',{
+                        floorId:vc.component.editMachineInfo.floorId,
+                        floorNum:vc.component.editMachineInfo.floorNum
+                    });
+                    vc.emit('unitSelect2','setUnit',{
+                        floorId:vc.component.editMachineInfo.floorId,
+                        floorNum:vc.component.editMachineInfo.floorNum,
+                        unitId:vc.component.editMachineInfo.unitId,
+                        floorNum:vc.component.editMachineInfo.unitNum,
+                    });
+                    vc.emit('roomSelect2','setRoom',{
+                        floorId:vc.component.editMachineInfo.floorId,
+                        floorNum:vc.component.editMachineInfo.floorNum,
+                        unitId:vc.component.editMachineInfo.unitId,
+                        unitNum:vc.component.editMachineInfo.unitNum,
+                        roomId:vc.component.editMachineInfo.roomId,
+                        roomNum:vc.component.editMachineInfo.roomNum,
+                    });
+                }
                 vc.component.editMachineInfo.communityId = vc.getCurrentCommunity().communityId;
+            });
+
+            vc.on("editMachine", "notify", function (_param) {
+                if (_param.hasOwnProperty("floorId")) {
+                    vc.component.editMachineInfo.floorId = _param.floorId;
+                }
+
+                if (_param.hasOwnProperty("unitId")) {
+                    vc.component.editMachineInfo.unitId = _param.unitId;
+                }
+
+                if(_param.hasOwnProperty("roomId")){
+                    vc.component.editMachineInfo.roomId = _param.roomId;
+                }
             });
         },
         methods: {
@@ -103,12 +158,39 @@
                                 limit: "required",
                                 param: "",
                                 errInfo: "设备ID不能为空"
-                            }]
+                            }],
+                    'addMachineInfo.locationTypeCd':
+                        [
+                            {
+                                limit: "required",
+                                param: "",
+                                errInfo: "请选择设备位置"
+                            }
+                        ],
+                    'addMachineInfo.locationObjId':
+                        [
+                            {
+                                limit: "required",
+                                param: "",
+                                errInfo: "请选择位置"
+                            }
+                        ]
 
                 })
                     ;
             },
             editMachine: function () {
+                vc.component.editMachineInfo.communityId = vc.getCurrentCommunity().communityId;
+                if (vc.component.editMachineInfo.locationTypeCd != '2000' && vc.component.editMachineInfo.locationTypeCd != '3000') { //大门时直接写 小区ID
+                    vc.component.editMachineInfo.locationObjId = vc.component.editMachineInfo.communityId;
+                } else if (vc.component.editMachineInfo.locationTypeCd == '2000') {
+                    vc.component.editMachineInfo.locationObjId = vc.component.editMachineInfo.unitId;
+                } else if (vc.component.editMachineInfo.locationTypeCd == '3000') {
+                    vc.component.editMachineInfo.locationObjId = vc.component.editMachineInfo.roomId;
+                } else {
+                    vc.toast("设备位置值错误");
+                    return;
+                }
                 if (!vc.component.editMachineValidate()) {
                     vc.message(vc.validate.errInfo);
                     return;
@@ -147,6 +229,15 @@
                     authCode: '',
                     machineIp: '',
                     machineMac: '',
+                    floorId: '',
+                    floorNum: '',
+                    floorName: '',
+                    unitId: '',
+                    unitNum: '',
+                    roomId: '',
+                    locationTypeCd: '',
+                    locationObjId: '',
+                    roomNum: ''
 
                 }
             }

@@ -34,6 +34,10 @@
            vc.on('unitSelect2', "transferFloor",function (_param) {
                 vc.copyObject(_param, vc.component.unitSelect2Info);
            });
+            vc.on('unitSelect2','setUnit',function (_param) {
+                vc.copyObject(_param, vc.component.unitSelect2Info);
+                $(".unitSelector").val(_param.unitId).select2();
+            });
         },
         methods: {
             _initUnitSelect2: function () {

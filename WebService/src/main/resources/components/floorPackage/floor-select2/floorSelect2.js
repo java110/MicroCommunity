@@ -27,6 +27,9 @@
            /* $('#'+$props.parentModal).on('show.bs.modal', function () {
                  vc.component._initFloorSelect2();
             })*/
+           vc.on('floorSelect2','setFloor',function (_param) {
+               $(".floorSelector").val(_param.floorId).select2();
+           });
         },
         methods: {
             _initFloorSelect2: function () {

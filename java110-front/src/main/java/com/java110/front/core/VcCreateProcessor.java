@@ -28,6 +28,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
     private static final String TAG_NAME = "create";
     private static final String NAME = "name";
     private static final int PRECEDENCE = 300;
+    private static final String DEFAULT_NAMESPACE = "default";
 
 
     public VcCreateProcessor(String dialectPrefix) {
@@ -69,8 +70,8 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         //js
         String js = VueComponentTemplate.findTemplateByComponentCode(componentName + "." + VueComponentTemplate.COMPONENT_JS);
         if (js != null) {
-
             js = dealJs(js, tag);
+            js = dealNameSpace(js, tag);
             js = dealJsAddComponentCode(js, tag);
             js = "<script type=\"text/javascript\" " + DIV_PROPERTY_COMPONENT + "=\"" + componentName + "\">//<![CDATA[ \n" + js + "//]]>\n</script>";
             htmlModel.add(modelFactory.createText(js));
@@ -188,5 +189,44 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         String code = tag.getAttributeValue("code");
 
         return js.replace("@vc_", code);
+    }
+
+    /**
+     * 处理namespace
+     *
+     * @param js
+     * @param tag
+     * @return
+     */
+    private String dealNameSpace(String js, IProcessableElementTag tag) {
+        String namespace = "";
+        if (!tag.hasAttribute("namespace")) {
+            namespace = DEFAULT_NAMESPACE;
+        }
+        namespace = tag.getAttributeValue("namespace");
+
+        //js对象中插入namespace 值
+        int extPos = js.indexOf("vc.extends");
+        String tmpProTypes = js.substring(extPos);
+        int pos = tmpProTypes.indexOf("{") + 1;
+        js = js.substring(0, extPos) + tmpProTypes.substring(0, pos).trim()
+                + "\nnamespace:" + namespace.trim() + ",\n" + tmpProTypes.substring(pos, tmpProTypes.length());
+        int position = js.indexOf("{");
+        String propsJs = "\n$namespace='" + namespace.trim() + "';\n";
+        js = new StringBuffer(js).insert(position + 1, propsJs).toString();
+        return js;
+    }
+
+    public static void main(String[] args) {
+        String js = "(function (vc, vm) {vc.extends({a:'123'})})";
+        int extPos = js.indexOf("vc.extends");
+        String tmpProTypes = js.substring(extPos);
+        int pos = tmpProTypes.indexOf("{") + 1;
+        js = js.substring(0, extPos) + tmpProTypes.substring(0, pos).trim() + "\nnamespace:" + DEFAULT_NAMESPACE + ",\n" + tmpProTypes.substring(pos, tmpProTypes.length());
+        int position = js.indexOf("{");
+        String propsJs = "\n$namespace=" + DEFAULT_NAMESPACE + ";\n";
+        js = new StringBuffer(js).insert(position + 1, propsJs).toString();
+
+        System.out.println(js);
     }
 }

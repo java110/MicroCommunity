@@ -33,6 +33,10 @@
            vc.on('roomSelect2', "transferRoom",function (_param) {
                 vc.copyObject(_param, vc.component.roomSelect2Info);
            });
+            vc.on('roomSelect2','setRoom',function (_param) {
+                vc.copyObject(_param, vc.component.roomSelect2Info);
+                $(".roomSelector").val(_param.roomId).select2();
+            });
         },
         methods: {
             _initRoomSelect2: function () {
