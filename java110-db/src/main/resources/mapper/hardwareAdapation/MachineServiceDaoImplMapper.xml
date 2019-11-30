@@ -137,7 +137,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
-        td1.name stateName,t2.name locationTypeName
+        td1.name stateName,td2.name locationTypeName
         from machine t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
         and t.machine_type_cd=td.status_cd
