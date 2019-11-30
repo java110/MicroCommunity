@@ -146,7 +146,7 @@
                         vmOptions.methods[nameSpace] = {};
                     }
                     var methodNameSpace = vmOptions.methods[nameSpace];
-                    methodNameSpace[methodAttr] = _vmOptions.data[methodAttr];
+                    methodNameSpace[methodAttr] = _vmOptions.methods[methodAttr];
                     /*vmOptions.methods[nameSpace][methodAttr] = _vmOptions.methods[methodAttr];*/
                 }
             }
