@@ -157,7 +157,12 @@
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.watch[watchAttr] = _vmOptions.watch[watchAttr];
                 } else {
-                    vmOptions.watch[nameSpace][watchAttr] = _vmOptions.watch[watchAttr];
+                    if(!vmOptions.watch.hasOwnProperty(nameSpace)){
+                        vmOptions.watch[nameSpace] = {};
+                    }
+                    var methodNameSpace = vmOptions.watch[nameSpace];
+                    methodNameSpace[watchAttr] = _vmOptions.watch[watchAttr];
+                    /*vmOptions.watch[nameSpace][watchAttr] = _vmOptions.watch[watchAttr];*/
                 }
             }
         }
