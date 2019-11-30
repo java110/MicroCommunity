@@ -27,8 +27,10 @@ public class MachineDto extends PageDto implements Serializable {
     private String machineIp;
     private String bId;
     private String locationTypeCd;
+    private String locationTypeName;
     private String locationObjId;
     private String state;
+    private String stateName;
     private String floorId;
     private String floorNum;
     private String unitId;
@@ -228,5 +230,21 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setLocationObjName(String locationObjName) {
         this.locationObjName = locationObjName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getLocationTypeName() {
+        return locationTypeName;
+    }
+
+    public void setLocationTypeName(String locationTypeName) {
+        this.locationTypeName = locationTypeName;
     }
 }

@@ -159,7 +159,7 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         for (MachineDto machineDto : tmpMachineDtos) {
             for (CommunityDto tmpCommunityDto : communityDtos) {
                 if (machineDto.getLocationObjId().equals(tmpCommunityDto.getCommunityId())) {
-                    machineDto.setLocationObjName(tmpCommunityDto.getName());
+                    machineDto.setLocationObjName(tmpCommunityDto.getName() + " " + machineDto.getLocationObjName());
                 }
             }
         }

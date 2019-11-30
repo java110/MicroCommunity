@@ -17,6 +17,7 @@ public class ApiMachineDataVo implements Serializable {
     private String locationTypeCd;
     private String locationObjId;
     private String state;
+    private String stateName;
 
 
     private String floorId;
@@ -177,5 +178,13 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setLocationObjName(String locationObjName) {
         this.locationObjName = locationObjName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

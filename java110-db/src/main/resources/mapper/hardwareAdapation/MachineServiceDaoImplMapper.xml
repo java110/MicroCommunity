@@ -137,15 +137,18 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
-        td1.name stateName
-        from machine t,t_dict td,t_dict td1
+        td1.name stateName,t2.name locationTypeName
+        from machine t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
         and t.machine_type_cd=td.status_cd
         and td.table_name='machine'
         and td.table_columns='machine_type_cd'
-        and td1.state = td1.status_cd
+        and td.state = td1.status_cd
         and td1.table_name='machine'
         and td1.table_columns='state'
+        and td.location_type_cd = td2.status_cd
+        and td2.table_name='machine'
+        and td2.table_columns='location_type_cd'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>
@@ -247,11 +250,17 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
     <!-- 查询设备数量 add by wuxw 2018-07-03 -->
     <select id="queryMachinesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from machine t,t_dict td
+        from machine t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
         and t.machine_type_cd=td.status_cd
         and td.table_name='machine'
         and td.table_columns='machine_type_cd'
+        and td.state = td1.status_cd
+        and td1.table_name='machine'
+        and td1.table_columns='state'
+        and td.location_type_cd = td2.status_cd
+        and td2.table_name='machine'
+        and td2.table_columns='location_type_cd'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>
