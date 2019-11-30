@@ -117,7 +117,7 @@
         if (_vmOptions.hasOwnProperty("namespace")) {
             nameSpace = _vmOptions.namespace;
             vc.namespace.push({
-                namespace:_vmOptions.namespace,
+                namespace: _vmOptions.namespace,
             })
         }
 
@@ -128,11 +128,13 @@
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.data[dataAttr] = _vmOptions.data[dataAttr];
                 } else {
-                    if(!vmOptions.data.hasOwnProperty(nameSpace)){
-                        vmOptions.data[nameSpace] = {};
-                    }
-                    var dataNameSpace = vmOptions.data[nameSpace];
-                    dataNameSpace[dataAttr] = _vmOptions.data[dataAttr];
+                    /* if(!vmOptions.data.hasOwnProperty(nameSpace)){
+                         vmOptions.data[nameSpace] = {};
+                     }
+                     var dataNameSpace = vmOptions.data[nameSpace];
+                     dataNameSpace[dataAttr] = _vmOptions.data[dataAttr];*/
+                    vmOptions.methods[nameSpace + "@" + dataAttr] = _vmOptions.methods[dataAttr];
+
                 }
             }
         }
@@ -142,12 +144,12 @@
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.methods[methodAttr] = _vmOptions.methods[methodAttr];
                 } else {
-                    if(!vmOptions.methods.hasOwnProperty(nameSpace)){
+                    /*if(!vmOptions.methods.hasOwnProperty(nameSpace)){
                         vmOptions.methods[nameSpace] = {};
                     }
                     var methodNameSpace = vmOptions.methods[nameSpace];
-                    methodNameSpace[methodAttr] = _vmOptions.methods[methodAttr];
-                    /*vmOptions.methods[nameSpace][methodAttr] = _vmOptions.methods[methodAttr];*/
+                    methodNameSpace[methodAttr] = _vmOptions.methods[methodAttr];*/
+                    vmOptions.methods[nameSpace + "@" + methodAttr] = _vmOptions.methods[methodAttr];
                 }
             }
         }
@@ -157,12 +159,12 @@
                 if (nameSpace == DEFAULT_NAMESPACE) {
                     vmOptions.watch[watchAttr] = _vmOptions.watch[watchAttr];
                 } else {
-                    if(!vmOptions.watch.hasOwnProperty(nameSpace)){
+                    /*if (!vmOptions.watch.hasOwnProperty(nameSpace)) {
                         vmOptions.watch[nameSpace] = {};
                     }
                     var methodNameSpace = vmOptions.watch[nameSpace];
-                    methodNameSpace[watchAttr] = _vmOptions.watch[watchAttr];
-                    /*vmOptions.watch[nameSpace][watchAttr] = _vmOptions.watch[watchAttr];*/
+                    methodNameSpace[watchAttr] = _vmOptions.watch[watchAttr];*/
+                    vmOptions.watch[nameSpace + "@" + watchAttr] = _vmOptions.watch[watchAttr];
                 }
             }
         }
