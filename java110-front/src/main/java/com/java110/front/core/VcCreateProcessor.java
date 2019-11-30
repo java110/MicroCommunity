@@ -90,7 +90,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
         String namespace = tag.getAttributeValue("namespace");
 
-        return html.replace("this.", namespace + "@");
+        return html.replace("this.", namespace + "_");
     }
 
     private String dealHtmlJs(IProcessableElementTag tag, String js) {
@@ -101,7 +101,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
         String namespace = tag.getAttributeValue("namespace");
 
-        return js.replace("this.", "vc.component."+namespace + "@");
+        return js.replace("this.", "vc.component."+namespace + "_");
     }
 
 

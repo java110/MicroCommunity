@@ -133,7 +133,7 @@
                      }
                      var dataNameSpace = vmOptions.data[nameSpace];
                      dataNameSpace[dataAttr] = _vmOptions.data[dataAttr];*/
-                    vmOptions.methods[nameSpace + "@" + dataAttr] = _vmOptions.methods[dataAttr];
+                    vmOptions.methods[nameSpace + "_" + dataAttr] = _vmOptions.methods[dataAttr];
 
                 }
             }
@@ -149,7 +149,7 @@
                     }
                     var methodNameSpace = vmOptions.methods[nameSpace];
                     methodNameSpace[methodAttr] = _vmOptions.methods[methodAttr];*/
-                    vmOptions.methods[nameSpace + "@" + methodAttr] = _vmOptions.methods[methodAttr];
+                    vmOptions.methods[nameSpace + "_" + methodAttr] = _vmOptions.methods[methodAttr];
                 }
             }
         }
@@ -164,7 +164,7 @@
                     }
                     var methodNameSpace = vmOptions.watch[nameSpace];
                     methodNameSpace[watchAttr] = _vmOptions.watch[watchAttr];*/
-                    vmOptions.watch[nameSpace + "@" + watchAttr] = _vmOptions.watch[watchAttr];
+                    vmOptions.watch[nameSpace + "_" + watchAttr] = _vmOptions.watch[watchAttr];
                 }
             }
         }
