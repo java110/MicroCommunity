@@ -199,6 +199,11 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
      * @return
      */
     private String dealNameSpace(String js, IProcessableElementTag tag) {
+
+        //在js 中检测propTypes 属性
+        if (!js.contains("vc.extends")) {
+            return js;
+        }
         String namespace = "";
         if (!tag.hasAttribute("namespace")) {
             namespace = DEFAULT_NAMESPACE;
