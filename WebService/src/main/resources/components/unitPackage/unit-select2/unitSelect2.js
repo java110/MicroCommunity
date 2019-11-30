@@ -44,7 +44,7 @@
                 console.log("调用_initUnitSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                $('.unitSelector').select2({
+                $('#unitSelector').select2({
                     placeholder: '必填，请选择单元',
                     ajax: {
                         url: "/callComponent/unitSelect2/loadUnits",
@@ -73,7 +73,7 @@
                         cache: true
                     }
                 });
-                $('.unitSelector').on("select2:select", function (evt) {
+                $('#unitSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
@@ -81,7 +81,7 @@
                     vc.component.unitSelect2Info.unitName = evt.params.data.text;
                 });
 
-                $('.unitSelector').on("select2:unselect", function (evt) {
+                $('#unitSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
                     console.log('unselect',evt)

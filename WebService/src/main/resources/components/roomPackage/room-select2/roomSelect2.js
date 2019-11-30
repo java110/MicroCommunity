@@ -35,7 +35,7 @@
            });
             vc.on('roomSelect2','setRoom',function (_param) {
                 vc.copyObject(_param, vc.component.roomSelect2Info);
-                $(".roomSelector").val(_param.roomId).select2();
+                $("#roomSelector").val(_param.roomId).select2();
             });
         },
         methods: {
@@ -43,7 +43,7 @@
                 console.log("调用_initRoomSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                $('.roomSelector').select2({
+                $('#roomSelector').select2({
                     placeholder: '必填，请选择房屋',
                     ajax: {
                         url: "/callComponent/roomSelect2/listRoom",
@@ -72,7 +72,7 @@
                         cache: true
                     }
                 });
-                $('.roomSelector').on("select2:select", function (evt) {
+                $('#roomSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
@@ -80,7 +80,7 @@
                     vc.component.roomSelect2Info.roomNum = evt.params.data.text;
                 });
 
-                $('.roomSelector').on("select2:unselect", function (evt) {
+                $('#roomSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
                     console.log('unselect',evt)

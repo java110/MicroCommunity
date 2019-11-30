@@ -15,7 +15,7 @@
             floorSelect2Info:{
                 deep: true,
                 handler:function(){
-                    vc.emit('unitSelect2', "transferFloor" ,vc.component.floorSelect2Info);
+                    vc.emit('unitSelect2', "transferFloor" ,this.floorSelect2Info);
                 }
             }
         },
@@ -28,7 +28,7 @@
                  vc.component._initFloorSelect2();
             })*/
            vc.on('floorSelect2','setFloor',function (_param) {
-               $(".floorSelector").val(_param.floorId).select2();
+               $("#floorSelector").val(_param.floorId).select2();
            });
         },
         methods: {
@@ -36,7 +36,7 @@
                 console.log("调用_initFloorSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                $('.floorSelector').select2({
+                $('#floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
                     ajax: {
                         url: "/callComponent/floorSelect2/list",
@@ -56,15 +56,15 @@
                             };
                         },
                         processResults: function (data) {
-                            console.log(data, vc.component._filterFloorData(data.apiFloorDataVoList));
+                            console.log(data, this._filterFloorData(data.apiFloorDataVoList));
                             return {
-                                results: vc.component._filterFloorData(data.apiFloorDataVoList)
+                                results: this._filterFloorData(data.apiFloorDataVoList)
                             };
                         },
                         cache: true
                     }
                 });
-                $('.floorSelector').on("select2:select", function (evt) {
+                $('#floorSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
@@ -72,7 +72,7 @@
                     this.floorSelect2Info.floorName = evt.params.data.text;
                 });
 
-                $('.floorSelector').on("select2:unselect", function (evt) {
+                $('#floorSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
                     console.log('unselect',evt)

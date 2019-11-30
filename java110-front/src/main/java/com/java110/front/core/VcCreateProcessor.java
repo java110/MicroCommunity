@@ -90,7 +90,9 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
         String namespace = tag.getAttributeValue("namespace");
 
-        return html.replace("this.", namespace + "_");
+        return html.replace("this.", namespace + "_")
+                .replaceAll("(id)+( )*+=+( )*+'", "id='" + namespace + "_")
+                .replaceAll("(id)+( )*+=+( )*+\"", "id=\"" + namespace + "_");
     }
 
     private String dealHtmlJs(IProcessableElementTag tag, String js) {
@@ -101,7 +103,9 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
         String namespace = tag.getAttributeValue("namespace");
 
-        return js.replace("this.", "vc.component."+namespace + "_");
+        return js.replace("this.", "vc.component." + namespace + "_")
+                .replaceAll("(\\$)+( )*+(\\()+( )*+\'+#", "\\$('#" + namespace + "_")
+                .replaceAll("(\\$)+( )*+(\\()+( )*+\"+#", "\\$(\"#" + namespace + "_");
     }
 
 
@@ -246,15 +250,10 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
     }
 
     public static void main(String[] args) {
-        String js = "(function (vc, vm) {vc.extends({a:'123'})})";
-        int extPos = js.indexOf("vc.extends");
-        String tmpProTypes = js.substring(extPos);
-        int pos = tmpProTypes.indexOf("{") + 1;
-        js = js.substring(0, extPos) + tmpProTypes.substring(0, pos).trim() + "\nnamespace:" + DEFAULT_NAMESPACE + ",\n" + tmpProTypes.substring(pos, tmpProTypes.length());
-        int position = js.indexOf("{");
-        String propsJs = "\n$namespace=" + DEFAULT_NAMESPACE + ";\n";
-        js = new StringBuffer(js).insert(position + 1, propsJs).toString();
+        String js = "123$ ( '#av').val()";
+        js = js.replaceAll("(\\$)+( )*+(\\()+( )*+\'+#", "\\$('#abg_");
 
         System.out.println(js);
+
     }
 }
