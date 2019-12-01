@@ -52,7 +52,7 @@
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum,
                         unitId:vc.component.editMachineInfo.unitId,
-                        floorNum:vc.component.editMachineInfo.unitNum,
+                        unitNum:vc.component.editMachineInfo.unitNum,
                     });
                     vc.emit('editMachine','roomSelect2','setRoom',{
                         floorId:vc.component.editMachineInfo.floorId,
@@ -159,7 +159,7 @@
                                 param: "",
                                 errInfo: "设备ID不能为空"
                             }],
-                    'addMachineInfo.locationTypeCd':
+                    'editMachineInfo.locationTypeCd':
                         [
                             {
                                 limit: "required",
@@ -167,7 +167,7 @@
                                 errInfo: "请选择设备位置"
                             }
                         ],
-                    'addMachineInfo.locationObjId':
+                    'editMachineInfo.locationObjId':
                         [
                             {
                                 limit: "required",
