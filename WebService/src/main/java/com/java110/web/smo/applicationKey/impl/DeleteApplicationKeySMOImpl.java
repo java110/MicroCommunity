@@ -32,6 +32,7 @@ public class DeleteApplicationKeySMOImpl extends AbstractComponentSMO implements
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "applicationKeyId", "钥匙申请ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_APPLICATION_KEY);

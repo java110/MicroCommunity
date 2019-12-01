@@ -38,6 +38,7 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写姓名");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
         Assert.hasKeyAndValue(reqJson, "tel", "必填，请填写手机号");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择用户类型");
         Assert.hasKeyAndValue(reqJson, "sex", "必填，请选择性别");

@@ -39,6 +39,7 @@
                 vc.component.applicationKeyManageInfo.showComponent = 'applicationKeyManage';
                 vc.component.applicationKeyManageInfo.conditions.page = _page;
                 vc.component.applicationKeyManageInfo.conditions.row = _rows;
+                vc.component.applicationKeyManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params: vc.component.applicationKeyManageInfo.conditions
                 };

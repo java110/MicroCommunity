@@ -32,6 +32,7 @@ public class AddApplicationKeySMOImpl extends AbstractComponentSMO implements IA
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写姓名");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写手机号");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择用户类型");
         Assert.hasKeyAndValue(paramIn, "sex", "必填，请选择性别");

@@ -5,257 +5,275 @@
 <mapper namespace="applicationKeyServiceDaoImpl">
 
     <!-- 保存钥匙申请信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessApplicationKeyInfo" parameterType="Map">
+    <insert id="saveBusinessApplicationKeyInfo" parameterType="Map">
            insert into business_application_key(
-application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,start_time,state,b_id,age
+application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,start_time,state,community_id,b_id,age
 ) values (
-#{applicationKeyId},#{idCard},#{sex},#{entTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},#{startTime},#{state},#{bId},#{age}
+#{applicationKeyId},#{idCard},#{sex},#{entTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},#{startTime},#{state},#{communityId},#{bId},#{age}
 )
        </insert>
 
 
-       <!-- 查询钥匙申请信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessApplicationKeyInfo" parameterType="Map" resultType="Map">
-           select  t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card idCard,t.sex,t.end_time,t.end_time entTime,t.machine_id,t.machine_id machineId,t.operate,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.b_id,t.b_id bId,t.age 
-from business_application_key t 
-where 1 =1 
-<if test="applicationKeyId !=null and applicationKeyId != ''">
-   and t.application_key_id= #{applicationKeyId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="sex !=null and sex != ''">
-   and t.sex= #{sex}
-</if> 
-<if test="entTime !=null and entTime != ''">
-   and t.end_time= #{entTime}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="typeCd !=null and typeCd != ''">
-   and t.type_cd= #{typeCd}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="age !=null and age != ''">
-   and t.age= #{age}
-</if> 
+    <!-- 查询钥匙申请信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessApplicationKeyInfo" parameterType="Map" resultType="Map">
+        select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
+        idCard,t.sex,t.end_time,t.end_time entTime,t.machine_id,t.machine_id machineId,t.operate,t.type_cd,t.type_cd
+        typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.age
+        from business_application_key t
+        where 1 =1
+        <if test="applicationKeyId !=null and applicationKeyId != ''">
+            and t.application_key_id= #{applicationKeyId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="entTime !=null and entTime != ''">
+            and t.end_time= #{entTime}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存钥匙申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveApplicationKeyInfoInstance" parameterType="Map">
         insert into application_key(
-application_key_id,id_card,sex,status_cd,end_time,machine_id,type_cd,name,tel,start_time,state,b_id,age
-) select t.application_key_id,t.id_card,t.sex,'0',t.end_time,t.machine_id,t.type_cd,t.name,t.tel,t.start_time,t.state,t.b_id,t.age from business_application_key t where 1=1
-<if test="applicationKeyId !=null and applicationKeyId != ''">
-   and t.application_key_id= #{applicationKeyId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="sex !=null and sex != ''">
-   and t.sex= #{sex}
-</if> 
-<if test="entTime !=null and entTime != ''">
-   and t.end_time= #{entTime}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-   and t.operate= 'ADD'
-<if test="typeCd !=null and typeCd != ''">
-   and t.type_cd= #{typeCd}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="age !=null and age != ''">
-   and t.age= #{age}
-</if> 
+        application_key_id,id_card,sex,status_cd,end_time,machine_id,type_cd,name,tel,start_time,state,community_id,b_id,age
+        ) select
+        t.application_key_id,t.id_card,t.sex,'0',t.end_time,t.machine_id,t.type_cd,t.name,t.tel,t.start_time,t.state,t.community_id,t.b_id,t.age
+        from business_application_key t where 1=1
+        <if test="applicationKeyId !=null and applicationKeyId != ''">
+            and t.application_key_id= #{applicationKeyId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="entTime !=null and entTime != ''">
+            and t.end_time= #{entTime}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询钥匙申请信息 add by wuxw 2018-07-03 -->
     <select id="getApplicationKeyInfo" parameterType="Map" resultType="Map">
-        select  t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time entTime,t.machine_id,t.machine_id machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.b_id,t.b_id bId,t.age 
-from application_key t 
-where 1 =1 
-<if test="applicationKeyId !=null and applicationKeyId != ''">
-   and t.application_key_id= #{applicationKeyId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="sex !=null and sex != ''">
-   and t.sex= #{sex}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="entTime !=null and entTime != ''">
-   and t.end_time= #{entTime}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="typeCd !=null and typeCd != ''">
-   and t.type_cd= #{typeCd}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="age !=null and age != ''">
-   and t.age= #{age}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
+        idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time entTime,t.machine_id,t.machine_id
+        machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time
+        startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age
+        from application_key t
+        where 1 =1
+        <if test="applicationKeyId !=null and applicationKeyId != ''">
+            and t.application_key_id= #{applicationKeyId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="entTime !=null and entTime != ''">
+            and t.end_time= #{entTime}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改钥匙申请信息 add by wuxw 2018-07-03 -->
     <update id="updateApplicationKeyInfoInstance" parameterType="Map">
-        update  application_key t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-, t.id_card= #{idCard}
-</if> 
-<if test="sex !=null and sex != ''">
-, t.sex= #{sex}
-</if> 
-<if test="entTime !=null and entTime != ''">
-, t.end_time= #{entTime}
-</if> 
-<if test="machineId !=null and machineId != ''">
-, t.machine_id= #{machineId}
-</if> 
-<if test="typeCd !=null and typeCd != ''">
-, t.type_cd= #{typeCd}
-</if> 
-<if test="name !=null and name != ''">
-, t.name= #{name}
-</if> 
-<if test="tel !=null and tel != ''">
-, t.tel= #{tel}
-</if> 
-<if test="startTime !=null and startTime != ''">
-, t.start_time= #{startTime}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="age !=null and age != ''">
-, t.age= #{age}
-</if> 
- where 1=1 <if test="applicationKeyId !=null and applicationKeyId != ''">
-and t.application_key_id= #{applicationKeyId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update application_key t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            , t.sex= #{sex}
+        </if>
+        <if test="entTime !=null and entTime != ''">
+            , t.end_time= #{entTime}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            , t.type_cd= #{typeCd}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            , t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="age !=null and age != ''">
+            , t.age= #{age}
+        </if>
+        where 1=1
+        <if test="applicationKeyId !=null and applicationKeyId != ''">
+            and t.application_key_id= #{applicationKeyId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询钥匙申请数量 add by wuxw 2018-07-03 -->
-     <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from application_key t 
-where 1 =1 
-<if test="applicationKeyId !=null and applicationKeyId != ''">
-   and t.application_key_id= #{applicationKeyId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="sex !=null and sex != ''">
-   and t.sex= #{sex}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="entTime !=null and entTime != ''">
-   and t.end_time= #{entTime}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="typeCd !=null and typeCd != ''">
-   and t.type_cd= #{typeCd}
-</if> 
-<if test="name !=null and name != ''">
-   and t.name= #{name}
-</if> 
-<if test="tel !=null and tel != ''">
-   and t.tel= #{tel}
-</if> 
-<if test="startTime !=null and startTime != ''">
-   and t.start_time= #{startTime}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="age !=null and age != ''">
-   and t.age= #{age}
-</if> 
+    <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from application_key t
+        where 1 =1
+        <if test="applicationKeyId !=null and applicationKeyId != ''">
+            and t.application_key_id= #{applicationKeyId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and t.sex= #{sex}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="entTime !=null and entTime != ''">
+            and t.end_time= #{entTime}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="age !=null and age != ''">
+            and t.age= #{age}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

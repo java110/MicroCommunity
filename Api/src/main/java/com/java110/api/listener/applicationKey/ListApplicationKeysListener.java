@@ -8,6 +8,7 @@ import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.applicationKey.ApiApplicationKeyDataVo;
 import com.java110.vo.api.applicationKey.ApiApplicationKeyVo;
@@ -56,6 +57,8 @@ public class ListApplicationKeysListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
+
         super.validatePageInfo(reqJson);
     }
 

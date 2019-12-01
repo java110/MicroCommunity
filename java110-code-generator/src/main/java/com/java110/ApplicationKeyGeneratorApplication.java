@@ -49,6 +49,7 @@ public class ApplicationKeyGeneratorApplication {
         param.put("state", "state");
         param.put("startTime", "start_time");
         param.put("entTime", "end_time");
+        param.put("communityId", "community_id");
         param.put("statusCd", "status_cd");
         param.put("operate", "operate");
         param.put("bId", "b_id");

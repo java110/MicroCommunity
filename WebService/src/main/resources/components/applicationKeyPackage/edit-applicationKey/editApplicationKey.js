@@ -126,12 +126,7 @@
                             limit: "required",
                             param: "",
                             errInfo: "性别不能为空"
-                        },
-                        {
-                            limit: "num",
-                            param: "",
-                            errInfo: "性别格式错误"
-                        },
+                        }
                     ],
                     'editApplicationKeyInfo.age': [
                         {

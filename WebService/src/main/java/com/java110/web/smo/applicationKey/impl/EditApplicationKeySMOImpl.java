@@ -29,6 +29,8 @@ public class EditApplicationKeySMOImpl extends AbstractComponentSMO implements I
         //super.validatePageInfo(pd);
 
         Assert.hasKeyAndValue(paramIn, "applicationKeyId", "钥匙申请ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
+
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写姓名");
         Assert.hasKeyAndValue(paramIn, "tel", "必填，请填写手机号");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择用户类型");

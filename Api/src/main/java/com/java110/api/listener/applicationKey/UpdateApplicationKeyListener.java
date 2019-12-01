@@ -34,6 +34,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "applicationKeyId", "钥匙申请ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写姓名");
         Assert.hasKeyAndValue(reqJson, "tel", "必填，请填写手机号");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择用户类型");

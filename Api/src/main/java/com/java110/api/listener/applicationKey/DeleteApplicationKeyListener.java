@@ -26,6 +26,7 @@ public class DeleteApplicationKeyListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
 
         Assert.hasKeyAndValue(reqJson, "applicationKeyId", "钥匙申请ID不能为空");
 
