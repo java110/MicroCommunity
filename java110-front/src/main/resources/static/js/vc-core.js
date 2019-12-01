@@ -37,9 +37,9 @@
         if (vc.notNull(_namespace)) {
             vc.component.$on(_namespace + "_" + _componentName + '_' + _value,
                 function (param) {
-                    if (vc.debug) {
+                    //if (vc.debug) {
                         console.log("监听ON事件", _namespace, _componentName, _value, param);
-                    }
+                   // }
                     _callback(param);
                 }
             );
@@ -48,9 +48,9 @@
 
         vc.component.$on(_componentName + '_' + _value,
             function (param) {
-                if (vc.debug) {
+               // if (vc.debug) {
                     console.log("监听ON事件", _componentName, _value, param);
-                }
+               // }
                 _callback(param);
             }
         );
@@ -77,9 +77,9 @@
             console.error("执行on 异常，vc.on 参数只能是3个 或4个");
             return;
         }
-        if (vc.debug) {
+        //if (vc.debug) {
             console.log("监听emit事件", _componentName, _value, _param);
-        }
+        //}
         if (vc.notNull(_namespace)) {
             vc.component.$emit(_namespace + "_" + _componentName + '_' + _value, _param);
             return;
