@@ -11,8 +11,8 @@
                 <tr align="center"><th>确定{{machineStateInfo.stateName}}设备</th></tr>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closeMachineStateModel()">点错了</button>
-                <button type="button" class="btn btn-primary" v-on:click="changeMachineState()">确认</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="_closeMachineStateModel()">点错了</button>
+                <button type="button" class="btn btn-primary" v-on:click="_changeMachineState()">确认</button>
             </div>
         </div>
     </div>
