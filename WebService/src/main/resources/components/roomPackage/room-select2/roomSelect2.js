@@ -18,23 +18,23 @@
             roomSelect2Info:{
                 deep: true,
                 handler:function(){
-                    vc.emit($props.callBackListener,$props.callBackFunction,vc.component.roomSelect2Info);
+                    vc.emit($props.callBackListener,$props.callBackFunction,this.roomSelect2Info);
                 }
             }
         },
         _initMethod:function(){
-                vc.component._initRoomSelect2();
+                this._initRoomSelect2();
         },
         _initEvent:function(){
             //监听 modal 打开
            /* $('#'+$props.parentModal).on('show.bs.modal', function () {
-                 vc.component._initUnitSelect2();
+                 this._initUnitSelect2();
             })*/
            vc.on('roomSelect2', "transferRoom",function (_param) {
-                vc.copyObject(_param, vc.component.roomSelect2Info);
+                vc.copyObject(_param, this.roomSelect2Info);
            });
             vc.on('roomSelect2','setRoom',function (_param) {
-                vc.copyObject(_param, vc.component.roomSelect2Info);
+                vc.copyObject(_param, this.roomSelect2Info);
                 $("#roomSelector").val(_param.roomId).select2();
             });
         },
@@ -59,14 +59,14 @@
                                 roomNum: _term,
                                 page: 1,
                                 row:10,
-                                unitId:vc.component.roomSelect2Info.unitId,
+                                unitId:this.roomSelect2Info.unitId,
                                 communityId:vc.getCurrentCommunity().communityId
                             };
                         },
                         processResults: function (data) {
-                            console.log(data, vc.component._filterRoomData(data.rooms));
+                            console.log(data, this._filterRoomData(data.rooms));
                             return {
-                                results: vc.component._filterRoomData(data.rooms)
+                                results: this._filterRoomData(data.rooms)
                             };
                         },
                         cache: true
@@ -76,8 +76,8 @@
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
                     console.log('select',evt);
-                    vc.component.roomSelect2Info.roomId = evt.params.data.id;
-                    vc.component.roomSelect2Info.roomNum = evt.params.data.text;
+                    this.roomSelect2Info.roomId = evt.params.data.id;
+                    this.roomSelect2Info.roomNum = evt.params.data.text;
                 });
 
                 $('#roomSelector').on("select2:unselect", function (evt) {

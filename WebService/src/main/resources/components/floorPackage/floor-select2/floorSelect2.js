@@ -1,40 +1,41 @@
-(function(vc){
+(function (vc) {
     vc.extends({
         propTypes: {
-               parentModal:vc.propTypes.string
+            parentModal: vc.propTypes.string
         },
-        data:{
-            floorSelect2Info:{
-                floors:[],
-                floorId:'-1',
-                floorNum:'',
-                floorName:'',
+        data: {
+            floorSelect2Info: {
+                floors: [],
+                floorId: '-1',
+                floorNum: '',
+                floorName: '',
             }
         },
-        watch:{
-            floorSelect2Info:{
+        watch: {
+            floorSelect2Info: {
                 deep: true,
-                handler:function(){
-                    vc.emit('unitSelect2', "transferFloor" ,this.floorSelect2Info);
+                handler: function () {
+                    vc.emit($namespace, 'unitSelect2', "transferFloor", this.floorSelect2Info);
                 }
             }
         },
-        _initMethod:function(){
+        _initMethod: function () {
             this._initFloorSelect2();
         },
-        _initEvent:function(){
+        _initEvent: function () {
             //监听 modal 打开
-           /* $('#'+$props.parentModal).on('show.bs.modal', function () {
-                 vc.component._initFloorSelect2();
-            })*/
-           vc.on('floorSelect2','setFloor',function (_param) {
-               $("#floorSelector").val(_param.floorId).select2();
-           });
+            /* $('#'+$props.parentModal).on('show.bs.modal', function () {
+                  vc.component._initFloorSelect2();
+             })*/
+            vc.on('floorSelect2', 'setFloor', function (_param) {
+                $("#floorSelector").val(_param.floorId).select2();
+            });
         },
         methods: {
             _initFloorSelect2: function () {
                 console.log("调用_initFloorSelect2 方法");
-                $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+                $.fn.modal.Constructor.prototype.enforceFocus = function () {
+                };
                 $.fn.select2.defaults.set('width', '100%');
                 $('#floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
@@ -45,14 +46,14 @@
                         data: function (params) {
                             console.log("param", params);
                             var _term = "";
-                            if(params.hasOwnProperty("term")){
+                            if (params.hasOwnProperty("term")) {
                                 _term = params.term;
                             }
                             return {
                                 floorName: _term,
                                 page: 1,
-                                row:10,
-                                communityId:vc.getCurrentCommunity().communityId
+                                row: 10,
+                                communityId: vc.getCurrentCommunity().communityId
                             };
                         },
                         processResults: function (data) {
@@ -67,7 +68,7 @@
                 $('#floorSelector').on("select2:select", function (evt) {
                     //这里是选中触发的事件
                     //evt.params.data 是选中项的信息
-                    console.log('select',evt);
+                    console.log('select', evt);
                     this.floorSelect2Info.floorId = evt.params.data.id;
                     this.floorSelect2Info.floorName = evt.params.data.text;
                 });
@@ -75,16 +76,16 @@
                 $('#floorSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
-                    console.log('unselect',evt)
+                    console.log('unselect', evt)
 
                 });
             },
-            _filterFloorData:function (_floors) {
+            _filterFloorData: function (_floors) {
                 var _tmpFloors = [];
                 for (var i = 0; i < _floors.length; i++) {
                     var _tmpFloor = {
-                        id:_floors[i].floorId,
-                        text:_floors[i].floorName
+                        id: _floors[i].floorId,
+                        text: _floors[i].floorName
                     };
                     _tmpFloors.push(_tmpFloor);
                 }

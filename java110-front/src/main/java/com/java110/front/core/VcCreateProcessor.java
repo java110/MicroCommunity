@@ -103,9 +103,14 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
 
         String namespace = tag.getAttributeValue("namespace");
 
-        return js.replace("this.", "vc.component." + namespace + "_")
+        js = js.replace("this.", "vc.component." + namespace + "_")
                 .replaceAll("(\\$)+( )*+(\\()+( )*+\'+#", "\\$('#" + namespace + "_")
                 .replaceAll("(\\$)+( )*+(\\()+( )*+\"+#", "\\$(\"#" + namespace + "_");
+
+        //将 监听也做优化
+        js = js.replaceAll("(vc.on)+\\('", "vc.on('" + namespace + ",");
+
+        return js;
     }
 
 

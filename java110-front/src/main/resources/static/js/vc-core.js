@@ -38,6 +38,31 @@
         vc.component.$emit(_componentName + '_' + _value, _param);
     };
 
+    /**
+     事件监听
+     **/
+    vc.on = function (_namespace, _componentName, _value, _callback) {
+
+        vc.component.$on(_namespace + "_" + _componentName + '_' + _value,
+            function (param) {
+                if (vc.debug) {
+                    console.log("监听ON事件", _namespace, _componentName, _value, param);
+                }
+                _callback(param);
+            }
+        );
+    };
+
+    /**
+     事件触发
+     **/
+    vc.emit = function (_namespace, _componentName, _value, _param) {
+        if (vc.debug) {
+            console.log("监听emit事件", _namespace, _componentName, _value, _param);
+        }
+        vc.component.$emit(_namespace + "_" + _componentName + '_' + _value, _param);
+    };
+
 })(window.vc);
 
 /**
