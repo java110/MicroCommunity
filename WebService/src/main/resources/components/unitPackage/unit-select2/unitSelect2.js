@@ -12,6 +12,7 @@
                 unitId: '-1',
                 unitNum: '',
                 unitName: '',
+                unitSelector:{}
             }
         },
         watch: {
@@ -37,7 +38,9 @@
             });
             vc.on('unitSelect2', 'setUnit', function (_param) {
                 vc.copyObject(_param, this.unitSelect2Info);
-                $(".unitSelector").val(_param.unitId).select2();
+               /* $(".unitSelector").val(_param.unitId).select2();*/
+                var option = new Option(_param.unitNum , _param.unitId, true, true);
+                this.unitSelect2Info.unitSelector.append(option);
             });
         },
         methods: {
@@ -46,8 +49,12 @@
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {
                 };
                 $.fn.select2.defaults.set('width', '100%');
-                $('#unitSelector').select2({
+                this.unitSelect2Info.unitSelector = $('#unitSelector').select2({
                     placeholder: '必填，请选择单元',
+                    allowClear: true,//允许清空
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    }, // 自定义格式化防止xss注入
                     ajax: {
                         url: "/callComponent/unitSelect2/loadUnits",
                         dataType: 'json',

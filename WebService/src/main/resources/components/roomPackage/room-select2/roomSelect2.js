@@ -12,6 +12,7 @@
                 unitId:'-1',
                 roomId:'',
                 unitName:'',
+                roomSelector:{}
             }
         },
         watch:{
@@ -35,7 +36,10 @@
            });
             vc.on('roomSelect2','setRoom',function (_param) {
                 vc.copyObject(_param, this.roomSelect2Info);
-                $("#roomSelector").val(_param.roomId).select2();
+                /*$("#roomSelector").val(_param.roomId).select2();*/
+
+                var option = new Option(_param.roomNum , _param.roomId, true, true);
+                this.roomSelect2Info.roomSelector.append(option);
             });
         },
         methods: {
@@ -43,8 +47,12 @@
                 console.log("调用_initRoomSelect2 方法");
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
-                $('#roomSelector').select2({
+                this.roomSelect2Info.roomSelector = $('#roomSelector').select2({
                     placeholder: '必填，请选择房屋',
+                    allowClear: true,//允许清空
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    }, // 自定义格式化防止xss注入
                     ajax: {
                         url: "/callComponent/roomSelect2/listRoom",
                         dataType: 'json',

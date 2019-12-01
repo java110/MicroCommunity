@@ -9,7 +9,7 @@
                 floorId: '-1',
                 floorNum: '',
                 floorName: '',
-                floorSelector:{},
+                floorSelector: {},
             }
         },
         watch: {
@@ -30,12 +30,12 @@
              })*/
             vc.on('floorSelect2', 'setFloor', function (_param) {
                 vc.copyObject(_param, this.floorSelect2Info);
-               /* $("#floorSelector").val({
-                    id:param.floorId,
-                    text:_param.floorNum
-                }).select2();*/
+                /* $("#floorSelector").val({
+                     id:param.floorId,
+                     text:_param.floorNum
+                 }).select2();*/
 
-                var option = new Option(_param.floorNum, _param.floorId, true, true);
+                var option = new Option(_param.floorNum + '号楼', _param.floorId, true, true);
                 this.floorSelect2Info.floorSelector.append(option);
             });
         },
@@ -48,7 +48,9 @@
                 this.floorSelect2Info.floorSelector = $('#floorSelector').select2({
                     placeholder: '必填，请选择楼栋',
                     allowClear: true,//允许清空
-                    escapeMarkup: function (markup) { return markup; }, // 自定义格式化防止xss注入
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    }, // 自定义格式化防止xss注入
                     ajax: {
                         url: "/callComponent/floorSelect2/list",
                         dataType: 'json',
