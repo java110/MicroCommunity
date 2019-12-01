@@ -199,13 +199,23 @@
                 });
             },
             saveApplicationKeyInfo: function () {
+                vc.component.addApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
+                if (vc.component.addApplicationKeyInfo.locationTypeCd != '2000' && vc.component.addApplicationKeyInfo.locationTypeCd != '3000') { //大门时直接写 小区ID
+                    vc.component.addApplicationKeyInfo.locationObjId = vc.component.addApplicationKeyInfo.communityId;
+                } else if (vc.component.addApplicationKeyInfo.locationTypeCd == '2000') {
+                    vc.component.addApplicationKeyInfo.locationObjId = vc.component.addApplicationKeyInfo.unitId;
+                } else if (vc.component.addApplicationKeyInfo.locationTypeCd == '3000') {
+                    vc.component.addApplicationKeyInfo.locationObjId = vc.component.addApplicationKeyInfo.roomId;
+                } else {
+                    vc.toast("设备位置值错误");
+                    return;
+                }
                 if (!vc.component.addApplicationKeyValidate()) {
                     vc.message(vc.validate.errInfo);
 
                     return;
                 }
 
-                vc.component.addApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
                 //不提交数据将数据 回调给侦听处理
                 if (vc.notNull($props.callBackListener)) {
                     vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addApplicationKeyInfo);
@@ -261,7 +271,10 @@
                     roomName: ''
 
                 };
-            }
+            },
+            _closeAddApplicationKeyView: function () {
+                vc.emit('applicationKeyManage', 'listApplicationKey', {});
+            },
         }
     });
 
