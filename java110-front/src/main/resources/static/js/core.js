@@ -133,7 +133,7 @@
                      }
                      var dataNameSpace = vmOptions.data[nameSpace];
                      dataNameSpace[dataAttr] = _vmOptions.data[dataAttr];*/
-                    vmOptions.methods[nameSpace + "_" + dataAttr] = _vmOptions.methods[dataAttr];
+                    vmOptions.data[nameSpace + "_" + dataAttr] = _vmOptions.data[dataAttr];
 
                 }
             }
