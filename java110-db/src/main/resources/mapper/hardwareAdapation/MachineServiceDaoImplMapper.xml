@@ -23,7 +23,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         machineCode,t.auth_code,t.auth_code authCode,t.operate,t.machine_version,t.machine_version
         machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name
         machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp,
-        t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId
+        t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd,t.location_obj_id,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId
         from business_machine t
         where 1 =1
         <if test="machineMac !=null and machineMac != ''">
@@ -137,6 +137,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         bId,t.machine_name,t.machine_name machineName,t.machine_type_cd,t.machine_type_cd
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
+        t.location_type_cd,t.location_obj_id,
         td1.name stateName,td2.name locationTypeName
         from machine t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
