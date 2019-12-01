@@ -1,37 +1,52 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
-    <div class="row">
+    <div class="row" v-if="applicationKeyManageInfo.showComponent == 'applicationKeyManage'">
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
-                        <button type="button"  class="btn btn-link btn-sm" style="margin-right:10px;"  v-on:click="_moreCondition()">{{applicationKeyManageInfo.moreCondition == true?'隐藏':'更多'}}</button>
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">{{applicationKeyManageInfo.moreCondition ==
+                            true?'隐藏':'更多'}}
+                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-<div class="col-sm-4" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入名称" v-model="applicationKeyManageInfo.conditions.name" class=" form-control">
-                            </div>                        </div><div class="col-sm-4" >
-<select class="custom-select" v-model="applicationKeyManageInfo.conditions.typeCd">
-         <option selected  value="">请选择用户类型</option>
-         <option  value="10001">保洁</option>
-<option  value="10002">保安</option>
-<option  value="10003">其他人员</option>
-  </select>                        </div><div class="col-sm-3" >
-<div class="form-group">
-                                <input type="text" placeholder="请输入用户手机" v-model="applicationKeyManageInfo.conditions.tel" class=" form-control">
-                            </div>                        </div><div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryApplicationKeyMethod()">
-                                    <i class="glyphicon glyphicon-search"></i> 查询
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入名称"
+                                       v-model="applicationKeyManageInfo.conditions.name" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="custom-select" v-model="applicationKeyManageInfo.conditions.typeCd">
+                                <option selected value="">请选择用户类型</option>
+                                <option value="10001">保洁</option>
+                                <option value="10002">保安</option>
+                                <option value="10003">其他人员</option>
+                            </select></div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入用户手机"
+                                       v-model="applicationKeyManageInfo.conditions.tel" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    v-on:click="_queryApplicationKeyMethod()">
+                                <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
-                        </div></div>
-<div class="row">
-<div class="col-sm-4" v-if="applicationKeyManageInfo.moreCondition == true">
-<div class="form-group">
-                                <input type="text" placeholder="请输入身份证号" v-model="applicationKeyManageInfo.conditions.idCard" class=" form-control">
-                            </div>                        </div></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" v-if="applicationKeyManageInfo.moreCondition == true">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入身份证号"
+                                       v-model="applicationKeyManageInfo.conditions.idCard" class=" form-control">
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -42,11 +57,11 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>钥匙申请信息</h5>
+                    <h5>申请钥匙</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddApplicationKeyModal()">
                             <i class="glyphicon glyphicon-plus"></i>
-                            添加钥匙申请
+                            申请
                         </button>
                     </div>
                 </div>
@@ -57,12 +72,12 @@
                     >
                         <thead>
                         <tr>
-                                                        <th class="text-center">钥匙申请ID</th>
+                            <th class="text-center">钥匙申请ID</th>
                             <th class="text-center">姓名</th>
                             <th class="text-center">手机号</th>
                             <th class="text-center">用户类型</th>
-                            <th class="text-center">性别</th>
-                            <th class="text-center">年龄</th>
+                            <!-- <th class="text-center">性别</th>
+                             <th class="text-center">年龄</th>-->
                             <th class="text-center">身份证号</th>
                             <th class="text-center">开始时间</th>
                             <th class="text-center">结束时间</th>
@@ -73,21 +88,27 @@
                         </thead>
                         <tbody>
                         <tr v-for="applicationKey in applicationKeyManageInfo.applicationKeys">
-                                                        <td class="text-center">{{applicationKey.applicationKeyId}}</td>
+                            <td class="text-center">{{applicationKey.applicationKeyId}}</td>
                             <td class="text-center">{{applicationKey.name}}</td>
                             <td class="text-center">{{applicationKey.tel}}</td>
                             <td class="text-center">{{applicationKey.typeCd}}</td>
-                            <td class="text-center">{{applicationKey.sex}}</td>
-                            <td class="text-center">{{applicationKey.age}}</td>
+                            <!--<td class="text-center">{{applicationKey.sex}}</td>
+                            <td class="text-center">{{applicationKey.age}}</td>-->
                             <td class="text-center">{{applicationKey.idCard}}</td>
                             <td class="text-center">{{applicationKey.startTime}}</td>
                             <td class="text-center">{{applicationKey.endTime}}</td>
-                            <td class="text-center"><div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openEditApplicationKeyModel(applicationKey)">修改</button>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditApplicationKeyModel(applicationKey)">修改
+                                    </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn-white btn btn-xs" v-on:click="_openDeleteApplicationKeyModel(applicationKey)">删除</button>
-                                </div></td>
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeleteApplicationKeyModel(applicationKey)">删除
+                                    </button>
+                                </div>
+                            </td>
 
                         </tr>
                         </tbody>
@@ -106,13 +127,15 @@
         </div>
     </div>
 
-    
-
-    <vc:create name="addApplicationKey"
-               callBackListener=""
-               callBackFunction=""
-    ></vc:create>
-    <vc:create name="editApplicationKey"></vc:create>
+    <div v-show="applicationKeyManageInfo.showComponent == 'addApplicationKey'">
+        <vc:create name="addApplicationKey"
+                   callBackListener=""
+                   callBackFunction=""
+        ></vc:create>
+    </div>
+    <div v-show="applicationKeyManageInfo.showComponent == 'editApplicationKey'">
+        <vc:create name="editApplicationKey"></vc:create>
+    </div>
     <vc:create name="deleteApplicationKey"></vc:create>
 
 </div>

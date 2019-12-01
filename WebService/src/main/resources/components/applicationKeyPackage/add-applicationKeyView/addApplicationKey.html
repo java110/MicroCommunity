@@ -2,7 +2,7 @@
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-title">
-                <h5>修改钥匙申请</h5>
+                <h5>申请钥匙</h5>
                 <div class="ibox-tools" style="top:10px;">
 
                 </div>
@@ -12,21 +12,21 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">姓名</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.name" type="text" placeholder="必填，请填写姓名"
+                        <input v-model="addApplicationKeyInfo.name" type="text" placeholder="必填，请填写姓名"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">手机号</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.tel" type="text" placeholder="必填，请填写手机号"
+                        <input v-model="addApplicationKeyInfo.tel" type="text" placeholder="必填，请填写手机号"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">用户类型</label>
                     <div class="col-sm-10">
-                        <select class="custom-select" v-model="editApplicationKeyInfo.typeCd">
+                        <select class="custom-select" v-model="addApplicationKeyInfo.typeCd">
                             <option selected disabled value="">必填，请选择用户类型</option>
                             <option value="10001">保洁</option>
                             <option value="10002">保安</option>
@@ -36,7 +36,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">性别</label>
                     <div class="col-sm-10">
-                        <select class="custom-select" v-model="editApplicationKeyInfo.sex">
+                        <select class="custom-select" v-model="addApplicationKeyInfo.sex">
                             <option selected disabled value="">必填，请选择性别</option>
                             <option value="0">男</option>
                             <option value="1">女</option>
@@ -45,21 +45,21 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">年龄</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.age" type="text" placeholder="必填，请填写年龄"
+                        <input v-model="addApplicationKeyInfo.age" type="text" placeholder="必填，请填写年龄"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">身份证号</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.idCard" type="text" placeholder="必填，请填写身份证号"
+                        <input v-model="addApplicationKeyInfo.idCard" type="text" placeholder="必填，请填写身份证号"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">设备位置</label>
                     <div class="col-sm-10">
-                        <select class="custom-select" v-model="editApplicationKeyInfo.locationTypeCd">
+                        <select class="custom-select" v-model="addApplicationKeyInfo.locationTypeCd">
                             <option selected disabled value="">必填，请选择设备位置</option>
                             <option value="1000">东大门</option>
                             <option value="1001">西大门</option>
@@ -71,57 +71,57 @@
                     </div>
                 </div>
                 <div class="form-group row"
-                     v-show="editApplicationKeyInfo.locationTypeCd == '2000' || editApplicationKeyInfo.locationTypeCd == '3000'  ">
+                     v-show="addApplicationKeyInfo.locationTypeCd == '2000' || addApplicationKeyInfo.locationTypeCd == '3000'  ">
                     <label class="col-sm-2 col-form-label">归属楼栋</label>
                     <div class="col-sm-10">
                         <vc:create name="floorSelect2"
-                                   parentModal="editApplicationKeyModel"
-                                   namespace="editApplicationKey"
+                                   parentModal="addApplicationKeyModel"
+                                   namespace="addApplicationKey"
                         ></vc:create>
                     </div>
                 </div>
                 <div class="form-group row"
-                     v-show="editApplicationKeyInfo.locationTypeCd == '2000' || editApplicationKeyInfo.locationTypeCd == '3000'  ">
+                     v-show="addApplicationKeyInfo.locationTypeCd == '2000' || addApplicationKeyInfo.locationTypeCd == '3000'  ">
                     <label class="col-sm-2 col-form-label">归属单元</label>
                     <div class="col-sm-10">
                         <vc:create name="unitSelect2"
-                                   parentModal="editApplicationKeyModel"
-                                   callBackListener="editApplicationKey"
+                                   parentModal="addApplicationKeyModel"
+                                   callBackListener="addApplicationKey"
                                    callBackFunction="notify"
-                                   namespace="editApplicationKey"
+                                   namespace="addApplicationKey"
                         ></vc:create>
                     </div>
                 </div>
                 <div class="form-group row"
-                     v-show="editApplicationKeyInfo.locationTypeCd == '3000'  ">
+                     v-show="addApplicationKeyInfo.locationTypeCd == '3000'  ">
                     <label class="col-sm-2 col-form-label">归属房屋</label>
                     <div class="col-sm-10">
                         <vc:create name="roomSelect2"
-                                   parentModal="editApplicationKeyModel"
-                                   callBackListener="editApplicationKey"
+                                   parentModal="addApplicationKeyModel"
+                                   callBackListener="addApplicationKey"
                                    callBackFunction="notify"
-                                   namespace="editApplicationKey"
+                                   namespace="addApplicationKey"
                         ></vc:create>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">开始时间</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.startTime" readonly type="text" placeholder="必填，请填写开始时间"
-                               class="form-control editApplicationStartTime">
+                        <input v-model="addApplicationKeyInfo.startTime" readonly type="text" placeholder="必填，请填写开始时间"
+                               class="form-control addApplicationStartTime">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">结束时间</label>
                     <div class="col-sm-10">
-                        <input v-model="editApplicationKeyInfo.endTime" readonly type="text" placeholder="必填，请填写结束时间"
-                               class="form-control editApplicationEndTime">
+                        <input v-model="addApplicationKeyInfo.endTime" readonly type="text" placeholder="必填，请填写结束时间"
+                               class="form-control addApplicationEndTime">
                     </div>
                 </div>
 
                 <div class="ibox-content">
                     <button class="btn btn-primary float-right" type="button"
-                            v-on:click="editApplicationKey()"><i class="fa fa-check"></i>&nbsp;保存
+                            v-on:click="saveApplicationKeyInfo()"><i class="fa fa-check"></i>&nbsp;保存
                     </button>
                     <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
                             data-dismiss="modal">取消
@@ -132,6 +132,5 @@
         </div>
     </div>
 </div>
-
 
 

@@ -1,101 +1,99 @@
-(function(vc){
+(function (vc) {
 
     vc.extends({
-        data:{
-            addNoticeViewInfo:{
-                title:'',
-                noticeTypeCd:'',
-                context:'',
-                startTime:'',
-                endTime:'',
+        data: {
+            addNoticeViewInfo: {
+                title: '',
+                noticeTypeCd: '',
+                context: '',
+                startTime: '',
+                endTime: '',
 
             }
         },
-         _initMethod:function(){
+        _initMethod: function () {
             vc.component._initNoticeInfo();
-         },
-         _initEvent:function(){
-            vc.on('addNoticeView','openAddNoticeView',function(){
+        },
+        _initEvent: function () {
+            vc.on('addNoticeView', 'openAddNoticeView', function () {
                 //vc.component._initNoticeInfo();
 
             });
         },
-        methods:{
-            addNoticeValidate(){
+        methods: {
+            addNoticeValidate() {
                 return vc.validate.validate({
-                    addNoticeViewInfo:vc.component.addNoticeViewInfo
-                },{
-                    'addNoticeViewInfo.title':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"标题不能为空"
-                        },
- {
-                            limit:"maxin",
-                            param:"4,100",
-                            errInfo:"小区名称必须在2至100字符之间"
-                        },
-                    ],
-'addNoticeViewInfo.noticeTypeCd':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"公告类型不能为空"
-                        },
- {
-                            limit:"maxLength",
-                            param:"200",
-                            errInfo:"公告类型错误"
-                        },
-                    ],
-'addNoticeViewInfo.context':[
-{
-                            limit:"required",
-                            param:"",
-                            errInfo:"公告内容不能为空"
+                    addNoticeViewInfo: vc.component.addNoticeViewInfo
+                }, {
+                    'addNoticeViewInfo.title': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "标题不能为空"
                         },
                         {
-                            limit:"maxLength",
-                            param:"10000",
-                            errInfo:"公告内容不能超过10000个字"
+                            limit: "maxin",
+                            param: "4,100",
+                            errInfo: "小区名称必须在2至100字符之间"
                         },
                     ],
-                    'addNoticeViewInfo.startTime':[
-                    {
-                        limit:"required",
-                        param:"",
-                        errInfo:"开始时间不能为空"
-                    },
-                     {
-                            limit:"dateTime",
-                            param:"",
-                            errInfo:"开始时间不是有效的日期"
+                    'addNoticeViewInfo.noticeTypeCd': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "公告类型不能为空"
+                        },
+                        {
+                            limit: "maxLength",
+                            param: "200",
+                            errInfo: "公告类型错误"
                         },
                     ],
-                    'addNoticeViewInfo.endTime':[
-                    {
-                        limit:"required",
-                        param:"",
-                        errInfo:"开始时间不能为空"
-                    },
-                     {
-                            limit:"dateTime",
-                            param:"",
-                            errInfo:"开始时间不是有效的日期"
+                    'addNoticeViewInfo.context': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "公告内容不能为空"
+                        },
+                        {
+                            limit: "maxLength",
+                            param: "10000",
+                            errInfo: "公告内容不能超过10000个字"
                         },
                     ],
-
-
+                    'addNoticeViewInfo.startTime': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "开始时间不能为空"
+                        },
+                        {
+                            limit: "dateTime",
+                            param: "",
+                            errInfo: "开始时间不是有效的日期"
+                        },
+                    ],
+                    'addNoticeViewInfo.endTime': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "开始时间不能为空"
+                        },
+                        {
+                            limit: "dateTime",
+                            param: "",
+                            errInfo: "开始时间不是有效的日期"
+                        },
+                    ],
 
 
                 });
             },
-            saveNoticeInfo:function(){
-                if(!vc.component.addNoticeValidate()){
+            saveNoticeInfo: function () {
+                if (!vc.component.addNoticeValidate()) {
                     vc.message(vc.validate.errInfo);
 
-                    return ;
+                    return;
                 }
 
                 vc.component.addNoticeViewInfo.communityId = vc.getCurrentCommunity().communityId;
@@ -105,40 +103,40 @@
                     'save',
                     JSON.stringify(vc.component.addNoticeViewInfo),
                     {
-                        emulateJSON:true
-                     },
-                     function(json,res){
+                        emulateJSON: true
+                    },
+                    function (json, res) {
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if(res.status == 200){
+                        if (res.status == 200) {
                             //关闭model
 
                             vc.component.clearaddNoticeViewInfo();
-                            vc.emit('noticeManage','listNotice',{});
+                            vc.emit('noticeManage', 'listNotice', {});
 
-                            return ;
+                            return;
                         }
                         vc.message(json);
 
-                     },
-                     function(errInfo,error){
+                    },
+                    function (errInfo, error) {
                         console.log('请求失败处理');
 
                         vc.message(errInfo);
 
-                     });
+                    });
             },
-            clearaddNoticeViewInfo:function(){
+            clearaddNoticeViewInfo: function () {
                 vc.component.addNoticeViewInfo = {
-                        title:'',
-                                    noticeTypeCd:'',
-                                    context:'',
-                                    startTime:'',
+                    title: '',
+                    noticeTypeCd: '',
+                    context: '',
+                    startTime: '',
 
-                                        };
+                };
             },
-            _initNoticeInfo:function(){
+            _initNoticeInfo: function () {
                 vc.component.addNoticeViewInfo.startTime = vc.dateFormat(new Date().getTime());
-                 $('.noticeStartTime').datetimepicker({
+                $('.noticeStartTime').datetimepicker({
                     language: 'zh-CN',
                     format: 'yyyy-mm-dd HH:ii:ss',
                     initTime: true,
@@ -166,16 +164,16 @@
                         vc.component.addNoticeViewInfo.endTime = value;
                     });
                 var $summernote = $('.summernote').summernote({
-                    lang:'zh-CN',
+                    lang: 'zh-CN',
                     height: 300,
-                    placeholder:'必填，请输入公告内容',
-                    callbacks : {
-                         onImageUpload: function(files, editor, $editable) {
-                             vc.component.sendFile($summernote,files);
-                         },
-                         onChange:function(contents,$editable){
+                    placeholder: '必填，请输入公告内容',
+                    callbacks: {
+                        onImageUpload: function (files, editor, $editable) {
+                            vc.component.sendFile($summernote, files);
+                        },
+                        onChange: function (contents, $editable) {
                             vc.component.addNoticeViewInfo.context = contents;
-                         }
+                        }
                     },
                     toolbar: [
                         ['style', ['style']],
@@ -188,45 +186,45 @@
                         ['insert', ['link', 'picture']],
                         ['view', ['fullscreen', 'codeview']],
                         ['help', ['help']]
-                      ],
+                    ],
                 });
             },
-            closeNoticeInfo:function(){
-                 vc.emit('noticeManage','listNotice',{});
+            closeNoticeInfo: function () {
+                vc.emit('noticeManage', 'listNotice', {});
 
             },
-            sendFile:function($summernote,files){
-                console.log('上传图片',files);
+            sendFile: function ($summernote, files) {
+                console.log('上传图片', files);
 
                 var param = new FormData();
                 param.append("uploadFile", files[0]);
-                param.append('communityId',vc.getCurrentCommunity().communityId);
+                param.append('communityId', vc.getCurrentCommunity().communityId);
 
                 vc.http.upload(
                     'addNoticeView',
                     'uploadImage',
                     param,
                     {
-                        emulateJSON:true,
+                        emulateJSON: true,
                         //添加请求头
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
-                     },
-                     function(json,res){
+                    },
+                    function (json, res) {
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if(res.status == 200){
+                        if (res.status == 200) {
                             var data = JSON.parse(json);
                             //关闭model
-                            $summernote.summernote('insertImage', "/callComponent/download/getFile/file?fileId="+data.fileId +"&communityId="+vc.getCurrentCommunity().communityId);
-                            return ;
+                            $summernote.summernote('insertImage', "/callComponent/download/getFile/file?fileId=" + data.fileId + "&communityId=" + vc.getCurrentCommunity().communityId);
+                            return;
                         }
                         vc.message(json);
-                     },
-                     function(errInfo,error){
+                    },
+                    function (errInfo, error) {
                         console.log('请求失败处理');
                         vc.message(errInfo);
-                     });
+                    });
 
             }
 

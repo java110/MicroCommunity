@@ -1,8 +1,12 @@
-(function (vc, vm) {
+(function (vc) {
 
     vc.extends({
+        propTypes: {
+            callBackListener: vc.propTypes.string, //父组件名称
+            callBackFunction: vc.propTypes.string //父组件监听方法
+        },
         data: {
-            editApplicationKeyInfo: {
+            addApplicationKeyInfo: {
                 applicationKeyId: '',
                 name: '',
                 tel: '',
@@ -21,39 +25,33 @@
                 locationTypeCd: '',
                 locationObjId: '',
                 roomName: ''
-
             }
         },
         _initMethod: function () {
-            vc.component._initEditApplicationKeyDateInfo();
-
+            vc.component._initAddApplicationKeyDateInfo();
         },
         _initEvent: function () {
-            vc.on('editApplicationKey', 'openEditApplicationKeyModal', function (_params) {
-                vc.component.refreshEditApplicationKeyInfo();
-               // $('#editApplicationKeyModel').modal('show');
-                vc.copyObject(_params, vc.component.editApplicationKeyInfo);
-                vc.component.editApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
+            vc.on('addApplicationKey', 'openAddApplicationKeyModal', function () {
+                $('#addApplicationKeyModel').modal('show');
             });
-
-            vc.on("editApplicationKey", "notify", function (_param) {
+            vc.on("addApplicationKey", "notify", function (_param) {
                 if (_param.hasOwnProperty("floorId")) {
-                    vc.component.editApplicationKeyInfo.floorId = _param.floorId;
+                    vc.component.addApplicationKeyInfo.floorId = _param.floorId;
                 }
 
                 if (_param.hasOwnProperty("unitId")) {
-                    vc.component.editApplicationKeyInfo.unitId = _param.unitId;
+                    vc.component.addApplicationKeyInfo.unitId = _param.unitId;
                 }
 
                 if(_param.hasOwnProperty("roomId")){
-                    vc.component.editApplicationKeyInfo.roomId = _param.roomId;
+                    vc.component.addApplicationKeyInfo.roomId = _param.roomId;
                 }
             });
         },
         methods: {
-            _initEditApplicationKeyDateInfo: function () {
-                vc.component.editApplicationKeyInfo.startTime = vc.dateFormat(new Date().getTime());
-                $('.editApplicationStartTime').datetimepicker({
+            _initAddApplicationKeyDateInfo: function () {
+                vc.component.addApplicationKeyInfo.startTime = vc.dateFormat(new Date().getTime());
+                $('.addApplicationStartTime').datetimepicker({
                     language: 'zh-CN',
                     format: 'yyyy-mm-dd HH:ii:ss',
                     initTime: true,
@@ -62,12 +60,12 @@
                     todayBtn: true
 
                 });
-                $('.editApplicationStartTime').datetimepicker()
+                $('.addApplicationStartTime').datetimepicker()
                     .on('changeDate', function (ev) {
-                        var value = $(".editApplicationStartTime").val();
-                        vc.component.editApplicationKeyInfo.startTime = value;
+                        var value = $(".addApplicationStartTime").val();
+                        vc.component.addApplicationKeyInfo.startTime = value;
                     });
-                $('.editApplicationEndTime').datetimepicker({
+                $('.addApplicationEndTime').datetimepicker({
                     language: 'zh-CN',
                     format: 'yyyy-mm-dd HH:ii:ss',
                     initTime: true,
@@ -75,17 +73,18 @@
                     autoClose: 1,
                     todayBtn: true
                 });
-                $('.editApplicationEndTime').datetimepicker()
+                $('.addApplicationEndTime').datetimepicker()
                     .on('changeDate', function (ev) {
-                        var value = $(".editApplicationEndTime").val();
-                        vc.component.editApplicationKeyInfo.endTime = value;
+                        var value = $(".addApplicationEndTime").val();
+                        vc.component.addApplicationKeyInfo.endTime = value;
                     });
             },
-            editApplicationKeyValidate: function () {
+
+            addApplicationKeyValidate: function () {
                 return vc.validate.validate({
-                    editApplicationKeyInfo: vc.component.editApplicationKeyInfo
+                    addApplicationKeyInfo: vc.component.addApplicationKeyInfo
                 }, {
-                    'editApplicationKeyInfo.name': [
+                    'addApplicationKeyInfo.name': [
                         {
                             limit: "required",
                             param: "",
@@ -97,7 +96,7 @@
                             errInfo: "姓名不能超过64位"
                         },
                     ],
-                    'editApplicationKeyInfo.tel': [
+                    'addApplicationKeyInfo.tel': [
                         {
                             limit: "required",
                             param: "",
@@ -109,7 +108,7 @@
                             errInfo: "手机号格式错误"
                         },
                     ],
-                    'editApplicationKeyInfo.typeCd': [
+                    'addApplicationKeyInfo.typeCd': [
                         {
                             limit: "required",
                             param: "",
@@ -121,7 +120,7 @@
                             errInfo: "用户类型格式错误"
                         },
                     ],
-                    'editApplicationKeyInfo.sex': [
+                    'addApplicationKeyInfo.sex': [
                         {
                             limit: "required",
                             param: "",
@@ -133,7 +132,7 @@
                             errInfo: "性别格式错误"
                         },
                     ],
-                    'editApplicationKeyInfo.age': [
+                    'addApplicationKeyInfo.age': [
                         {
                             limit: "required",
                             param: "",
@@ -145,7 +144,7 @@
                             errInfo: "年龄不是有效数字"
                         },
                     ],
-                    'editApplicationKeyInfo.idCard': [
+                    'addApplicationKeyInfo.idCard': [
                         {
                             limit: "required",
                             param: "",
@@ -157,7 +156,7 @@
                             errInfo: "不是有效的身份证号"
                         },
                     ],
-                    'editApplicationKeyInfo.startTime': [
+                    'addApplicationKeyInfo.startTime': [
                         {
                             limit: "required",
                             param: "",
@@ -169,7 +168,7 @@
                             errInfo: "不是有效的时间格式"
                         },
                     ],
-                    'editApplicationKeyInfo.endTime': [
+                    'addApplicationKeyInfo.endTime': [
                         {
                             limit: "required",
                             param: "",
@@ -181,20 +180,14 @@
                             errInfo: "不是有效的时间格式"
                         },
                     ],
-                    'editApplicationKeyInfo.applicationKeyId': [
-                        {
-                            limit: "required",
-                            param: "",
-                            errInfo: "钥匙申请ID不能为空"
-                        }],
-                    'editApplicationKeyInfo.locationTypeCd': [
+                    'addApplicationKeyInfo.locationTypeCd': [
                         {
                             limit: "required",
                             param: "",
                             errInfo: "申请位置不能为空"
                         }
                     ],
-                    'editApplicationKeyInfo.locationObjId': [
+                    'addApplicationKeyInfo.locationObjId': [
                         {
                             limit: "required",
                             param: "",
@@ -202,18 +195,28 @@
                         }
                     ]
 
+
                 });
             },
-            editApplicationKey: function () {
-                if (!vc.component.editApplicationKeyValidate()) {
+            saveApplicationKeyInfo: function () {
+                if (!vc.component.addApplicationKeyValidate()) {
                     vc.message(vc.validate.errInfo);
+
+                    return;
+                }
+
+                vc.component.addApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
+                //不提交数据将数据 回调给侦听处理
+                if (vc.notNull($props.callBackListener)) {
+                    vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addApplicationKeyInfo);
+                    $('#addApplicationKeyModel').modal('hide');
                     return;
                 }
 
                 vc.http.post(
-                    'editApplicationKey',
-                    'update',
-                    JSON.stringify(vc.component.editApplicationKeyInfo),
+                    'addApplicationKey',
+                    'save',
+                    JSON.stringify(vc.component.addApplicationKeyInfo),
                     {
                         emulateJSON: true
                     },
@@ -221,21 +224,24 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if (res.status == 200) {
                             //关闭model
-                            $('#editApplicationKeyModel').modal('hide');
+                            //$('#addApplicationKeyModel').modal('hide');
+                            vc.component.clearAddApplicationKeyInfo();
                             vc.emit('applicationKeyManage', 'listApplicationKey', {});
+
                             return;
                         }
                         vc.message(json);
+
                     },
                     function (errInfo, error) {
                         console.log('请求失败处理');
 
                         vc.message(errInfo);
+
                     });
             },
-            refreshEditApplicationKeyInfo: function () {
-                vc.component.editApplicationKeyInfo = {
-                    applicationKeyId: '',
+            clearAddApplicationKeyInfo: function () {
+                vc.component.addApplicationKeyInfo = {
                     name: '',
                     tel: '',
                     typeCd: '',
@@ -244,10 +250,19 @@
                     idCard: '',
                     startTime: '',
                     endTime: '',
+                    floorId: '',
+                    floorNum: '',
+                    floorName: '',
+                    unitId: '',
+                    unitName: '',
+                    roomId: '',
+                    locationTypeCd: '',
+                    locationObjId: '',
+                    roomName: ''
 
-                }
+                };
             }
         }
     });
 
-})(window.vc, window.vc.component);
+})(window.vc);
