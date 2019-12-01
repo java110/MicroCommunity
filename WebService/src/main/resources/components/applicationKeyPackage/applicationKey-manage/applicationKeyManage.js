@@ -67,7 +67,7 @@
                 vc.component.applicationKeyManageInfo.showComponent = 'addApplicationKey';
             },
             _openEditApplicationKeyModel: function (_applicationKey) {
-                /*vc.emit('editApplicationKey', 'openEditApplicationKeyModal', _applicationKey);*/
+                vc.emit('editApplicationKey', 'openEditApplicationKeyModal', _applicationKey);
                 vc.component.applicationKeyManageInfo.showComponent = 'editApplicationKey';
 
             },
