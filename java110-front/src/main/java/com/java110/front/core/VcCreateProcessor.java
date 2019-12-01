@@ -108,8 +108,8 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
                 .replaceAll("(\\$)+( )*+(\\()+( )*+\"+#", "\\$(\"#" + namespace + "_");
 
         //将 监听也做优化
-        js = js.replaceAll("(vc.on)+\\('", "vc.on('" + namespace + ",");
-
+        js = js.replaceAll("(vc.on)+\\('", "vc.on('" + namespace + "','");
+        js = js.replaceAll("(vc.on)+\\(\"", "vc.on(\"" + namespace + "\",\"");
         return js;
     }
 
