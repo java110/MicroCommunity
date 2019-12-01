@@ -16,7 +16,35 @@
     /**
      事件监听
      **/
-    vc.on = function (_componentName, _value, _callback) {
+    vc.on = function () {
+        var _namespace = "";
+        var _componentName = "";
+        var _value = "";
+        var _callback = undefined;
+        if (arguments.length == 4) {
+            _namespace = arguments[0];
+            _componentName = arguments[1];
+            _value = arguments[2];
+            _callback = arguments[3];
+        }else if(arguments.length == 3){
+            _componentName = arguments[0];
+            _value = arguments[1];
+            _callback = arguments[2];
+        }else{
+            console.error("执行on 异常，vc.on 参数只能是3个 或4个");
+            return;
+        }
+        if (vc.notNull(_namespace)) {
+            vc.component.$on(_namespace + "_" + _componentName + '_' + _value,
+                function (param) {
+                    if (vc.debug) {
+                        console.log("监听ON事件", _namespace, _componentName, _value, param);
+                    }
+                    _callback(param);
+                }
+            );
+            return;
+        }
 
         vc.component.$on(_componentName + '_' + _value,
             function (param) {
@@ -31,36 +59,32 @@
     /**
      事件触发
      **/
-    vc.emit = function (_componentName, _value, _param) {
+    vc.emit = function () {
+        var _namespace = "";
+        var _componentName = "";
+        var _value = "";
+        var _callback = undefined;
+        if (arguments.length == 4) {
+            _namespace = arguments[0];
+            _componentName = arguments[1];
+            _value = arguments[2];
+            _callback = arguments[3];
+        }else if(arguments.length == 3){
+            _componentName = arguments[0];
+            _value = arguments[1];
+            _callback = arguments[2];
+        }else{
+            console.error("执行on 异常，vc.on 参数只能是3个 或4个");
+            return;
+        }
         if (vc.debug) {
             console.log("监听emit事件", _componentName, _value, _param);
         }
-        vc.component.$emit(_componentName + '_' + _value, _param);
-    };
-
-    /**
-     事件监听
-     **/
-    vc.on = function (_namespace, _componentName, _value, _callback) {
-
-        vc.component.$on(_namespace + "_" + _componentName + '_' + _value,
-            function (param) {
-                if (vc.debug) {
-                    console.log("监听ON事件", _namespace, _componentName, _value, param);
-                }
-                _callback(param);
-            }
-        );
-    };
-
-    /**
-     事件触发
-     **/
-    vc.emit = function (_namespace, _componentName, _value, _param) {
-        if (vc.debug) {
-            console.log("监听emit事件", _namespace, _componentName, _value, _param);
+        if (vc.notNull(_namespace)) {
+            vc.component.$emit(_namespace + "_" + _componentName + '_' + _value, _param);
+            return;
         }
-        vc.component.$emit(_namespace + "_" + _componentName + '_' + _value, _param);
+        vc.component.$emit(_componentName + '_' + _value, _param);
     };
 
 })(window.vc);
