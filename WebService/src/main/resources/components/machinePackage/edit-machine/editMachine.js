@@ -33,28 +33,28 @@
                 vc.copyObject(_params, vc.component.editMachineInfo);
                 //根据位置类型 传输数据
                 if (vc.component.editMachineInfo.locationTypeCd == '2000') {
-                    vc.emit('floorSelect2','setFloor',{
+                    vc.emit('editMachine','floorSelect2','setFloor',{
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum
                     });
-                    vc.emit('unitSelect2','setUnit',{
+                    vc.emit('editMachine','unitSelect2','setUnit',{
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum,
                         unitId:vc.component.editMachineInfo.unitId,
                         unitNum:vc.component.editMachineInfo.unitNum,
                     });
                 } else if (vc.component.editMachineInfo.locationTypeCd == '3000') {
-                    vc.emit('floorSelect2','setFloor',{
+                    vc.emit('editMachine','floorSelect2','setFloor',{
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum
                     });
-                    vc.emit('unitSelect2','setUnit',{
+                    vc.emit('editMachine','unitSelect2','setUnit',{
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum,
                         unitId:vc.component.editMachineInfo.unitId,
                         floorNum:vc.component.editMachineInfo.unitNum,
                     });
-                    vc.emit('roomSelect2','setRoom',{
+                    vc.emit('editMachine','roomSelect2','setRoom',{
                         floorId:vc.component.editMachineInfo.floorId,
                         floorNum:vc.component.editMachineInfo.floorNum,
                         unitId:vc.component.editMachineInfo.unitId,
