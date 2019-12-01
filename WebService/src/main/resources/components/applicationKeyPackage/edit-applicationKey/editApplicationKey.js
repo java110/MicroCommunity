@@ -1,0 +1,185 @@
+(function(vc,vm){
+
+    vc.extends({
+        data:{
+            editApplicationKeyInfo:{
+                applicationKeyId:'',
+name:'',
+tel:'',
+typeCd:'',
+sex:'',
+age:'',
+idCard:'',
+startTime:'',
+endTime:'',
+
+            }
+        },
+         _initMethod:function(){
+
+         },
+         _initEvent:function(){
+             vc.on('editApplicationKey','openEditApplicationKeyModal',function(_params){
+                vc.component.refreshEditApplicationKeyInfo();
+                $('#editApplicationKeyModel').modal('show');
+                vc.copyObject(_params, vc.component.editApplicationKeyInfo );
+                vc.component.editApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
+            });
+        },
+        methods:{
+            editApplicationKeyValidate:function(){
+                        return vc.validate.validate({
+                            editApplicationKeyInfo:vc.component.editApplicationKeyInfo
+                        },{
+                            'editApplicationKeyInfo.name':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"姓名不能为空"
+                        },
+ {
+                            limit:"maxin",
+                            param:"1,64",
+                            errInfo:"姓名不能超过64位"
+                        },
+                    ],
+'editApplicationKeyInfo.tel':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"手机号不能为空"
+                        },
+ {
+                            limit:"phone",
+                            param:"",
+                            errInfo:"手机号格式错误"
+                        },
+                    ],
+'editApplicationKeyInfo.typeCd':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"用户类型不能为空"
+                        },
+ {
+                            limit:"num",
+                            param:"",
+                            errInfo:"用户类型格式错误"
+                        },
+                    ],
+'editApplicationKeyInfo.sex':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"性别不能为空"
+                        },
+ {
+                            limit:"num",
+                            param:"",
+                            errInfo:"性别格式错误"
+                        },
+                    ],
+'editApplicationKeyInfo.age':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"年龄不能为空"
+                        },
+ {
+                            limit:"num",
+                            param:"",
+                            errInfo:"年龄不是有效数字"
+                        },
+                    ],
+'editApplicationKeyInfo.idCard':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"身份证号不能为空"
+                        },
+ {
+                            limit:"idCard",
+                            param:"",
+                            errInfo:"不是有效的身份证号"
+                        },
+                    ],
+'editApplicationKeyInfo.startTime':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"开始时间不能为空"
+                        },
+ {
+                            limit:"dateTime",
+                            param:"",
+                            errInfo:"不是有效的时间格式"
+                        },
+                    ],
+'editApplicationKeyInfo.endTime':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"结束时间不能为空"
+                        },
+ {
+                            limit:"dateTime",
+                            param:"",
+                            errInfo:"不是有效的时间格式"
+                        },
+                    ],
+'editApplicationKeyInfo.applicationKeyId':[
+{
+                            limit:"required",
+                            param:"",
+                            errInfo:"钥匙申请ID不能为空"
+                        }]
+
+                        });
+             },
+            editApplicationKey:function(){
+                if(!vc.component.editApplicationKeyValidate()){
+                    vc.message(vc.validate.errInfo);
+                    return ;
+                }
+
+                vc.http.post(
+                    'editApplicationKey',
+                    'update',
+                    JSON.stringify(vc.component.editApplicationKeyInfo),
+                    {
+                        emulateJSON:true
+                     },
+                     function(json,res){
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if(res.status == 200){
+                            //关闭model
+                            $('#editApplicationKeyModel').modal('hide');
+                             vc.emit('applicationKeyManage','listApplicationKey',{});
+                            return ;
+                        }
+                        vc.message(json);
+                     },
+                     function(errInfo,error){
+                        console.log('请求失败处理');
+
+                        vc.message(errInfo);
+                     });
+            },
+            refreshEditApplicationKeyInfo:function(){
+                vc.component.editApplicationKeyInfo= {
+                  applicationKeyId:'',
+name:'',
+tel:'',
+typeCd:'',
+sex:'',
+age:'',
+idCard:'',
+startTime:'',
+endTime:'',
+
+                }
+            }
+        }
+    });
+
+})(window.vc,window.vc.component);
