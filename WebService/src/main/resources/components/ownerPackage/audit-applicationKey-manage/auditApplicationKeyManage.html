@@ -27,8 +27,12 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="number" placeholder="请输入用户类型"
-                                       v-model="auditApplicationKeyManageInfo.conditions.typeCd" class=" form-control">
+                                <select class="custom-select" v-model="auditApplicationKeyManageInfo.conditions.typeCd">
+                                    <option selected value="">请选择审核状态</option>
+                                    <option value="10001">审核完成</option>
+                                    <option value="10002">未审核</option>
+                                    <option value="10003">审核拒绝</option>
+                                </select>
                             </div>
                         </div>
 
@@ -42,8 +46,11 @@
                     <div class="row" v-if="auditApplicationKeyManageInfo.moreCondition == true">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="number" placeholder="请输入用户类型"
-                                       v-model="auditApplicationKeyManageInfo.conditions.typeCd" class=" form-control">
+                                <select class="custom-select" v-model="auditApplicationKeyManageInfo.conditions.typeCd">
+                                    <option selected value="">请选择报修类型</option>
+                                    <option value="10001">保洁</option>
+                                    <option value="10002">保安</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-4">

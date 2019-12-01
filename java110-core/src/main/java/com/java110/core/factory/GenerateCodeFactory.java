@@ -104,6 +104,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_machineTranslateId = "90";
     public static final String CODE_PREFIX_fileRelId = "91";
     public static final String CODE_PREFIX_machineRecordId = "92";
+    public static final String CODE_PREFIX_applicationKeyId = "93";
 
 
     /**

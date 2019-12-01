@@ -1,7 +1,7 @@
 {
   "templateName":"开门记录",
-  "templateCode":"applicationKey",
-  "templateKey":"applicationKeyId",
+  "templateCode":"machineRecord",
+  "templateKey":"machineRecordId",
   "templateKeyName":"开门记录ID",
   "searchCode": "name",
   "searchName": "名称",
