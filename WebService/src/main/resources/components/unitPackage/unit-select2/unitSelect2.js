@@ -19,6 +19,7 @@
                 deep: true,
                 handler: function () {
                     vc.emit($props.callBackListener, $props.callBackFunction, this.unitSelect2Info);
+                    console.log('是否执行 watch',$props.callBackListener, $props.callBackFunction, this.unitSelect2Info);
                     vc.emit($namespace, 'roomSelect2', "transferRoom", this.unitSelect2Info);
                 }
             }
