@@ -26,6 +26,7 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String startTime;
     private String state;
     private String age;
+    private String communityId;
 
 
     private Date createTime;
@@ -136,5 +137,13 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

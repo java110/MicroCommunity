@@ -114,6 +114,7 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         businessApplicationKey.putAll(paramInJson);
         businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
         businessApplicationKey.put("applicationKeyId", "-1");
+        businessApplicationKey.put("state", "10002");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
         return business;

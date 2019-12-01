@@ -3,7 +3,9 @@ package com.java110.api.listener.applicationKey;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -30,6 +32,10 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -100,6 +106,11 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         machineDto.setLocationTypeCd(paramInJson.getString("locationTypeCd"));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         Assert.listOnlyOne(machineDtos, "该位置还没有相应的门禁设备");
+        ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
+        applicationKeyDto.setApplicationKeyId(paramInJson.getString("applicationKeyId"));
+        applicationKeyDto.setCommunityId(paramInJson.getString("communityId"));
+        List<ApplicationKeyDto> applicationKeyDtos = applicationKeyInnerServiceSMOImpl.queryApplicationKeys(applicationKeyDto);
+        Assert.listOnlyOne(applicationKeyDtos, "未找到申请记录或找到多条记录");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
@@ -108,6 +119,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         JSONObject businessApplicationKey = new JSONObject();
         businessApplicationKey.putAll(paramInJson);
         businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
+        businessApplicationKey.put("state", applicationKeyDtos.get(0).getState());
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
         return business;
@@ -119,5 +131,13 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
     public void setMachineInnerServiceSMOImpl(IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
         this.machineInnerServiceSMOImpl = machineInnerServiceSMOImpl;
+    }
+
+    public IApplicationKeyInnerServiceSMO getApplicationKeyInnerServiceSMOImpl() {
+        return applicationKeyInnerServiceSMOImpl;
+    }
+
+    public void setApplicationKeyInnerServiceSMOImpl(IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl) {
+        this.applicationKeyInnerServiceSMOImpl = applicationKeyInnerServiceSMOImpl;
     }
 }
