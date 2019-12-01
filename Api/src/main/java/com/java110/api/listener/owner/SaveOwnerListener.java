@@ -160,6 +160,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(paramInJson);
+        businessOwner.put("state", "2000");
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;
@@ -289,7 +290,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "age", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(paramIn, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
-        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
+        Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含类型");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
         Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
 

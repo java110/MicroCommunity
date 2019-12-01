@@ -7,9 +7,9 @@
     <!-- 保存业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerInfo" parameterType="Map">
         insert into business_building_owner(
-        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card
+        operate,sex,name,link,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state
         ) values (
-        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId},#{idCard}
+        #{operate},#{sex},#{name},#{link},#{remark},#{ownerId},#{bId},#{userId},#{age},#{memberId},#{ownerTypeCd},#{communityId},#{idCard},#{state}
         )
     </insert>
 
@@ -19,7 +19,7 @@
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.community_id,t.community_id communityId,
-        t.id_card, t.id_card idCard
+        t.id_card, t.id_card idCard,t.state
         from business_building_owner t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -55,6 +55,9 @@
         <if test="age !=null and age != ''">
             and t.age= #{age}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
@@ -68,9 +71,9 @@
     <!-- 保存业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfoInstance" parameterType="Map">
         insert into building_owner(
-        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card
+        sex,name,link,status_cd,remark,owner_id,b_id,user_id,age,member_id,owner_type_cd,community_id,id_card,state
         ) select t.sex,t.name,t.link,'0',t.remark,t.owner_id,t.b_id,t.user_id,t.age,t.member_id,t.owner_type_cd,
-        t.community_id communityId,t.id_card
+        t.community_id communityId,t.id_card,state
         from business_building_owner t where 1=1
         and t.operate= 'ADD'
         <if test="sex !=null">
@@ -109,7 +112,9 @@
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
         </if>
-
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
     </insert>
 
 
@@ -119,7 +124,7 @@
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
-        t.community_id communityId,t.id_card, t.id_card idCard
+        t.community_id communityId,t.id_card, t.id_card idCard,t.state
         from building_owner t
         where 1 =1
         <if test="sex !=null">
@@ -154,6 +159,9 @@
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
@@ -211,6 +219,9 @@
         <if test="age !=null and age != ''">
             and t.age= #{age}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
@@ -253,6 +264,9 @@
         </if>
         <if test="age !=null and age != ''">
             , t.age= #{age}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
         </if>
         <if test="idCard !=null and idCard != ''">
             , t.id_card = #{idCard}
@@ -307,6 +321,9 @@
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}

@@ -1,0 +1,130 @@
+<div id="component">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                v-on:click="_moreCondition()">{{auditApplicationKeyManageInfo.moreCondition == true?'隐藏':'更多'}}
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入姓名"
+                                       v-model="auditApplicationKeyManageInfo.conditions.name" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入手机号码"
+                                       v-model="auditApplicationKeyManageInfo.conditions.tel" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="number" placeholder="请输入用户类型"
+                                       v-model="auditApplicationKeyManageInfo.conditions.typeCd" class=" form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOwnerMethod()"><i
+                                    class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="row" v-if="auditApplicationKeyManageInfo.moreCondition == true">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="number" placeholder="请输入用户类型"
+                                       v-model="auditApplicationKeyManageInfo.conditions.typeCd" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入身份证号"
+                                       v-model="auditApplicationKeyManageInfo.conditions.idCard" class=" form-control">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>审核钥匙</h5>
+                    <div class="ibox-tools" style="top:10px;">
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>手机号码</th>
+                            <th>用户类型</th>
+                            <th>身份证号</th>
+                            <th>所属位置</th>
+                            <th>具体位置</th>
+                            <th>申请时间</th>
+                            <th>结束时间</th>
+                            <th>状态</th>
+                            <th class="text-right">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="applicationKey in auditApplicationKeyManageInfo.applicationKeys">
+                            <td>{{applicationKey.name}}</td>
+                            <td>{{applicationKey.tel}}</td>
+                            <td>{{applicationKey.typeCd}}</td>
+                            <td>{{applicationKey.idCard}}</td>
+                            <td>{{applicationKey.locationTypeName}}</td>
+                            <td>{{applicationKey.locationObjName}}</td>
+                            <td>{{applicationKey.startTime}}</td>
+                            <td>{{applicationKey.endTime}}</td>
+                            <td>{{applicationKey.stateName}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openAuditApplicationKeyModal(applicationKey)">审核
+                                    </button>
+                                </div>
+
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+    <vc:create name="audit"
+               callBackListener="auditApplicationKeyManage"
+               callBackFunction="notifyAuditInfo"
+    ></vc:create>
+
+</div>

@@ -425,6 +425,8 @@ public class ServiceCodeConstant {
     // 保存业主信息
     public static final String SERVICE_CODE_SAVE_OWNER = "owner.saveOwner";
 
+    public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";
+
     // 编辑业主信息
     public static final String SERVICE_CODE_EDIT_OWNER = "owner.editOwner";
 
