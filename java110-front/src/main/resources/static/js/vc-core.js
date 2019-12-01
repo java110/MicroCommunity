@@ -63,16 +63,16 @@
         var _namespace = "";
         var _componentName = "";
         var _value = "";
-        var _callback = undefined;
+        var _param = undefined;
         if (arguments.length == 4) {
             _namespace = arguments[0];
             _componentName = arguments[1];
             _value = arguments[2];
-            _callback = arguments[3];
+            _param = arguments[3];
         }else if(arguments.length == 3){
             _componentName = arguments[0];
             _value = arguments[1];
-            _callback = arguments[2];
+            _param = arguments[2];
         }else{
             console.error("执行on 异常，vc.on 参数只能是3个 或4个");
             return;
