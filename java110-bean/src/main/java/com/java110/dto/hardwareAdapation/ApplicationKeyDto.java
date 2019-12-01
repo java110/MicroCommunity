@@ -18,7 +18,7 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String applicationKeyId;
     private String idCard;
     private String sex;
-    private String entTime;
+    private String endTime;
     private String machineId;
     private String typeCd;
     private String name;
@@ -58,13 +58,7 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
         this.sex = sex;
     }
 
-    public String getEntTime() {
-        return entTime;
-    }
 
-    public void setEntTime(String entTime) {
-        this.entTime = entTime;
-    }
 
     public String getMachineId() {
         return machineId;
@@ -145,5 +139,13 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
