@@ -16,6 +16,11 @@ public class ServiceCodeMachineConstant {
      * 修改 设备
      */
     public static final String UPDATE_MACHINE = "machine.updateMachine";
+
+    /**
+     * 修改 设备
+     */
+    public static final String UPDATE_MACHINE_STATE = "machine.updateMachineState";
     /**
      * 删除 设备
      */
