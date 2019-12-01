@@ -249,7 +249,7 @@ public class VcCreateProcessor extends AbstractElementTagProcessor {
         js = js.substring(0, extPos) + tmpProTypes.substring(0, pos).trim()
                 + "\nnamespace:'" + namespace.trim() + "',\n" + tmpProTypes.substring(pos, tmpProTypes.length());
         int position = js.indexOf("{");
-        String propsJs = "\n$namespace='" + namespace.trim() + "';\n";
+        String propsJs = "\nvar $namespace='" + namespace.trim() + "';\n";
         js = new StringBuffer(js).insert(position + 1, propsJs).toString();
         return js;
     }
