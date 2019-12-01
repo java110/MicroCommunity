@@ -40,7 +40,7 @@ public abstract class AbstractApplicationKeyBusinessServiceDataFlowListener exte
         businessApplicationKeyInfo.put("applicationKeyId", businessApplicationKeyInfo.get("application_key_id"));
         businessApplicationKeyInfo.put("idCard", businessApplicationKeyInfo.get("id_card"));
         businessApplicationKeyInfo.put("sex", businessApplicationKeyInfo.get("sex"));
-        businessApplicationKeyInfo.put("entTime", businessApplicationKeyInfo.get("end_time"));
+        businessApplicationKeyInfo.put("endTime", businessApplicationKeyInfo.get("end_time"));
         businessApplicationKeyInfo.put("machineId", businessApplicationKeyInfo.get("machine_id"));
         businessApplicationKeyInfo.put("operate", businessApplicationKeyInfo.get("operate"));
         businessApplicationKeyInfo.put("typeCd", businessApplicationKeyInfo.get("type_cd"));
@@ -78,7 +78,7 @@ public abstract class AbstractApplicationKeyBusinessServiceDataFlowListener exte
         currentApplicationKeyInfo.put("applicationKeyId", currentApplicationKeyInfo.get("application_key_id"));
         currentApplicationKeyInfo.put("idCard", currentApplicationKeyInfo.get("id_card"));
         currentApplicationKeyInfo.put("sex", currentApplicationKeyInfo.get("sex"));
-        currentApplicationKeyInfo.put("entTime", currentApplicationKeyInfo.get("end_time"));
+        currentApplicationKeyInfo.put("endTime", currentApplicationKeyInfo.get("end_time"));
         currentApplicationKeyInfo.put("machineId", currentApplicationKeyInfo.get("machine_id"));
         currentApplicationKeyInfo.put("operate", currentApplicationKeyInfo.get("operate"));
         currentApplicationKeyInfo.put("typeCd", currentApplicationKeyInfo.get("type_cd"));

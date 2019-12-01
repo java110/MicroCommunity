@@ -9,7 +9,7 @@
            insert into business_application_key(
 application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,start_time,state,community_id,b_id,age
 ) values (
-#{applicationKeyId},#{idCard},#{sex},#{entTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},#{startTime},#{state},#{communityId},#{bId},#{age}
+#{applicationKeyId},#{idCard},#{sex},#{endTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},#{startTime},#{state},#{communityId},#{bId},#{age}
 )
        </insert>
 
@@ -17,7 +17,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 查询钥匙申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessApplicationKeyInfo" parameterType="Map" resultType="Map">
         select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
-        idCard,t.sex,t.end_time,t.end_time entTime,t.machine_id,t.machine_id machineId,t.operate,t.type_cd,t.type_cd
+        idCard,t.sex,t.end_time,t.end_time endTime,t.machine_id,t.machine_id machineId,t.operate,t.type_cd,t.type_cd
         typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.age
         from business_application_key t
@@ -31,8 +31,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="sex !=null and sex != ''">
             and t.sex= #{sex}
         </if>
-        <if test="entTime !=null and entTime != ''">
-            and t.end_time= #{entTime}
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -49,7 +49,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
         <if test="state !=null and state != ''">
@@ -84,8 +84,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="sex !=null and sex != ''">
             and t.sex= #{sex}
         </if>
-        <if test="entTime !=null and entTime != ''">
-            and t.end_time= #{entTime}
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -100,7 +100,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
         <if test="state !=null and state != ''">
@@ -122,7 +122,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 查询钥匙申请信息 add by wuxw 2018-07-03 -->
     <select id="getApplicationKeyInfo" parameterType="Map" resultType="Map">
         select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
-        idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time entTime,t.machine_id,t.machine_id
+        idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.machine_id,t.machine_id
         machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time
         startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age
         from application_key t
@@ -139,8 +139,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="entTime !=null and entTime != ''">
-            and t.end_time= #{entTime}
+        <if test="endTime !=null  ">
+            and t.end_time= #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -154,7 +154,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
         <if test="state !=null and state != ''">
@@ -188,8 +188,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="sex !=null and sex != ''">
             , t.sex= #{sex}
         </if>
-        <if test="entTime !=null and entTime != ''">
-            , t.end_time= #{entTime}
+        <if test="endTime !=null ">
+            , t.end_time= #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             , t.machine_id= #{machineId}
@@ -203,7 +203,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="tel !=null and tel != ''">
             , t.tel= #{tel}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             , t.start_time= #{startTime}
         </if>
         <if test="state !=null and state != ''">
@@ -242,8 +242,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="entTime !=null and entTime != ''">
-            and t.end_time= #{entTime}
+        <if test="endTime !=null">
+            and t.end_time= #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -257,7 +257,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
         <if test="state !=null and state != ''">
