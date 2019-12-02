@@ -33,6 +33,37 @@
                 vc.component.refreshEditApplicationKeyInfo();
                // $('#editApplicationKeyModel').modal('show');
                 vc.copyObject(_params, vc.component.editApplicationKeyInfo);
+                if (vc.component.editApplicationKeyInfo.locationTypeCd == '2000') {
+                    vc.emit('editApplicationKey','floorSelect2','setFloor',{
+                        floorId:vc.component.editApplicationKeyInfo.floorId,
+                        floorNum:vc.component.editApplicationKeyInfo.floorNum
+                    });
+                    vc.emit('editApplicationKey','unitSelect2','setUnit',{
+                        floorId:vc.component.editApplicationKeyInfo.floorId,
+                        floorNum:vc.component.editApplicationKeyInfo.floorNum,
+                        unitId:vc.component.editApplicationKeyInfo.unitId,
+                        unitNum:vc.component.editApplicationKeyInfo.unitNum,
+                    });
+                } else if (vc.component.editApplicationKeyInfo.locationTypeCd == '3000') {
+                    vc.emit('editApplicationKey','floorSelect2','setFloor',{
+                        floorId:vc.component.editApplicationKeyInfo.floorId,
+                        floorNum:vc.component.editApplicationKeyInfo.floorNum
+                    });
+                    vc.emit('editApplicationKey','unitSelect2','setUnit',{
+                        floorId:vc.component.editApplicationKeyInfo.floorId,
+                        floorNum:vc.component.editApplicationKeyInfo.floorNum,
+                        unitId:vc.component.editApplicationKeyInfo.unitId,
+                        unitNum:vc.component.editApplicationKeyInfo.unitNum,
+                    });
+                    vc.emit('editApplicationKey','roomSelect2','setRoom',{
+                        floorId:vc.component.editApplicationKeyInfo.floorId,
+                        floorNum:vc.component.editApplicationKeyInfo.floorNum,
+                        unitId:vc.component.editApplicationKeyInfo.unitId,
+                        unitNum:vc.component.editApplicationKeyInfo.unitNum,
+                        roomId:vc.component.editApplicationKeyInfo.roomId,
+                        roomNum:vc.component.editApplicationKeyInfo.roomNum,
+                    });
+                }
                 vc.component.editApplicationKeyInfo.communityId = vc.getCurrentCommunity().communityId;
             });
 
