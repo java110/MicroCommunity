@@ -62,7 +62,7 @@
                                 _term = params.term;
                             }
                             return {
-                                floorName: _term,
+                                floorNum: _term,
                                 page: 1,
                                 row: 10,
                                 communityId: vc.getCurrentCommunity().communityId
@@ -82,7 +82,7 @@
                     //evt.params.data 是选中项的信息
                     console.log('select', evt);
                     this.floorSelect2Info.floorId = evt.params.data.id;
-                    this.floorSelect2Info.floorName = evt.params.data.text;
+                    this.floorSelect2Info.floorNum = evt.params.data.text;
                 });
 
                 $('#floorSelector').on("select2:unselect", function (evt) {
@@ -97,7 +97,7 @@
                 for (var i = 0; i < _floors.length; i++) {
                     var _tmpFloor = {
                         id: _floors[i].floorId,
-                        text: _floors[i].floorName
+                        text: _floors[i].floorNum
                     };
                     _tmpFloors.push(_tmpFloor);
                 }
