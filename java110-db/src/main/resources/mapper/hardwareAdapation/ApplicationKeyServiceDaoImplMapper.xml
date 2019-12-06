@@ -124,8 +124,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
         idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.machine_id,t.machine_id
         machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time
-        startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age
-        from application_key t
+        startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age,
+        m.`location_type_cd` locationTypeCd,m.`location_obj_id` locationObjId
+        from application_key t,machine m
+        where 1 =1
+        and t.machine_id = m.machine_id
+        and m.status_cd = '0'
         where 1 =1
         <if test="applicationKeyId !=null and applicationKeyId != ''">
             and t.application_key_id= #{applicationKeyId}
@@ -228,8 +232,10 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 查询钥匙申请数量 add by wuxw 2018-07-03 -->
     <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from application_key t
+        from application_key t,machine m
         where 1 =1
+        and t.machine_id = m.machine_id
+        and m.status_cd = '0'
         <if test="applicationKeyId !=null and applicationKeyId != ''">
             and t.application_key_id= #{applicationKeyId}
         </if>
@@ -265,6 +271,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+            and m.community_id= #{communityId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

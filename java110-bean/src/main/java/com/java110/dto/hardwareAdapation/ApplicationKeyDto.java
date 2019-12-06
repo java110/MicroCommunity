@@ -27,6 +27,16 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String state;
     private String age;
     private String communityId;
+    private String locationTypeCd;
+    private String locationTypeName;
+    private String locationObjId;
+    private String locationObjName;
+    private String floorId;
+    private String floorNum;
+    private String unitId;
+    private String unitNum;
+    private String roomId;
+    private String roomNum;
 
 
     private Date createTime;
@@ -147,5 +157,85 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getLocationTypeCd() {
+        return locationTypeCd;
+    }
+
+    public void setLocationTypeCd(String locationTypeCd) {
+        this.locationTypeCd = locationTypeCd;
+    }
+
+    public String getLocationTypeName() {
+        return locationTypeName;
+    }
+
+    public void setLocationTypeName(String locationTypeName) {
+        this.locationTypeName = locationTypeName;
+    }
+
+    public String getLocationObjId() {
+        return locationObjId;
+    }
+
+    public void setLocationObjId(String locationObjId) {
+        this.locationObjId = locationObjId;
+    }
+
+    public String getLocationObjName() {
+        return locationObjName;
+    }
+
+    public void setLocationObjName(String locationObjName) {
+        this.locationObjName = locationObjName;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
     }
 }
