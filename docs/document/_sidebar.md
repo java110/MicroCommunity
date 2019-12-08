@@ -55,6 +55,7 @@
   * [添加业主](api/owner/saveOwner.md)
   * [修改业主](api/owner/updateOwner.md)
   * [删除业主](api/owner/deleteOwner.md)
+  * [钥匙申请](api/machine/applicationKey.md)
 
 * 服务端接口协议
 
