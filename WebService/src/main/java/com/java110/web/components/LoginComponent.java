@@ -3,6 +3,7 @@ package com.java110.web.components;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.ILoginServiceSMO;
+import com.java110.web.smo.sys.ISysServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -11,25 +12,32 @@ import org.springframework.stereotype.Component;
 public class LoginComponent {
 
 
-
     @Autowired
     private ILoginServiceSMO loginServiceSMOImpl;
+
+    @Autowired
+    private ISysServiceSMO sysServiceSMOImpl;
+
     /**
      * 用户登录
+     *
      * @param pd
      * @return
      */
-    public ResponseEntity<String> doLogin(IPageData pd){
+    public ResponseEntity<String> doLogin(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        try{
-            responseEntity =  loginServiceSMOImpl.doLogin(pd);
-        }catch (Exception e){
+        try {
+            responseEntity = loginServiceSMOImpl.doLogin(pd);
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }finally {
+        } finally {
             return responseEntity;
         }
     }
 
+    public ResponseEntity<String> getSysInfo(IPageData pd) {
+        return sysServiceSMOImpl.getSysInfo(pd);
+    }
 
 
     public ILoginServiceSMO getLoginServiceSMOImpl() {
@@ -38,5 +46,13 @@ public class LoginComponent {
 
     public void setLoginServiceSMOImpl(ILoginServiceSMO loginServiceSMOImpl) {
         this.loginServiceSMOImpl = loginServiceSMOImpl;
+    }
+
+    public ISysServiceSMO getSysServiceSMOImpl() {
+        return sysServiceSMOImpl;
+    }
+
+    public void setSysServiceSMOImpl(ISysServiceSMO sysServiceSMOImpl) {
+        this.sysServiceSMOImpl = sysServiceSMOImpl;
     }
 }

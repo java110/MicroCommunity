@@ -8,7 +8,7 @@
         </form>
     </div>
     <ul class="nav navbar-top-links navbar-right">
-        <li style="padding: 20px">
+        <li style="padding: 20px" v-if="logo == 'HC'">
             <span class="m-r-sm text-muted welcome-message">
                 <a target="_blank" href="https://www.bilibili.com/video/av78427253">演示视频</a>
             </span>
@@ -33,7 +33,7 @@
             </div>
         </li>
         <li style="padding: 20px">
-            <span class="m-r-sm text-muted welcome-message">欢迎访问HC小区管理系统，{{userName}}！</span>
+            <span class="m-r-sm text-muted welcome-message">欢迎访问{{logo}}小区管理系统，{{userName}}！</span>
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
