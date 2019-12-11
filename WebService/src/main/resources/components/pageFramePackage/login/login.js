@@ -11,6 +11,7 @@
         },
         _initMethod: function () {
             vc.component.clearCacheData();
+            vc.component._loadSysInfo();
         },
         _initEvent: function () {
             vc.component.$on('errorInfoEvent', function (_errorInfo) {
