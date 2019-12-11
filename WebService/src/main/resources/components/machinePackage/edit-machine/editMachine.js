@@ -19,7 +19,8 @@
                 roomId: '',
                 locationTypeCd: '',
                 locationObjId: '',
-                roomNum: ''
+                roomNum: '',
+                machineUrl: '',
 
             }
         },
@@ -31,36 +32,37 @@
                 vc.component.refreshEditMachineInfo();
                 $('#editMachineModel').modal('show');
                 vc.copyObject(_params, vc.component.editMachineInfo);
+                vc.component._initMachineUrl();
                 //根据位置类型 传输数据
                 if (vc.component.editMachineInfo.locationTypeCd == '2000') {
-                    vc.emit('editMachine','floorSelect2','setFloor',{
-                        floorId:vc.component.editMachineInfo.floorId,
-                        floorNum:vc.component.editMachineInfo.floorNum
+                    vc.emit('editMachine', 'floorSelect2', 'setFloor', {
+                        floorId: vc.component.editMachineInfo.floorId,
+                        floorNum: vc.component.editMachineInfo.floorNum
                     });
-                    vc.emit('editMachine','unitSelect2','setUnit',{
-                        floorId:vc.component.editMachineInfo.floorId,
-                        floorNum:vc.component.editMachineInfo.floorNum,
-                        unitId:vc.component.editMachineInfo.unitId,
-                        unitNum:vc.component.editMachineInfo.unitNum,
+                    vc.emit('editMachine', 'unitSelect2', 'setUnit', {
+                        floorId: vc.component.editMachineInfo.floorId,
+                        floorNum: vc.component.editMachineInfo.floorNum,
+                        unitId: vc.component.editMachineInfo.unitId,
+                        unitNum: vc.component.editMachineInfo.unitNum,
                     });
                 } else if (vc.component.editMachineInfo.locationTypeCd == '3000') {
-                    vc.emit('editMachine','floorSelect2','setFloor',{
-                        floorId:vc.component.editMachineInfo.floorId,
-                        floorNum:vc.component.editMachineInfo.floorNum
+                    vc.emit('editMachine', 'floorSelect2', 'setFloor', {
+                        floorId: vc.component.editMachineInfo.floorId,
+                        floorNum: vc.component.editMachineInfo.floorNum
                     });
-                    vc.emit('editMachine','unitSelect2','setUnit',{
-                        floorId:vc.component.editMachineInfo.floorId,
-                        floorNum:vc.component.editMachineInfo.floorNum,
-                        unitId:vc.component.editMachineInfo.unitId,
-                        unitNum:vc.component.editMachineInfo.unitNum,
+                    vc.emit('editMachine', 'unitSelect2', 'setUnit', {
+                        floorId: vc.component.editMachineInfo.floorId,
+                        floorNum: vc.component.editMachineInfo.floorNum,
+                        unitId: vc.component.editMachineInfo.unitId,
+                        unitNum: vc.component.editMachineInfo.unitNum,
                     });
-                    vc.emit('editMachine','roomSelect2','setRoom',{
-                        floorId:vc.component.editMachineInfo.floorId,
-                        floorNum:vc.component.editMachineInfo.floorNum,
-                        unitId:vc.component.editMachineInfo.unitId,
-                        unitNum:vc.component.editMachineInfo.unitNum,
-                        roomId:vc.component.editMachineInfo.roomId,
-                        roomNum:vc.component.editMachineInfo.roomNum,
+                    vc.emit('editMachine', 'roomSelect2', 'setRoom', {
+                        floorId: vc.component.editMachineInfo.floorId,
+                        floorNum: vc.component.editMachineInfo.floorNum,
+                        unitId: vc.component.editMachineInfo.unitId,
+                        unitNum: vc.component.editMachineInfo.unitNum,
+                        roomId: vc.component.editMachineInfo.roomId,
+                        roomNum: vc.component.editMachineInfo.roomNum,
                     });
                 }
                 vc.component.editMachineInfo.communityId = vc.getCurrentCommunity().communityId;
@@ -75,12 +77,25 @@
                     vc.component.editMachineInfo.unitId = _param.unitId;
                 }
 
-                if(_param.hasOwnProperty("roomId")){
+                if (_param.hasOwnProperty("roomId")) {
                     vc.component.editMachineInfo.roomId = _param.roomId;
                 }
             });
         },
         methods: {
+            _initMachineUrl: function () {
+                var sysInfo = vc.getData("_sysInfo");
+                if (sysInfo == null) {
+                    return;
+                }
+
+                var apiUrl = sysInfo.apiUrl + "/api/machineTranslate.machineHeartbeart?communityId="
+                    + vc.getCurrentCommunity().communityId + "&transaction_id=-1&req_time=20181113225612&user_id=-1"
+                    + "&app_id=" + vc.component.editMachineInfo.machineTypeCd;
+                vc.component.editMachineInfo.machineUrl = apiUrl;
+
+
+            },
             editMachineValidate: function () {
                 return vc.validate.validate({
                     editMachineInfo: vc.component.editMachineInfo
@@ -237,7 +252,8 @@
                     roomId: '',
                     locationTypeCd: '',
                     locationObjId: '',
-                    roomNum: ''
+                    roomNum: '',
+                    machineUrl: ''
 
                 }
             }

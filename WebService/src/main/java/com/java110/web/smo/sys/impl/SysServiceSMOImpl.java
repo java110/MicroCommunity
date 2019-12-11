@@ -58,8 +58,11 @@ public class SysServiceSMOImpl extends AbstractComponentSMO implements ISysServi
         if (StringUtil.isEmpty(logo)) {
             logo = "HC";
         }
+        String apiUrl = MappingCache.getValue("SYS_API_URL");
+
         JSONObject sysInfo = new JSONObject();
         sysInfo.put("logo", logo);
+        sysInfo.put("apiUrl", apiUrl);
 
         return new ResponseEntity<String>(sysInfo.toJSONString(), HttpStatus.OK);
     }

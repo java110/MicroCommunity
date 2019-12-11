@@ -51,9 +51,9 @@
                             vc.copyObject(json, vc.component.loginInfo);
                             return;
                         }
-                        vc.copyObject(json, vc.component.loginInfo);
+                        vc.copyObject(JSON.parse(json), vc.component.loginInfo);
                         //保存到浏览器
-                        vc.saveData("_sysInfo", json);
+                        vc.saveData("_sysInfo", JSON.parse(json));
                     },
                     function (errInfo, error) {
                         console.log('请求失败处理');
