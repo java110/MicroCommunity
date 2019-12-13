@@ -2,6 +2,7 @@ package com.java110.web.components;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IRegisterServiceSMO;
+import com.java110.web.smo.sys.ISysServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,30 @@ public class RegisterComponent {
     @Autowired
     IRegisterServiceSMO registerServiceSMOImpl;
 
+    @Autowired
+    private ISysServiceSMO sysServiceSMOImpl;
+
 
     /**
      * 用户注册
+     *
      * @param pd 页面封装数据
      * @return
      */
-    public ResponseEntity<String> doRegister(IPageData pd){
+    public ResponseEntity<String> doRegister(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        try{
-            responseEntity =  registerServiceSMOImpl.doRegister(pd);
-        }catch (Exception e){
+        try {
+            responseEntity = registerServiceSMOImpl.doRegister(pd);
+        } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }finally {
+        } finally {
             return responseEntity;
         }
     }
 
+    public ResponseEntity<String> getSysInfo(IPageData pd) {
+        return sysServiceSMOImpl.getSysInfo(pd);
+    }
 
     public IRegisterServiceSMO getRegisterServiceSMOImpl() {
         return registerServiceSMOImpl;
@@ -42,5 +50,13 @@ public class RegisterComponent {
 
     public void setRegisterServiceSMOImpl(IRegisterServiceSMO registerServiceSMOImpl) {
         this.registerServiceSMOImpl = registerServiceSMOImpl;
+    }
+
+    public ISysServiceSMO getSysServiceSMOImpl() {
+        return sysServiceSMOImpl;
+    }
+
+    public void setSysServiceSMOImpl(ISysServiceSMO sysServiceSMOImpl) {
+        this.sysServiceSMOImpl = sysServiceSMOImpl;
     }
 }
