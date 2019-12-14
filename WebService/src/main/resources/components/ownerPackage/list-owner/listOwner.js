@@ -117,7 +117,7 @@
                         communityId:vc.getCurrentCommunity().communityId,
                         ownerId:_owner.ownerId
                     }
-                }
+                };
                vc.http.get('listOwner',
                             'getRooms',
                              param,
@@ -127,7 +127,8 @@
                                 if(rooms.length == 1){
                                       vc.jumpToPage("/flow/ownerRepairFlow?ownerId="+_owner.ownerId+"&roomId="+rooms[0].roomId);
                                 }else if(rooms.length == 0){
-                                    vc.message("当前业主未查询到房屋信息");
+                                    //vc.message("当前业主未查询到房屋信息");
+                                    vc.toast("当前业主未查询到房屋信息");
                                 }else{
 
                                     vc.emit('searchRoom','showOwnerRooms',rooms);
