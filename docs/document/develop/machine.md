@@ -35,6 +35,14 @@ v0.01|初稿|2019-11-12|wuxw
 
 ###### 协议接口
 
+header 信息：
+
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|MachineCode|1|String|30|设备编码|门禁编码|
+
+body 信息：
+
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
 |machineCode|1|String|30|设备编码|门禁编码|
@@ -68,6 +76,7 @@ v0.01|初稿|2019-11-12|wuxw
 ``` javascript
 请求头信息：
 Content-Type:application/json
+machineCode:AC_20191110001
 
 请求报文：
 {
@@ -263,12 +272,14 @@ body信息：
 
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|userID|1|String|30|命令ID|-|
+|userId|1|String|30|命令ID|-|
 |machineCode|1|String|30|设备编码|-|
+|openTypeCd|1|String|12|开门方式|开门方式，1000 人脸开门 2000 钥匙开门|
+|recordTypeCd|1|String|12|记录类型|记录类型，8888 开门记录 6666 访客留影|
 |similar|1|String|200|相似度|-|
 |screenId|1|String|30|屏幕ID|-|
 |photo|1|String|30|base64照片|-|
-|dateTime|1|String|30|日期|YYYY.MM.DD hh:mm:ss|
+|dateTime|1|String|30|日期|YYYY-MM-DD hh:mm:ss|
 
 
 ###### 返回协议
@@ -290,19 +301,19 @@ MachineCode:AC_20191110002
 
 请求报文：
 {
-"userID":"test-1111",
-"machineCode":"test-MachineCode","screenId":1,
+"userId":"772019121580420009",
+"machineCode":"test001",
+"openTypeCd":"1000",
+"recordTypeCd":"8888",
+"screenId":1,
 "similar":0.77,
-"photo":"data:image/jpeg;base64,/9j/4AAQSLf//Z",
-"dateTime":"2017.11.30 16:37:00"
+"photo":"data:image/jpeg;base64,/9j/4AAQSLf//Z234234",
+"dateTime":"2017-11-30 16:37:00"
 }
 
 返回报文：
  {
      "code": 0,
-     "data": {
-         "$ref": "@"
-     },
      "message": "success"
  }
 ```
