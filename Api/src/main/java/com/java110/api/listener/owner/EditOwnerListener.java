@@ -6,6 +6,8 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.dto.OwnerDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -44,6 +46,9 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -127,7 +132,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "sex", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "ownerTypeCd", "请求报文中未包含sex");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
-        Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
+        // Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
 
     }
 
@@ -139,6 +144,11 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
      */
     private JSONObject editOwner(JSONObject paramInJson) {
 
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(paramInJson.getString("memberId"));
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+        Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
@@ -147,6 +157,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         JSONObject businessOwner = new JSONObject();
 
         businessOwner.putAll(paramInJson);
+        businessOwner.put("state", ownerDtos.get(0).getState());
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
         return business;
@@ -165,7 +176,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         fileRelDto.setRelTypeCd("10000");
         fileRelDto.setObjId(paramInJson.getString("memberId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if(fileRelDtos == null || fileRelDtos.size() == 0){
+        if (fileRelDtos == null || fileRelDtos.size() == 0) {
             JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
             business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
@@ -193,6 +204,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
 
 
     }
+
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
@@ -212,5 +224,13 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
 
     public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
         this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
+    }
+
+    public IOwnerInnerServiceSMO getOwnerInnerServiceSMOImpl() {
+        return ownerInnerServiceSMOImpl;
+    }
+
+    public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
+        this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
     }
 }

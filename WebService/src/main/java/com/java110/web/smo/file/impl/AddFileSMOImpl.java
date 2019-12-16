@@ -60,6 +60,8 @@ public class AddFileSMOImpl extends BaseComponentSMO implements IAddFileSMO {
 
     }
 
+
+
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }

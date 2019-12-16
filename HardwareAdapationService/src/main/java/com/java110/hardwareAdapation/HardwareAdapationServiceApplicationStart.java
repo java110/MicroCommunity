@@ -37,7 +37,8 @@ import java.nio.charset.Charset;
 @EnableFeignClients(basePackages = {
         "com.java110.core.smo.user",
         "com.java110.core.smo.order",
-        "com.java110.core.smo.owner"
+        "com.java110.core.smo.owner",
+        "com.java110.core.smo.room"
 })
 public class HardwareAdapationServiceApplicationStart {
 

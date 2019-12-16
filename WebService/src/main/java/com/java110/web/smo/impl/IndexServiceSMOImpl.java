@@ -47,9 +47,15 @@ public class IndexServiceSMOImpl extends BaseComponentSMO implements IIndexServi
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
         //数据校验是否 商户是否入驻该小区
         super.checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
+
         responseEntity = this.callCenterService(restTemplate, pd, "",
                 ServiceConstant.SERVICE_API_URL + "/api/index.queryIndexStatistic" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody().toString());
+            paramOut.put("storeTypeCd", storeTypeCd);
+            responseEntity = new ResponseEntity(paramOut.toJSONString(), HttpStatus.OK);
+        }
 
         return responseEntity;
     }

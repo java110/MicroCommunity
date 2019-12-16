@@ -29,6 +29,7 @@
                     <tr>
                         <th>权限编码</th>
                         <th>权限名称</th>
+                        <th>资源路径</th>
                         <th>权限描述</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -40,6 +41,7 @@
                         {{privilege.pId}}
                     </td>
                     <td class="mail-ontact">{{privilege.name}}</td>
+                    <td class="mail-ontact">{{privilege.resource}}</td>
                     <td class="mail-subject">{{privilege.description}}</td>
                     <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
                     <td class="text-right mail-date">

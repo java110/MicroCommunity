@@ -12,4 +12,4 @@ _________                                 .__             _________             
  \______  / \____/ |___|  //____  >\____/ |____/ \___  >/_______  / \___  >|__|     \_/  |__| \___  >\___  >
         \/              \/      \/                   \/         \/      \/                        \/     \/
 
- java110 ConsoleService starting, more information scan https://github.com/java110/MicroCommunity
+ java110 WebService starting, more information scan https://github.com/java110/MicroCommunity

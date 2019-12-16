@@ -12,5 +12,10 @@ public class TranslateOwnerToMachineFactory {
         TranslateOwnerToMachineChangeMachine machine = new TranslateOwnerToMachineChangeMachine(true);
         Thread ownerToMachineChangeThread = new Thread(machine,"TranslateOwnerToMachineChangeMachineThread");
         ownerToMachineChangeThread.start();
+
+        //启动申请钥匙信息同步 线程 变更业主的场景
+        TranslateApplicationKeyToMachine applicationKeyMachine = new TranslateApplicationKeyToMachine(true);
+        Thread translateApplicationKeyToMachineThread = new Thread(applicationKeyMachine,"TranslateApplicationKeyToMachineThread");
+        translateApplicationKeyToMachineThread.start();
     }
 }

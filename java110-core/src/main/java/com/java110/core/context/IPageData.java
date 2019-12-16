@@ -15,6 +15,12 @@ import org.springframework.http.ResponseEntity;
      */
      String getUserId();
 
+    /**
+     * 获取用户ID
+     * @return 用户ID
+     */
+    String getUserName();
+
      String getAppId();
 
     /**
@@ -98,6 +104,7 @@ import org.springframework.http.ResponseEntity;
      * @throws IllegalArgumentException 参数错误异常
      */
      IPageData builder(String userId,
+                       String userName,
                        String token,
                        String reqData,
                        String componentCode,
@@ -108,6 +115,7 @@ import org.springframework.http.ResponseEntity;
             throws IllegalArgumentException;
 
     IPageData builder(String userId,
+                      String userName,
                       String token,
                       String reqData,
                       String componentCode,

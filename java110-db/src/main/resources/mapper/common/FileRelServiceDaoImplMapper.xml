@@ -5,7 +5,7 @@
 <mapper namespace="fileRelServiceDaoImpl">
 
     <!-- 保存文件存放信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessFileRelInfo" parameterType="Map">
+    <insert id="saveBusinessFileRelInfo" parameterType="Map">
            insert into business_file_rel(
 rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_id
 ) values (
@@ -14,173 +14,173 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
        </insert>
 
 
-       <!-- 查询文件存放信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessFileRelInfo" parameterType="Map" resultType="Map">
-           select  t.rel_type_cd,t.rel_type_cd relTypeCd,t.save_way,t.save_way saveWay,t.operate,t.file_rel_id,t.file_rel_id fileRelId,t.file_real_name,t.file_real_name fileRealName,t.obj_id,t.obj_id objId,t.file_save_name,t.file_save_name fileSaveName,t.b_id,t.b_id bId 
-from business_file_rel t 
-where 1 =1 
-<if test="relTypeCd !=null and relTypeCd != ''">
-   and t.rel_type_cd= #{relTypeCd}
-</if> 
-<if test="saveWay !=null and saveWay != ''">
-   and t.save_way= #{saveWay}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="fileRelId !=null and fileRelId != ''">
-   and t.file_rel_id= #{fileRelId}
-</if> 
-<if test="fileRealName !=null and fileRealName != ''">
-   and t.file_real_name= #{fileRealName}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="fileSaveName !=null and fileSaveName != ''">
-   and t.file_save_name= #{fileSaveName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <!-- 查询文件存放信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessFileRelInfo" parameterType="Map" resultType="Map">
+        select t.rel_type_cd,t.rel_type_cd relTypeCd,t.save_way,t.save_way saveWay,t.operate,t.file_rel_id,t.file_rel_id
+        fileRelId,t.file_real_name,t.file_real_name fileRealName,t.obj_id,t.obj_id
+        objId,t.file_save_name,t.file_save_name fileSaveName,t.b_id,t.b_id bId
+        from business_file_rel t
+        where 1 =1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="saveWay !=null and saveWay != ''">
+            and t.save_way= #{saveWay}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存文件存放信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFileRelInfoInstance" parameterType="Map">
         insert into file_rel(
-rel_type_cd,save_way,file_rel_id,file_real_name,obj_id,file_save_name,status_cd,b_id
-) select t.rel_type_cd,t.save_way,t.file_rel_id,t.file_real_name,t.obj_id,t.file_save_name,'0',t.b_id from business_file_rel t where 1=1
-<if test="relTypeCd !=null and relTypeCd != ''">
-   and t.rel_type_cd= #{relTypeCd}
-</if> 
-<if test="saveWay !=null and saveWay != ''">
-   and t.save_way= #{saveWay}
-</if> 
-   and t.operate= 'ADD'
-<if test="fileRelId !=null and fileRelId != ''">
-   and t.file_rel_id= #{fileRelId}
-</if> 
-<if test="fileRealName !=null and fileRealName != ''">
-   and t.file_real_name= #{fileRealName}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="fileSaveName !=null and fileSaveName != ''">
-   and t.file_save_name= #{fileSaveName}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+        rel_type_cd,save_way,file_rel_id,file_real_name,obj_id,file_save_name,status_cd,b_id
+        ) select t.rel_type_cd,t.save_way,t.file_rel_id,t.file_real_name,t.obj_id,t.file_save_name,'0',t.b_id from
+        business_file_rel t where 1=1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="saveWay !=null and saveWay != ''">
+            and t.save_way= #{saveWay}
+        </if>
+        and t.operate= 'ADD'
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询文件存放信息 add by wuxw 2018-07-03 -->
     <select id="getFileRelInfo" parameterType="Map" resultType="Map">
-        select  t.rel_type_cd,t.rel_type_cd relTypeCd,t.save_way,t.save_way saveWay,t.file_rel_id,t.file_rel_id fileRelId,t.file_real_name,t.file_real_name fileRealName,t.obj_id,t.obj_id objId,t.file_save_name,t.file_save_name fileSaveName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId 
-from file_rel t 
-where 1 =1 
-<if test="relTypeCd !=null and relTypeCd != ''">
-   and t.rel_type_cd= #{relTypeCd}
-</if> 
-<if test="saveWay !=null and saveWay != ''">
-   and t.save_way= #{saveWay}
-</if> 
-<if test="fileRelId !=null and fileRelId != ''">
-   and t.file_rel_id= #{fileRelId}
-</if> 
-<if test="fileRealName !=null and fileRealName != ''">
-   and t.file_real_name= #{fileRealName}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="fileSaveName !=null and fileSaveName != ''">
-   and t.file_save_name= #{fileSaveName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.rel_type_cd,t.rel_type_cd relTypeCd,t.save_way,t.save_way saveWay,t.file_rel_id,t.file_rel_id
+        fileRelId,t.file_real_name,t.file_real_name fileRealName,t.obj_id,t.obj_id
+        objId,t.file_save_name,t.file_save_name fileSaveName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId
+        from file_rel t
+        where 1 =1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="saveWay !=null and saveWay != ''">
+            and t.save_way= #{saveWay}
+        </if>
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改文件存放信息 add by wuxw 2018-07-03 -->
     <update id="updateFileRelInfoInstance" parameterType="Map">
-        update  file_rel t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="relTypeCd !=null and relTypeCd != ''">
-, t.rel_type_cd= #{relTypeCd}
-</if> 
-<if test="saveWay !=null and saveWay != ''">
-, t.save_way= #{saveWay}
-</if> 
-<if test="fileRealName !=null and fileRealName != ''">
-, t.file_real_name= #{fileRealName}
-</if> 
-<if test="objId !=null and objId != ''">
-, t.obj_id= #{objId}
-</if> 
-<if test="fileSaveName !=null and fileSaveName != ''">
-, t.file_save_name= #{fileSaveName}
-</if> 
- where 1=1 <if test="fileRelId !=null and fileRelId != ''">
-and t.file_rel_id= #{fileRelId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update file_rel t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            , t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="saveWay !=null and saveWay != ''">
+            , t.save_way= #{saveWay}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            , t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            , t.file_save_name= #{fileSaveName}
+        </if>
+        where 1=1
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询文件存放数量 add by wuxw 2018-07-03 -->
-     <select id="queryFileRelsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from file_rel t 
-where 1 =1 
-<if test="relTypeCd !=null and relTypeCd != ''">
-   and t.rel_type_cd= #{relTypeCd}
-</if> 
-<if test="saveWay !=null and saveWay != ''">
-   and t.save_way= #{saveWay}
-</if> 
-<if test="fileRelId !=null and fileRelId != ''">
-   and t.file_rel_id= #{fileRelId}
-</if> 
-<if test="fileRealName !=null and fileRealName != ''">
-   and t.file_real_name= #{fileRealName}
-</if> 
-<if test="objId !=null and objId != ''">
-   and t.obj_id= #{objId}
-</if> 
-<if test="fileSaveName !=null and fileSaveName != ''">
-   and t.file_save_name= #{fileSaveName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <select id="queryFileRelsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from file_rel t
+        where 1 =1
+        <if test="relTypeCd !=null and relTypeCd != ''">
+            and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="saveWay !=null and saveWay != ''">
+            and t.save_way= #{saveWay}
+        </if>
+        <if test="fileRelId !=null and fileRelId != ''">
+            and t.file_rel_id= #{fileRelId}
+        </if>
+        <if test="fileRealName !=null and fileRealName != ''">
+            and t.file_real_name= #{fileRealName}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        <if test="fileSaveName !=null and fileSaveName != ''">
+            and t.file_save_name= #{fileSaveName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

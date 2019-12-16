@@ -3,6 +3,7 @@ package com.java110.web.smo.applicationKey.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 
 /**
@@ -51,8 +51,8 @@ public class AddApplicationKeySMOImpl extends AbstractComponentSMO implements IA
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("storeId", result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/applicationKey.saveApplicationKey",
                 HttpMethod.POST);

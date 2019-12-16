@@ -6,11 +6,13 @@ import java.io.Serializable;
 
 public class BasePrivilegeDto extends PageDto implements Serializable {
 
+    private String userId;
     private String pId;
     private String name;
+    private String resource;
     private String domain;
     private String description;
-    private String statusCd;
+    private String statusCd = "0";
 
     private String createTime;
 
@@ -68,5 +70,21 @@ public class BasePrivilegeDto extends PageDto implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

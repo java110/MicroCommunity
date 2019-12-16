@@ -21,6 +21,9 @@
                 }
                 this.logo = sysInfo.logo;
             },
+	     _gotoIndex:function(){
+                vc.jumpToPage("/")
+           },
             getMenus: function () {
 
                 var _tmpMenus = vc.getMenus();

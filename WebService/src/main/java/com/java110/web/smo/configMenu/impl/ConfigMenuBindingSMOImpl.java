@@ -39,6 +39,7 @@ public class ConfigMenuBindingSMOImpl extends AbstractComponentSMO implements IC
         Assert.hasKeyByFlowData(infos, "addMenuView", "isShow", "必填，请选择是否显示菜单");
         Assert.hasKeyByFlowData(infos, "addPrivilegeView", "name", "必填，请填写权限名称");
         Assert.hasKeyByFlowData(infos, "addPrivilegeView", "domain", "必填，请选择商户类型");
+        Assert.hasKeyByFlowData(infos, "addPrivilegeView", "resource", "必填，请添加资源路径");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.MENU_MANAGE);

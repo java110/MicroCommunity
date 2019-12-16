@@ -656,4 +656,64 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_APPLICATION_KEY ="240200050001";
 
+    /**
+     *  保存 消息保存关系
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_MSG="250200030001";
+
+    /**
+     * 修改 消息保存关系
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MSG="250200040001";
+    /**
+     *  删除 消息_MSG_MSG保存关系
+     */
+    public static final String BUSINESS_TYPE_DELETE_MSG ="250200050001";
+
+    /**
+     *  保存 消息阅读
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_MSG_READ="260200030001";
+
+    /**
+     * 修改 消息阅读
+     */
+    public static final String BUSINESS_TYPE_UPDATE_MSG_READ="260200040001";
+    /**
+     *  删除 消息阅读
+     */
+    public static final String BUSINESS_TYPE_DELETE_MSG_READ ="260200050001";
+
+    /**
+     *  保存广告
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ADVERT="270200030001";
+
+    /**
+     * 修改广告
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ADVERT="270200040001";
+    /**
+     *  删除广告
+     */
+    public static final String BUSINESS_TYPE_DELETE_ADVERT ="270200050001";
+
+    /**
+     *  保存广告
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ADVERT_ITEM="271200030001";
+
+    /**
+     * 修改广告
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ADVERT_ITEM="271200040001";
+    /**
+     *  删除广告
+     */
+    public static final String BUSINESS_TYPE_DELETE_ADVERT_ITEM ="271200050001";
+
 }

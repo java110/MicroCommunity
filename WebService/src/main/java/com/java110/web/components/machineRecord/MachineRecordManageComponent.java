@@ -33,7 +33,7 @@ public class MachineRecordManageComponent {
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
         reqParam.put("recordTypeCd", "8888");
 
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(),
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
                 reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
 
         return listMachineRecordsSMOImpl.listMachineRecords(newPd);

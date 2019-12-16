@@ -111,9 +111,9 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
 
 
         // 将权限组分配给对应商户类型管理员
-        info.put("pgId",MappingCache.getValue(DomainContant.DEFAULT_PRIVILEGE_ADMIN, info.get("domain").toString()));
+        info.put("pgId", MappingCache.getValue(DomainContant.DEFAULT_PRIVILEGE_ADMIN, info.get("domain").toString()));
 
-         saveFlag = sqlSessionTemplate.insert("menuServiceDaoImpl.saveBasePrivilegeRelInfo", info);
+        saveFlag = sqlSessionTemplate.insert("menuServiceDaoImpl.saveBasePrivilegeRelInfo", info);
 
 
         return saveFlag;
@@ -148,14 +148,14 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
         logger.debug("修改路由信息Instance 入参 info : {}", info);
         int saveFlag = 0;
         //判断是否为删除
-        if(info.containsKey("statusCd") && StatusConstant.STATUS_CD_INVALID.equals(info.get("statusCd"))){
-                //做查询
+        if (info.containsKey("statusCd") && StatusConstant.STATUS_CD_INVALID.equals(info.get("statusCd"))) {
+            //做查询
             List<Map> basePrivileges = getBasePrivilegeInfo(info);
 
-            if(basePrivileges != null && basePrivileges.size() > 0){
+            if (basePrivileges != null && basePrivileges.size() > 0) {
                 saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateBasePrivilegeRelInfo", info);
 
-                if(saveFlag < 1){
+                if (saveFlag < 1) {
                     return saveFlag;
                 }
             }
@@ -182,6 +182,17 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
         }
 
         return Integer.parseInt(businessBasePrivilegeInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public boolean checkUserHasResource(Map info) {
+        logger.debug("查询路由信息 入参 info : {}", info);
+
+        List<Map> businessBasePrivilegeInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.checkUserHasResource", info);
+        if (businessBasePrivilegeInfos != null && businessBasePrivilegeInfos.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -231,24 +242,24 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
         int saveFlag = 0;
 
         //判断是否为删除
-        if(info.containsKey("statusCd") && StatusConstant.STATUS_CD_INVALID.equals(info.get("statusCd"))){
+        if (info.containsKey("statusCd") && StatusConstant.STATUS_CD_INVALID.equals(info.get("statusCd"))) {
             //做查询
             List<Map> baseMenus = getMenuInfo(info);
 
-            if(baseMenus != null && baseMenus.size() > 0){
+            if (baseMenus != null && baseMenus.size() > 0) {
                 Map privilegeInfo = new HashMap();
                 privilegeInfo.put("pId", baseMenus.get(0).get("pId"));
                 privilegeInfo.put("statusCd", StatusConstant.STATUS_CD_INVALID);
                 //删除权限 权限组关系
                 saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateBasePrivilegeRelInfo", info);
 
-                if(saveFlag < 1){
+                if (saveFlag < 1) {
                     return saveFlag;
                 }
                 //删除权限
                 saveFlag = sqlSessionTemplate.update("menuServiceDaoImpl.updateBasePrivilegeInfo", info);
 
-                if(saveFlag < 1){
+                if (saveFlag < 1) {
                     return saveFlag;
                 }
             }

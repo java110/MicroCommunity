@@ -38,6 +38,11 @@ public class ServiceCodeMachineTranslateConstant {
     public static final String MACHINE_QUERY_USER_INFO = "machineTranslate.machineQueryUserInfo";
 
     /**
+     * 心跳检测类
+     */
+    public static final String MACHINE_GET_TASK_INFO = "machineTranslate.machineGetTaskInfo";
+
+    /**
      * 上传刷脸记录
      */
     public static final String MACHINE_UPLOAD_FACE_LOG = "machineTranslate.machineUploadFaceLog";

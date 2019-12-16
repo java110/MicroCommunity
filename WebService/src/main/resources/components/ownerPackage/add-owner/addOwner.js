@@ -67,18 +67,6 @@
                             errInfo:"性别不能为空"
                         }
                     ],
-                    'addOwnerInfo.idCard':[
-                        {
-                            limit:"required",
-                            param:"",
-                            errInfo:"身份证号不能为空"
-                        },
-                        {
-                            limit:"idCard",
-                            param:"",
-                            errInfo:"不是有效的身份证号"
-                        }
-                    ],
                     'addOwnerInfo.link':[
                         {
                             limit:"required",
@@ -89,6 +77,13 @@
                             limit:"phone",
                             param:"",
                             errInfo:"不是有效的手机号"
+                        }
+                    ],
+                    'addOwnerInfo.idCard':[
+                        {
+                            limit:"maxLength",
+                            param:"18",
+                            errInfo:"身份证长度不能超过200位"
                         }
                     ],
                     'addOwnerInfo.remark':[

@@ -31,6 +31,7 @@ public class EditBasePrivilegeSMOImpl extends AbstractComponentSMO implements IE
         Assert.hasKeyAndValue(paramIn, "pId", "权限ID不能为空");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写权限名称");
         Assert.hasKeyAndValue(paramIn, "domain", "必填，请选择商户类型");
+        Assert.hasKeyAndValue(paramIn, "resource", "必填，请填写资源路径");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.BASE_PRIVILEGE);

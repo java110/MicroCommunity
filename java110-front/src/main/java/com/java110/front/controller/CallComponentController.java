@@ -10,9 +10,11 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,9 @@ import java.util.Map;
 public class CallComponentController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(CallComponentController.class);
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 调用组件方法
@@ -47,6 +52,10 @@ public class CallComponentController extends BaseController {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
 
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            //权限校验
+            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
             Assert.notNull(componentInstance, "未找到组件对应的处理类，请确认 " + componentCode);
@@ -55,7 +64,6 @@ public class CallComponentController extends BaseController {
 
             Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
 
-            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
             logger.debug("组件编码{}，组件方法{}，pd 为{}", componentCode, componentMethod, pd.toString());
 
@@ -107,6 +115,10 @@ public class CallComponentController extends BaseController {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
 
+            pd = freshPageDate(request);
+            //权限校验
+            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
             Assert.notNull(componentInstance, "未找到组件对应的处理类，请确认 " + componentCode);
@@ -114,19 +126,19 @@ public class CallComponentController extends BaseController {
             Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class, MultipartFile.class);
 
             Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
-            pd = freshPageDate(request);
+
 
             logger.debug("组件编码{}，组件方法{}，pd 为{}", componentCode, componentMethod, pd.toString());
 
             responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd, uploadFile);
 
         } catch (SMOException e) {
-            logger.error("组件运行异常",e);
+            logger.error("组件运行异常", e);
             /*MultiValueMap<String, String> headers = new HttpHeaders();
             headers.add("code", e.getResult().getCode());*/
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("组件运行异常",e);
+            logger.error("组件运行异常", e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
                 Throwable targetEx = ((InvocationTargetException) e).getTargetException();
@@ -162,6 +174,10 @@ public class CallComponentController extends BaseController {
         try {
             Assert.hasLength(componentCode, "参数错误，未传入组件编码");
             Assert.hasLength(componentMethod, "参数错误，未传入调用组件方法");
+            pd = freshPageDate(request);
+
+            hasPrivilege(restTemplate, pd, "/" + componentCode + "/" + componentMethod);
+
 
             Object componentInstance = ApplicationContextFactory.getBean(componentCode);
 
@@ -170,14 +186,13 @@ public class CallComponentController extends BaseController {
             Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class);
 
             Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
-            pd = freshPageDate(request);
             responseEntity = (ResponseEntity<Object>) cMethod.invoke(componentInstance, pd);
 
         } catch (SMOException e) {
-            logger.error("组件运行异常",e);
+            logger.error("组件运行异常", e);
             responseEntity = new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            logger.error("组件运行异常",e);
+            logger.error("组件运行异常", e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
                 Throwable targetEx = ((InvocationTargetException) e).getTargetException();
@@ -220,10 +235,17 @@ public class CallComponentController extends BaseController {
             reqData = paramObj.toJSONString();
         }
 
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(),
-                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(),"");
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
+                reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(), "");
         return newPd;
     }
 
 
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 }

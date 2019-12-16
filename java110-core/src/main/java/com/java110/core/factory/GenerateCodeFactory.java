@@ -105,6 +105,10 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_fileRelId = "91";
     public static final String CODE_PREFIX_machineRecordId = "92";
     public static final String CODE_PREFIX_applicationKeyId = "93";
+    public static final String CODE_PREFIX_msgId = "94";
+    public static final String CODE_PREFIX_msgReadId = "95";
+    public static final String CODE_PREFIX_advertId = "96";
+    public static final String CODE_PREFIX_advertItemId = "97";
 
 
     /**

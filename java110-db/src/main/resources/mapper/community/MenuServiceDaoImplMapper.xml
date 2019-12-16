@@ -122,9 +122,9 @@
     <!-- 保存路由信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveBasePrivilegeInfo" parameterType="Map">
         insert into p_privilege(
-        p_id,name,domain,description
+        p_id,name,resource,domain,description
         ) values (
-        #{pId},#{name},#{domain},#{description}
+        #{pId},#{name},#{resource},#{domain},#{description}
         )
 
     </insert>
@@ -132,7 +132,7 @@
 
     <!-- 查询路由信息 add by wuxw 2018-07-03 -->
     <select id="getBasePrivilegeInfo" parameterType="Map" resultType="Map">
-        select t.p_id,t.name,t.domain,t.description,t.p_id pId,t.create_time createTime
+        select t.p_id,t.name,t.domain,t.resource,t.description,t.p_id pId,t.create_time createTime
         from p_privilege t
         where t.status_cd= '0'
         <if test="pId !=null and pId != ''">
@@ -140,6 +140,9 @@
         </if>
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="resource !=null and resource != ''">
+            and t.resource = #{resource}
         </if>
         <if test="domain !=null and domain != ''">
             and t.domain= #{domain}
@@ -161,6 +164,9 @@
             </if>
             <if test="name !=null and name != ''">
                 t.name= #{name},
+            </if>
+            <if test="resource !=null and resource != ''">
+                t.resource= #{resource},
             </if>
             <if test="domain !=null and domain != ''">
                 t.domain= #{domain},
@@ -202,8 +208,14 @@
         <if test="name !=null and name != ''">
             and t.name like concat('%',#{name},'%')
         </if>
+        <if test="resource !=null and resource != ''">
+            and t.resource = #{resource}
+        </if>
         <if test="domain !=null and domain != ''">
             and t.domain= #{domain}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
         </if>
     </select>
 
@@ -395,6 +407,28 @@
             AND ppr.status_cd = '0'
             )
         </if>
+    </select>
+
+    <select id="checkUserHasResource" parameterType="Map" resultType="Map">
+        SELECT pp.*,'-1' AS pg_id,'' AS pg_name FROM p_privilege_user ppu,p_privilege pp
+            WHERE ppu.`p_id` = pp.`p_id`
+                AND pp.`resource` = #{resource}
+                AND ppu.`privilege_flag` = '0'
+                AND ppu.`user_id` = #{userId}
+                AND ppu.`status_cd` = '0'
+                AND pp.`status_cd` = '0'
+        UNION
+        SELECT pp.*,ppg.pg_id,ppg.name pg_name FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege pp,p_privilege_rel ppr
+            WHERE ppu.`p_id` = ppr.pg_id
+                AND ppr.pg_id = ppg.pg_id
+                AND ppr.p_id = pp.`p_id`
+                AND pp.`resource` = #{resource}
+                AND ppu.`privilege_flag` = '1'
+                AND ppu.`user_id` = #{userId}
+                AND ppu.`status_cd` = '0'
+                AND pp.`status_cd` = '0'
+                AND ppg.status_cd = '0'
+                AND ppr.status_cd = '0'
     </select>
 
 

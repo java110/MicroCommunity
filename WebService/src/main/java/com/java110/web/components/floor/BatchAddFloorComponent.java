@@ -73,6 +73,7 @@ public class BatchAddFloorComponent {
                 needReqParam.put("name", floorIndex + "号楼");
                 needReqParam.put("remark", floors.containsKey("remark") ? floors.getString("remark") : "");
                 newPd = PageData.newInstance().builder(pd.getUserId(),
+                        pd.getUserName(),
                         pd.getToken(),
                         needReqParam.toJSONString(),
                         pd.getComponentCode(),

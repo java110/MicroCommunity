@@ -61,6 +61,7 @@
                         <tr>
                             <th class="text-center">权限ID</th>
                             <th class="text-center">权限名称</th>
+                            <th class="text-center">资源路径</th>
                             <th class="text-center">商户类型</th>
                             <th class="text-center">创建时间</th>
                             <th class="text-center">操作</th>
@@ -72,6 +73,7 @@
                         <tr v-for="basePrivilege in basePrivilegeManageInfo.basePrivileges">
                             <td class="text-center">{{basePrivilege.pId}}</td>
                             <td class="text-center">{{basePrivilege.name}}</td>
+                            <td class="text-center">{{basePrivilege.resource}}</td>
                             <td class="text-center">{{basePrivilege.domain}}</td>
                             <td class="text-center">{{basePrivilege.createTime}}</td>
                             <td class="text-center">

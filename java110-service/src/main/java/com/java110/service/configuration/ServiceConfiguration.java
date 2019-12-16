@@ -18,7 +18,10 @@ public class ServiceConfiguration {
         exclusions.append("/callComponent/validate-code/*,");
         exclusions.append("/callComponent/validate-tel/*,");
         exclusions.append("/flow/login,");
-        exclusions.append("/flow/register");
+        exclusions.append("/flow/register,");
+        exclusions.append("/flow/advertVedioFlow,");//放开 广告页面是不需要登录的
+        exclusions.append("/callComponent/advertVedioView/*,");//放开 广告页面是不需要登录的
+        exclusions.append("/callComponent/download/getFile/file");//放开 下载图片也不需要登录
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");

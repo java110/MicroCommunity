@@ -6,7 +6,8 @@
                     <h5>查询条件</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
-                                v-on:click="_moreCondition()">{{auditApplicationKeyManageInfo.moreCondition == true?'隐藏':'更多'}}
+                                v-on:click="_moreCondition()">{{auditApplicationKeyManageInfo.moreCondition ==
+                            true?'隐藏':'更多'}}
                         </button>
                     </div>
                 </div>
@@ -27,7 +28,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <select class="custom-select" v-model="auditApplicationKeyManageInfo.conditions.typeCd">
+                                <select class="custom-select" v-model="auditApplicationKeyManageInfo.conditions.state">
                                     <option selected value="">请选择审核状态</option>
                                     <option value="10001">审核完成</option>
                                     <option value="10002">未审核</option>
@@ -37,7 +38,8 @@
                         </div>
 
                         <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOwnerMethod()"><i
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    v-on:click="_queryApplicationKeyMethod()"><i
                                     class="glyphicon glyphicon-search"></i> 查询
                             </button>
                         </div>
@@ -47,7 +49,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <select class="custom-select" v-model="auditApplicationKeyManageInfo.conditions.typeCd">
-                                    <option selected value="">请选择报修类型</option>
+                                    <option selected value="">请选择用户类型</option>
                                     <option value="10001">保洁</option>
                                     <option value="10002">保安</option>
                                 </select>
@@ -86,8 +88,7 @@
                             <th>手机号码</th>
                             <th>用户类型</th>
                             <th>身份证号</th>
-                            <th>所属位置</th>
-                            <th>具体位置</th>
+                            <th>位置</th>
                             <th>申请时间</th>
                             <th>结束时间</th>
                             <th>状态</th>
@@ -100,19 +101,17 @@
                             <td>{{applicationKey.tel}}</td>
                             <td>{{applicationKey.typeCd}}</td>
                             <td>{{applicationKey.idCard}}</td>
-                            <td>{{applicationKey.locationTypeName}}</td>
                             <td>{{applicationKey.locationObjName}}</td>
                             <td>{{applicationKey.startTime}}</td>
                             <td>{{applicationKey.endTime}}</td>
                             <td>{{applicationKey.stateName}}</td>
                             <td>
-                                <div class="btn-group">
+                                <div class="btn-group" v-if="applicationKey.state == '10002'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openAuditApplicationKeyModal(applicationKey)">审核
                                     </button>
                                 </div>
-
-
+                            </td>
                         </tr>
                         </tbody>
                         <tfoot>

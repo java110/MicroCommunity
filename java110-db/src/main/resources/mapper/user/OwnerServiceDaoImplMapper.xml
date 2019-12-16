@@ -126,7 +126,26 @@
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
         t.community_id communityId,t.id_card, t.id_card idCard,t.state
         from building_owner t
+        <if test="roomId != null and roomId != ''">
+            ,building_owner_room_rel borr
+        </if>
+        <if test="roomIds != null ">
+            ,building_owner_room_rel borr
+        </if>
         where 1 =1
+        <if test="roomId != null and roomId != ''">
+            and t.owner_id = borr.owner_id
+            and borr.status_cd = '0'
+            and borr.room_id = #{roomId}
+        </if>
+        <if test="roomIds != null">
+            and t.owner_id = borr.owner_id
+            and borr.status_cd = '0'
+            and borr.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -185,7 +204,26 @@
     <select id="getOwnerInfoCount" parameterType="Map" resultType="Map">
         select count(1) count
         from building_owner t
+        <if test="roomId != null and roomId != ''">
+            ,building_owner_room_rel borr
+        </if>
+        <if test="roomIds != null ">
+            ,building_owner_room_rel borr
+        </if>
         where 1 =1
+        <if test="roomId != null and roomId != ''">
+            and t.owner_id = borr.owner_id
+            and borr.status_cd = '0'
+            and borr.room_id = #{roomId}
+        </if>
+        <if test="roomIds != null">
+            and t.owner_id = borr.owner_id
+            and borr.status_cd = '0'
+            and borr.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>

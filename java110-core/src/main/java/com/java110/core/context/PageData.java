@@ -23,6 +23,8 @@ public class PageData implements IPageData, Serializable {
 
     private String userId;
 
+    private String userName;
+
     private String appId;
 
     //会话ID
@@ -153,6 +155,7 @@ public class PageData implements IPageData, Serializable {
     }
 
     public IPageData builder(String userId,
+                             String userName,
                              String token,
                              String reqData,
                              String componentCode,
@@ -160,6 +163,7 @@ public class PageData implements IPageData, Serializable {
                              String url,
                              String sessionId) {
         return builder(userId,
+                userName,
                 token,
                 reqData,
                 componentCode,
@@ -170,6 +174,7 @@ public class PageData implements IPageData, Serializable {
     }
 
     public IPageData builder(String userId,
+                             String userName,
                              String token,
                              String reqData,
                              String componentCode,
@@ -183,6 +188,7 @@ public class PageData implements IPageData, Serializable {
         this.setReqData(reqData);
         this.setRequestTime(DateUtil.getyyyyMMddhhmmssDateString());
         this.setUserId(userId);
+        this.setUserName(userName);
         this.setToken(token);
         this.setUrl(url);
         this.setSessionId(sessionId);
@@ -202,5 +208,13 @@ public class PageData implements IPageData, Serializable {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

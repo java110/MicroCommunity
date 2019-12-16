@@ -72,6 +72,7 @@ public class JwtFilter implements Filter {
 
             chain.doFilter(req, res);
         } catch (FilterException e) {
+            logger.error("业务处理失败", e);
             if ("POST".equals(request.getMethod())) {
                 writeJson(response,
                         DataTransactionFactory.pageResponseJson(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, e.getMessage(), null),

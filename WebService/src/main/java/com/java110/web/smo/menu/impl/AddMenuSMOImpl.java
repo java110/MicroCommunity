@@ -30,10 +30,9 @@ public class AddMenuSMOImpl extends AbstractComponentSMO implements IAddMenuSMO 
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写菜单名称");
-Assert.hasKeyAndValue(paramIn, "url", "必填，请菜单菜单地址");
-Assert.hasKeyAndValue(paramIn, "seq", "必填，请填写序列");
-Assert.hasKeyAndValue(paramIn, "isShow", "必填，请选择是否显示菜单");
-
+        Assert.hasKeyAndValue(paramIn, "url", "必填，请菜单菜单地址");
+        Assert.hasKeyAndValue(paramIn, "seq", "必填，请填写序列");
+        Assert.hasKeyAndValue(paramIn, "isShow", "必填，请选择是否显示菜单");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.MENU_MANAGE);

@@ -3,19 +3,24 @@ package com.java110.api.listener.applicationKey;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.*;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.utils.util.BeanConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,6 +40,12 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -65,6 +76,22 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
         //添加单元信息
         businesses.add(updateApplicationKey(reqJson, context));
+
+        if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(reqJson.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(reqJson.getString("communityId"));
+            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
+            }
+            reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
+
+            businesses.add(editApplicationKeyPhoto(reqJson, context));
+
+        }
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -125,6 +152,48 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         return business;
     }
 
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject editApplicationKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setRelTypeCd("30000");
+        fileRelDto.setObjId(paramInJson.getString("applicationKeyId"));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        if(fileRelDtos == null || fileRelDtos.size() == 0){
+            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("relTypeCd", "30000");
+            businessUnit.put("saveWay", "table");
+            businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
+            businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
+            businessUnit.put("fileSaveName", paramInJson.getString("applicationKeyPhotoId"));
+            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+            return business;
+        }
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
+        businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("applicationKeyPhotoId"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+        return business;
+
+
+    }
     public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
         return machineInnerServiceSMOImpl;
     }
@@ -139,5 +208,21 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
     public void setApplicationKeyInnerServiceSMOImpl(IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl) {
         this.applicationKeyInnerServiceSMOImpl = applicationKeyInnerServiceSMOImpl;
+    }
+
+    public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {
+        return fileInnerServiceSMOImpl;
+    }
+
+    public void setFileInnerServiceSMOImpl(IFileInnerServiceSMO fileInnerServiceSMOImpl) {
+        this.fileInnerServiceSMOImpl = fileInnerServiceSMOImpl;
+    }
+
+    public IFileRelInnerServiceSMO getFileRelInnerServiceSMOImpl() {
+        return fileRelInnerServiceSMOImpl;
+    }
+
+    public void setFileRelInnerServiceSMOImpl(IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl) {
+        this.fileRelInnerServiceSMOImpl = fileRelInnerServiceSMOImpl;
     }
 }

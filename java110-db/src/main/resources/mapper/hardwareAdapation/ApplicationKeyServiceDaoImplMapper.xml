@@ -121,16 +121,23 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
 
     <!-- 查询钥匙申请信息 add by wuxw 2018-07-03 -->
     <select id="getApplicationKeyInfo" parameterType="Map" resultType="Map">
-        select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
+        SELECT t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
         idCard,t.sex,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.machine_id,t.machine_id
         machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time
         startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age,
-        m.`location_type_cd` locationTypeCd,m.`location_obj_id` locationObjId
-        from application_key t,machine m
-        where 1 =1
-        and t.machine_id = m.machine_id
-        and m.status_cd = '0'
-        where 1 =1
+        m.`location_type_cd` locationTypeCd,m.`location_obj_id` locationObjId,
+        td.name typeName,td1.name stateName
+        FROM application_key t,machine m,t_dict td,t_dict td1
+        WHERE 1 =1
+        AND t.type_cd=td.status_cd
+        AND td.table_name='application_key'
+        AND td.table_columns='type_cd'
+        AND t.state = td1.status_cd
+        AND td1.table_name='application_key'
+        AND td1.table_columns='state'
+
+        AND t.machine_id = m.machine_id
+        AND m.status_cd = '0'
         <if test="applicationKeyId !=null and applicationKeyId != ''">
             and t.application_key_id= #{applicationKeyId}
         </if>
@@ -232,8 +239,14 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 查询钥匙申请数量 add by wuxw 2018-07-03 -->
     <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from application_key t,machine m
-        where 1 =1
+        FROM application_key t,machine m,t_dict td,t_dict td1
+        WHERE 1 =1
+        AND t.type_cd=td.status_cd
+        AND td.table_name='application_key'
+        AND td.table_columns='type_cd'
+        AND t.state = td1.status_cd
+        AND td1.table_name='application_key'
+        AND td1.table_columns='state'
         and t.machine_id = m.machine_id
         and m.status_cd = '0'
         <if test="applicationKeyId !=null and applicationKeyId != ''">

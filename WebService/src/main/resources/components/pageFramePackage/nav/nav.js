@@ -49,7 +49,7 @@
                     param,
                     function (json) {
                         var _noticeObj = JSON.parse(json);
-                        vm.nav.notices = _noticeObj.notices;
+                        vm.nav.notices = _noticeObj.msgs;
                         vm.nav.total = _noticeObj.total;
                     }, function () {
                         console.log('请求失败处理');
@@ -158,13 +158,24 @@
                 //中心加载当前页
                 location.reload();
             },
-            _noticeDetail: function (_notice) {
+            _noticeDetail: function (_msg) {
                 //console.log(_notice.noticeId);
-                vc.jumpToPage("/flow/noticeDetailFlow?noticeId=" + _notice.noticeId);
+                //vc.jumpToPage("/flow/noticeDetailFlow?noticeId="+_notice.noticeId);
+
+                //标记为消息已读
+                vc.http.post('nav',
+                    'readMsg',
+                    JSON.stringify(_msg),
+                    function (json, res) {
+                        if (res.status == 200) {
+                            vc.jumpToPage(_msg.url);
+                        }
+                    }, function () {
+                        console.log('请求失败处理');
+                    }
+                );
             }
         }
-
-
     });
 
     vm.getUserInfo();

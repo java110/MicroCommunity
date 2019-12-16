@@ -1,14 +1,16 @@
 package com.java110.front.controller;
 
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.util.Assert;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -19,6 +21,8 @@ import java.util.Date;
 @Controller
 public class FlowController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(FlowController.class);
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 流程处理方法
@@ -35,15 +39,18 @@ public class FlowController extends BaseController {
             System.out.println("开始寻找组件数据");
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             System.out.println("数据获取成功");
+            //权限校验
+            hasPrivilege(restTemplate, pd, "/" + flowCode);
             validateFlowData(flowCode, pd);
 
         } catch (Throwable e) {
             flowCode = "error";
         }
-        System.out.println("传入的路径为  "+flowCode);
+        System.out.println("传入的路径为  " + flowCode);
 
         return flowCode;
     }
+
 
     /**
      * 流程数据校验方法
@@ -53,5 +60,13 @@ public class FlowController extends BaseController {
     private void validateFlowData(String flowCode, IPageData pd) throws RuntimeException {
 
         Assert.hasLength(flowCode, "参数错误，未传入流程编码");
+    }
+
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 }

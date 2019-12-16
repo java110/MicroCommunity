@@ -12,7 +12,7 @@
                 unitId: '-1',
                 unitNum: '',
                 unitName: '',
-                unitSelector:{}
+                unitSelector: {}
             }
         },
         watch: {
@@ -20,7 +20,7 @@
                 deep: true,
                 handler: function () {
                     vc.emit($props.callBackListener, $props.callBackFunction, this.unitSelect2Info);
-                    console.log('是否执行 watch',$props.callBackListener, $props.callBackFunction, this.unitSelect2Info);
+                    console.log('是否执行 watch', $props.callBackListener, $props.callBackFunction, this.unitSelect2Info);
                     vc.emit($namespace, 'roomSelect2', "transferRoom", this.unitSelect2Info);
                 }
             }
@@ -38,9 +38,19 @@
             });
             vc.on('unitSelect2', 'setUnit', function (_param) {
                 vc.copyObject(_param, this.unitSelect2Info);
-               /* $(".unitSelector").val(_param.unitId).select2();*/
-                var option = new Option(_param.unitNum , _param.unitId, true, true);
+                /* $(".unitSelector").val(_param.unitId).select2();*/
+                var option = new Option(_param.unitNum, _param.unitId, true, true);
                 this.unitSelect2Info.unitSelector.append(option);
+            });
+            vc.on('unitSelect2', 'clearUnit', function (_param) {
+                this.unitSelect2Info = {
+                    units: [],
+                    floorId: '-1',
+                    unitId: '-1',
+                    unitNum: '',
+                    unitName: '',
+                    unitSelector: {}
+                };
             });
         },
         methods: {
@@ -93,7 +103,9 @@
                 $('#unitSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
-                    console.log('unselect', evt)
+                    console.log('unselect', evt);
+                    this.unitSelect2Info.unitId = '-1';
+                    this.unitSelect2Info.unitName = '';
 
                 });
             },

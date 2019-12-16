@@ -51,6 +51,7 @@ public class BindingConfigMenuListener extends AbstractServiceApiListener {
         Assert.hasKeyByFlowData(infos, "addMenuView", "isShow", "必填，请选择是否显示菜单");
         Assert.hasKeyByFlowData(infos, "addPrivilegeView", "name", "必填，请填写权限名称");
         Assert.hasKeyByFlowData(infos, "addPrivilegeView", "domain", "必填，请选择商户类型");
+        Assert.hasKeyByFlowData(infos, "addPrivilegeView", "resource", "必填，请填写资源路径");
 
     }
 

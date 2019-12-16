@@ -39,12 +39,12 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
         Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区ID");
         Assert.hasKeyAndValue(paramIn, "fileId", "请求报文中未包含文件ID");
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.GET_FILE);
+        /*super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.GET_FILE);
 
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+        paramIn.putAll(paramMap);*/
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFile" + mapToUrlParam(paramIn);
 
@@ -68,7 +68,11 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
         //headers.add("Content-Disposition", "attachment; filename=" + outParam.getString("fileName"));
         headers.add("Accept-Ranges", "bytes");
 
-        byte[] context = Base64Convert.base64ToByte(outParam.getString("context").replace("data:image/webp;base64,", ""));
+        byte[] context = Base64Convert.base64ToByte(outParam.getString("context").replace("data:image/webp;base64,", "")
+                .replace("data:image/webp;base64,", "")
+                .replace("data:image/png;base64,", "")
+                .replace("data:image/jpeg;base64,", "")
+        );
 
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }

@@ -5,7 +5,9 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.OwnerDto;
+import com.java110.dto.RoomDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.hardwareAdapation.dao.IMachineTranslateServiceDao;
@@ -17,6 +19,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     private IMachineTranslateServiceDao machineTranslateServiceDaoImpl;
 
@@ -40,6 +44,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         TRANSLATE_STATE = state;
         orderInnerServiceSMOImpl = ApplicationContextFactory.getBean(IOrderInnerServiceSMO.class.getName(), IOrderInnerServiceSMO.class);
         ownerInnerServiceSMOImpl = ApplicationContextFactory.getBean(IOwnerInnerServiceSMO.class.getName(), IOwnerInnerServiceSMO.class);
+        roomInnerServiceSMOImpl = ApplicationContextFactory.getBean(IRoomInnerServiceSMO.class.getName(), IRoomInnerServiceSMO.class);
         machineInnerServiceSMOImpl = ApplicationContextFactory.getBean("machineInnerServiceSMOImpl", IMachineInnerServiceSMO.class);
         machineTranslateServiceDaoImpl = ApplicationContextFactory.getBean("machineTranslateServiceDaoImpl", IMachineTranslateServiceDao.class);
 
@@ -77,7 +82,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
                 if (machineDtos == null || machineDtos.size() == 0) {
                     //刷新 状态为C1
                     orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
-                    logger.debug("没有数据数据直接刷为C1"+ JSONObject.toJSONString(tmpOrderDto));
+                    logger.debug("没有数据数据直接刷为C1" + JSONObject.toJSONString(tmpOrderDto));
                     continue;
                 }
                 dealData(tmpOrderDto, machineDtos.get(0));
@@ -103,8 +108,26 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         //根据小区ID查询现有设备
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        List<OwnerDto> ownerDtos = null;
+        String locationTypeCd = machineDto.getLocationTypeCd();
 
+        if ("1000,1001,1002,1003".contains(locationTypeCd)) {//查询整个小区的业主
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        } else if ("2000".equals(locationTypeCd)) {//2000 单元门 ，则这个单元下的业主同步
+            //先根据单元门ID 查询 房屋
+            RoomDto roomDto = new RoomDto();
+            roomDto.setUnitId(machineDto.getLocationObjId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            ownerDto.setRoomIds(getRoomIds(roomDtos));
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        } else if ("3000".equals(locationTypeCd)) {// 3000 房屋门
+            ownerDto.setRoomId(machineDto.getLocationObjId());
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        }
+
+        if (ownerDtos == null) {
+            return;
+        }
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
                 saveMachineTranslate(machineDto, tmpOwnerDto);
@@ -119,15 +142,23 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
 
     }
 
+    private String[] getRoomIds(List<RoomDto> roomDtos) {
+        List<String> roomIds = new ArrayList<String>();
+        for (RoomDto roomDto : roomDtos) {
+            roomIds.add(roomDto.getRoomId());
+        }
+        return roomIds.toArray(new String[roomIds.size()]);
+    }
+
     private void saveMachineTranslate(MachineDto tmpMachineDto, OwnerDto ownerDto) {
         Map paramInfo = new HashMap();
         paramInfo.put("machineId", tmpMachineDto.getMachineId());
         paramInfo.put("objId", ownerDto.getMemberId());
 
         int count = machineTranslateServiceDaoImpl.queryMachineTranslatesCount(paramInfo);
-        if(count >0){
-            updateMachineTranslate(tmpMachineDto,ownerDto);
-            return ;
+        if (count > 0) {
+            updateMachineTranslate(tmpMachineDto, ownerDto);
+            return;
         }
         Map info = new HashMap();
         //machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id

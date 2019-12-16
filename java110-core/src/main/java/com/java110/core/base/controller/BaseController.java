@@ -1,8 +1,11 @@
 package com.java110.core.base.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.IPageData;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.NoAuthorityException;
 
 import com.java110.utils.util.StringUtil;
@@ -10,7 +13,11 @@ import com.java110.core.base.AppBase;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.context.PageData;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -25,36 +32,38 @@ public class BaseController extends AppBase {
 
     /**
      * 检查用户登录
+     *
      * @throws NoAuthorityException
      */
-    protected void checkLogin(PageData pd) throws NoAuthorityException{
-        if(StringUtil.isNullOrNone(pd.getUserId())){
-            throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR,"用户未登录，请登录！");
+    protected void checkLogin(PageData pd) throws NoAuthorityException {
+        if (StringUtil.isNullOrNone(pd.getUserId())) {
+            throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "用户未登录，请登录！");
         }
     }
 
 
     /**
      * 将url参数写到header map中
+     *
      * @param request
      */
-    protected void initUrlParam(HttpServletRequest request,Map headers) {
-		/*put real ip address*/
+    protected void initUrlParam(HttpServletRequest request, Map headers) {
+        /*put real ip address*/
 
         Map readOnlyMap = request.getParameterMap();
 
-        StringBuffer queryString = new StringBuffer(request.getRequestURL()!=null?request.getRequestURL():"");
+        StringBuffer queryString = new StringBuffer(request.getRequestURL() != null ? request.getRequestURL() : "");
 
         if (readOnlyMap != null && !readOnlyMap.isEmpty()) {
             queryString.append("?");
             Set<String> keys = readOnlyMap.keySet();
-            for (Iterator it = keys.iterator(); it.hasNext();) {
+            for (Iterator it = keys.iterator(); it.hasNext(); ) {
                 String key = (String) it.next();
                 String[] value = (String[]) readOnlyMap.get(key);
 //                String[] value = (String[]) readOnlyMap.get(key);
-                if(value.length>1) {
+                if (value.length > 1) {
                     headers.put(key, value[0]);
-                    for(int j =0 ;j<value.length;j++){
+                    for (int j = 0; j < value.length; j++) {
                         queryString.append(key);
                         queryString.append("=");
                         queryString.append(value[j]);
@@ -71,11 +80,11 @@ public class BaseController extends AppBase {
             }
         }
 
-		/*put requst url*/
-        if (readOnlyMap != null && !readOnlyMap.isEmpty()){
-            headers.put("REQUEST_URL",queryString.toString().substring(0, queryString.toString().length() - 1));
-        }else{
-            headers.put("REQUEST_URL",queryString.toString());
+        /*put requst url*/
+        if (readOnlyMap != null && !readOnlyMap.isEmpty()) {
+            headers.put("REQUEST_URL", queryString.toString().substring(0, queryString.toString().length() - 1));
+        } else {
+            headers.put("REQUEST_URL", queryString.toString());
         }
 
     }
@@ -90,7 +99,7 @@ public class BaseController extends AppBase {
             String[] values = entry.getValue();
             if (null == values) {
                 value = "";
-            } else if (values.length>1) {
+            } else if (values.length > 1) {
                 for (int i = 0; i < values.length; i++) { //用于请求参数中有多个相同名称
                     value = values[i] + ",";
                 }
@@ -104,24 +113,25 @@ public class BaseController extends AppBase {
         return returnMap;
     }
 
-    protected void initHeadParam(HttpServletRequest request,Map headers) {
+    protected void initHeadParam(HttpServletRequest request, Map headers) {
 
         Enumeration reqHeaderEnum = request.getHeaderNames();
 
-        while( reqHeaderEnum.hasMoreElements() ) {
-            String headerName = (String)reqHeaderEnum.nextElement();
+        while (reqHeaderEnum.hasMoreElements()) {
+            String headerName = (String) reqHeaderEnum.nextElement();
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
 
-        headers.put("IP",getIpAddr(request));
+        headers.put("IP", getIpAddr(request));
 
-        headers.put("hostName",request.getLocalName());
-        headers.put("port",request.getLocalPort()+"");
+        headers.put("hostName", request.getLocalName());
+        headers.put("port", request.getLocalPort() + "");
 
     }
 
     /**
      * 获取IP地址
+     *
      * @param request
      * @return
      */
@@ -148,12 +158,13 @@ public class BaseController extends AppBase {
 
     /**
      * 创建 PageData 对象
+     *
      * @param request
      * @return
      * @throws IllegalArgumentException
      */
-    protected PageData getPageData(HttpServletRequest request){
-        if(request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) == null){
+    protected PageData getPageData(HttpServletRequest request) {
+        if (request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA) == null) {
             throw new IllegalArgumentException("请求参数错误");
         }
         return (PageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
@@ -161,24 +172,25 @@ public class BaseController extends AppBase {
 
     /**
      * 查询菜单
+     *
      * @param model
      * @param pd
      */
-    protected void getMenus(Model model,PageData pd,List<Map> menuItems){
+    protected void getMenus(Model model, PageData pd, List<Map> menuItems) {
         List<Map> removeMenuItems = new ArrayList<Map>();
-        for(Map menuItem : menuItems){
-            if(!"-1".equals(menuItem.get("parentId")) && !"1".equals(menuItem.get("level"))){
-                Map parentMenuItem = this.getMenuItemFromList(menuItems,menuItem.get("parentId").toString());
-                if(parentMenuItem == null){
+        for (Map menuItem : menuItems) {
+            if (!"-1".equals(menuItem.get("parentId")) && !"1".equals(menuItem.get("level"))) {
+                Map parentMenuItem = this.getMenuItemFromList(menuItems, menuItem.get("parentId").toString());
+                if (parentMenuItem == null) {
                     continue;
                 }
-                if(parentMenuItem.containsKey("subMenus")){
+                if (parentMenuItem.containsKey("subMenus")) {
                     List<Map> subMenus = (List<Map>) parentMenuItem.get("subMenus");
                     subMenus.add(menuItem);
-                }else{
+                } else {
                     List<Map> subMenus = new ArrayList<Map>();
                     subMenus.add(menuItem);
-                    parentMenuItem.put("subMenus",subMenus);
+                    parentMenuItem.put("subMenus", subMenus);
                 }
 
                 //removeMenuItems.add(menuItem);
@@ -187,19 +199,18 @@ public class BaseController extends AppBase {
 
 
         //bug 20180510 如果在一级菜单下面没有挂二级菜单报错问题处理
-        ifNoSubMenusToRemove(menuItems,removeMenuItems);
+        ifNoSubMenusToRemove(menuItems, removeMenuItems);
 
-        removeMap(menuItems,removeMenuItems);
+        removeMap(menuItems, removeMenuItems);
 
 
-
-        model.addAttribute("menus",menuItems);
+        model.addAttribute("menus", menuItems);
     }
 
 
-    private Map getMenuItemFromList(List<Map> menuItems,String parentId){
-        for(Map menuItem : menuItems){
-            if(menuItem.get("mId").toString().equals(parentId)){
+    private Map getMenuItemFromList(List<Map> menuItems, String parentId) {
+        for (Map menuItem : menuItems) {
+            if (menuItem.get("mId").toString().equals(parentId)) {
                 return menuItem;
             }
         }
@@ -208,22 +219,23 @@ public class BaseController extends AppBase {
 
     /**
      * 删除map
+     *
      * @param menuItems
      * @param removeMenuItems
      */
-    private void removeMap(List<Map> menuItems,List<Map> removeMenuItems){
-        if(removeMenuItems == null  || removeMenuItems.size() == 0){
+    private void removeMap(List<Map> menuItems, List<Map> removeMenuItems) {
+        if (removeMenuItems == null || removeMenuItems.size() == 0) {
             return;
         }
 
-        for(Map removeMenuItem : removeMenuItems){
+        for (Map removeMenuItem : removeMenuItems) {
             menuItems.remove(removeMenuItem);
         }
     }
 
-    private void ifNoSubMenusToRemove(List<Map> menuItems,List<Map> removeMenuItems){
-        for(Map menu :menuItems){
-            if(!menu.containsKey("subMenus")){
+    private void ifNoSubMenusToRemove(List<Map> menuItems, List<Map> removeMenuItems) {
+        for (Map menu : menuItems) {
+            if (!menu.containsKey("subMenus")) {
                 removeMenuItems.add(menu);
             }
         }
@@ -231,15 +243,33 @@ public class BaseController extends AppBase {
 
     /**
      * 封装数据
+     *
      * @param reqJson
      * @param headers
      * @return
      * @throws Exception
      */
-    protected BusinessServiceDataFlow writeDataToDataFlowContext(String reqJson, Map<String,String> headers) throws Exception {
-        BusinessServiceDataFlow businessServiceDataFlow = DataFlowFactory.newInstance(BusinessServiceDataFlow.class).builder(reqJson,headers);
+    protected BusinessServiceDataFlow writeDataToDataFlowContext(String reqJson, Map<String, String> headers) throws Exception {
+        BusinessServiceDataFlow businessServiceDataFlow = DataFlowFactory.newInstance(BusinessServiceDataFlow.class).builder(reqJson, headers);
         return businessServiceDataFlow;
     }
 
+    protected void hasPrivilege(RestTemplate restTemplate, IPageData pd, String resource) {
+        ResponseEntity<String> responseEntity = null;
+        //没有用户的情况下不做权限判断
+        if (StringUtil.isEmpty(pd.getUserId())) {
+            return;
+        }
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("resource", resource);
+        paramIn.put("userId", pd.getUserId());
+        responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
+                ServiceConstant.SERVICE_API_URL + "/api/basePrivilege.CheckUserHasResourceListener",
+                HttpMethod.POST);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+    }
 
 }

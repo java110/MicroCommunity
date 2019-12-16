@@ -360,6 +360,9 @@ public class ServiceCodeConstant {
     //检查用户是否有权限
     public static final String SERVICE_CODE_CHECK_USER_HAS_PRIVILEGE = "check.user.hasPrivilege";
 
+    //检查用户是否有权限
+    public static final String SERVICE_CODE_CHECK_USER_HAS_RESOURCE = "basePrivilege.CheckUserHasResourceListener";
+
 
     //查询小区楼
     public static final String SERVICE_CODE_QUERY_FLOOR = "floor.queryFloors";
@@ -544,6 +547,12 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_DELETE_NOTICE = "notice.deleteNotice";
 
     public static final String SERVICE_CODE_LIST_NOTICES = "notice.listNotices";
+
+    public static final String SERVICE_CODE_LIST_MSGS = "msg.listMsg";
+    public static final String SERVICE_CODE_READ_MSGS = "msg.readMsg";
+
+
+    //msg.readMsg
 
     /**
      * 查询数据字典

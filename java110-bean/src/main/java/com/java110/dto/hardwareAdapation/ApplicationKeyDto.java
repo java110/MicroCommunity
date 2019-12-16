@@ -21,10 +21,12 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String endTime;
     private String machineId;
     private String typeCd;
+    private String typeCdName;
     private String name;
     private String tel;
     private String startTime;
     private String state;
+    private String stateName;
     private String age;
     private String communityId;
     private String locationTypeCd;
@@ -37,6 +39,7 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String unitNum;
     private String roomId;
     private String roomNum;
+    private String bId;
 
 
     private Date createTime;
@@ -237,5 +240,29 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

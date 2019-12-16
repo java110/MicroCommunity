@@ -9,6 +9,7 @@
             addPrivilegeViewInfo:{
                 flowComponent:'addPrivilegeView',
                 name:'',
+                resource:'',
                 domain:'',
                 description:'',
 
@@ -29,6 +30,10 @@
 
             vc.on('addPrivilegeViewInfo','syncData',function(_obj){
                 vc.copyObject(_obj,vc.component.addPrivilegeViewInfo);
+                //从url中获取 资源路径 /flow/abc
+                if(_obj.hasOwnProperty("url") && vc.notNull(_obj.url)){
+                    vc.component.addPrivilegeViewInfo.resource = (_obj.url.indexOf("/flow") == 0 && _obj.url.length > 5) ? _obj.url.substring(5):_obj.url;
+                }
             });
 
             vc.on('addPrivilegeViewInfo', 'onIndex', function(_index){

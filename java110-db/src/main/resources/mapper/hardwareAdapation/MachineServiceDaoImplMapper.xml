@@ -189,6 +189,12 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="locationObjId !=null and locationObjId != ''">
             and t.location_obj_id= #{locationObjId}
         </if>
+        <if test="locationObjIds != null ">
+            and t.location_obj_id in
+            <foreach collection="locationObjIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="state !=null and state != ''">
             and t.state = #{state}
         </if>
@@ -300,6 +306,12 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         </if>
         <if test="locationObjId !=null and locationObjId != ''">
             and t.location_obj_id= #{locationObjId}
+        </if>
+        <if test="locationObjIds != null ">
+            and t.location_obj_id in
+            <foreach collection="locationObjIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="state !=null and state != ''">
             and t.state = #{state}

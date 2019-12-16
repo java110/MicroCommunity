@@ -15,6 +15,11 @@ public class ApiIndexStatisticVo extends Vo {
    private String freeParkingSpaceCount;
    private String shopCount;
    private String freeShopCount;
+    private String machineCount;
+    private String loseMachineCount;
+    private String machineRecordCount;
+    private String failRecordCount;
+
 
 
     public String getOwnerCount() {
@@ -79,5 +84,38 @@ public class ApiIndexStatisticVo extends Vo {
 
     public void setFreeShopCount(String freeShopCount) {
         this.freeShopCount = freeShopCount;
+    }
+
+
+    public String getMachineCount() {
+        return machineCount;
+    }
+
+    public void setMachineCount(String machineCount) {
+        this.machineCount = machineCount;
+    }
+
+    public String getLoseMachineCount() {
+        return loseMachineCount;
+    }
+
+    public void setLoseMachineCount(String loseMachineCount) {
+        this.loseMachineCount = loseMachineCount;
+    }
+
+    public String getMachineRecordCount() {
+        return machineRecordCount;
+    }
+
+    public void setMachineRecordCount(String machineRecordCount) {
+        this.machineRecordCount = machineRecordCount;
+    }
+
+    public String getFailRecordCount() {
+        return failRecordCount;
+    }
+
+    public void setFailRecordCount(String failRecordCount) {
+        this.failRecordCount = failRecordCount;
     }
 }

@@ -7,6 +7,7 @@ public class ApiBasePrivilegeDataVo implements Serializable {
 
     private String pId;
     private String name;
+    private String resource;
     private String domain;
     private String description;
 
@@ -59,5 +60,13 @@ public class ApiBasePrivilegeDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 }

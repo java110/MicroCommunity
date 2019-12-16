@@ -300,6 +300,15 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     public List<Map> queryManchineOrders(Map info) {
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryManchineOrders");
     }
+    /**
+     * 查询申请钥匙订单
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> queryApplicationKeyOrders(Map info) {
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryApplicationKeyOrders");
+    }
 
     /**
      * 根据oId 查询Business

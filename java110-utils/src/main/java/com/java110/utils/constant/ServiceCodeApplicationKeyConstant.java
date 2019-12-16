@@ -28,4 +28,10 @@ public class ServiceCodeApplicationKeyConstant {
     public static final String LIST_APPLICATIONKEYS = "applicationKey.listApplicationKeys";
 
 
+    /**
+     * 审核 钥匙申请
+     */
+    public static final String AUDIT_APPLICATIONKEY = "applicationKey.auditApplicationKey";
+
+
 }

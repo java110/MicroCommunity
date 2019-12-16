@@ -38,6 +38,16 @@
                 var option = new Option(_param.floorNum + '号楼', _param.floorId, true, true);
                 this.floorSelect2Info.floorSelector.append(option);
             });
+
+            vc.on('floorSelect2', 'clearFloor', function (_param) {
+                this.floorSelect2Info = {
+                    floors: [],
+                    floorId: '-1',
+                    floorNum: '',
+                    floorName: '',
+                    floorSelector: {},
+                };
+            });
         },
         methods: {
             _initFloorSelect2: function () {
@@ -88,7 +98,9 @@
                 $('#floorSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
-                    console.log('unselect', evt)
+                    console.log('unselect', evt);
+                    this.floorSelect2Info.floorId = '-1';
+                    this.floorSelect2Info.floorNum = '';
 
                 });
             },

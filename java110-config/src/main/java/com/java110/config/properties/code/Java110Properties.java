@@ -20,6 +20,13 @@ public class Java110Properties {
 
     private boolean autoReloadComponent = false;
 
+    private String ftpServer;
+    private int ftpPort;
+    private String ftpUserName;
+    private String ftpUserPassword;
+
+    private String ftpPath;
+
     public String getMappingPath() {
         return mappingPath;
     }
@@ -50,5 +57,46 @@ public class Java110Properties {
 
     public void setAutoReloadComponent(boolean autoReloadComponent) {
         this.autoReloadComponent = autoReloadComponent;
+    }
+
+    public String getFtpServer() {
+        return ftpServer;
+    }
+
+    public void setFtpServer(String ftpServer) {
+        this.ftpServer = ftpServer;
+    }
+
+
+    public String getFtpUserName() {
+        return ftpUserName;
+    }
+
+    public void setFtpUserName(String ftpUserName) {
+        this.ftpUserName = ftpUserName;
+    }
+
+    public String getFtpUserPassword() {
+        return ftpUserPassword;
+    }
+
+    public void setFtpUserPassword(String ftpUserPassword) {
+        this.ftpUserPassword = ftpUserPassword;
+    }
+
+    public int getFtpPort() {
+        return ftpPort;
+    }
+
+    public void setFtpPort(int ftpPort) {
+        this.ftpPort = ftpPort;
+    }
+
+    public String getFtpPath() {
+        return ftpPath;
+    }
+
+    public void setFtpPath(String ftpPath) {
+        this.ftpPath = ftpPath;
     }
 }

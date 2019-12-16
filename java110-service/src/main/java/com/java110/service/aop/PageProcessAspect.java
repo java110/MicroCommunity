@@ -53,6 +53,7 @@ public class PageProcessAspect {
         IPageData pd = null;
         String reqData = "";
         String userId = "";
+        String userName = "";
         String appId = "";
         String sessionId = request.getSession().getId();
         appId = request.getHeader("APP_ID");
@@ -92,6 +93,7 @@ public class PageProcessAspect {
             Map<String, String> userInfo = (Map<String, String>) request.getAttribute("claims");
             if (userInfo.containsKey(CommonConstant.LOGIN_USER_ID)) {
                 userId = userInfo.get(CommonConstant.LOGIN_USER_ID);
+                userName = userInfo.get(CommonConstant.LOGIN_USER_NAME);
             }
         }
 
@@ -113,7 +115,7 @@ public class PageProcessAspect {
                 componentCode = urls[4];
             }
         }
-        pd = PageData.newInstance().builder(userId, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
+        pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
 
     }

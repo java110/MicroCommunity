@@ -11,6 +11,8 @@ import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
 
     @Override
-    public List<MenuGroupDto> queryMenuGroups(@RequestBody  MenuGroupDto menuGroupDto) {
+    public List<MenuGroupDto> queryMenuGroups(@RequestBody MenuGroupDto menuGroupDto) {
 
         //校验是否传了 分页信息
 
@@ -65,7 +67,8 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
     @Override
     public int queryMenuGroupsCount(@RequestBody MenuGroupDto menuGroupDto) {
-        return menuServiceDaoImpl.queryMenuGroupsCount(BeanConvertUtil.beanCovertMap(menuGroupDto));    }
+        return menuServiceDaoImpl.queryMenuGroupsCount(BeanConvertUtil.beanCovertMap(menuGroupDto));
+    }
 
     public IMenuServiceDao getMenuServiceDaoImpl() {
         return menuServiceDaoImpl;
@@ -77,7 +80,7 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
 
     @Override
-    public List<BasePrivilegeDto> queryBasePrivileges(@RequestBody  BasePrivilegeDto basePrivilegeDto) {
+    public List<BasePrivilegeDto> queryBasePrivileges(@RequestBody BasePrivilegeDto basePrivilegeDto) {
 
         //校验是否传了 分页信息
 
@@ -111,12 +114,24 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
     @Override
     public int queryBasePrivilegesCount(@RequestBody BasePrivilegeDto basePrivilegeDto) {
-        return menuServiceDaoImpl.queryBasePrivilegesCount(BeanConvertUtil.beanCovertMap(basePrivilegeDto));    }
+        return menuServiceDaoImpl.queryBasePrivilegesCount(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
+    }
 
+    @Override
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param routeDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/checkUserHasResource", method = RequestMethod.POST)
+    public boolean checkUserHasResource(@RequestBody BasePrivilegeDto basePrivilegeDto) {
+        return menuServiceDaoImpl.checkUserHasResource(BeanConvertUtil.beanCovertMap(basePrivilegeDto));
+    }
 
 
     @Override
-    public List<MenuDto> queryMenus(@RequestBody  MenuDto menuDto) {
+    public List<MenuDto> queryMenus(@RequestBody MenuDto menuDto) {
 
         //校验是否传了 分页信息
 
@@ -150,6 +165,7 @@ public class MenuInnerServiceSMOImpl extends BaseServiceSMO implements IMenuInne
 
     @Override
     public int queryMenusCount(@RequestBody MenuDto menuDto) {
-        return menuServiceDaoImpl.queryMenusCount(BeanConvertUtil.beanCovertMap(menuDto));    }
+        return menuServiceDaoImpl.queryMenusCount(BeanConvertUtil.beanCovertMap(menuDto));
+    }
 
 }

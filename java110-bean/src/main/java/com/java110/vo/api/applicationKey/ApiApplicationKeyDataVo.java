@@ -9,6 +9,7 @@ public class ApiApplicationKeyDataVo implements Serializable {
     private String name;
     private String tel;
     private String typeCd;
+    private String typeCdName;
     private String sex;
     private String age;
     private String idCard;
@@ -24,6 +25,8 @@ public class ApiApplicationKeyDataVo implements Serializable {
     private String unitNum;
     private String roomId;
     private String roomNum;
+    private String state;
+    private String stateName;
 
     public String getApplicationKeyId() {
         return applicationKeyId;
@@ -175,5 +178,29 @@ public class ApiApplicationKeyDataVo implements Serializable {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

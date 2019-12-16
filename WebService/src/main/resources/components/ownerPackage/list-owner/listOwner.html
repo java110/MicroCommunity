@@ -15,14 +15,14 @@
 
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入业主ID"
-                                       v-model="listOwnerInfo.conditions.ownerId" class=" form-control">
+                                <input type="text" placeholder="请输入业主名称"
+                                       v-model="listOwnerInfo.conditions.name" class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入业主名称"
-                                       v-model="listOwnerInfo.conditions.name" class=" form-control">
+                                <input type="text" placeholder="请输入业主身份证号"
+                                       v-model="listOwnerInfo.conditions.idCard" class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -31,6 +31,7 @@
                                        v-model="listOwnerInfo.conditions.link" class=" form-control">
                             </div>
                         </div>
+
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryOwnerMethod()"><i
                                     class="glyphicon glyphicon-search"></i> 查询
@@ -38,12 +39,46 @@
                         </div>
 
                     </div>
+                    <div class="row" v-show="listOwnerInfo.moreCondition == true">
+                        <div class="col-sm-4">
+                            <div class="form-group input-group">
+                                <vc:create name="floorSelect2"
+                                           parentModal="listOwnerModel"
+                                           namespace="listOwner"
+                                ></vc:create>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <vc:create name="unitSelect2"
+                                           parentModal="listOwnerModel"
+                                           callBackListener="listOwner"
+                                           callBackFunction="notify"
+                                           namespace="listOwner"
+                                ></vc:create>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <vc:create name="roomSelect2"
+                                           parentModal="listOwnerModel"
+                                           callBackListener="listOwner"
+                                           callBackFunction="notify"
+                                           namespace="listOwner"
+                                ></vc:create>
+                            </div>
+                        </div>
+
+
+                    </div>
                     <div class="row" v-if="listOwnerInfo.moreCondition == true">
+
 
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入业主身份证号"
-                                       v-model="listOwnerInfo.conditions.idCard" class=" form-control">
+                                <input type="text" placeholder="请输入业主ID"
+                                       v-model="listOwnerInfo.conditions.ownerId" class=" form-control">
                             </div>
                         </div>
 
@@ -134,26 +169,26 @@
                                             <a href="#"
                                                v-on:click="_openDeleteOwnerRoom(owner)">删除房屋</a>
                                         </p>
-                                        <p style="margin:10px 0;">
-                                            <a href="#"
-                                               v-on:click="_openHireParkingSpace(owner)">车位出租</a>
-                                            <span>|</span>
-                                            <a href="#"
-                                               v-on:click="_openSellParkingSpace(owner)">车位出售</a>
-                                        </p>
-                                        <p style="margin:10px 0;">
-                                            <a href="#"
-                                               v-on:click="_openPayPropertyFee(owner)">物业费用</a>
-                                            <span>|</span>
-                                            <a href="#"
-                                               v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
-                                        </p>
-                                        <p style="margin:10px 0;">
-                                            <a href="#"
-                                               v-on:click="_openOwnerRepair(owner)">业主报修</a>
-                                            <span>|</span>
+                                        <!-- <p style="margin:10px 0;">
+                                             <a href="#"
+                                                v-on:click="_openHireParkingSpace(owner)">车位出租</a>
+                                             <span>|</span>
+                                             <a href="#"
+                                                v-on:click="_openSellParkingSpace(owner)">车位出售</a>
+                                         </p>
+                                         <p style="margin:10px 0;">
+                                             <a href="#"
+                                                v-on:click="_openPayPropertyFee(owner)">物业费用</a>
+                                             <span>|</span>
+                                             <a href="#"
+                                                v-on:click="_openPayParkingSpaceFee(owner)">停车费用</a>
+                                         </p>
+                                         <p style="margin:10px 0;">
+                                             <a href="#"
+                                                v-on:click="_openOwnerRepair(owner)">业主报修</a>
+                                             <span>|</span>
 
-                                        </p>
+                                         </p>-->
                                     </div>
                                 </div>
 

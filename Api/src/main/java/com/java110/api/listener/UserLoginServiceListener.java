@@ -116,6 +116,7 @@ public class UserLoginServiceListener extends AbstractServiceApiDataFlowListener
         try {
             Map userMap = new HashMap();
             userMap.put(CommonConstant.LOGIN_USER_ID,userInfo.getString("userId"));
+            userMap.put(CommonConstant.LOGIN_USER_NAME,userInfo.getString("userName"));
             String token = AuthenticationFactory.createAndSaveToken(userMap);
             userInfo.remove("userPwd");
             userInfo.put("token",token);

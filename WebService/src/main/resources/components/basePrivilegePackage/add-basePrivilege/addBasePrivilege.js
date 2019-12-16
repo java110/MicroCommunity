@@ -9,6 +9,7 @@
             addBasePrivilegeInfo: {
                 pId: '',
                 name: '',
+                resource: '',
                 domain: '',
                 description: '',
 
@@ -37,6 +38,18 @@
                             limit: "maxin",
                             param: "2,10",
                             errInfo: "权限名称必须在2至10字符之间"
+                        },
+                    ],
+                    'addBasePrivilegeInfo.resource': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "资源路径不能为空"
+                        },
+                        {
+                            limit: "maxin",
+                            param: "1,200",
+                            errInfo: "资源路径必须在1至200字符之间"
                         },
                     ],
                     'addBasePrivilegeInfo.domain': [

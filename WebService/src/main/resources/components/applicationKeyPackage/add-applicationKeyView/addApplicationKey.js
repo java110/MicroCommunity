@@ -24,11 +24,13 @@
                 roomId: '',
                 locationTypeCd: '',
                 locationObjId: '',
-                roomName: ''
+                roomName: '',
+                photo:'',
             }
         },
         _initMethod: function () {
             vc.component._initAddApplicationKeyDateInfo();
+            vc.component._initAddApplicationKeyMedia();
         },
         _initEvent: function () {
             vc.on('addApplicationKey', 'openAddApplicationKeyModal', function () {
@@ -264,12 +266,77 @@
                     roomId: '',
                     locationTypeCd: '',
                     locationObjId: '',
-                    roomName: ''
+                    roomName: '',
+                    photo:'',
+                    videoPlaying:false
 
                 };
             },
             _closeAddApplicationKeyView: function () {
                 vc.emit('applicationKeyManage', 'listApplicationKey', {});
+            },
+            _addUserMedia:function() {
+                return navigator.getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia || null;
+            },
+            _initAddApplicationKeyMedia:function () {
+                if(vc.component._addUserMedia()){
+                    vc.component.addApplicationKeyInfo.videoPlaying = false;
+                    var constraints = {
+                        video: true,
+                        audio: false
+                    };
+                    var video = document.getElementById('photo');
+                    var media = navigator.getUserMedia(constraints, function (stream) {
+                        var url = window.URL || window.webkitURL;
+                        //video.src = url ? url.createObjectURL(stream) : stream;
+                        try {
+                            video.src = url ? url.createObjectURL(stream) : stream;
+                        } catch (error) {
+                            video.srcObject = stream;
+                        }
+                        video.play();
+                        vc.component.addApplicationKeyInfo.videoPlaying = true;
+                    }, function (error) {
+                        console.log("ERROR");
+                        console.log(error);
+                    });
+                }else{
+                    console.log("初始化视频失败");
+                }
+            },
+            _takePhoto:function () {
+                if (vc.component.addApplicationKeyInfo.videoPlaying) {
+                    var canvas = document.getElementById('canvas');
+                    var video = document.getElementById('photo');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var data = canvas.toDataURL('image/webp');
+                    vc.component.addApplicationKeyInfo.photo = data;
+                    //document.getElementById('photo').setAttribute('src', data);
+                }
+            },
+            _uploadPhoto:function(event){
+                $("#uploadApplicationKeyPhoto").trigger("click")
+            },
+            _choosePhoto:function(event){
+                var photoFiles = event.target.files;
+                if (photoFiles && photoFiles.length > 0) {
+                    // 获取目前上传的文件
+                    var file = photoFiles[0];// 文件大小校验的动作
+                    if(file.size > 1024 * 1024 * 1) {
+                        vc.toast("图片大小不能超过 2MB!")
+                        return false;
+                    }
+                    var reader = new FileReader(); //新建FileReader对象
+                    reader.readAsDataURL(file); //读取为base64
+                    reader.onloadend = function(e) {
+                        vc.component.addApplicationKeyInfo.photo = reader.result;
+                    }
+                }
             },
         }
     });

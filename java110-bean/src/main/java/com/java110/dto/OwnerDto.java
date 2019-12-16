@@ -31,6 +31,9 @@ public class OwnerDto extends PageDto implements Serializable {
     private String psId;
     private String num;
     private String idCard;
+    private String floorId;
+    private String unitId;
+    private String state;
 
     private String bId;
 
@@ -202,5 +205,29 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

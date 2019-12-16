@@ -103,6 +103,7 @@
                     errorCallback(error.bodyText, error);
                     vc.loading('close');
                 });
+
         },
 
     };
@@ -402,5 +403,34 @@
                 document.body.removeChild(m)
             }, d * 1000);
         }, duration);
+    }
+})(window.vc);
+
+/**
+ toast
+ **/
+(function (vc) {
+    vc.urlToBase64 = function urlToBase64(_url,_callFun) {
+        var imgData;
+        var reader = new FileReader();
+        getImageBlob(_url, function (blob) {
+            reader.readAsDataURL(blob);
+        });
+        reader.onload = function (e) {
+            imgData = e.target.result;
+            _callFun(imgData);
+        };
+
+        function getImageBlob(_url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", _url, true);
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+                if (this.status == 200) {
+                    if (cb) cb(this.response);
+                }
+            };
+            xhr.send();
+        }
     }
 })(window.vc);

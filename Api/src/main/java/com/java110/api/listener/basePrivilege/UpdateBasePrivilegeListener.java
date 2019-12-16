@@ -24,12 +24,14 @@ public class UpdateBasePrivilegeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "pId", "权限ID不能为空");
-Assert.hasKeyAndValue(reqJson, "name", "必填，请填写权限名称");
-Assert.hasKeyAndValue(reqJson, "domain", "必填，请选择商户类型");
+        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写权限名称");
+        Assert.hasKeyAndValue(reqJson, "domain", "必填，请选择商户类型");
+        Assert.hasKeyAndValue(reqJson, "resource", "必填，请选择资源路径");
 
     }
 

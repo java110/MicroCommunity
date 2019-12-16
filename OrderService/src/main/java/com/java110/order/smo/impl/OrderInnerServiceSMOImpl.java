@@ -9,6 +9,8 @@ import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -67,6 +69,16 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
     @Override
     public List<OrderDto> queryMachineOrders(@RequestBody OrderDto orderDto) {
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryManchineOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
+    }
+
+    /**
+     * <p>查询上级组织信息</p>
+     *
+     * @param orderDto 数据对象分享
+     * @return OrderDto 对象数据
+     */
+    public List<OrderDto> queryApplicationKeyOrders(@RequestBody OrderDto orderDto){
+        return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryApplicationKeyOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
     }
 
 

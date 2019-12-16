@@ -16,16 +16,20 @@
                 floorNum: '',
                 floorName: '',
                 unitId: '',
-                unitName: '',
+                unitNum: '',
                 roomId: '',
                 locationTypeCd: '',
                 locationObjId: '',
-                roomName: ''
+                roomName: '',
+                videoPlaying:false,
+                photo:''
 
             }
         },
         _initMethod: function () {
             vc.component._initEditApplicationKeyDateInfo();
+            vc.component._initEditApplicationKeyMedia();
+
 
         },
         _initEvent: function () {
@@ -289,11 +293,76 @@
                     roomId: '',
                     locationTypeCd: '',
                     locationObjId: '',
-                    roomName: ''
+                    roomName: '',
+                    videoPlaying:false,
+                    photo:''
                 }
             },
             _closeEditApplicationKeyView: function () {
                 vc.emit('applicationKeyManage', 'listApplicationKey', {});
+            },
+            _editUserMedia:function() {
+                return navigator.getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia || null;
+            },
+            _initEditApplicationKeyMedia:function () {
+                if(vc.component._editUserMedia()){
+                    vc.component.editApplicationKeyInfo.videoPlaying = false;
+                    var constraints = {
+                        video: true,
+                        audio: false
+                    };
+                    var video = document.getElementById('photo');
+                    var media = navigator.getUserMedia(constraints, function (stream) {
+                        var url = window.URL || window.webkitURL;
+                        //video.src = url ? url.createObjectURL(stream) : stream;
+                        try {
+                            video.src = url ? url.createObjectURL(stream) : stream;
+                        } catch (error) {
+                            video.srcObject = stream;
+                        }
+                        video.play();
+                        vc.component.editApplicationKeyInfo.videoPlaying = true;
+                    }, function (error) {
+                        console.log("ERROR");
+                        console.log(error);
+                    });
+                }else{
+                    console.log("初始化视频失败");
+                }
+            },
+            _takeEditPhoto:function () {
+                if (vc.component.editApplicationKeyInfo.videoPlaying) {
+                    var canvas = document.getElementById('canvas');
+                    var video = document.getElementById('photo');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var data = canvas.toDataURL('image/webp');
+                    vc.component.editApplicationKeyInfo.photo = data;
+                    //document.getElementById('photo').setAttribute('src', data);
+                }
+            },
+            _uploadEditPhoto:function(event){
+                $("#uploadEditApplicationKeyPhoto").trigger("click")
+            },
+            _chooseEditPhoto:function(event){
+                var photoFiles = event.target.files;
+                if (photoFiles && photoFiles.length > 0) {
+                    // 获取目前上传的文件
+                    var file = photoFiles[0];// 文件大小校验的动作
+                    if(file.size > 1024 * 1024 * 1) {
+                        vc.toast("图片大小不能超过 2MB!")
+                        return false;
+                    }
+                    var reader = new FileReader(); //新建FileReader对象
+                    reader.readAsDataURL(file); //读取为base64
+                    reader.onloadend = function(e) {
+                        vc.component.editApplicationKeyInfo.photo = reader.result;
+                    }
+                }
             },
         }
     });

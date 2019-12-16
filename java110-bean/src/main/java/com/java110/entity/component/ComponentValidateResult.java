@@ -2,6 +2,7 @@ package com.java110.entity.component;
 
 /**
  * 组件校验结果返回分装实体
+ *
  * @ClassName ComponentValidateResult
  * @Description TODO 组件校验结果返回分装实体
  * @Author wuxw
@@ -12,14 +13,17 @@ package com.java110.entity.component;
 public class ComponentValidateResult {
 
 
-    public ComponentValidateResult(String storeId, String storeTypeCd, String communityId,String userId) {
+    public ComponentValidateResult(String storeId, String storeTypeCd, String communityId, String userId, String userName) {
         this.storeId = storeId;
         this.storeTypeCd = storeTypeCd;
         this.communityId = communityId;
         this.userId = userId;
+        this.userName = userName;
     }
 
     private String userId;
+
+    private String userName;
 
     //商户ID
     private String storeId;
@@ -60,5 +64,13 @@ public class ComponentValidateResult {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

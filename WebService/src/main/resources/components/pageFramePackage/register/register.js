@@ -78,7 +78,7 @@
                         },
                         {
                             limit:"maxin",
-                            param:"4,6",
+                            param:"4,12",
                             errInfo:"用户名长度必须在4位至6位"
                         },
                     ],

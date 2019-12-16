@@ -70,14 +70,9 @@
                     ],
                     'editOwnerInfo.idCard':[
                         {
-                            limit:"required",
-                            param:"",
-                            errInfo:"身份证号不能为空"
-                        },
-                        {
-                            limit:"idCard",
-                            param:"",
-                            errInfo:"不是有效的身份证号"
+                            limit:"maxLength",
+                            param:"18",
+                            errInfo:"身份证长度不能超过200位"
                         }
                     ],
                     'editOwnerInfo.link':[
@@ -152,6 +147,7 @@
                     link:'',
                     sex:'',
                     remark:'',
+                    idCard:'',
                     ownerPhoto:'',
                     videoPlaying:false
                 };

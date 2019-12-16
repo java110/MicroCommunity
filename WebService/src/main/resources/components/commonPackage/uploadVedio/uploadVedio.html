@@ -1,0 +1,14 @@
+<div class="">
+    <div class="progress" v-if="this.uploadVedioInfo.progress > 0" style="height: 1px;">
+        <div class="progress-bar" role="progressbar" v-bind:style="{width: this.uploadVedioInfo.progress+'%'}"
+             v-bind:aria-valuenow="this.uploadVedioInfo.progress" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div style="margin-bottom: 5px;" v-if="this.uploadVedioInfo.progress > 0">
+        <span>{{this.uploadVedioInfo.fileName}}</span>
+    </div>
+    <div>
+        <button class="btn btn-primary" v-on:click="this._uploadVedio()">上传视频</button>
+        <input type="file" class="file" accept="video/*" capture="camcorder" id="uploadVedio" hidden
+               v-on:change="this._chooseVedio($event)">
+    </div>
+</div>

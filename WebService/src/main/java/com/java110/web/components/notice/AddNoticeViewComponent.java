@@ -41,7 +41,7 @@ public class AddNoticeViewComponent {
     public ResponseEntity<String> uploadImage(IPageData pd, MultipartFile uploadFile) throws Exception {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         paramIn.put("suffix", "jpeg");
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getToken(), paramIn.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), paramIn.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());
         return addFileSMOImpl.saveFile(newPd, uploadFile);
     }
 

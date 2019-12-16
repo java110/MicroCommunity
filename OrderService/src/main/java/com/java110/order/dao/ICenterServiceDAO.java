@@ -158,6 +158,7 @@ public interface ICenterServiceDAO {
 
 
     public List<Map> queryManchineOrders(Map info);
+    public List<Map> queryApplicationKeyOrders(Map info);
 
 
 
