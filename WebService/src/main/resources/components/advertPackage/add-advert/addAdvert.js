@@ -211,7 +211,7 @@
 
                     return;
                 }
-                if (vc.component.addAdvertInfo.viewType == '99') {
+                if (vc.component.addAdvertInfo.viewType == '9999') {
                     vc.component.addAdvertInfo.vedioName = '';
                 } else {
                     vc.component.addAdvertInfo.photos = [];
