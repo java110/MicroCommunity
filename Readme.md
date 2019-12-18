@@ -45,6 +45,14 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     推荐用docker部署管理，需要安装docker、docker-compose （如果夸主机部署请用docker swarm 自行创建java110-net network），
     如果是单机推荐直接运行 reBuildAll.sh
     
+### 业主小程序
+
+    目前正在火速开发中，欢迎star
+    
+   github: [https://github.com/java110/WechatOwnerService](https://github.com/java110/WechatOwnerService)
+   
+   gitee: [https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
+    
 ### 系统功能（function） 
 
    ![image](docs/images/hc_function.png)
