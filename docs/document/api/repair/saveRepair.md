@@ -30,6 +30,7 @@
 |roomId|1|String|30|房屋ID|-|
 |appointmentTime|1|String|-|预约时间| 格式为 YYYY-MM-DD hh24:mi:ss|
 |context|1|String|200|报修内容|-|
+|communityId|1|String|30|小区ID|-|
 |photos|1|Array|-|相关照片，base64格式|-|
 
 ###### 返回协议
@@ -60,6 +61,7 @@ SIGN:aabdncdhdbd878sbdudn898
     "repairName":"吴学文",
     "tel":"17797173942",
     "context":"服务太差",
+    "communityId":"702019120393220007",
     "appointmentTime":"2019-12-14 18:30:30",
     "photos":['base64....'],
 }

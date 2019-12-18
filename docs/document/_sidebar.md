@@ -58,6 +58,7 @@
   * [钥匙申请](api/machine/applicationKey.md)
   * [投诉建议](api/complaint/saveComplaint.md)
   * [报修](api/repair/saveRepair.md)
+  * [查看报修](api/repair/queryRepair.md)
 
 * 服务端接口协议
 
