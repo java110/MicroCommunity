@@ -27,7 +27,7 @@
 |name|1|String|50|名称|-|
 |email|1|String|30|邮箱地址|-|
 |tel|1|String|11|电话|-|
-|orgId|?|String|200|备注|-|
+|orgId|1|String|200|备注|-|
 |address|1|String|300|现居住地址|-|
 |sex|1|String|1|小区ID|0表示男孩 1表示女孩|
 |relCd|1|String|30|关系角色|10000 普通员工， 20000部门经理 查看t_dict表|
