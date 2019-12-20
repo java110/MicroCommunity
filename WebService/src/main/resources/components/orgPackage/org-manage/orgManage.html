@@ -1,9 +1,9 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
-        <div class="col-lg-4" >
+        <div class="col-lg-3" >
             <div id="orgTree" class="" style="background: #fff;"></div>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-9">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
@@ -17,30 +17,25 @@
                         </div>
                         <div class="ibox-content">
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group ">
-                                        <select class="custom-select" v-model="orgManageInfo.conditions.headOrgId">
-                                            <option selected value="">必填，请选择总公司</option>
-                                            <option v-for="headOrg in orgManageInfo.headOrg" :value="headOrg.orgId">
-                                                {{headOrg.orgName}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-4" v-if="orgManageInfo.moreCondition == true">
                                     <div class="form-group">
-                                        <select class="custom-select" v-model="orgManageInfo.conditions.branchOrgId">
-                                            <option selected value="">必填，请选择分公司</option>
-                                            <option v-for="branchOrg in orgManageInfo.branchOrg"
-                                                    :value="branchOrg.orgId">{{branchOrg.orgName}}
-                                            </option>
-                                        </select>
+                                        <input type="text" placeholder="请输入组织ID"
+                                               v-model="orgManageInfo.conditions.orgId"
+                                               class=" form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <input type="text" placeholder="请输入组织名称"
                                                v-model="orgManageInfo.conditions.orgName"
+                                               class=" form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" v-if="orgManageInfo.moreCondition == true">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="请选择小区"
+                                               v-model="orgManageInfo.conditions.communityId"
                                                class=" form-control">
                                     </div>
                                 </div>
@@ -52,13 +47,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4" v-if="orgManageInfo.moreCondition == true">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="请输入组织ID"
-                                               v-model="orgManageInfo.conditions.orgId"
-                                               class=" form-control">
-                                    </div>
-                                </div>
+
                             </div>
 
 

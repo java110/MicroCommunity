@@ -17,10 +17,9 @@
                 branchOrg:[],
                 orgTree:[],
                 conditions:{
-                    headOrgId:'',
-                    branchOrgId:'',
                     orgId:'',
                     orgName:'',
+                    communityId:'',
                     orgLevel:'',
                     parentOrgId:'',
                 }
