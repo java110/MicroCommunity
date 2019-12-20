@@ -56,15 +56,10 @@
             //只查 查询总公司级组织
             vc.component.orgManageInfo.orgTree = [];
             vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree,'1', '',function(){
-                //默认查询分公司组织信息
-                vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree[0].nodes,
-                                        '2',
-                                        vc.component.orgManageInfo.orgTree[0].orgId,
-                                        function(){}
-                                        );
+                vc.component._loadBranchOrgTrees();
             });
             vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,1,'');
-            vc.component._refreshOrgTree();
+
         },
         _initEvent:function(){
             
@@ -79,7 +74,16 @@
             _refreshOrgTree:function(){
                 $('#orgTree').treeview({
                           data: vc.component.orgManageInfo.orgTree
-                        });
+                });
+            },
+            _loadBranchOrgTrees:function(){
+                //默认查询分公司组织信息
+                vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree[0].nodes,
+                                        '2',
+                                        vc.component.orgManageInfo.orgTree[0].orgId,
+                                        function(){
+                                            vc.component._refreshOrgTree();
+                                        });
             },
             _listOrgTrees:function(_nodes,_orgLevel,_parentOrgId,_callback){
                 var param = {
