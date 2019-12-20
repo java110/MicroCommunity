@@ -1,47 +1,56 @@
- <fieldset role="tabpanel" aria-labelledby="component-h-0" class="body current" v-bind:class="{no_display:step!=1}" aria-hidden="false">
+<fieldset role="tabpanel" aria-labelledby="component-h-0" class="body current" v-bind:class="{no_display:step!=1}"
+          aria-hidden="false">
     <h2>公司基本信息</h2>
     <div class="row">
         <div class="col-lg-8">
             <div class="form-group">
                 <label>公司名称</label> <span class="required">*</span>
-                <input id="name" v-model="companyBaseInfo.name" type="text" class="form-control required" aria-required="true" />
+                <input id="name" v-model="companyBaseInfo.name" type="text" class="form-control required"
+                       aria-required="true"/>
             </div>
             <div class="dropdown form-group">
                 <label>公司地址</label> <span class="required">*</span>
 
                 <select id="pro" class="form-control form-control-sm" style="width: 10vw;display: inline;"
                         v-model="selectProv"
-                        @change="getProv($event)" >
+                        @change="getProv(selectProv)">
                     <option value='' disabled selected style='display:none;'>请选择省</option>
-                <option v-for="item in provs"
-                        :label="item.label"
-                        :value="item.id">{{item.label}}</option>
+                    <option v-for="item in provs"
+                            :label="item.areaName"
+                            :value="item.areaCode">{{item.areaName}}
+                    </option>
 
                 </select>
                 <select id="city" class="form-control form-control-sm" style="width: 10vw;display: inline;"
                         v-if="selectProv!=''"
                         v-model="selectCity"
-                        @change="getCity($event)" >
+                        @change="getCity(selectCity)">
                     <option value='' disabled selected style='display:none;'>请选择城市</option>
                     <option v-for="item in citys"
-                            :label="item.label"
-                            :value="item.id">{{item.label}}</option>
+                            :label="item.areaName"
+                            :value="item.areaCode">{{item.areaName}}
+                    </option>
                 </select>
-                <input  name="address" v-model="companyBaseInfo.address" type="text" class="form-control required" aria-required="true" />
+                <input name="address" v-model="companyBaseInfo.address" type="text" class="form-control required"
+                       aria-required="true"/>
             </div>
             <div class="form-group">
                 <label>联系电话</label> <span class="required">*</span>
-                <input name="tel" v-model="companyBaseInfo.tel" type="text" class="form-control required" aria-required="true" />
+                <input name="tel" v-model="companyBaseInfo.tel" type="text" class="form-control required"
+                       aria-required="true"/>
             </div>
             <div class="form-group">
                 <label>公司业务</label> <span class="required">*</span>
-                <select name="storeTypeCd" v-model="companyBaseInfo.storeTypeCd" class="form-control  required" aria-required="true">
-                    <option v-for="storeType in storeTypes" v-bind:value="storeType.storeTypeCd">{{storeType.name}}</option>
+                <select name="storeTypeCd" v-model="companyBaseInfo.storeTypeCd" class="form-control  required"
+                        aria-required="true">
+                    <option v-for="storeType in storeTypes" v-bind:value="storeType.storeTypeCd">{{storeType.name}}
+                    </option>
                 </select>
             </div>
             <div class="form-group">
                 <label>附近建筑</label> <span class="required">*</span>
-                <input name="nearbyLandmarks" v-model="companyBaseInfo.nearbyLandmarks" type="text" class="form-control required" aria-required="true" />
+                <input name="nearbyLandmarks" v-model="companyBaseInfo.nearbyLandmarks" type="text"
+                       class="form-control required" aria-required="true"/>
             </div>
         </div>
         <div class="col-lg-4">

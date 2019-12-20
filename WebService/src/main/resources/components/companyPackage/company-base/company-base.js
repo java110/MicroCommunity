@@ -23,6 +23,8 @@
         },
          _initMethod:function(){
              vc.component.initStoreType();
+
+             vc.component._initArea('101','0');
          },
          _initEvent:function(){
 //              vc.component.$on('errorInfoEvent',function(_errorInfo){
@@ -40,20 +42,11 @@
              }
         },
         methods:{
-            getProv: function (prov) {
-                let tempCity=[];
-                this.citys=[];
-                this.selectCity='';
-                for (var val of this.allCity){
-                    if (prov.currentTarget.value == val.pid){
-                        tempCity.push({label: val.label, id: val.id})
-                    }
-                }
-                this.citys = tempCity;
+            getProv: function (_prov) {
+                vc.component._initArea('202',_prov);
             },
-            getCity: function (city) {
-                console.log(this.selectCity);
-                console.log(this.selectProv);
+            getCity: function (_city) {
+                vc.component._initArea('303',_city);
             },
             initStoreType:function(){
                 var param = {
@@ -74,18 +67,26 @@
                                 console.log('请求失败处理',errInfo,error);
                                 vc.component.$emit('errorInfoEvent',errInfo);
                              });
+
+            },
+            _initArea:function(_areaLevel,_parentAreaCode){ //加载区域
+                var _param = {
+                    params:{
+                        areaLevel:_areaLevel,
+                        parentAreaCode:_parentAreaCode
+                    }
+                };
                 vc.http.get('company','getAreas',
-                    JSON.stringify(param),
+                    _param,
                     function(json,res){
                         if(res.status == 200){
-                            vc.component.areas = JSON.parse(json);
-                            for (var i=0;i<vc.component.areas.length;i++){
-                                if(vc.component.areas[i].level==1){
-                                    vc.component.provs.push(vc.component.areas[i])
-                                }
-                                if(vc.component.areas[i].level==2){
-                                    vc.component.allCity.push(vc.component.areas[i])
-                                }
+                            var _tmpAreas = JSON.parse(json);
+                            if(_areaLevel == '101'){
+                                vc.component.provs = _tmpAreas;
+                            }else if(_areaLevel == '202'){
+                                vc.component.citys = _tmpAreas;
+                            }else{
+                                vc.component.areas = _tmpAreas;
                             }
                             return ;
                         }

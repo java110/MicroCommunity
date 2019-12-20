@@ -140,7 +140,7 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         ResponseEntity<String> responseEntity = null;
         Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
 
-        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/api.queryAreas", HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/area.listAreas", HttpMethod.GET);
 
         if(responseEntity.getStatusCode() == HttpStatus.OK){
             Assert.jsonObjectHaveKey(responseEntity.getBody(),"areas","查询中心服务异常，不是有效json或未包含areas节点");
