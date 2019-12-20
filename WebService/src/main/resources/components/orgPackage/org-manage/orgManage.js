@@ -4,6 +4,7 @@
 (function(vc){
     var DEFAULT_PAGE = 1;
     var DEFAULT_ROWS = 10;
+    var ALL_ROWS = 100;
     vc.extends({
         data:{
             orgManageInfo:{
@@ -14,6 +15,7 @@
                 orgName:'',
                 headOrg:[],
                 branchOrg:[],
+                orgTree:[],
                 conditions:{
                     headOrgId:'',
                     branchOrgId:'',
@@ -51,8 +53,18 @@
             }
          },
         _initMethod:function(){
-            vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
+            //只查 查询总公司级组织
+            vc.component.orgManageInfo.orgTree = [];
+            vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree,'1', '',function(){
+                //默认查询分公司组织信息
+                vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree[0].nodes,
+                                        '2',
+                                        vc.component.orgManageInfo.orgTree[0].orgId,
+                                        function(){}
+                                        );
+            });
             vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,1,'');
+            vc.component._refreshOrgTree();
         },
         _initEvent:function(){
             
@@ -64,6 +76,41 @@
             });
         },
         methods:{
+            _refreshOrgTree:function(){
+                $('#orgTree').treeview({
+                          data: vc.component.orgManageInfo.orgTree
+                        });
+            },
+            _listOrgTrees:function(_nodes,_orgLevel,_parentOrgId,_callback){
+                var param = {
+                    params:{
+                        page:DEFAULT_PAGE,
+                        row:ALL_ROWS,
+                        orgLevel:_orgLevel,
+                        parentOrgId:_parentOrgId
+                    }
+               };
+               //发送get请求
+               vc.http.get('orgManage',
+                            'list',
+                             param,
+                             function(json,res){
+                                var _tmpOrgs =JSON.parse(json).orgs;
+                                _tmpOrgs.forEach(function (_item) {
+                                    _nodes.push({
+                                        orgId:_item.orgId,
+                                        text:_item.orgName,
+                                        href:function(_item){},
+                                        tags:[0],
+                                        nodes:[]
+                                    });
+                                    _callback();
+                                });
+                             },function(errInfo,error){
+                                console.log('请求失败处理');
+                             }
+                           );
+            },
             _listOrgs:function(_page, _rows){
 
                 vc.component.orgManageInfo.conditions.page = _page;
