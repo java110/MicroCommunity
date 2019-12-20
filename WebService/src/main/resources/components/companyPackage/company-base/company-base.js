@@ -9,6 +9,7 @@
             storeTypes:[],
             companyBaseInfo:{
                 name:"",
+                areaAddress:'',
                 address:"",
                 tel:"",
                 storeTypeCd:"",
@@ -46,7 +47,23 @@
                 vc.component._initArea('202',_prov);
             },
             getCity: function (_city) {
-                vc.component._initArea('303',_city);
+                //vc.component._initArea('303',_city);
+                vc.component.companyBaseInfo.areaAddress = '';
+                if(!vc.notNull(vc.component.provs)){
+                    return;
+                }
+                vc.component.provs.forEach(function(_param){
+                    if(_param.areaCode == vc.component.selectProv){
+                        vc.component.companyBaseInfo.areaAddress = _param.areaName;
+                    }
+                });
+
+                 vc.component.citys.forEach(function(_param){
+                    if(_param.areaCode == vc.component.selectCity){
+                        vc.component.companyBaseInfo.areaAddress += _param.areaName;
+                    }
+                });
+
             },
             initStoreType:function(){
                 var param = {
@@ -93,7 +110,7 @@
                         //vc.component.$emit('errorInfoEvent',json);
                     },function(errInfo,error){
                         console.log('请求失败处理',errInfo,error);
-                        vc.component.$emit('errorInfoEvent',errInfo);
+                        vc.toast("查询地区失败");
                     });
             },
             validateBase:function(){
@@ -111,6 +128,13 @@
                                             param:"100",
                                             errInfo:"用户名长度必须在100位之内"
                                         },
+                                    ],
+                                    'companyBaseInfo.areaAddress':[
+                                        {
+                                            limit:"required",
+                                            param:"",
+                                            errInfo:"请选择地址"
+                                        }
                                     ],
                                     'companyBaseInfo.address':[
                                         {

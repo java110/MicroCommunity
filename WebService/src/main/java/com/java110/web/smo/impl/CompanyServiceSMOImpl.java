@@ -28,32 +28,34 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
     /**
      * 查询 商户类别
+     *
      * @param pd
      * @return
      */
     @Override
     public ResponseEntity<String> getStoreType(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+        Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
 
-        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/query.store.type?type=all", HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/query.store.type?type=all", HttpMethod.GET);
 
-        if(responseEntity.getStatusCode() == HttpStatus.OK){
-            Assert.jsonObjectHaveKey(responseEntity.getBody(),"storeType","查询中心服务异常，不是有效json或未包含storeType节点");
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            Assert.jsonObjectHaveKey(responseEntity.getBody(), "storeType", "查询中心服务异常，不是有效json或未包含storeType节点");
             //将storeType 返回出去
-            responseEntity = new ResponseEntity<String>(JSONObject.parseObject(responseEntity.getBody()).getJSONArray("storeType").toJSONString(),HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>(JSONObject.parseObject(responseEntity.getBody()).getJSONArray("storeType").toJSONString(), HttpStatus.OK);
         }
         return responseEntity;
     }
 
     /**
      * 保存公司信息
+     *
      * @param pd
      * @return
      */
-    public ResponseEntity<String> saveCompanyInfo(IPageData pd){
+    public ResponseEntity<String> saveCompanyInfo(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+        Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
 
         validateCompanyInfo(pd.getReqData());
 
@@ -64,56 +66,55 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
         //基本信息
         JSONObject businessStore = reqJson.getJSONObject("businessStore");
-        businessStore.put("userId",pd.getUserId());
-        businessStore.put("name",paramJson.getString("name"));
-        businessStore.put("address",paramJson.getString("address"));
-        businessStore.put("tel",paramJson.getString("tel"));
-        businessStore.put("storeTypeCd",paramJson.getString("storeTypeCd"));
-        businessStore.put("nearbyLandmarks",paramJson.getString("nearbyLandmarks"));
+        businessStore.put("userId", pd.getUserId());
+        businessStore.put("name", paramJson.getString("name"));
+        businessStore.put("address", paramJson.getString("areaAddress") + paramJson.getString("address"));
+        businessStore.put("tel", paramJson.getString("tel"));
+        businessStore.put("storeTypeCd", paramJson.getString("storeTypeCd"));
+        businessStore.put("nearbyLandmarks", paramJson.getString("nearbyLandmarks"));
 
         JSONArray businessStoreAttr = new JSONArray();
 
         JSONObject attr = new JSONObject();
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_CORPORATION);
-        attr.put("value",paramJson.getString("corporation"));
+        attr.put("value", paramJson.getString("corporation"));
         businessStoreAttr.add(attr);
 
-         attr = new JSONObject();
+        attr = new JSONObject();
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_REGISTEREDCAPITAL);
-        attr.put("value",paramJson.getString("registeredCapital"));
+        attr.put("value", paramJson.getString("registeredCapital"));
         businessStoreAttr.add(attr);
 
-         attr = new JSONObject();
+        attr = new JSONObject();
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_FOUNDINGTIME);
-        attr.put("value",paramJson.getString("foundingTime"));
+        attr.put("value", paramJson.getString("foundingTime"));
         businessStoreAttr.add(attr);
 
         attr = new JSONObject();
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_REGISTRATIONAUTHORITY);
-        attr.put("value",paramJson.getString("registrationAuthority"));
+        attr.put("value", paramJson.getString("registrationAuthority"));
         businessStoreAttr.add(attr);
 
         attr = new JSONObject();
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_SCOPE);
-        attr.put("value",paramJson.getString("scope"));
+        attr.put("value", paramJson.getString("scope"));
         businessStoreAttr.add(attr);
-        reqJson.put("businessStoreAttr",businessStoreAttr);
+        reqJson.put("businessStoreAttr", businessStoreAttr);
 
         JSONArray businessStoreCerdentials = new JSONArray();
         JSONObject cerdentials = new JSONObject();
 
         cerdentials.put("credentialsCd", CredentialsConstant.LICENCE);
-        cerdentials.put("value",paramJson.getString("value"));
-        cerdentials.put("validityPeriod",paramJson.getString("validityPeriod"));
-        cerdentials.put("positivePhoto","");
-        cerdentials.put("negativePhoto","");
+        cerdentials.put("value", paramJson.getString("value"));
+        cerdentials.put("validityPeriod", paramJson.getString("validityPeriod"));
+        cerdentials.put("positivePhoto", "");
+        cerdentials.put("negativePhoto", "");
         businessStoreCerdentials.add(cerdentials);
 
-        reqJson.put("businessStoreCerdentials",businessStoreCerdentials);
+        reqJson.put("businessStoreCerdentials", businessStoreCerdentials);
 
 
-
-        responseEntity = this.callCenterService(restTemplate,pd,reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL+"/api/save.store.info", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/save.store.info", HttpMethod.POST);
 
        /* if(responseEntity.getStatusCode() != HttpStatus.OK){
             return responseEntity;
@@ -132,20 +133,21 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
     /**
      * 查询 所有省市
+     *
      * @param pd
      * @return
      */
     @Override
     public ResponseEntity<String> getAreas(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        Assert.hasLength(pd.getUserId(),"用户还未登录请先登录");
+        Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
 
-        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL+"/api/area.listAreas", HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/area.listAreas", HttpMethod.GET);
 
-        if(responseEntity.getStatusCode() == HttpStatus.OK){
-            Assert.jsonObjectHaveKey(responseEntity.getBody(),"areas","查询中心服务异常，不是有效json或未包含areas节点");
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            Assert.jsonObjectHaveKey(responseEntity.getBody(), "areas", "查询中心服务异常，不是有效json或未包含areas节点");
             //将areas 返回出去
-            responseEntity = new ResponseEntity<String>(JSONObject.parseObject(responseEntity.getBody()).getJSONArray("areas").toJSONString(),HttpStatus.OK);
+            responseEntity = new ResponseEntity<String>(JSONObject.parseObject(responseEntity.getBody()).getJSONArray("areas").toJSONString(), HttpStatus.OK);
         }
         return responseEntity;
     }
@@ -153,9 +155,10 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
     /**
      * 校验公司信息
+     *
      * @param param
      */
-    private void validateCompanyInfo(String param){
+    private void validateCompanyInfo(String param) {
 
     }
 
