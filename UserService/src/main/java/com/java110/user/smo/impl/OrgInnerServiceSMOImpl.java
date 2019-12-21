@@ -56,8 +56,12 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
 
         List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
 
+        String[] communityIds = getCommunityIds(orgs);
+        if (communityIds == null || communityIds.length < 0) {
+            return orgs;
+        }
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityIds(getCommunityIds(orgs));
+        communityDto.setCommunityIds(communityIds);
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
@@ -108,11 +112,11 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
     private String[] getCommunityIds(List<OrgDto> orgDtos) {
         List<String> communityIds = new ArrayList<String>();
         for (OrgDto orgDto : orgDtos) {
-            if("9999".equals(orgDto.getBelongCommunityId())){
+            if ("9999".equals(orgDto.getBelongCommunityId())) {
                 orgDto.setBelongCommunityName("入驻所有小区");
                 continue;
             }
-            if(StringUtil.isEmpty(orgDto.getBelongCommunityId())){
+            if (StringUtil.isEmpty(orgDto.getBelongCommunityId())) {
                 orgDto.setBelongCommunityName("未知小区");
                 continue;
             }

@@ -67,7 +67,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        //super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
     }

@@ -13,9 +13,14 @@
         },
         methods: {
             _loadCommunityInfo: function (_param) {
+                var param = {
+                    params:{
+                        _uId:'ccdd00opikookjuhyyttvhnnjuuu'
+                    }
+                };
                 vc.http.get('initData',
                     'getCommunitys',
-                    '',
+                    param,
                     function (json, res) {
                         if (res.status == 200) {
                             var _communityInfos = JSON.parse(json);
