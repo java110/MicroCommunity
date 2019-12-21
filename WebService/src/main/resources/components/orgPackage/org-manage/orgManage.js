@@ -54,7 +54,11 @@
         _initMethod:function(){
             //只查 查询总公司级组织
             vc.component.orgManageInfo.orgTree = [];
-            vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree,'1', '',function(){
+            vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree,'1', '',function(_tmpOrgs){
+                vc.emit('orgManage','listOrg',{
+                    parentOrgId:_tmpOrgs[0].orgId,
+                    orgLevel:2
+                });
                 vc.component._loadBranchOrgTrees();
             });
             vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,1,'');
@@ -64,6 +68,7 @@
         _initEvent:function(){
             
             vc.on('orgManage','listOrg',function(_param){
+                  vc.copyObject(_param, vc.component.orgManageInfo.conditions);
                   vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
             });
              vc.on('pagination','page_event',function(_currentPage){
@@ -88,7 +93,7 @@
                 vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree[0].nodes,
                                         '2',
                                         vc.component.orgManageInfo.orgTree[0].orgId,
-                                        function(){
+                                        function(_tmpOrgs){
                                             vc.component._refreshOrgTree();
                                         });
             },
@@ -116,7 +121,7 @@
                                         tags:[0],
                                         nodes:[]
                                     });
-                                    _callback();
+                                    _callback(_tmpOrgs);
                                 });
                              },function(errInfo,error){
                                 console.log('请求失败处理');
