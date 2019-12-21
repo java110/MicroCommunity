@@ -12,6 +12,7 @@ import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.community.ApiCommunityDataVo;
@@ -96,6 +97,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
         if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
+            communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
             count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
             if (count > 0) {
                 communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
@@ -113,7 +115,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
         ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
 
         apiCommunityVo.setTotal(count);
-        apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiCommunityVo.setRecords(1);
         apiCommunityVo.setCommunitys(communitys);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
