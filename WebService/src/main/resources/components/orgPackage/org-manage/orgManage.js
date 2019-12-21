@@ -155,8 +155,8 @@
             },
             _openAddOrgModal:function(){
                 vc.emit('addOrg','openAddOrgModal',{
-                    parentOrgId: vc.component.conditions.parentOrgId,
-                    orgLevel: vc.component.conditions.orgLevel
+                    parentOrgId: vc.component.orgManageInfo.conditions.parentOrgId,
+                    orgLevel: vc.component.orgManageInfo.conditions.orgLevel
                 });
             },
             _openEditOrgModel:function(_org){
