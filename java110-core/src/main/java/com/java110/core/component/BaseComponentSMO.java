@@ -12,6 +12,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,7 +254,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
         String communityId = "";
-        if (paramIn.containsKey("communityId")) {
+        if (paramIn.containsKey("communityId")&& !StringUtil.isEmpty(paramIn.getString("communityId"))) {
             communityId = paramIn.getString("communityId");
             checkStoreEnterCommunity(pd, storeId, storeTypeCd, communityId, restTemplate);
         }
