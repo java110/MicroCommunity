@@ -28,7 +28,11 @@
 
          },
          _initEvent:function(){
-            vc.on('addOrg','openAddOrgModal',function(){
+            vc.on('addOrg','openAddOrgModal',function(_param){
+                if(_param.hasOwnProperty('parentOrgId')){
+                    vc.component.addOrgInfo.parentOrgId = _param.parentOrgId;
+                    vc.component.addOrgInfo.orgLevel = _param.orgLevel;
+                }
                 $('#addOrgModel').modal('show');
             });
         },

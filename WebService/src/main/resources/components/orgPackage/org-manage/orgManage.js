@@ -79,7 +79,7 @@
                           selectedBackColor:'#1ab394'
                 });
                 $('#orgTree').on('nodeSelected', function(event, data) {
-                    console.log(event,data);
+                    //console.log(event,data);
                     vc.component.orgManageInfo.conditions.orgLevel = (parseInt(data.orgLevel) + 1);
                     vc.component.orgManageInfo.conditions.parentOrgId = data.orgId;
                     vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
@@ -154,7 +154,10 @@
                            );
             },
             _openAddOrgModal:function(){
-                vc.emit('addOrg','openAddOrgModal',{});
+                vc.emit('addOrg','openAddOrgModal',{
+                    parentOrgId: vc.component.conditions.parentOrgId,
+                    orgLevel: vc.component.conditions.orgLevel
+                });
             },
             _openEditOrgModel:function(_org){
                 vc.emit('editOrg','openEditOrgModal',_org);
