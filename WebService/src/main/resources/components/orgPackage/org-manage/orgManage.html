@@ -85,12 +85,12 @@
                                     <td class="text-center">{{org.orgLevel == 1 ? '无' : org.parentOrgName}}</td>
                                     <td class="text-center">{{org.belongCommunityName}}</td>
                                     <td class="text-center">
-                                        <div class="btn-group" v-if="org.allowOperation == T">
+                                        <div class="btn-group" v-if="org.allowOperation == 'T'">
                                             <button class="btn-white btn btn-xs" v-on:click="_openEditOrgModel(org)">
                                                 修改
                                             </button>
                                         </div>
-                                        <div class="btn-group" v-if="org.allowOperation == T">
+                                        <div class="btn-group" v-if="org.allowOperation == 'T'">
                                             <button class="btn-white btn btn-xs" v-on:click="_openDeleteOrgModel(org)">
                                                 删除
                                             </button>
