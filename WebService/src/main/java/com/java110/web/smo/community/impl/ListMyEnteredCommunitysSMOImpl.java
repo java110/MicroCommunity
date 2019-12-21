@@ -36,7 +36,7 @@ public class ListMyEnteredCommunitysSMOImpl extends AbstractComponentSMO impleme
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
 
-        super.validatePageInfo(pd);
+        //super.validatePageInfo(pd);
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_COMMUNITY,PrivilegeCodeConstant.ADMIN_HAS_LIST_COMMUNITY);
     }
