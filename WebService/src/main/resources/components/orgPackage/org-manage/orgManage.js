@@ -68,14 +68,15 @@
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listOrgs(_currentPage,DEFAULT_ROWS);
             });
-             $('#orgTree').on('nodeSelected', function(event, data) {
-                console.log(event,data);
-            });
+
         },
         methods:{
             _refreshOrgTree:function(){
                 $('#orgTree').treeview({
                           data: vc.component.orgManageInfo.orgTree
+                });
+                 $('#orgTree').on('nodeSelected', function(event, data) {
+                    console.log(event,data);
                 });
             },
             _loadBranchOrgTrees:function(){
