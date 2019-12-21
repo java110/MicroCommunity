@@ -1,6 +1,10 @@
 package com.java110.web.components.org;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.utils.constant.StateConstant;
+import com.java110.web.smo.ICommunityServiceSMO;
 import com.java110.web.smo.org.IEditOrgSMO;
 import com.java110.web.smo.org.IListOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,8 @@ public class EditOrgComponent {
 
     @Autowired
     private IEditOrgSMO editOrgSMOImpl;
+    @Autowired
+    private ICommunityServiceSMO communityServiceSMOImpl;
 
     /**
      * 添加小区数据
@@ -27,6 +33,20 @@ public class EditOrgComponent {
         return editOrgSMOImpl.updateOrg(pd);
     }
 
+    public ResponseEntity<String> listEnterCommunitys(IPageData pd) {
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("auditStatusCd", StateConstant.AGREE_AUDIT);
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(),
+                pd.getUserName(), pd.getToken(),
+                paramIn.toJSONString(), pd.getComponentCode(),
+                pd.getComponentMethod(), "",
+                pd.getAppId());
+
+        return communityServiceSMOImpl.listMyCommunity(newPd);
+
+    }
     /**
      * 查询组织管理列表
      * @param pd 页面数据封装
@@ -50,5 +70,13 @@ public class EditOrgComponent {
 
     public void setListOrgsSMOImpl(IListOrgsSMO listOrgsSMOImpl) {
         this.listOrgsSMOImpl = listOrgsSMOImpl;
+    }
+
+    public ICommunityServiceSMO getCommunityServiceSMOImpl() {
+        return communityServiceSMOImpl;
+    }
+
+    public void setCommunityServiceSMOImpl(ICommunityServiceSMO communityServiceSMOImpl) {
+        this.communityServiceSMOImpl = communityServiceSMOImpl;
     }
 }

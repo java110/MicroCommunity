@@ -30,7 +30,8 @@
         }
         ,
         _initMethod: function () {
-
+            //查询入驻的小区
+            vc.component._loadAddEnterCommunitys();
         }
         ,
         _initEvent: function () {
@@ -189,6 +190,26 @@
                     function (json, res) {
                         var _orgManageInfo = JSON.parse(json);
                         vc.component.addOrgInfo.parentOrg = _orgManageInfo.orgs;
+                    }, function (errInfo, error) {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
+            _loadAddEnterCommunitys:function () {
+                //belongCommunitys
+                var param = {
+                    params:{
+                        _uid:'mmmllnnjhhjjh'
+                    }
+                }
+
+                //发送get请求
+                vc.http.get('addOrg',
+                    'listEnterCommunitys',
+                    param,
+                    function (json, res) {
+                        var _enterCommunitys = JSON.parse(json);
+                        vc.component.addOrgInfo.belongCommunitys = _enterCommunitys.communitys;
                     }, function (errInfo, error) {
                         console.log('请求失败处理');
                     }

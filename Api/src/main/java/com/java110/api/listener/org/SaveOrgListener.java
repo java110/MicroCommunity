@@ -92,6 +92,7 @@ public class SaveOrgListener extends AbstractServiceApiListener {
         JSONObject businessOrg = new JSONObject();
         businessOrg.putAll(paramInJson);
         businessOrg.put("orgId", "-1");
+        businessOrg.put("allowOperation", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
         return business;

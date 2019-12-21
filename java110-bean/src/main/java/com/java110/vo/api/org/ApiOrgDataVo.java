@@ -11,7 +11,9 @@ public class ApiOrgDataVo implements Serializable {
     private String parentOrgId;
     private String parentOrgName;
     private String belongCommunityId;
+    private String belongCommunityName;
     private String description;
+    private String allowOperation;
 
     private String orgLevelName;
 
@@ -77,5 +79,21 @@ public class ApiOrgDataVo implements Serializable {
 
     public void setBelongCommunityId(String belongCommunityId) {
         this.belongCommunityId = belongCommunityId;
+    }
+
+    public String getBelongCommunityName() {
+        return belongCommunityName;
+    }
+
+    public void setBelongCommunityName(String belongCommunityName) {
+        this.belongCommunityName = belongCommunityName;
+    }
+
+    public String getAllowOperation() {
+        return allowOperation;
+    }
+
+    public void setAllowOperation(String allowOperation) {
+        this.allowOperation = allowOperation;
     }
 }

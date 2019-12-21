@@ -288,6 +288,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businessOrg.put("parentOrgId", orgId);
         businessOrg.put("belongCommunityId", "9999");
         businessOrg.put("orgId", orgId);
+        businessOrg.put("allowOperation", "F");
         businessOrg.put("storeId", paramInJson.getString("storeId"));
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
@@ -314,6 +315,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businessOrg.put("parentOrgId", paramInJson.getString("levelOneOrgId"));
         businessOrg.put("belongCommunityId", "9999");
         businessOrg.put("orgId", orgId);
+        businessOrg.put("allowOperation", "F");
         businessOrg.put("storeId", paramInJson.getString("storeId"));
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
@@ -321,7 +323,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
     }
 
     /**
-     * 添加公司总部
+     * 添加总部办公室
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
@@ -341,6 +343,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businessOrg.put("belongCommunityId", "9999");
         businessOrg.put("orgId", orgId);
         businessOrg.put("storeId", paramInJson.getString("storeId"));
+        businessOrg.put("allowOperation", "F");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
         return business;

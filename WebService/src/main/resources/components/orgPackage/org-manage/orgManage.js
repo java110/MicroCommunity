@@ -118,6 +118,7 @@
                                 orgId: _item.orgId,
                                 orgLevel: _orgLevel,
                                 text: _item.orgLevelName + '|' + _item.orgName,
+                                belongCommunityId:_item.belongCommunityId,
                                 href: function (_item) {
                                 },
                                 tags: [0],

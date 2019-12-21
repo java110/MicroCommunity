@@ -2,13 +2,17 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.org.IOrgInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.OwnerDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.UserDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.user.dao.IOrgServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +39,10 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+
     @Override
     public List<OrgDto> queryOrgs(@RequestBody OrgDto orgDto) {
 
@@ -48,6 +56,17 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
 
         List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
 
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(getCommunityIds(orgs));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+
+        for (CommunityDto tmpCommunityDto : communityDtos) {
+            for (OrgDto tmpOrgDto : orgs) {
+                if (tmpCommunityDto.getCommunityId().equals(tmpOrgDto.getBelongCommunityId())) {
+                    tmpOrgDto.setBelongCommunityName(tmpCommunityDto.getName());
+                }
+            }
+        }
 
         return orgs;
     }
@@ -62,7 +81,6 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
     /**
      * <p>查询上级组织信息</p>
      *
-     *
      * @param orgDto 数据对象分享
      * @return OrgDto 对象数据
      */
@@ -73,11 +91,34 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
 
         List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getParentOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
 
-        if(orgs == null){
+        if (orgs == null) {
             orgs = new ArrayList<>();
         }
 
         return orgs;
+    }
+
+
+    /**
+     * 获取批量userId
+     *
+     * @param orgDtos 小区楼信息
+     * @return 批量userIds 信息
+     */
+    private String[] getCommunityIds(List<OrgDto> orgDtos) {
+        List<String> communityIds = new ArrayList<String>();
+        for (OrgDto orgDto : orgDtos) {
+            if("9999".equals(orgDto.getBelongCommunityId())){
+                orgDto.setBelongCommunityName("入驻所有小区");
+                continue;
+            }
+            if(StringUtil.isEmpty(orgDto.getBelongCommunityId())){
+                orgDto.setBelongCommunityName("未知小区");
+                continue;
+            }
+            communityIds.add(orgDto.getBelongCommunityId());
+        }
+        return communityIds.toArray(new String[communityIds.size()]);
     }
 
     public IOrgServiceDao getOrgServiceDaoImpl() {
@@ -94,5 +135,13 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
 
     public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
         this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
+    }
+
+    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
+        return communityInnerServiceSMOImpl;
+    }
+
+    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
+        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
     }
 }

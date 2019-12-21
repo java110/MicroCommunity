@@ -23,6 +23,7 @@
         },
         _initMethod: function () {
             vc.component._editOrgListParentOrgInfo();
+            vc.component._loadEditEnterCommunitys();
         },
         _initEvent: function () {
             vc.on('editOrg', 'openEditOrgModal', function (_params) {
@@ -165,6 +166,26 @@
                     function (json, res) {
                         var _orgManageInfo = JSON.parse(json);
                         vc.component.editOrgInfo.parentOrg = _orgManageInfo.orgs;
+                    }, function (errInfo, error) {
+                        console.log('请求失败处理');
+                    }
+                );
+            },
+            _loadEditEnterCommunitys:function () {
+                //belongCommunitys
+                var param = {
+                    params:{
+                        _uid:'mmmllnnjhhjjh'
+                    }
+                }
+
+                //发送get请求
+                vc.http.get('editOrg',
+                    'listEnterCommunitys',
+                    param,
+                    function (json, res) {
+                        var _enterCommunitys = JSON.parse(json);
+                        vc.component.editOrgInfo.belongCommunitys = _enterCommunitys.communitys;
                     }, function (errInfo, error) {
                         console.log('请求失败处理');
                     }
