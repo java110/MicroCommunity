@@ -131,7 +131,7 @@
                     param,
                     function (json, res) {
                         if (res.status == 200) {
-                            vm.navCommunityInfo.communityInfos = JSON.parse(json);
+                            vm.navCommunityInfo.communityInfos = JSON.parse(json).communitys;
 
                             if (vm.navCommunityInfo.communityInfos == null || vm.navCommunityInfo.communityInfos.length == 0) {
                                 vm.navCommunityInfo._currentCommunity = {
