@@ -77,14 +77,14 @@
                 $('#orgTree').treeview({
                           data: vc.component.orgManageInfo.orgTree
                 });
-                $('#orgTree').treeview("selectNode",
-                          [0]);
-                 $('#orgTree').on('nodeSelected', function(event, data) {
+                $('#orgTree').on('nodeSelected', function(event, data) {
                     console.log(event,data);
                     vc.component.orgManageInfo.conditions.orgLevel = (parseInt(data.orgLevel) + 1);
                     vc.component.orgManageInfo.conditions.parentOrgId = data.orgId;
                     vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 });
+                $('#orgTree').treeview("selectNode",[0]);
+
             },
             _loadBranchOrgTrees:function(){
                 //默认查询分公司组织信息
