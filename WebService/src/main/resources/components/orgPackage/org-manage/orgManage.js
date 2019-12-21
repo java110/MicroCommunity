@@ -59,6 +59,7 @@
             });
             vc.component._getOrgsByOrgLevel(DEFAULT_PAGE, DEFAULT_ROWS,1,'');
 
+
         },
         _initEvent:function(){
             
@@ -77,6 +78,9 @@
                 });
                  $('#orgTree').on('nodeSelected', function(event, data) {
                     console.log(event,data);
+                    vc.component.orgManageInfo.conditions.orgLevel=data.orgLevel;
+                    vc.component.orgManageInfo.conditions.parentOrgId=data.orgId;
+                    vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 });
             },
             _loadBranchOrgTrees:function(){
@@ -106,6 +110,7 @@
                                 _tmpOrgs.forEach(function (_item) {
                                     _nodes.push({
                                         orgId:_item.orgId,
+                                        orgLevel:_orgLevel,
                                         text:_item.orgName,
                                         href:function(_item){},
                                         tags:[0],
