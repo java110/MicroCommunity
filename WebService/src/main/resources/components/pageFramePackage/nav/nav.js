@@ -121,9 +121,14 @@
                 /**
                  [{community:"123123",name:"测试1小区"},{community:"223123",name:"测试2小区"}]
                  **/
+                var param = {
+                    params:{
+                        _uid:'123mlkdinkldldijdhuudjdjkkd'
+                    }
+                };
                 vc.http.get('nav',
                     'getCommunitys',
-                    '',
+                    param,
                     function (json, res) {
                         if (res.status == 200) {
                             vm.navCommunityInfo.communityInfos = JSON.parse(json);

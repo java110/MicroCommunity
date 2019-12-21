@@ -57,7 +57,7 @@ public class OrgInnerServiceSMOImpl extends BaseServiceSMO implements IOrgInnerS
         List<OrgDto> orgs = BeanConvertUtil.covertBeanList(orgServiceDaoImpl.getOrgInfo(BeanConvertUtil.beanCovertMap(orgDto)), OrgDto.class);
 
         String[] communityIds = getCommunityIds(orgs);
-        if (communityIds == null || communityIds.length < 0) {
+        if (communityIds == null || communityIds.length < 1) {
             return orgs;
         }
         CommunityDto communityDto = new CommunityDto();
