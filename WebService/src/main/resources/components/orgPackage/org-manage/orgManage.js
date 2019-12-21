@@ -115,7 +115,7 @@
                                     _nodes.push({
                                         orgId:_item.orgId,
                                         orgLevel:_orgLevel,
-                                        text:_item.orgName,
+                                        text:_item.orgLevelName + '|' +_item.orgName,
                                         href:function(_item){},
                                         tags:[0],
                                         nodes:[]
