@@ -48,11 +48,6 @@ public class ListMyEnteredCommunitysSMOImpl extends AbstractComponentSMO impleme
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-
-        if(!StoreTypeConstant.STORE_TYPE_SYSTEM_MANAGER.equals(result.getStoreTypeCd())) {
-            paramIn.put("memberId", result.getStoreId());
-        }
-
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listMyEnteredCommunitys" + mapToUrlParam(paramIn);
 
 

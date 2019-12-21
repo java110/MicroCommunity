@@ -95,6 +95,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
         List<ApiCommunityDataVo> communitys = null;
         if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
+            communityDto.setMemberId(reqJson.getString("storeId"));
             count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
             if (count > 0) {
                 communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
