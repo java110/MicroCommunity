@@ -22,8 +22,8 @@ import java.util.Map;
 /**
  * 查询community服务类
  */
-@Service("listCommunitysSMOImpl")
-public class ListListMyEnteredCommunitysSMOImpl extends AbstractComponentSMO implements IListMyEnteredCommunitysSMO {
+@Service("listMyEnteredCommunitysSMOImpl")
+public class ListMyEnteredCommunitysSMOImpl extends AbstractComponentSMO implements IListMyEnteredCommunitysSMO {
 
     @Autowired
     private RestTemplate restTemplate;
