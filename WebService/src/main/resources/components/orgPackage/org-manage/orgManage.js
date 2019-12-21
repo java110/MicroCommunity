@@ -78,8 +78,8 @@
                 });
                  $('#orgTree').on('nodeSelected', function(event, data) {
                     console.log(event,data);
-                    vc.component.orgManageInfo.conditions.orgLevel=data.orgLevel;
-                    vc.component.orgManageInfo.conditions.parentOrgId=data.orgId;
+                    vc.component.orgManageInfo.conditions.orgLevel = (parseInt(data.orgLevel+1));
+                    vc.component.orgManageInfo.conditions.parentOrgId = data.orgId;
                     vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
                 });
             },
