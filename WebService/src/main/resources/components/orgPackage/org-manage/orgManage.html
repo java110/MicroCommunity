@@ -1,6 +1,6 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
-        <div class="col-lg-3" >
+        <div class="col-lg-3">
             <div id="orgTree" class="" style="background: #fff;"></div>
         </div>
         <div class="col-lg-9">
@@ -10,14 +10,14 @@
                         <div class="ibox-title">
                             <h5>查询条件</h5>
                             <div class="ibox-tools" style="top:10px;">
-                                <button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
+                                <!--<button type="button" class="btn btn-link btn-sm" style="margin-right:10px;"
                                         v-on:click="_moreCondition()">{{orgManageInfo.moreCondition == true?'隐藏':'更多'}}
-                                </button>
+                                </button>-->
                             </div>
                         </div>
                         <div class="ibox-content">
                             <div class="row">
-                                <div class="col-sm-4" v-if="orgManageInfo.moreCondition == true">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <input type="text" placeholder="请输入组织ID"
                                                v-model="orgManageInfo.conditions.orgId"
@@ -32,7 +32,7 @@
                                                class=" form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3" v-if="orgManageInfo.moreCondition == true">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <input type="text" placeholder="请选择小区"
                                                v-model="orgManageInfo.conditions.communityId"
@@ -46,11 +46,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row">
-
-                            </div>
-
-
                         </div>
                     </div>
                 </div>
