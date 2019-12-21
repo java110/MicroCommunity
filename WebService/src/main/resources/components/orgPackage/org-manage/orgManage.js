@@ -76,7 +76,7 @@
             _refreshOrgTree:function(){
                 $('#orgTree').treeview({
                           data: vc.component.orgManageInfo.orgTree,
-                          onhoverColor:'#1ab394'
+                          selectedBackColor:'#1ab394'
                 });
                 $('#orgTree').on('nodeSelected', function(event, data) {
                     console.log(event,data);
