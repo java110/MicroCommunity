@@ -7,9 +7,9 @@
     <!-- 保存组织信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOrgInfo" parameterType="Map">
         insert into business_org(
-        org_name,operate,parent_org_id,description,org_level,store_id,b_id,org_id
+        org_name,operate,parent_org_id,description,org_level,store_id,b_id,org_id,belong_community_id
         ) values (
-        #{orgName},#{operate},#{parentOrgId},#{description},#{orgLevel},#{storeId},#{bId},#{orgId}
+        #{orgName},#{operate},#{parentOrgId},#{description},#{orgLevel},#{storeId},#{bId},#{orgId},#{belongCommunityId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessOrgInfo" parameterType="Map" resultType="Map">
         select t.org_name,t.org_name orgName,t.operate,t.parent_org_id,t.parent_org_id
         parentOrgId,t.description,t.org_level,t.org_level orgLevel,t.store_id,t.store_id storeId,t.b_id,t.b_id
-        bId,t.org_id,t.org_id orgId
+        bId,t.org_id,t.org_id orgId,t.belong_community_id ,t.belong_community_id belongCommunityId
         from business_org t
         where 1 =1
         <if test="orgName !=null and orgName != ''">
@@ -45,6 +45,9 @@
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
+        <if test="belongCommunityId !=null and belongCommunityId != ''">
+            and t.belong_community_id= #{belongCommunityId}
+        </if>
 
     </select>
 
@@ -52,8 +55,9 @@
     <!-- 保存组织信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOrgInfoInstance" parameterType="Map">
         insert into u_org(
-        org_name,parent_org_id,description,org_level,status_cd,store_id,b_id,org_id
-        ) select t.org_name,t.parent_org_id,t.description,t.org_level,'0',t.store_id,t.b_id,t.org_id from business_org t
+        org_name,parent_org_id,description,org_level,status_cd,store_id,b_id,org_id,belong_community_id
+        ) select t.org_name,t.parent_org_id,t.description,t.org_level,'0',t.store_id,t.b_id,t.org_id,t.belong_community_id
+        from business_org t
         where 1=1
         <if test="orgName !=null and orgName != ''">
             and t.org_name= #{orgName}
@@ -77,6 +81,9 @@
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
+        <if test="belongCommunityId !=null and belongCommunityId != ''">
+            and t.belong_community_id= #{belongCommunityId}
+        </if>
 
     </insert>
 
@@ -85,7 +92,8 @@
     <select id="getOrgInfo" parameterType="Map" resultType="Map">
         select t.org_name,t.org_name orgName,t.parent_org_id,t.parent_org_id
         parentOrgId,t.description,t.org_level,t.org_level orgLevel,td.name orgLevelName,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,uo.org_name parentOrgName
+        statusCd,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.org_id,t.org_id orgId,uo.org_name parentOrgName,
+        t.belong_community_id ,t.belong_community_id belongCommunityId
         from u_org t,t_dict td,u_org uo
         where 1 =1
         and t.org_level = td.status_cd
@@ -117,6 +125,9 @@
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
+        <if test="belongCommunityId !=null and belongCommunityId != ''">
+            and t.belong_community_id= #{belongCommunityId}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -141,6 +152,9 @@
         </if>
         <if test="orgLevel !=null and orgLevel != ''">
             , t.org_level= #{orgLevel}
+        </if>
+        <if test="belongCommunityId !=null and belongCommunityId != ''">
+            , t.belong_community_id= #{belongCommunityId}
         </if>
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
@@ -188,6 +202,9 @@
         </if>
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
+        </if>
+        <if test="belongCommunityId !=null and belongCommunityId != ''">
+            and t.belong_community_id= #{belongCommunityId}
         </if>
 
 
