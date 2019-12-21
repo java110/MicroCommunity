@@ -3,6 +3,7 @@ package com.java110.web.components;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.INavServiceSMO;
+import com.java110.web.smo.community.IListMyEnteredCommunitysSMO;
 import com.java110.web.smo.msg.IListMsgSMO;
 import com.java110.web.smo.msg.IReadMsgSMO;
 import com.java110.web.smo.notice.IListNoticesSMO;
@@ -30,6 +31,9 @@ public class NavComponent {
 
     @Autowired
     private IReadMsgSMO readMsgSMOImpl;
+
+    @Autowired
+    private IListMyEnteredCommunitysSMO listMyEnteredCommunitysSMOImpl;
 
 
     /**
@@ -96,11 +100,18 @@ public class NavComponent {
      */
     public ResponseEntity<String> getCommunitys(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
-        responseEntity = navServiceSMOImpl.listMyCommunity(pd);
+        responseEntity = listMyEnteredCommunitysSMOImpl.myCommunitys(pd);
 
         return responseEntity;
     }
 
+    public IListMyEnteredCommunitysSMO getListMyEnteredCommunitysSMOImpl() {
+        return listMyEnteredCommunitysSMOImpl;
+    }
+
+    public void setListMyEnteredCommunitysSMOImpl(IListMyEnteredCommunitysSMO listMyEnteredCommunitysSMOImpl) {
+        this.listMyEnteredCommunitysSMOImpl = listMyEnteredCommunitysSMOImpl;
+    }
 
     public INavServiceSMO getNavServiceSMOImpl() {
         return navServiceSMOImpl;
