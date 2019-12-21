@@ -117,7 +117,8 @@
                                         text:_item.orgName,
                                         href:function(_item){},
                                         tags:[0],
-                                        nodes:[]
+                                        nodes:[],
+                                        onhoverColor:'#1ab394'
                                     });
                                     _callback();
                                 });
