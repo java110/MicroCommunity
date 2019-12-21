@@ -75,7 +75,8 @@
         methods:{
             _refreshOrgTree:function(){
                 $('#orgTree').treeview({
-                          data: vc.component.orgManageInfo.orgTree
+                          data: vc.component.orgManageInfo.orgTree,
+                          onhoverColor:'#1ab394'
                 });
                 $('#orgTree').on('nodeSelected', function(event, data) {
                     console.log(event,data);
@@ -117,8 +118,7 @@
                                         text:_item.orgName,
                                         href:function(_item){},
                                         tags:[0],
-                                        nodes:[],
-                                        onhoverColor:'#1ab394'
+                                        nodes:[]
                                     });
                                     _callback();
                                 });
