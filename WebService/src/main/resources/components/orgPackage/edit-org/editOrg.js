@@ -8,7 +8,6 @@
                 orgLevel: '',
                 parentOrgId: '',
                 belongCommunityId: '',
-                communityId: '',
                 description: '',
                 parentOrg: [],
                 belongCommunitys:[]
@@ -25,14 +24,14 @@
         },
         _initMethod: function () {
             vc.component._editOrgListParentOrgInfo();
-            vc.component._loadEditEnterCommunitys();
         },
         _initEvent: function () {
             vc.on('editOrg', 'openEditOrgModal', function (_params) {
                 vc.component.refreshEditOrgInfo();
+                vc.component._loadEditEnterCommunitys();
                 $('#editOrgModel').modal('show');
                 vc.copyObject(_params, vc.component.editOrgInfo);
-                vc.component.editOrgInfo.communityId = vc.component.editOrgInfo.belongCommunityId;
+                //vc.component.editOrgInfo.communityId = vc.component.editOrgInfo.belongCommunityId;
             });
         },
         methods: {
@@ -106,7 +105,6 @@
                 });
             },
             editOrg: function () {
-                vc.component.editOrgInfo.belongCommunityId = vc.component.editOrgInfo.communityId;
                 if (!vc.component.editOrgValidate()) {
                     vc.message(vc.validate.errInfo);
                     return;
