@@ -40,7 +40,7 @@
                 if (_param.hasOwnProperty('parentOrgId')) {
                     vc.component.addOrgInfo.parentOrgId = _param.parentOrgId;
                     vc.component.addOrgInfo.orgLevel = _param.orgLevel;
-                    if(_param.parentOrgId == 3){ // 部门是不能改小区的，是依赖分公司的小区信息
+                    if(_param.orgLevel == 3){ // 部门是不能改小区的，是依赖分公司的小区信息
                         vc.component.addOrgInfo.communityId = _param.belongCommunityId;
                     }
                 }
