@@ -30,8 +30,7 @@
         }
         ,
         _initMethod: function () {
-            //查询入驻的小区
-            vc.component._loadAddEnterCommunitys();
+
         }
         ,
         _initEvent: function () {
@@ -43,6 +42,8 @@
                         vc.component.addOrgInfo.belongCommunityId = _param.belongCommunityId;
                     }
                 }
+                //查询入驻的小区
+                vc.component._loadAddEnterCommunitys();
                 $('#addOrgModel').modal('show');
             });
         }
