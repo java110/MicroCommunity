@@ -10,7 +10,8 @@
                 belongCommunityId: '',
                 communityId: '',
                 description: '',
-                parentOrg: []
+                parentOrg: [],
+                belongCommunitys:[]
 
             }
         },
@@ -141,7 +142,10 @@
                     orgLevel: '',
                     parentOrgId: '',
                     description: '',
-                    parentOrg: []
+                    belongCommunityId: '',
+                    communityId: '',
+                    parentOrg: [],
+                    belongCommunitys:[]
                 }
             },
             _editOrgListParentOrgInfo: function () {
@@ -187,7 +191,7 @@
                     param,
                     function (json, res) {
                         var _enterCommunitys = JSON.parse(json);
-                        vc.component.editOrgInfo.belongCommunitys = _enterCommunitys.communitys;
+                        vc.component.editOrgInfo.belongCommunitys = _enterCommunitys;
                     }, function (errInfo, error) {
                         console.log('请求失败处理');
                     }

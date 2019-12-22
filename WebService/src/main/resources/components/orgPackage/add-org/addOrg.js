@@ -164,7 +164,9 @@
                     orgLevel: '',
                     parentOrgId: '',
                     description: '',
-                    parentOrg: []
+                    parentOrg: [],
+                    belongCommunityId: '',
+                    communityId: '',
                 };
             }
             ,
