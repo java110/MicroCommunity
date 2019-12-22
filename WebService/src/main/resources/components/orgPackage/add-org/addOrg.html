@@ -38,7 +38,7 @@
                                     <select class="custom-select" v-model="addOrgInfo.belongCommunityId" v-bind:disabled="addOrgInfo.orgLevel == 3">
                                         <option selected disabled value="">必填，请选择隶属小区</option>
                                         <option  value="9999">入驻所有小区</option>
-                                        <option v-for="belongCommunity in addOrgInfo.belongCommunitys" :value="belongCommunity.belongCommunityId">
+                                        <option v-for="belongCommunity in addOrgInfo.belongCommunitys" :value="belongCommunity.communityId">
                                             {{belongCommunity.name}}
                                         </option>
                                     </select></div>
