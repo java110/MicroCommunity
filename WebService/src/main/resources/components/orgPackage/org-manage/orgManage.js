@@ -67,6 +67,9 @@
             vc.on('orgManage', 'listOrg', function (_param) {
                 //vc.copyObject(_param, vc.component.orgManageInfo.conditions);
                 vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);
+                vc.component._listOrgTrees(vc.component.orgManageInfo.orgTree, '1', '', function () {
+                    vc.component._loadBranchOrgTrees();
+                });
             });
             vc.on('pagination', 'page_event', function (_currentPage) {
                 vc.component._listOrgs(_currentPage, DEFAULT_ROWS);

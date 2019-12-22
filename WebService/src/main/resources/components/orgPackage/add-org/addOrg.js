@@ -209,7 +209,7 @@
                     param,
                     function (json, res) {
                         var _enterCommunitys = JSON.parse(json);
-                        vc.component.addOrgInfo.belongCommunitys = _enterCommunitys.communitys;
+                        vc.component.addOrgInfo.belongCommunitys = _enterCommunitys;
                     }, function (errInfo, error) {
                         console.log('请求失败处理');
                     }
