@@ -107,7 +107,7 @@
                     params: {
                         page: DEFAULT_PAGE,
                         row: DEFAULT_ROWS,
-                        communityId: vc.getCurrentCommunity().communityId,
+                        /*communityId: vc.getCurrentCommunity().communityId,*/
                         appId: vc.component.serviceRegisterManageInfo.conditions.appId
                     }
                 }
