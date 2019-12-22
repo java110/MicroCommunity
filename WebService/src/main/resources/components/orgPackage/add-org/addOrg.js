@@ -13,6 +13,7 @@
                 parentOrgId: '',
                 description: '',
                 belongCommunityId: '',
+                communityId: '',
                 parentOrg:[],
                 belongCommunitys:[]
 
@@ -40,7 +41,7 @@
                     vc.component.addOrgInfo.parentOrgId = _param.parentOrgId;
                     vc.component.addOrgInfo.orgLevel = _param.orgLevel;
                     if(_param.parentOrgId == 3){ // 部门是不能改小区的，是依赖分公司的小区信息
-                        vc.component.addOrgInfo.belongCommunityId = _param.belongCommunityId;
+                        vc.component.addOrgInfo.communityId = _param.belongCommunityId;
                     }
                 }
                 $('#addOrgModel').modal('show');
@@ -114,6 +115,7 @@
             }
             ,
             saveOrgInfo: function () {
+                vc.component.addOrgInfo.belongCommunityId = vc.component.addOrgInfo.communityId;
                 if (!vc.component.addOrgValidate()) {
                     vc.message(vc.validate.errInfo);
 

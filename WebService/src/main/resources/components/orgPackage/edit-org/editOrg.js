@@ -8,6 +8,7 @@
                 orgLevel: '',
                 parentOrgId: '',
                 belongCommunityId: '',
+                communityId: '',
                 description: '',
                 parentOrg: []
 
@@ -30,7 +31,7 @@
                 vc.component.refreshEditOrgInfo();
                 $('#editOrgModel').modal('show');
                 vc.copyObject(_params, vc.component.editOrgInfo);
-                vc.component.editOrgInfo.communityId = vc.getCurrentCommunity().communityId;
+                vc.component.editOrgInfo.communityId = vc.component.editOrgInfo.belongCommunityId;
             });
         },
         methods: {
@@ -104,6 +105,7 @@
                 });
             },
             editOrg: function () {
+                vc.component.editOrgInfo.belongCommunityId = vc.component.editOrgInfo.communityId;
                 if (!vc.component.editOrgValidate()) {
                     vc.message(vc.validate.errInfo);
                     return;
@@ -171,11 +173,11 @@
                     }
                 );
             },
-            _loadEditEnterCommunitys:function () {
+            _loadEditEnterCommunitys: function () {
                 //belongCommunitys
                 var param = {
-                    params:{
-                        _uid:'mmmllnnjhhjjh'
+                    params: {
+                        _uid: 'mmmllnnjhhjjh'
                     }
                 }
 
