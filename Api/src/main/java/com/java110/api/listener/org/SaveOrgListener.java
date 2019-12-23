@@ -31,6 +31,7 @@ public class SaveOrgListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "orgName", "必填，请填写组织名称");
         Assert.hasKeyAndValue(reqJson, "orgLevel", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(reqJson, "parentOrgId", "必填，请选择上级ID");
+        Assert.hasKeyAndValue(reqJson, "belongCommunityId", "必填，请选择隶属小区");
         //Assert.hasKeyAndValue(reqJson, "description", "必填，请填写描述");
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
 
@@ -91,6 +92,7 @@ public class SaveOrgListener extends AbstractServiceApiListener {
         JSONObject businessOrg = new JSONObject();
         businessOrg.putAll(paramInJson);
         businessOrg.put("orgId", "-1");
+        businessOrg.put("allowOperation", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
         return business;

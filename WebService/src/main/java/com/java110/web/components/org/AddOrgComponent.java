@@ -1,6 +1,10 @@
 package com.java110.web.components.org;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.utils.constant.StateConstant;
+import com.java110.web.smo.ICommunityServiceSMO;
 import com.java110.web.smo.org.IAddOrgSMO;
 import com.java110.web.smo.org.IListOrgsSMO;
 import com.java110.web.smo.org.IListParentOrgsSMO;
@@ -22,27 +26,46 @@ public class AddOrgComponent {
 
     @Autowired
     private IListParentOrgsSMO listParentOrgsSMOImpl;
+    @Autowired
+    private ICommunityServiceSMO communityServiceSMOImpl;
 
     /**
      * 添加组织管理数据
+     *
      * @param pd 页面数据封装
      * @return ResponseEntity 对象
      */
-    public ResponseEntity<String> save(IPageData pd){
+    public ResponseEntity<String> save(IPageData pd) {
         return addOrgSMOImpl.saveOrg(pd);
     }
+
+    public ResponseEntity<String> listEnterCommunitys(IPageData pd) {
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("auditStatusCd", StateConstant.AGREE_AUDIT);
+
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(),
+                pd.getUserName(), pd.getToken(),
+                paramIn.toJSONString(), pd.getComponentCode(),
+                pd.getComponentMethod(), "",
+                pd.getAppId());
+
+        return communityServiceSMOImpl.listMyCommunity(newPd);
+
+    }
+
     /**
      * 查询组织管理列表
+     *
      * @param pd 页面数据封装
      * @return 返回 ResponseEntity 对象
      */
-    public ResponseEntity<String> list(IPageData pd){
+    public ResponseEntity<String> list(IPageData pd) {
         return listOrgsSMOImpl.listOrgs(pd);
     }
 
 
-
-    public ResponseEntity<String> getParentOrg(IPageData pd){
+    public ResponseEntity<String> getParentOrg(IPageData pd) {
         return listParentOrgsSMOImpl.listParentOrgs(pd);
     }
 
@@ -68,5 +91,13 @@ public class AddOrgComponent {
 
     public void setListOrgsSMOImpl(IListOrgsSMO listOrgsSMOImpl) {
         this.listOrgsSMOImpl = listOrgsSMOImpl;
+    }
+
+    public ICommunityServiceSMO getCommunityServiceSMOImpl() {
+        return communityServiceSMOImpl;
+    }
+
+    public void setCommunityServiceSMOImpl(ICommunityServiceSMO communityServiceSMOImpl) {
+        this.communityServiceSMOImpl = communityServiceSMOImpl;
     }
 }
