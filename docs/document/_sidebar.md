@@ -56,6 +56,7 @@
   * [添加业主](api/owner/saveOwner.md)
   * [修改业主](api/owner/updateOwner.md)
   * [删除业主](api/owner/deleteOwner.md)
+  * [查询业主成员](api/owner/queryOwnerMembers.md)
   * [钥匙申请](api/machine/applicationKey.md)
   * [投诉建议](api/complaint/saveComplaint.md)
   * [报修](api/repair/saveRepair.md)
