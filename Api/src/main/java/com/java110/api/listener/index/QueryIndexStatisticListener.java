@@ -11,7 +11,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
-import com.java110.dto.OwnerDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.ParkingSpaceDto;
 import com.java110.dto.RoomDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;

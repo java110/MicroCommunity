@@ -11,7 +11,7 @@ import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
-import com.java110.dto.OwnerDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
@@ -32,7 +32,6 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

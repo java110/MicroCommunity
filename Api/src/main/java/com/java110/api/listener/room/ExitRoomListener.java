@@ -14,7 +14,7 @@ import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
 import com.java110.dto.FeeDto;
-import com.java110.dto.OwnerRoomRelDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;

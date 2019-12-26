@@ -7,7 +7,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
-import com.java110.dto.OwnerDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.utils.constant.BusinessTypeConstant;

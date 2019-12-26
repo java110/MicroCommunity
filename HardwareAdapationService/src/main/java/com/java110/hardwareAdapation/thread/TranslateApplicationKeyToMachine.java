@@ -1,15 +1,11 @@
 package com.java110.hardwareAdapation.thread;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.config.App;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
-import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
-import com.java110.dto.OwnerDto;
-import com.java110.dto.RoomDto;
 import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.order.OrderDto;

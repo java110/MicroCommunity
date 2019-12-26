@@ -6,7 +6,7 @@ import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
-import com.java110.dto.OwnerDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.RoomDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.order.OrderDto;

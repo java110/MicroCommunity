@@ -1,7 +1,6 @@
 package com.java110.user.smo.impl;
 
 
-import com.java110.utils.constant.CommunityMemberTypeConstant;
 import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -10,17 +9,15 @@ import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
-import com.java110.dto.OwnerDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.UserDto;
 import com.java110.user.dao.IOwnerServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
