@@ -2,7 +2,7 @@
 
 **1\. 查询投诉建议**
 ###### 接口功能
-> 用户通过web端或APP查询广告项接口
+> 用户通过web端或APP查询投诉建议接口
 
 ###### URL
 > [,http://api.java110.com:8008/api/complaint.listComplaints](,http://api.java110.com:8008/api/complaint.listComplaints)
@@ -89,83 +89,6 @@ SIGN:aabdncdhdbd878sbdudn898
 		"stateName": "处理中",
 		"storeId": "402019032924930007",
 		"tel": "18909782345",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110301190003",
-		"complaintName": "cxx",
-		"context": "csdsdsds",
-		"roomId": "752019100758260005",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "15819214587",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110399850010",
-		"complaintName": "王艳艳",
-		"context": "存储",
-		"roomId": "752019100758260005",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "18909783333",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110459230001",
-		"complaintName": "张三分",
-		"context": "自动提交一个节点测试",
-		"roomId": "752019100965690010",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "18909786789",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110403960002",
-		"complaintName": "张三分",
-		"context": "自动提交一个节点测试",
-		"roomId": "752019100965690010",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "18909786789",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110471120001",
-		"complaintName": "吴学文",
-		"context": "测试回单内容",
-		"roomId": "752019100758260005",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "17797173567",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110564340012",
-		"complaintName": "七七",
-		"context": "七七",
-		"roomId": "752019100965690010",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "13323654562",
-		"typeCd": "809001",
-		"typeCdName": "投诉"
-	}, {
-		"complaintId": "882019110572260013",
-		"complaintName": "七七",
-		"context": "七七",
-		"roomId": "752019100965690010",
-		"state": "10001",
-		"stateName": "处理中",
-		"storeId": "402019032924930007",
-		"tel": "13323654562",
 		"typeCd": "809001",
 		"typeCdName": "投诉"
 	}],
