@@ -101,25 +101,6 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
             Assert.hasLength(userDefaultPassword, "映射表中未设置员工默认密码，请检查" + MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
             userDefaultPassword = AuthenticationFactory.passwdMd5(userDefaultPassword);
 
-            /**
-             * {
-             *      "userId": "-1",
-             *      "name": "张三",
-             *      "email": "928255095@qq.com",
-             *      "address": "青海省西宁市城中区129号",
-             *      "password": "ERCBHDUYFJDNDHDJDNDJDHDUDHDJDDKDK",
-             *      "locationCd": "001",
-             *      "age": 19,
-             *      "sex": "0",
-             *      "tel": "17797173943",
-             *      "level_cd": "1",
-             *      "businessUserAttr": [{
-             *      "attrId":"-1",
-             *      "specCd":"1001",
-             *      "value":"01"
-             *      }]
-             *      }
-             */
             registerInfo.put("userId", "-1");
             registerInfo.put("email", "");
             registerInfo.put("address", userInfo.getString("country") + userInfo.getString("province") + userInfo.getString("city"));

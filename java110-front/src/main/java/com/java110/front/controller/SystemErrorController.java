@@ -1,4 +1,4 @@
-package com.java110.service.controller;
+package com.java110.front.controller;
 
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.util.StringUtil;

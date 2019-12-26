@@ -1,4 +1,4 @@
-package com.java110.service.aop;
+package com.java110.front.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.CommonConstant;
