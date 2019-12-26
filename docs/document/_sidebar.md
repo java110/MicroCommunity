@@ -59,6 +59,9 @@
   * [查询业主成员](api/owner/queryOwnerMembers.md)
   * [钥匙申请](api/machine/applicationKey.md)
   * [投诉建议](api/complaint/saveComplaint.md)
+  * [查询投诉建议](api/complaint/listComplaints.md)
+  * [删除投诉建议](api/complaint/deleteComplaint.md)
+  * [修改投诉建议](api/complaint/updateComplaint.md)
   * [报修](api/repair/saveRepair.md)
   * [查看报修](api/repair/queryRepair.md)
   * [删除组织](api/organization/deleteOrg.md)
@@ -77,6 +80,8 @@
   * [查询广告](api/Advert/listAdverts.md)
   * [修改广告](api/Advert/updateAdvert.md)
   * [删除广告](api/Advert/deleteAdvert.md)
+  * [停车费清单](api/money/getParkingSpacePayFee.md)
+  * [物业费清单](api/money/getPropertyPayFee.md)
   
   
 
