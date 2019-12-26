@@ -32,6 +32,7 @@
 
   * [用户注册](api/user/register.md)
   * [用户登录](api/user/login.md)
+  * [游客登记](api/user/saveVisit.md)
   * [用户校验登录](api/user/checkLogin.md)
   * [用户退出登录](api/user/logout.md)
   * [保存商户](api/store/saveStore.md)
@@ -55,10 +56,29 @@
   * [添加业主](api/owner/saveOwner.md)
   * [修改业主](api/owner/updateOwner.md)
   * [删除业主](api/owner/deleteOwner.md)
+  * [查询业主成员](api/owner/queryOwnerMembers.md)
   * [钥匙申请](api/machine/applicationKey.md)
   * [投诉建议](api/complaint/saveComplaint.md)
   * [报修](api/repair/saveRepair.md)
   * [查看报修](api/repair/queryRepair.md)
+  * [删除组织](api/organization/deleteOrg.md)
+  * [查询组织](api/organization/listOrgs.md)
+  * [查询上级组织](api/organization/listParentOrgs.md)
+  * [保存组织](api/organization/saveOrg.md)
+  * [修改组织](api/organization/updateOrg.md)
+  * [通过用户ID查询组织](api/organization/store.byuser.md)
+  * [新增员工](api/staff/addStaff.md)
+  * [删除员工](api/staff/deleteStaff.md)
+  * [编辑员工](api/staff/editStaff.md)
+  * [搜索员工](api/staff/searchStaff.md)
+  * [保存广告](api/Advert/saveAdvert.md)
+  * [查询广告项](api/Advert/listAdvertItems.md)
+  * [查询广告图片视频](api/Advert/listAdvertPhotoAndVedios.md)
+  * [查询广告](api/Advert/listAdverts.md)
+  * [修改广告](api/Advert/updateAdvert.md)
+  * [删除广告](api/Advert/deleteAdvert.md)
+  
+  
 
 * 服务端接口协议
 

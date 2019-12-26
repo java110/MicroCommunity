@@ -20,7 +20,8 @@
             listMyCommunity:function(){
                 var param = {
                     params:{
-                        msg:this.message
+                        msg:this.message,
+                        _sb:'123',
                     }
 
                }

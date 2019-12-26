@@ -36,7 +36,7 @@
 
                 vc.component.cacheManageInfo.conditions.page = _page;
                 vc.component.cacheManageInfo.conditions.row = _rows;
-                vc.component.cacheManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.cacheManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params: vc.component.cacheManageInfo.conditions
                 };

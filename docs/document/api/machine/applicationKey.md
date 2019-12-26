@@ -36,6 +36,7 @@
 |locationTypeCd|1|String|12|位置|位置类型，1000 东大门  1001 西大门 1002 北大门 1003 南大门 2000 单元门 3000 房屋门|
 |locationObjId|1|String|30|位置对象|对象ID，大门时小区ID，单元门 时单元ID 房屋时房屋ID|
 |storeId|1|String|30|商户ID|商户ID|
+|photo|1|String|-|base64照片信息|base64照片信息|
 
 
 ###### 返回协议
@@ -71,6 +72,7 @@ SIGN:aabdncdhdbd878sbdudn898
 	"locationTypeCd":"1000",
 	"locationObjId":"702019120393220007",
 	"storeId":"71000023495857001",
+    "photo":"base64...."
 }
 
 

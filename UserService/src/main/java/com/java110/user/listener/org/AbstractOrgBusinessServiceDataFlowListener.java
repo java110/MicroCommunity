@@ -44,6 +44,8 @@ public abstract class AbstractOrgBusinessServiceDataFlowListener extends Abstrac
         businessOrgInfo.put("orgLevel", businessOrgInfo.get("org_level"));
         businessOrgInfo.put("storeId", businessOrgInfo.get("store_id"));
         businessOrgInfo.put("orgId", businessOrgInfo.get("org_id"));
+        businessOrgInfo.put("belongCommunityId", businessOrgInfo.get("belong_community_id"));
+        businessOrgInfo.put("allowOperation", businessOrgInfo.get("allow_operation"));
         businessOrgInfo.remove("bId");
         businessOrgInfo.put("statusCd", statusCd);
     }
@@ -75,7 +77,8 @@ public abstract class AbstractOrgBusinessServiceDataFlowListener extends Abstrac
         currentOrgInfo.put("orgLevel", currentOrgInfo.get("org_level"));
         currentOrgInfo.put("storeId", currentOrgInfo.get("store_id"));
         currentOrgInfo.put("orgId", currentOrgInfo.get("org_id"));
-
+        currentOrgInfo.put("belongCommunityId", currentOrgInfo.get("belong_community_id"));
+        currentOrgInfo.put("allowOperation", currentOrgInfo.get("allow_operation"));
 
         currentOrgInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOrgServiceDaoImpl().saveBusinessOrgInfo(currentOrgInfo);

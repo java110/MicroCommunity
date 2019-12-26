@@ -33,6 +33,8 @@ public class EditOrgSMOImpl extends AbstractComponentSMO implements IEditOrgSMO 
         Assert.hasKeyAndValue(paramIn, "orgName", "必填，请填写组织名称");
         Assert.hasKeyAndValue(paramIn, "orgLevel", "必填，请填写报修人名称");
         Assert.hasKeyAndValue(paramIn, "parentOrgId", "必填，请选择上级ID");
+        Assert.hasKeyAndValue(paramIn, "belongCommunityId", "必填，请选择隶属小区");
+
         //Assert.hasKeyAndValue(paramIn, "description", "必填，请填写描述");
 
 

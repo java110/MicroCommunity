@@ -141,8 +141,9 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
     public ResponseEntity<String> getAreas(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         Assert.hasLength(pd.getUserId(), "用户还未登录请先登录");
+        JSONObject param = JSONObject.parseObject(pd.getReqData());
 
-        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/area.listAreas", HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/area.listAreas" + mapToUrlParam(param), HttpMethod.GET);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             Assert.jsonObjectHaveKey(responseEntity.getBody(), "areas", "查询中心服务异常，不是有效json或未包含areas节点");

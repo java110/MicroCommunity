@@ -108,10 +108,10 @@ public class ApiApplicationStart {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger2构建RESTful APIs")
-                .description("api信息")
+                .title("HC小区管理系统 APIs")
+                .description("HC小区管理系统提供的所有能力")
                 .termsOfServiceUrl("https://github.com/java110/MicroCommunity")
-                .contact("sunf")
+                .contact("吴学文")
                 .version("1.0")
                 .build();
     }

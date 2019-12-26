@@ -11,6 +11,8 @@ import com.java110.dto.app.AppDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.app.ApiAppDataVo;
 import com.java110.vo.api.app.ApiAppVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.List;
  * 查询小区侦听类
  */
 @Java110Listener("listAppsListener")
+@Api(value = "查询应用服务")
 public class ListAppsListener extends AbstractServiceApiListener {
 
     @Autowired
@@ -59,6 +62,7 @@ public class ListAppsListener extends AbstractServiceApiListener {
         super.validatePageInfo(reqJson);
     }
 
+    @ApiOperation(value = "查询应用信息", notes = "test: 返回 2XX 表示服务正常", httpMethod = "GET", response = ApiAppVo.class)
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
