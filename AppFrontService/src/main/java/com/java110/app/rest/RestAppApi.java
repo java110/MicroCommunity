@@ -27,7 +27,7 @@ import java.util.Map;
  * add by wuxw 2019-11-19
  */
 @RestController
-@RequestMapping(path = "/appApi")
+@RequestMapping(path = "/app")
 public class RestAppApi extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(RestAppApi.class);
 
