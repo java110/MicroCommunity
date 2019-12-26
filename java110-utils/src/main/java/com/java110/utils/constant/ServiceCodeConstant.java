@@ -428,6 +428,9 @@ public class ServiceCodeConstant {
     // 保存业主信息
     public static final String SERVICE_CODE_SAVE_OWNER = "owner.saveOwner";
 
+    // App 用户绑定业主接口
+    public static final String SERVICE_CODE_APP_USER_BINDING_OWNER = "owner.appUserBindingOwner";
+
     public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";
 
     // 编辑业主信息
