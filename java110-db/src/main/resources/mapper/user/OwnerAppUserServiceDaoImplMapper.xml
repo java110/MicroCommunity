@@ -5,257 +5,267 @@
 <mapper namespace="ownerAppUserServiceDaoImpl">
 
     <!-- 保存绑定业主信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessOwnerAppUserInfo" parameterType="Map">
-           insert into business_owner_app_user(
-id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
-) values (
-#{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{bId},#{memberId}
-)
-       </insert>
+    <insert id="saveBusinessOwnerAppUserInfo" parameterType="Map">
+        insert into business_owner_app_user(
+        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
+        ) values (
+        #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{bId},#{memberId}
+        )
+    </insert>
 
 
-       <!-- 查询绑定业主信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessOwnerAppUserInfo" parameterType="Map" resultType="Map">
-           select  t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId 
-from business_owner_app_user t 
-where 1 =1 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="openId !=null and openId != ''">
-   and t.open_id= #{openId}
-</if> 
-<if test="link !=null and link != ''">
-   and t.link= #{link}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="appUserName !=null and appUserName != ''">
-   and t.app_user_name= #{appUserName}
-</if> 
-<if test="communityName !=null and communityName != ''">
-   and t.community_name= #{communityName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="appUserId !=null and appUserId != ''">
-   and t.app_user_id= #{appUserId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="appTypeCd !=null and appTypeCd != ''">
-   and t.app_type_cd= #{appTypeCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="memberId !=null and memberId != ''">
-   and t.member_id= #{memberId}
-</if> 
+    <!-- 查询绑定业主信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessOwnerAppUserInfo" parameterType="Map" resultType="Map">
+        select t.id_card,t.id_card idCard,t.open_id,t.open_id
+        openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
+        communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId
+        from business_owner_app_user t
+        where 1 =1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="appUserName !=null and appUserName != ''">
+            and t.app_user_name= #{appUserName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="appUserId !=null and appUserId != ''">
+            and t.app_user_id= #{appUserId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appTypeCd !=null and appTypeCd != ''">
+            and t.app_type_cd= #{appTypeCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存绑定业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerAppUserInfoInstance" parameterType="Map">
         insert into owner_app_user(
-id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
-) select t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,t.member_id from business_owner_app_user t where 1=1
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="openId !=null and openId != ''">
-   and t.open_id= #{openId}
-</if> 
-<if test="link !=null and link != ''">
-   and t.link= #{link}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-   and t.operate= 'ADD'
-<if test="appUserName !=null and appUserName != ''">
-   and t.app_user_name= #{appUserName}
-</if> 
-<if test="communityName !=null and communityName != ''">
-   and t.community_name= #{communityName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="appUserId !=null and appUserId != ''">
-   and t.app_user_id= #{appUserId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="appTypeCd !=null and appTypeCd != ''">
-   and t.app_type_cd= #{appTypeCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="memberId !=null and memberId != ''">
-   and t.member_id= #{memberId}
-</if> 
+        id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
+        ) select
+        t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,t.member_id
+        from business_owner_app_user t where 1=1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        and t.operate= 'ADD'
+        <if test="appUserName !=null and appUserName != ''">
+            and t.app_user_name= #{appUserName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="appUserId !=null and appUserId != ''">
+            and t.app_user_id= #{appUserId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appTypeCd !=null and appTypeCd != ''">
+            and t.app_type_cd= #{appTypeCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询绑定业主信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerAppUserInfo" parameterType="Map" resultType="Map">
-        select  t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.status_cd,t.status_cd statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId 
-from owner_app_user t 
-where 1 =1 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="openId !=null and openId != ''">
-   and t.open_id= #{openId}
-</if> 
-<if test="link !=null and link != ''">
-   and t.link= #{link}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="appUserName !=null and appUserName != ''">
-   and t.app_user_name= #{appUserName}
-</if> 
-<if test="communityName !=null and communityName != ''">
-   and t.community_name= #{communityName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="appUserId !=null and appUserId != ''">
-   and t.app_user_id= #{appUserId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="appTypeCd !=null and appTypeCd != ''">
-   and t.app_type_cd= #{appTypeCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="memberId !=null and memberId != ''">
-   and t.member_id= #{memberId}
-</if> 
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.status_cd,t.status_cd
+        statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
+        communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId
+        from owner_app_user t
+        where 1 =1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="appUserName !=null and appUserName != ''">
+            and t.app_user_name= #{appUserName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="states !=null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="appUserId !=null and appUserId != ''">
+            and t.app_user_id= #{appUserId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appTypeCd !=null and appTypeCd != ''">
+            and t.app_type_cd= #{appTypeCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改绑定业主信息 add by wuxw 2018-07-03 -->
     <update id="updateOwnerAppUserInfoInstance" parameterType="Map">
-        update  owner_app_user t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="idCard !=null and idCard != ''">
-, t.id_card= #{idCard}
-</if> 
-<if test="openId !=null and openId != ''">
-, t.open_id= #{openId}
-</if> 
-<if test="link !=null and link != ''">
-, t.link= #{link}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="appUserName !=null and appUserName != ''">
-, t.app_user_name= #{appUserName}
-</if> 
-<if test="communityName !=null and communityName != ''">
-, t.community_name= #{communityName}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="appTypeCd !=null and appTypeCd != ''">
-, t.app_type_cd= #{appTypeCd}
-</if> 
-<if test="memberId !=null and memberId != ''">
-, t.member_id= #{memberId}
-</if> 
- where 1=1 <if test="appUserId !=null and appUserId != ''">
-and t.app_user_id= #{appUserId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update owner_app_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="idCard !=null and idCard != ''">
+            , t.id_card= #{idCard}
+        </if>
+        <if test="openId !=null and openId != ''">
+            , t.open_id= #{openId}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="appUserName !=null and appUserName != ''">
+            , t.app_user_name= #{appUserName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="appTypeCd !=null and appTypeCd != ''">
+            , t.app_type_cd= #{appTypeCd}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            , t.member_id= #{memberId}
+        </if>
+        where 1=1
+        <if test="appUserId !=null and appUserId != ''">
+            and t.app_user_id= #{appUserId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询绑定业主数量 add by wuxw 2018-07-03 -->
-     <select id="queryOwnerAppUsersCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from owner_app_user t 
-where 1 =1 
-<if test="idCard !=null and idCard != ''">
-   and t.id_card= #{idCard}
-</if> 
-<if test="openId !=null and openId != ''">
-   and t.open_id= #{openId}
-</if> 
-<if test="link !=null and link != ''">
-   and t.link= #{link}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="appUserName !=null and appUserName != ''">
-   and t.app_user_name= #{appUserName}
-</if> 
-<if test="communityName !=null and communityName != ''">
-   and t.community_name= #{communityName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="appUserId !=null and appUserId != ''">
-   and t.app_user_id= #{appUserId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="appTypeCd !=null and appTypeCd != ''">
-   and t.app_type_cd= #{appTypeCd}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="memberId !=null and memberId != ''">
-   and t.member_id= #{memberId}
-</if> 
+    <select id="queryOwnerAppUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_app_user t
+        where 1 =1
+        <if test="idCard !=null and idCard != ''">
+            and t.id_card= #{idCard}
+        </if>
+        <if test="openId !=null and openId != ''">
+            and t.open_id= #{openId}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="appUserName !=null and appUserName != ''">
+            and t.app_user_name= #{appUserName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="appUserId !=null and appUserId != ''">
+            and t.app_user_id= #{appUserId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appTypeCd !=null and appTypeCd != ''">
+            and t.app_type_cd= #{appTypeCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="memberId !=null and memberId != ''">
+            and t.member_id= #{memberId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

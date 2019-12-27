@@ -27,6 +27,8 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String appTypeCd;
     private String memberId;
 
+    private String[] states;
+
 
     private Date createTime;
 
@@ -136,5 +138,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

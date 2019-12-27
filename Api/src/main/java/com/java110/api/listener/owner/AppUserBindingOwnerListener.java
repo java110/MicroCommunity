@@ -11,8 +11,11 @@ import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.UserDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
@@ -29,6 +32,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AppUserBindingOwnerListener
@@ -57,6 +61,9 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     private static Logger logger = LoggerFactory.getLogger(AppUserBindingOwnerListener.class);
 
     @Override
@@ -76,15 +83,39 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "appUserName", "未包含用户名称");
         Assert.hasKeyAndValue(reqJson, "idCard", "未包含身份证号");
         Assert.hasKeyAndValue(reqJson, "link", "未包含联系电话");
+        //判断是否有用户ID
+        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
+
+        Assert.hasKeyAndValue(headers, "user_id", "请求头中未包含用户信息");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
+        //判断是否有用户ID
+        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
 
+        String userId = headers.get("user_id");
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
+        Assert.listOnlyOne(userDtos, "未找到相应用户信息，或查询到多条");
 
+        String openId = userDtos.get(0).getOpenId();
+
+        Assert.hasLength(openId, "该用户不是能力开放用户");
+
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setStates(new String[]{"10000","12000"});
+
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        //Assert.listOnlyOne(ownerAppUserDtos, "已经申请过入驻小区");
+        if(ownerAppUserDtos !=null && ownerAppUserDtos.size()>0){
+            throw new IllegalArgumentException("已经申请过入驻小区");
+        }
 
         //查询小区是否存在
         CommunityDto communityDto = new CommunityDto();
@@ -154,7 +185,7 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         businessOwnerAppUser.put("communityId", communityDto.getCommunityId());
         businessOwnerAppUser.put("appUserName", ownerDto.getName());
         businessOwnerAppUser.put("idCard", ownerDto.getIdCard());
-        businessOwnerAppUser.put("link",ownerDto.getLink());
+        businessOwnerAppUser.put("link", ownerDto.getLink());
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
         return business;
     }
@@ -190,5 +221,21 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
 
     public void setOwnerInnerServiceSMOImpl(IOwnerInnerServiceSMO ownerInnerServiceSMOImpl) {
         this.ownerInnerServiceSMOImpl = ownerInnerServiceSMOImpl;
+    }
+
+    public IOwnerAppUserInnerServiceSMO getOwnerAppUserInnerServiceSMOImpl() {
+        return ownerAppUserInnerServiceSMOImpl;
+    }
+
+    public void setOwnerAppUserInnerServiceSMOImpl(IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl) {
+        this.ownerAppUserInnerServiceSMOImpl = ownerAppUserInnerServiceSMOImpl;
+    }
+
+    public IUserInnerServiceSMO getUserInnerServiceSMOImpl() {
+        return userInnerServiceSMOImpl;
+    }
+
+    public void setUserInnerServiceSMOImpl(IUserInnerServiceSMO userInnerServiceSMOImpl) {
+        this.userInnerServiceSMOImpl = userInnerServiceSMOImpl;
     }
 }

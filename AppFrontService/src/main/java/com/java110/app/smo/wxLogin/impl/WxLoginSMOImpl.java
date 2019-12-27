@@ -138,6 +138,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         try {
             Map userMap = new HashMap();
             userMap.put(CommonConstant.LOGIN_USER_ID, userInfo.getString("userId"));
+            userMap.put(CommonConstant.LOGIN_USER_NAME, userInfo.getString("name"));
             String token = AuthenticationFactory.createAndSaveToken(userMap);
             JSONObject paramOut = new JSONObject();
             paramOut.put("result", 0);

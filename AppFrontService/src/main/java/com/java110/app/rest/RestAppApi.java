@@ -19,11 +19,11 @@ import java.util.Map;
 
 /**
  * 微信小程序api处理类
- *
+ * <p>
  * 主要用于透传api 直接提供出来的接口
- *
+ * <p>
  * 方便快速开发
- *
+ * <p>
  * add by wuxw 2019-11-19
  */
 @RestController
@@ -170,9 +170,28 @@ public class RestAppApi extends BaseController {
         try {
             super.initHeadParam(request, headers);
             super.initUrlParam(request, headers);
+            this.getUserInfo(request, headers);
+
         } catch (Exception e) {
             logger.error("加载头信息失败", e);
             throw e;
+        }
+    }
+
+
+    private void getUserInfo(HttpServletRequest request, Map headers) throws Exception {
+        Object claimsObj = request.getAttribute("claims");
+        if (claimsObj == null) {
+            return;
+        }
+        Map<String, String> claims = (Map<String, String>) claimsObj;
+
+        for (String key : claims.keySet()) {
+
+            if("userId".equals(key)){
+                headers.put("user_id", claims.get(key));
+            }
+            headers.put(key, claims.get(key));
         }
     }
 
