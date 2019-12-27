@@ -56,13 +56,12 @@ SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 {
-    "sex":"填写具体值",
-            "name":"填写具体值",
-            "link":"填写具体值",
-            "remark":"填写具体值",
-            "userId":"填写具体值",
-            "ownerTypeCd":"1001",
-            "age":"填写具体值"
+    "communityName":"格兰小镇",
+    "areaCode":"123123",
+    "appUserName":"用户名称",
+    "idCard":"身份证号",
+    "link":"联系电话",
+    "remark":"123123"
 }
 
 返回报文：
