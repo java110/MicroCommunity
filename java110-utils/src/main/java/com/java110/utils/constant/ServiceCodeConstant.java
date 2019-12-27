@@ -431,6 +431,21 @@ public class ServiceCodeConstant {
     // App 用户绑定业主接口
     public static final String SERVICE_CODE_APP_USER_BINDING_OWNER = "owner.appUserBindingOwner";
 
+
+    /**
+     * 查询 审核业主绑定
+     */
+    public static final String LIST_APPUSERBINDINGOWNERS = "owner.listAppUserBindingOwners";
+
+
+
+    /**
+     * 修改 审核业主绑定
+     */
+    public static final String UPDATE_APPUSERBINDINGOWNER = "owner.updateAppUserBindingOwner";
+    public static final String DELETE_APPUSERBINDINGOWNER = "owner.deleteAppUserBindingOwner";
+
+
     public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";
 
     // 编辑业主信息

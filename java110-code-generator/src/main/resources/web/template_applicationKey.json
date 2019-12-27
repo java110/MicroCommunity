@@ -1,0 +1,138 @@
+{
+  "templateName":"钥匙申请",
+  "templateCode":"applicationKey",
+  "templateKey":"applicationKeyId",
+  "templateKeyName":"钥匙申请ID",
+  "searchCode": "name",
+  "searchName": "名称",
+  "conditions": [
+    {
+      "name": "名称",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "用户类型",
+      "inputType": "select",
+      "code": "typeCd",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"保洁,保安,其他人员",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "用户手机",
+      "inputType": "input",
+      "code": "tel",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "身份证号",
+      "inputType": "input",
+      "code": "idCard",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"姓名",
+      "desc":"必填，请填写姓名",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,64",
+      "limitErrInfo":"姓名不能超过64位",
+      "show": true
+    },
+    {
+      "code": "tel",
+      "cnCode":"手机号",
+      "desc":"必填，请填写手机号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"手机号格式错误",
+      "show": true
+    },
+    {
+      "code": "typeCd",
+      "cnCode":"用户类型",
+      "desc":"必填，请选择用户类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"10001,10002,10003",
+      "selectValueName":"保洁,保安,其他人员",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"用户类型格式错误",
+      "show": true
+    },
+    {
+      "code": "sex",
+      "cnCode":"性别",
+      "desc":"必填，请选择性别",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"0,1",
+      "selectValueName":"男,女",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"性别格式错误",
+      "show": true
+    },
+    {
+      "code": "age",
+      "cnCode":"年龄",
+      "desc":"必填，请填写年龄",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"年龄不是有效数字",
+      "show": true
+    },
+    {
+      "code":"idCard",
+      "cnCode":"身份证号",
+      "desc":"必填，请填写身份证号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"idCard",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的身份证号",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode":"开始时间",
+      "desc":"必填，请选择开始时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode":"结束时间",
+      "desc":"必填，请选择结束时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    }
+  ]
+}
