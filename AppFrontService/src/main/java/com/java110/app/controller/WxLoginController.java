@@ -50,10 +50,10 @@ public class WxLoginController extends BaseController {
             return responseEntity;
         }
 
-        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-        /*IPageData pd = PageData.newInstance().builder("", "","", postInfo,
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        IPageData pd = PageData.newInstance().builder("", "","", postInfo,
                 "", "", "", "",
-                request.getHeader("APP_ID"));*/
+                request.getHeader("APP_ID"));
 
         return wxLoginSMOImpl.doLogin(pd);
     }

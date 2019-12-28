@@ -42,6 +42,7 @@ spring:
     database: 0
     host: dev.redis.java110.com
     port: 6379
+    password:
     pool:
       max-active: 300
       max-wait: 10000
