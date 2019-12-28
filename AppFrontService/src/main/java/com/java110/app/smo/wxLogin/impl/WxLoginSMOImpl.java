@@ -74,7 +74,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         JSONObject responseObj = JSONObject.parseObject(response);
 
         if (responseObj.containsKey("errcode") && !"0".equals(responseObj.getString("errcode"))) {
-            throw new IllegalArgumentException("微信验证失败，可能是code失效");
+            throw new IllegalArgumentException("微信验证失败，可能是code失效" + responseObj);
         }
 
         String openId = responseObj.getString("openid");

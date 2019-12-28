@@ -29,6 +29,8 @@ public abstract class AbstractComponentSMO extends BaseComponentSMO {
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
+        logger.debug("businessProcess: pd=" + JSONObject.toJSONString(pd));
+
 
         //业务数据校验
         validate(pd, paramIn);

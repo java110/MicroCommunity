@@ -82,7 +82,7 @@
   * [删除广告](api/Advert/deleteAdvert.md)
   * [停车费清单](api/money/getParkingSpacePayFee.md)
   * [物业费清单](api/money/getPropertyPayFee.md)
-  * [物业费清单](api/owner/appUserBindingOwner.md)
+  * [业主绑定](api/owner/appUserBindingOwner.md)
   
   
 
