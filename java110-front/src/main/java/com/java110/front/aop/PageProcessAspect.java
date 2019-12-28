@@ -57,6 +57,7 @@ public class PageProcessAspect {
         String appId = "";
         String sessionId = request.getSession().getId();
         appId = request.getHeader("APP_ID");
+        logger.debug("请求头信息：" + request.getHeaderNames());
         if ("POST,PUT".contains(request.getMethod())) {
             InputStream in = request.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
