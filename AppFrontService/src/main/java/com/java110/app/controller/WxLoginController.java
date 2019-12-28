@@ -7,6 +7,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.dto.wxLogin.UserInfo;
 import com.java110.dto.wxLogin.WxLoginInfo;
+import com.java110.utils.constant.CommonConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,77 +49,13 @@ public class WxLoginController extends BaseController {
             responseEntity = new ResponseEntity<>("code is null", HttpStatus.BAD_REQUEST);
             return responseEntity;
         }
-        /*String sessionKey = null;
-        String openId = null;*/
-//        try {
-//            /*WxMaJscode2SessionResult result = this.wxMaService.getUserService().getSessionInfo(code);
-//            sessionKey = result.getSessionKey();
-//            openId = result.getOpenid();*/
-//        } catch (Exception e) {
-//            logger.error("login fail by wx", e);
-//            e.printStackTrace();
-//        }
 
-        IPageData pd = PageData.newInstance().builder("", "","", postInfo,
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = PageData.newInstance().builder("", "","", postInfo,
                 "", "", "", "",
-                request.getHeader("APP_ID"));
+                request.getHeader("APP_ID"));*/
 
         return wxLoginSMOImpl.doLogin(pd);
-
-        //login first
-        /*User user = userService.queryByOpenid(openId);
-        if (user == null) {
-            user = new User();
-            user.setUsername(openId);
-            //Md5Hash md5Hash = new Md5Hash(openId, openId,1024);
-            user.setPassword(openId); //密码保存加密的openid
-            user.setWeixinOpenid(openId);
-            user.setAvatar(userInfo.getAvatarUrl());
-            user.setNickname(userInfo.getNickName());
-            user.setGender(userInfo.getGender());
-            user.setUserLevel((byte) 0); //普通用户
-            user.setStatus((byte) 0); //0可用 1禁用 2注销
-            user.setLastLoginTime(LocalDateTime.now());
-            user.setLastLoginIp(IpUtil.getIpAddr(request));
-            user.setSessionKey(sessionKey);
-            //user.setRoleid("2"); //默认普通用户
-            userService.add(user);
-        } else {
-            user.setLastLoginTime(LocalDateTime.now());
-            user.setLastLoginIp(IpUtil.getIpAddr(request));
-            user.setSessionKey(sessionKey);
-            //LogUtil.info("登录 " + user.toString());
-            if (userService.updateById(user) == 0) {
-                //LogUtil.error("update login user error");
-                return ResponseUtil.updatedDataFailed();
-            }
-        }
-        String token = UserTokenManager.generateToken(user.getId());
-        JSONObject jsonObject = new JSONObject();
-        //生成token
-        jsonObject.put("errno", "0");
-        jsonObject.put("token", token);
-        jsonObject.put("userInfo", userInfo);
-        LOGGER.info(jsonObject);
-        //LogUtil.info("login success");
-        //LogUtil.info(jsonObject);
-        return ResponseUtil.ok(jsonObject);*/
-
-        //return new ResponseEntity<>("",HttpStatus.OK);
-
-
     }
-
-    /**
-     * 微信登出
-     *
-     * @return
-     */
-   /* @RequestMapping("/logout")
-    public JSONObject logoutWx() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return ResponseUtil.ok();
-    }*/
 
 }
