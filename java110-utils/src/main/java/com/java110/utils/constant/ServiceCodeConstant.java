@@ -435,8 +435,12 @@ public class ServiceCodeConstant {
     /**
      * 查询 审核业主绑定
      */
-    public static final String LIST_APPUSERBINDINGOWNERS = "owner.listAppUserBindingOwners";
+    public static final String LIST_AUDIT_APPUSERBINDINGOWNERS = "owner.listAuditAppUserBindingOwners";
 
+    /**
+     * 查询 审核业主绑定
+     */
+    public static final String LIST_APPUSERBINDINGOWNERS = "owner.listAppUserBindingOwners";
 
 
     /**
