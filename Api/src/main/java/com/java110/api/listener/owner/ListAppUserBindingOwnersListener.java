@@ -61,7 +61,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
 
         Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
 
-        Assert.hasKeyAndValue(headers, "userId", "请求头中未包含用户信息");
+        Assert.hasKeyAndValue(headers, "userid", "请求头中未包含用户信息");
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
 
         Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
 
-        String userId = headers.get("userId");
+        String userId = headers.get("userid");
 
         //根据userId 查询openId
         UserDto userDto = new UserDto();
