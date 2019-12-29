@@ -27,15 +27,13 @@ java1.8 + idea/eclipse + mysql
 
 Java + spring cloud + mybatis + mysql + kafka + redis
 
-3. 服务依赖关系
+![image](docs/images/system.png)
 
-![image](dependencies.png)
-
-4. 硬件要求:
+3. 硬件要求:
 
    测试环境基本要求：4个CPU 、16G内存和80G硬盘
    
-5. 软件要求:
+4. 软件要求:
 
     需要自行安装 mysql5.6、zookeeper、Redis和kafka
     
