@@ -102,13 +102,13 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         Assert.hasLength(openId, "该用户不是能力开放用户");
 
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setStates(new String[]{"10000","12000"});
+        ownerAppUserDto.setStates(new String[]{"10000", "12000"});
 
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
         //Assert.listOnlyOne(ownerAppUserDtos, "已经申请过入驻小区");
-        if(ownerAppUserDtos !=null && ownerAppUserDtos.size()>0){
-            throw new IllegalArgumentException("已经申请过入驻小区");
+        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+            throw new IllegalArgumentException("已经申请过绑定业主");
         }
 
         //查询小区是否存在
@@ -137,6 +137,7 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
+        paramObj.put("openId", openId);
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
