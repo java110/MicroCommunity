@@ -5,7 +5,6 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.org.IOrgStaffRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.user.dao.IOrgStaffRelServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

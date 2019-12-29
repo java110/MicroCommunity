@@ -12,7 +12,7 @@ import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomAttrDto;
 import com.java110.dto.RoomDto;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

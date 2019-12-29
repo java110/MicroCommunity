@@ -7,12 +7,10 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.app.IAppInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.app.AppDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;

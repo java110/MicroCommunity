@@ -446,7 +446,7 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
     @Override
     public List<Map> queryUserInfoAttrs(Map info) throws DAOException {
         Assert.notNull(info, "queryUserInfo 的参数不能为空");
-        logger.debug("----【userServiceDaoImpl.updateUserAttrInstance】保存数据入参 : " + JSONObject.toJSONString(info));
+        logger.debug("----【userServiceDaoImpl.queryUserInfoAttrs】查询用户属性 : " + JSONObject.toJSONString(info));
         List<Map> userAttrs = sqlSessionTemplate.selectList("userServiceDaoImpl.queryUserInfoAttrs", info);
         return userAttrs;
     }

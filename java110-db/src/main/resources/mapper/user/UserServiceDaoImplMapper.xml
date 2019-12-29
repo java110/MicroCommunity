@@ -283,7 +283,8 @@
 
     <!-- 查询用户属性信息 -->
     <select id="queryUserInfoAttrs" parameterType="map" resultType="map">
-        select u.attr_id,u.user_id,u.spec_cd,u.value,u.b_id
+        select u.attr_id,u.user_id,u.spec_cd,u.value,u.b_id,
+        u.attr_id attrId,u.user_id userId,u.spec_cd specCd,u.b_id bId
         from u_user_attr u where u.status_cd = '0'
         <if test="bId != null and bId !=''">
             and u.b_id = #{bId}

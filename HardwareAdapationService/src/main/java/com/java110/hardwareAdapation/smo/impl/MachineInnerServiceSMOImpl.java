@@ -2,12 +2,10 @@ package com.java110.hardwareAdapation.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
-import com.java110.dto.community.CommunityDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.demo.DemoDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.hardwareAdapation.dao.IMachineServiceDao;

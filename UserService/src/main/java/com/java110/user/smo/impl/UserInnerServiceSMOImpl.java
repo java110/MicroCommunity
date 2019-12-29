@@ -1,11 +1,11 @@
 package com.java110.user.smo.impl;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.org.OrgDto;
+import com.java110.dto.user.UserAttrDto;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.user.dao.IUserServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +68,6 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
     }
 
 
-
     @Override
     public int getUserCount(@RequestBody UserDto userDto) {
 
@@ -87,8 +86,32 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
 
         List<UserDto> staffs = BeanConvertUtil.covertBeanList(userServiceDaoImpl.getUsers(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
 
-
+        freshUserAttrs(staffs);
         return staffs;
+    }
+
+    private void freshUserAttrs(List<UserDto> userDtos) {
+
+        Map param = null;
+        for (UserDto userDto : userDtos) {
+            param = new HashMap();
+            param.put("userId",userDto.getUserId());
+            List<UserAttrDto> userAttrDtos = BeanConvertUtil.covertBeanList(userServiceDaoImpl.queryUserInfoAttrs(param), UserAttrDto.class);
+            if(userAttrDtos == null || userAttrDtos.size() == 0){
+                continue;
+            }
+            userDto.setUserAttrs(userAttrDtos);
+            for(UserAttrDto userAttrDto : userAttrDtos){
+                //openId 单独出来处理
+                if("100201911001".equals(userAttrDto.getSpecCd())){
+                    userDto.setOpenId(userAttrDto.getValue());
+                }
+            }
+
+
+        }
+
+
     }
 
 

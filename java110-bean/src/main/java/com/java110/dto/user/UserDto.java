@@ -1,6 +1,9 @@
-package com.java110.dto;
+package com.java110.dto.user;
+
+import com.java110.dto.PageDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName UserDto
@@ -45,6 +48,8 @@ public class UserDto extends PageDto implements Serializable {
     private String staffName;
 
     private String openId;
+
+    private List<UserAttrDto> userAttrs;
 
 
 
@@ -182,5 +187,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public List<UserAttrDto> getUserAttrs() {
+        return userAttrs;
+    }
+
+    public void setUserAttrs(List<UserAttrDto> userAttrs) {
+        this.userAttrs = userAttrs;
     }
 }

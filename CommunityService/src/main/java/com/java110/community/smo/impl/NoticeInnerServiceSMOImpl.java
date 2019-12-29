@@ -7,7 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.notice.INoticeInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.notice.NoticeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

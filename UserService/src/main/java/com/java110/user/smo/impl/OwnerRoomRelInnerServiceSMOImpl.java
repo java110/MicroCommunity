@@ -7,7 +7,7 @@ import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -6,7 +6,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.repair.IRepairUserInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
