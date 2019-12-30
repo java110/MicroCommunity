@@ -44,7 +44,7 @@ public class EditAuditAppUserBindingOwnerSMOImpl extends AbstractComponentSMO im
         ResponseEntity<String> responseEntity = null;
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        if("1200".equals(paramIn.getString("1100"))){
+        if("1100".equals(paramIn.getString("state"))){
             paramIn.put("state","12000");
         }else{
             paramIn.put("state","13000");

@@ -5,15 +5,23 @@
             addCommunityInfo: {
                 name: '',
                 address: '',
+                areaAddress:'',
                 nearbyLandmarks: '',
                 cityCode: '0971',
                 mapX: '101.33',
                 mapY: '101.33',
 
-            }
+            },
+            areas: [],
+            provs: [],
+            citys: [],
+            selectProv: '',
+            selectCity: '',
+            selectArea: '',
+            allCity: []
         },
         _initMethod: function () {
-
+            vc.component._initArea('101', '0');
         },
         _initEvent: function () {
             vc.on('addCommunity', 'openAddCommunityModal', function () {
@@ -95,6 +103,9 @@
 
                 //vc.component.addCommunityInfo.communityId = vc.getCurrentCommunity().communityId;
 
+                vc.component.addCommunityInfo.address = vc.component.addCommunityInfo.areaAddress+ vc.addCommunityInfo.address;
+
+
                 vc.http.post(
                     'addCommunity',
                     'save',
@@ -132,7 +143,65 @@
                     mapY: '101.33',
 
                 };
-            }
+            },
+            getProv: function (_prov) {
+                vc.component._initArea('202', _prov);
+            },
+            getCity: function (_city) {
+                vc.component._initArea('303',_city);
+            },
+            getArea:function(_area){
+              vc.component.addCommunityInfo.cityCode = _area;
+
+                vc.component.addCommunityInfo.areaAddress = '';
+                if (vc.component.provs == null || vc.component.provs == undefined) {
+                    return;
+                }
+                vc.component.provs.forEach(function (_param) {
+                    if (_param.areaCode == vc.component.selectProv) {
+                        vc.component.addCommunityInfo.areaAddress = _param.areaName;
+                    }
+                });
+
+                vc.component.citys.forEach(function (_param) {
+                    if (_param.areaCode == vc.component.selectCity) {
+                        vc.component.addCommunityInfo.areaAddress += _param.areaName;
+                    }
+                });
+
+                vc.component.areas.forEach(function (_param) {
+                    if (_param.areaCode == vc.component.selectArea) {
+                        vc.component.addCommunityInfo.areaAddress += _param.areaName;
+                    }
+                });
+            },
+            _initArea: function (_areaLevel, _parentAreaCode) { //加载区域
+                var _param = {
+                    params: {
+                        areaLevel: _areaLevel,
+                        parentAreaCode: _parentAreaCode
+                    }
+                };
+                vc.http.get('addCommunity', 'getAreas',
+                    _param,
+                    function (json, res) {
+                        if (res.status == 200) {
+                            var _tmpAreas = JSON.parse(json);
+                            if (_areaLevel == '101') {
+                                vc.component.provs = _tmpAreas;
+                            } else if (_areaLevel == '202') {
+                                vc.component.citys = _tmpAreas;
+                            } else {
+                                vc.component.areas = _tmpAreas;
+                            }
+                            return;
+                        }
+                        //vc.component.$emit('errorInfoEvent',json);
+                    }, function (errInfo, error) {
+                        console.log('请求失败处理', errInfo, error);
+                        vc.toast("查询地区失败");
+                    });
+            },
         }
     });
 

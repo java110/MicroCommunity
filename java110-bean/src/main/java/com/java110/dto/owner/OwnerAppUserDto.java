@@ -22,6 +22,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String appUserName;
     private String communityName;
     private String state;
+    private String stateName;
     private String appUserId;
     private String communityId;
     private String appTypeCd;
@@ -146,5 +147,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

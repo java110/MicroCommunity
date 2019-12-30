@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <select class="custom-select" v-model="auditAppUserBindingOwnerManageInfo.conditions.null">
+                            <select class="custom-select" v-model="auditAppUserBindingOwnerManageInfo.conditions.state">
                                 <option selected value="">请选择状态</option>
                                 <option value="10000">审核中</option>
                                 <option value="12000">审核成功</option>
@@ -95,7 +95,7 @@
                             <td class="text-center">{{auditAppUserBindingOwner.state}}</td>
                             <td class="text-center">{{auditAppUserBindingOwner.createTime}}</td>
                             <td class="text-center">
-                                <div class="btn-group">
+                                <div class="btn-group" v-if="auditAppUserBindingOwner.state == '1000'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openAuditAppUserBindingOwnerModel(auditAppUserBindingOwner)">
                                         审核

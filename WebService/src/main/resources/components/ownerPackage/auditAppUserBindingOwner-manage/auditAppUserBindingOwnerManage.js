@@ -17,6 +17,7 @@
                     appUserName:'',
                     idCard:'',
                     link:'',
+                    state:''
                 }
             }
         },
@@ -94,6 +95,9 @@
                 }else{
                     vc.component.auditAppUserBindingOwnerManageInfo.moreCondition = true;
                 }
+            },
+            _queryAuditAppUserBindingOwnerMethod:function () {
+                vc.component._listAuditAppUserBindingOwners(DEFAULT_PAGE, DEFAULT_ROWS);
             }
 
              

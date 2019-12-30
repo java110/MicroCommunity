@@ -13,6 +13,7 @@ public class ApiAuditAppUserBindingOwnerDataVo implements Serializable {
     private String idCard;
     private String link;
     private String state;
+    private String stateName;
     private String createTime;
 
     public String getAppUserId() {
@@ -87,5 +88,11 @@ public class ApiAuditAppUserBindingOwnerDataVo implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getStateName() {
+        return stateName;
+    }
 
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
 }
