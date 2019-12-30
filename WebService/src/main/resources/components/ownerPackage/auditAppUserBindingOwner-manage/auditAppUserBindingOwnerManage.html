@@ -92,10 +92,10 @@
                             <td class="text-center">{{auditAppUserBindingOwner.appUserName}}</td>
                             <td class="text-center">{{auditAppUserBindingOwner.idCard}}</td>
                             <td class="text-center">{{auditAppUserBindingOwner.link}}</td>
-                            <td class="text-center">{{auditAppUserBindingOwner.state}}</td>
+                            <td class="text-center">{{auditAppUserBindingOwner.stateName}}</td>
                             <td class="text-center">{{auditAppUserBindingOwner.createTime}}</td>
                             <td class="text-center">
-                                <div class="btn-group" v-if="auditAppUserBindingOwner.state == '1000'">
+                                <div class="btn-group" v-if="auditAppUserBindingOwner.state == '10000'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openAuditAppUserBindingOwnerModel(auditAppUserBindingOwner)">
                                         审核
