@@ -19,7 +19,7 @@
         },
         methods:{
             deleteServiceRegister:function(){
-                vc.component.deleteServiceRegisterInfo.communityId=vc.getCurrentCommunity().communityId;
+                //vc.component.deleteServiceRegisterInfo.communityId=vc.getCurrentCommunity().communityId;
                 vc.http.post(
                     'deleteServiceRegister',
                     'delete',
