@@ -5,7 +5,7 @@
 > 用户通过web端或APP查询业主成员信息
 
 ###### URL
-> [http://api.java110.com:8008/api/owner.queryOwnerMembers](http://api.java110.com:8008/api/owner.queryOwnerMembers)
+> [http://api.java110.com:8008/api/owner.listOwnerMachines](http://api.java110.com:8008/api/owner.listOwnerMachines)
 
 ###### 支持格式
 > JSON
@@ -26,7 +26,6 @@
 | :-: | :-: | :-: | :-: | :-: | :-: |
 |ownerId|1|String|30|业主ID|-|
 |communityId|1|String|30|小区ID|-|
-|ownerTypeCd|1|String|12|业主成员1002|-|
 
 ###### 返回协议
 

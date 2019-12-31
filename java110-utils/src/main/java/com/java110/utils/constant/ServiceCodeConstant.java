@@ -442,6 +442,11 @@ public class ServiceCodeConstant {
      */
     public static final String LIST_APPUSERBINDINGOWNERS = "owner.listAppUserBindingOwners";
 
+    /**
+     * 查询 业主门禁
+     */
+    public static final String LIST_OWNER_MACHINES = "owner.listOwnerMachines";
+
 
     /**
      * 修改 审核业主绑定
