@@ -16,6 +16,7 @@
             t.create_time createTime
         from city_area t
         where 1=1
+        and t.status_cd = '0'
         <if test="areaCode != null and areaCode !=''">
             and t.area_code = #{areaCode}
         </if>
@@ -30,6 +31,34 @@
         </if>
         <if test="parentAreaName != null and parentAreaName !=''">
             and t.parent_area_name like concat('%',#{parentAreaName},'%')
+        </if>
+    </select>
+
+    <select id="getProvCityArea" parameterType="Map" resultType="Map">
+        SELECT
+            par.parent_area_code provCode,
+            par.parent_area_name provName,
+            par.area_code cityCode,
+            par.area_name cityName,
+            chil.area_code areaCode,
+            chil.area_name areaName
+        FROM
+            city_area par,
+            city_area chil
+        WHERE
+            chil.parent_area_code = par.area_code
+        AND chil.area_level = '303'
+        and chil.status_cd = '0'
+        and par.status_cd = '0'
+        <if test="areaCode != null and areaCode !=''">
+            and chil.area_code = #{areaCode}
+        </if>
+        <if test="areaCodes != null">
+            and chil.area_code in
+            <foreach collection="areaCodes" open="(" close=")"
+                     separator=","  item="item">
+                #{item}
+            </foreach>
         </if>
     </select>
 

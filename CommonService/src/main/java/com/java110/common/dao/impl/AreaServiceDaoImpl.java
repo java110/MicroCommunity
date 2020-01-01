@@ -37,6 +37,22 @@ public class AreaServiceDaoImpl extends BaseServiceDao implements IAreaServiceDa
         return businessAppInfos;
     }
 
+    /**
+     * 查询省份 城市 区域
+     * @param info bId 信息
+     * @return 应用信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getProvCityArea(Map info) throws DAOException {
+
+        logger.debug("getProvCityArea 入参 info : {}",info);
+
+        List<Map> businessAppInfos = sqlSessionTemplate.selectList("areaServiceDaoImpl.getProvCityArea",info);
+
+        return businessAppInfos;
+    }
+
 
 
 }

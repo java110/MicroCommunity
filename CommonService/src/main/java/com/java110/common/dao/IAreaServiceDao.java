@@ -14,4 +14,12 @@ public interface IAreaServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getAreas(Map info) throws DAOException;
+
+    /**
+     * 查询省份 城市 区域
+     * @param info bId 信息
+     * @return 应用信息
+     * @throws DAOException DAO异常
+     */
+    public List<Map> getProvCityArea(Map info) throws DAOException;
 }

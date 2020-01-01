@@ -27,4 +27,12 @@ public class AreaInnerServiceSMOImpl extends BaseServiceSMO implements IAreaInne
 
         return areas;
     }
+
+    @Override
+    public List<AreaDto> getProvCityArea(@RequestBody AreaDto areaDto) {
+
+        List<AreaDto> areas = BeanConvertUtil.covertBeanList(areaServiceDaoImpl.getProvCityArea(BeanConvertUtil.beanCovertMap(areaDto)), AreaDto.class);
+
+        return areas;
+    }
 }

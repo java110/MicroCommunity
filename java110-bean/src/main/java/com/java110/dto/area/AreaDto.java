@@ -17,6 +17,7 @@ public class AreaDto extends PageDto implements Serializable {
 
     private int id;
     private String areaCode;
+    private String[] areaCodes;
     private String areaName;
     private String areaLevel;
     private String parentAreaCode;
@@ -24,6 +25,10 @@ public class AreaDto extends PageDto implements Serializable {
     private String lon;
     private String lat;
     private String statusCd = "0";
+    private String provCode;
+    private String provName;
+    private String cityCode;
+    private String cityName;
 
 
     public int getId() {
@@ -96,5 +101,45 @@ public class AreaDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getProvCode() {
+        return provCode;
+    }
+
+    public void setProvCode(String provCode) {
+        this.provCode = provCode;
+    }
+
+    public String getProvName() {
+        return provName;
+    }
+
+    public void setProvName(String provName) {
+        this.provName = provName;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String[] getAreaCodes() {
+        return areaCodes;
+    }
+
+    public void setAreaCodes(String[] areaCodes) {
+        this.areaCodes = areaCodes;
     }
 }
