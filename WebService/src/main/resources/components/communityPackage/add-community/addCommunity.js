@@ -103,7 +103,7 @@
 
                 //vc.component.addCommunityInfo.communityId = vc.getCurrentCommunity().communityId;
 
-                vc.component.addCommunityInfo.address = vc.component.addCommunityInfo.areaAddress+ vc.addCommunityInfo.address;
+                vc.component.addCommunityInfo.address = vc.component.addCommunityInfo.areaAddress+ vc.component.addCommunityInfo.address;
 
 
                 vc.http.post(
