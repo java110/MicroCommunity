@@ -2,6 +2,7 @@ package com.java110.web.components.assetImport;
 
 import com.java110.core.context.IPageData;
 import com.java110.front.controller.CallComponentController;
+import com.java110.web.smo.assetExport.IAssetExportSMO;
 import com.java110.web.smo.assetImport.IAssetImportSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,9 @@ public class AssetImportComponent {
     @Autowired
     private IAssetImportSMO assetImportSMOImpl;
 
+    @Autowired
+    private IAssetExportSMO assetExportSMOImpl;
+
     /**
      * 添加应用数据
      *
@@ -33,11 +37,30 @@ public class AssetImportComponent {
         return assetImportSMOImpl.importExcelData(pd,uploadFile);
     }
 
+    /**
+     * 资产导出
+     *
+     * @param pd
+     * @return
+     * @throws Exception
+     */
+    public ResponseEntity<Object> exitCommunityData(IPageData pd) throws Exception {
+        return assetExportSMOImpl.exportExcelData(pd);
+    }
+
     public IAssetImportSMO getAssetImportSMOImpl() {
         return assetImportSMOImpl;
     }
 
     public void setAssetImportSMOImpl(IAssetImportSMO assetImportSMOImpl) {
         this.assetImportSMOImpl = assetImportSMOImpl;
+    }
+
+    public IAssetExportSMO getAssetExportSMOImpl() {
+        return assetExportSMOImpl;
+    }
+
+    public void setAssetExportSMOImpl(IAssetExportSMO assetExportSMOImpl) {
+        this.assetExportSMOImpl = assetExportSMOImpl;
     }
 }

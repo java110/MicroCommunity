@@ -41,6 +41,7 @@ public class EditApplicationKeySMOImpl extends AbstractComponentSMO implements I
         Assert.hasKeyAndValue(paramIn, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(paramIn, "locationTypeCd", "必填，位置不能为空");
         Assert.hasKeyAndValue(paramIn, "locationObjId", "必填，未选择位置对象");
+        Assert.hasKeyAndValue(paramIn, "typeFlag", "必填，未选择钥匙类型");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_APPLICATION_KEY);

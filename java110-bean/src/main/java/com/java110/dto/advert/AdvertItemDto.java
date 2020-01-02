@@ -16,6 +16,7 @@ import java.util.Date;
 public class AdvertItemDto extends PageDto implements Serializable {
 
     private String itemTypeCd;
+    private String[] itemTypeCds;
     private String communityId;
     private String advertItemId;
     private String advertId;
@@ -91,5 +92,13 @@ public class AdvertItemDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getItemTypeCds() {
+        return itemTypeCds;
+    }
+
+    public void setItemTypeCds(String[] itemTypeCds) {
+        this.itemTypeCds = itemTypeCds;
     }
 }

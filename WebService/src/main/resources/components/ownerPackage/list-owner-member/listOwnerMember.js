@@ -27,8 +27,8 @@
                 var param = {
                     params:{
                         ownerId:vc.component.memberInfo._currentOwnerId,
-                        communityId:vc.getCurrentCommunity().communityId,
-                        ownerTypeCd:'1002'
+                        communityId:vc.getCurrentCommunity().communityId
+
                     }
                 };
              //发送get请求

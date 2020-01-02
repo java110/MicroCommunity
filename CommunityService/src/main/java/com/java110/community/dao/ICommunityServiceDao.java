@@ -1,6 +1,8 @@
 package com.java110.community.dao;
 
 
+import com.java110.dto.community.CommunityAttrDto;
+import com.java110.dto.community.CommunityDto;
 import com.java110.utils.exception.DAOException;
 
 import java.util.List;
@@ -237,5 +239,14 @@ public interface ICommunityServiceDao {
      * @return 小区数量
      */
     int queryCommunitysCount(Map info);
+
+    /**
+     * 查询小区属性
+     *
+     * @param info
+     * @return
+     */
+    int getCommunityAttrsCount(Map info);
+
 
 }

@@ -50,6 +50,8 @@ public abstract class AbstractApplicationKeyBusinessServiceDataFlowListener exte
         businessApplicationKeyInfo.put("state", businessApplicationKeyInfo.get("state"));
         businessApplicationKeyInfo.put("age", businessApplicationKeyInfo.get("age"));
         businessApplicationKeyInfo.put("communityId", businessApplicationKeyInfo.get("community_id"));
+        businessApplicationKeyInfo.put("typeFlag", businessApplicationKeyInfo.get("type_flag"));
+        businessApplicationKeyInfo.put("pwd", businessApplicationKeyInfo.get("pwd"));
 
         businessApplicationKeyInfo.remove("bId");
         businessApplicationKeyInfo.put("statusCd", statusCd);
@@ -88,6 +90,8 @@ public abstract class AbstractApplicationKeyBusinessServiceDataFlowListener exte
         currentApplicationKeyInfo.put("state", currentApplicationKeyInfo.get("state"));
         currentApplicationKeyInfo.put("age", currentApplicationKeyInfo.get("age"));
         currentApplicationKeyInfo.put("communityId", currentApplicationKeyInfo.get("community_id"));
+        currentApplicationKeyInfo.put("typeFlag", currentApplicationKeyInfo.get("type_flag"));
+        currentApplicationKeyInfo.put("pwd", currentApplicationKeyInfo.get("pwd"));
 
 
 

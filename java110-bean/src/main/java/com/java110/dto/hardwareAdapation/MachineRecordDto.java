@@ -18,6 +18,7 @@ public class MachineRecordDto extends PageDto implements Serializable {
     private String fileTime;
     private String machineCode;
     private String openTypeCd;
+    private String openTypeName;
     private String idCard;
     private String machineRecordId;
     private String machineId;
@@ -136,5 +137,13 @@ public class MachineRecordDto extends PageDto implements Serializable {
 
     public void setRecordTypeCd(String recordTypeCd) {
         this.recordTypeCd = recordTypeCd;
+    }
+
+    public String getOpenTypeName() {
+        return openTypeName;
+    }
+
+    public void setOpenTypeName(String openTypeName) {
+        this.openTypeName = openTypeName;
     }
 }

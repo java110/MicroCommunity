@@ -37,7 +37,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
     protected static final int DEFAULT_ORDER = 1;
     //默认序列
     protected static final int DEFAULT_SEQ = 1;
-    protected static final int MAX_ROW = 50;
+    protected static final int MAX_ROW = 10000;
 
     @Autowired
     private RestTemplate restTemplate;

@@ -129,7 +129,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         if (paramIn.containsKey("ownerId") && !paramIn.getString("ownerId").startsWith("-")) {
-            paramIn.put("ownerTypeCd", "1002");
+            //paramIn.put("ownerTypeCd", "1002");
         } else {
             paramIn.put("ownerTypeCd", "1001");
         }
@@ -171,7 +171,7 @@ public class OwnerServiceSMOImpl extends BaseComponentSMO implements IOwnerServi
         if (paramIn.getString("ownerId").equals(paramIn.getString("memberId"))) {
             paramIn.put("ownerTypeCd", "1001");
         } else {
-            paramIn.put("ownerTypeCd", "1002");
+            //paramIn.put("ownerTypeCd", "1002");
         }
         String communityId = paramIn.getString("communityId");
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);

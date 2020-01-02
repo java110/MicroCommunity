@@ -124,8 +124,8 @@
         t.owner_id,t.owner_id ownerId,t.b_id,t.b_id bId,
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
-        t.community_id communityId,t.id_card, t.id_card idCard,t.state
-        from building_owner t
+        t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName
+        from building_owner t,t_dict td
         <if test="roomId != null and roomId != ''">
             ,building_owner_room_rel borr
         </if>
@@ -146,6 +146,9 @@
                 #{item}
             </foreach>
         </if>
+        and td.table_name = 'building_owner'
+        and td.`table_columns` = 'owner_type_cd'
+        and td.status_cd = t.owner_type_cd
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -193,6 +196,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

@@ -20,12 +20,15 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -62,6 +65,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，位置不能为空");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "必填，未选择位置对象");
+        Assert.hasKeyAndValue(reqJson, "typeFlag", "必填，未选择钥匙类型");
 
     }
 
@@ -147,6 +151,13 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         businessApplicationKey.putAll(paramInJson);
         businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
         businessApplicationKey.put("state", applicationKeyDtos.get(0).getState());
+        if(!paramInJson.containsKey("pwd") || StringUtil.isEmpty(paramInJson.getString("pwd"))) {
+            businessApplicationKey.put("pwd", applicationKeyDtos.get(0).getPwd());
+        }
+        if("1100103".equals(paramInJson.getString("typeFlag"))){ // 临时访问密码,只设置成24小时
+            businessApplicationKey.put("endTime", applicationKeyDtos.get(0).getEndTime());
+        }
+        businessApplicationKey.put("typeFlag", applicationKeyDtos.get(0).getTypeCd());
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
         return business;
@@ -166,7 +177,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
         fileRelDto.setRelTypeCd("30000");
         fileRelDto.setObjId(paramInJson.getString("applicationKeyId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if(fileRelDtos == null || fileRelDtos.size() == 0){
+        if (fileRelDtos == null || fileRelDtos.size() == 0) {
             JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
             business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
@@ -194,6 +205,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
 
     }
+
     public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {
         return machineInnerServiceSMOImpl;
     }

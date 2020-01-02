@@ -597,4 +597,9 @@ public class ServiceCodeConstant {
      */
     public static final String LIST_AREAS = "area.listAreas";
 
+
+    //查询停车位
+    public static final String SERVICE_CODE_QUERY_PARKING_SPACE_CAR = "parkingSpace.queryParkingSpaceCars";
+
+
 }

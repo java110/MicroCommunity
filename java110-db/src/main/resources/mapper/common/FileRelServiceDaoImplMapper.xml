@@ -91,6 +91,13 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         <if test="relTypeCd !=null and relTypeCd != ''">
             and t.rel_type_cd= #{relTypeCd}
         </if>
+        <if test="relTypeCds !=null">
+            and t.rel_type_cd in
+            <foreach collection="relTypeCds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
         <if test="saveWay !=null and saveWay != ''">
             and t.save_way= #{saveWay}
         </if>
@@ -157,6 +164,13 @@ rel_type_cd,save_way,operate,file_rel_id,file_real_name,obj_id,file_save_name,b_
         where 1 =1
         <if test="relTypeCd !=null and relTypeCd != ''">
             and t.rel_type_cd= #{relTypeCd}
+        </if>
+        <if test="relTypeCds !=null">
+            and t.rel_type_cd in
+            <foreach collection="relTypeCds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
         </if>
         <if test="saveWay !=null and saveWay != ''">
             and t.save_way= #{saveWay}

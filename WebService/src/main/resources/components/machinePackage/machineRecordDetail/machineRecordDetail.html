@@ -8,6 +8,13 @@
                     <div>
                         <div>
                             <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">开门记录ID</label>
+                                <div class="col-sm-10">
+                                    <input v-model="machineRecordDetailInfo.machineRecordId" type="text"
+                                           placeholder="必填，请填写开门记录ID" readonly class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">设备编码</label>
                                 <div class="col-sm-10">
                                     <input v-model="machineRecordDetailInfo.machineCode" type="text"
@@ -49,6 +56,13 @@
                                            class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row" v-if="machineRecordDetailInfo.openTypeCd == '1000'">
+                                <label class="col-sm-2 col-form-label">人脸照片</label>
+                                <div class="col-sm-10">
+                                    <image width="120px" height="140px" v-bind:src="machineRecordDetailInfo.photo" @error="errorLoadImg"/>
+                                </div>
+                            </div>
+
 
                             <div class="ibox-content">
                                 <button type="button" class="btn btn-warning float-right"

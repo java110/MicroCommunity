@@ -65,11 +65,12 @@
             _openAddApplicationKeyModal: function () {
                 //vc.emit('addApplicationKey', 'openAddApplicationKeyModal', {});
                 vc.component.applicationKeyManageInfo.showComponent = 'addApplicationKey';
+                vc.emit('addApplicationKey', "_initAddApplicationKeyData", {});
             },
             _openEditApplicationKeyModel: function (_applicationKey) {
                 vc.emit('editApplicationKey', 'openEditApplicationKeyModal', _applicationKey);
                 vc.component.applicationKeyManageInfo.showComponent = 'editApplicationKey';
-
+                vc.emit('editApplicationKey', "_initEditApplicationKeyData", {});
             },
             _openDeleteApplicationKeyModel: function (_applicationKey) {
                 vc.emit('deleteApplicationKey', 'openDeleteApplicationKeyModal', _applicationKey);

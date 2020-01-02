@@ -17,13 +17,17 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 
 
 import com.java110.core.annotation.Java110Listener;
+import com.java110.utils.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 保存小区侦听
@@ -54,6 +58,7 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "必填，位置不能为空");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "必填，未选择位置对象");
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
+        Assert.hasKeyAndValue(reqJson, "typeFlag", "必填，请选择钥匙类型");
 
     }
 
@@ -165,9 +170,29 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
         businessApplicationKey.put("applicationKeyId", "-1");
         businessApplicationKey.put("state", "10002");
+        businessApplicationKey.put("pwd",this.getRandom());
+        if("1100103".equals(paramInJson.getString("typeFlag"))){ // 临时访问密码,只设置成24小时
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.HOUR, 24);
+            businessApplicationKey.put("endTime", DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        }
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
         return business;
+    }
+
+    /**
+     * 获取随机数
+     *
+     * @return
+     */
+    private  String getRandom() {
+        Random random = new Random();
+        String result = "";
+        for (int i = 0; i < 6; i++) {
+            result += random.nextInt(10);
+        }
+        return result;
     }
 
     /**

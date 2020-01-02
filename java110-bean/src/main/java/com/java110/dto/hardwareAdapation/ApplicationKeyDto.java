@@ -40,6 +40,9 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
     private String roomId;
     private String roomNum;
     private String bId;
+    private String pwd;
+    private String typeFlag;
+    private String typeFlagName;
 
 
     private Date createTime;
@@ -264,5 +267,29 @@ public class ApplicationKeyDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getTypeFlag() {
+        return typeFlag;
+    }
+
+    public void setTypeFlag(String typeFlag) {
+        this.typeFlag = typeFlag;
+    }
+
+    public String getTypeFlagName() {
+        return typeFlagName;
+    }
+
+    public void setTypeFlagName(String typeFlagName) {
+        this.typeFlagName = typeFlagName;
     }
 }

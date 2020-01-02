@@ -7,9 +7,10 @@
     <!-- 保存钥匙申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessApplicationKeyInfo" parameterType="Map">
            insert into business_application_key(
-application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,start_time,state,community_id,b_id,age
+application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,start_time,state,community_id,b_id,age,type_flag,pwd
 ) values (
-#{applicationKeyId},#{idCard},#{sex},#{endTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},#{startTime},#{state},#{communityId},#{bId},#{age}
+#{applicationKeyId},#{idCard},#{sex},#{endTime},#{machineId},#{operate},#{typeCd},#{name},#{tel},
+#{startTime},#{state},#{communityId},#{bId},#{age},#{typeFlag},#{pwd}
 )
        </insert>
 
@@ -19,7 +20,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         select t.application_key_id,t.application_key_id applicationKeyId,t.id_card,t.id_card
         idCard,t.sex,t.end_time,t.end_time endTime,t.machine_id,t.machine_id machineId,t.operate,t.type_cd,t.type_cd
         typeCd,t.name,t.tel,t.start_time,t.start_time startTime,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.age
+        communityId,t.b_id,t.b_id bId,t.age,t.type_flag,t.pwd
         from business_application_key t
         where 1 =1
         <if test="applicationKeyId !=null and applicationKeyId != ''">
@@ -64,6 +65,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="age !=null and age != ''">
             and t.age= #{age}
         </if>
+        <if test="typeFlag !=null and typeFlag != ''">
+            and t.type_flag= #{typeFlag}
+        </if>
+        <if test="pwd !=null and pwd != ''">
+            and t.pwd= #{pwd}
+        </if>
 
     </select>
 
@@ -71,10 +78,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 保存钥匙申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveApplicationKeyInfoInstance" parameterType="Map">
         insert into application_key(
-        application_key_id,id_card,sex,status_cd,end_time,machine_id,type_cd,name,tel,start_time,state,community_id,b_id,age
+        application_key_id,id_card,sex,status_cd,end_time,machine_id,type_cd,name,tel,start_time,state,community_id,b_id,age,type_flag,pwd
         ) select
-        t.application_key_id,t.id_card,t.sex,'0',t.end_time,t.machine_id,t.type_cd,t.name,t.tel,t.start_time,t.state,t.community_id,t.b_id,t.age
-        from business_application_key t where 1=1
+        t.application_key_id,t.id_card,t.sex,'0',t.end_time,t.machine_id,t.type_cd,t.name,t.tel,t.start_time,t.state,t.community_id,t.b_id,t.age,
+        t.type_flag,t.pwd
+        from business_application_key t
+        where 1=1
         <if test="applicationKeyId !=null and applicationKeyId != ''">
             and t.application_key_id= #{applicationKeyId}
         </if>
@@ -115,6 +124,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="age !=null and age != ''">
             and t.age= #{age}
         </if>
+        <if test="typeFlag !=null and typeFlag != ''">
+            and t.type_flag= #{typeFlag}
+        </if>
+        <if test="pwd !=null and pwd != ''">
+            and t.pwd= #{pwd}
+        </if>
 
     </insert>
 
@@ -126,8 +141,8 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         machineId,t.type_cd,t.type_cd typeCd,t.name,t.tel,t.start_time,t.start_time
         startTime,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.age,
         m.`location_type_cd` locationTypeCd,m.`location_obj_id` locationObjId,
-        td.name typeName,td1.name stateName
-        FROM application_key t,machine m,t_dict td,t_dict td1
+        td.name typeName,td1.name stateName,t.type_flag,t.type_flag typeFlag,t.pwd,td2.name typeFlagName
+        FROM application_key t,machine m,t_dict td,t_dict td1,t_dict td2
         WHERE 1 =1
         AND t.type_cd=td.status_cd
         AND td.table_name='application_key'
@@ -135,6 +150,9 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         AND t.state = td1.status_cd
         AND td1.table_name='application_key'
         AND td1.table_columns='state'
+        AND t.type_flag = td2.status_cd
+        AND td2.table_name='application_key'
+        AND td2.table_columns='type_flag'
 
         AND t.machine_id = m.machine_id
         AND m.status_cd = '0'
@@ -151,7 +169,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
             and t.status_cd= #{statusCd}
         </if>
         <if test="endTime !=null  ">
-            and t.end_time= #{endTime}
+            and t.end_time &gt; #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -179,6 +197,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
+        </if>
+        <if test="typeFlag !=null and typeFlag != ''">
+            and t.type_flag= #{typeFlag}
+        </if>
+        <if test="pwd !=null and pwd != ''">
+            and t.pwd= #{pwd}
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -226,6 +250,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         <if test="age !=null and age != ''">
             , t.age= #{age}
         </if>
+        <if test="typeFlag !=null and typeFlag != ''">
+            , t.type_flag= #{typeFlag}
+        </if>
+        <if test="pwd !=null and pwd != ''">
+            , t.pwd= #{pwd}
+        </if>
         where 1=1
         <if test="applicationKeyId !=null and applicationKeyId != ''">
             and t.application_key_id= #{applicationKeyId}
@@ -239,7 +269,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
     <!-- 查询钥匙申请数量 add by wuxw 2018-07-03 -->
     <select id="queryApplicationKeysCount" parameterType="Map" resultType="Map">
         select count(1) count
-        FROM application_key t,machine m,t_dict td,t_dict td1
+        FROM application_key t,machine m,t_dict td,t_dict td1,t_dict td2
         WHERE 1 =1
         AND t.type_cd=td.status_cd
         AND td.table_name='application_key'
@@ -247,6 +277,9 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         AND t.state = td1.status_cd
         AND td1.table_name='application_key'
         AND td1.table_columns='state'
+        AND t.type_flag = td2.status_cd
+        AND td2.table_name='application_key'
+        AND td2.table_columns='type_flag'
         and t.machine_id = m.machine_id
         and m.status_cd = '0'
         <if test="applicationKeyId !=null and applicationKeyId != ''">
@@ -262,7 +295,7 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
             and t.status_cd= #{statusCd}
         </if>
         <if test="endTime !=null">
-            and t.end_time= #{endTime}
+            and t.end_time &gt; #{endTime}
         </if>
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -291,6 +324,12 @@ application_key_id,id_card,sex,end_time,machine_id,operate,type_cd,name,tel,star
         </if>
         <if test="age !=null and age != ''">
             and t.age= #{age}
+        </if>
+        <if test="typeFlag !=null and typeFlag != ''">
+            and t.type_flag= #{typeFlag}
+        </if>
+        <if test="pwd !=null and pwd != ''">
+            and t.pwd= #{pwd}
         </if>
 
 

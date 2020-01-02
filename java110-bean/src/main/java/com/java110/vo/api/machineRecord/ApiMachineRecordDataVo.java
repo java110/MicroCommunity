@@ -10,6 +10,7 @@ public class ApiMachineRecordDataVo implements Serializable {
     private String machineId;
     private String name;
     private String openTypeCd;
+    private String openTypeName;
     private String tel;
     private String idCard;
     private String recordTypeCd;
@@ -77,5 +78,13 @@ public class ApiMachineRecordDataVo implements Serializable {
 
     public void setRecordTypeCd(String recordTypeCd) {
         this.recordTypeCd = recordTypeCd;
+    }
+
+    public String getOpenTypeName() {
+        return openTypeName;
+    }
+
+    public void setOpenTypeName(String openTypeName) {
+        this.openTypeName = openTypeName;
     }
 }

@@ -254,7 +254,7 @@
                     return;
                 }
                 if (!vc.component.editAdvertValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 
@@ -280,12 +280,12 @@
                             vc.emit('advertManage', 'listAdvert', {});
                             return;
                         }
-                        vc.message(json);
+                        vc.toast(json);
                     },
                     function (errInfo, error) {
                         console.log('请求失败处理');
 
-                        vc.message(errInfo);
+                        vc.toast(errInfo);
                     });
             },
             _loadAdvertItem: function () {
@@ -312,10 +312,11 @@
                 //判断属性中是否有照片
                 _advertItems.forEach(function (_item) {
                         vc.component.editAdvertInfo.viewType = _item.itemTypeCd;
-
+                        var _photos = [];
                         if (_item.itemTypeCd == '8888') {
-                            vc.component.editAdvertInfo.photos.push(_item.url);
-                            vc.emit('editAdvert', 'uploadImage', 'notifyPhotos', vc.component.editAdvertInfo.photos);
+                            //vc.component.editAdvertInfo.photos.push(_item.url);
+                            _photos.push(_item.url);
+                            vc.emit('editAdvert', 'uploadImage', 'notifyPhotos', _photos);
                         } else {
                             vc.component.editAdvertInfo.vedioName = _item.url;
                             vc.emit('editAdvert', 'uploadVedio', 'notifyVedio', _item.url);

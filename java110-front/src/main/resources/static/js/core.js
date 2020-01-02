@@ -352,6 +352,7 @@
 })(window, window.vc);
 
 /**
+ * vc.toast("");
  时间处理工具类
  **/
 (function (vc) {

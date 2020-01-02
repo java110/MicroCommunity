@@ -1,72 +1,70 @@
 /**
-    权限组
-**/
-(function(vc){
+ 权限组
+ **/
+(function (vc) {
 
     vc.extends({
-        data:{
-            assetImportInfo:{
+        data: {
+            assetImportInfo: {
                 communityId: vc.getCurrentCommunity().communityId,
-                excelTemplate:'',
-                remark:""
+                excelTemplate: '',
+                remark: ""
             }
         },
 
-        _initMethod:function(){
+        _initMethod: function () {
 
         },
-        _initEvent:function(){
+        _initEvent: function () {
 
         },
-        methods:{
-            assetImportValidate:function(){
-                    return vc.validate.validate({
-                            assetImportInfo:vc.component.assetImportInfo
-                        },{
+        methods: {
+            assetImportValidate: function () {
+                return vc.validate.validate({
+                    assetImportInfo: vc.component.assetImportInfo
+                }, {
 
-                            'assetImportInfo.excelTemplate':[
-                                {
-                                    limit:"required",
-                                    param:"",
-                                    errInfo:"文件不能为空"
-                                }
-                            ],
-                            'assetImportInfo.communityId':[
-                                {
-                                    limit:"required",
-                                    param:"",
-                                    errInfo:"还未入驻小区，请先入驻小区"
-                                }
-                            ]
-                        });
+                    'assetImportInfo.excelTemplate': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "文件不能为空"
+                        }
+                    ],
+                    'assetImportInfo.communityId': [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "还未入驻小区，请先入驻小区"
+                        }
+                    ]
+                });
             },
-            _openDownloadHcExcelTemplate:function(){
+            _openDownloadHcExcelTemplate: function () {
                 //下载 模板
                 vc.jumpToPage('/import/hc.xlsx')
             },
-            getExcelTemplate:function(e){
+            getExcelTemplate: function (e) {
                 //console.log("getExcelTemplate 开始调用")
-               vc.component.assetImportInfo.excelTemplate = e.target.files[0];
-
-
+                vc.component.assetImportInfo.excelTemplate = e.target.files[0];
             },
-            _importData:function(){
+            _importData: function () {
 
-                if(!vc.component.assetImportValidate()){
-                    return ;
+                if (!vc.component.assetImportValidate()) {
+                    return;
                 }
                 // 导入数据
                 if (!vc.component.checkFileType(vc.component.assetImportInfo.excelTemplate.name.split('.')[1])) {
                     vc.message('不是有效的Excel格式');
-                    return ;
+                    return;
                 }
                 if (!vc.component.checkFileSize(vc.component.assetImportInfo.excelTemplate.size)) {
                     vc.message('Excel文件大小不能超过2M');
-                    return ;
+                    return;
                 }
                 var param = new FormData();
                 param.append("uploadFile", vc.component.assetImportInfo.excelTemplate);
-                param.append('communityId',vc.component.assetImportInfo.communityId);
+                param.append('communityId', vc.component.assetImportInfo.communityId);
 
 
                 vc.http.upload(
@@ -74,26 +72,58 @@
                     'importData',
                     param,
                     {
-                        emulateJSON:true,
+                        emulateJSON: true,
                         //添加请求头
                         headers: {
                             "Content-Type": "multipart/form-data"
                         }
-                     },
-                     function(json,res){
+                    },
+                    function (json, res) {
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
-                        if(res.status == 200){
+                        if (res.status == 200) {
                             //关闭model
                             vc.message("处理成功");
                             vc.jumpToPage('/flow/ownerFlow')
-                            return ;
+                            return;
                         }
                         vc.message(json);
-                     },
-                     function(errInfo,error){
+                    },
+                    function (errInfo, error) {
                         console.log('请求失败处理');
                         vc.message(errInfo);
-                     });
+                    });
+            },
+            _exitCommunityData: function () {
+                vc.jumpToPage('/callComponent/assetImport/exitCommunityData?communityId='+vc.getCurrentCommunity().communityId);
+                /*var param = {
+                    params:{
+                        communityId: vc.getCurrentCommunity().communityId
+                    }
+                };
+                vc.http.get(
+                    'assetImport',
+                    'exitCommunityData',
+                    param,
+                    {
+                        emulateJSON: true,
+                        //添加请求头
+                        /!*headers: {
+                            "Content-Type": "multipart/form-data"
+                        }*!/
+                    },
+                    function (json, res) {
+                        //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
+                        if (res.status == 200) {
+                            //关闭model
+                            vc.toast("导出成功");
+                            return;
+                        }
+                        vc.message(json);
+                    },
+                    function (errInfo, error) {
+                        console.log('请求失败处理');
+                        vc.message(errInfo);
+                    });*/
             },
             checkFileType: function (fileType) {
                 const acceptTypes = ['xls', 'xlsx'];

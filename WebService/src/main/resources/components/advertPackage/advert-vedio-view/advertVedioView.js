@@ -84,12 +84,13 @@
                     $("#videoView").hide();
                     $("#imgView").show();
                     curr++;
-                    if (curr >= vLen) {
-                        curr = 0; //重新循环播放
-                        vc.component._loadAdvertVedioData();
-                    }
                     // console.log("当前图片地址：1" );
                     setTimeout(function () {
+                        if (curr >= vLen) {
+                            curr = 0; //重新循环播放
+                            vc.component._loadAdvertVedioData();
+                            return;
+                        }
                         console.log("当前图片地址：2" + vList[curr]);
                         vc.component.handleImgVideoUrl(_imgsAndVideos);
                     }, _imagePlayTime);
@@ -113,11 +114,13 @@
                         //$('#videoView').get(0).pause();
                         console.log("当前图片地址：" + url);
                         curr++;
-                        if (curr >= vLen) {
-                            curr = 0; //重新循环播放
-                            vc.component._loadAdvertVedioData();
-                        }
+
                         setTimeout(function () {
+                            if (curr >= vLen) {
+                                curr = 0; //重新循环播放
+                                vc.component._loadAdvertVedioData();
+                                return;
+                            }
                             vc.component.handleImgVideoUrl(_imgsAndVideos);
                         }, _imagePlayTime);
 

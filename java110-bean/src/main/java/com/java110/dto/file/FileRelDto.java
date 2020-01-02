@@ -16,6 +16,7 @@ import java.util.Date;
 public class FileRelDto extends PageDto implements Serializable {
 
     private String relTypeCd;
+    private String[] relTypeCds;
     private String saveWay;
     private String fileRelId;
     private String fileRealName;
@@ -91,5 +92,13 @@ public class FileRelDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getRelTypeCds() {
+        return relTypeCds;
+    }
+
+    public void setRelTypeCds(String[] relTypeCds) {
+        this.relTypeCds = relTypeCds;
     }
 }

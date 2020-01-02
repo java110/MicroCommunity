@@ -207,8 +207,7 @@
                     return;
                 }
                 if (!vc.component.addAdvertValidate()) {
-                    vc.message(vc.validate.errInfo);
-
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
                 if (vc.component.addAdvertInfo.viewType == '8888') {
@@ -243,13 +242,13 @@
 
                             return;
                         }
-                        vc.message(json);
+                        vc.toast(json);
 
                     },
                     function (errInfo, error) {
                         console.log('请求失败处理');
 
-                        vc.message(errInfo);
+                        vc.toast(errInfo);
 
                     });
             },

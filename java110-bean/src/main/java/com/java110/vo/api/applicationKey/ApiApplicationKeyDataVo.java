@@ -27,6 +27,9 @@ public class ApiApplicationKeyDataVo implements Serializable {
     private String roomNum;
     private String state;
     private String stateName;
+    private String pwd;
+    private String typeFlag;
+    private String typeFlagName;
 
     public String getApplicationKeyId() {
         return applicationKeyId;
@@ -202,5 +205,29 @@ public class ApiApplicationKeyDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getTypeFlag() {
+        return typeFlag;
+    }
+
+    public void setTypeFlag(String typeFlag) {
+        this.typeFlag = typeFlag;
+    }
+
+    public String getTypeFlagName() {
+        return typeFlagName;
+    }
+
+    public void setTypeFlagName(String typeFlagName) {
+        this.typeFlagName = typeFlagName;
     }
 }

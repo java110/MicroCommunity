@@ -12,6 +12,7 @@
                             <th data-hide="phone">名称</th>
                             <th data-hide="phone">性别</th>
                             <th data-hide="phone">年龄</th>
+                            <th data-hide="phone">类型</th>
                             <th data-hide="phone">身份证</th>
                             <th data-hide="phone">联系方式</th>
                             <th data-hide="phone">创建员工</th>
@@ -34,6 +35,9 @@
                             </td>
                             <td>
                                 {{owner.age}}
+                            </td>
+                            <td>
+                                {{owner.ownerTypeName}}
                             </td>
                             <td>
                                 {{owner.idCard}}
@@ -73,6 +77,7 @@
     <!-- 删除员工权限 -->
     <vc:create name="editOwner"
                notifyLoadDataComponentName="listOwnerMember"
+               componentTitle="成员"
     ></vc:create>
     <vc:create name="deleteOwner"
                notifyLoadDataComponentName="listOwnerMember"

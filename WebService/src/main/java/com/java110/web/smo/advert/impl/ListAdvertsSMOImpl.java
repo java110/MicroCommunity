@@ -7,6 +7,7 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.web.smo.advert.IListAdvertsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ListAdvertsSMOImpl extends AbstractComponentSMO implements IListAdv
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
+        Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区信息");
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_ADVERT);
     }

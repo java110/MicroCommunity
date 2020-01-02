@@ -85,9 +85,7 @@
                     >
                         <thead>
                         <tr>
-                            <th class="text-center">开门记录ID</th>
                             <th class="text-center">设备编码</th>
-                            <th class="text-center">设备ID</th>
                             <th class="text-center">被呼叫用户名称</th>
                             <th class="text-center">被呼叫方式</th>
                             <th class="text-center">被呼叫用户手机号</th>
@@ -97,11 +95,9 @@
                         </thead>
                         <tbody>
                         <tr v-for="machineRecord in machineVistorPhotoManageInfo.machineRecords">
-                            <td class="text-center">{{machineRecord.machineRecordId}}</td>
                             <td class="text-center">{{machineRecord.machineCode}}</td>
-                            <td class="text-center">{{machineRecord.machineId}}</td>
                             <td class="text-center">{{machineRecord.name}}</td>
-                            <td class="text-center">{{machineRecord.openTypeCd}}</td>
+                            <td class="text-center">{{machineRecord.openTypeName}}</td>
                             <td class="text-center">{{machineRecord.tel}}</td>
                             <td class="text-center">{{machineRecord.idCard}}</td>
                             <td class="text-center">

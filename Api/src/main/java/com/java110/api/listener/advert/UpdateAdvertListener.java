@@ -9,8 +9,11 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.advert.IAdvertInnerServiceSMO;
 import com.java110.core.smo.advert.IAdvertItemInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.dto.advert.AdvertDto;
+import com.java110.dto.advert.AdvertItemDto;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -42,6 +45,9 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -87,7 +93,27 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
         //添加单元信息
         businesses.add(updateAdvert(reqJson, context));
-       /* if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
+
+        AdvertItemDto advertItemDto = new AdvertItemDto();
+        advertItemDto.setAdvertId(reqJson.getString("advertId"));
+        advertItemDto.setItemTypeCds(new String[]{"8888", "9999"});
+        List<AdvertItemDto> advertItemDtos = advertItemInnerServiceSMOImpl.queryAdvertItems(advertItemDto);
+
+        //删除照片或视频
+        for (AdvertItemDto tmpAdvertItemDto : advertItemDtos) {
+            businesses.add(delAdvertItemPhotoOrVideo(tmpAdvertItemDto, context));
+        }
+
+        //删除文件和 广告的关系
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(reqJson.getString("advertId"));
+        fileRelDto.setRelTypeCds(new String[]{"40000","50000"});
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        for (FileRelDto tmpFileRelDto : fileRelDtos) {
+            businesses.add(delAdvertFileRel(tmpFileRelDto, context));
+        }
+
+        if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
                 businesses.add(addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex)));
@@ -97,7 +123,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         } else {
             businesses.add(addAdvertItemVedio(reqJson, context));
             businesses.add(addAdvertFileRel(reqJson, context, "50000"));
-        }*/
+        }
 
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
@@ -108,6 +134,26 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 删除所有的照片或视频信息
+     *
+     * @param advertItemDto
+     * @param context
+     * @return
+     */
+    private JSONObject delAdvertItemPhotoOrVideo(AdvertItemDto advertItemDto, DataFlowContext context) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ADVERT_ITEM);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessAdvertItem = new JSONObject();
+        businessAdvertItem.put("advertItemId", advertItemDto.getAdvertItemId());
+        businessAdvertItem.put("communityId", advertItemDto.getCommunityId());
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessAdvertItem", businessAdvertItem);
+        return business;
     }
 
     private JSONObject addAdvertItemPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext, String photo) {
@@ -131,7 +177,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessAdvertItem = new JSONObject();
         businessAdvertItem.put("advertId", paramInJson.getString("advertId"));
@@ -163,7 +209,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessAdvertItem = new JSONObject();
         businessAdvertItem.put("advertId", paramInJson.getString("advertId"));
@@ -201,6 +247,26 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         businessUnit.put("fileSaveName", paramInJson.getString("advertPhotoId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
+        return business;
+    }
+
+    /**
+     * 删除广告文件关系
+     *
+     * @param fileRelDto      接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject delAdvertFileRel(FileRelDto fileRelDto, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FILE_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("fileRelId", fileRelDto.getFileRelId());
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
         return business;
     }
 

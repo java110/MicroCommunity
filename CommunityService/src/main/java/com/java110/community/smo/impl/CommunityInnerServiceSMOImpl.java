@@ -1,6 +1,7 @@
 package com.java110.community.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.community.CommunityAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +56,19 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
     }
 
     @Override
-    public List<CommunityDto> queryCommunitys(@RequestBody  CommunityDto communityDto) {
+    public List<CommunityAttrDto> getCommunityAttrs(@RequestBody CommunityAttrDto communityAttrDto) {
+        return BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityAttrs(BeanConvertUtil.beanCovertMap(communityAttrDto)), CommunityAttrDto.class);
+    }
+
+    @Override
+    public int getCommunityAttrsCount(@RequestBody CommunityAttrDto communityAttrDto) {
+        logger.debug("queryCommunityAttrsCount：{}", JSONObject.toJSONString(communityAttrDto));
+
+        return communityServiceDaoImpl.getCommunityAttrsCount(BeanConvertUtil.beanCovertMap(communityAttrDto));
+    }
+
+    @Override
+    public List<CommunityDto> queryCommunitys(@RequestBody CommunityDto communityDto) {
 
         //校验是否传了 分页信息
 

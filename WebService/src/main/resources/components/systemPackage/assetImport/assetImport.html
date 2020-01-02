@@ -3,12 +3,18 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>资产导入</h5>
+                    <h5>资产信息</h5>
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm"
                                 v-on:click="_openDownloadHcExcelTemplate()">
                             <i class="glyphicon glyphicon-download-alt"></i>
                             模板
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-sm"
+                                v-on:click="_exitCommunityData()">
+                            <i class="glyphicon glyphicon-floppy-save"></i>
+                            资产导出
                         </button>
                     </div>
                 </div>

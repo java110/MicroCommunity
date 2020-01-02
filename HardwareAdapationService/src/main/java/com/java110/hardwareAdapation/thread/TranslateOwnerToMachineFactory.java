@@ -17,5 +17,10 @@ public class TranslateOwnerToMachineFactory {
         TranslateApplicationKeyToMachine applicationKeyMachine = new TranslateApplicationKeyToMachine(true);
         Thread translateApplicationKeyToMachineThread = new Thread(applicationKeyMachine,"TranslateApplicationKeyToMachineThread");
         translateApplicationKeyToMachineThread.start();
+
+        //定时修改申请钥匙的密码
+        UpdateApplicationKeyPwd updateApplicationKeyPwd = new UpdateApplicationKeyPwd(true);
+        Thread updateApplicationKeyPwdThread = new Thread(updateApplicationKeyPwd,"UpdateApplicationKeyPwdThread");
+        updateApplicationKeyPwdThread.start();
     }
 }

@@ -1,6 +1,7 @@
 package com.java110.community.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.community.CommunityAttrDto;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
@@ -465,4 +466,17 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
 
         return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
     }
+
+    @Override
+    public int getCommunityAttrsCount(Map info) {
+        logger.debug("查询小区数据 入参 info : {}",info);
+
+        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityAttrsCount", info);
+        if (businessCommunityInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
+    }
+
 }

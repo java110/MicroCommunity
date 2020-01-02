@@ -25,16 +25,21 @@
                 locationTypeCd: '',
                 locationObjId: '',
                 roomName: '',
-                photo:'',
+                typeFlag:'',
+                photo: '',
+                mediaStreamTrack: null
             }
         },
         _initMethod: function () {
             vc.component._initAddApplicationKeyDateInfo();
-            vc.component._initAddApplicationKeyMedia();
+            //vc.component._initAddApplicationKeyMedia();
         },
         _initEvent: function () {
             vc.on('addApplicationKey', 'openAddApplicationKeyModal', function () {
                 $('#addApplicationKeyModel').modal('show');
+            });
+            vc.on('addApplicationKey', "_initAddApplicationKeyData", function () {
+                vc.component._initAddApplicationKeyMedia();
             });
             vc.on("addApplicationKey", "notify", function (_param) {
                 if (_param.hasOwnProperty("floorId")) {
@@ -45,7 +50,7 @@
                     vc.component.addApplicationKeyInfo.unitId = _param.unitId;
                 }
 
-                if(_param.hasOwnProperty("roomId")){
+                if (_param.hasOwnProperty("roomId")) {
                     vc.component.addApplicationKeyInfo.roomId = _param.roomId;
                 }
             });
@@ -267,31 +272,37 @@
                     locationTypeCd: '',
                     locationObjId: '',
                     roomName: '',
-                    photo:'',
-                    videoPlaying:false
-
+                    photo: '',
+                    videoPlaying: false,
+                    mediaStreamTrack: null,
+                    typeFlag:'',
                 };
             },
             _closeAddApplicationKeyView: function () {
                 vc.emit('applicationKeyManage', 'listApplicationKey', {});
+                //关闭拍照摄像头
+                if (vc.component.addApplicationKeyInfo.mediaStreamTrack != null) {
+                    vc.component.addApplicationKeyInfo.mediaStreamTrack.stop();
+                }
             },
-            _addUserMedia:function() {
+            _addUserMedia: function () {
                 return navigator.getUserMedia = navigator.getUserMedia ||
                     navigator.webkitGetUserMedia ||
                     navigator.mozGetUserMedia ||
                     navigator.msGetUserMedia || null;
             },
-            _initAddApplicationKeyMedia:function () {
-                if(vc.component._addUserMedia()){
+            _initAddApplicationKeyMedia: function () {
+                if (vc.component._addUserMedia()) {
                     vc.component.addApplicationKeyInfo.videoPlaying = false;
                     var constraints = {
                         video: true,
                         audio: false
                     };
-                    var video = document.getElementById('photo');
-                    var media = navigator.getUserMedia(constraints, function (stream) {
+                   var video = document.getElementById('AddApplicationKeyPhoto');
+                   var media = navigator.getUserMedia(constraints, function (stream) {
                         var url = window.URL || window.webkitURL;
                         //video.src = url ? url.createObjectURL(stream) : stream;
+                       vc.component.addApplicationKeyInfo.mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
                         try {
                             video.src = url ? url.createObjectURL(stream) : stream;
                         } catch (error) {
@@ -303,14 +314,14 @@
                         console.log("ERROR");
                         console.log(error);
                     });
-                }else{
+                } else {
                     console.log("初始化视频失败");
                 }
             },
-            _takePhoto:function () {
+            _takePhoto: function () {
                 if (vc.component.addApplicationKeyInfo.videoPlaying) {
-                    var canvas = document.getElementById('canvas');
-                    var video = document.getElementById('photo');
+                    var canvas = document.getElementById('AddApplicationKeyCanvas');
+                    var video = document.getElementById('AddApplicationKeyPhoto');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
@@ -319,21 +330,21 @@
                     //document.getElementById('photo').setAttribute('src', data);
                 }
             },
-            _uploadPhoto:function(event){
+            _uploadPhoto: function (event) {
                 $("#uploadApplicationKeyPhoto").trigger("click")
             },
-            _choosePhoto:function(event){
+            _choosePhoto: function (event) {
                 var photoFiles = event.target.files;
                 if (photoFiles && photoFiles.length > 0) {
                     // 获取目前上传的文件
                     var file = photoFiles[0];// 文件大小校验的动作
-                    if(file.size > 1024 * 1024 * 1) {
+                    if (file.size > 1024 * 1024 * 1) {
                         vc.toast("图片大小不能超过 2MB!")
                         return false;
                     }
                     var reader = new FileReader(); //新建FileReader对象
                     reader.readAsDataURL(file); //读取为base64
-                    reader.onloadend = function(e) {
+                    reader.onloadend = function (e) {
                         vc.component.addApplicationKeyInfo.photo = reader.result;
                     }
                 }

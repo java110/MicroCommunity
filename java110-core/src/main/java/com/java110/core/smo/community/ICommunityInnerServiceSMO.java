@@ -3,6 +3,7 @@ package com.java110.core.smo.community;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,4 +61,24 @@ public interface ICommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/getCommunityMemberCount", method = RequestMethod.POST)
     int getCommunityMemberCount(@RequestBody CommunityMemberDto communityMemberDto);
+
+    /**
+     * <p>查询小区楼信息</p>
+     *
+     *
+     * @param communityAttrDto 数据对象分享
+     * @return CommunityDto 对象数据
+     */
+    @RequestMapping(value = "/getCommunityAttrs", method = RequestMethod.POST)
+    List<CommunityAttrDto> getCommunityAttrs(@RequestBody CommunityAttrDto communityAttrDto);
+
+    /**
+     * 查询<p>小区楼</p>总记录数
+     *
+     * @param communityAttrDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/getCommunityAttrsCount", method = RequestMethod.POST)
+    int getCommunityAttrsCount(@RequestBody CommunityAttrDto communityAttrDto);
+
 }
