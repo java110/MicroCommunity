@@ -298,11 +298,11 @@
                         video: true,
                         audio: false
                     };
-                   var video = document.getElementById('AddApplicationKeyPhoto');
-                   var media = navigator.getUserMedia(constraints, function (stream) {
+                    var video = document.getElementById('AddApplicationKeyPhoto');
+                    var media = navigator.getUserMedia(constraints, function (stream) {
                         var url = window.URL || window.webkitURL;
                         //video.src = url ? url.createObjectURL(stream) : stream;
-                       vc.component.addApplicationKeyInfo.mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
+                        vc.component.addApplicationKeyInfo.mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
                         try {
                             video.src = url ? url.createObjectURL(stream) : stream;
                         } catch (error) {

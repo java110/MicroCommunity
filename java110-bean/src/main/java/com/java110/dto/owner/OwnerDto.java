@@ -29,6 +29,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String age;
     private String memberId;
     private String ownerTypeCd;
+    private String[] ownerTypeCds;
+    private String ownerTypeName;
     private String roomNum;
     private String psId;
     private String num;
@@ -231,5 +233,21 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getOwnerTypeName() {
+        return ownerTypeName;
+    }
+
+    public void setOwnerTypeName(String ownerTypeName) {
+        this.ownerTypeName = ownerTypeName;
+    }
+
+    public String[] getOwnerTypeCds() {
+        return ownerTypeCds;
+    }
+
+    public void setOwnerTypeCds(String[] ownerTypeCds) {
+        this.ownerTypeCds = ownerTypeCds;
     }
 }

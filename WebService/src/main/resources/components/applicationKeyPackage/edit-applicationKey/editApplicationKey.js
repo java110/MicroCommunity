@@ -336,7 +336,7 @@
                         try {
                             video.src = url ? url.createObjectURL(stream) : stream;
                         } catch (error) {
-                           video.srcObject = stream;
+                            video.srcObject = stream;
                         }
                         video.play();
                         vc.component.editApplicationKeyInfo.videoPlaying = true;

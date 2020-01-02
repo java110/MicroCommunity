@@ -3,14 +3,14 @@ package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +57,7 @@ public class QueryOwnerMembersListener extends AbstractServiceApiDataFlowListene
         validateOwnerData(reqJson);
 
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
+        ownerDto.setOwnerTypeCds(new String[]{"1002", "1003", "1004", "1005"});
         List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
@@ -69,7 +70,6 @@ public class QueryOwnerMembersListener extends AbstractServiceApiDataFlowListene
     }
 
 
-
     /**
      * 校验查询条件是否满足条件
      *
@@ -78,7 +78,7 @@ public class QueryOwnerMembersListener extends AbstractServiceApiDataFlowListene
     private void validateOwnerData(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
-        Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
+        // Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
 
     }
 
