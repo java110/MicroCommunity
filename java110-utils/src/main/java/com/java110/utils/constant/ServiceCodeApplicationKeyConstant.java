@@ -11,6 +11,11 @@ public class ServiceCodeApplicationKeyConstant {
      */
     public static final String ADD_APPLICATIONKEY = "applicationKey.saveApplicationKey";
 
+    /**
+     * 钥匙申请
+     */
+    public static final String APPLY_APPLICATIONKEY = "applicationKey.applyApplicationKey";
+
 
     /**
      * 修改 钥匙申请
