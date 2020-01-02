@@ -27,6 +27,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * 钥匙申请
@@ -59,6 +60,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(reqJson, "machineIds", "必填，请填写设备信息");
         Assert.hasKeyAndValue(reqJson, "photos", "必填，未包含身份证信息");
+        Assert.hasKeyAndValue(reqJson, "typeFlag", "必填，未包含密码类型");
 
     }
 
@@ -71,7 +73,9 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
+
         JSONArray machineIds = reqJson.getJSONArray("machineIds");
+        reqJson.put("pwd", getRandom());
         for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
             //添加单元信息
             reqJson.put("machineId", machineIds.getString(machineIndex));
@@ -198,6 +202,20 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMsg", businessMsg);
         return business;
+    }
+
+    /**
+     * 获取随机数
+     *
+     * @return
+     */
+    private static String getRandom() {
+        Random random = new Random();
+        String result = "";
+        for (int i = 0; i < 6; i++) {
+            result += random.nextInt(10);
+        }
+        return result;
     }
 
 
