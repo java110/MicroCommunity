@@ -21,7 +21,7 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     private String[] auditStatusCds;
 
-    private String statusCd;
+    private String statusCd = "0";
 
     private boolean needCommunityInfo;
 
