@@ -78,7 +78,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         reqJson.put("pwd", getRandom());
         for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
             //添加单元信息
-            reqJson.put("machineId", machineIds.getString(machineIndex));
+            reqJson.put("machineId", machineIds.getJSONObject(machineIndex).getString("machineId"));
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
             businesses.add(addApplicationKey(reqJson, context));
             if (reqJson.containsKey("photos")) {
@@ -88,7 +88,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
                     FileDto fileDto = new FileDto();
                     fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                     fileDto.setFileName(fileDto.getFileId());
-                    fileDto.setContext(photos.getString(photoIndex));
+                    fileDto.setContext(photos.getJSONObject(photoIndex).getString("photo"));
                     fileDto.setSuffix("jpeg");
                     fileDto.setCommunityId(reqJson.getString("communityId"));
                     if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
