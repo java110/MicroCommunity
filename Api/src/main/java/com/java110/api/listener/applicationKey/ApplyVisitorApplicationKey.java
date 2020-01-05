@@ -81,6 +81,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
         Calendar cl = Calendar.getInstance();
         cl.add(Calendar.DAY_OF_MONTH, 1);
         String endTime = DateUtil.getFormatTimeString(cl.getTime(), DateUtil.DATE_FORMATE_STRING_A);
+        String pwd = getRandom();
 
         for (ApplicationKeyDto tmpApplicationKey : applicationKeys) {
             //添加单元信息
@@ -88,7 +89,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
 
             reqJson.put("endTime", endTime);
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
-            reqJson.put("pwd", getRandom());
+            reqJson.put("pwd", pwd);
             businesses.add(addApplicationKey(reqJson, context));
         }
 
