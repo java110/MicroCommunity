@@ -84,6 +84,7 @@
   * [物业费清单](api/money/getPropertyPayFee.md)
   * [业主绑定](api/owner/appUserBindingOwner.md)
   * [业主门禁](api/owner/listOwnerMachines.md)
+  * [申请访客密码](api/applyVisitorApplicationKey/applyVisitorApplicationKey.md)
   
   
 
