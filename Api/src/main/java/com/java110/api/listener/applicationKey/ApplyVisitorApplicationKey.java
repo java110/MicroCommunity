@@ -67,7 +67,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
             return;
         }
 
-        reqJson.put("pwd", getRandom());
+
         applicationKeyDto = new ApplicationKeyDto();
         applicationKeyDto.setIdCard(reqJson.getString("idCard"));
         applicationKeyDto.setCommunityId(reqJson.getString("communityId"));
@@ -88,6 +88,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
 
             reqJson.put("endTime", endTime);
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
+            reqJson.put("pwd", getRandom());
             businesses.add(addApplicationKey(reqJson, context));
         }
 
