@@ -460,6 +460,9 @@ public class ServiceCodeConstant {
     // 编辑业主信息
     public static final String SERVICE_CODE_EDIT_OWNER = "owner.editOwner";
 
+    // 上传业主照片
+    public static final String SERVICE_CODE_UPLOAD_OWNER_PHOTO = "owner.uploadOwnerPhoto";
+
     //删除业主信息
     public static final String SERVICE_CODE_DELETE_OWNER = "owner.deleteOwner";
 

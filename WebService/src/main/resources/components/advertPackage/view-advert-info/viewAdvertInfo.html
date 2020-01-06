@@ -4,74 +4,78 @@
             <div class="ibox-title">
                 <h5>发布广告信息</h5>
                 <div class="ibox-tools" style="top:10px;">
-                    <button type="button" v-if="viewAdvertInfo.index != 2" class="btn btn-primary btn-sm" style="margin-right:10px;"  v-on:click="_openSelectAdvertInfoModel()">
-                        <i class="glyphicon glyphicon-search"></i> 选择发布广告</button>
+                    <button type="button" v-if="viewAdvertInfo.index != 2" class="btn btn-primary btn-sm"
+                            style="margin-right:10px;" v-on:click="_openSelectAdvertInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择发布广告
+                    </button>
 
-                    <button type="button" v-if="viewAdvertInfo.index != 2" class="btn btn-primary btn-sm" v-on:click="_openAddAdvertInfoModel()">
-                        <i class="glyphicon glyphicon-plus"></i> 添加发布广告</button>
+                    <button type="button" v-if="viewAdvertInfo.index != 2" class="btn btn-primary btn-sm"
+                            v-on:click="_openAddAdvertInfoModel()">
+                        <i class="glyphicon glyphicon-plus"></i> 添加发布广告
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
-<div class="col-sm-4">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >广告名称：</label>
+                            <label class="col-form-label">广告名称：</label>
                             <label class="">{{viewAdvertInfo.adName}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >广告类型：</label>
+                            <label class="col-form-label">广告类型：</label>
                             <label class="">{{viewAdvertInfo.adTypeCd}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >广告分类：</label>
+                            <label class="col-form-label">广告分类：</label>
                             <label class="">{{viewAdvertInfo.classify}}</label>
                         </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >投放位置：</label>
+                            <label class="col-form-label">投放位置：</label>
                             <label class="">{{viewAdvertInfo.locationTypeCd}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >具体位置：</label>
+                            <label class="col-form-label">具体位置：</label>
                             <label class="">{{viewAdvertInfo.locationObjId}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >广告状态：</label>
+                            <label class="col-form-label">广告状态：</label>
                             <label class="">{{viewAdvertInfo.state}}</label>
                         </div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >播放顺序：</label>
+                            <label class="col-form-label">播放顺序：</label>
                             <label class="">{{viewAdvertInfo.seq}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >投放时间：</label>
+                            <label class="col-form-label">投放时间：</label>
                             <label class="">{{viewAdvertInfo.startTime}}</label>
                         </div>
-</div>
-<div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >结束时间：</label>
+                            <label class="col-form-label">结束时间：</label>
                             <label class="">{{viewAdvertInfo.endTime}}</label>
                         </div>
-</div>
-</div>
+                    </div>
+                </div>
 
             </div>
         </div>
