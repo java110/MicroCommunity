@@ -40,12 +40,12 @@ public class GetFileByObjIdSMOImpl extends BaseComponentSMO implements IGetFileB
         Assert.hasKeyAndValue(paramIn, "objId", "请求报文中未包含文件ID");
         Assert.hasKeyAndValue(paramIn, "fileTypeCd", "请求报文中未包含文件类型");
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.GET_FILE);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.GET_FILE);
 
-        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        /*ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+        paramIn.putAll(paramMap);*/
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/file.getFileByObjId" + mapToUrlParam(paramIn);
 
