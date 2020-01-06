@@ -18,6 +18,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
 
         Assert.hasLength(openId, "该用户不是能力开放用户");
 
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson,OwnerAppUserDto.class);
         ownerAppUserDto.setStates(new String[]{"10000", "12000"});
 
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
