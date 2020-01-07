@@ -51,7 +51,7 @@
                                 {{_showCommunityStatus(community.auditStatusCd)}}
                             </td>
                             <td class="text-right">
-                                <div class="btn-group" v-if="community.auditStatusCd == '1100'">
+                                <div class="btn-group" v-if="community.auditStatusCd == '1100' && community.communityId != '7020181217000001'">
                                     <button class="btn-white btn btn-xs" v-on:click="_openExitCommunityModel(community)">申请退出</button>
                                 </div>
                             </td>
