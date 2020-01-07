@@ -1,4 +1,4 @@
-package com.java110.common;
+package com.java110.report;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.event.service.BusinessServiceDataFlowEventPublishing;

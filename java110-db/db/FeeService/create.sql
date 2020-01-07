@@ -116,7 +116,7 @@ create table business_pay_fee_config(
 CREATE INDEX idx_bpfc_config_id ON business_pay_fee_config(config_id);
 CREATE INDEX idx_bpfc_b_id ON business_pay_fee_config(b_id);
 
--- 费用配置表
+-- 费用配propertyFeeConfig置表
 create table pay_fee_config(
       config_id varchar(30) not null comment '费用ID',
       b_id VARCHAR(30) NOT NULL COMMENT '业务Id',
