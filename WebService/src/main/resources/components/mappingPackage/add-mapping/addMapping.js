@@ -92,7 +92,7 @@ remark:'',
                     return ;
                 }
 
-                vc.component.addMappingInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.addMappingInfo.communityId = vc.getCurrentCommunity().communityId;
 
                 vc.http.post(
                     'addMapping',
