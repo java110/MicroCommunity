@@ -37,7 +37,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        /*Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");*/
+        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择投诉类型");
         Assert.hasKeyAndValue(reqJson, "roomId", "必填，请选择房屋编号");
         Assert.hasKeyAndValue(reqJson, "complaintName", "必填，请填写投诉人");

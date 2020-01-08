@@ -128,6 +128,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_SAVE_STORE_INFO = "save.store.info";
 
     /**
+     * 保存商户信息
+     */
+    public static final String SERVICE_CODE_LIST_STORES_BY_COMMUNITY = "store.listStoresByCommunity";
+
+    /**
      * 修改商户信息
      */
     public static final String SERVICE_CODE_UPDATE_STORE_INFO = "update.store.info";
