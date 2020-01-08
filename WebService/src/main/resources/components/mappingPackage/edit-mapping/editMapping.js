@@ -4,11 +4,11 @@
         data:{
             editMappingInfo:{
                 id:'',
-domain:'DOMAIN.COMMON',
-name:'',
-key:'',
-value:'',
-remark:'',
+                domain:'DOMAIN.COMMON',
+                name:'',
+                key:'',
+                value:'',
+                remark:'',
 
             }
         },
@@ -20,7 +20,7 @@ remark:'',
                 vc.component.refreshEditMappingInfo();
                 $('#editMappingModel').modal('show');
                 vc.copyObject(_params, vc.component.editMappingInfo );
-                vc.component.editMappingInfo.communityId = vc.getCurrentCommunity().communityId;
+               // vc.component.editMappingInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
