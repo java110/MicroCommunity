@@ -89,7 +89,8 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
             if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "根据psId 查询存在多条停车位信息" + tmpOwnerCarDto.getPsId());
+                //throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "根据psId 查询存在多条停车位信息" + tmpOwnerCarDto.getPsId());
+                continue;
             }
 
             parkingSpaceDto = parkingSpaceDtos.get(0);
