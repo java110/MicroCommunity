@@ -120,7 +120,7 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "30000");
         businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("memberId"));
+        businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
         businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("applicationKeyPhotoId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
@@ -153,6 +153,8 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
      */
     private JSONObject addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        String applicationKeyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId);
+        paramInJson.put("applicationKeyId",applicationKeyId);
         //根据位置id 和 位置对象查询相应 设备ID
         MachineDto machineDto = new MachineDto();
         machineDto.setLocationObjId(paramInJson.getString("locationObjId"));
@@ -168,7 +170,7 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
         JSONObject businessApplicationKey = new JSONObject();
         businessApplicationKey.putAll(paramInJson);
         businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
-        businessApplicationKey.put("applicationKeyId", "-1");
+        businessApplicationKey.put("applicationKeyId", applicationKeyId);
         businessApplicationKey.put("state", "10002");
         businessApplicationKey.put("pwd",this.getRandom());
         if("1100103".equals(paramInJson.getString("typeFlag"))){ // 临时访问密码,只设置成24小时
