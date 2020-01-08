@@ -8,11 +8,9 @@ import com.java110.utils.constant.ServiceConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -54,10 +52,17 @@ public class ApiSMOImpl extends BaseComponentSMO implements IApiSMO {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(body, header);
         logger.debug("请求后端url" + url);
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, method, httpEntity, String.class);
-        logger.debug("api返回信息" + responseEntity);
-        return responseEntity;
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, method, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("api返回信息" + responseEntity);
+            return responseEntity;
+        }
     }
 
 
