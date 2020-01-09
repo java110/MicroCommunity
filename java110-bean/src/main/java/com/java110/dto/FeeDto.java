@@ -24,6 +24,9 @@ public class FeeDto extends PageDto implements Serializable {
     private String payerObjId;
     private String[] feeTypeCds;
 
+    private String squarePrice;
+    private String additionalAmount;
+
     private Date arrearsEndTime;
 
 
@@ -136,5 +139,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setFeeTypeCds(String[] feeTypeCds) {
         this.feeTypeCds = feeTypeCds;
+    }
+
+    public String getSquarePrice() {
+        return squarePrice;
+    }
+
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
+
+    public String getAdditionalAmount() {
+        return additionalAmount;
+    }
+
+    public void setAdditionalAmount(String additionalAmount) {
+        this.additionalAmount = additionalAmount;
     }
 }

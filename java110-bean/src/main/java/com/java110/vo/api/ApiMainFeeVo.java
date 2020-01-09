@@ -18,6 +18,9 @@ public class ApiMainFeeVo extends Vo {
     private String endTime;
     private String amount;
 
+    private String squarePrice;
+    private String additionalAmount;
+
     public String getFeeId() {
         return feeId;
     }
@@ -58,5 +61,21 @@ public class ApiMainFeeVo extends Vo {
 
     public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
+    }
+
+    public String getSquarePrice() {
+        return squarePrice;
+    }
+
+    public void setSquarePrice(String squarePrice) {
+        this.squarePrice = squarePrice;
+    }
+
+    public String getAdditionalAmount() {
+        return additionalAmount;
+    }
+
+    public void setAdditionalAmount(String additionalAmount) {
+        this.additionalAmount = additionalAmount;
     }
 }
