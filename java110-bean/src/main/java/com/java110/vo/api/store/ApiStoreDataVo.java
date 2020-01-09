@@ -1,23 +1,10 @@
-package com.java110.dto.store;
-
-import com.java110.dto.PageDto;
+package com.java110.vo.api.store;
 
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @ClassName FloorDto
- * @Description 业主数据层封装
- * @Author wuxw
- * @Date 2019/4/24 8:52
- * @Version 1.0
- * add by wuxw 2019/4/24
- **/
-public class StoreDto extends PageDto implements Serializable {
-
-
+public class ApiStoreDataVo implements Serializable {
     private String storeId;
-    private String[] storeIds;
     private String userId;
     private String name;
     private String address;
@@ -28,11 +15,7 @@ public class StoreDto extends PageDto implements Serializable {
     private String mapY;
     private String storeName;
     private String storeTypeName;
-
-
-    private Date createTime;
-
-    private String statusCd = "0";
+    private String createTime;
 
     public String getStoreId() {
         return storeId;
@@ -114,22 +97,6 @@ public class StoreDto extends PageDto implements Serializable {
         this.storeName = storeName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatusCd() {
-        return statusCd;
-    }
-
-    public void setStatusCd(String statusCd) {
-        this.statusCd = statusCd;
-    }
-
     public String getStoreTypeName() {
         return storeTypeName;
     }
@@ -138,11 +105,11 @@ public class StoreDto extends PageDto implements Serializable {
         this.storeTypeName = storeTypeName;
     }
 
-    public String[] getStoreIds() {
-        return storeIds;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setStoreIds(String[] storeIds) {
-        this.storeIds = storeIds;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
