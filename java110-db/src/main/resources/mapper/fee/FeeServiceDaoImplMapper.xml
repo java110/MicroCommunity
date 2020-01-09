@@ -106,9 +106,11 @@
         select t.amount,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
         feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
-        userId,t.payer_obj_id,t.payer_obj_id payerObjId
-        from pay_fee t
+        userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount additionalAmount
+        from pay_fee t,pay_fee_config pfc
         where 1 =1
+        and t.fee_type_cd = pfc.fee_type_cd
+        and pfc.status_cd = '0'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -201,8 +203,10 @@
     <!-- 查询费用数量 add by wuxw 2018-07-03 -->
     <select id="queryFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee t
+        from pay_fee t,pay_fee_config pfc
         where 1 =1
+        and t.fee_type_cd = pfc.fee_type_cd
+        and pfc.status_cd = '0'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
