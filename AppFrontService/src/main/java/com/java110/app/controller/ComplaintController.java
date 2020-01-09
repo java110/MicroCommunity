@@ -43,8 +43,12 @@ public class ComplaintController extends BaseController {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
 
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                request.getHeader("APP_ID"));
 
-        return saveComplaintSMOImpl.save(pd);
+        return saveComplaintSMOImpl.save(newPd);
     }
 
 }
