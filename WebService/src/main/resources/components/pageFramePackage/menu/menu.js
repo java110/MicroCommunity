@@ -99,7 +99,8 @@
                 }
 
                 $("body").toggleClass("mini-navbar");
-                vc.setMenuState('OFF');
+                //vc.setMenuState('OFF');
+                vc.setMenuState('ON');
             }
 
         },
