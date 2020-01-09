@@ -94,7 +94,11 @@
                 vc.setMenus(vm.menus);
             },
             miniMenu: function () {
-                vc.setMenuState('ON');
+
+
+                if(!vc.notNull(vc.getMenuState())){
+                    vc.setMenuState('ON');
+                }
 
                 if (vc.notNull(vc.getMenuState()) && vc.getMenuState() == 'ON') {
                     return;
