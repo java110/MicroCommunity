@@ -482,7 +482,7 @@
             and s.store_id = #{storeId}
         </if>
         <if test="storeIds !=null">
-            and t.store_id in
+            and s.store_id in
             <foreach collection="storeIds" open="(" close=")"
                      separator="," item="item">
                 #{item}
