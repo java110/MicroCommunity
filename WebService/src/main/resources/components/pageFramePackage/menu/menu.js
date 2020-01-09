@@ -95,7 +95,7 @@
             },
             miniMenu: function () {
 
-
+                //菜单默认为打开方式
                 if(!vc.notNull(vc.getMenuState())){
                     vc.setMenuState('ON');
                 }

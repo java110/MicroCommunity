@@ -11,6 +11,20 @@ import java.util.List;
 public class Orders extends BaseOrder{
 
     /**
+     * 一次订单提交
+     */
+    public static final String ORDER_PROCESS_ORDER_ONCE_SUBMIT = "1003001";
+    /**
+     * 订单预生成
+     */
+    public static final String ORDER_PROCESS_ORDER_PRE_SUBMIT = "1004001";
+
+    /**
+     * 订单确认生成
+     */
+    public static final String ORDER_PROCESS_ORDER_CONFIRM_SUBMIT = "1005001";
+
+    /**
      * 订单ID
      */
     private String oId;
@@ -39,6 +53,8 @@ public class Orders extends BaseOrder{
      * 订单类型
      */
     private String orderTypeCd;
+
+    private String orderProcess = ORDER_PROCESS_ORDER_ONCE_SUBMIT;
 
 
 
@@ -101,5 +117,13 @@ public class Orders extends BaseOrder{
 
     public void setOrdersAttrs(List<OrdersAttrs> ordersAttrs) {
         this.ordersAttrs = ordersAttrs;
+    }
+
+    public String getOrderProcess() {
+        return orderProcess;
+    }
+
+    public void setOrderProcess(String orderProcess) {
+        this.orderProcess = orderProcess;
     }
 }

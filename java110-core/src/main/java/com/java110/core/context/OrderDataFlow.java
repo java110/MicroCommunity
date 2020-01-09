@@ -9,6 +9,7 @@ import com.java110.entity.order.Business;
 import com.java110.entity.order.BusinessAttrs;
 import com.java110.entity.order.Orders;
 import com.java110.entity.order.OrdersAttrs;
+import com.java110.utils.util.StringUtil;
 
 import java.util.*;
 
@@ -136,6 +137,14 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
         Assert.jsonObjectHaveKey(tmpOrderJson,"orderTypeCd","请求报文错误，未找到orderTypeCd节点");
         this.orders.setOrderTypeCd(tmpOrderJson.getString("orderTypeCd"));
 
+        if(tmpOrderJson.containsKey("orderProcess") && !StringUtil.isEmpty(tmpOrderJson.getString("orderProcess"))){
+            this.orders.setOrderProcess(tmpOrderJson.getString("orderProcess"));
+        }
+
+        if(tmpOrderJson.containsKey("oId") && !StringUtil.isEmpty(tmpOrderJson.getString("oId"))){
+            this.orders.setoId(tmpOrderJson.getString("oId"));
+        }
+
         if(!tmpOrderJson.containsKey("attrs")){
             return ;
         }
@@ -163,6 +172,9 @@ public class OrderDataFlow extends AbstractOrderDataFlowContext {
     private void builderBusiness() {
 
         this.businessList = new ArrayList<Business>();
+        if(!this.getReqJson().containsKey("business")){
+            return;
+        }
 
         JSONArray tmpBusiness = this.getReqJson().getJSONArray("business");
 

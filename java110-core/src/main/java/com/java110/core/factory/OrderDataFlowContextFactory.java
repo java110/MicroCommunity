@@ -260,10 +260,10 @@ public class OrderDataFlowContextFactory {
      * @param dataFlow
      * @return
      */
-    public static Map getNeedDeleteBusiness(IOrderDataFlowContext dataFlow){
+    public static Map getNeedDeleteBusiness(IOrderDataFlowContext dataFlow,List<com.java110.entity.order.Business> deleteBusinesses){
         Map business = new HashMap();
         String bId = "";
-        for(com.java110.entity.order.Business busi:dataFlow.getBusinessList()){
+        for(com.java110.entity.order.Business busi:deleteBusinesses){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));

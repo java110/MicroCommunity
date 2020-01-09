@@ -1,6 +1,8 @@
 package com.java110.order.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.entity.order.Orders;
+import com.java110.order.smo.IOrderProcessServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.BusinessException;
 import com.java110.utils.util.Assert;
@@ -37,6 +39,9 @@ public class OrderApi extends BaseController {
     @Autowired
     private IOrderServiceSMO orderServiceSMOImpl;
 
+    @Autowired
+    private IOrderProcessServiceSMO orderProcessServiceSMOImpl;
+
     /**
      * 订单请求服务
      * @param orderInfo 订单信息
@@ -58,7 +63,18 @@ public class OrderApi extends BaseController {
             DataFlowEventPublishing.receiveRequest(orderInfo, headers);
             //预校验
             preValiateOrderInfo(orderInfo);
-            responseEntity = orderServiceSMOImpl.service(orderInfo, headers);
+            JSONObject order = JSONObject.parseObject(orderInfo).getJSONObject("orders");
+
+            if(!order.containsKey("orderProcess")){
+                responseEntity = orderServiceSMOImpl.service(orderInfo, headers);
+            }else if(Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT.equals(order.getString("orderProcess"))){
+                responseEntity = orderProcessServiceSMOImpl.preService(orderInfo, headers);
+            }else if(Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT.equals(order.getString("orderProcess"))){
+                responseEntity = orderProcessServiceSMOImpl.confirmService(orderInfo, headers);
+            }else{
+                responseEntity = orderServiceSMOImpl.service(orderInfo, headers);
+            }
+
         } catch (Exception e) {
             logger.error("请求订单异常", e);
             responseEntity = new ResponseEntity<String>("请求中心服务发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
