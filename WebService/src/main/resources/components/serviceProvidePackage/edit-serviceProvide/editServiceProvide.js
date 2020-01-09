@@ -24,7 +24,7 @@
                 vc.component.refreshEditServiceProvideInfo();
                 $('#editServiceProvideModel').modal('show');
                 vc.copyObject(_params, vc.component.editServiceProvideInfo);
-                vc.component.editServiceProvideInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.editServiceProvideInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods: {
