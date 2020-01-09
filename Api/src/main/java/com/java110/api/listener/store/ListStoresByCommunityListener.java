@@ -53,7 +53,7 @@ public class ListStoresByCommunityListener extends AbstractServiceApiListener {
 
     @Override
     public HttpMethod getHttpMethod() {
-        return HttpMethod.POST;
+        return HttpMethod.GET;
     }
 
     @Override
