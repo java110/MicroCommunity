@@ -94,13 +94,14 @@
                 vc.setMenus(vm.menus);
             },
             miniMenu: function () {
+                vc.setMenuState('ON');
+
                 if (vc.notNull(vc.getMenuState()) && vc.getMenuState() == 'ON') {
                     return;
                 }
 
                 $("body").toggleClass("mini-navbar");
-                //vc.setMenuState('OFF');
-                vc.setMenuState('ON');
+                vc.setMenuState('OFF');
             }
 
         },
