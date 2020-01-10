@@ -61,6 +61,7 @@ public abstract class AbstractFeeBusinessServiceDataFlowListener extends Abstrac
 //自动插入DEL
         Map info = new HashMap();
         info.put("feeId", businessFee.getString("feeId"));
+        info.put("communityId", businessFee.getString("communityId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentFeeInfos = getFeeServiceDaoImpl().getFeeInfo(info);
         if (currentFeeInfos == null || currentFeeInfos.size() != 1) {
