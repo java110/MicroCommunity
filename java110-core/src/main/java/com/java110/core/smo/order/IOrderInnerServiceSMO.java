@@ -1,6 +1,7 @@
 package com.java110.core.smo.order;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.order.BusinessDto;
 import com.java110.dto.order.OrderDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,4 +71,12 @@ public interface IOrderInnerServiceSMO {
      */
     @RequestMapping(value = "/queryApplicationKeyOrders", method = RequestMethod.POST)
     List<OrderDto> queryApplicationKeyOrders(@RequestBody OrderDto orderDto);
+
+    /**
+     * 查询 同订单 订单项
+     * @param businessDto
+     * @return
+     */
+    @RequestMapping(value = "/querySameOrderBusiness", method = RequestMethod.POST)
+    List<BusinessDto> querySameOrderBusiness(@RequestBody BusinessDto businessDto);
 }

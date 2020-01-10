@@ -322,5 +322,16 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.getBusinessByOId",info);
     }
 
+    /**
+     * 查询同订单 订单项
+     * @param info
+     * @return
+     * @throws DAOException
+     */
+    public List<Map> querySameOrderBusiness(Map info) throws DAOException{
+        logger.debug("----【CenterServiceDAOImpl.querySameOrderBusiness】数据入参 : " + JSONObject.toJSONString(info));
+
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.querySameOrderBusiness",info);
+    }
 
 }

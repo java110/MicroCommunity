@@ -494,6 +494,12 @@ public class ServiceCodeConstant {
     //缴费
     public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
 
+    //预交费
+    public static final String SERVICE_CODE_PAY_FEE_PRE = "fee.payFeePre";
+
+    //交费通知
+    public static final String SERVICE_CODE_PAY_CONFIRM_PRE = "fee.payFeeConfirm";
+
 
     //查询停车位
     public static final String SERVICE_CODE_QUERY_PARKING_SPACE = "parkingSpace.queryParkingSpaces";

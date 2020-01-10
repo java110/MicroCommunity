@@ -4,6 +4,7 @@ package com.java110.order.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.order.BusinessDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.util.BeanConvertUtil;
@@ -79,6 +80,15 @@ public class OrderInnerServiceSMOImpl extends BaseServiceSMO implements IOrderIn
      */
     public List<OrderDto> queryApplicationKeyOrders(@RequestBody OrderDto orderDto){
         return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.queryApplicationKeyOrders(BeanConvertUtil.beanCovertMap(orderDto)), OrderDto.class);
+    }
+
+    /**
+     * 查询 同订单 订单项
+     * @param businessDto
+     * @return
+     */
+    public List<BusinessDto> querySameOrderBusiness(@RequestBody BusinessDto businessDto){
+        return BeanConvertUtil.covertBeanList(centerServiceDAOImpl.querySameOrderBusiness(BeanConvertUtil.beanCovertMap(businessDto)), BusinessDto.class);
     }
 
 

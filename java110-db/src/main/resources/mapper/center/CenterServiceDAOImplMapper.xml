@@ -235,4 +235,35 @@
     </update>
 
 
+    <!-- querySameOrderBusiness 查询同订单 订单项 -->
+    <select id="querySameOrderBusiness" parameterType="map" resultType="map">
+
+                SELECT
+                    cb1.b_id bId,
+                    cb1.o_id oId,
+                    cb1.create_time createTime,
+                    cb1.business_type_cd businessTypeCd,
+                    cb1.finish_time finishTime,
+                    cb1.status_cd statusCd
+                FROM
+                    c_business cb1
+                    <if test="bId != null and bId != ''">
+                        ,c_business cb2
+                    </if>
+                WHERE
+                    1=1
+                    <if test="bId != null and bId != ''">
+                        and cb1.o_id = cb2.o_id
+                        AND cb2.b_id = #{bId}
+                    </if>
+                    <if test="oId != null and oId != ''">
+                        and cb1.o_id = #{oId}
+                    </if>
+                    <if test="businessTypeCd != null and businessTypeCd != ''">
+                        and cb1.business_type_cd = #{businessTypeCd}
+                    </if>
+
+
+    </select>
+
 </mapper>

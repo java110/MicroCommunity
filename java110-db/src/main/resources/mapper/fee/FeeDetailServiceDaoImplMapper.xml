@@ -5,7 +5,7 @@
 <mapper namespace="feeDetailServiceDaoImpl">
 
     <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessFeeDetailInfo" parameterType="Map">
+    <insert id="saveBusinessFeeDetailInfo" parameterType="Map">
            insert into business_pay_fee_detail(
 operate,prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,b_id,fee_id
 ) values (
@@ -14,219 +14,221 @@ operate,prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,com
        </insert>
 
 
-       <!-- 查询费用明细信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessFeeDetailInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,t.cycles,t.remark,t.received_amount,t.received_amount receivedAmount,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId 
-from business_pay_fee_detail t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
+    <!-- 查询费用明细信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessFeeDetailInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id
+        detailId,t.receivable_amount,t.receivable_amount
+        receivableAmount,t.cycles,t.remark,t.received_amount,t.received_amount
+        receivedAmount,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId
+        from business_pay_fee_detail t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeDetailInfoInstance" parameterType="Map">
         insert into pay_fee_detail(
-prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id
-) select t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id from business_pay_fee_detail t where 1=1
-   and t.operate= 'ADD'
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if> 
+        prime_rate,detail_id,receivable_amount,cycles,remark,status_cd,received_amount,community_id,b_id,fee_id
+        ) select
+        t.prime_rate,t.detail_id,t.receivable_amount,t.cycles,t.remark,'0',t.received_amount,t.community_id,t.b_id,t.fee_id
+        from business_pay_fee_detail t where 1=1
+        and t.operate= 'ADD'
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询费用明细信息 add by wuxw 2018-07-03 -->
     <select id="getFeeDetailInfo" parameterType="Map" resultType="Map">
-        select  t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id detailId,t.receivable_amount,t.receivable_amount receivableAmount,
-        t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount receivedAmount,t.community_id,
+        select t.prime_rate,t.prime_rate primeRate,t.detail_id,t.detail_id
+        detailId,t.receivable_amount,t.receivable_amount receivableAmount,
+        t.cycles,t.remark,t.status_cd,t.status_cd statusCd,t.received_amount,t.received_amount
+        receivedAmount,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId ,t.create_time createTime
-from pay_fee_detail t 
-where 1 =1 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if>
+        from pay_fee_detail t
+        where 1 =1
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
         <if test="startTime !=null ">
             and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null ">
             and t.create_time &lt;= #{endTime}
         </if>
-   order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
 
     </select>
 
 
-
-
     <!-- 修改费用明细信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeDetailInfoInstance" parameterType="Map">
-        update  pay_fee_detail t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="primeRate !=null and primeRate != ''">
-, t.prime_rate= #{primeRate}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-, t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-, t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-, t.received_amount= #{receivedAmount}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-, t.fee_id= #{feeId}
-</if> 
- where 1=1 <if test="detailId !=null and detailId != ''">
-and t.detail_id= #{detailId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update pay_fee_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="primeRate !=null and primeRate != ''">
+            , t.prime_rate= #{primeRate}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            , t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            , t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询费用明细数量 add by wuxw 2018-07-03 -->
-     <select id="queryFeeDetailsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from pay_fee_detail t 
-where 1 =1 
-<if test="primeRate !=null and primeRate != ''">
-   and t.prime_rate= #{primeRate}
-</if> 
-<if test="detailId !=null and detailId != ''">
-   and t.detail_id= #{detailId}
-</if> 
-<if test="receivableAmount !=null and receivableAmount != ''">
-   and t.receivable_amount= #{receivableAmount}
-</if> 
-<if test="cycles !=null and cycles != ''">
-   and t.cycles= #{cycles}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="receivedAmount !=null and receivedAmount != ''">
-   and t.received_amount= #{receivedAmount}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="feeId !=null and feeId != ''">
-   and t.fee_id= #{feeId}
-</if>
-         <if test="startTime !=null ">
-             and t.create_time &gt;= #{startTime}
-         </if>
-         <if test="endTime !=null ">
-             and t.create_time &lt;= #{endTime}
-         </if>
+    <select id="queryFeeDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_detail t
+        where 1 =1
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
+        </if>
+        <if test="cycles !=null and cycles != ''">
+            and t.cycles= #{cycles}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="receivedAmount !=null and receivedAmount != ''">
+            and t.received_amount= #{receivedAmount}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="startTime !=null ">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.create_time &lt;= #{endTime}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
