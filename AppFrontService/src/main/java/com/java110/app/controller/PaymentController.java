@@ -64,7 +64,7 @@ public class PaymentController extends BaseController {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return toNotifySMOImpl.toNotify(request);
+        return toNotifySMOImpl.toNotify(postInfo,request);
 
 
     }

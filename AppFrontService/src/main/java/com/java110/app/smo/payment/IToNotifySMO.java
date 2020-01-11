@@ -15,5 +15,5 @@ public interface IToNotifySMO {
      * @param request
      * @return
      */
-    public ResponseEntity<String> toNotify(HttpServletRequest request);
+    public ResponseEntity<String> toNotify(String param,HttpServletRequest request);
 }

@@ -40,23 +40,12 @@ public class ToNotifySMOImpl implements IToNotifySMO {
     private WechatAuthProperties wechatAuthProperties;
 
     @Override
-    public ResponseEntity<String> toNotify(HttpServletRequest request) {
+    public ResponseEntity<String> toNotify(String param,HttpServletRequest request) {
         String resXml = "";
         ResponseEntity responseEntity = null;
         try {
-            InputStream inputStream = request.getInputStream();
-//获取请求输入流
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len = 0;
-            while ((len = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-            outputStream.close();
-            inputStream.close();
-            String wxReqXml = new String(outputStream.toByteArray(), "utf-8");
-            logger.debug("微信回调报文" + wxReqXml);
-            Map<String, Object> map = PayUtil.getMapFromXML(wxReqXml);
+
+            Map<String, Object> map = PayUtil.getMapFromXML(param);
             logger.info("【小程序支付回调】 回调数据： \n" + map);
             String returnCode = (String) map.get("return_code");
             if ("SUCCESS".equalsIgnoreCase(returnCode)) {
