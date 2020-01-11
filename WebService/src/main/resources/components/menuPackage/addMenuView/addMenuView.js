@@ -100,7 +100,8 @@
 
                     vc.emit('addPrivilegeViewInfo', 'syncData', {
                         name: vc.component.addMenuViewInfo.name,
-                        description: vc.component.addMenuViewInfo.description
+                        description: vc.component.addMenuViewInfo.description,
+                        url: vc.component.addMenuViewInfo.url
                     });
                     //侦听回传
                     vc.emit($props.callBackListener, $props.callBackFunction, vc.component.addMenuViewInfo);

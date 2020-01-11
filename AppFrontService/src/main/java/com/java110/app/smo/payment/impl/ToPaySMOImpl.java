@@ -116,12 +116,12 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
             resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
             resultMap.put("signType", "MD5");
             resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
-            resultMap.put("returnCode", "SUCCESS");
-            resultMap.put("returnMsg", "OK");
+            resultMap.put("code", "0");
+            resultMap.put("msg", "下单成功");
             logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
         } else {
-            resultMap.put("returnCode", resMap.get("return_code"));
-            resultMap.put("returnMsg", resMap.get("return_msg"));
+            resultMap.put("code", resMap.get("return_code"));
+            resultMap.put("msg", resMap.get("return_msg"));
             logger.info("【小程序支付】统一下单失败，失败原因:" + resMap.get("return_msg"));
         }
         return resultMap;

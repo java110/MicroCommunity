@@ -28,7 +28,7 @@ import java.util.*;
 public class ToNotifySMOImpl implements IToNotifySMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
-    private static final String APP_ID = "";
+    private static final String APP_ID = "992020011134400001";
 
 
     @Autowired
