@@ -92,6 +92,8 @@ public class OrderProcessServiceSMOImpl extends AbstractOrderServiceSMOImpl impl
             //能够执行到这一步 认为是都成功了
             refreshOrderDataFlowResJson(dataFlow);
 
+            responseEntity = new ResponseEntity<String>(dataFlow.getResJson().toJSONString(),OrderDataFlowContextFactory.hashMap2MultiValueMap(dataFlow.getResHeaders()), HttpStatus.OK);
+
         } catch (BusinessException e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), OrderDataFlowContextFactory.hashMap2MultiValueMap(dataFlow.getResHeaders()), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (OrdersException e) {
