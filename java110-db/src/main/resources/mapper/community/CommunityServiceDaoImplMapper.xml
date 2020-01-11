@@ -438,7 +438,7 @@
             and t.city_code= #{cityCode}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -498,7 +498,7 @@
             and t.city_code= #{cityCode}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
