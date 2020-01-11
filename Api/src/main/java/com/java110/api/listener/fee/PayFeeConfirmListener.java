@@ -71,7 +71,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
+        dataFlowContext.getRequestCurrentHeaders().put("oId", paramObj.getString("oId"));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
@@ -91,9 +91,9 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
      * @param headers 头部信息
      */
     protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
-        super.freshOrderProtocol(orders,headers);
+        super.freshOrderProtocol(orders, headers);
         orders.put("orderProcess", Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT);
-        orders.put("oId",orders.getString("oId"));
+        orders.put("oId", headers.get("oId"));
     }
 
     /**
