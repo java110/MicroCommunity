@@ -20,6 +20,8 @@ public class ApiUserDataVo implements Serializable {
 
     private String locationCd;
 
+    private String openId;
+
     private int age;
 
     private String sex;
@@ -112,5 +114,13 @@ public class ApiUserDataVo implements Serializable {
 
     public void setLevelCd(String levelCd) {
         this.levelCd = levelCd;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

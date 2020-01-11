@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;
@@ -93,9 +94,14 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
 
         ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            dataFlowContext.setResponseEntity(responseEntity);
+            return ;
+        }
 
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
         dataFlowContext.setResponseEntity(responseEntity);
-
     }
 
     /**
@@ -105,10 +111,11 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
      * @param headers 头部信息
      */
     protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
-        super.freshOrderProtocol(orders,headers);
+        super.freshOrderProtocol(orders, headers);
         orders.put("orderProcess", Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
 
     }
+
     /**
      * 添加费用明细信息
      *
@@ -133,19 +140,19 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() != 1){
+        if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
 
         feeDto = feeDtos.get(0);
-        paramInJson.put("feeInfo",feeDto);
+        paramInJson.put("feeInfo", feeDto);
 
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeDto.getFeeTypeCd());
         feeConfigDto.setCommunityId(feeDto.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() != 1){
+        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
         }
 
@@ -153,7 +160,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         String builtUpArea = "0.00";
 
         //物业费时 需要建筑面积 但是停车费不需要建筑面积
-        if(FeeTypeConstant.FEE_TYPE_PROPERTY.equals(feeConfigDto.getFeeTypeCd())) {
+        if (FeeTypeConstant.FEE_TYPE_PROPERTY.equals(feeConfigDto.getFeeTypeCd())) {
 
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(feeDto.getPayerObjId());
@@ -167,15 +174,14 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         }
 
 
-
         double receivableAmount = Double.parseDouble(feeConfigDto.getSquarePrice())
-                                    * Double.parseDouble(builtUpArea)
-                                    + Double.parseDouble(feeConfigDto.getAdditionalAmount());
+                * Double.parseDouble(builtUpArea)
+                + Double.parseDouble(feeConfigDto.getAdditionalAmount());
         receivableAmount = Double.parseDouble(paramInJson.getString("cycles")) * receivableAmount;
 
         businessFeeDetail.put("receivableAmount", receivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);
-
+        paramInJson.put("receivableAmount", receivableAmount);
         return business;
     }
 
@@ -192,10 +198,10 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFee = new JSONObject();
-        FeeDto feeInfo = (FeeDto)paramInJson.get("feeInfo");
+        FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
         Date endTime = feeInfo.getEndTime();
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);

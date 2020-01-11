@@ -20,7 +20,7 @@
                 vc.component.refreshEditAppInfo();
                 $('#editAppModel').modal('show');
                 vc.component.editAppInfo = _params;
-                vc.component.editAppInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.editAppInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods: {

@@ -60,5 +60,5 @@ public abstract class AbstractComponentSMO extends BaseComponentSMO {
      * @param pd      页面数据封装
      * @param paramIn 前台数据对象
      */
-    protected abstract ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws IOException;
+    protected abstract ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception;
 }

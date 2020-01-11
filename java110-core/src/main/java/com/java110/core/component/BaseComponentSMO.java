@@ -107,6 +107,28 @@ public class BaseComponentSMO extends BaseServiceSMO {
     }
 
     /**
+     * 获取用户信息
+     *
+     * @param pd
+     * @param restTemplate
+     * @return
+     */
+    protected ResponseEntity<String> getUserAndAttr(IPageData pd, RestTemplate restTemplate, Map paramIn) {
+        //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
+        ResponseEntity<String> responseEntity = null;
+        if(paramIn !=null){
+            paramIn.put("page","1");
+            paramIn.put("row","1");
+        }
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers" +mapToUrlParam(paramIn), HttpMethod.GET);
+        // 过滤返回报文中的字段，只返回name字段
+        //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
+        return responseEntity;
+
+    }
+
+    /**
      * 查询商户信息
      *
      * @return

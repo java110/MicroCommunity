@@ -1,9 +1,13 @@
 package com.java110.app.controller;
 
 import com.java110.app.smo.complaint.ISaveComplaintSMO;
+import com.java110.app.smo.payment.IToNotifySMO;
+import com.java110.app.smo.payment.IToPaySMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.PayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  * 支付 处理类
@@ -23,7 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 public class PaymentController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
+    @Autowired
+    private IToPaySMO toPaySMOImpl;
 
+    @Autowired
+    private IToNotifySMO toNotifySMOImpl;
 
     /**
      * <p>统一下单入口</p>
@@ -33,7 +44,12 @@ public class PaymentController extends BaseController {
      */
     @RequestMapping(path = "/toPay", method = RequestMethod.POST)
     public ResponseEntity<String> toPay(@RequestBody String postInfo, HttpServletRequest request) {
-        return null;
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                request.getHeader("APP_ID"));
+        return toPaySMOImpl.toPay(newPd);
     }
 
 
@@ -45,7 +61,10 @@ public class PaymentController extends BaseController {
      */
     @RequestMapping(path = "/notify", method = RequestMethod.POST)
     public ResponseEntity<String> notify(@RequestBody String postInfo, HttpServletRequest request) {
-        return null;
+
+        return toNotifySMOImpl.toNotify(request);
+
+
     }
 
 }
