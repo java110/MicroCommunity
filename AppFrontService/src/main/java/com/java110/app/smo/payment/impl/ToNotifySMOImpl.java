@@ -54,7 +54,9 @@ public class ToNotifySMOImpl implements IToNotifySMO {
             }
             outputStream.close();
             inputStream.close();
-            Map<String, Object> map = PayUtil.getMapFromXML(new String(outputStream.toByteArray(), "utf-8"));
+            String wxReqXml = new String(outputStream.toByteArray(), "utf-8");
+            logger.debug("微信回调报文" + wxReqXml);
+            Map<String, Object> map = PayUtil.getMapFromXML(wxReqXml);
             logger.info("【小程序支付回调】 回调数据： \n" + map);
             String returnCode = (String) map.get("return_code");
             if ("SUCCESS".equalsIgnoreCase(returnCode)) {
