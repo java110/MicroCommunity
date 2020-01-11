@@ -138,7 +138,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         paramMap.put("appid", wechatAuthProperties.getAppId());
         paramMap.put("mch_id", wechatAuthProperties.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
-        paramMap.put("body", "");
+        paramMap.put("body", "HC智慧家园-停车费");
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());
