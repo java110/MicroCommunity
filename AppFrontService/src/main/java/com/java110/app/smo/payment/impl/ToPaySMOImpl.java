@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+@Service("toPaySMOImpl")
 public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
 
