@@ -76,7 +76,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
 
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody().toString());
         int total = userResult.getIntValue("total");
-        if(total < 1){
+        if (total < 1) {
             //未查询到用户信息
             throw new IllegalArgumentException("未查询微信用户");
         }
@@ -149,8 +149,12 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
 //转换为xml
         String xmlData = PayUtil.mapToXml(paramMap);
 
+        logger.debug("调用支付统一下单接口" + xmlData);
+
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(
                 wechatAuthProperties.getWxPayUnifiedOrder(), xmlData, String.class);
+
+        logger.debug("统一下单返回"+responseEntity);
 //请求微信后台，获取预支付ID
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
