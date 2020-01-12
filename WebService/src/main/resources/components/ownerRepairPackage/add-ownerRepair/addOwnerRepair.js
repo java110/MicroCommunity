@@ -189,7 +189,7 @@
                     vc.component.addOwnerRepairInfo.appointmentTime = vc.dateFormat(new Date().getTime());
                      $('.addAppointmentTime').datetimepicker({
                         language: 'zh-CN',
-                        format: 'yyyy-mm-dd HH:ii:ss',
+                        format: 'yyyy-mm-dd hh:ii:ss',
                         initTime: true,
                         initialDate: new Date(),
                         autoClose: 1,

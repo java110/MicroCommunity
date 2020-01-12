@@ -148,7 +148,7 @@
                 //vc.component.editNoticeViewInfo.startTime = vc.dateFormat(new Date().getTime());
                  $('.editNoticeStartTime').datetimepicker({
                     language: 'zh-CN',
-                    format: 'yyyy-mm-dd HH:ii:ss',
+                    format: 'yyyy-mm-dd hh:ii:ss',
                     initTime: true,
                     initialDate: new Date(),
                     autoClose: 1,
@@ -162,7 +162,7 @@
                     });
                 $('.editNoticeEndTime').datetimepicker({
                     language: 'zh-CN',
-                    format: 'yyyy-mm-dd HH:ii:ss',
+                    format: 'yyyy-mm-dd hh:ii:ss',
                     initTime: true,
                     initialDate: new Date(),
                     autoClose: 1,
