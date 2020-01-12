@@ -94,7 +94,7 @@
             },
             editMenu: function () {
                 if (!vc.component.editMenuValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

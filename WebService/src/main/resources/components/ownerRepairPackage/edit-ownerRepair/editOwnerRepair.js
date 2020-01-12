@@ -113,7 +113,7 @@
              },
             editOwnerRepair:function(){
                 if(!vc.component.editOwnerRepairValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
                 vc.component.editOwnerRepairInfo.communityId = vc.getCurrentCommunity().communityId;

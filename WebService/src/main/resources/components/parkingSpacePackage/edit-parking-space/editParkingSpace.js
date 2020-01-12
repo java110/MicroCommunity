@@ -72,7 +72,7 @@
             editParkingSpaceMethod:function(){
 
                 if(!vc.component.editParkingSpaceValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

@@ -105,7 +105,7 @@
              },
             editNotice:function(){
                 if(!vc.component.editNoticeValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
                 vc.component.editNoticeViewInfo.communityId = vc.getCurrentCommunity().communityId;

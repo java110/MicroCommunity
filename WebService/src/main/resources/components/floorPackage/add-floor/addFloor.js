@@ -78,7 +78,7 @@
             },
             saveFloorInfo:function(){
                 if(!vc.component.addFloorValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

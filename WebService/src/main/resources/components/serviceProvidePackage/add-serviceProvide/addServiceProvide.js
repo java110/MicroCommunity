@@ -94,7 +94,7 @@
             },
             saveServiceProvideInfo: function () {
                 if (!vc.component.addServiceProvideValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

@@ -116,7 +116,7 @@
             ,
             saveOrgInfo: function () {
                 if (!vc.component.addOrgValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

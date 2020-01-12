@@ -125,7 +125,7 @@
             },
             saveServiceImplInfo: function () {
                 if (!vc.component.addServiceImplValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

@@ -75,7 +75,7 @@
             },
             saveAppInfo: function () {
                 if (!vc.component.addAppValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

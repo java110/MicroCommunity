@@ -98,7 +98,7 @@
             },
             editServiceProvide: function () {
                 if (!vc.component.editServiceProvideValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

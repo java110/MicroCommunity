@@ -140,7 +140,7 @@ description:'',
              },
             editServiceImpl:function(){
                 if(!vc.component.editServiceImplValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

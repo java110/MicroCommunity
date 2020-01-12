@@ -79,7 +79,7 @@
             },
             editResourceStore: function () {
                 if (!vc.component.editResourceStoreValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

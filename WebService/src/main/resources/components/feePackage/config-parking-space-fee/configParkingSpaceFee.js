@@ -47,7 +47,7 @@
              },
             saveParkingSpaceConfigFee:function(){
                 if(!vc.component.changeFeeConfigValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
                 vc.component.changeFeeConfigInfo.communityId = vc.getCurrentCommunity().communityId;

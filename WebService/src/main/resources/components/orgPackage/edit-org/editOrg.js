@@ -106,7 +106,7 @@
             },
             editOrg: function () {
                 if (!vc.component.editOrgValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

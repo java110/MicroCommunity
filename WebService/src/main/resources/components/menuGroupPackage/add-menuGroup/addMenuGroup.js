@@ -92,7 +92,7 @@ description:'',
             },
             saveMenuGroupInfo:function(){
                 if(!vc.component.addMenuGroupValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

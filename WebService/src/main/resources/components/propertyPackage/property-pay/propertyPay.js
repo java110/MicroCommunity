@@ -102,7 +102,7 @@
              },
             payFee:function(){
                 if(!vc.component.payFeeValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

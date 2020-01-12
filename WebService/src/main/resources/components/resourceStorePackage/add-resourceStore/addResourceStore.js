@@ -74,7 +74,7 @@
             },
             saveResourceStoreInfo:function(){
                 if(!vc.component.addResourceStoreValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

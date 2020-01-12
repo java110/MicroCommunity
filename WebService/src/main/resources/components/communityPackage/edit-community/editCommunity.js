@@ -97,7 +97,7 @@ mapY:'101.33',
              },
             editCommunity:function(){
                 if(!vc.component.editCommunityValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

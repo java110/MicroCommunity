@@ -81,7 +81,7 @@
             },
             editBasePrivilege: function () {
                 if (!vc.component.editBasePrivilegeValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

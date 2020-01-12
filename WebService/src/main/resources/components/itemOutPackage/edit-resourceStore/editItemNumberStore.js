@@ -82,7 +82,7 @@ console.log("JS加载开始");
                 if (!vc.component.editResourceStoreValidate()) {
                     console.log("开始判断!");
 
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
                 console.log("开始向后台发送请求!");

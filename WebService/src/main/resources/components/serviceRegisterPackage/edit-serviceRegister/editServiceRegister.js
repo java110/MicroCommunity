@@ -99,7 +99,7 @@
             },
             editServiceRegister: function () {
                 if (!vc.component.editServiceRegisterValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

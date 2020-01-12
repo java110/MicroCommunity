@@ -183,7 +183,7 @@
              },
             editRoom:function(){
                 if(!vc.component.editRoomValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
                 vc.component.editRoomInfo.apartment=vc.component.editRoomInfo.apartment1+vc.component.editRoomInfo.apartment2;

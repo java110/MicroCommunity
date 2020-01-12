@@ -86,7 +86,7 @@
             },
             saveOwnerInfo:function(){
                 if(!vc.component.addOwnerValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

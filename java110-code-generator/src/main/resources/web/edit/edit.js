@@ -27,7 +27,7 @@
              },
             edit@@TemplateCode@@:function(){
                 if(!vc.component.edit@@TemplateCode@@Validate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

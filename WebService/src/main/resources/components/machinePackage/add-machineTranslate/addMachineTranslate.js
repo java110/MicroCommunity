@@ -101,7 +101,7 @@
             },
             saveMachineTranslateInfo: function () {
                 if (!vc.component.addMachineTranslateValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

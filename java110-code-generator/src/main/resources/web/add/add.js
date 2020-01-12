@@ -32,7 +32,7 @@
             },
             save@@TemplateCode@@Info:function(){
                 if(!vc.component.add@@TemplateCode@@Validate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

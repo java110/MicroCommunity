@@ -172,7 +172,7 @@
              },
             addRoom:function(){
                 if(!vc.component.addRoomValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

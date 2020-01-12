@@ -152,7 +152,7 @@
                 }
 
                 if (!vc.component.addMachineValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

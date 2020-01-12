@@ -207,7 +207,7 @@
                     return;
                 }
                 if (!vc.component.editMachineValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

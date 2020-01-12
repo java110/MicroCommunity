@@ -91,7 +91,7 @@
             },
             saveNoticeInfo: function () {
                 if (!vc.component.addNoticeValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

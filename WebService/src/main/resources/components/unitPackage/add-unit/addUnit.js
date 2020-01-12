@@ -98,7 +98,7 @@
              },
             addUnit:function(){
                 if(!vc.component.addUnitValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

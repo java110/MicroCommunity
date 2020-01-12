@@ -80,7 +80,7 @@
             doSellRoom:function(){
                 //
                 if(!vc.component.sellRoomValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

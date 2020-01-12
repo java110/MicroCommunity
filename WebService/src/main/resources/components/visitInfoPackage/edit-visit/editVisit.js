@@ -75,7 +75,7 @@
             },
             editVisit: function () {
                 if (!vc.component.editAppValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

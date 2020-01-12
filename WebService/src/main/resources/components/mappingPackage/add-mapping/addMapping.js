@@ -87,7 +87,7 @@ remark:'',
             },
             saveMappingInfo:function(){
                 if(!vc.component.addMappingValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

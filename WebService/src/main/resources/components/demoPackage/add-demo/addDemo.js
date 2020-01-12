@@ -58,7 +58,7 @@
             },
             saveDemoInfo:function(){
                 if(!vc.component.addDemoValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

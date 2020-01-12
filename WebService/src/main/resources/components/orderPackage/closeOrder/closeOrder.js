@@ -65,7 +65,7 @@
             },
             _closeOrderSubmit:function(){
                 if(!vc.component.closeOrderValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
                 //不提交数据将数据 回调给侦听处理

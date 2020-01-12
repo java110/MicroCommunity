@@ -105,7 +105,7 @@
             editOwnerMethod: function () {
 
                 if (!vc.component.editOwnerValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

@@ -94,7 +94,7 @@
              },
             editMapping:function(){
                 if(!vc.component.editMappingValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

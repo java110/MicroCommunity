@@ -78,7 +78,7 @@
              },
             editUnit:function(){
                 if(!vc.component.editUnitValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

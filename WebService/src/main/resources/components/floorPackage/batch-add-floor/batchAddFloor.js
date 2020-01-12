@@ -64,7 +64,7 @@
             },
             batchSaveFloorInfo:function(){
                 if(!vc.component.batchAddFloorValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }

@@ -88,7 +88,7 @@
             },
             editComplaint: function () {
                 if (!vc.component.editComplaintValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return;
                 }
 

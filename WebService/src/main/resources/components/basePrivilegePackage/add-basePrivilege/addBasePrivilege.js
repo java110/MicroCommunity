@@ -77,7 +77,7 @@
             },
             saveBasePrivilegeInfo: function () {
                 if (!vc.component.addBasePrivilegeValidate()) {
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return;
                 }

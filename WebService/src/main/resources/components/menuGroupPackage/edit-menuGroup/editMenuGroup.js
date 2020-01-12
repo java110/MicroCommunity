@@ -94,7 +94,7 @@ description:'',
              },
             editMenuGroup:function(){
                 if(!vc.component.editMenuGroupValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
                     return ;
                 }
 

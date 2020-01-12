@@ -165,7 +165,7 @@ provideAppId:'8000418002',
             },
             saveServiceInfo:function(){
                 if(!vc.component.addServiceValidate()){
-                    vc.message(vc.validate.errInfo);
+                    vc.toast(vc.validate.errInfo);
 
                     return ;
                 }
