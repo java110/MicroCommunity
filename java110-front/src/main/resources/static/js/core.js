@@ -62,11 +62,21 @@
             vc.loading('open');
             Vue.http.post('/callComponent/' + componentCode + "/" + componentMethod, param, options)
                 .then(function (res) {
-                    successCallback(res.bodyText, res);
-                    vc.loading('close');
+                    try {
+                        successCallback(res.bodyText, res);
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
+                    }
                 }, function (error) {
-                    errorCallback(error.bodyText, error);
-                    vc.loading('close');
+                    try {
+                        errorCallback(error.bodyText, error);
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
+                    }
                 });
         },
         get: function (componentCode, componentMethod, param, successCallback, errorCallback) {
@@ -83,25 +93,45 @@
             vc.loading('open');
             Vue.http.get('/callComponent/' + componentCode + "/" + componentMethod, param)
                 .then(function (res) {
-                    successCallback(res.bodyText, res);
-                    if (vc.constant.GET_CACHE_URL.includes(_getPath) && res.status == 200) {
-                        vc.saveData(_getPath, JSON.parse(res.bodyText));
+                    try {
+                        successCallback(res.bodyText, res);
+                        if (vc.constant.GET_CACHE_URL.includes(_getPath) && res.status == 200) {
+                            vc.saveData(_getPath, JSON.parse(res.bodyText));
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
                     }
-                    vc.loading('close');
                 }, function (error) {
-                    errorCallback(error.bodyText, error);
-                    vc.loading('close');
+                    try {
+                        errorCallback(error.bodyText, error);
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
+                    }
                 });
         },
         upload: function (componentCode, componentMethod, param, options, successCallback, errorCallback) {
             vc.loading('open');
             Vue.http.post('/callComponent/upload/' + componentCode + "/" + componentMethod, param, options)
                 .then(function (res) {
-                    successCallback(res.bodyText, res);
-                    vc.loading('close');
+                    try {
+                        successCallback(res.bodyText, res);
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
+                    }
                 }, function (error) {
-                    errorCallback(error.bodyText, error);
-                    vc.loading('close');
+                    try {
+                        errorCallback(error.bodyText, error);
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        vc.loading('close');
+                    }
                 });
 
         },
@@ -411,7 +441,7 @@
  toast
  **/
 (function (vc) {
-    vc.urlToBase64 = function urlToBase64(_url,_callFun) {
+    vc.urlToBase64 = function urlToBase64(_url, _callFun) {
         var imgData;
         var reader = new FileReader();
         getImageBlob(_url, function (blob) {
