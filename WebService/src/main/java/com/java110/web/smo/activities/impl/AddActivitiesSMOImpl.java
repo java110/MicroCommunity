@@ -1,22 +1,25 @@
-package com.java110.web.smo.@@templateCode@@.impl;
+package com.java110.web.smo.activities.impl;
 
-import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.AbstractComponentSMO;
+import com.java110.core.context.IPageData;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.@@templateCode@@
-import org.springframework.stereotype.Service;.IDelete@@TemplateCode@@SMO;
+import com.java110.web.smo.activities.IAddActivitiesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+
 
 /**
  * 添加小区服务实现类
- * delete by wuxw 2019-06-30
+ * add by wuxw 2019-06-30
  */
-@Service("delete@@TemplateCode@@SMOImpl")
-public class Delete@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements IDelete@@TemplateCode@@SMO {
+@Service("addActivitiesSMOImpl")
+public class AddActivitiesSMOImpl extends AbstractComponentSMO implements IAddActivitiesSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -27,10 +30,12 @@ public class Delete@@TemplateCode@@SMOImpl extends AbstractComponentSMO implemen
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
-        @@validateTemplateColumns@@
-
-
-        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_@@TEMPLATECODE@@);
+        Assert.hasKeyAndValue(paramIn, "title", "必填，请填写业活动标题");
+        Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择活动类型");
+        Assert.hasKeyAndValue(paramIn, "headerImg", "必填，请选择头部照片");
+        Assert.hasKeyAndValue(paramIn, "context", "必填，请填写活动内容");
+        Assert.hasKeyAndValue(paramIn, "startTime", "必填，请选择开始时间");
+        Assert.hasKeyAndValue(paramIn, "endTime", "必填，请选择结束时间");
 
     }
 
@@ -40,13 +45,13 @@ public class Delete@@TemplateCode@@SMOImpl extends AbstractComponentSMO implemen
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.delete@@TemplateCode@@",
+                ServiceConstant.SERVICE_API_URL + "/api/activities.saveActivities",
                 HttpMethod.POST);
         return responseEntity;
     }
 
     @Override
-    public ResponseEntity<String> delete@@TemplateCode@@(IPageData pd) {
+    public ResponseEntity<String> saveActivities(IPageData pd) {
         return super.businessProcess(pd);
     }
 

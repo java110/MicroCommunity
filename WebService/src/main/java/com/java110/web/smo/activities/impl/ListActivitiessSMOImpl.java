@@ -1,31 +1,32 @@
-package com.java110.web.smo.@@templateCode@@.impl;
+package com.java110.web.smo.activities.impl;
 
-import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.AbstractComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.core.context.IPageData;
-import com.java110.entity.component.ComponentValidateResult;
-import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.@@templateCode@@.IList@@TemplateCode@@sManageSMO;
+import com.java110.web.smo.activities.IListActivitiessSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 /**
- * 查询@@templateCode@@服务类
+ * 查询activities服务类
  */
-@Service("list@@TemplateCode@@sSMOImpl")
-public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implements IList@@TemplateCode@@sSMO {
+@Service("listActivitiessSMOImpl")
+public class ListActivitiessSMOImpl extends AbstractComponentSMO implements IListActivitiessSMO {
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public ResponseEntity<String> list@@TemplateCode@@s(IPageData pd) throws SMOException {
+    public ResponseEntity<String> listActivitiess(IPageData pd) throws SMOException {
         return businessProcess(pd);
     }
 
@@ -34,7 +35,7 @@ public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implement
 
         super.validatePageInfo(pd);
 
-        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_@@TEMPLATECODE@@);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_ACTIVITIES);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class List@@TemplateCode@@sSMOImpl extends AbstractComponentSMO implement
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.list@@TemplateCode@@s" + mapToUrlParam(paramIn);
+        String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/activities.listActivitiess" + mapToUrlParam(paramIn);
 
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",

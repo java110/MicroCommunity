@@ -1,11 +1,12 @@
-package com.java110.web.smo.@@templateCode@@.impl;
+package com.java110.web.smo.activities.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.AbstractComponentSMO;
+import com.java110.core.context.IPageData;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.@@templateCode@@.IEdit@@TemplateCode@@SMO;
+import com.java110.web.smo.activities.IEditActivitiesSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 添加@@templateName@@服务实现类
+ * 添加活动服务实现类
  * add by wuxw 2019-06-30
  */
-@Service("eidt@@TemplateCode@@SMOImpl")
-public class Edit@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements IEdit@@TemplateCode@@SMO {
+@Service("eidtActivitiesSMOImpl")
+public class EditActivitiesSMOImpl extends AbstractComponentSMO implements IEditActivitiesSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -27,10 +28,16 @@ public class Edit@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements
 
         //super.validatePageInfo(pd);
 
-        @@validateTemplateColumns@@
+        Assert.hasKeyAndValue(paramIn, "activitiesId", "活动ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "title", "必填，请填写业活动标题");
+        Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择活动类型");
+        Assert.hasKeyAndValue(paramIn, "headerImg", "必填，请选择头部照片");
+        Assert.hasKeyAndValue(paramIn, "context", "必填，请填写活动内容");
+        Assert.hasKeyAndValue(paramIn, "startTime", "必填，请选择开始时间");
+        Assert.hasKeyAndValue(paramIn, "endTime", "必填，请选择结束时间");
 
 
-        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__@@TEMPLATECODE@@);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__ACTIVITIES);
 
     }
 
@@ -40,13 +47,13 @@ public class Edit@@TemplateCode@@SMOImpl extends AbstractComponentSMO implements
         super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-                ServiceConstant.SERVICE_API_URL + "/api/@@templateCode@@.update@@TemplateCode@@",
+                ServiceConstant.SERVICE_API_URL + "/api/activities.updateActivities",
                 HttpMethod.POST);
         return responseEntity;
     }
 
     @Override
-    public ResponseEntity<String> update@@TemplateCode@@(IPageData pd) {
+    public ResponseEntity<String> updateActivities(IPageData pd) {
         return super.businessProcess(pd);
     }
 
