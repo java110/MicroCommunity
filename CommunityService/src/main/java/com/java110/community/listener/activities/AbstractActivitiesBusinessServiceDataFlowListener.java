@@ -51,6 +51,7 @@ public abstract class AbstractActivitiesBusinessServiceDataFlowListener extends 
         businessActivitiesInfo.put("endTime", businessActivitiesInfo.get("end_time"));
         businessActivitiesInfo.put("communityId", businessActivitiesInfo.get("community_id"));
         businessActivitiesInfo.put("headerImg", businessActivitiesInfo.get("header_img"));
+        businessActivitiesInfo.put("state", businessActivitiesInfo.get("state"));
         businessActivitiesInfo.remove("bId");
         businessActivitiesInfo.put("statusCd", statusCd);
     }
@@ -89,6 +90,7 @@ public abstract class AbstractActivitiesBusinessServiceDataFlowListener extends 
         currentActivitiesInfo.put("endTime", currentActivitiesInfo.get("end_time"));
         currentActivitiesInfo.put("communityId", currentActivitiesInfo.get("community_id"));
         currentActivitiesInfo.put("headerImg", currentActivitiesInfo.get("header_img"));
+        currentActivitiesInfo.put("state", currentActivitiesInfo.get("state"));
 
 
         currentActivitiesInfo.put("operate", StatusConstant.OPERATE_DEL);

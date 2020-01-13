@@ -31,6 +31,7 @@ public class AddActivitiesSMOImpl extends AbstractComponentSMO implements IAddAc
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "title", "必填，请填写业活动标题");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择活动类型");
         Assert.hasKeyAndValue(paramIn, "headerImg", "必填，请选择头部照片");
         Assert.hasKeyAndValue(paramIn, "context", "必填，请填写活动内容");

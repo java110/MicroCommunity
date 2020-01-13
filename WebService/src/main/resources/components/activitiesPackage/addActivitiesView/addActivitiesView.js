@@ -10,7 +10,7 @@
                 context: '',
                 startTime: '',
                 endTime: '',
-                photos:[],
+
 
             }
         },
@@ -24,7 +24,11 @@
             });
 
             vc.on("addActivitiesView", "notifyUploadImage", function (_param) {
-                vc.component.addActivitiesView.photos = _param;
+                if(vc.notNull(_param) && _param.length >0){
+                    vc.component.addActivitiesView.headerImg = _param[0];
+                }else{
+                    vc.component.addActivitiesView.headerImg = '';
+                }
             });
         },
         methods: {
@@ -152,8 +156,7 @@
                     headerImg: '',
                     context: '',
                     startTime: '',
-                    endTime: '',
-                    photos:[],
+                    endTime: ''
 
                 };
             },

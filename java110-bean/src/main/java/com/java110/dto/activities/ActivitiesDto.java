@@ -28,6 +28,7 @@ public class ActivitiesDto extends PageDto implements Serializable {
     private String endTime;
     private String communityId;
     private String headerImg;
+    private String state;
 
 
     private Date createTime;
@@ -154,5 +155,13 @@ public class ActivitiesDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

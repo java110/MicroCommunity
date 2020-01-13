@@ -31,6 +31,7 @@ public class DeleteActivitiesSMOImpl extends AbstractComponentSMO implements IDe
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "activitiesId", "活动ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_ACTIVITIES);

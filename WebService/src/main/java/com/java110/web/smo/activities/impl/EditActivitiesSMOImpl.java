@@ -29,6 +29,7 @@ public class EditActivitiesSMOImpl extends AbstractComponentSMO implements IEdit
         //super.validatePageInfo(pd);
 
         Assert.hasKeyAndValue(paramIn, "activitiesId", "活动ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
         Assert.hasKeyAndValue(paramIn, "title", "必填，请填写业活动标题");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择活动类型");
         Assert.hasKeyAndValue(paramIn, "headerImg", "必填，请选择头部照片");

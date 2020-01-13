@@ -12,6 +12,7 @@ public class ApiActivitiesDataVo implements Serializable {
     private String context;
     private String startTime;
     private String endTime;
+    private String state;
 
     public String getActivitiesId() {
         return activitiesId;
@@ -69,5 +70,11 @@ public class ApiActivitiesDataVo implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getState() {
+        return state;
+    }
 
+    public void setState(String state) {
+        this.state = state;
+    }
 }

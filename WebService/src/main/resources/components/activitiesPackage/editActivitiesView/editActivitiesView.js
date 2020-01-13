@@ -9,8 +9,7 @@
                 headerImg: '',
                 context: '',
                 startTime: '',
-                endTime: '',
-                photos:[]
+                endTime: ''
             }
         },
          _initMethod:function(){
@@ -27,13 +26,17 @@
                 _params.context = filterXSS(_params.context);
                 vc.copyObject(_params,vc.component.editActivitiesViewInfo);
                 $(".eidtSummernote").summernote('code', vc.component.editActivitiesViewInfo.context);
-
-                vc.component.editActivitiesViewInfo.photos.push(vc.component.editActivitiesViewInfo.headerImg);
+                var photos = [];
+                photos.push(vc.component.editActivitiesViewInfo.headerImg);
                 vc.emit('editActivitiesView', 'uploadImage', 'notifyPhotos', vc.component.editActivitiesViewInfo.photos);
             });
 
              vc.on("editActivitiesViewInfo", "notifyUploadImage", function (_param) {
-                 vc.component.editActivitiesViewInfo.photos = _param;
+                 if(vc.notNull(_param) && _param.length >0){
+                     vc.component.editActivitiesViewInfo.headerImg = _param[0];
+                 }else{
+                     vc.component.editActivitiesViewInfo.headerImg = '';
+                 }
              });
 
         },
