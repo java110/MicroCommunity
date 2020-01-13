@@ -732,4 +732,20 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_OWNER_APP_USER ="280200050001";
 
+
+    /**
+     *  保存活动
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_ACTIVITIES="290200030001";
+
+    /**
+     * 修改活动
+     */
+    public static final String BUSINESS_TYPE_UPDATE_ACTIVITIES="290200040001";
+    /**
+     *  删除活动
+     */
+    public static final String BUSINESS_TYPE_DELETE_ACTIVITIES ="290200050001";
+
 }

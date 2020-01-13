@@ -110,6 +110,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_advertId = "96";
     public static final String CODE_PREFIX_advertItemId = "97";
     public static final String CODE_PREFIX_appUserId = "98";
+    public static final String CODE_PREFIX_activitiesId = "99";
 
 
     /**
