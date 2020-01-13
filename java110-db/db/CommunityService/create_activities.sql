@@ -14,6 +14,7 @@ CREATE TABLE business_activities(
   user_name VARCHAR(30) NOT NULL COMMENT '创建用户名称',
   start_time timestamp not null default  current_timestamp comment '开始时间',
   end_time timestamp not null comment '结束时间',
+  state varchar(12) not null default '10000' comment '审核状态，10000 待审核 ，11000 审核完成 12000 审核失败',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
 );
@@ -38,6 +39,7 @@ CREATE TABLE activities(
     user_name VARCHAR(30) NOT NULL COMMENT '创建用户名称',
     start_time timestamp not null default  current_timestamp comment '开始时间',
     end_time timestamp not null comment '结束时间',
+     state varchar(12) not null default '10000' comment '审核状态，10000 待审核 ，11000 审核完成 12000 审核失败',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效',
   UNIQUE KEY (activities_id)

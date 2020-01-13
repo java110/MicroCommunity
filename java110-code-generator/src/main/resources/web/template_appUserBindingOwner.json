@@ -1,0 +1,133 @@
+{
+  "templateName":"审核业主绑定",
+  "templateCode":"auditAppUserBindingOwner",
+  "templateKey":"appUserId",
+  "templateKeyName":"绑定ID",
+  "searchCode": "name",
+  "searchName": "名称",
+  "conditions": [
+    {
+      "name": "业主名称",
+      "inputType": "input",
+      "code": "appUserName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "业主身份证",
+      "inputType": "input",
+      "code": "idCard",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "状态",
+      "inputType": "input",
+      "inputType": "select",
+      "selectValue":"10000,12000,13000",
+      "selectValueName":"审核中,审核成功,审核失败"
+    },
+    {
+      "name": "业主手机",
+      "inputType": "input",
+      "code": "link",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"memberId",
+      "cnCode":"业主ID",
+      "desc":"必填，请填写业主ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxin",
+      "limitParam":"1,64",
+      "limitErrInfo":"业主ID不能超过64位",
+      "show": true
+    },
+    {
+      "code": "communityId",
+      "cnCode":"小区ID",
+      "desc":"必填，请填写小区ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"小区ID格式错误",
+      "show": true
+    },
+    {
+      "code": "communityName",
+      "cnCode":"小区名称",
+      "desc":"必填，请填写小区名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"小区名称格式错误",
+      "show": true
+    },
+    {
+      "code": "appUserName",
+      "cnCode":"关联业主",
+      "desc":"必填，请填写业主",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"关联业主格式错误",
+      "show": true
+    },
+    {
+      "code": "idCard",
+      "cnCode":"身份证",
+      "desc":"必填，请填写身份证",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"身份证不是有效数字",
+      "show": true
+    },
+    {
+      "code":"link",
+      "cnCode":"手机号",
+      "desc":"必填，请填写手机号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"手机号不是有效的身份证号",
+      "show": true
+    },
+    {
+      "code": "state",
+      "cnCode":"状态",
+      "desc":"必填，请填写状态",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "createTime",
+      "cnCode":"申请时间",
+      "desc":"必填，请选择结束时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    }
+  ]
+}
