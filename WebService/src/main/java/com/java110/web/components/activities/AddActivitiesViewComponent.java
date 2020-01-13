@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 /**
  * 添加活动组件
  */
-@Component("addActivities")
-public class AddActivitiesComponent {
+@Component("addActivitiesView")
+public class AddActivitiesViewComponent {
 
     @Autowired
     private IAddActivitiesSMO addActivitiesSMOImpl;

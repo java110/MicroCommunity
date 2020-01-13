@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 /**
  * 编辑小区组件
  */
-@Component("editActivities")
-public class EditActivitiesComponent {
+@Component("editActivitiesView")
+public class EditActivitiesViewComponent {
 
     @Autowired
     private IEditActivitiesSMO editActivitiesSMOImpl;
