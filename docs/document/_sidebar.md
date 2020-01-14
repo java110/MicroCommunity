@@ -95,6 +95,10 @@
   * [支付确认通知](api/money/payFeeConfirm.md)
   * [预下单](api/money/payFeePre.md)
   * [根据对象ID查询文件信息](api/file/getFileByObjId.md)
+  * [采购管理-删除审核人员](api/purchase/deleteAuditUser.md)
+  * [采购管理-查询审核人员](api/purchase/listAuditUsers.md)
+  * [采购管理-查询审核工单](api/purchase/listAuditOrders.md)
+  * [采购管理-添加审核人员](api/purchase/saveAuditUser.md)
   
   
 
