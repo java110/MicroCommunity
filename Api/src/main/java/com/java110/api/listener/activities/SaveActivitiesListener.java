@@ -56,8 +56,7 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
 
         reqJson.put("activitiesId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_activitiesId));
 
-        //添加单元信息
-        businesses.add(addActivities(reqJson, context));
+
 
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
             FileDto fileDto = new FileDto();
@@ -74,6 +73,9 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
             businesses.add(addHeaderImg(reqJson, context));
 
         }
+
+        //添加单元信息
+        businesses.add(addActivities(reqJson, context));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 

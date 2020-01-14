@@ -68,8 +68,6 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
-        //添加单元信息
-        businesses.add(updateActivities(reqJson, context));
 
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
             FileDto fileDto = new FileDto();
@@ -86,6 +84,9 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
             businesses.add(editHeaderImg(reqJson, context));
 
         }
+        //添加单元信息
+        businesses.add(updateActivities(reqJson, context));
+
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
