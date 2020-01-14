@@ -179,6 +179,8 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessActivities = new JSONObject();
         businessActivities.putAll(paramInJson);
+        businessActivities.put("userId",activitiesDtos.get(0).getUserId());
+        businessActivities.put("userName",activitiesDtos.get(0).getUserName());
         businessActivities.put("readCount",activitiesDtos.get(0).getReadCount());
         businessActivities.put("likeCount",activitiesDtos.get(0).getLikeCount());
         businessActivities.put("collectCount",activitiesDtos.get(0).getCollectCount());

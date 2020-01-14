@@ -13,6 +13,12 @@ public class ApiActivitiesDataVo implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String userName;
+    private String userId;
+
+    private String collectCount;
+    private String likeCount;
+    private String readCount;
 
     public String getActivitiesId() {
         return activitiesId;
@@ -76,5 +82,45 @@ public class ApiActivitiesDataVo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(String collectCount) {
+        this.collectCount = collectCount;
+    }
+
+    public String getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public String getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(String readCount) {
+        this.readCount = readCount;
     }
 }
