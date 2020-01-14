@@ -16,12 +16,12 @@
              vc.component._initEditActivitiesInfo();
          },
          _initEvent:function(){
-             vc.on('editActivitiesViewInfo','openEditActivitiesModal',function(_params){
+             vc.on('editActivitiesView','openEditActivitiesModal',function(_params){
                 vc.component.refreshEditActivitiesInfo();
                 _params.context = filterXSS(_params.context);
                 vc.component.editActivitiesViewInfo = _params;
             });
-            vc.on('editActivitiesViewInfo','activitiesEditActivitiesInfo',function(_params){
+            vc.on('editActivitiesView','activitiesEditActivitiesInfo',function(_params){
                 vc.component.refreshEditActivitiesInfo();
                 _params.context = filterXSS(_params.context);
                 vc.copyObject(_params,vc.component.editActivitiesViewInfo);
@@ -31,7 +31,7 @@
                 vc.emit('editActivitiesView', 'uploadImage', 'notifyPhotos', photos);
             });
 
-             vc.on("editActivitiesViewInfo", "notifyUploadImage", function (_param) {
+             vc.on("editActivitiesView", "notifyUploadImage", function (_param) {
                  if(vc.notNull(_param) && _param.length >0){
                      vc.component.editActivitiesViewInfo.headerImg = _param[0];
                  }else{
@@ -124,7 +124,7 @@
                 vc.component.editActivitiesViewInfo.communityId = vc.getCurrentCommunity().communityId;
 
                 vc.http.post(
-                    'editActivities',
+                    'editActivitiesView',
                     'update',
                     JSON.stringify(vc.component.editActivitiesViewInfo),
                     {

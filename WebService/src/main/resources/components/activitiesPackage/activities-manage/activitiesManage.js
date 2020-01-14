@@ -69,7 +69,7 @@
             },
             _openEditActivitiesModel:function(_activities){
 
-                vc.emit('editActivitiesViewInfo','activitiesEditActivitiesInfo',_activities);
+                vc.emit('editActivitiesView','activitiesEditActivitiesInfo',_activities);
                 vc.component.activitiesManageInfo.componentShow = 'editActivitiesView';
             },
             _openDeleteActivitiesModel: function (_activities) {
