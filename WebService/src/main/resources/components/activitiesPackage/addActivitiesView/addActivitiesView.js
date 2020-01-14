@@ -65,24 +65,14 @@
                             limit: "required",
                             param: "",
                             errInfo: "头部照片不能为空"
-                        },
-                        {
-                            limit: "maxin",
-                            param: "1,200",
-                            errInfo: "头部照片格式错误"
-                        },
+                        }
                     ],
                     'addActivitiesViewInfo.context': [
                         {
                             limit: "required",
                             param: "",
                             errInfo: "活动内容不能为空"
-                        },
-                        {
-                            limit: "maxin",
-                            param: "1,4000",
-                            errInfo: "活动内容太长"
-                        },
+                        }
                     ],
                     'addActivitiesViewInfo.startTime': [
                         {
@@ -91,7 +81,7 @@
                             errInfo: "开始时间不能为空"
                         },
                         {
-                            limit: "date",
+                            limit: "dateTime",
                             param: "",
                             errInfo: "开始时间格式错误"
                         },
@@ -103,7 +93,7 @@
                             errInfo: "结束时间不能为空"
                         },
                         {
-                            limit: "date",
+                            limit: "dateTime",
                             param: "",
                             errInfo: "结束时间格式错误"
                         },
