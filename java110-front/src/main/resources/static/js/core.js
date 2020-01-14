@@ -343,6 +343,12 @@
         }
         return true;
     };
+    vc.isEmpty = function (_paramObj) {
+        if (_paramObj == null || _paramObj == undefined ) {
+            return true;
+        }
+        return false;
+    };
     //设置debug 模式
     vc.setDebug = function (_param) {
         vc.debug = _param;
