@@ -28,7 +28,7 @@
                 $(".eidtSummernote").summernote('code', vc.component.editActivitiesViewInfo.context);
                 var photos = [];
                 photos.push(vc.component.editActivitiesViewInfo.headerImg);
-                vc.emit('editActivitiesView', 'uploadImage', 'notifyPhotos', vc.component.editActivitiesViewInfo.photos);
+                vc.emit('editActivitiesView', 'uploadImage', 'notifyPhotos', photos);
             });
 
              vc.on("editActivitiesViewInfo", "notifyUploadImage", function (_param) {
@@ -191,7 +191,7 @@
                     placeholder:'必填，请输入公告内容',
                     callbacks : {
                          onImageUpload: function(files, editor, $editable) {
-                             sendEditFile(files);
+                             vc.component.sendEditFile(files);
                          },
                          onChange:function(contents,$editable){
                             vc.component.editActivitiesViewInfo.context = contents;

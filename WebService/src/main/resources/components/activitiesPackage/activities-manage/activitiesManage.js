@@ -28,6 +28,7 @@
         _initEvent: function () {
 
             vc.on('activitiesManage', 'listActivities', function (_param) {
+                vc.component.activitiesManageInfo.componentShow = 'activitiesList';
                 vc.component._listActivitiess(DEFAULT_PAGE, DEFAULT_ROWS);
             });
             vc.on('pagination', 'page_event', function (_currentPage) {
