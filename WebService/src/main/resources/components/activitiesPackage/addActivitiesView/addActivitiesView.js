@@ -25,9 +25,9 @@
 
             vc.on("addActivitiesView", "notifyUploadImage", function (_param) {
                 if(!vc.isEmpty(_param) && _param.length >0){
-                    vc.component.addActivitiesView.headerImg = _param[0];
+                    vc.component.addActivitiesViewInfo.headerImg = _param[0];
                 }else{
-                    vc.component.addActivitiesView.headerImg = '';
+                    vc.component.addActivitiesViewInfo.headerImg = '';
                 }
             });
         },
