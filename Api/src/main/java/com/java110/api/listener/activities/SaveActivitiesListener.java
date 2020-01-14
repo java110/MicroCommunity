@@ -40,6 +40,8 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写活动内容");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
+        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
+        Assert.hasKeyAndValue(reqJson, "userName", "必填，请填写用户名称");
 
     }
 

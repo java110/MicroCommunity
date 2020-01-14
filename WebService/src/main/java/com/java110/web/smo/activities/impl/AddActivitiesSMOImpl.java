@@ -3,6 +3,7 @@ package com.java110.web.smo.activities.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.web.smo.activities.IAddActivitiesSMO;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 
 /**
@@ -43,7 +43,9 @@ public class AddActivitiesSMOImpl extends AbstractComponentSMO implements IAddAc
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("userId", result.getUserId());
+        paramIn.put("userName", result.getUserName());
 
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/activities.saveActivities",
