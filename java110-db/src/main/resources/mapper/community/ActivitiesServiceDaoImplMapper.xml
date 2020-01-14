@@ -54,10 +54,10 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -113,10 +113,10 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -171,10 +171,10 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -189,6 +189,7 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -226,10 +227,10 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="context !=null and context != ''">
             , t.context= #{context}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             , t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             , t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -286,10 +287,10 @@ collect_count,like_count,title,read_count,user_name,user_id,activities_id,operat
         <if test="context !=null and context != ''">
             and t.context= #{context}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
