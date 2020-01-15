@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class TranslateOwnerToMachineChangeMachine implements Runnable {
     Logger logger = LoggerFactory.getLogger(TranslateOwnerToMachineChangeMachine.class);
-    public static final long DEFAULT_WAIT_SECOND = 5000 * 6; // 默认30秒执行一次
+    public static final long DEFAULT_WAIT_SECOND = 1000 * 60 ; // 默认30秒执行一次
     public static boolean TRANSLATE_STATE = false;
 
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
@@ -74,6 +74,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         OrderDto orderDto = new OrderDto();
         List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryMachineOrders(orderDto);
         for (OrderDto tmpOrderDto : orderDtos) {
+            logger.debug("开始处理订单" + JSONObject.toJSONString(tmpOrderDto));
             try {
                 //根据bId 查询硬件信息
                 machineDto = new MachineDto();
@@ -117,6 +118,7 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
             //先根据单元门ID 查询 房屋
             RoomDto roomDto = new RoomDto();
             roomDto.setUnitId(machineDto.getLocationObjId());
+            roomDto.setCommunityId(machineDto.getCommunityId());
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
             ownerDto.setRoomIds(getRoomIds(roomDtos));
             ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);

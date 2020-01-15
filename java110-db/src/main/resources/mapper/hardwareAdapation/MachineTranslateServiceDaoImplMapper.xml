@@ -128,7 +128,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         select t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code machineCode,t.type_cd,t.type_cd
         typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName
+        communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName,t.create_time createTime
         from machine_translate t,t_dict td,t_dict td1
         where 1 =1
         and t.type_cd=td.status_cd
@@ -167,6 +167,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

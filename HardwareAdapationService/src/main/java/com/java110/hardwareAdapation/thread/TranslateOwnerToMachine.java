@@ -87,7 +87,7 @@ public class TranslateOwnerToMachine implements Runnable {
                     OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                     ownerRoomRelDto.setbId(tmpOrderDto.getbId());
                     List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                    Assert.listOnlyOne(ownerRoomRelDtos, "数据错误 业主房屋关系未找到，或找到多条");
+                    Assert.listOnlyOne(ownerRoomRelDtos, "数据错误 业主房屋关系未找到，或找到多条" + JSONObject.toJSONString(tmpOrderDto));
                     ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
                 } else {
                     ownerDto.setbId(tmpOrderDto.getbId());
