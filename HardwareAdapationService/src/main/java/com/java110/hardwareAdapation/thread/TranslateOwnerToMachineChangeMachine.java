@@ -120,6 +120,9 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
             roomDto.setUnitId(machineDto.getLocationObjId());
             roomDto.setCommunityId(machineDto.getCommunityId());
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if(roomDtos == null || roomDtos.size() == 0){ // 单元下没有房屋
+                return ;
+            }
             ownerDto.setRoomIds(getRoomIds(roomDtos));
             ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         } else if ("3000".equals(locationTypeCd)) {// 3000 房屋门
