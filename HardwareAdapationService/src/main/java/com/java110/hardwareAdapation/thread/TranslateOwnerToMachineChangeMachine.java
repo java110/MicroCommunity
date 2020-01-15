@@ -134,10 +134,11 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
             return;
         }
         for (OwnerDto tmpOwnerDto : ownerDtos) {
-            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
+            if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())
+                    || BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
                 saveMachineTranslate(machineDto, tmpOwnerDto);
-            } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
-                updateMachineTranslate(machineDto, tmpOwnerDto);
+//            } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
+//                updateMachineTranslate(machineDto, tmpOwnerDto);
             } else if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE.equals(tmpOrderDto.getBusinessTypeCd())) {
                 deleteMachineTranslate(machineDto, tmpOwnerDto);
             } else {
