@@ -34,7 +34,7 @@
                         {
                             limit: "maxin",
                             param: "4,100",
-                            errInfo: "小区名称必须在2至100字符之间"
+                            errInfo: "标题必须在4至100字符之间"
                         },
                     ],
                     'addNoticeViewInfo.noticeTypeCd': [
