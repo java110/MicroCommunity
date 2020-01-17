@@ -29,6 +29,8 @@ public class ServiceCodeAdvertConstant {
 
     public static final String LIST_ADVERT_PHOTO_VEDIOS = "advert.listAdvertPhotoAndVedios";
 
+    public static final String LIST_ADVERT_PHOTO = "advert.listAdvertPhoto";
+
     /**
      * 查询广告 图片视频
      */
