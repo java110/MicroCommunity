@@ -20,7 +20,7 @@ description:'',
                 vc.component.refreshEditMenuGroupInfo();
                 $('#editMenuGroupModel').modal('show');
                 vc.copyObject(_params, vc.component.editMenuGroupInfo );
-                vc.component.editMenuGroupInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.editMenuGroupInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{
