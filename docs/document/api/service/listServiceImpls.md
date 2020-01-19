@@ -35,15 +35,15 @@
 
 |父参数名称|参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-|serviceImpls|businessTypeCd||String|12|-|
-|serviceImpls|description|int|11|id|-||-|
-|serviceImpls|invokeType|String|4|调用类型|-|
-|serviceImpls|messageTopic|String|50|异步时的消息topic名称|-|
-|serviceImpls|name|String|50|服务名称|-|
-|serviceImpls|retryCount|int|11|重试次数|-|
-|serviceImpls|serviceBusinessId|int|11|ID|-|
-|serviceImpls|timeout|int|11|超时时间|默认60|
-|serviceImpls|url|String|200|目标地址|-|
+|serviceImpls|businessTypeCd|1|String|12|-|
+|serviceImpls|description|1|int|11|id|-|
+|serviceImpls|invokeType|1|String|4|调用类型|-|
+|serviceImpls|messageTopic|1|String|50|异步时的消息topic名称|-|
+|serviceImpls|name|1|String|50|服务名称|-|
+|serviceImpls|retryCount|1|int|11|重试次数|-|
+|serviceImpls|serviceBusinessId|1|int|11|ID|-|
+|serviceImpls|timeout|1|int|11|超时时间|默认60|
+|serviceImpls|url|1|String|200|目标地址|-|
 
 
 		
