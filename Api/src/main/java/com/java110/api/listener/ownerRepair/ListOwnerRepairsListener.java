@@ -9,6 +9,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ownerRepair.ApiOwnerRepairDataVo;
 import com.java110.vo.api.ownerRepair.ApiOwnerRepairVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,12 @@ public class ListOwnerRepairsListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
+
+        if(!StringUtil.isEmpty(ownerRepairDto.getRoomId()) && ownerRepairDto.getRoomId().contains(",")){
+            String[] roomIds = ownerRepairDto.getRoomId().split(",");
+            ownerRepairDto.setRoomIds(roomIds);
+            ownerRepairDto.setRoomId("");
+        }
 
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
 
