@@ -48,6 +48,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         Assert.jsonObjectHaveKey(paramIn, "cycles", "请求报文中未包含cycles节点");
         Assert.jsonObjectHaveKey(paramIn, "receivedAmount", "请求报文中未包含receivedAmount节点");
         Assert.jsonObjectHaveKey(paramIn, "feeId", "请求报文中未包含feeId节点");
+        Assert.jsonObjectHaveKey(paramIn, "feeName", "请求报文中未包含feeName节点");
 
     }
 
@@ -86,7 +87,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         String openId = realUserInfo.getString("openId");
 
         //微信下单PayUtil
-        Map result = java110Payment(orderId, money, openId);
+        Map result = java110Payment(paramIn.getString("feeName"), orderId, money, openId);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;
@@ -102,7 +103,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
      * @return
      * @throws Exception
      */
-    private Map<String, String> java110Payment(String orderNum, double money, String openId) throws Exception {
+    private Map<String, String> java110Payment(String feeName, String orderNum, double money, String openId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -110,7 +111,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         double payAmount = PayUtil.getPayAmountByEnv("DEV", money);
 //添加或更新支付记录(参数跟进自己业务需求添加)
 
-        Map<String, String> resMap = this.java110UnifieldOrder(orderNum, wechatAuthProperties.TRADE_TYPE_JSAPI, payAmount, openId);
+        Map<String, String> resMap = this.java110UnifieldOrder(feeName, orderNum, wechatAuthProperties.TRADE_TYPE_JSAPI, payAmount, openId);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             resultMap.put("appId", wechatAuthProperties.getAppId());
             resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
@@ -132,13 +133,13 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     /**
      * 小程序支付统一下单
      */
-    private Map<String, String> java110UnifieldOrder(String orderNum, String tradeType, double payAmount, String openid) throws Exception {
+    private Map<String, String> java110UnifieldOrder(String feeName, String orderNum, String tradeType, double payAmount, String openid) throws Exception {
 //封装参数
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", wechatAuthProperties.getAppId());
         paramMap.put("mch_id", wechatAuthProperties.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
-        paramMap.put("body", "HC智慧家园-停车费");
+        paramMap.put("body", "HC智慧家园-" + feeName);
         paramMap.put("out_trade_no", orderNum);
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());
@@ -154,7 +155,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(
                 wechatAuthProperties.getWxPayUnifiedOrder(), xmlData, String.class);
 
-        logger.debug("统一下单返回"+responseEntity);
+        logger.debug("统一下单返回" + responseEntity);
 //请求微信后台，获取预支付ID
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
