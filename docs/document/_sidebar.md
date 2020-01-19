@@ -68,7 +68,10 @@
   * [查询历史投诉单](api/complaint/listAuditHistoryComplaints.md)
   * [查询审核投诉单](api/complaint/listAuditComplaints.md)
   * [报修](api/repair/saveRepair.md)
+  * [删除报修](api/repair/deleteOwnerRepair.md)
   * [查看报修](api/repair/queryRepair.md)
+  * [报修结案](api/repair/closeRepairDispatch.md)
+  * [报修派单](api/repair/repairDispatchStep.md)
   * [删除组织](api/organization/deleteOrg.md)
   * [查询组织](api/organization/listOrgs.md)
   * [查询上级组织](api/organization/listParentOrgs.md)
@@ -95,10 +98,16 @@
   * [支付确认通知](api/money/payFeeConfirm.md)
   * [预下单](api/money/payFeePre.md)
   * [根据对象ID查询文件信息](api/file/getFileByObjId.md)
+  * [保存文件](api/file/saveFile.md)
+  * [查询文件](api/file/getFile.md)
   * [采购管理-删除审核人员](api/purchase/deleteAuditUser.md)
   * [采购管理-查询审核人员](api/purchase/listAuditUsers.md)
   * [采购管理-查询审核工单](api/purchase/listAuditOrders.md)
   * [采购管理-添加审核人员](api/purchase/saveAuditUser.md)
+  * [采购管理-查询资源(物品)](api/resource/listResourceStores.md)
+  * [采购管理-编辑资源(物品)](api/resource/updateResourceStore.md)
+  * [采购管理-删除资源(物品)](api/resource/deleteResourceStore.md)
+  * [采购管理-保存资源(物品)](api/resource/saveResourceStore.md)
   
   
 
