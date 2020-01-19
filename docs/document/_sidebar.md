@@ -33,6 +33,7 @@
   * [用户注册](api/user/register.md)
   * [用户登录](api/user/login.md)
   * [游客登记](api/user/saveVisit.md)
+  * [访客登记变更](api/user/updateVisit.md)
   * [上传业主照片](api/user/uploadOwnerPhoto.md)
   * [用户校验登录](api/user/checkLogin.md)
   * [用户退出登录](api/user/logout.md)
@@ -41,6 +42,9 @@
   * [查询已入驻的小区](api/community/queryMyCommunity.md)
   * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
   * [查询小区商户](api/community/listStoresByCommunity.md)
+  * [小区审核](api/community/auditCommunity.md)
+  * [审核入驻小区状态](api/community/auditEnterCommunity.md)
+  * [查询未审核入驻小区](api/community/listAuditEnterCommunitys.md)
   * [检查用户权限](api/user/checkUserHasPrivilege.md)
   * [小区成员入驻](api/community/communityMemberJoined.md)
   * [小区成员退出](api/community/communityMemberQuit.md)
@@ -108,6 +112,14 @@
   * [采购管理-编辑资源(物品)](api/resource/updateResourceStore.md)
   * [采购管理-删除资源(物品)](api/resource/deleteResourceStore.md)
   * [采购管理-保存资源(物品)](api/resource/saveResourceStore.md)
+  * [查询服务提供](api/service/listServiceProvides.md)
+  * [编辑服务提供](api/service/updateServiceProvide.md)
+  * [删除服务提供](api/service/deleteServiceProvide.md)
+  * [开发服务提供](api/service/saveServiceProvide.md)
+  * [配置菜单](api/menu/configMenu.md)
+  * [删除菜单](api/menu/deleteMenu.md)
+  * [修改菜单](api/menu/updateMenu.md)
+  * [查询菜单](api/menu/updateMenu.md)
   
   
 
@@ -158,6 +170,7 @@
   * [保存停车位](services/parkingSpace/SaveParkingSpaceInfo.md)
   * [修改停车位](services/parkingSpace/UpdateParkingSpaceInfo.md)
   * [删除停车位](services/parkingSpace/DeleteParkingSpaceInfo.md)
+
 
 * 工具类接口
 
