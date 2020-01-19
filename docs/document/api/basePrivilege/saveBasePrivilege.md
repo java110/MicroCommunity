@@ -5,7 +5,7 @@
 > 添加基础权限接口
 
 ###### URL
-> [http://api.java110.com:8008/api/advert.saveAdvert](http://api.java110.com:8008/api/advert.saveAdvert)
+> [http://api.java110.com:8008/api/basePrivilege.saveBasePrivileges](http://api.java110.com:8008/api/basePrivilege.saveBasePrivileges)
 
 ###### 支持格式
 > JSON
@@ -40,7 +40,7 @@
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/advert.saveAdvert](http://api.java110.com:8008/api/advert.saveAdvert)
+> 地址：[http://api.java110.com:8008/api/basePrivilege.saveBasePrivileges](http://api.java110.com:8008/api/basePrivilege.saveBasePrivileges)
 
 ``` javascript
 请求头信息：
