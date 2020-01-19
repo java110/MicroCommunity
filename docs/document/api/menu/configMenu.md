@@ -24,8 +24,16 @@
 ###### 请求参数
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|floorId|1|String|30|楼ID|-|
-|communityId|1|String|30|小区ID|-|
+|-|注：参数请求格式请根据下面举例参数格式|-|
+|name|1|String|30|菜单名称|-|
+|url|1|String|30|菜单地址|-|
+|seq|1|String|30|序列|-|
+|isShow|1|String|30|是否显示菜单|-|
+|name|1|String|30|权限名称|-|
+|domain|1|String|30|商户类型|-|
+|resource|1|String|30|资源路径|-|
+
+
 
 ###### 返回协议
 
