@@ -19,8 +19,12 @@
              t.status_cd= #{statusCd},
         </if>
         <if test="state !=null and state != ''">
-             t.state= #{state}
+             t.state= #{state},
         </if>
+        <if test="updateTime !=null ">
+            t.update_time= #{updateTime}
+        </if>
+
         where 1=1
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -80,6 +84,8 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+
+
 
     </select>
 
@@ -167,7 +173,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        order by t.create_time desc
+        order by t.update_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
