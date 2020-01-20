@@ -22,10 +22,7 @@ import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 从订单中同步业主信息至设备中间表
@@ -168,6 +165,7 @@ public class TranslateOwnerToMachine implements Runnable {
         Map paramInfo = new HashMap();
         paramInfo.put("machineId", tmpMachineDto.getMachineId());
         paramInfo.put("objId", ownerDto.getMemberId());
+        paramInfo.put("statusCd", "0");
 
         int count = machineTranslateServiceDaoImpl.queryMachineTranslatesCount(paramInfo);
         if (count > 0) {
@@ -196,6 +194,7 @@ public class TranslateOwnerToMachine implements Runnable {
         info.put("objId", ownerDto.getMemberId());
         info.put("state", "10000");
         info.put("communityId", ownerDto.getCommunityId());
+        info.put("updateTime", new Date());
         machineTranslateServiceDaoImpl.updateMachineTranslate(info);
 
     }

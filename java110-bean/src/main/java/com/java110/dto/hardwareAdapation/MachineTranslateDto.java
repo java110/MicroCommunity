@@ -25,6 +25,7 @@ public class MachineTranslateDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
     private String communityId;
+    private String updateTime;
 
 
     private Date createTime;
@@ -127,5 +128,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

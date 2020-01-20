@@ -75,11 +75,11 @@
                         <tr>
                             <th class="text-center">同步ID</th>
                             <th class="text-center">设备编码</th>
-                            <th class="text-center">设备ID</th>
                             <th class="text-center">对象类型</th>
                             <th class="text-center">对象名称</th>
                             <th class="text-center">对象Id</th>
                             <th class="text-center">状态</th>
+                            <th class="text-center">同步时间</th>
                             <th class="text-center">操作</th>
 
 
@@ -89,11 +89,11 @@
                         <tr v-for="machineTranslate in machineTranslateManageInfo.machineTranslates">
                             <td class="text-center">{{machineTranslate.machineTranslateId}}</td>
                             <td class="text-center">{{machineTranslate.machineCode}}</td>
-                            <td class="text-center">{{machineTranslate.machineId}}</td>
                             <td class="text-center">{{machineTranslate.typeCdName}}</td>
                             <td class="text-center">{{machineTranslate.objName}}</td>
                             <td class="text-center">{{machineTranslate.objId}}</td>
                             <td class="text-center">{{machineTranslate.stateName}}</td>
+                            <td class="text-center">{{machineTranslate.updateTime}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
