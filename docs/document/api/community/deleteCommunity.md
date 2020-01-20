@@ -5,7 +5,7 @@
 > 删除小区接口
 
 ###### URL
-> [待补充]()
+> [http://api.java110.com:8008/api/community.deleteCommunity](http://api.java110.com:8008/api/community.deleteCommunity)
 
 ###### 支持格式
 > JSON
@@ -36,7 +36,7 @@
 
 
 ###### 举例
-> 地址：[待补充]()
+> 地址：[http://api.java110.com:8008/api/community.deleteCommunity](http://api.java110.com:8008/api/community.deleteCommunity)
 
 ``` javascript
 请求头信息：
@@ -49,9 +49,17 @@ SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 {
-	待补充
+	"address": "青海省西宁市城中区申宁路6",
+	"nearbyLandmarks": "安馨雅苑北100米1",
+	"cityName": "未知",
+	"stateName": "待审核",
+	"cityCode": "8630100",
+	"name": "格兰小镇(西宁)",
+	"state": "1000",
+	"communityId": "7020181217000002",
+	"mapY": "",
+	"mapX": "102.909090"
 }
-
 返回报文：
 
 成功
