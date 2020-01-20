@@ -1,8 +1,8 @@
 
 
-**1\. 添加通知**
+**1\. 添加公告**
 ###### 接口功能
->添加通知接口
+>添加公告接口
 
 ###### URL
 > [http://api.java110.com:8008/api/notice.saveNotice](http://api.java110.com:8008/api/notice.saveNotice)

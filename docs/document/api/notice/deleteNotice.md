@@ -1,8 +1,8 @@
 
 
-**1\. 删除通知**
+**1\. 删除公告**
 ###### 接口功能
->删除通知接口
+>删除公告接口
 
 ###### URL
 > [http://api.java110.com:8008/api/notice.deleteNotice](http://api.java110.com:8008/api/notice.deleteNotice)
