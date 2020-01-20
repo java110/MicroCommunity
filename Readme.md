@@ -45,7 +45,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     
 ### 业主小程序
 
-    目前正在火速开发中，欢迎star
+   ![image](docs/images/hcOwner.png)
     
    github: [https://github.com/java110/WechatOwnerService](https://github.com/java110/WechatOwnerService)
    
