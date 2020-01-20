@@ -2,7 +2,7 @@
 
 **1\. 删除应用**
 ###### 接口功能
-> 用户通过web端或APP删除广告接口
+> 删除应用接口
 
 ###### URL
 > [http://api.java110.com:8008/api/app.deleteApp](http://api.java110.com:8008/api/app.deleteApp)
