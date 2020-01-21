@@ -99,13 +99,14 @@
   * [删除广告](api/Advert/deleteAdvert.md)
   * [停车费清单](api/money/getParkingSpacePayFee.md)
   * [物业费清单](api/money/getPropertyPayFee.md)
+  * [支付确认通知](api/money/payFeeConfirm.md)
+  * [预下单](api/money/payFeePre.md)
+  * [根据停车位查询费用](api/money/queryFeeByParkingSpace.md)
   * [业主绑定](api/owner/appUserBindingOwner.md)
   * [业主门禁](api/owner/listOwnerMachines.md)
   * [申请访客密码](api/applyVisitorApplicationKey/applyVisitorApplicationKey.md)
   * [手机端申请钥匙](api/applicationKey/applyApplicationKey.md)
   * [查询活动](api/activities/listActivitiess.md)
-  * [支付确认通知](api/money/payFeeConfirm.md)
-  * [预下单](api/money/payFeePre.md)
   * [根据对象ID查询文件信息](api/file/getFileByObjId.md)
   * [保存文件](api/file/saveFile.md)
   * [查询文件](api/file/getFile.md)
@@ -158,6 +159,7 @@
   * [更新应用](api/app/updateApp.md)
   * [添加应用](api/app/saveApp.md)
   * [查询应用](api/app/listApps.md)
+  * [查询首页统计信息](api/count/queryIndexStatistic.md)
   
   
 
