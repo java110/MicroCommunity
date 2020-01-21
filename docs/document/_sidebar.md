@@ -213,3 +213,7 @@
 * 工具类接口
 
   * [刷新缓存](api/utils/clearCache)
+  
+* 商业授权
+
+  * [授权](license.md)
