@@ -40,6 +40,7 @@
 
                 vc.component.activitiesManageInfo.conditions.page = _page;
                 vc.component.activitiesManageInfo.conditions.row = _rows;
+                vc.component.activitiesManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params: vc.component.activitiesManageInfo.conditions
                 };
