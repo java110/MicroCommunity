@@ -31,7 +31,6 @@ public class EditMenuGroupSMOImpl extends AbstractComponentSMO implements IEditM
         Assert.hasKeyAndValue(paramIn, "gId", "组Id不能为空");
         Assert.hasKeyAndValue(paramIn, "name", "必填，请填写组名称");
         Assert.hasKeyAndValue(paramIn, "icon", "必填，请填写icon");
-        Assert.hasKeyAndValue(paramIn, "label", "必填，请填写标签");
         Assert.hasKeyAndValue(paramIn, "seq", "必填，请填写序列");
 
 

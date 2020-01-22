@@ -54,14 +54,10 @@
                         errInfo: "icon必须在2至20字符之间"
                     },
                     ],
-                    'addMenuGroupInfo.label': [{
-                        limit: "required",
-                        param: "",
-                        errInfo: "标签不能为空"
-                    },
+                    'addMenuGroupInfo.label': [,
                     {
-                        limit: "maxin",
-                        param: "1,20",
+                        limit: "maxLength",
+                        param: "20",
                         errInfo: "标签错误"
                     },
                     ],
