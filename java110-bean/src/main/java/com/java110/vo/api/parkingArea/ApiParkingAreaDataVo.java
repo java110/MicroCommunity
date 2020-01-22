@@ -6,34 +6,49 @@ import java.util.Date;
 public class ApiParkingAreaDataVo implements Serializable {
 
     private String paId;
-private String num;
-private String typeCd;
-private String remark;
-public String getPaId() {
+    private String num;
+    private String typeCd;
+    private String remark;
+
+    private String createTime;
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getNum() {
+
+    public String getNum() {
         return num;
     }
-public void setNum(String num) {
+
+    public void setNum(String num) {
         this.num = num;
     }
-public String getTypeCd() {
+
+    public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
 
-
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }

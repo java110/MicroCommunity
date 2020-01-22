@@ -1,4 +1,5 @@
-<div id = "editParkingAreaModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div id="editParkingAreaModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -7,30 +8,36 @@
                     <div>
                         <div>
                             <div class="form-group row">
-         <label class="col-sm-2 col-form-label">停车场编号</label>
-         <div class="col-sm-10">
-           <input v-model="editParkingAreaInfo.num"                   type="text" placeholder="必填，请填写停车场编号" class="form-control">
-         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">停车场类型</label>
-         <div class="col-sm-10">
-<select class="custom-select" v-model="editParkingAreaInfo.typeCd">
-         <option selected  disabled value="">必填，请选择停车场类型</option>
-         <option  value="1001">地上停车场</option>
-<option  value="2001">地下停车场</option>
-  </select>         </div>
-</div>
-<div class="form-group row">
-         <label class="col-sm-2 col-form-label">备注</label>
-         <div class="col-sm-10">
-           <input v-model="editParkingAreaInfo.remark"                   type="text" placeholder="必填，请填写备注" class="form-control">
-         </div>
-</div>
+                                <label class="col-sm-2 col-form-label">停车场编号</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editParkingAreaInfo.num" type="text" placeholder="必填，请填写停车场编号"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">停车场类型</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="editParkingAreaInfo.typeCd">
+                                        <option selected disabled value="">必填，请选择停车场类型</option>
+                                        <option value="1001">地上停车场</option>
+                                        <option value="2001">地下停车场</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">备注</label>
+                                <div class="col-sm-10">
+                                    <input v-model="editParkingAreaInfo.remark" type="text" placeholder="可填，请填写备注"
+                                           class="form-control">
+                                </div>
+                            </div>
 
                             <div class="ibox-content">
-                                <button class="btn btn-primary float-right" type="button" v-on:click="editParkingArea()" ><i class="fa fa-check"></i>&nbsp;保存</button>
-                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;" data-dismiss="modal">取消</button>
+                                <button class="btn btn-primary float-right" type="button"
+                                        v-on:click="editParkingArea()"><i class="fa fa-check"></i>&nbsp;保存
+                                </button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                        data-dismiss="modal">取消
+                                </button>
                             </div>
                         </div>
                     </div>
