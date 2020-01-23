@@ -59,7 +59,12 @@
                         var _tmpNow = new Date();
                         var total = (_tmpNow - _tmpInTime)/1000;
                         var hours = parseFloat(total / (60*60));//计算整数天数
-                        _tmpCarIn.continueHours = hours;
+                        if (isNaN(hours)) {
+                         _tmpCarIn.continueHours = hours;
+                        }else{
+                          var newHours = Math.round(hours*100)/100;
+                          _tmpCarIn.continueHours = newHours;
+                        }
                         _tmpCarIns.push(_tmpCarIn);
                     }
                     vc.component.carInManageInfo.carIns = _tmpCarIns;
