@@ -23,7 +23,7 @@
             }
         },
         _initMethod: function() {
-            vc.component._listCarInouts(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._listCarIns(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent: function() {
 
@@ -73,7 +73,7 @@
                 });
             },
             _queryCarInoutMethod: function() {
-                vc.component._listCarInouts(DEFAULT_PAGE, DEFAULT_ROWS);
+                vc.component._listCarIns(DEFAULT_PAGE, DEFAULT_ROWS);
 
             },
             _moreCondition: function() {
