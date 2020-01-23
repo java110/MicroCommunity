@@ -6,41 +6,50 @@ import java.util.Date;
 public class ApiCarBlackWhiteDataVo implements Serializable {
 
     private String bwId;
-private String blackWhite;
-private String carNum;
-private String startTime;
-private String endTime;
-public String getBwId() {
+    private String blackWhite;
+    private String carNum;
+    private String startTime;
+    private String endTime;
+
+    public String getBwId() {
         return bwId;
     }
-public void setBwId(String bwId) {
+
+    public void setBwId(String bwId) {
         this.bwId = bwId;
     }
-public String getBlackWhite() {
+
+    public String getBlackWhite() {
         return blackWhite;
     }
-public void setBlackWhite(String blackWhite) {
+
+    public void setBlackWhite(String blackWhite) {
         this.blackWhite = blackWhite;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-
 
 
 }
