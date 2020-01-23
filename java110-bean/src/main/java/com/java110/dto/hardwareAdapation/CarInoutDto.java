@@ -19,6 +19,7 @@ public class CarInoutDto extends PageDto implements Serializable {
     private String inoutId;
     private String carNum;
     private String state;
+    private String[] states;
     private String communityId;
     private String outTime;
 
@@ -91,5 +92,13 @@ public class CarInoutDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

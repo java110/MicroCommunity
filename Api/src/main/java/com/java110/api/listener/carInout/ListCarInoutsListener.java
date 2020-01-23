@@ -66,6 +66,12 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
 
         CarInoutDto carInoutDto = BeanConvertUtil.covertBean(reqJson, CarInoutDto.class);
 
+        if (reqJson.containsKey("state") && reqJson.getString("state").contains(",")) {
+            carInoutDto.setState("");
+            String[] states = reqJson.getString("state").split(",");
+            carInoutDto.setStates(states);
+        }
+
         int count = carInoutInnerServiceSMOImpl.queryCarInoutsCount(carInoutDto);
 
         List<ApiCarInoutDataVo> carInouts = null;
