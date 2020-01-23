@@ -39,6 +39,7 @@ endTime:'',
 
                 vc.component.carInoutManageInfo.conditions.page = _page;
                 vc.component.carInoutManageInfo.conditions.row = _rows;
+                vc.component.carInoutManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params:vc.component.carInoutManageInfo.conditions
                };
