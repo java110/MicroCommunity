@@ -1,70 +1,82 @@
 {
-  "templateName":"停车场",
-  "templateCode":"parkingArea",
-  "templateKey":"paId",
-  "templateKeyName":"停车场ID",
-  "searchCode": "num",
-  "searchName": "停车场编号",
+  "templateName":"黑白名单",
+  "templateCode":"carBlackWhite",
+  "templateKey":"bwId",
+  "templateKeyName":"黑白名单ID",
+  "searchCode": "carNum",
+  "searchName": "车牌号",
   "conditions": [
     {
-      "name": "停车场编号",
-      "inputType": "input",
-      "code": "num",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "停车场类型",
+      "name": "名单类型",
       "inputType": "select",
-      "selectValue":"1001,2001",
-      "selectValueName":"地上停车场,地下停车场",
-      "code": "typeCd",
+      "selectValue":"1111,2222",
+      "selectValueName":"黑名单,白名单",
+      "code": "blackWhite",
       "whereCondition": "equal"
     },
     {
-      "name": "停车场ID",
+      "name": "车牌号",
       "inputType": "input",
-      "code": "paId",
+      "code": "carNum",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "名单ID",
+      "inputType": "input",
+      "code": "bwId",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"num",
-      "cnCode":"停车场编号",
-      "desc":"必填，请填写停车场编号",
+      "code":"blackWhite",
+      "cnCode":"名单类型",
+      "desc":"必填，请填写名单类型",
       "required":true,
       "hasDefaultValue":false,
-      "inputType":"input",
-      "limit":"maxin",
-      "limitParam":"1,12",
-      "limitErrInfo":"停车场编号不能超过12位",
-      "show": true
-    },
-    {
-      "code": "typeCd",
-      "cnCode":"停车场类型",
-      "desc":"必填，请选择停车场类型",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "select",
-      "selectValue":"1001,2001",
-      "selectValueName":"地上停车场,地下停车场",
+      "inputType":"select",
+      "selectValue":"1111,2222",
+      "selectValueName":"黑名单,白名单",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"停车场类型格式错误",
+      "limitErrInfo":"名单类型格式错误",
       "show": true
     },
     {
-      "code": "remark",
-      "cnCode":"备注",
-      "desc":"必填，请填写备注",
+      "code": "carNum",
+      "cnCode":"车牌号",
+      "desc":"必填，请填写车牌号",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"maxin",
-      "limitParam":"1,4000",
-      "limitErrInfo":"备注太长",
-      "show": false
+      "limitParam":"1,12",
+      "limitErrInfo":"车牌号大于12位",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode":"开始时间",
+      "desc":"必填，请选择开始时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode":"结束时间",
+      "desc":"必填，请选择结束时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
     }
   ]
 }

@@ -108,6 +108,24 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_OWNER_CAR = "111200050001";
 
 
+    /**
+     * 保存车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE = "112200030001";
+
+    /**
+     * 修改车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE = "112200040001";
+
+
+    /**
+     * 删除车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE = "112200050001";
+
+
+
 
 
 

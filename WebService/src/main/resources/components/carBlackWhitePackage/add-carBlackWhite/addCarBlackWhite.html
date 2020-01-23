@@ -1,0 +1,55 @@
+<div id="addCarBlackWhiteModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="m-t-none m-b ">添加名单</h3>
+                <div class="ibox-content">
+                    <div>
+                        <div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">名单类型</label>
+                                <div class="col-sm-10">
+                                    <select class="custom-select" v-model="addCarBlackWhiteInfo.blackWhite">
+                                        <option selected disabled value="">必填，请选择名单类型</option>
+                                        <option value="1111">黑名单</option>
+                                        <option value="2222">白名单</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">车牌号</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addCarBlackWhiteInfo.carNum" type="text" placeholder="必填，请填写车牌号"
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">开始时间</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addCarBlackWhiteInfo.startTime" type="text" placeholder="必填，请填写开始时间"
+                                           class="form-control addCarBlackWhiteStartTime">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">结束时间</label>
+                                <div class="col-sm-10">
+                                    <input v-model="addCarBlackWhiteInfo.endTime" type="text" placeholder="必填，请填写结束时间"
+                                           class="form-control addCarBlackWhiteEndTime">
+                                </div>
+                            </div>
+
+                            <div class="ibox-content">
+                                <button class="btn btn-primary float-right" type="button"
+                                        v-on:click="saveCarBlackWhiteInfo()"><i class="fa fa-check"></i>&nbsp;保存
+                                </button>
+                                <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                        data-dismiss="modal">取消
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
