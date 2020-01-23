@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carInoutServiceDaoImpl">
+
+    <!-- 保存进出场信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessCarInoutInfo" parameterType="Map">
+           insert into business_car_inout(
+in_time,inout_id,operate,car_num,state,community_id,b_id,out_time
+) values (
+#{inTime},#{inoutId},#{operate},#{carNum},#{state},#{communityId},#{bId},#{outTime}
+)
+       </insert>
+
+
+       <!-- 查询进出场信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessCarInoutInfo" parameterType="Map" resultType="Map">
+           select  t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.operate,t.car_num,t.car_num carNum,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.out_time,t.out_time outTime 
+from business_car_inout t 
+where 1 =1 
+<if test="inTime !=null and inTime != ''">
+   and t.in_time= #{inTime}
+</if> 
+<if test="inoutId !=null and inoutId != ''">
+   and t.inout_id= #{inoutId}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="outTime !=null and outTime != ''">
+   and t.out_time= #{outTime}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存进出场信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveCarInoutInfoInstance" parameterType="Map">
+        insert into car_inout(
+in_time,inout_id,car_num,status_cd,state,community_id,b_id,out_time
+) select t.in_time,t.inout_id,t.car_num,'0',t.state,t.community_id,t.b_id,t.out_time from business_car_inout t where 1=1
+<if test="inTime !=null and inTime != ''">
+   and t.in_time= #{inTime}
+</if> 
+<if test="inoutId !=null and inoutId != ''">
+   and t.inout_id= #{inoutId}
+</if> 
+   and t.operate= 'ADD'
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="outTime !=null and outTime != ''">
+   and t.out_time= #{outTime}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询进出场信息 add by wuxw 2018-07-03 -->
+    <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
+        select  t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.car_num,t.car_num carNum,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.out_time,t.out_time outTime 
+from car_inout t 
+where 1 =1 
+<if test="inTime !=null and inTime != ''">
+   and t.in_time= #{inTime}
+</if> 
+<if test="inoutId !=null and inoutId != ''">
+   and t.inout_id= #{inoutId}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="outTime !=null and outTime != ''">
+   and t.out_time= #{outTime}
+</if> 
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改进出场信息 add by wuxw 2018-07-03 -->
+    <update id="updateCarInoutInfoInstance" parameterType="Map">
+        update  car_inout t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="inTime !=null and inTime != ''">
+, t.in_time= #{inTime}
+</if> 
+<if test="carNum !=null and carNum != ''">
+, t.car_num= #{carNum}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="outTime !=null and outTime != ''">
+, t.out_time= #{outTime}
+</if> 
+ where 1=1 <if test="inoutId !=null and inoutId != ''">
+and t.inout_id= #{inoutId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询进出场数量 add by wuxw 2018-07-03 -->
+     <select id="queryCarInoutsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from car_inout t 
+where 1 =1 
+<if test="inTime !=null and inTime != ''">
+   and t.in_time= #{inTime}
+</if> 
+<if test="inoutId !=null and inoutId != ''">
+   and t.inout_id= #{inoutId}
+</if> 
+<if test="carNum !=null and carNum != ''">
+   and t.car_num= #{carNum}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="outTime !=null and outTime != ''">
+   and t.out_time= #{outTime}
+</if> 
+
+
+     </select>
+
+</mapper>

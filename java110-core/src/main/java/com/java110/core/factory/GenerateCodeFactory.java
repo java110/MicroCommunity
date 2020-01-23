@@ -113,6 +113,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_activitiesId = "99";
     public static final String CODE_PREFIX_paId = "10";
     public static final String CODE_PREFIX_bwId = "11";
+    public static final String CODE_PREFIX_inoutId = "12";
 
 
     /**
