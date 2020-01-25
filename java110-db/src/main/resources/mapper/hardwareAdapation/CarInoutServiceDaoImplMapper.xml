@@ -117,6 +117,7 @@
         <if test="outTime !=null ">
             and t.out_time= #{outTime}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
