@@ -125,6 +125,9 @@
             <if test="num !=null and num != ''">
                 and t.num= #{num}
             </if>
+            <if test="areaNum !=null and areaNum != ''">
+                and pa.num= #{areaNum}
+            </if>
             <if test="psId !=null and psId != ''">
                 and t.ps_id= #{psId}
             </if>
@@ -214,6 +217,9 @@
         </if>
         <if test="num !=null and num != ''">
             and t.num= #{num}
+        </if>
+        <if test="areaNum !=null and areaNum != ''">
+            and pa.num= #{areaNum}
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}

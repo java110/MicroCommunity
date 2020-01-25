@@ -12,11 +12,11 @@
             parkingSpaceInfo:{
                 flowComponent:'viewSelectParkingSpace',
                 num:'',
-                typeCd:'',
                 area:'',
                 state:'',
                 stateName:'',
                 remark:'',
+                areaNum:'',
                 psId:''
             }
         },
@@ -40,11 +40,10 @@
             },
             loadParkingSpaceData:function(){
                vc.component.parkingSpaceInfo.psId = vc.getParam("psId");
-               vc.component.parkingSpaceInfo.name = vc.getParam("name");
-               vc.component.parkingSpaceInfo.age = vc.getParam("age");
-               vc.component.parkingSpaceInfo.sex = vc.getParam("sex");
-               vc.component.parkingSpaceInfo.userName = vc.getParam("userName");
-               vc.component.parkingSpaceInfo.link = vc.getParam("link");
+               vc.component.parkingSpaceInfo.num = vc.getParam("num");
+               vc.component.parkingSpaceInfo.area = vc.getParam("area");
+               vc.component.parkingSpaceInfo.state = vc.getParam("state");
+               vc.component.parkingSpaceInfo.areaNum = vc.getParam("areaNum");
 
                if(vc.component.parkingSpaceInfo.psId != ''){
                   vc.emit($props.callBackComponent,'notify',vc.component.parkingSpaceInfo);

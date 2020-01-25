@@ -3,7 +3,7 @@
         <div class="ibox ">
             <div class="ibox-title">
                 <h5>停车位信息</h5>
-                <div class="ibox-tools" style="top:10px;">
+                <div class="ibox-tools" style="top:10px;" v-if="parkingSpaceInfo.psId == ''">
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="openSearchParkingSpaceModel()">
                         <i class="glyphicon glyphicon-search"></i> 选择车位</button>
                 </div>
@@ -24,8 +24,8 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" >类型：</label>
-                            <label class="">{{parkingSpaceInfo.typeCd == 1001 ? '地下停车位' : '地上停车位'}}</label>
+                            <label class="col-form-label" >停车场：</label>
+                            <label class="">{{parkingSpaceInfo.areaNum}}</label>
                         </div>
                     </div>
 

@@ -8,6 +8,10 @@
                             v-on:click="_callBackListOwner(viewOwnerInfo.ownerId)">
                         返回
                     </button>
+                    <button type="button" class="btn btn-primary btn-sm" v-if="viewOwnerInfo.ownerId==''"
+                            v-on:click="_openChooseOwner()">
+                        选择业主
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
@@ -77,4 +81,9 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="searchOwner"
+               emitChooseOwner="viewOwnerInfo"
+               emitLoadData="viewOwnerInfo"
+    ></vc:create>
 </div>
