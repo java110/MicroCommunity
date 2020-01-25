@@ -52,5 +52,10 @@ public class ServiceCodeMachineTranslateConstant {
      */
     public static final String MACHINE_CMD_RESULT = "machineTranslate.machineCmdResult";
 
+    /**
+     * 道闸开门
+     */
+    public static final String MACHINE_ROAD_GATE_OPEN = "machineTranslate.machineRoadGateOpen";
+
 
 }

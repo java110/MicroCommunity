@@ -23,7 +23,8 @@
                 roomId: '',
                 locationTypeCd: '',
                 locationObjId: '',
-                roomName: ''
+                roomName: '',
+                direction:''
             }
         },
         _initMethod: function () {
@@ -89,6 +90,19 @@
                                 limit: "num",
                                 param: "",
                                 errInfo: "设备类型格式错误"
+                            },
+                        ],
+                        'addMachineInfo.direction':
+                        [
+                            {
+                                limit: "required",
+                                param: "",
+                                errInfo: "设备方向不能为空"
+                            },
+                            {
+                                limit: "num",
+                                param: "",
+                                errInfo: "设备方向格式错误"
                             },
                         ],
                     'addMachineInfo.authCode':
@@ -201,7 +215,7 @@
                     authCode: '',
                     machineIp: '',
                     machineMac: '',
-
+                    direction:''
                 };
             },
             _initAddMachineData: function () {

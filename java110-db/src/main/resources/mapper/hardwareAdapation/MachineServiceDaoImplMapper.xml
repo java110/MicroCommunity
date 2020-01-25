@@ -6,15 +6,15 @@
 
     <!-- 保存设备信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineInfo" parameterType="Map">
-           insert into business_machine(
-machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,
-machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
-) values (
-#{machineMac},#{machineId},#{machineCode},#{authCode},#{operate},#{machineVersion},
-#{communityId},#{bId},#{machineName},#{machineTypeCd},#{machineIp},
-#{locationTypeCd},#{locationObjId},#{state}
-)
-       </insert>
+        insert into business_machine(
+        machine_mac,machine_id,machine_code,auth_code,operate,machine_version,community_id,b_id,
+        machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state,direction
+        ) values (
+        #{machineMac},#{machineId},#{machineCode},#{authCode},#{operate},#{machineVersion},
+        #{communityId},#{bId},#{machineName},#{machineTypeCd},#{machineIp},
+        #{locationTypeCd},#{locationObjId},#{state},#{direction}
+        )
+    </insert>
 
 
     <!-- 查询设备信息（Business） add by wuxw 2018-07-03 -->
@@ -23,7 +23,8 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         machineCode,t.auth_code,t.auth_code authCode,t.operate,t.machine_version,t.machine_version
         machineVersion,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.machine_name,t.machine_name
         machineName,t.machine_type_cd,t.machine_type_cd machineTypeCd,t.machine_ip,t.machine_ip machineIp,
-        t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd,t.location_obj_id,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId
+        t.location_type_cd,t.location_obj_id,t.state,t.location_type_cd,t.location_obj_id,t.location_type_cd
+        locationTypeCd,t.location_obj_id locationObjId,t.direction
         from business_machine t
         where 1 =1
         <if test="machineMac !=null and machineMac != ''">
@@ -69,6 +70,10 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="state !=null and state != ''">
             and t.state = #{state}
         </if>
+        <if test="direction !=null and direction != ''">
+            and t.direction = #{direction}
+        </if>
+
 
     </select>
 
@@ -78,11 +83,11 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         insert into machine(
         machine_mac,machine_id,machine_code,auth_code,machine_version,status_cd,
         community_id,b_id,machine_name,machine_type_cd,machine_ip,
-        location_type_cd,location_obj_id,state
+        location_type_cd,location_obj_id,state,direction
         ) select
         t.machine_mac,t.machine_id,t.machine_code,t.auth_code,t.machine_version,'0',t.community_id,t.b_id,
         t.machine_name,t.machine_type_cd,t.machine_ip,
-        t.location_type_cd,t.location_obj_id,t.state
+        t.location_type_cd,t.location_obj_id,t.state,t.direction
         from business_machine t where 1=1
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
@@ -125,6 +130,9 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="state !=null and state != ''">
             and t.state = #{state}
         </if>
+        <if test="direction !=null and direction != ''">
+            and t.direction = #{direction}
+        </if>
 
     </insert>
 
@@ -138,8 +146,8 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
         t.location_type_cd,t.location_obj_id,
-        td1.name stateName,td2.name locationTypeName,t.create_time createTime
-        from machine t,t_dict td,t_dict td1,t_dict td2
+        td1.name stateName,td2.name locationTypeName,t.create_time createTime,t.direction,td3.name directionName
+        from machine t,t_dict td,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.machine_type_cd=td.status_cd
         and td.table_name='machine'
@@ -150,6 +158,9 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         and t.location_type_cd = td2.status_cd
         and td2.table_name='machine'
         and td2.table_columns='location_type_cd'
+        and t.direction = td3.status_cd
+        and td3.table_name='machine'
+        and td3.table_columns='direction'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>
@@ -198,6 +209,9 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="state !=null and state != ''">
             and t.state = #{state}
         </if>
+        <if test="direction !=null and direction != ''">
+            and t.direction = #{direction}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -245,6 +259,9 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="state !=null and state != ''">
             , t.state = #{state}
         </if>
+        <if test="direction !=null and direction != ''">
+            , t.direction = #{direction}
+        </if>
         where 1=1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -258,7 +275,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
     <!-- 查询设备数量 add by wuxw 2018-07-03 -->
     <select id="queryMachinesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from machine t,t_dict td,t_dict td1,t_dict td2
+        from machine t,t_dict td,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.machine_type_cd=td.status_cd
         and td.table_name='machine'
@@ -269,6 +286,9 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         and t.location_type_cd = td2.status_cd
         and td2.table_name='machine'
         and td2.table_columns='location_type_cd'
+        and t.direction = td3.status_cd
+        and td3.table_name='machine'
+        and td3.table_columns='direction'
         <if test="machineMac !=null and machineMac != ''">
             and t.machine_mac= #{machineMac}
         </if>

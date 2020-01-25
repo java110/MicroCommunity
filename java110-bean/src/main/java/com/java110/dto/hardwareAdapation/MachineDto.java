@@ -39,6 +39,8 @@ public class MachineDto extends PageDto implements Serializable {
     private String roomId;
     private String roomNum;
     private String locationObjName;
+    private String direction;//设备方向
+    private String directionName;
 
 
 
@@ -254,5 +256,21 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setLocationObjIds(String[] locationObjIds) {
         this.locationObjIds = locationObjIds;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public String getDirectionName() {
+        return directionName;
+    }
+
+    public void setDirectionName(String directionName) {
+        this.directionName = directionName;
     }
 }

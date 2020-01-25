@@ -20,6 +20,7 @@
                                 <option selected value="">请选择设备类型</option>
                                 <option value="992019111002270001">锐目门禁</option>
                                 <option value="9998">其他</option>
+                                <option value="9996">车辆道闸</option>
                             </select></div>
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -75,6 +76,7 @@
                             <th class="text-center">设备名称</th>
                             <th class="text-center">设备类型</th>
                             <th class="text-center">设备位置</th>
+                            <th class="text-center">方向</th>
                             <th class="text-center">状态</th>
                             <th class="text-center">时间</th>
 <!--                            <th class="text-center">设备MAC</th>-->
@@ -90,6 +92,7 @@
                             <td class="text-center">{{machine.machineName}}</td>
                             <td class="text-center">{{machine.machineTypeCdName}}</td>
                             <td class="text-center">{{machine.locationObjName}}</td>
+                            <td class="text-center">{{machine.directionName}}</td>
                             <td class="text-center">{{machine.stateName}}</td>
                            <td class="text-center">{{machine.createTime}}</td>
                            <!--<td class="text-center">{{machine.machineMac}}</td>-->
