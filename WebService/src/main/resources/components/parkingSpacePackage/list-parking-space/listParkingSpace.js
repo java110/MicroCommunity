@@ -12,7 +12,8 @@
                 conditions: {
                     psId: '',
                     area: '',
-                    typeCd: ''
+                    paId:'',
+                    areaNum: ''
                 }
             }
         },
@@ -21,6 +22,17 @@
         },
         _initEvent: function () {
             vc.on('listParkingSpace', 'listParkingSpaceData', function () {
+                vc.component._listParkingSpaceData(DEFAULT_PAGE, DEFAULT_ROWS);
+                vc.component.listParkingSpaceInfo.num = '';
+            });
+            vc.on('listParkingSpace', 'chooseParkingArea', function (_parkingArea) {
+                vc.component.listParkingSpaceInfo.conditions.paId = _parkingArea.paId;
+                vc.component.listParkingSpaceInfo.conditions.areaNum = _parkingArea.num;
+                vc.component.listParkingSpaceInfo.num = '';
+            });
+
+            vc.on('listParkingSpace', 'listParkingAreaData', function (_parkingArea) {
+                vc.component.listParkingSpaceInfo.conditions.paId = _parkingArea.paId;
                 vc.component._listParkingSpaceData(DEFAULT_PAGE, DEFAULT_ROWS);
                 vc.component.listParkingSpaceInfo.num = '';
             });
@@ -105,7 +117,10 @@
                 } else {
                     vc.component.listParkingSpaceInfo.moreCondition = true;
                 }
-            }
+            },
+            _openChooseParkingArea:function(){
+                vc.emit('chooseParkingArea','openChooseParkingAreaModel',{});
+            },
         }
     })
 })(window.vc);

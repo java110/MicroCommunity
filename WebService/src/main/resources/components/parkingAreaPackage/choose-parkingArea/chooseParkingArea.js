@@ -48,7 +48,7 @@
                 }
                 vc.emit($props.emitChooseParkingArea,'chooseParkingArea',_parkingArea);
                 vc.emit($props.emitLoadData,'listParkingAreaData',{
-                    parkingAreaId:_parkingArea.parkingAreaId
+                    paId:_parkingArea.paId
                 });
                 $('#chooseParkingAreaModel').modal('hide');
             },
