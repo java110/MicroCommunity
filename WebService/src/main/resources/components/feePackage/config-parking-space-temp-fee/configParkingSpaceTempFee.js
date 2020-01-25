@@ -12,9 +12,9 @@
 
          },
          _initEvent:function(){
-             vc.on('changeFeeTempConfigInfo','openConfigPropertyFeeModel',function(_params){
+             vc.on('configFeeTempConfigInfo','openConfigParkingSpaceFeeModel',function(_params){
                 vc.copyObject(_params, vc.component.changeFeeTempConfigInfo);
-                $('#changeFeeTempConfigInfoModel').modal('show');
+                $('#configFeeTempConfigInfoModel').modal('show');
             });
         },
         methods:{
