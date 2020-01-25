@@ -72,8 +72,8 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            $('#changeFeeTempConfigInfoModel').modal('hide');
-                            vc.emit('viewParkingSpaceFeeConfig','loadParkingSpaceConfigFee',vc.component.changeFeeConfigInfo);
+                            $('#configFeeTempConfigInfoModel').modal('hide');
+                            vc.emit('viewParkingSpaceFeeConfig','loadParkingSpaceConfigFee',vc.component.changeFeeTempConfigInfo);
                             return ;
                         }
                         vc.message(json);
