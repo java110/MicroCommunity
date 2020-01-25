@@ -65,7 +65,7 @@
             },
             openConfigParkingSpaceTempFeeModel:function(_feeInfo){
                 vc.emit('changeFeeTempConfigInfo','openConfigPropertyFeeModel',_feeInfo);
-            }
+            },
             loadParkingSpaceConfigFee:function(_feeInfo){
                 var param = {
                     params:{
