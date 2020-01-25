@@ -59,7 +59,7 @@
     <insert id="saveParkingSpaceInfoInstance" parameterType="Map">
         insert into parking_space(
         area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id
-        ) select t.area,t.t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id from
+        ) select t.area,t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id from
         business_parking_space t where 1=1
         <if test="area !=null and area != ''">
             and t.area= #{area}
