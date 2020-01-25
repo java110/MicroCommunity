@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 /**
  * 添加停车位组件
  */
-@Component("parkingSpaceSelect2")
-public class ParkingSpaceSelect2Component {
+@Component("parkingAreaSelect2")
+public class ParkingAreaSelect2Component {
 
     @Autowired
     private IListParkingAreasSMO listParkingAreasSMOImpl;
