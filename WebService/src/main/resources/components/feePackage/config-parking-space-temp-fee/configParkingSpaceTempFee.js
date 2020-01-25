@@ -5,6 +5,7 @@
             changeFeeTempConfigInfo:{
                 configId:"",
                 squarePrice:"",
+                feeTypeCd:"",
                 additionalAmount:""
             }
         },
