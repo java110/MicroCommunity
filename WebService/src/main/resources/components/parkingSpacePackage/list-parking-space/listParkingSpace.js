@@ -13,7 +13,8 @@
                     psId: '',
                     area: '',
                     paId:'',
-                    areaNum: ''
+                    areaNum: '',
+                    state:''
                 }
             }
         },
@@ -50,7 +51,8 @@
                         num: vc.component.listParkingSpaceInfo.num,
                         psId: vc.component.listParkingSpaceInfo.conditions.psId,
                         area: vc.component.listParkingSpaceInfo.conditions.area,
-                        paId: vc.component.listParkingSpaceInfo.conditions.paId
+                        paId: vc.component.listParkingSpaceInfo.conditions.paId,
+                        state: vc.component.listParkingSpaceInfo.conditions.state,
                     }
                 }
 
