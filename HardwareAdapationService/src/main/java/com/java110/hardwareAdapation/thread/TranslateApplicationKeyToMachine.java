@@ -127,6 +127,9 @@ public class TranslateApplicationKeyToMachine implements Runnable {
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 
         for (MachineDto tmpMachineDto : machineDtos) {
+            if("9996".equals(tmpMachineDto.getMachineTypeCd())){
+                continue;
+            }
             if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
                 saveMachineTranslate(tmpMachineDto, applicationKeyDto);
             } else if (BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
