@@ -100,6 +100,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
