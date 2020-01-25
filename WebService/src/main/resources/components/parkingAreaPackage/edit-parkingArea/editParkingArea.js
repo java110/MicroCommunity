@@ -50,14 +50,10 @@
                         errInfo: "停车场类型格式错误"
                     },
                     ],
-                    'editParkingAreaInfo.remark': [{
-                        limit: "required",
-                        param: "",
-                        errInfo: "备注不能为空"
-                    },
+                    'editParkingAreaInfo.remark': [
                     {
-                        limit: "maxin",
-                        param: "1,4000",
+                        limit: "maxLength",
+                        param: "4000",
                         errInfo: "备注太长"
                     },
                     ],

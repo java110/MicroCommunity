@@ -50,7 +50,7 @@
                         num: vc.component.listParkingSpaceInfo.num,
                         psId: vc.component.listParkingSpaceInfo.conditions.psId,
                         area: vc.component.listParkingSpaceInfo.conditions.area,
-                        typeCd: vc.component.listParkingSpaceInfo.conditions.typeCd
+                        paId: vc.component.listParkingSpaceInfo.conditions.paId
                     }
                 }
 

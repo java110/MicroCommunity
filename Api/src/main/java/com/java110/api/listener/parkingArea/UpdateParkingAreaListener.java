@@ -29,7 +29,6 @@ public class UpdateParkingAreaListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "num", "必填，请填写停车场编号");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
         Assert.hasKeyAndValue(reqJson, "typeCd", "必填，请选择停车场类型");
-        Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写备注");
 
     }
 

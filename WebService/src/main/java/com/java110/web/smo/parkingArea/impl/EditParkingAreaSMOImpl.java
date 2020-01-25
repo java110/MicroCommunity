@@ -31,7 +31,6 @@ public class EditParkingAreaSMOImpl extends AbstractComponentSMO implements IEdi
         Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区信息");
         Assert.hasKeyAndValue(paramIn, "num", "必填，请填写停车场编号");
         Assert.hasKeyAndValue(paramIn, "typeCd", "必填，请选择停车场类型");
-        Assert.hasKeyAndValue(paramIn, "remark", "必填，请填写备注");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__PARKINGAREA);
