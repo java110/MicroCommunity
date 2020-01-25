@@ -88,7 +88,7 @@ create table business_car_inout_detail(
   community_id varchar(30) not null comment '小区ID',
   machine_id varchar(30) not null comment '设备ID',
   machine_code varchar(30) not null comment '设备编码',
-  inout varchar(12) not null comment '1010 进场 2020 出场',
+  car_inout varchar(12) not null comment '3306 进场 3307 出场',
   car_num varchar(12) not null comment '车牌号',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   operate VARCHAR(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
@@ -101,7 +101,7 @@ create table car_inout_detail(
   community_id varchar(30) not null comment '小区ID',
   machine_id varchar(30) not null comment '设备ID',
   machine_code varchar(30) not null comment '设备编码',
-  inout varchar(12) not null comment '1010 进场 2020 出场',
+  car_inout varchar(12) not null comment '3306 进场 3307 出场',
   car_num varchar(12) not null comment '车牌号',
   create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   status_cd VARCHAR(2) NOT NULL DEFAULT '0' COMMENT '数据状态，详细参考c_status表，S 保存，0, 在用 1失效'

@@ -3,12 +3,15 @@ package com.java110.api.listener.machineTranslate;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.hardwareAdapation.ICarBlackWhiteInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.dto.hardwareAdapation.CarBlackWhiteDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.api.machine.MachineResDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,8 +32,18 @@ import java.util.Map;
 @Java110Listener("machineRoadGateOpenListener")
 public class MachineRoadGateOpenListener extends BaseMachineListener {
 
+    private static final String MACHINE_DIRECTION_IN = "3306"; // 进入
+
+    private static final String MACHINE_DIRECTION_OUT = "3307"; //出去
+
+    private static final String CAR_BLACK = "1111"; // 车辆黑名单
+    private static final String CAR_WHITE = "2222"; // 车辆白名单
+
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private ICarBlackWhiteInnerServiceSMO carBlackWhiteInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -66,8 +79,40 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
             outParam.put("message", "该设备【" + machineCode + "】未在该小区【" + communityId + "】注册");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
-            return ;
+            return;
         }
+        //设备方向
+        String direction = machineDtos.get(0).getDirection();
+
+        //进入
+        if (MACHINE_DIRECTION_IN.equals(direction)) {
+            dealCarIn(context, reqJson, machineDtos.get(0), communityId, machineCode);
+        }
+
+    }
+
+    /**
+     * 处理车辆进入
+     *
+     * @param reqJson
+     * @param machineDto
+     * @param communityId
+     * @param machineCode
+     */
+    private void dealCarIn(DataFlowContext context, JSONObject reqJson, MachineDto machineDto, String communityId, String machineCode) {
+        //车辆是否黑名单 车辆
+        String carNum = reqJson.getString("carNum");
+        CarBlackWhiteDto carBlackWhiteDto = new CarBlackWhiteDto();
+        carBlackWhiteDto.setCommunityId(communityId);
+        carBlackWhiteDto.setCarNum(carNum);
+        carBlackWhiteDto.setBlackWhite(CAR_BLACK);
+        int count = carBlackWhiteInnerServiceSMOImpl.queryCarBlackWhitesCount(carBlackWhiteDto);
+        if (count > 0) {
+            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, carNum + "被加入黑名单，无法放行"));
+            return;
+        }
+
+
 
     }
 

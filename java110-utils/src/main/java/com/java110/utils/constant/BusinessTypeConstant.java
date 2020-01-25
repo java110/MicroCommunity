@@ -347,6 +347,23 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 添加进场记录详情
+     */
+    public static final String BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL = "541120030001";
+
+    /**
+     * 修改进场记录详情
+     */
+    public static final String BUSINESS_TYPE_UPDATE_CAR_INOUT_DETAIL = "541120040001";
+
+
+    /**
+     * 删除进场记录详情
+     */
+    public static final String BUSINESS_TYPE_DELETE_CAR_INOUT_DETAIL = "541120050001";
+
+
+    /**
      * 发布公告
      */
     public static final String BUSINESS_TYPE_SAVE_NOTICE = "550100030001";
