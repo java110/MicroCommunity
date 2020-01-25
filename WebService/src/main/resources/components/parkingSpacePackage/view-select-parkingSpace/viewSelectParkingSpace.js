@@ -40,15 +40,17 @@
                 vc.emit('searchParkingSpace','openSearchParkingSpaceModel',{});
             },
             loadParkingSpaceData:function(){
-                if(vc.notNull(vc.getParam("psId"))){
-                    vc.component.parkingSpaceInfo.parkingSpaceFlag='ParkingSpace';
-                }
+
                vc.component.parkingSpaceInfo.psId = vc.getParam("psId");
                vc.component.parkingSpaceInfo.num = vc.getParam("num");
                vc.component.parkingSpaceInfo.area = vc.getParam("area");
                vc.component.parkingSpaceInfo.state = vc.getParam("state");
                vc.component.parkingSpaceInfo.areaNum = vc.getParam("areaNum");
-
+               if(vc.notNull(vc.getParam("psId"))){
+                   vc.component.parkingSpaceInfo.parkingSpaceFlag='ParkingSpace';
+                   vc.emit('hireParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
+                   vc.emit('sellParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
+               }
                if(vc.component.parkingSpaceInfo.psId != ''){
                   vc.emit($props.callBackComponent,'notify',vc.component.parkingSpaceInfo);
                }

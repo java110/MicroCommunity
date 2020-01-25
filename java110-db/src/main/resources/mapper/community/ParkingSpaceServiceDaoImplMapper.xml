@@ -110,7 +110,8 @@
             t.b_id,
             t.b_id bId,
             td.name stateName,
-            pa.num areaNum
+            pa.num areaNum,
+            pa.type_cd typeCd
         FROM
           parking_space t,t_dict td,parking_area pa
         <where>
