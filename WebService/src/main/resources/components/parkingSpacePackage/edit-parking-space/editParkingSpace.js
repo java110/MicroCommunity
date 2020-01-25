@@ -117,7 +117,8 @@
                     num:'',
                     paId:'',
                     area:'',
-                    remark:''
+                    remark:'',
+                    areaNum:''
                 };
 
                 vc.emit('editParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
