@@ -138,7 +138,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
         t.location_type_cd,t.location_obj_id,
-        td1.name stateName,td2.name locationTypeName
+        td1.name stateName,td2.name locationTypeName,t.create_time createTime
         from machine t,t_dict td,t_dict td1,t_dict td2
         where 1 =1
         and t.machine_type_cd=td.status_cd
@@ -198,6 +198,7 @@ machine_name,machine_type_cd,machine_ip,location_type_cd,location_obj_id,state
         <if test="state !=null and state != ''">
             and t.state = #{state}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
