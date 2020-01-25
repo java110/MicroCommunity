@@ -7,9 +7,9 @@
     <!-- 保存停车位信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessParkingSpaceInfo" parameterType="Map">
         insert into business_parking_space(
-        area,operate,num,ps_id,pa_id, remark,state,community_id,b_id,user_id
+        area,operate,num,ps_id,pa_id, remark,state,community_id,b_id
         ) values (
-        #{area},#{operate},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId},#{userId}
+        #{area},#{operate},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessParkingSpaceInfo" parameterType="Map" resultType="Map">
         select t.area,t.operate,t.num,t.ps_id,t.ps_id
         psId,t.pa_id,t.pa_id
-        paId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        paId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
         from business_parking_space t
         where 1 =1
         <if test="area !=null and area != ''">
@@ -50,9 +50,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
 
     </select>
 
@@ -60,8 +58,8 @@
     <!-- 保存停车位信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveParkingSpaceInfoInstance" parameterType="Map">
         insert into parking_space(
-        area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id,user_id
-        ) select t.area,t.t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id,t.user_id from
+        area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id
+        ) select t.area,t.t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id from
         business_parking_space t where 1=1
         <if test="area !=null and area != ''">
             and t.area= #{area}
@@ -89,9 +87,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
 
     </insert>
 
@@ -113,8 +109,6 @@
             t.community_id communityId,
             t.b_id,
             t.b_id bId,
-            t.user_id,
-            t.user_id userId,
             td.name stateName,
             pa.num areaNum
         FROM
@@ -164,9 +158,7 @@
             <if test="bId !=null and bId != ''">
                 and t.b_id= #{bId}
             </if>
-            <if test="userId !=null and userId != ''">
-                and t.user_id= #{userId}
-            </if>
+            order by t.create_time desc
 
             <if test="page != -1 and page != null ">
                 limit #{page}, #{row}
@@ -195,9 +187,6 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            , t.user_id= #{userId}
         </if>
         where 1=1
         <if test="psId !=null and psId != ''">
@@ -253,9 +242,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
 
 
     </select>

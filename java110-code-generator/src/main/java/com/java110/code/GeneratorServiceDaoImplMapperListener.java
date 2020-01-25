@@ -180,6 +180,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         //加入分页功能<if test="page != -1">
         //            limit page,row
         //        </if>
+        sqlValue += "order by t.create_time desc\n";
         sqlValue += "<if test=\"page != -1 and page != null \">\n";
         sqlValue += "   limit #{page}, #{row}\n";
         sqlValue += "</if> \n";
