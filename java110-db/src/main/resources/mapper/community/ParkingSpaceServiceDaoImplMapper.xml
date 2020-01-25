@@ -7,17 +7,18 @@
     <!-- 保存停车位信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessParkingSpaceInfo" parameterType="Map">
         insert into business_parking_space(
-        area,operate,type_cd,num,ps_id,remark,state,community_id,b_id,user_id
+        area,operate,num,ps_id,pa_id, remark,state,community_id,b_id,user_id
         ) values (
-        #{area},#{operate},#{typeCd},#{num},#{psId},#{remark},#{state},#{communityId},#{bId},#{userId}
+        #{area},#{operate},#{num},#{psId},#{paId},#{remark},#{state},#{communityId},#{bId},#{userId}
         )
     </insert>
 
 
     <!-- 查询停车位信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessParkingSpaceInfo" parameterType="Map" resultType="Map">
-        select t.area,t.operate,t.type_cd,t.type_cd typeCd,t.num,t.ps_id,t.ps_id
-        psId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
+        select t.area,t.operate,t.num,t.ps_id,t.ps_id
+        psId,t.pa_id,t.pa_id
+        paId,t.remark,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.user_id,t.user_id userId
         from business_parking_space t
         where 1 =1
         <if test="area !=null and area != ''">
@@ -26,14 +27,15 @@
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
-        <if test="typeCd !=null and typeCd != ''">
-            and t.type_cd= #{typeCd}
-        </if>
+
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -57,22 +59,23 @@
 
     <!-- 保存停车位信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveParkingSpaceInfoInstance" parameterType="Map">
-        insert into p_parking_space(
-        area,type_cd,num,ps_id,remark,status_cd,state,community_id,b_id,user_id
-        ) select t.area,t.type_cd,t.num,t.ps_id,t.remark,'0',t.state,t.community_id,t.b_id,t.user_id from
+        insert into parking_space(
+        area,num,ps_id,pa_id,remark,status_cd,state,community_id,b_id,user_id
+        ) select t.area,t.t.num,t.ps_id,t.pa_id,t.remark,'0',t.state,t.community_id,t.b_id,t.user_id from
         business_parking_space t where 1=1
         <if test="area !=null and area != ''">
             and t.area= #{area}
         </if>
         and t.operate= 'ADD'
-        <if test="typeCd !=null and typeCd != ''">
-            and t.type_cd= #{typeCd}
-        </if>
+
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -97,11 +100,11 @@
     <select id="getParkingSpaceInfo" parameterType="Map" resultType="Map">
         SELECT
             t.area,
-            t.`type_cd` typeCd,
-            t.`type_cd`,
             t.num,
             t.ps_id psId,
             t.ps_id,
+            t.pa_id paId,
+            t.pa_id,
             t.remark,
             t.status_cd statusCd,
             t.status_cd,
@@ -113,27 +116,26 @@
             t.user_id,
             t.user_id userId,
             td.name stateName,
-            td1.name typeCdName
+            pa.num areaNum
         FROM
-          p_parking_space t,t_dict td,t_dict td1
+          parking_space t,t_dict td,parking_area pa
         <where>
             t.state = td.status_cd
-            and td.table_name='p_parking_space'
+            and td.table_name='parking_space'
             and td.table_columns='state'
-            and t.type_cd = td1.status_cd
-            and td1.table_name='p_parking_space'
-            and td1.table_columns='type_cd'
+            and t.pa_id = pa.pa_id
+            and pa.status_cd ='0'
             <if test="area !=null and area != ''">
                 and t.area= #{area}
-            </if>
-            <if test="typeCd !=null and typeCd != ''">
-                and t.type_cd= #{typeCd}
             </if>
             <if test="num !=null and num != ''">
                 and t.num= #{num}
             </if>
             <if test="psId !=null and psId != ''">
                 and t.ps_id= #{psId}
+            </if>
+            <if test="paId !=null and paId != ''">
+                and t.pa_id= #{paId}
             </if>
             <if test="remark !=null and remark != ''">
                 and t.remark= #{remark}
@@ -175,15 +177,12 @@
 
     <!-- 修改停车位信息 add by wuxw 2018-07-03 -->
     <update id="updateParkingSpaceInfoInstance" parameterType="Map">
-        update p_parking_space t set t.status_cd = #{statusCd}
+        update parking_space t set t.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
         <if test="area !=null and area != ''">
             , t.area= #{area}
-        </if>
-        <if test="typeCd !=null and typeCd != ''">
-            , t.type_cd= #{typeCd}
         </if>
         <if test="num !=null and num != ''">
             , t.num= #{num}
@@ -213,19 +212,25 @@
     <!-- 查询停车位数量 add by wuxw 2018-07-03 -->
     <select id="queryParkingSpacesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from p_parking_space t
-        where 1 =1
+        FROM
+            parking_space t,t_dict td,parking_area pa
+        where
+        t.state = td.status_cd
+        and td.table_name='parking_space'
+        and td.table_columns='state'
+        and t.pa_id = pa.pa_id
+        and pa.status_cd ='0'
         <if test="area !=null and area != ''">
             and t.area= #{area}
-        </if>
-        <if test="typeCd !=null and typeCd != ''">
-            and t.type_cd= #{typeCd}
         </if>
         <if test="num !=null and num != ''">
             and t.num= #{num}
         </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
+        </if>
+        <if test="paId !=null and paId != ''">
+            and t.pa_id= #{paId}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}

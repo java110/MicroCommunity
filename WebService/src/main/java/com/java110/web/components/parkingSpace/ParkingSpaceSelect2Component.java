@@ -10,37 +10,17 @@ import org.springframework.stereotype.Component;
 /**
  * 添加停车位组件
  */
-@Component("addParkingSpace")
-public class AddParkingSpaceComponent {
-
-    @Autowired
-    private IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl;
+@Component("parkingSpaceSelect2")
+public class ParkingSpaceSelect2Component {
 
     @Autowired
     private IListParkingAreasSMO listParkingAreasSMOImpl;
 
-    /**
-     * 查询小区楼信息
-     * @param pd 页面封装对象 包含页面请求数据
-     * @return ResponseEntity对象返回给页面
-     */
-    public ResponseEntity<String> saveParkingSpace(IPageData pd) {
 
-        return parkingSpaceServiceSMOImpl.saveParkingSpace(pd);
-    }
-
-    public ResponseEntity<String> listParkingArea(IPageData pd){
+    public ResponseEntity<String> list(IPageData pd){
         return listParkingAreasSMOImpl.listParkingAreas(pd);
     }
 
-
-    public IParkingSpaceServiceSMO getParkingSpaceServiceSMOImpl() {
-        return parkingSpaceServiceSMOImpl;
-    }
-
-    public void setParkingSpaceServiceSMOImpl(IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl) {
-        this.parkingSpaceServiceSMOImpl = parkingSpaceServiceSMOImpl;
-    }
 
     public IListParkingAreasSMO getListParkingAreasSMOImpl() {
         return listParkingAreasSMOImpl;

@@ -1,5 +1,6 @@
 (function(vc){
-
+    var DEFAULT_PAGE = 1;
+    var DEFAULT_ROW = 10;
     vc.extends({
         propTypes: {
                notifyLoadDataComponentName:vc.propTypes.string
@@ -7,14 +8,14 @@
         data:{
             addParkingSpaceInfo:{
                 num:'',
-                typeCd:'',
+                paId:'',
                 area:'',
                 remark:'',
-                psId:''
+                psId:'',
+                parkingAreas:[]
             }
         },
          _initMethod:function(){
-
          },
          _initEvent:function(){
             vc.on('addParkingSpace','openAddParkingSpaceModal',function(_parkingSpaceId){
@@ -22,6 +23,10 @@
                     vc.component.addParkingSpaceInfo.parkingSpaceId = _parkingSpaceId;
                 }
                 $('#addParkingSpaceModel').modal('show');
+            });
+
+            vc.on("addParkingSpace", "notify", function (_param) {
+                    vc.component.addParkingSpaceInfo.paId = _param.paId;
             });
         },
         methods:{
@@ -41,11 +46,11 @@
                             errInfo:"车位编号长度不能超过12位"
                         },
                     ],
-                    'addParkingSpaceInfo.typeCd':[
+                    'addParkingSpaceInfo.paId':[
                         {
                             limit:"required",
                             param:"",
-                            errInfo:"车位类型不能为空"
+                            errInfo:"停车场不能为空"
                         }
                     ],
                     'addParkingSpaceInfo.area':[
@@ -108,12 +113,18 @@
             },
             clearAddParkingSpaceInfo:function(){
                 vc.component.addParkingSpaceInfo = {
-                                            num:'',
-                                            typeCd:'',
-                                            area:'',
-                                            remark:''
-                                        };
+                    num:'',
+                    paId:'',
+                    area:'',
+                    remark:''
+                };
+
+                vc.emit('addParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
+                    paId: '',
+                    num: ''
+                });
             }
+
         }
     });
 

@@ -80,7 +80,8 @@
                         <tr>
                             <th>车位ID</th>
                             <th data-hide="phone">车位编码</th>
-                            <th data-hide="phone">车位类型</th>
+                            <th data-hide="phone">停车场ID</th>
+                            <th data-hide="phone">停车场编号</th>
                             <th data-hide="phone">车位状态</th>
                             <th data-hide="phone">面积</th>
                             <th class="text-right">操作</th>
@@ -96,7 +97,10 @@
                                 {{parkingSpace.num}}
                             </td>
                             <td>
-                                {{vc.component._viewParkingTypeCd(parkingSpace.typeCd)}}
+                                {{parkingSpace.paId}}
+                            </td>
+                            <td>
+                                {{parkingSpace.areaNum}}
                             </td>
                             <td>
                                 {{vc.component._viewParkingSpaceState(parkingSpace.state)}}

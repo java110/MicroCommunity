@@ -8,7 +8,8 @@
             editParkingSpaceInfo:{
                 psId:'',
                 num:'',
-                typeCd:'',
+                areaNum:'',
+                paId:'',
                 area:'',
                 remark:''
             }
@@ -19,7 +20,14 @@
          _initEvent:function(){
             vc.on('editParkingSpace','openEditParkingSpaceModal',function(_parkingSpace){
                 vc.copyObject(_parkingSpace,vc.component.editParkingSpaceInfo);
+                vc.emit('editParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
+                    paId: vc.component.editParkingSpaceInfo.paId,
+                    num: vc.component.editParkingSpaceInfo.areaNum
+                });
                 $('#editParkingSpaceModel').modal('show');
+            });
+             vc.on("editParkingSpace", "notify", function (_param) {
+                    vc.component.addParkingSpaceInfo.paId = _param.paId;
             });
         },
         methods:{
@@ -107,10 +115,15 @@
                 vc.component.editParkingSpaceInfo = {
                     psId:'',
                     num:'',
-                    typeCd:'',
+                    paId:'',
                     area:'',
                     remark:''
                 };
+
+                vc.emit('editParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
+                    paId: '',
+                    num: ''
+                });
             }
         }
     });
