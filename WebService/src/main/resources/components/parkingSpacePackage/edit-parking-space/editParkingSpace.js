@@ -47,11 +47,11 @@
                            errInfo:"车位编号长度不能超过12位"
                        },
                    ],
-                   'editParkingSpaceInfo.typeCd':[
+                   'editParkingSpaceInfo.paId':[
                        {
                            limit:"required",
                            param:"",
-                           errInfo:"车位类型不能为空"
+                           errInfo:"停车场不能为空"
                        }
                    ],
                    'editParkingSpaceInfo.area':[

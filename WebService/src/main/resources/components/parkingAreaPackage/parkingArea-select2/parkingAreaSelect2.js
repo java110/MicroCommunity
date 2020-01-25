@@ -29,7 +29,7 @@
             vc.on('parkingAreaSelect2', 'setParkingArea', function (_param) {
                 vc.copyObject(_param, this.parkingAreaSelect2Info);
 
-                var option = new Option(_param.num + '号停车场', _param.paId, true, true);
+                var option = new Option(_param.num, _param.paId, true, true);
                 this.parkingAreaSelect2Info.parkingAreaSelector.append(option);
             });
 
