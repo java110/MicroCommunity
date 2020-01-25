@@ -11,6 +11,7 @@
         data:{
             parkingSpaceInfo:{
                 flowComponent:'viewSelectParkingSpace',
+                parkingSpaceFlag:'',
                 num:'',
                 area:'',
                 state:'',
@@ -39,6 +40,9 @@
                 vc.emit('searchParkingSpace','openSearchParkingSpaceModel',{});
             },
             loadParkingSpaceData:function(){
+                if(vc.notNull(vc.getParam("psId"))){
+                    vc.component.parkingSpaceInfo.parkingSpaceFlag='ParkingSpace';
+                }
                vc.component.parkingSpaceInfo.psId = vc.getParam("psId");
                vc.component.parkingSpaceInfo.num = vc.getParam("num");
                vc.component.parkingSpaceInfo.area = vc.getParam("area");

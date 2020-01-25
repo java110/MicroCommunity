@@ -12,6 +12,7 @@
         data:{
             viewOwnerInfo:{
                 flowComponent:'viewOwnerInfo',
+                viewOwnerFlag:'',
                 ownerId:"",
                 name:"",
                 age:"",
@@ -52,6 +53,8 @@
                 if(!vc.notNull(_ownerId)){
                     return ;
                 }
+
+                vc.component.viewOwnerInfo.viewOwnerFlag = 'Owner';
 
                var param = {
                     params:{
