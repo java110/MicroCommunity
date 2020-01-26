@@ -256,8 +256,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
         JSONObject data = new JSONObject();
         data.put("money", money);//缴费金额
-        data.put("hour", hour);//停车时间
-        data.put("min", min);//停车时间
+        data.put("hour", new Double(hour).intValue());//停车时间
+        data.put("min", new Double(min).intValue());//停车时间
 
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付", data));
     }

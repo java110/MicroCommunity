@@ -58,19 +58,16 @@
                         var _tmpInTime = new Date(_tmpCarIn.inTime);
                         var _tmpNow = new Date();
                         var diff = _tmpNow - _tmpInTime;
-                        var nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
-                        var nh = 1000 * 60 * 60;// 一小时的毫秒数
-                        var nm = 1000 * 60;// 一分钟的毫秒数
-                        var day = 0;
-                        var hour = 0;
-                        var min = 0;
-                        day = diff / nd;// 计算差多少天
-                        hour = diff % nd / nh + day * 24;// 计算差多少小时
-                        min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
-                        if (isNaN(hour)) {
-                         _tmpCarIn.continueHours = hour;
+                        //计算出小时数
+                        var leave1=diff%(24*3600*1000)    //计算天数后剩余的毫秒数
+                        var hours=Math.floor(leave1/(3600*1000))
+                        //计算相差分钟数
+                        var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
+                        var minutes=Math.floor(leave2/(60*1000))
+                        if (isNaN(hours)) {
+                         _tmpCarIn.continueHours = hours;
                         }else{
-                          var newHours = hour+":"+min;
+                          var newHours = hours+":"+minutes;
                           _tmpCarIn.continueHours = newHours;
                         }
                         _tmpCarIns.push(_tmpCarIn);
