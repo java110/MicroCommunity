@@ -27,6 +27,8 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.api.machine.MachineResDataVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -47,6 +49,8 @@ import java.util.Map;
  **/
 @Java110Listener("machineRoadGateOpenListener")
 public class MachineRoadGateOpenListener extends BaseMachineListener {
+    private static Logger logger = LoggerFactory.getLogger(MachineRoadGateOpenListener.class);
+
 
     private static final String MACHINE_DIRECTION_IN = "3306"; // 进入
 
@@ -103,7 +107,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         machineDto.setCommunityId(communityId);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         if (machineDtos == null || machineDtos.size() < 1) {
-            responseEntity = MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR,"该设备【" + machineCode + "】未在该小区【" + communityId + "】注册");
+            responseEntity = MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "该设备【" + machineCode + "】未在该小区【" + communityId + "】注册");
             context.setResponseEntity(responseEntity);
             return;
         }
@@ -188,7 +192,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         ownerCarDto.setCommunityId(tmpCarInoutDto.getCommunityId());
         List<OwnerCarDto> ownerCarDtos = carInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         Date nowTime = new Date();
-        if(ownerCarDtos != null && ownerCarDtos.size() >0) {
+        if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
             //这里获取最新的一条记录 我们认为 一个小区中一辆车不能同时有两个车位
             OwnerCarDto tmpOwnerCarDto = ownerCarDtos.get(0);
             FeeDto feeDto = new FeeDto();
@@ -213,8 +217,14 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         }
 
         //计算缴费金额
-
-        Date inTime = tmpCarInoutDto.getInTime();
+        Date inTime = null;
+        try {
+            inTime = DateUtil.getDateFromString(tmpCarInoutDto.getInTime(), DateUtil.DATE_FORMATE_STRING_A);
+        } catch (Exception e) {
+            logger.error("格式化出错", e);
+            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "后台异常，数据格式错误"));
+            return;
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(tmpCarInoutDto.getCommunityId());

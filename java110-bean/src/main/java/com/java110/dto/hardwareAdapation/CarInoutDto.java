@@ -17,17 +17,14 @@ import java.util.Date;
  **/
 public class CarInoutDto extends PageDto implements Serializable {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date inTime;
+
+    private String inTime;
     private String inoutId;
     private String carNum;
     private String state;
     private String[] states;
     private String communityId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date outTime;
+    private String outTime;
 
 
     private Date createTime;
@@ -93,19 +90,19 @@ public class CarInoutDto extends PageDto implements Serializable {
         this.states = states;
     }
 
-    public Date getInTime() {
+    public String getInTime() {
         return inTime;
     }
 
-    public void setInTime(Date inTime) {
+    public void setInTime(String inTime) {
         this.inTime = inTime;
     }
 
-    public Date getOutTime() {
+    public String getOutTime() {
         return outTime;
     }
 
-    public void setOutTime(Date outTime) {
+    public void setOutTime(String outTime) {
         this.outTime = outTime;
     }
 }
