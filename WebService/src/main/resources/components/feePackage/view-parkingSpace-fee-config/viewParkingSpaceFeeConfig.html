@@ -150,40 +150,6 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-12">
-        <div class="ibox ">
-            <div class="ibox-title">
-                <h5>{{feeConfigUpTempInfo.feeName}}信息</h5>
-                <div class="ibox-tools" style="top:10px;">
-                    <button type="button" class="btn btn-primary btn-sm" v-on:click="openConfigParkingSpaceTempFeeModel(feeConfigUpTempInfo)">
-                        <i class="glyphicon glyphicon-plus"></i> 编辑</button>
-                </div>
-            </div>
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >地上临时配置ID：</label>
-                            <label class="">{{feeConfigUpTempInfo.configId}}</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">每小时单价：</label>
-                            <label class="">{{feeConfigUpTempInfo.squarePrice}} 元</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" >首两个小时：</label>
-                            <label class="">{{feeConfigUpTempInfo.additionalAmount}} 元</label>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
     <vc:create name="configParkingSpaceFee"></vc:create>
     <vc:create name="configParkingSpaceTempFee"></vc:create>
 </div>

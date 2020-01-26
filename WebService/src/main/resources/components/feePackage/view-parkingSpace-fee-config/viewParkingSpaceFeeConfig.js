@@ -35,14 +35,7 @@
                  squarePrice:"",
                  feeName:"临时地下停车费",
                  feeTypeCd:'888800010007'
-             },
-           feeConfigUpTempInfo:{
-               configId:"",
-               squarePrice:"",
-               additionalAmount:"",
-               feeName:"临时地上停车费",
-               feeTypeCd:'888800010008'
-           }
+             }
         },
         _initMethod:function(){
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigUpHireInfo);
@@ -50,7 +43,6 @@
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigUpSellInfo);
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigDownSellInfo);
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigDownTempInfo);
-                vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigUpTempInfo);
         },
         _initEvent:function(){
             vc.on('viewParkingSpaceFeeConfig','loadParkingSpaceConfigFee',function(_param){

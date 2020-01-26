@@ -154,6 +154,7 @@
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

@@ -15,27 +15,19 @@ import java.util.Date;
  **/
 public class CarInoutDto extends PageDto implements Serializable {
 
-    private String inTime;
+    private Date inTime;
     private String inoutId;
     private String carNum;
     private String state;
     private String[] states;
     private String communityId;
-    private String outTime;
+    private Date outTime;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
-
-    public String getInTime() {
-        return inTime;
-    }
-
-    public void setInTime(String inTime) {
-        this.inTime = inTime;
-    }
 
     public String getInoutId() {
         return inoutId;
@@ -69,13 +61,6 @@ public class CarInoutDto extends PageDto implements Serializable {
         this.communityId = communityId;
     }
 
-    public String getOutTime() {
-        return outTime;
-    }
-
-    public void setOutTime(String outTime) {
-        this.outTime = outTime;
-    }
 
 
     public Date getCreateTime() {
@@ -100,5 +85,21 @@ public class CarInoutDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public Date getInTime() {
+        return inTime;
+    }
+
+    public void setInTime(Date inTime) {
+        this.inTime = inTime;
+    }
+
+    public Date getOutTime() {
+        return outTime;
+    }
+
+    public void setOutTime(Date outTime) {
+        this.outTime = outTime;
     }
 }

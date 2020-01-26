@@ -5,21 +5,27 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarBlackWhiteInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarInoutInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
+import com.java110.dto.FeeConfigDto;
+import com.java110.dto.FeeDto;
 import com.java110.dto.hardwareAdapation.CarBlackWhiteDto;
 import com.java110.dto.hardwareAdapation.CarInoutDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.machine.MachineResDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +63,15 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
     @Autowired
     private ICarBlackWhiteInnerServiceSMO carBlackWhiteInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO carInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -170,9 +185,56 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         }
 
         //判断车辆出租和出售 时间是否到期
+        OwnerCarDto ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setCarNum(carNum);
+        ownerCarDto.setCommunityId(tmpCarInoutDto.getCommunityId());
+        List<OwnerCarDto> ownerCarDtos = carInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+        //这里获取最新的一条记录 我们认为 一个小区中一辆车不能同时有两个车位
+        OwnerCarDto tmpOwnerCarDto = ownerCarDtos.get(0);
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjId(tmpOwnerCarDto.getPsId());
+        feeDto.setCommunityId(tmpCarInoutDto.getCommunityId());
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
+        FeeDto tmpFeeDto = feeDtos.get(0);
 
-        context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付"));
+        Date endTime = tmpFeeDto.getEndTime();
+        Date nowTime = new Date();
+        long betweenTime = (endTime.getTime() - nowTime.getTime());
+
+        if (betweenTime > 0) {
+            long day = betweenTime / (60 * 60 * 24 * 1000);
+            JSONObject data = new JSONObject();
+            data.put("day", day);//还剩余多少天
+            modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto);
+            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", data));
+            return;
+        }
+
+        //计算缴费金额
+
+        Date inTime = tmpCarInoutDto.getInTime();
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(tmpCarInoutDto.getCommunityId());
+        feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
+        Double hour = Math.ceil((nowTime.getTime() - inTime.getTime()) / (60 * 60 * 1000));
+        double money = 0.00;
+        if (hour <= 2) {
+            money = Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
+        } else {
+            double lastHour = hour - 2;
+            money = lastHour * Double.parseDouble(tmpFeeConfigDto.getSquarePrice()) + Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
+        }
+
+        JSONObject data = new JSONObject();
+        data.put("money", money);//缴费金额
+        data.put("hour", hour);//停车时间
+
+        context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付", data));
     }
 
     private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
