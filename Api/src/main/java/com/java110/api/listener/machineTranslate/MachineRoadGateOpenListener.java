@@ -232,18 +232,32 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
         FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
-        Double hour = Math.ceil((nowTime.getTime() - inTime.getTime()) / (60 * 60 * 1000));
+        long diff = nowTime.getTime() - inTime.getTime();
+        long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
+        long nh = 1000 * 60 * 60;// 一小时的毫秒数
+        long nm = 1000 * 60;// 一分钟的毫秒数
+        double day = 0;
+        double hour = 0;
+        double min = 0;
+        day = diff / nd;// 计算差多少天
+        hour = diff % nd / nh + day * 24;// 计算差多少小时
+        min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
         double money = 0.00;
-        if (hour <= 2) {
+        double newHour = hour;
+        if (min > 0) { //一小时超过
+            newHour += 1;
+        }
+        if (newHour <= 2) {
             money = Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
         } else {
-            double lastHour = hour - 2;
+            double lastHour = newHour - 2;
             money = lastHour * Double.parseDouble(tmpFeeConfigDto.getSquarePrice()) + Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
         }
 
         JSONObject data = new JSONObject();
         data.put("money", money);//缴费金额
         data.put("hour", hour);//停车时间
+        data.put("min", min);//停车时间
 
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付", data));
     }

@@ -57,12 +57,20 @@
                         var _tmpCarIn = _carInManageInfo.carInouts[carInIndex];
                         var _tmpInTime = new Date(_tmpCarIn.inTime);
                         var _tmpNow = new Date();
-                        var total = (_tmpNow - _tmpInTime)/1000;
-                        var hours = parseFloat(total / (60*60));//计算整数天数
-                        if (isNaN(hours)) {
-                         _tmpCarIn.continueHours = hours;
+                        var diff = _tmpNow - _tmpInTime;
+                        var nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
+                        var nh = 1000 * 60 * 60;// 一小时的毫秒数
+                        var nm = 1000 * 60;// 一分钟的毫秒数
+                        var day = 0;
+                        var hour = 0;
+                        var min = 0;
+                        day = diff / nd;// 计算差多少天
+                        hour = diff % nd / nh + day * 24;// 计算差多少小时
+                        min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
+                        if (isNaN(hour)) {
+                         _tmpCarIn.continueHours = hour;
                         }else{
-                          var newHours = Math.round(hours*100)/100;
+                          var newHours = hour+":"+min;
                           _tmpCarIn.continueHours = newHours;
                         }
                         _tmpCarIns.push(_tmpCarIn);
