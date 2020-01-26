@@ -189,26 +189,29 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         ownerCarDto.setCarNum(carNum);
         ownerCarDto.setCommunityId(tmpCarInoutDto.getCommunityId());
         List<OwnerCarDto> ownerCarDtos = carInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        //这里获取最新的一条记录 我们认为 一个小区中一辆车不能同时有两个车位
-        OwnerCarDto tmpOwnerCarDto = ownerCarDtos.get(0);
-        FeeDto feeDto = new FeeDto();
-        feeDto.setPayerObjId(tmpOwnerCarDto.getPsId());
-        feeDto.setCommunityId(tmpCarInoutDto.getCommunityId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        FeeDto tmpFeeDto = feeDtos.get(0);
-
-        Date endTime = tmpFeeDto.getEndTime();
         Date nowTime = new Date();
-        long betweenTime = (endTime.getTime() - nowTime.getTime());
+        if(ownerCarDtos != null && ownerCarDtos.size() >0) {
+            //这里获取最新的一条记录 我们认为 一个小区中一辆车不能同时有两个车位
+            OwnerCarDto tmpOwnerCarDto = ownerCarDtos.get(0);
+            FeeDto feeDto = new FeeDto();
+            feeDto.setPayerObjId(tmpOwnerCarDto.getPsId());
+            feeDto.setCommunityId(tmpCarInoutDto.getCommunityId());
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (betweenTime > 0) {
-            long day = betweenTime / (60 * 60 * 24 * 1000);
-            JSONObject data = new JSONObject();
-            data.put("day", day);//还剩余多少天
-            modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto);
-            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", data));
-            return;
+            FeeDto tmpFeeDto = feeDtos.get(0);
+
+            Date endTime = tmpFeeDto.getEndTime();
+
+            long betweenTime = (endTime.getTime() - nowTime.getTime());
+
+            if (betweenTime > 0) {
+                long day = betweenTime / (60 * 60 * 24 * 1000);
+                JSONObject data = new JSONObject();
+                data.put("day", day);//还剩余多少天
+                modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto);
+                context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", data));
+                return;
+            }
         }
 
         //计算缴费金额
