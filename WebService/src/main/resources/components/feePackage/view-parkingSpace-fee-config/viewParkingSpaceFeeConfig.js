@@ -33,7 +33,7 @@
                  configId:"",
                  additionalAmount:"",
                  squarePrice:"",
-                 feeName:"临时地下停车费",
+                 feeName:"临时停车费",
                  feeTypeCd:'888800010007'
              }
         },

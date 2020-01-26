@@ -1,6 +1,8 @@
 package com.java110.dto.hardwareAdapation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.java110.dto.PageDto;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,12 +17,16 @@ import java.util.Date;
  **/
 public class CarInoutDto extends PageDto implements Serializable {
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date inTime;
     private String inoutId;
     private String carNum;
     private String state;
     private String[] states;
     private String communityId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date outTime;
 
 

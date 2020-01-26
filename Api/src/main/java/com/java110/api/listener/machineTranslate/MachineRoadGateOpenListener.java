@@ -85,7 +85,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        JSONObject outParam = null;
+        //JSONObject outParam = null;
         ResponseEntity<String> responseEntity = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
         String communityId = reqHeader.get("communityId");
@@ -103,9 +103,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         machineDto.setCommunityId(communityId);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         if (machineDtos == null || machineDtos.size() < 1) {
-            outParam.put("code", -1);
-            outParam.put("message", "该设备【" + machineCode + "】未在该小区【" + communityId + "】注册");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            responseEntity = MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR,"该设备【" + machineCode + "】未在该小区【" + communityId + "】注册");
             context.setResponseEntity(responseEntity);
             return;
         }
@@ -256,7 +254,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         context.setResponseEntity(responseEntity);
     }
 
-    private Object modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto) {
+    private JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto) {
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
