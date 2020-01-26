@@ -10,6 +10,9 @@ public class ApiCarInoutDataVo implements Serializable {
     private String carNum;
     private String inTime;
     private String outTime;
+    private int inHours;
+    private int inMin;
+    private double money;
 
     public String getInoutId() {
         return inoutId;
@@ -51,5 +54,27 @@ public class ApiCarInoutDataVo implements Serializable {
         this.outTime = outTime;
     }
 
+    public int getInHours() {
+        return inHours;
+    }
 
+    public void setInHours(int inHours) {
+        this.inHours = inHours;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public int getInMin() {
+        return inMin;
+    }
+
+    public void setInMin(int inMin) {
+        this.inMin = inMin;
+    }
 }

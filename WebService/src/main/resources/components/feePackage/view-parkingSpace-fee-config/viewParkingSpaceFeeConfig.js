@@ -82,8 +82,6 @@
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigUpSellInfo);
                            }else if(_feeInfo.feeTypeCd == vc.component.feeConfigDownTempInfo.feeTypeCd){
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigDownTempInfo);
-                            }else if(_feeInfo.feeTypeCd == vc.component.feeConfigUpTempInfo.feeTypeCd){
-                                   vc.copyObject(JSON.parse(json), vc.component.feeConfigUpTempInfo);
                             }else{
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigDownSellInfo);
                             }
