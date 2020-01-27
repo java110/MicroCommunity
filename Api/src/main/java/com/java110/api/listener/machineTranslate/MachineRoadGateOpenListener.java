@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarBlackWhiteInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarInoutInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
+import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.FeeConfigDto;
 import com.java110.dto.FeeDto;
 import com.java110.dto.hardwareAdapation.CarBlackWhiteDto;
@@ -21,6 +23,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
@@ -56,6 +59,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
     private static final String MACHINE_DIRECTION_OUT = "3307"; //出去
 
+    private static final String HIRE_SELL_OUT = "hireSellOut"; // 出租或出售车辆出场
+
     private static final String CAR_BLACK = "1111"; // 车辆黑名单
     private static final String CAR_WHITE = "2222"; // 车辆白名单
 
@@ -76,6 +81,9 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -154,6 +162,14 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
             return;
         }
 
+        //标识支付完成，检查是否为支付超时
+
+        if (judgeCarOutTimeOut(event, context, reqJson, tmpCarInoutDto, machineDto)) {
+            JSONObject data = computeHourAndMoney(tmpCarInoutDto.getCommunityId(), new Date(), reqJson.getDate("feeRestartTime"));
+            context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "支付已超时，请重新支付", data));
+            return;
+        }
+
         modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto);
         ResponseEntity<String> responseEntity = context.getResponseEntity();
 
@@ -162,6 +178,67 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
             return;
         }
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功"));
+    }
+
+    /**
+     * 判断车辆出场是否已经超时
+     *
+     * @param event
+     * @param context
+     * @param reqJson
+     * @param tmpCarInoutDto
+     * @param machineDto
+     * @return
+     */
+    private boolean judgeCarOutTimeOut(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(machineDto.getCommunityId());
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        String storeId = "-1";
+        if (communityMemberDtos != null && communityMemberDtos.size() > 0) {
+            storeId = communityMemberDtos.get(0).getMemberId();
+        }
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(machineDto.getCommunityId());
+        feeDto.setPayerObjId(reqJson.getString("inoutId"));
+        feeDto.setIncomeObjId(storeId);
+        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        feeDto.setState("2009001");
+        feeDto.setFeeFlag("2006012");
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return false;
+        }
+
+        FeeDto tmpFeeDto = feeDtos.get(0);
+
+
+        long dffMin = new Date().getTime() - tmpFeeDto.getEndTime().getTime();
+
+        if (dffMin < 15 * 1000 * 60) {
+            return false;
+        }
+
+        //重新插入 一条 收费记录 收费
+
+        HttpHeaders header = new HttpHeaders();
+        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
+        JSONArray businesses = new JSONArray();
+        AppService service = event.getAppService();
+        //添加单元信息
+        businesses.add(modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", ""));
+        businesses.add(addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A)));
+        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
+        //将 rest header 信息传递到下层服务中去
+        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
+        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        context.setResponseEntity(responseEntity);
+        reqJson.put("feeRestartTime", tmpFeeDto.getEndTime());
+
+        return true;
     }
 
     /**
@@ -210,7 +287,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
                 long day = betweenTime / (60 * 60 * 24 * 1000);
                 JSONObject data = new JSONObject();
                 data.put("day", day);//还剩余多少天
-                modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto);
+                modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto, HIRE_SELL_OUT);
                 context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", data));
                 return;
             }
@@ -226,8 +303,14 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
             return;
         }
 
+        JSONObject data = computeHourAndMoney(tmpCarInoutDto.getCommunityId(), nowTime, inTime);
+
+        context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付", data));
+    }
+
+    private JSONObject computeHourAndMoney(String communityId, Date nowTime, Date inTime) {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(tmpCarInoutDto.getCommunityId());
+        feeConfigDto.setCommunityId(communityId);
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
@@ -258,11 +341,14 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         data.put("money", money);//缴费金额
         data.put("hour", new Double(hour).intValue());//停车时间
         data.put("min", new Double(min).intValue());//停车时间
-
-        context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, "车辆未支付，请先支付", data));
+        return data;
     }
 
     private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto) {
+        modifyCarInoutInfo(event, context, reqJson, tmpCarInoutDto, machineDto, "");
+    }
+
+    private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto, String from) {
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
@@ -271,6 +357,12 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         businesses.add(modifyCarInout(reqJson, context, tmpCarInoutDto));
         reqJson.put("inoutId", tmpCarInoutDto.getInoutId());
         businesses.add(addCarInoutDetail(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto));
+        if (HIRE_SELL_OUT.equals(from)) {
+            JSONObject tmpModifyCarInoutFee = modifyCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
+            if (tmpModifyCarInoutFee != null) {
+                businesses.add(tmpModifyCarInoutFee);
+            }
+        }
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
         //将 rest header 信息传递到下层服务中去
         super.freshHttpHeader(header, context.getRequestCurrentHeaders());
@@ -279,14 +371,18 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
     }
 
     private JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto) {
+        return modifyCarInout(reqJson, context, carInoutDto, "100500", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+    }
+
+    private JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto, String state, String endTime) {
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCarInout = new JSONObject();
         businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
-        businessCarInout.put("state", "100500");
-        businessCarInout.put("outTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        businessCarInout.put("state", state);
+        businessCarInout.put("outTime", endTime);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
         return business;
@@ -321,6 +417,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         //添加单元信息
         businesses.add(addCarInout(reqJson, context, communityId));
         businesses.add(addCarInoutDetail(reqJson, context, communityId, machineDto));
+        businesses.add(addCarInoutFee(reqJson, context, communityId));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -335,6 +432,103 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功"));
     }
 
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
+        return addCarInoutFee(paramInJson, dataFlowContext, communityId, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+    }
+
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, String startTime) {
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(communityId);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        String storeId = "-1";
+        if (communityMemberDtos != null && communityMemberDtos.size() > 0) {
+            storeId = communityMemberDtos.get(0).getMemberId();
+        }
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("feeId", "-1");
+        businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        businessUnit.put("incomeObjId", storeId);
+        businessUnit.put("amount", "-1.00");
+        businessUnit.put("startTime", startTime);
+        businessUnit.put("endTime", DateUtil.getLastTime()); // 临时车将结束时间刷成2038年
+        businessUnit.put("communityId", communityId);
+        businessUnit.put("payerObjId", paramInJson.getString("inoutId"));
+        businessUnit.put("feeFlag", "2006012"); // 一次性费用
+        businessUnit.put("state", "2008001"); // 收费中
+        businessUnit.put("userId", "-1");
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
+
+        return business;
+    }
+
+    /**
+     * 出租或出售 车辆出场
+     *
+     * @param reqJson
+     * @param context
+     * @param communityId
+     * @param machineDto
+     * @return
+     */
+    private JSONObject modifyCarInoutFee(JSONObject reqJson, DataFlowContext context, String communityId, MachineDto machineDto) {
+
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(communityId);
+        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
+        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
+        String storeId = "-1";
+        if (communityMemberDtos != null && communityMemberDtos.size() > 0) {
+            storeId = communityMemberDtos.get(0).getMemberId();
+        }
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setCommunityId(communityId);
+        feeDto.setPayerObjId(reqJson.getString("inoutId"));
+        feeDto.setIncomeObjId(storeId);
+        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        feeDto.setState("2008001");
+        feeDto.setFeeFlag("2006012");
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos == null || feeDtos.size() < 1) {
+            return null;
+        }
+
+        FeeDto tmpFeeDto = feeDtos.get(0);
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.putAll(BeanConvertUtil.beanCovertMap(tmpFeeDto));
+        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("state", "2009001"); // 收费中
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
+
+        return business;
+    }
 
     /**
      * 添加小区信息
