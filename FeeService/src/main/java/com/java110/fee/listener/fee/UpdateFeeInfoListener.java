@@ -150,7 +150,9 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     Calendar endCalender = Calendar.getInstance();
                     endCalender.setTime(endTime);
                     endCalender.add(Calendar.MONTH, cycles);
-                    businessFeeInfo.put("end_time", endCalender.getTime());
+                    if(cycles > 0) {
+                        businessFeeInfo.put("end_time", endCalender.getTime());
+                    }
                     flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_VALID);
                     feeServiceDaoImpl.updateFeeInfoInstance(businessFeeInfo);
                     if (businessFeeInfo.size() == 1) {

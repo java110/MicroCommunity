@@ -92,7 +92,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-        paramObj.put("cycles", 1);
+        paramObj.put("cycles", 0);
         //添加单元信息
         businesses.add(addFeeDetail(paramObj, dataFlowContext));
         businesses.add(modifyFee(paramObj, dataFlowContext));
@@ -129,7 +129,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         CarInoutDto carInoutDto = carInoutDtos.get(0);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+2);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCarInout = new JSONObject();
         businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
@@ -239,7 +239,8 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("endTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-        feeMap.put("total", paramInJson.getString("receivableAmount"));
+        feeMap.put("amount", paramInJson.getString("receivableAmount"));
+        feeMap.put("state", "2009001");
         businessFee.putAll(feeMap);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessFee);
 
