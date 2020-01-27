@@ -75,7 +75,7 @@
                         var _tempCarInoutFeeManageInfo = JSON.parse(json);
                         vc.component.tempCarInoutFeeManageInfo.total = _tempCarInoutFeeManageInfo.total;
                         vc.component.tempCarInoutFeeManageInfo.records = parseInt(_tempCarInoutFeeManageInfo.total/_rows +1);
-                        vc.component.tempCarInoutFeeManageInfo.payFees = _tempCarInoutFeeManageInfo.payFees;
+                        vc.component.tempCarInoutFeeManageInfo.payFees = _tempCarInoutFeeManageInfo.tempCarInoutFees;
                         vc.emit('pagination', 'init', {
                             total: vc.component.tempCarInoutFeeManageInfo.records,
                             currentPage: _page
