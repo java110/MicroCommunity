@@ -121,7 +121,7 @@
         feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
-        additionalAmount,t.fee_flag feeFlag,t.state
+        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state
         from pay_fee t,pay_fee_config pfc
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
