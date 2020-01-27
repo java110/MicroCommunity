@@ -485,6 +485,9 @@ public class ServiceCodeConstant {
     //查询费用配置 根据停车位
     public static final String SERVICE_CODE_QUERY_FEE_BY_PARKING_SPACE = "fee.queryFeeByParkingSpace";
 
+    //查询费用配置 根据车辆进出场
+    public static final String SERVICE_CODE_QUERY_FEE_BY_CAR_INOUT = "fee.queryFeeByCarInout";
+
     //保存费用配置
     public static final String SERVICE_CODE_SAVE_FEE_CONFIG = "fee.saveFeeConfig";
 
