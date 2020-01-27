@@ -15,7 +15,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <input size="16" type="text" placeholder="请填写车牌号"
-                                       v-model="tempCarInoutFeeManageInfo.conditions.userCode" class="form-control">
+                                       v-model="tempCarInoutFeeManageInfo.conditions.carNum" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -64,29 +64,29 @@
                     >
                         <thead>
                         <tr>
+                            <th class="text-center">订单ID</th>
                             <th class="text-center">缴费ID</th>
                             <th class="text-center">进场ID</th>
                             <th class="text-center">车牌号</th>
-                            <th class="text-center">订单ID</th>
                             <th class="text-center">应付金额</th>
                             <td class="text-center">实付金额</td>
                             <td class="text-center">开始时间</td>
                             <td class="text-center">结束时间</td>
-                            <td class="text-center">操作员工</td>
+<!--                            <td class="text-center">操作员工</td>-->
                             <td class="text-center">缴费时间</td>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="payFee in tempCarInoutFeeManageInfo.payFees">
+                            <td class="text-center">{{payFee.oId}}</td>
                             <td class="text-center">{{payFee.feeId}}</td>
                             <td class="text-center">{{payFee.inoutId}}</td>
                             <td class="text-center">{{payFee.carNum}}</td>
-                            <td class="text-center">{{payFee.oId}}</td>
-                            <td class="text-center">{{payFee.receivableAmount}}</td>
-                            <td class="text-center">{{payFee.receivedAmount}}</td>
+                            <td class="text-center">{{payFee.receivableAmount}}元</td>
+                            <td class="text-center">{{payFee.receivedAmount}}元</td>
                             <td class="text-center">{{payFee.startTime}}</td>
                             <td class="text-center">{{payFee.endTime}}</td>
-                            <td class="text-center">{{payFee.userName}}</td>
+<!--                            <td class="text-center">{{payFee.userName}}</td>-->
                             <td class="text-center">{{payFee.payTime}}</td>
 
                         </tr>
