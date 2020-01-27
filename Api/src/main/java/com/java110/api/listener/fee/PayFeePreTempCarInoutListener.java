@@ -92,7 +92,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
+        paramObj.put("cycles", 1);
         //添加单元信息
         businesses.add(addFeeDetail(paramObj, dataFlowContext));
         businesses.add(modifyFee(paramObj, dataFlowContext));
