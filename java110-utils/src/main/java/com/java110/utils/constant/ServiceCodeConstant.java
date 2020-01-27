@@ -499,6 +499,10 @@ public class ServiceCodeConstant {
 
     //预交费
     public static final String SERVICE_CODE_PAY_FEE_PRE = "fee.payFeePre";
+    /**
+     * 临时停车费
+     */
+    public static final String SERVICE_CODE_PAY_FEE_PRE_TEMP_CAR_INOUT = "fee.payFeePreTempCarInout";
 
     //交费通知
     public static final String SERVICE_CODE_PAY_CONFIRM_PRE = "fee.payFeeConfirm";
