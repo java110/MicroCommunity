@@ -169,7 +169,7 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
             double min = 0;
             day = diff / nd;// 计算差多少天
             hour = diff % nd / nh + day * 24;// 计算差多少小时
-            min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
+            min = diff % nd % nh / nm ;// 计算差多少分钟
             double money = 0.00;
             double newHour = hour;
             if (min > 0) { //一小时超过
