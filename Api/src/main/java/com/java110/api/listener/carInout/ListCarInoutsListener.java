@@ -5,8 +5,10 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarInoutInnerServiceSMO;
 import com.java110.dto.FeeConfigDto;
+import com.java110.dto.FeeDto;
 import com.java110.dto.hardwareAdapation.CarInoutDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.FeeTypeConstant;
@@ -41,6 +43,9 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -116,6 +121,29 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
 
         Date nowTime = new Date();
         Date inTime = null;
+        List<String> inoutIds = new ArrayList<>();
+        for(ApiCarInoutDataVo apiCarInoutDataVo : carInouts){
+            if("100600".equals(apiCarInoutDataVo.getState())){
+                inoutIds.add(apiCarInoutDataVo.getInoutId());
+            }
+        }
+
+        if(inoutIds.size()>0){
+            FeeDto feeDto = new FeeDto();
+            feeDto.setCommunityId(communityId);
+            feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+            feeDto.setPayerObjIds(inoutIds.toArray(new String[inoutIds.size()]));
+            feeDto.setState("2008001");
+            feeDto.setFeeFlag("2006012");
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+            for(FeeDto tmpFeeDto : feeDtos){
+                for(ApiCarInoutDataVo apiCarInoutDataVo : carInouts){
+                    if(tmpFeeDto.getPayerObjId().equals(apiCarInoutDataVo.getInoutId())){
+                        apiCarInoutDataVo.setInTime(DateUtil.getFormatTimeString(tmpFeeDto.getStartTime(),DateUtil.DATE_FORMATE_STRING_A));
+                    }
+                }
+            }
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityId);

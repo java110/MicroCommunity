@@ -169,6 +169,12 @@
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
         </if>
+        <if test="payerObjIds != null ">
+            and t.payer_obj_id in
+            <foreach collection="payerObjIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
@@ -278,6 +284,12 @@
         </if>
         <if test="payerObjId !=null and payerObjId != ''">
             and t.payer_obj_id= #{payerObjId}
+        </if>
+        <if test="payerObjIds != null ">
+            and t.payer_obj_id in
+            <foreach collection="payerObjIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}

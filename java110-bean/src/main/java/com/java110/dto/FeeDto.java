@@ -22,6 +22,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String feeId;
     private String userId;
     private String payerObjId;
+    private String[] payerObjIds;
     private String[] feeTypeCds;
 
     private String squarePrice;
@@ -173,5 +174,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
+    }
+
+    public String[] getPayerObjIds() {
+        return payerObjIds;
+    }
+
+    public void setPayerObjIds(String[] payerObjIds) {
+        this.payerObjIds = payerObjIds;
     }
 }
