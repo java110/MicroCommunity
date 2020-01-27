@@ -63,7 +63,7 @@ public class QueryFeeByCarInoutListener extends AbstractServiceApiDataFlowListen
         FeeDto feeDtoParamIn = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
         feeDtoParamIn.setPayerObjId(reqJson.getString("inoutId"));
         feeDtoParamIn.setState(reqJson.getString("state"));
-        feeDtoParamIn.setState(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        feeDtoParamIn.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         feeDtoParamIn.setFeeFlag("2006012");
 
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDtoParamIn);
