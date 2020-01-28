@@ -16,6 +16,7 @@ import java.util.Date;
 public class CarBlackWhiteDto extends PageDto implements Serializable {
 
     private String blackWhite;
+    private String blackWhiteName;
     private String carNum;
     private String startTime;
     private String endTime;
@@ -91,5 +92,13 @@ public class CarBlackWhiteDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getBlackWhiteName() {
+        return blackWhiteName;
+    }
+
+    public void setBlackWhiteName(String blackWhiteName) {
+        this.blackWhiteName = blackWhiteName;
     }
 }

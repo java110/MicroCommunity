@@ -85,9 +85,12 @@
     <select id="getCarBlackWhiteInfo" parameterType="Map" resultType="Map">
         select t.black_white,t.black_white blackWhite,t.car_num,t.car_num carNum,t.start_time,t.start_time
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.bw_id,t.bw_id bwId
-        from car_black_white t
+        communityId,t.b_id,t.b_id bId,t.bw_id,t.bw_id bwId,td1.name blackWhiteName
+        from car_black_white t,t_dict td1
         where 1 =1
+        and t.black_white = td1.status_cd
+        and td1.table_name = 'car_black_white'
+        and td1.table_columns = 'black_white'
         <if test="blackWhite !=null and blackWhite != ''">
             and t.black_white= #{blackWhite}
         </if>
@@ -154,8 +157,11 @@
     <!-- 查询黑白名单数量 add by wuxw 2018-07-03 -->
     <select id="queryCarBlackWhitesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from car_black_white t
+        from car_black_white t,t_dict td1
         where 1 =1
+        and t.black_white = td1.status_cd
+        and td1.table_name = 'car_black_white'
+        and td1.table_columns = 'black_white'
         <if test="blackWhite !=null and blackWhite != ''">
             and t.black_white= #{blackWhite}
         </if>
