@@ -88,8 +88,8 @@
         from car_inout t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
-        and a.table_name = 'car_inout'
-        and a.table_columns = 'state'
+        and td1.table_name = 'car_inout'
+        and td1.table_columns = 'state'
         <if test="inTime !=null ">
             and t.in_time= #{inTime}
         </if>
@@ -165,8 +165,8 @@
         from car_inout t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
-        and a.table_name = 'car_inout'
-        and a.table_columns = 'state'
+        and td1.table_name = 'car_inout'
+        and td1.table_columns = 'state'
         <if test="inTime !=null ">
             and t.in_time= #{inTime}
         </if>
