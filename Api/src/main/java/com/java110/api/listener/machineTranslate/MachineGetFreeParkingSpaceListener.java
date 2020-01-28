@@ -92,7 +92,7 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
-        super.validateMachineHeader(event, reqJson);
+        //super.validateMachineHeader(event, reqJson);
 
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
 
