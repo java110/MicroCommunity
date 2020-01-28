@@ -35,6 +35,8 @@ public class Java110StringConvert extends AbstractConverter {
 
     @Override
     protected String convertToString(Object value) throws Throwable {
+        logger.debug("convertToString当前对象类型start" + value.getClass());
+
         if (value instanceof Date) {
             return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
         }
@@ -45,6 +47,8 @@ public class Java110StringConvert extends AbstractConverter {
     @Override
     protected Object convertToType(Class type, Object value) throws Throwable {
         //System.out.printf("12313");
+        logger.debug("convertToType当前对象类型start" + value.getClass());
+
         if (value instanceof Date) {
             return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
         }
