@@ -141,7 +141,7 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
         int realFreeParkingSpaceCount = freeParkingSpaceCount - realCarCount;
         JSONObject realFreeParkingSpace = new JSONObject();
         realFreeParkingSpace.put("total", freeParkingSpaceCount);
-        realFreeParkingSpace.put("freeCount", realFreeParkingSpaceCount);
+        realFreeParkingSpace.put("freeCount", realFreeParkingSpaceCount < 0 ? 0 : realFreeParkingSpaceCount);
 
         context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_SUCCESS, "成功", realFreeParkingSpace));
 
