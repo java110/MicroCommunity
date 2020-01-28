@@ -23,7 +23,7 @@ description:'',
                 vc.component.refreshEditServiceImplInfo();
                 $('#editServiceImplModel').modal('show');
                 vc.copyObject(_params, vc.component.editServiceImplInfo );
-                vc.component.editServiceImplInfo.communityId = vc.getCurrentCommunity().communityId;
+                //vc.component.editServiceImplInfo.communityId = vc.getCurrentCommunity().communityId;
             });
         },
         methods:{

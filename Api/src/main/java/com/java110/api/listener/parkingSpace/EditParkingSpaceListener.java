@@ -13,7 +13,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
-import com.java110.dto.ParkingSpaceDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
@@ -95,9 +95,9 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
     private void validate(String paramIn) {
         Assert.jsonObjectHaveKey(paramIn, "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(paramIn, "psId", "未包含停车位ID");
-        Assert.jsonObjectHaveKey(paramIn, "num", "请求报文中未包含age");
-        Assert.jsonObjectHaveKey(paramIn, "area", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(paramIn, "typeCd", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(paramIn, "paId", "未包含停车场信息");
+        Assert.jsonObjectHaveKey(paramIn, "num", "请求报文中未包含num");
+        Assert.jsonObjectHaveKey(paramIn, "area", "请求报文中未包含area");
 
         JSONObject paramObj = JSONObject.parseObject(paramIn);
 
@@ -105,11 +105,6 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
         if (paramObj.getString("psId").startsWith("-")) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "停车位ID必须为已有ID");
-        }
-
-
-        if (!"1001".equals(paramObj.getString("typeCd")) && !"2001".equals(paramObj.getString("typeCd"))) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "传入typeCd 非法");
         }
     }
 

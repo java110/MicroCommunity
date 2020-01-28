@@ -27,6 +27,11 @@ public class ApiMachineDataVo implements Serializable {
     private String roomId;
     private String roomNum;
     private String locationObjName;
+    private String direction;
+    private String directionName;
+
+
+    private String createTime;
 
     public String getMachineId() {
         return machineId;
@@ -186,5 +191,29 @@ public class ApiMachineDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public String getDirectionName() {
+        return directionName;
+    }
+
+    public void setDirectionName(String directionName) {
+        this.directionName = directionName;
     }
 }

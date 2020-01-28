@@ -16,7 +16,7 @@ import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.ParkingSpaceDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;

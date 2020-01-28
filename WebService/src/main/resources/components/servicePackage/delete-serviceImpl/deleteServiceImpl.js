@@ -19,7 +19,7 @@
         },
         methods:{
             deleteServiceImpl:function(){
-                vc.component.deleteServiceImplInfo.communityId=vc.getCurrentCommunity().communityId;
+                //vc.component.deleteServiceImplInfo.communityId=vc.getCurrentCommunity().communityId;
                 vc.http.post(
                     'deleteServiceImpl',
                     'delete',

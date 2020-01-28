@@ -7,9 +7,9 @@
     <!-- 保存车辆管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerCarInfo" parameterType="Map">
         insert into business_owner_car(
-        car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id
+        car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id,community_id
         ) values (
-        #{carColor},#{carBrand},#{carType},#{operate},#{carNum},#{psId},#{remark},#{ownerId},#{bId},#{userId},#{carId}
+        #{carColor},#{carBrand},#{carType},#{operate},#{carNum},#{psId},#{remark},#{ownerId},#{bId},#{userId},#{carId},#{communityId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessOwnerCarInfo" parameterType="Map" resultType="Map">
         select t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t.car_type,t.car_type
         carType,t.operate,t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.owner_id,t.owner_id
-        ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId
+        ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId,t.community_id,t.community_id communityId
         from business_owner_car t
         where 1 =1
         <if test="carColor !=null and carColor != ''">
@@ -54,6 +54,9 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </select>
 
@@ -61,8 +64,8 @@
     <!-- 保存车辆管理信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerCarInfoInstance" parameterType="Map">
         insert into owner_car(
-        car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_id,car_id
-        ) select t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id
+        car_color,car_brand,car_type,car_num,ps_id,remark,status_cd,owner_id,b_id,user_id,car_id,community_id
+        ) select t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id,t.community_id
         from business_owner_car t where 1=1
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -95,6 +98,9 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </insert>
 
@@ -104,7 +110,7 @@
         select t.car_color,t.car_color carColor,t.car_brand,t.car_brand carBrand,t1.name car_type,t1.name carType,
         t.car_num,t.car_num carNum,t.ps_id,t.ps_id psId,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
-        createTime
+        createTime,t.community_id communityId
         from owner_car t,t_dict t1 where t.car_type=t1.status_cd and t1.table_name='owner_car'
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -139,6 +145,10 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -183,6 +193,9 @@
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </update>
 
@@ -223,6 +236,9 @@
         </if>
         <if test="carId !=null and carId != ''">
             and t.car_id= #{carId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
 

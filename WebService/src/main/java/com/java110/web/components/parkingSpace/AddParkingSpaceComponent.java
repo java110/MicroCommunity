@@ -2,6 +2,7 @@ package com.java110.web.components.parkingSpace;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IParkingSpaceServiceSMO;
+import com.java110.web.smo.parkingArea.IListParkingAreasSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,9 @@ public class AddParkingSpaceComponent {
     @Autowired
     private IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl;
 
+    @Autowired
+    private IListParkingAreasSMO listParkingAreasSMOImpl;
+
     /**
      * 查询小区楼信息
      * @param pd 页面封装对象 包含页面请求数据
@@ -25,6 +29,10 @@ public class AddParkingSpaceComponent {
         return parkingSpaceServiceSMOImpl.saveParkingSpace(pd);
     }
 
+    public ResponseEntity<String> listParkingArea(IPageData pd){
+        return listParkingAreasSMOImpl.listParkingAreas(pd);
+    }
+
 
     public IParkingSpaceServiceSMO getParkingSpaceServiceSMOImpl() {
         return parkingSpaceServiceSMOImpl;
@@ -32,5 +40,13 @@ public class AddParkingSpaceComponent {
 
     public void setParkingSpaceServiceSMOImpl(IParkingSpaceServiceSMO parkingSpaceServiceSMOImpl) {
         this.parkingSpaceServiceSMOImpl = parkingSpaceServiceSMOImpl;
+    }
+
+    public IListParkingAreasSMO getListParkingAreasSMOImpl() {
+        return listParkingAreasSMOImpl;
+    }
+
+    public void setListParkingAreasSMOImpl(IListParkingAreasSMO listParkingAreasSMOImpl) {
+        this.listParkingAreasSMOImpl = listParkingAreasSMOImpl;
     }
 }

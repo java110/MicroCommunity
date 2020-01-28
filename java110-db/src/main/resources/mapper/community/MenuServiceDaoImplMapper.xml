@@ -60,7 +60,7 @@
             <if test="icon !=null and icon != ''">
                 t.icon= #{icon},
             </if>
-            <if test="label !=null and label != ''">
+            <if test="label !=null ">
                 t.label= #{label},
             </if>
             <if test="seq !=null ">

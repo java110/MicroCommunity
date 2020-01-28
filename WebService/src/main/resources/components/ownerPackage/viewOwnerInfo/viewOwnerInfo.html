@@ -8,12 +8,17 @@
                             v-on:click="_callBackListOwner(viewOwnerInfo.ownerId)">
                         返回
                     </button>
+                    <button type="button" class="btn btn-primary btn-sm" v-if="viewOwnerInfo.viewOwnerFlag!='Owner'"
+                            v-on:click="_openChooseOwner()">
+                        选择业主
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-2">
-                        <image width="120px" height="140px" v-bind:src="viewOwnerInfo.ownerPhoto" @error="errorLoadImg"/>
+                        <image width="120px" height="140px" v-bind:src="viewOwnerInfo.ownerPhoto"
+                               @error="errorLoadImg"/>
                     </div>
                     <div class="col-sm-9">
                         <div class="row">
@@ -77,4 +82,9 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="searchOwner"
+               emitChooseOwner="viewOwnerInfo"
+               emitLoadData="viewOwnerInfo"
+    ></vc:create>
 </div>

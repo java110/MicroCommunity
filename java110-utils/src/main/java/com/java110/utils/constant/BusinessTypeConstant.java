@@ -108,6 +108,24 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_OWNER_CAR = "111200050001";
 
 
+    /**
+     * 保存车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE = "112200030001";
+
+    /**
+     * 修改车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE = "112200040001";
+
+
+    /**
+     * 删除车辆黑白名单
+     */
+    public static final String BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE = "112200050001";
+
+
+
 
 
 
@@ -280,6 +298,22 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_ROOM_INFO = "530100050001";
 
     /**
+     * 增加停车场
+     */
+    public static final String BUSINESS_TYPE_SAVE_PARKING_AREA = "541100030001";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PARKING_AREA = "541100040001";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_PARKING_AREA = "541100050001";
+
+    /**
      * 增加车位
      */
     public static final String BUSINESS_TYPE_SAVE_PARKING_SPACE = "540100030001";
@@ -294,6 +328,39 @@ public class BusinessTypeConstant {
      * 删除车位
      */
     public static final String BUSINESS_TYPE_DELETE_PARKING_SPACE = "540100050001";
+
+    /**
+     * 添加进场记录
+     */
+    public static final String BUSINESS_TYPE_SAVE_CAR_INOUT = "541110030001";
+
+    /**
+     * 修改车位
+     */
+    public static final String BUSINESS_TYPE_UPDATE_CAR_INOUT = "541110040001";
+
+
+    /**
+     * 删除车位
+     */
+    public static final String BUSINESS_TYPE_DELETE_CAR_INOUT = "541110050001";
+
+
+    /**
+     * 添加进场记录详情
+     */
+    public static final String BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL = "541120030001";
+
+    /**
+     * 修改进场记录详情
+     */
+    public static final String BUSINESS_TYPE_UPDATE_CAR_INOUT_DETAIL = "541120040001";
+
+
+    /**
+     * 删除进场记录详情
+     */
+    public static final String BUSINESS_TYPE_DELETE_CAR_INOUT_DETAIL = "541120050001";
 
 
     /**

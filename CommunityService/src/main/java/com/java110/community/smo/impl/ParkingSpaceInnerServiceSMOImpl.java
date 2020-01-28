@@ -7,7 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.ParkingSpaceDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,47 +46,7 @@ public class ParkingSpaceInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         List<ParkingSpaceDto> parkingSpaces = BeanConvertUtil.covertBeanList(parkingSpaceServiceDaoImpl.getParkingSpaceInfo(BeanConvertUtil.beanCovertMap(parkingSpaceDto)), ParkingSpaceDto.class);
 
-        if (parkingSpaces == null || parkingSpaces.size() == 0) {
-            return parkingSpaces;
-        }
-
-        String[] userIds = getUserIds(parkingSpaces);
-        //根据 userId 查询用户信息
-        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
-
-        for (ParkingSpaceDto parkingSpace : parkingSpaces) {
-            refreshParkingSpace(parkingSpace, users);
-        }
         return parkingSpaces;
-    }
-
-    /**
-     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
-     *
-     * @param parkingSpace 小区停车位信息
-     * @param users 用户列表
-     */
-    private void refreshParkingSpace(ParkingSpaceDto parkingSpace, List<UserDto> users) {
-        for (UserDto user : users) {
-            if (parkingSpace.getUserId().equals(user.getUserId())) {
-                BeanConvertUtil.covertBean(user, parkingSpace);
-            }
-        }
-    }
-
-    /**
-     * 获取批量userId
-     *
-     * @param parkingSpaces 小区楼信息
-     * @return 批量userIds 信息
-     */
-    private String[] getUserIds(List<ParkingSpaceDto> parkingSpaces) {
-        List<String> userIds = new ArrayList<String>();
-        for (ParkingSpaceDto parkingSpace : parkingSpaces) {
-            userIds.add(parkingSpace.getUserId());
-        }
-
-        return userIds.toArray(new String[userIds.size()]);
     }
 
     @Override

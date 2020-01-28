@@ -8,6 +8,7 @@ import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
 import com.java110.dto.activities.ActivitiesDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeActivitiesConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.activities.ApiActivitiesDataVo;
 import com.java110.vo.api.activities.ApiActivitiesVo;
@@ -56,6 +57,7 @@ public class ListActivitiessListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         super.validatePageInfo(reqJson);
     }
 

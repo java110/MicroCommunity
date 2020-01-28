@@ -28,13 +28,21 @@
                 additionalAmount:"",
                 feeName:"出售地下停车费",
                 feeTypeCd:'888800010003'
-            }
+            },
+             feeConfigDownTempInfo:{
+                 configId:"",
+                 additionalAmount:"",
+                 squarePrice:"",
+                 feeName:"临时停车费",
+                 feeTypeCd:'888800010007'
+             }
         },
         _initMethod:function(){
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigUpHireInfo);
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigDownHireInfo);
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigUpSellInfo);
                 vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigDownSellInfo);
+                vc.component.loadParkingSpaceConfigFee(vc.component.feeConfigDownTempInfo);
         },
         _initEvent:function(){
             vc.on('viewParkingSpaceFeeConfig','loadParkingSpaceConfigFee',function(_param){
@@ -46,7 +54,9 @@
 
             openConfigParkingSpaceFeeModel:function(_feeInfo){
                 vc.emit('configParkingSpaceFee','openConfigParkingSpaceFeeModel',_feeInfo);
-
+            },
+            openConfigParkingSpaceTempFeeModel:function(_feeInfo){
+                vc.emit('configFeeTempConfigInfo','openConfigParkingSpaceFeeModel',_feeInfo);
             },
             loadParkingSpaceConfigFee:function(_feeInfo){
                 var param = {
@@ -70,6 +80,8 @@
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigDownHireInfo);
                             }else if(_feeInfo.feeTypeCd == vc.component.feeConfigUpSellInfo.feeTypeCd){
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigUpSellInfo);
+                           }else if(_feeInfo.feeTypeCd == vc.component.feeConfigDownTempInfo.feeTypeCd){
+                                   vc.copyObject(JSON.parse(json), vc.component.feeConfigDownTempInfo);
                             }else{
                                    vc.copyObject(JSON.parse(json), vc.component.feeConfigDownSellInfo);
                             }

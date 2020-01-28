@@ -31,7 +31,6 @@ public class UpdateMenuGroupListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "gId", "组Id不能为空");
         Assert.hasKeyAndValue(reqJson, "name", "必填，请填写组名称");
         Assert.hasKeyAndValue(reqJson, "icon", "必填，请填写icon");
-        Assert.hasKeyAndValue(reqJson, "label", "必填，请填写标签");
         Assert.hasKeyAndValue(reqJson, "seq", "必填，请填写序列");
 
     }

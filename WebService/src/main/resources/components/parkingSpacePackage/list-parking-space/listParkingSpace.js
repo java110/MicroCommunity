@@ -12,7 +12,9 @@
                 conditions: {
                     psId: '',
                     area: '',
-                    typeCd: ''
+                    paId:'',
+                    areaNum: '',
+                    state:''
                 }
             }
         },
@@ -21,6 +23,17 @@
         },
         _initEvent: function () {
             vc.on('listParkingSpace', 'listParkingSpaceData', function () {
+                vc.component._listParkingSpaceData(DEFAULT_PAGE, DEFAULT_ROWS);
+                vc.component.listParkingSpaceInfo.num = '';
+            });
+            vc.on('listParkingSpace', 'chooseParkingArea', function (_parkingArea) {
+                vc.component.listParkingSpaceInfo.conditions.paId = _parkingArea.paId;
+                vc.component.listParkingSpaceInfo.conditions.areaNum = _parkingArea.num;
+                vc.component.listParkingSpaceInfo.num = '';
+            });
+
+            vc.on('listParkingSpace', 'listParkingAreaData', function (_parkingArea) {
+                vc.component.listParkingSpaceInfo.conditions.paId = _parkingArea.paId;
                 vc.component._listParkingSpaceData(DEFAULT_PAGE, DEFAULT_ROWS);
                 vc.component.listParkingSpaceInfo.num = '';
             });
@@ -38,7 +51,8 @@
                         num: vc.component.listParkingSpaceInfo.num,
                         psId: vc.component.listParkingSpaceInfo.conditions.psId,
                         area: vc.component.listParkingSpaceInfo.conditions.area,
-                        typeCd: vc.component.listParkingSpaceInfo.conditions.typeCd
+                        paId: vc.component.listParkingSpaceInfo.conditions.paId,
+                        state: vc.component.listParkingSpaceInfo.conditions.state,
                     }
                 }
 
@@ -73,6 +87,12 @@
             _openEditParkingSpaceModel: function (_parkingSpace) {
                 vc.emit('editParkingSpace', 'openEditParkingSpaceModal', _parkingSpace);
             },
+            _openToSellParkingSpaceModel:function(_parkingSpace){ // 出售
+                vc.jumpToPage('/flow/sellParkingSpaceFlow?'+vc.objToGetParam(_parkingSpace));
+            },
+            _openToHireParkingSpaceModel:function(_parkingSpace){ //出租
+                vc.jumpToPage('/flow/hireParkingSpaceFlow?'+vc.objToGetParam(_parkingSpace));
+            },
             _viewParkingSpaceState: function (state) {
                 if (state == 'F') {
                     return "空闲";
@@ -105,7 +125,10 @@
                 } else {
                     vc.component.listParkingSpaceInfo.moreCondition = true;
                 }
-            }
+            },
+            _openChooseParkingArea:function(){
+                vc.emit('chooseParkingArea','openChooseParkingAreaModel',{});
+            },
         }
     })
 })(window.vc);

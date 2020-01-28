@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carInoutDetailServiceDaoImpl">
+
+    <!-- 保存进出场详情信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessCarInoutDetailInfo" parameterType="Map">
+        insert into business_car_inout_detail(
+        inout_id,machine_id,machine_code,operate,car_inout,detail_id,car_num,community_id,b_id
+        ) values (
+        #{inoutId},#{machineId},#{machineCode},#{operate},#{carInout},#{detailId},#{carNum},#{communityId},#{bId}
+        )
+    </insert>
+
+
+    <!-- 查询进出场详情信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessCarInoutDetailInfo" parameterType="Map" resultType="Map">
+        select t.inout_id,t.inout_id inoutId,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
+        machineCode,t.operate,t.car_inout,t.car_inout carInout,t.detail_id,t.detail_id detailId,t.car_num,t.car_num
+        carNum,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
+        from business_car_inout_detail t
+        where 1 =1
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="carInout !=null and carInout != ''">
+            and t.car_inout= #{carInout}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存进出场详情信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveCarInoutDetailInfoInstance" parameterType="Map">
+        insert into car_inout_detail(
+        inout_id,machine_id,machine_code,car_inout,detail_id,car_num,status_cd,community_id,b_id
+        ) select t.inout_id,t.machine_id,t.machine_code,t.car_inout,t.detail_id,t.car_num,'0',t.community_id,t.b_id from
+        business_car_inout_detail t where 1=1
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        and t.operate= 'ADD'
+        <if test="carInout !=null and carInout != ''">
+            and t.car_inout= #{carInout}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询进出场详情信息 add by wuxw 2018-07-03 -->
+    <select id="getCarInoutDetailInfo" parameterType="Map" resultType="Map">
+        select t.inout_id,t.inout_id inoutId,t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
+        machineCode,t.car_inout,t.car_inout carInout,t.detail_id,t.detail_id detailId,t.car_num,t.car_num
+        carNum,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
+        from car_inout_detail t
+        where 1 =1
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="carInout !=null and carInout != ''">
+            and t.car_inout= #{carInout}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改进出场详情信息 add by wuxw 2018-07-03 -->
+    <update id="updateCarInoutDetailInfoInstance" parameterType="Map">
+        update car_inout_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="inoutId !=null and inoutId != ''">
+            , t.inout_id= #{inoutId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            , t.machine_code= #{machineCode}
+        </if>
+        <if test="carInout !=null and carInout != ''">
+            , t.car_inout= #{carInout}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            , t.car_num= #{carNum}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询进出场详情数量 add by wuxw 2018-07-03 -->
+    <select id="queryCarInoutDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from car_inout_detail t
+        where 1 =1
+        <if test="inoutId !=null and inoutId != ''">
+            and t.inout_id= #{inoutId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and t.machine_code= #{machineCode}
+        </if>
+        <if test="carInout !=null and carInout != ''">
+            and t.car_inout= #{carInout}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="carNum !=null and carNum != ''">
+            and t.car_num= #{carNum}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -40,7 +40,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
     private WechatAuthProperties wechatAuthProperties;
 
     @Override
-    public ResponseEntity<String> toNotify(String param,HttpServletRequest request) {
+    public ResponseEntity<String> toNotify(String param, HttpServletRequest request) {
         String resXml = "";
         ResponseEntity responseEntity = null;
         try {

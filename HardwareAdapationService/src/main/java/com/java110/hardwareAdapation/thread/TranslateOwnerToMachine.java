@@ -142,6 +142,9 @@ public class TranslateOwnerToMachine implements Runnable {
         for (OwnerDto ownerDto : ownerDtos) {
 
             for (MachineDto tmpMachineDto : machineDtos) {
+                if("9996".equals(tmpMachineDto.getMachineTypeCd())){
+                    continue;
+                }
                 if (BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())
                         || BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL.equals(tmpOrderDto.getBusinessTypeCd())
                         || BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {

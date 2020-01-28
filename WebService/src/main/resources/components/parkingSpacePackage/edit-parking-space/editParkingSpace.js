@@ -8,7 +8,8 @@
             editParkingSpaceInfo:{
                 psId:'',
                 num:'',
-                typeCd:'',
+                areaNum:'',
+                paId:'',
                 area:'',
                 remark:''
             }
@@ -19,7 +20,14 @@
          _initEvent:function(){
             vc.on('editParkingSpace','openEditParkingSpaceModal',function(_parkingSpace){
                 vc.copyObject(_parkingSpace,vc.component.editParkingSpaceInfo);
+                vc.emit('editParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
+                    paId: vc.component.editParkingSpaceInfo.paId,
+                    num: vc.component.editParkingSpaceInfo.areaNum
+                });
                 $('#editParkingSpaceModel').modal('show');
+            });
+             vc.on("editParkingSpace", "notify", function (_param) {
+                    vc.component.addParkingSpaceInfo.paId = _param.paId;
             });
         },
         methods:{
@@ -39,11 +47,11 @@
                            errInfo:"车位编号长度不能超过12位"
                        },
                    ],
-                   'editParkingSpaceInfo.typeCd':[
+                   'editParkingSpaceInfo.paId':[
                        {
                            limit:"required",
                            param:"",
-                           errInfo:"车位类型不能为空"
+                           errInfo:"停车场不能为空"
                        }
                    ],
                    'editParkingSpaceInfo.area':[
@@ -107,10 +115,16 @@
                 vc.component.editParkingSpaceInfo = {
                     psId:'',
                     num:'',
-                    typeCd:'',
+                    paId:'',
                     area:'',
-                    remark:''
+                    remark:'',
+                    areaNum:''
                 };
+
+                vc.emit('editParkingSpace', 'parkingAreaSelect2', 'setParkingArea', {
+                    paId: '',
+                    num: ''
+                });
             }
         }
     });

@@ -21,6 +21,7 @@
                 locationObjId: '',
                 roomNum: '',
                 machineUrl: '',
+                direction:''
 
             }
         },
@@ -138,6 +139,19 @@
                                 errInfo: "设备类型格式错误"
                             },
                         ],
+                    'editMachineInfo.direction':
+                    [
+                        {
+                            limit: "required",
+                            param: "",
+                            errInfo: "设备方向不能为空"
+                        },
+                        {
+                            limit: "num",
+                            param: "",
+                            errInfo: "设备方向格式错误"
+                        },
+                    ],
                     'editMachineInfo.authCode':
                         [
                             {
@@ -253,7 +267,8 @@
                     locationTypeCd: '',
                     locationObjId: '',
                     roomNum: '',
-                    machineUrl: ''
+                    machineUrl: '',
+                     direction:''
 
                 }
             }

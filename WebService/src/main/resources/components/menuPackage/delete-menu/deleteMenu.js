@@ -19,7 +19,7 @@
         },
         methods:{
             deleteMenu:function(){
-                vc.component.deleteMenuInfo.communityId=vc.getCurrentCommunity().communityId;
+                //vc.component.deleteMenuInfo.communityId=vc.getCurrentCommunity().communityId;
                 vc.http.post(
                     'deleteMenu',
                     'delete',

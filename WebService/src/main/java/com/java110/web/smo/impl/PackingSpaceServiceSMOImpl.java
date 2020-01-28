@@ -306,9 +306,9 @@ public class PackingSpaceServiceSMOImpl extends BaseComponentSMO implements IPar
     private void validateEditParkingSpace(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(pd.getReqData(), "psId", "未包含psId");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "num", "请求报文中未包含age");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "area", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "typeCd", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "num", "请求报文中未包含num");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "area", "请求报文中未包含area");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "paId", "请求报文中未包含停车场信息");
     }
 
     /**
@@ -318,9 +318,9 @@ public class PackingSpaceServiceSMOImpl extends BaseComponentSMO implements IPar
      */
     private void validateSaveParkingSpace(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "未包含小区ID");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "num", "请求报文中未包含age");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "area", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "typeCd", "请求报文中未包含link");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "num", "请求报文中未包含num");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "area", "请求报文中未包含area");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "paId", "请求报文中未包含停车场信息");
     }
 
     /**

@@ -12,6 +12,7 @@
                 total:0,
                 records:1,
                 num:'',
+                areaNum:'',
                 carNum:'',
                 psFlag:$props.parkingSpaceFlag,
                 showSearchCondition:$props.showSearchCondition
@@ -42,6 +43,7 @@
                         row:_row,
                         communityId:vc.getCurrentCommunity().communityId,
                         num:vc.component.searchParkingSpaceInfo.num,
+                        areaNum:vc.component.searchParkingSpaceInfo.areaNum,
                         carNum:vc.component.searchParkingSpaceInfo.carNum,
                         state:$props.parkingSpaceFlag
                     }

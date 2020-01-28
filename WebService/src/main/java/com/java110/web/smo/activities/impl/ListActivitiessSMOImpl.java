@@ -6,6 +6,7 @@ import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.web.smo.activities.IListActivitiessSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class ListActivitiessSMOImpl extends AbstractComponentSMO implements ILis
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
+
+        Assert.hasKeyAndValue(paramIn, "communityId", "请求报文中未包含小区信息");
 
         super.validatePageInfo(pd);
 

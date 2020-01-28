@@ -12,6 +12,7 @@
         data:{
             viewOwnerInfo:{
                 flowComponent:'viewOwnerInfo',
+                viewOwnerFlag:'',
                 ownerId:"",
                 name:"",
                 age:"",
@@ -34,6 +35,10 @@
                 }*/
             });
 
+            vc.on('viewOwnerInfo','chooseOwner',function(_owner){
+                vc.copyObject(_owner,vc.component.viewOwnerInfo);
+            });
+
             vc.on('viewOwnerInfo','callBackOwnerInfo',function(_info){
                 vc.emit($props.callBackListener,$props.callBackFunction,vc.component.viewOwnerInfo);
             });
@@ -48,6 +53,8 @@
                 if(!vc.notNull(_ownerId)){
                     return ;
                 }
+
+                vc.component.viewOwnerInfo.viewOwnerFlag = 'Owner';
 
                var param = {
                     params:{
@@ -83,6 +90,9 @@
             },
             errorLoadImg:function(){
                 vc.component.viewOwnerInfo.ownerPhoto="/img/noPhoto.gif";
+            },
+            _openChooseOwner:function(){
+                vc.emit('searchOwner','openSearchOwnerModel',{});
             }
 
         }

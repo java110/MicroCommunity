@@ -33,7 +33,7 @@ public class HireParkingSpaceFeeComponent {
         String paramIn = pd.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         return feeServiceSMOImpl.loadPropertyConfigFee(pd, "1001".equals(paramObj.getString("typeCd"))
-                ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
+                ? FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE);
     }
 
     public IFeeServiceSMO getFeeServiceSMOImpl() {

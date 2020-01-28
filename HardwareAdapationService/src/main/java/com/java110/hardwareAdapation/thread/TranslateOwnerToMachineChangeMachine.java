@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class TranslateOwnerToMachineChangeMachine implements Runnable {
     Logger logger = LoggerFactory.getLogger(TranslateOwnerToMachineChangeMachine.class);
-    public static final long DEFAULT_WAIT_SECOND = 1000 * 60 ; // 默认30秒执行一次
+    public static final long DEFAULT_WAIT_SECOND = 1000 * 60; // 默认30秒执行一次
     public static boolean TRANSLATE_STATE = false;
 
     private IOrderInnerServiceSMO orderInnerServiceSMOImpl;
@@ -86,7 +86,10 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
                     logger.debug("没有数据数据直接刷为C1" + JSONObject.toJSONString(tmpOrderDto));
                     continue;
                 }
-                dealData(tmpOrderDto, machineDtos.get(0));
+                if (!"9996".equals(machineDtos.get(0).getMachineTypeCd())) {
+                    dealData(tmpOrderDto, machineDtos.get(0));
+                }
+
                 //刷新 状态为C1
                 orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
             } catch (Exception e) {
@@ -120,8 +123,8 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
             roomDto.setUnitId(machineDto.getLocationObjId());
             roomDto.setCommunityId(machineDto.getCommunityId());
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            if(roomDtos == null || roomDtos.size() == 0){ // 单元下没有房屋
-                return ;
+            if (roomDtos == null || roomDtos.size() == 0) { // 单元下没有房屋
+                return;
             }
             ownerDto.setRoomIds(getRoomIds(roomDtos));
             ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);

@@ -34,6 +34,7 @@ public class AddMachineSMOImpl extends AbstractComponentSMO implements IAddMachi
         Assert.hasKeyAndValue(paramIn, "machineVersion", "必填，请填写设备版本号");
         Assert.hasKeyAndValue(paramIn, "machineName", "必填，请填写设备名称");
         Assert.hasKeyAndValue(paramIn, "machineTypeCd", "必填，请选择设备类型");
+        Assert.hasKeyAndValue(paramIn, "direction", "必填，请选择设备方向");
         Assert.hasKeyAndValue(paramIn, "authCode", "必填，请填写鉴权编码");
         Assert.hasKeyAndValue(paramIn, "locationTypeCd", "必填，请选择位置类型");
         Assert.hasKeyAndValue(paramIn, "locationObjId", "必填，请填写位置对象ID");

@@ -3,6 +3,7 @@ package com.java110.app.controller;
 import com.java110.app.smo.complaint.ISaveComplaintSMO;
 import com.java110.app.smo.payment.IToNotifySMO;
 import com.java110.app.smo.payment.IToPaySMO;
+import com.java110.app.smo.payment.IToPayTempCarInoutSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
@@ -34,6 +35,9 @@ public class PaymentController extends BaseController {
     private IToPaySMO toPaySMOImpl;
 
     @Autowired
+    private IToPayTempCarInoutSMO toPayTempCarInoutSMOImpl;
+
+    @Autowired
     private IToNotifySMO toNotifySMOImpl;
 
     /**
@@ -50,6 +54,22 @@ public class PaymentController extends BaseController {
                 "", "", "", pd.getSessionId(),
                 request.getHeader("APP_ID"));
         return toPaySMOImpl.toPay(newPd);
+    }
+
+    /**
+     * <p>统一下单入口</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/toPayTempCarInout", method = RequestMethod.POST)
+    public ResponseEntity<String> toPayTempCarInout(@RequestBody String postInfo, HttpServletRequest request) {
+        IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                "", "", "", pd.getSessionId(),
+                request.getHeader("APP_ID"));
+        return toPayTempCarInoutSMOImpl.toPay(newPd);
     }
 
 

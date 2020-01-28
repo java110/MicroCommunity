@@ -124,14 +124,8 @@ public class SaveParkingSpaceListener extends AbstractServiceApiDataFlowListener
         Assert.jsonObjectHaveKey(paramIn, "communityId", "未包含小区ID");
         Assert.jsonObjectHaveKey(paramIn, "num", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(paramIn, "area", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(paramIn, "typeCd", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        if (!"1001".equals(paramObj.getString("typeCd")) && !"2001".equals(paramObj.getString("typeCd"))) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "传入typeCd 非法");
-        }
+        Assert.jsonObjectHaveKey(paramIn, "paId", "请求报文停车场信息");
     }
 
 

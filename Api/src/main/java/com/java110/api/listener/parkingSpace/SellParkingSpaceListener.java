@@ -14,7 +14,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.FeeConfigDto;
-import com.java110.dto.ParkingSpaceDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
