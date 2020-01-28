@@ -87,11 +87,11 @@
                 vc.jumpToPage("/flow/addRoomBindingFlow");
             },
             _openEditRoomModel:function(_room){
-                _room.floorId = vc.component.roomInfo.conditions.floorId;
+                //_room.floorId = vc.component.roomInfo.conditions.floorId;
                 vc.emit('editRoom','openEditRoomModal',_room);
             },
             _openDelRoomModel:function(_room){
-                 _room.floorId = vc.component.roomInfo.conditions.floorId;
+                 //_room.floorId = vc.component.roomInfo.conditions.floorId;
                  vc.emit('deleteRoom','openRoomModel',_room);
             },
             /**
