@@ -21,7 +21,7 @@
                     colorLight : "#ffffff", //生成二维码的浅色部分
                     correctLevel : QRCode.CorrectLevel.H
                 });
-                var _url = vc.component.parkingSpaceQrCodeInfo.url +"/tempParkingFeePay/tempParkingFeePay?communityId="+vc.getCurrentCommunity().communityId + "&communityName="+vc.getCurrentCommunity().name;
+                var _url = vc.component.parkingSpaceQrCodeInfo.url +"/tempParkingFeePay?communityId="+vc.getCurrentCommunity().communityId + "&communityName="+vc.getCurrentCommunity().name;
                 qrcode.makeCode(_url);
             },
             _downLoadQrCode:function(){
