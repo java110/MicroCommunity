@@ -7,6 +7,7 @@ public class ApiCarInoutDataVo implements Serializable {
 
     private String inoutId;
     private String state;
+    private String stateName;
     private String carNum;
     private String inTime;
     private String outTime;
@@ -76,5 +77,13 @@ public class ApiCarInoutDataVo implements Serializable {
 
     public void setInMin(int inMin) {
         this.inMin = inMin;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

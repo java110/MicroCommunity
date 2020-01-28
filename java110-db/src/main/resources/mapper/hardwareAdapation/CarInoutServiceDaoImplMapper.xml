@@ -84,9 +84,12 @@
     <select id="getCarInoutInfo" parameterType="Map" resultType="Map">
         select t.in_time,t.in_time inTime,t.inout_id,t.inout_id inoutId,t.car_num,t.car_num
         carNum,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
-        bId,t.out_time,t.out_time outTime
-        from car_inout t
+        bId,t.out_time,t.out_time outTime,td1.name stateName
+        from car_inout t,t_dict td1
         where 1 =1
+        and t.state = td1.status_cd
+        and a.table_name = 'car_inout'
+        and a.table_columns = 'state'
         <if test="inTime !=null ">
             and t.in_time= #{inTime}
         </if>
@@ -160,7 +163,11 @@
     <select id="queryCarInoutsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from car_inout t
+        from car_inout t,t_dict td1
         where 1 =1
+        and t.state = td1.status_cd
+        and a.table_name = 'car_inout'
+        and a.table_columns = 'state'
         <if test="inTime !=null ">
             and t.in_time= #{inTime}
         </if>
