@@ -38,7 +38,7 @@ public class Java110StringConvert extends AbstractConverter {
         if (value instanceof Date) {
             return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
         }
-        logger.debug("当前对象类型" + value.getClass());
+        logger.debug("convertToString当前对象类型" + value.getClass());
         return super.convertToString(value);
     }
 
@@ -48,6 +48,7 @@ public class Java110StringConvert extends AbstractConverter {
         if (value instanceof Date) {
             return DateUtil.getFormatTimeString((Date) value, DateUtil.DATE_FORMATE_STRING_A);
         }
+        logger.debug("convertToType当前对象类型" + value.getClass());
         return value.toString();
     }
 
