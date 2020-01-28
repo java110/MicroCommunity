@@ -20,6 +20,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String carType;
     private String carTypeName;
     private String carNum;
+    private String[] carNums;
     private String communityId;
     private String psId;
     private String remark;
@@ -136,5 +137,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String[] getCarNums() {
+        return carNums;
+    }
+
+    public void setCarNums(String[] carNums) {
+        this.carNums = carNums;
     }
 }

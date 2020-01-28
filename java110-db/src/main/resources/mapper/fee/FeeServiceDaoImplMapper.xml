@@ -269,6 +269,9 @@
         <if test="arrearsEndTime != null">
             and t.end_time &lt; #{arrearsEndTime}
         </if>
+        <if test="noArrearsEndTime != null">
+            and t.end_time &gt;  #{noArrearsEndTime}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
             and pfc.community_id= #{communityId}

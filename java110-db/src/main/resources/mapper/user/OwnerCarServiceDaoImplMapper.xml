@@ -124,6 +124,12 @@
         <if test="carNum !=null and carNum != ''">
             and t.car_num= #{carNum}
         </if>
+        <if test="carNums !=null">
+            and t.car_num in
+            <foreach collection="carNums" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="psId !=null and psId != ''">
             and t.ps_id= #{psId}
         </if>

@@ -31,6 +31,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String feeFlag;
 
     private Date arrearsEndTime;
+    private Date noArrearsEndTime;
 
 
     private Date createTime;
@@ -182,5 +183,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setPayerObjIds(String[] payerObjIds) {
         this.payerObjIds = payerObjIds;
+    }
+
+    public Date getNoArrearsEndTime() {
+        return noArrearsEndTime;
+    }
+
+    public void setNoArrearsEndTime(Date noArrearsEndTime) {
+        this.noArrearsEndTime = noArrearsEndTime;
     }
 }
