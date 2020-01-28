@@ -162,7 +162,6 @@
     <!-- 查询进出场数量 add by wuxw 2018-07-03 -->
     <select id="queryCarInoutsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from car_inout t
         from car_inout t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
