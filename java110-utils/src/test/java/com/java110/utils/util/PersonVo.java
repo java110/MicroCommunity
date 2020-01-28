@@ -10,7 +10,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2020/1/28
  **/
-public class PersonVo {
+public class PersonVo extends parentDto{
 
     private String id;
     private String name;

@@ -27,6 +27,7 @@ public class BeanConvertUtilTest extends TestCase {
         personDto.setId(1);
         personDto.setName("wuxw");
         personDto.setCreateTime(new Date());
+        personDto.setPage("1");
         personDto.setAge(1);
         PersonVo personVo = new PersonVo();
         personVo = BeanConvertUtil.covertBean(personDto, personVo);
@@ -83,6 +84,7 @@ public class BeanConvertUtilTest extends TestCase {
         Map info = new HashMap();
         info.put("name", "wuxw");
         info.put("createTime", new Date());
+        info.put("page",1);
         PersonDto personDto = null;
          personDto = BeanConvertUtil.covertBean(info,PersonDto.class);
 

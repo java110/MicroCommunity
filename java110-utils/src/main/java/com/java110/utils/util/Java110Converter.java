@@ -26,6 +26,10 @@ public class Java110Converter implements Converter {
     }
 
     public static Object getValue(Object value, Class target) {
+
+        if (value == null) {
+            return value;
+        }
         //1.0 String 转 Date
         if (value instanceof String && target == Date.class) {
             String date = (String) value;

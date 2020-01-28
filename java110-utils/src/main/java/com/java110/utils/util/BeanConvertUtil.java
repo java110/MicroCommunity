@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.beans.BeanMap;
 
@@ -90,7 +91,8 @@ public final class BeanConvertUtil {
     }
 
     private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map orgMap) {
-        Field[] fields = dstBean.getClass().getDeclaredFields();
+        //Field[] fields = dstBean.getClass().getDeclaredFields();
+        Field[] fields = FieldUtils.getAllFields(dstBean.getClass());
         for (Field field : fields) {
             if (!orgMap.containsKey(field.getName())) {
                 continue;
