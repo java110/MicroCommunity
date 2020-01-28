@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,7 +192,9 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         info.put("objId", ownerDto.getMemberId());
         info.put("state", "10000");
         info.put("communityId", ownerDto.getCommunityId());
+        info.put("updateTime", new Date());
         machineTranslateServiceDaoImpl.updateMachineTranslate(info);
+
 
     }
 
@@ -202,6 +205,8 @@ public class TranslateOwnerToMachineChangeMachine implements Runnable {
         info.put("objId", ownerDto.getMemberId());
         info.put("statusCd", StatusConstant.STATUS_CD_INVALID);
         info.put("communityId", ownerDto.getCommunityId());
+        info.put("updateTime", new Date());
+
         machineTranslateServiceDaoImpl.updateMachineTranslate(info);
 
     }

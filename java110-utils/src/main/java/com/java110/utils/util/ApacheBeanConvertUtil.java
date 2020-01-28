@@ -5,18 +5,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.cglib.beans.BeanMap;
 
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @ClassName BeanConvertUtil
@@ -26,9 +21,9 @@ import java.util.Objects;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public final class BeanConvertUtil {
+public final class ApacheBeanConvertUtil {
 
-    private BeanConvertUtil() {
+    private ApacheBeanConvertUtil() {
     }
 
     static {
@@ -56,6 +51,7 @@ public final class BeanConvertUtil {
         }, Date.class);
 
 
+
         ConvertUtils.register(new Java110StringConvert(), String.class);
     }
 
@@ -73,36 +69,12 @@ public final class BeanConvertUtil {
     public static <T1, T2> T2 covertBean(T1 orgBean, T2 dstBean) {
 
         try {
-            //BeanUtils.copyProperties(dstBean, orgBean);
-            if (orgBean instanceof Map) {
-                BeanMap beanMap = BeanMap.create(dstBean);
-                //beanMap.putAll((Map)orgBean);
-                objectFieldsPutMap(dstBean, beanMap, (Map) orgBean);
-                return dstBean;
-            }
-            final BeanCopier beanCopier = BeanCopier.create(orgBean.getClass(), dstBean.getClass(), true);
-            beanCopier.copy(orgBean, dstBean, new Java110Converter());
+            BeanUtils.copyProperties(dstBean, orgBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("bean转换bean失败", e);
         }
         return dstBean;
-    }
-
-    private static void objectFieldsPutMap(Object dstBean, BeanMap beanMap, Map orgMap) {
-        Field[] fields = dstBean.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (!orgMap.containsKey(field.getName())) {
-                continue;
-            }
-            Class dstClass = field.getType();
-            //System.out.println("字段类型" + dstClass);
-
-            Object value = orgMap.get(field.getName());
-            //String 转date
-            Object tmpValue = Java110Converter.getValue(value, dstClass);
-            beanMap.put(field.getName(), tmpValue);
-        }
     }
 
     /**
@@ -120,7 +92,7 @@ public final class BeanConvertUtil {
         T2 returnModel = null;
         try {
             returnModel = t.newInstance();
-            covertBean(orgBean, returnModel);
+            BeanUtils.copyProperties(returnModel, orgBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("bean转换bean失败", e);
@@ -154,17 +126,15 @@ public final class BeanConvertUtil {
      * @return map对象
      */
     public static Map beanCovertMap(Object orgBean) {
+        Map newMap = null;
 
-        Map<String, Object> map = new HashMap();
         try {
-            BeanMap beanMap = BeanMap.create(orgBean);
-            for (Object key : beanMap.keySet()) {
-                map.put(key + "", beanMap.get(key));
-            }
+            newMap = PropertyUtils.describe(orgBean);
         } catch (Exception e) {
             throw new RuntimeException("bean转换Map失败", e);
         }
-        return map;
+
+        return newMap;
     }
 
 
