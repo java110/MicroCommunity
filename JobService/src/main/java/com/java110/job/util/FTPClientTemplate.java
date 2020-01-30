@@ -3,12 +3,14 @@ package com.java110.job.util;
 import com.java110.job.dao.IHcFtpFileDAO;
 import com.java110.job.model.FtpTaskLogDetail;
 import com.java110.job.smo.IHcFtpFileSMO;
+import com.java110.job.smo.impl.HcFtpFileSMOImpl;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -26,8 +28,8 @@ public class FTPClientTemplate implements Callable<Map> {
     //---------------------------------------------------------------------  
     // Instance data  
     //---------------------------------------------------------------------  
-    /** logger */  
-    protected final Logger log                  = Logger.getLogger(getClass());
+    /** logger */
+    private static final Logger logger = LoggerFactory.getLogger(HcFtpFileSMOImpl.class);
     private static ThreadLocal<FTPClient> ftpClientThreadLocal = new ThreadLocal<FTPClient>();
     private String host;
     private int                    port;  
@@ -344,7 +346,7 @@ public class FTPClientTemplate implements Callable<Map> {
             //处理传输  
             input = new FileInputStream(localAbsoluteFile);
             getFTPClient().storeFile(remoteAbsoluteFile, input);  
-            log.debug("put " + localAbsoluteFile);  
+            logger.debug("put " + localAbsoluteFile);  
             return true;  
         } catch (FileNotFoundException e) {
             throw new Exception("local file not found.", e);
@@ -453,8 +455,8 @@ public class FTPClientTemplate implements Callable<Map> {
 	        }  
         } catch (IOException e) {
     		result.put("flag", "0");
-			log.debug(" not upload !!! ");
-			log.debug("uploadFileFrom IOException : {}", e);
+			logger.debug(" not upload !!! ");
+			logger.debug("uploadFileFrom IOException : {}", e);
 			throw e;
 		} catch (Exception e1) {
 			result.put("flag", "0");
@@ -827,7 +829,7 @@ public class FTPClientTemplate implements Callable<Map> {
 			if(end>=filelength){
 				end=filelength-1;
 			}
-			log.debug("线程:" + tnum +"从"+start+"开始上传到"+end+ "结束，共需上传:"+(end-start+1));
+			logger.debug("线程:" + tnum +"从"+start+"开始上传到"+end+ "结束，共需上传:"+(end-start+1));
 			accessFile = new RandomAccessFile(file, "rwd");
 			ftpClient = getFTPClient();
 			ftpClient.setRestartOffset(start);
@@ -844,7 +846,7 @@ public class FTPClientTemplate implements Callable<Map> {
 			while ((len =accessFile.read(data)) != -1 && downedlength < threadDownSize) {
 				downedlength = downedlength + len;
 				out.write(data,0,len);   
-				log.debug("线程:" + tnum + "已上传:"+downedlength);
+				logger.debug("线程:" + tnum + "已上传:"+downedlength);
 				if(downedlength==threadDownSize){
 					break;
 				}
@@ -852,11 +854,11 @@ public class FTPClientTemplate implements Callable<Map> {
 					data = new byte[Integer.valueOf(Long.toString(threadDownSize-downedlength))];
 				}
 			}
-			log.debug("线程:" + tnum + "上传完成!共上传"+downedlength);
+			logger.debug("线程:" + tnum + "上传完成!共上传"+downedlength);
 		} catch (IOException e) {
 			flag = "0";
-			log.debug(" not upload !!! ");
-			log.debug("uploadFileFrom IOException : {}", e);
+			logger.debug(" not upload !!! ");
+			logger.debug("uploadFileFrom IOException : {}", e);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			flag="0";
@@ -900,7 +902,7 @@ public class FTPClientTemplate implements Callable<Map> {
 			if(end>=filelength){
 				end=filelength-1;
 			}
-			log.debug("线程:" + tnum +"从"+start+"开始下载到"+end+ "结束，共需下载:"+(end-start+1));
+			logger.debug("线程:" + tnum +"从"+start+"开始下载到"+end+ "结束，共需下载:"+(end-start+1));
 			ftpClient = getFTPClient();
 			accessFile = new RandomAccessFile(file, "rwd");
 			ftpClient.setRestartOffset(start);
@@ -913,7 +915,7 @@ public class FTPClientTemplate implements Callable<Map> {
 			while ((len = in.read(data)) != -1 && downedlength < threadDownSize) {
 				downedlength = downedlength + len;
 				accessFile.write(data, 0, len);
-				log.debug("线程:" + tnum + "已下载:"+downedlength);
+				logger.debug("线程:" + tnum + "已下载:"+downedlength);
 				if(downedlength==threadDownSize){
 					break;
 				}
@@ -921,15 +923,15 @@ public class FTPClientTemplate implements Callable<Map> {
 					data = new byte[Integer.valueOf(Long.toString(threadDownSize-downedlength))];
 				}
 			}
-			log.debug("线程:" + tnum + "下载完成!共下载"+downedlength);
+			logger.debug("线程:" + tnum + "下载完成!共下载"+downedlength);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			flag="0";
-			log.error("下载线程异常", e1);
+			logger.error("下载线程异常", e1);
 		}  catch (Exception e1) {
 			// TODO Auto-generated catch block
 			flag="0";
-			log.error("下载线程异常", e1);
+			logger.error("下载线程异常", e1);
 		} finally {
 			try {
 //				ftpClient.logout();

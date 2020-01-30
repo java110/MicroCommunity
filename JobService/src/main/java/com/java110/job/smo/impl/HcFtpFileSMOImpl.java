@@ -1,20 +1,23 @@
 package com.java110.job.smo.impl;
 
-import com.java110.job.model.*;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.job.model.FtpTaskLog;
+import com.java110.job.model.FtpTaskLogDetail;
 import com.java110.job.smo.IHcFtpFileBMO;
 import com.java110.job.smo.IHcFtpFileSMO;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.annotation.Resource;
 import java.util.Map;
 @Service("hcFtpFileSMOImpl")
 @Transactional
 public class HcFtpFileSMOImpl implements IHcFtpFileSMO {
-    /** logger */  
-    protected final Logger log= Logger.getLogger(getClass());
+    /** logger */
+	private static final Logger logger = LoggerFactory.getLogger(HcFtpFileSMOImpl.class);
+
 
 	@Resource(name = "hcFtpFileBMOImpl")
 	private IHcFtpFileBMO hcFtpFileBMOImpl;
