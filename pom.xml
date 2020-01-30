@@ -247,6 +247,12 @@
                 <artifactId>log4j-jcl</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.slf4j/log4j-over-slf4j -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>1.7.30</version>
+            </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
             <dependency>
