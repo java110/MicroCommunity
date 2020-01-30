@@ -6,7 +6,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.dto.FeeDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;

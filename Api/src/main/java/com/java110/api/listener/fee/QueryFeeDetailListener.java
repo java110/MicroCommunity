@@ -10,7 +10,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeDetailInnerServiceSMO;
-import com.java110.dto.FeeDetailDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiFeeDetailDataVo;
 import com.java110.vo.api.ApiFeeDetailVo;

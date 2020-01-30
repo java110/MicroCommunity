@@ -1,4 +1,6 @@
-package com.java110.dto;
+package com.java110.dto.fee;
+
+import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;

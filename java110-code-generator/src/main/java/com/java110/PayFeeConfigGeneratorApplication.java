@@ -53,6 +53,12 @@ public class PayFeeConfigGeneratorApplication {
         param.put("bId", "b_id");
         param.put("squarePrice", "square_price");
         param.put("additionalAmount", "additional_amount");
+        param.put("isDefault", "is_default");
+        param.put("startTime", "start_time");
+        param.put("endTime", "end_time");
+        param.put("feeFlag", "fee_flag");
+        param.put("feeName", "fee_name");
+        param.put("computingFormula", "computing_formula");
         param.put("statusCd", "status_cd");
         param.put("operate", "operate");
         data.setParams(param);

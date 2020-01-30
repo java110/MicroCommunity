@@ -16,7 +16,7 @@ import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
-import com.java110.dto.FeeDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiArrearsFeeDataVo;

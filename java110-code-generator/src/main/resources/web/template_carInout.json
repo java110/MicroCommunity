@@ -1,0 +1,94 @@
+{
+  "templateName":"车辆进场",
+  "templateCode":"carInout",
+  "templateKey":"inoutId",
+  "templateKeyName":"进出场ID",
+  "searchCode": "carNum",
+  "searchName": "车牌号",
+  "conditions": [
+    {
+      "name": "车辆状态",
+      "inputType": "select",
+      "selectValue":"100300,100400,100500,100600",
+      "selectValueName":"进场状态,支付完成,离场状态,超时重新支付",
+      "code": "state",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "车牌号",
+      "inputType": "input",
+      "code": "carNum",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "进出场ID",
+      "inputType": "input",
+      "code": "inoutId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "进场开始时间",
+      "inputType": "input",
+      "code": "startTime",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "进场结束时间",
+      "inputType": "input",
+      "code": "endTime",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"state",
+      "cnCode":"车辆状态",
+      "desc":"必填，请填写车辆状态",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"select",
+      "selectValue":"1111,2222",
+      "selectValueName":"黑名单,白名单",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"名单类型格式错误",
+      "show": true
+    },
+    {
+      "code": "carNum",
+      "cnCode":"车牌号",
+      "desc":"必填，请填写车牌号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,12",
+      "limitErrInfo":"车牌号大于12位",
+      "show": true
+    },
+    {
+      "code": "inTime",
+      "cnCode":"进场时间",
+      "desc":"必填，请选择进场时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "outTime",
+      "cnCode":"出场时间",
+      "desc":"必填，请选择出场时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"不是有效的时间格式",
+      "show": true
+    }
+  ]
+}
