@@ -120,9 +120,16 @@
         computingFormula,t.additional_amount,t.additional_amount additionalAmount,t.status_cd,t.status_cd
         statusCd,t.square_price,t.square_price squarePrice,t.is_default,t.is_default isDefault,t.config_id,t.config_id
         configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
-        startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId
-        from pay_fee_config t
+        startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
+        td1.name feeTypeCdName,td2.name feeFlagName
+        from pay_fee_config t,t_dict td1,t_dict td2
         where 1 =1
+        and t.fee_type_cd = td1.status_cd
+        and td1.table_name = 'pay_fee_config'
+        and td1.table_columns = 'fee_type_cd'
+        and t.fee_flag = td2.status_cd
+        and td2.table_name = 'pay_fee_config'
+        and td2.table_columns = 'fee_flag'
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
         </if>
@@ -219,8 +226,14 @@
     <!-- 查询费用配置数量 add by wuxw 2018-07-03 -->
     <select id="queryFeeConfigsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee_config t
+        from pay_fee_config t,t_dict td1,t_dict td2
         where 1 =1
+        and t.fee_type_cd = td1.status_cd
+        and td1.table_name = 'pay_fee_config'
+        and td1.table_columns = 'fee_type_cd'
+        and t.fee_flag = td2.status_cd
+        and td2.table_name = 'pay_fee_config'
+        and td2.table_columns = 'fee_flag'
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
         </if>

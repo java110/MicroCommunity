@@ -6,69 +6,111 @@ import java.util.Date;
 public class ApiFeeConfigDataVo implements Serializable {
 
     private String configId;
-private String feeTypeCd;
-private String feeName;
-private String feeFlag;
-private String startTime;
-private String endTime;
-private String computingFormula;
-private String squarePrice;
-private String additionalAmount;
-public String getConfigId() {
+    private String feeTypeCd;
+    private String feeName;
+    private String feeFlag;
+    private String startTime;
+    private String endTime;
+    private String computingFormula;
+    private String squarePrice;
+    private String additionalAmount;
+    private String feeTypeCdName;
+    private String feeFlagName;
+    private String isDefault;
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getFeeTypeCd() {
+
+    public String getFeeTypeCd() {
         return feeTypeCd;
     }
-public void setFeeTypeCd(String feeTypeCd) {
+
+    public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getFeeFlag() {
+
+    public String getFeeFlag() {
         return feeFlag;
     }
-public void setFeeFlag(String feeFlag) {
+
+    public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getComputingFormula() {
+
+    public String getComputingFormula() {
         return computingFormula;
     }
-public void setComputingFormula(String computingFormula) {
+
+    public void setComputingFormula(String computingFormula) {
         this.computingFormula = computingFormula;
     }
-public String getSquarePrice() {
+
+    public String getSquarePrice() {
         return squarePrice;
     }
-public void setSquarePrice(String squarePrice) {
+
+    public void setSquarePrice(String squarePrice) {
         this.squarePrice = squarePrice;
     }
-public String getAdditionalAmount() {
+
+    public String getAdditionalAmount() {
         return additionalAmount;
     }
-public void setAdditionalAmount(String additionalAmount) {
+
+    public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
     }
 
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
 
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
+    }
 
+    public String getFeeFlagName() {
+        return feeFlagName;
+    }
+
+    public void setFeeFlagName(String feeFlagName) {
+        this.feeFlagName = feeFlagName;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
 }

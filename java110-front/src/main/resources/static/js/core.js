@@ -362,6 +362,28 @@
         return vc.map[_key];
     };
 
+    vc.getDict = function(_name,_type,_callFun){
+        var param = {
+            params: {
+                name:_name,
+                type:_type
+            }
+        };
+
+        //发送get请求
+        vc.http.get('core', 'list', param,
+        function(json, res) {
+            if(res.status == 200){
+                var _dictInfo = JSON.parse(json);
+                _callFun(_dictInfo);
+                return ;
+            }
+        },
+        function(errInfo, error) {
+            console.log('请求失败处理');
+        });
+    }
+
 
 })(window.vc);
 

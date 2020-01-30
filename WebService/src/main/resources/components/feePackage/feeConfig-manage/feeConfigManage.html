@@ -25,12 +25,7 @@
                         <div class="col-sm-3">
                             <select class="custom-select" v-model="feeConfigManageInfo.conditions.feeTypeCd">
                                 <option selected value="">请选择费用类型</option>
-                                <option value="888800010001">物业费</option>
-                                <option value="888800010002">地上出售车位费</option>
-                                <option value="888800010003">地下出售车位费</option>
-                                <option value="888800010004">地上出租车位费</option>
-                                <option value="888800010005">地下出租车位费</option>
-                                <option value="888800010007">临时车费用</option>
+                                <option v-for="(item,index) in feeConfigManageInfo.feeTypeCds" :key="index" v-bind:value="item.statusCd">{{item.name}}</option>
                             </select></div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryFeeConfigMethod()">
@@ -52,7 +47,7 @@
                     <div class="ibox-tools" style="top:10px;">
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddFeeConfigModal()">
                             <i class="glyphicon glyphicon-plus"></i>
-                            添加费用项
+                            添加
                         </button>
                     </div>
                 </div>
@@ -79,20 +74,20 @@
                         <tbody>
                         <tr v-for="feeConfig in feeConfigManageInfo.feeConfigs">
                             <td class="text-center">{{feeConfig.configId}}</td>
-                            <td class="text-center">{{feeConfig.feeTypeCd}}</td>
+                            <td class="text-center">{{feeConfig.feeTypeCdName}}</td>
                             <td class="text-center">{{feeConfig.feeName}}</td>
-                            <td class="text-center">{{feeConfig.feeFlag}}</td>
+                            <td class="text-center">{{feeConfig.feeFlagName}}</td>
                             <td class="text-center">{{feeConfig.startTime}}</td>
                             <td class="text-center">{{feeConfig.endTime}}</td>
-                            <td class="text-center">{{feeConfig.squarePrice}}</td>
-                            <td class="text-center">{{feeConfig.additionalAmount}}</td>
+                            <td class="text-center">{{feeConfig.squarePrice}}元</td>
+                            <td class="text-center">{{feeConfig.additionalAmount}}元</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openEditFeeConfigModel(feeConfig)">修改
                                     </button>
                                 </div>
-                                <div class="btn-group" v-if="feeConfig.isDefault='F'">
+                                <div class="btn-group" v-if="feeConfig.isDefault=='F'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openDeleteFeeConfigModel(feeConfig)">删除
                                     </button>

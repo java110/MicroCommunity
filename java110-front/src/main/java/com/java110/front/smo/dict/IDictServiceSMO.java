@@ -1,4 +1,4 @@
-package com.java110.web.smo.dict;
+package com.java110.front.smo.dict;
 
 import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;

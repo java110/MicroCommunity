@@ -12,6 +12,7 @@
                 records: 1,
                 moreCondition: false,
                 feeName: '',
+                feeTypeCds:[],
                 conditions: {
                     feeFlag: '',
                     feeName: '',
@@ -22,6 +23,10 @@
         },
         _initMethod: function() {
             vc.component._listFeeConfigs(DEFAULT_PAGE, DEFAULT_ROWS);
+
+            vc.getDict('pay_fee_config',"fee_type_cd",function(_data){
+                vc.component.feeConfigManageInfo.feeTypeCds = _data;
+            });
         },
         _initEvent: function() {
 
@@ -81,7 +86,6 @@
                     vc.component.feeConfigManageInfo.moreCondition = true;
                 }
             }
-
         }
     });
 })(window.vc);

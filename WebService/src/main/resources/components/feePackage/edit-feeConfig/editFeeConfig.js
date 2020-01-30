@@ -12,12 +12,20 @@
                 computingFormula: '',
                 squarePrice: '',
                 additionalAmount: '0.00',
-
+                isDefault:'',
+                feeTypeCds:[],
+                computingFormulas:[]
             }
         },
         _initMethod: function() {
-
-},
+            vc.component._initEditFeeConfigDateInfo();
+            vc.getDict('pay_fee_config',"fee_type_cd",function(_data){
+                vc.component.editFeeConfigInfo.feeTypeCds = _data;
+            });
+            vc.getDict('pay_fee_config',"computing_formula",function(_data){
+                vc.component.editFeeConfigInfo.computingFormulas = _data;
+            });
+        },
         _initEvent: function() {
             vc.on('editFeeConfig', 'openEditFeeConfigModal',
             function(_params) {
@@ -28,6 +36,36 @@
             });
         },
         methods: {
+            _initEditFeeConfigDateInfo: function () {
+                vc.component.editFeeConfigInfo.startTime = vc.dateFormat(new Date().getTime());
+                $('.editFeeConfigStartTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd hh:ii:ss',
+                    initTime: true,
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+
+                });
+                $('.editFeeConfigStartTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".editFeeConfigStartTime").val();
+                        vc.component.editFeeConfigInfo.startTime = value;
+                    });
+                $('.editFeeConfigEndTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd hh:ii:ss',
+                    initTime: true,
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+                });
+                $('.editFeeConfigEndTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".editFeeConfigEndTime").val();
+                        vc.component.editFeeConfigInfo.endTime = value;
+                    });
+            },
             editFeeConfigValidate: function() {
                 return vc.validate.validate({
                     editFeeConfigInfo: vc.component.editFeeConfigInfo
@@ -130,6 +168,10 @@
                 });
             },
             editFeeConfig: function() {
+            //固定费用
+                if(vc.component.editFeeConfigValidate.computingFormula == '2002'){
+                   vc.component.addFeeConfigInfo.squarePrice = "0.00";
+                }
                 if (!vc.component.editFeeConfigValidate()) {
                     vc.toast(vc.validate.errInfo);
                     return;
@@ -165,7 +207,7 @@
                     computingFormula: '',
                     squarePrice: '',
                     additionalAmount: '',
-
+                    isDefault:''
                 }
             }
         }

@@ -26,6 +26,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String communityId;
+    private String feeTypeCdName;
+    private String feeFlagName;
 
 
     private Date createTime;
@@ -136,5 +138,21 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
+
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
+    }
+
+    public String getFeeFlagName() {
+        return feeFlagName;
+    }
+
+    public void setFeeFlagName(String feeFlagName) {
+        this.feeFlagName = feeFlagName;
     }
 }
