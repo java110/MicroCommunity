@@ -50,10 +50,10 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -98,10 +98,10 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -157,10 +157,10 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -204,10 +204,10 @@
         <if test="feeName !=null and feeName != ''">
             , t.fee_name= #{feeName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             , t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             , t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">
@@ -261,10 +261,10 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
-        <if test="startTime !=null and startTime != ''">
+        <if test="startTime !=null ">
             and t.start_time= #{startTime}
         </if>
-        <if test="endTime !=null and endTime != ''">
+        <if test="endTime !=null ">
             and t.end_time= #{endTime}
         </if>
         <if test="communityId !=null and communityId != ''">

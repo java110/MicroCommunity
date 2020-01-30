@@ -197,6 +197,8 @@
                 });
             },
             refreshEditFeeConfigInfo: function() {
+                var _feeTypeCds = vc.component.editFeeConfigInfo.feeTypeCds;
+                var _computingFormulas = vc.component.editFeeConfigInfo.computingFormulas;
                 vc.component.editFeeConfigInfo = {
                     configId: '',
                     feeTypeCd: '',
@@ -208,7 +210,9 @@
                     squarePrice: '',
                     additionalAmount: '',
                     isDefault:''
-                }
+                };
+                vc.component.editFeeConfigInfo.feeTypeCds = _feeTypeCds;
+                vc.component.editFeeConfigInfo.computingFormulas = _computingFormulas;
             }
         }
     });

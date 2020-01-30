@@ -93,6 +93,7 @@ public class SaveFeeConfigListener extends AbstractServiceApiListener {
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("configId", "-1");
+        businessFeeConfig.put("isDefault", "F");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
         return business;

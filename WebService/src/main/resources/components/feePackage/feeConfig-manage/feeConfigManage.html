@@ -25,7 +25,9 @@
                         <div class="col-sm-3">
                             <select class="custom-select" v-model="feeConfigManageInfo.conditions.feeTypeCd">
                                 <option selected value="">请选择费用类型</option>
-                                <option v-for="(item,index) in feeConfigManageInfo.feeTypeCds" :key="index" v-bind:value="item.statusCd">{{item.name}}</option>
+                                <option v-for="(item,index) in feeConfigManageInfo.feeTypeCds" :key="index"
+                                        v-bind:value="item.statusCd">{{item.name}}
+                                </option>
                             </select></div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryFeeConfigMethod()">
@@ -65,7 +67,7 @@
                             <th class="text-center">计费起始时间</th>
                             <th class="text-center">计费终止时间</th>
                             <th class="text-center">计费单价</th>
-                            <th class="text-center">附加费用</th>
+                            <th class="text-center">附加/固定费用</th>
                             <th class="text-center">操作</th>
 
 
@@ -79,7 +81,9 @@
                             <td class="text-center">{{feeConfig.feeFlagName}}</td>
                             <td class="text-center">{{feeConfig.startTime}}</td>
                             <td class="text-center">{{feeConfig.endTime}}</td>
-                            <td class="text-center">{{feeConfig.squarePrice}}元</td>
+                            <td class="text-center">{{feeConfig.computingFormula == '2002' ?
+                                '-':feeConfig.squarePrice+'元'}}
+                            </td>
                             <td class="text-center">{{feeConfig.additionalAmount}}元</td>
                             <td class="text-center">
                                 <div class="btn-group">

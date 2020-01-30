@@ -57,7 +57,7 @@
                                         </option>
                                     </select></div>
                             </div>
-                            <div class="form-group row" v-if="addFeeConfigInfo.computingFormula != '2002'">
+                            <div class="form-group row" v-if="editFeeConfigInfo.computingFormula != '2002'">
                                 <label class="col-sm-2 col-form-label">计费单价</label>
                                 <div class="col-sm-10">
                                     <input v-model="editFeeConfigInfo.squarePrice" type="text" placeholder="必填，请填写计费单价"
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">{{addFeeConfigInfo.computingFormula == '1001' ?'附加费用':'固定费用'}}</label>
+                                <label class="col-sm-2 col-form-label">{{editFeeConfigInfo.computingFormula == '1001' ?'附加费用':'固定费用'}}</label>
                                 <div class="col-sm-10">
                                     <input v-model="editFeeConfigInfo.additionalAmount" type="text"
                                            placeholder="必填，请填写附加费用" class="form-control">
