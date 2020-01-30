@@ -28,4 +28,10 @@ public class ServiceCodeFeeConfigConstant {
     public static final String LIST_FEECONFIGS = "feeConfig.listFeeConfigs";
 
 
+    /**
+     * 查询  需要设置费用房屋
+     */
+    public static final String LIST_ROOMS_WHERE_FEE_SET = "fee.listRoomsWhereFeeSet";
+
+
 }

@@ -28,6 +28,11 @@ public class ApiRoomDataVo implements Serializable {
     private String apartment;
     private String apartmentName;
 
+    private String ownerId;
+    private String ownerName;
+    private String idCard;
+    private String link;
+
 
 
     public String getUnitPrice() {
@@ -149,5 +154,37 @@ public class ApiRoomDataVo implements Serializable {
 
     public void setApartmentName(String apartmentName) {
         this.apartmentName = apartmentName;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

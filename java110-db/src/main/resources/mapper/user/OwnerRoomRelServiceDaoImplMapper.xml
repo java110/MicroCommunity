@@ -84,8 +84,27 @@ rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
     <select id="getOwnerRoomRelInfo" parameterType="Map" resultType="Map">
         select t.rel_id,t.rel_id relId,t.status_cd,t.status_cd statusCd,t.remark,t.state,t.owner_id,t.owner_id
         ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.room_id,t.room_id roomId
+        <if test="byOwnerInfo == true">
+            ,bow.name ownerName,bow.id_card idCard,bow.link
+        </if>
         from building_owner_room_rel t
+        <if test="byOwnerInfo == true">
+            ,building_owner bow
+        </if>
         where 1 =1
+        <if test="byOwnerInfo == true">
+           and t.owner_id = bow.owner_id
+            and bow.status_cd = '0'
+        </if>
+        <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
+            and bow.name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="byOwnerInfo == true and idCard !=null and idCard != ''">
+            and bow.id_card = #{idCard}
+        </if>
+        <if test="relId !=null and relId != ''">
+            and t.rel_id= #{relId}
+        </if>
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
@@ -152,7 +171,20 @@ rel_id,operate,remark,state,owner_id,b_id,user_id,room_id
     <select id="queryOwnerRoomRelsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from building_owner_room_rel t
+        <if test="byOwnerInfo == true">
+            ,building_owner bow
+        </if>
         where 1 =1
+        <if test="byOwnerInfo == true">
+            and t.owner_id = bow.owner_id
+            and bow.status_cd = '0'
+        </if>
+        <if test="byOwnerInfo == true and ownerName !=null and ownerName != ''">
+            and bow.name like concat('%',#{ownerName},'%')
+        </if>
+        <if test="byOwnerInfo == true and idCard !=null and idCard != ''">
+            and bow.id_card = #{idCard}
+        </if>
         <if test="relId !=null and relId != ''">
             and t.rel_id= #{relId}
         </if>
