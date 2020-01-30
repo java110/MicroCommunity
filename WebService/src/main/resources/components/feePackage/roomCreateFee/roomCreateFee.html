@@ -86,10 +86,6 @@
                                 style="margin-left:10px" v-on:click="_openAddRoom()">
                             <i class="glyphicon glyphicon-plus"></i> 批量取消收费
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm"
-                                style="margin-left:10px" v-on:click="_openAddRoom()">
-                            <i class="glyphicon glyphicon-plus"></i> 查看收费
-                        </button>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -101,7 +97,6 @@
                             <th>房屋ID</th>
                             <th data-hide="phone">房屋编号</th>
                             <th data-hide="phone">楼层</th>
-                            <th data-hide="phone">建筑面积</th>
                             <th data-hide="phone">业主ID</th>
                             <th data-hide="phone">业主名称</th>
                             <th data-hide="phone">业主身份证</th>
@@ -136,6 +131,10 @@
                                 </div>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs" v-on:click="_openDelRoomModel(room)">取消收费
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_openDelRoomModel(room)">查看收费
                                     </button>
                                 </div>
                             </td>
