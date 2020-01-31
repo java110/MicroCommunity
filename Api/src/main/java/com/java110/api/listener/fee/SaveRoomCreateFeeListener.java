@@ -80,24 +80,28 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
         reqJson.put("feeTypeCd", reqJson.getString("feeTypeCd"));
         //判断收费范围
+        RoomDto roomDto = new RoomDto();
+        if (reqJson.containsKey("roomState") && "2001".equals(reqJson.getString("roomState"))) {
+            roomDto.setState("2001");
+        }
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
-            RoomDto roomDto = new RoomDto();
+
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
         } else if ("4000".equals(reqJson.getString("locationTypeCd"))) {//楼栋
-            RoomDto roomDto = new RoomDto();
+            //RoomDto roomDto = new RoomDto();
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDto.setFloorId(reqJson.getString("locationObjId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
         } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//单元
-            RoomDto roomDto = new RoomDto();
+            //RoomDto roomDto = new RoomDto();
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDto.setUnitId(reqJson.getString("locationObjId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
         } else if ("3000".equals(reqJson.getString("locationTypeCd"))) {//房屋
-            RoomDto roomDto = new RoomDto();
+            //RoomDto roomDto = new RoomDto();
             roomDto.setCommunityId(reqJson.getString("communityId"));
             roomDto.setRoomId(reqJson.getString("locationObjId"));
             roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
@@ -125,6 +129,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         int failRooms = 0;
         //添加单元信息
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
+
             businesses.add(addFee(roomDtos.get(0), reqJson, context));
 
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {

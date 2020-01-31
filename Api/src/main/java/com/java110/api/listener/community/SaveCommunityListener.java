@@ -9,6 +9,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.util.DateUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,8 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(addCommunity(reqJson, context));
         businesses.addAll(addCommunityMember(reqJson));
+        //产生物业费配置信息
+        businesses.add(addFeeConfig(reqJson,context));
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -53,6 +56,39 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
+        businessFeeConfig.put("feeName", "物业费[系统默认]");
+        businessFeeConfig.put("feeFlag", "1003006");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "1001");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
     }
 
 

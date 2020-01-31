@@ -16,7 +16,7 @@ public class DateUtil {
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
 
-    private static final String LAST_TIME = "2038-01-01 00:00:00";
+    public static final String LAST_TIME = "2038-01-01 00:00:00";
 
     private static Map<String, SimpleDateFormat> formats = new HashMap();
     public static final String DATE_FORMATE_STRING_DEFAULT = "yyyyMMddHHmmss";

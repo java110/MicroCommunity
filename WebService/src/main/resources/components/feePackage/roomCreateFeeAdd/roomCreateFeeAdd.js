@@ -15,7 +15,8 @@
                 roomId: '',
                 feeTypeCd:'',
                 configId:'',
-                billType:''
+                billType:'',
+                roomState:''
             }
         },
         _initMethod: function() {
@@ -85,7 +86,13 @@
                         param: "",
                         errInfo: "出账类型不能为空"
                     }
-                    ]
+                    ],
+                     'roomCreateFeeAddInfo.roomState': [{
+                         limit: "required",
+                         param: "",
+                         errInfo: "出账类型不能为空"
+                     }
+                     ]
                 });
             },
             saveRoomCreateFeeInfo: function() {
