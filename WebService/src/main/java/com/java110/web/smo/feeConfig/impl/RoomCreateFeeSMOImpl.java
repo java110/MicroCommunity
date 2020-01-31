@@ -51,7 +51,7 @@ public class RoomCreateFeeSMOImpl extends AbstractComponentSMO implements IRoomC
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
 
 
-        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(paramMap),
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, JSONObject.toJSONString(paramIn),
                 apiUrl,
                 HttpMethod.POST);
 

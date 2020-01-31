@@ -7,10 +7,10 @@
     <!-- 保存费用信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFeeInfo" parameterType="Map">
         insert into business_pay_fee(
-        amount,operate,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state
+        amount,operate,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id
         ) values (
         #{amount},#{operate},#{incomeObjId},#{feeTypeCd},#{startTime},#{endTime},#{communityId},#{bId},#{feeId},#{userId},#{payerObjId},
-        #{feeFlag},#{state}
+        #{feeFlag},#{state},#{configId}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.amount,t.operate,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
         feeTypeCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id userId,t.payer_obj_id,t.payer_obj_id
-        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state
+        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId
         from business_pay_fee t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -62,6 +62,9 @@
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}
         </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
 
     </select>
 
@@ -69,10 +72,10 @@
     <!-- 保存费用信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeInfoInstance" parameterType="Map">
         insert into pay_fee(
-        amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state
+        amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id
         ) select
         t.amount,t.income_obj_id,t.fee_type_cd,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.fee_id,t.user_id,t.payer_obj_id
-        ,t.fee_flag,t.state
+        ,t.fee_flag,t.state,t.config_id
         from business_pay_fee t where 1=1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -111,6 +114,9 @@
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}
         </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
 
     </insert>
 
@@ -121,10 +127,11 @@
         feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
-        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state
+        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId
         from pay_fee t,pay_fee_config pfc
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
+        and t.config_id = pfc.config_id
         and pfc.status_cd = '0'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -180,6 +187,9 @@
         </if>
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -241,6 +251,7 @@
         from pay_fee t,pay_fee_config pfc
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
+        and t.config_id = pfc.config_id
         and pfc.status_cd = '0'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
@@ -299,6 +310,9 @@
         </if>
         <if test="feeFlag !=null and feeFlag != ''">
             and t.fee_flag= #{feeFlag}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
         </if>
 
 

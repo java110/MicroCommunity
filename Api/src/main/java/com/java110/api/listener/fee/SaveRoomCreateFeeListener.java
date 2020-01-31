@@ -6,8 +6,10 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -43,6 +45,9 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_SAVE_ROOM_CREATE_FEE;
@@ -68,6 +73,12 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         logger.debug("ServiceDataFlowEvent : {}", event);
         List<RoomDto> roomDtos = null;
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        feeConfigDto.setConfigId(reqJson.getString("configId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
+        reqJson.put("feeTypeCd", reqJson.getString("feeTypeCd"));
         //判断收费范围
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
             RoomDto roomDto = new RoomDto();
@@ -106,7 +117,6 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
 
-
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
@@ -117,7 +127,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             businesses.add(addFee(roomDtos.get(0), reqJson, context));
 
-            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0) {
+            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
                 //将 rest header 信息传递到下层服务中去
                 super.freshHttpHeader(header, context.getRequestCurrentHeaders());
@@ -125,7 +135,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
                 responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
 
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                    failRooms++;
+                    failRooms += businesses.size();
                 }
 
                 businesses = new JSONArray();
@@ -138,7 +148,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
             super.freshHttpHeader(header, context.getRequestCurrentHeaders());
             responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
-                failRooms++;
+                failRooms += businesses.size();
             }
         }
 
@@ -169,6 +179,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", "-1");
         businessUnit.put("configId", paramInJson.getString("configId"));
+        businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
         businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
