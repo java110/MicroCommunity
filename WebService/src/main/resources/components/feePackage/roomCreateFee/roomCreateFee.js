@@ -75,8 +75,11 @@
                              }
                            );
             },
-            _openAddRoom:function(){
-                vc.jumpToPage("/flow/addRoomBindingFlow");
+            _openRoomCreateFeeAddModal:function(_room,_isMore){
+                vc.emit('roomCreateFeeAdd', 'openRoomCreateFeeAddModal',{
+                    isMore:_isMore,
+                    room:_room
+                });
             },
             _openEditRoomModel:function(_room){
                 //_room.floorId = vc.component.roomCreateFeeInfo.conditions.floorId;

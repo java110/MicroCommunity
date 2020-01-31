@@ -497,6 +497,9 @@ public class ServiceCodeConstant {
     //缴费
     public static final String SERVICE_CODE_PAY_FEE = "fee.payFee";
 
+    //设置费用
+    public static final String SERVICE_CODE_SAVE_ROOM_CREATE_FEE = "fee.saveRoomCreateFee";
+
     //预交费
     public static final String SERVICE_CODE_PAY_FEE_PRE = "fee.payFeePre";
     /**
