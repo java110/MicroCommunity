@@ -127,7 +127,7 @@
                         //关闭model
                         $('#roomCreateFeeAddModel').modal('hide');
                         vc.component.clearAddFeeConfigInfo();
-                        vc.toast("收费成功");
+                        vc.toast("创建收费成功，总共["+res.totalRoom+"]房屋，成功["+res.successRoom+"],失败["+res.errorRoom+"]",8000);
                         return;
                     }
                     vc.message(json);

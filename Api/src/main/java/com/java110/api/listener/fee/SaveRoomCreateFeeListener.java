@@ -78,7 +78,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         feeConfigDto.setConfigId(reqJson.getString("configId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + reqJson.getString("configId"));
-        reqJson.put("feeTypeCd", reqJson.getString("feeTypeCd"));
+        reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
+        reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         //判断收费范围
         RoomDto roomDto = new RoomDto();
         if (reqJson.containsKey("roomState") && "2001".equals(reqJson.getString("roomState"))) {
@@ -130,7 +131,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         //添加单元信息
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
 
-            businesses.add(addFee(roomDtos.get(0), reqJson, context));
+            businesses.add(addFee(roomDtos.get(roomIndex), reqJson, context));
 
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
@@ -191,6 +192,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", roomDto.getRoomId());
+        businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
+        businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
 
