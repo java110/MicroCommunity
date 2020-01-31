@@ -42,6 +42,7 @@
 
                 vc.component.auditAppUserBindingOwnerManageInfo.conditions.page = _page;
                 vc.component.auditAppUserBindingOwnerManageInfo.conditions.row = _rows;
+                vc.component.auditAppUserBindingOwnerManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
                 var param = {
                     params:vc.component.auditAppUserBindingOwnerManageInfo.conditions
                };

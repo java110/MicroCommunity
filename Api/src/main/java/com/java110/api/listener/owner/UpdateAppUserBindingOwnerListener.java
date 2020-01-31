@@ -36,6 +36,7 @@ public class UpdateAppUserBindingOwnerListener extends AbstractServiceApiListene
 
         Assert.hasKeyAndValue(reqJson, "appUserId", "绑定ID不能为空");
         Assert.hasKeyAndValue(reqJson, "state", "必填，请填写状态");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
 
     }
 

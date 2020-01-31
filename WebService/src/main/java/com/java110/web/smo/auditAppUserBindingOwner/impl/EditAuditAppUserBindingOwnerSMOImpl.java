@@ -29,6 +29,7 @@ public class EditAuditAppUserBindingOwnerSMOImpl extends AbstractComponentSMO im
 
         Assert.hasKeyAndValue(paramIn, "appUserId", "绑定ID不能为空");
         Assert.hasKeyAndValue(paramIn, "state", "必填，请填写状态");
+        Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区信息");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__AUDITAPPUSERBINDINGOWNER);

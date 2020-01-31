@@ -8,6 +8,7 @@ import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
@@ -48,6 +49,8 @@ public class ListAuditAppUserBindingOwnersListener extends AbstractServiceApiLis
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+
         super.validatePageInfo(reqJson);
     }
 
