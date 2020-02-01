@@ -7,10 +7,10 @@
     <!-- 保存费用信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFeeInfo" parameterType="Map">
         insert into business_pay_fee(
-        amount,operate,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id
+        amount,operate,income_obj_id,fee_type_cd,start_time,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id,payer_obj_type
         ) values (
         #{amount},#{operate},#{incomeObjId},#{feeTypeCd},#{startTime},#{endTime},#{communityId},#{bId},#{feeId},#{userId},#{payerObjId},
-        #{feeFlag},#{state},#{configId}
+        #{feeFlag},#{state},#{configId},#{payerObjType}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.amount,t.operate,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
         feeTypeCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id userId,t.payer_obj_id,t.payer_obj_id
-        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId
+        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,t.payer_obj_type,t.payer_obj_type payerObjType
         from business_pay_fee t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -65,6 +65,9 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type = #{payerObjType}
+        </if>
 
     </select>
 
@@ -72,9 +75,9 @@
     <!-- 保存费用信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeInfoInstance" parameterType="Map">
         insert into pay_fee(
-        amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id
+        amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id,payer_obj_type
         ) select
-        t.amount,t.income_obj_id,t.fee_type_cd,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.fee_id,t.user_id,t.payer_obj_id
+        t.amount,t.income_obj_id,t.fee_type_cd,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.fee_id,t.user_id,t.payer_obj_id,t.payer_obj_type
         ,t.fee_flag,t.state,t.config_id
         from business_pay_fee t where 1=1
         <if test="amount !=null and amount != ''">
@@ -118,6 +121,10 @@
             and t.config_id= #{configId}
         </if>
 
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type = #{payerObjType}
+        </if>
+
     </insert>
 
 
@@ -127,12 +134,23 @@
         feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
-        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId
-        from pay_fee t,pay_fee_config pfc
+        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
+        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula computingFormula,
+        t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault
+        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
         and t.config_id = pfc.config_id
         and pfc.status_cd = '0'
+        and pfc.fee_type_cd = td1.status_cd
+        and td1.table_name = 'pay_fee_config'
+        and td1.table_columns = 'fee_type_cd'
+        and t.state = td2.status_cd
+        and td2.table_name = 'pay_fee'
+        and td2.table_columns = 'state'
+        and t.fee_flag = td3.status_cd
+        and td3.table_name = 'pay_fee'
+        and td3.table_columns = 'fee_flag'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -191,6 +209,9 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type = #{payerObjType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -248,11 +269,20 @@
     <!-- 查询费用数量 add by wuxw 2018-07-03 -->
     <select id="queryFeesCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee t,pay_fee_config pfc
+        from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
         and t.config_id = pfc.config_id
         and pfc.status_cd = '0'
+        and pfc.fee_type_cd = td1.status_cd
+        and td1.table_name = 'pay_fee_config'
+        and td1.table_columns = 'fee_type_cd'
+        and t.state = td2.status_cd
+        and td2.table_name = 'pay_fee'
+        and td2.table_columns = 'state'
+        and t.fee_flag = td3.status_cd
+        and td3.table_name = 'pay_fee'
+        and td3.table_columns = 'fee_flag'
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
         </if>
@@ -313,6 +343,9 @@
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type = #{payerObjType}
         </if>
 
 

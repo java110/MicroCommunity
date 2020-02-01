@@ -10,13 +10,17 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">收费范围</label>
                                 <div class="col-sm-10">
-                                    <select class="custom-select" v-model="roomCreateFeeAddInfo.locationTypeCd">
+                                    <select class="custom-select" v-model="roomCreateFeeAddInfo.locationTypeCd" v-if="roomCreateFeeAddInfo.isMore == true">
                                         <option selected disabled value="">必填，请选择收费范围</option>
                                         <option value="1000">小区</option>
                                         <option value="4000">楼栋</option>
                                         <option value="2000">单元</option>
                                         <option value="3000">房屋</option>
-                                    </select></div>
+                                    </select>
+                                    <input v-model="roomCreateFeeAddInfo.locationTypeCdName" v-if="roomCreateFeeAddInfo.isMore == false" disabled = "disabled" type="text" placeholder="必填，请填写收费范围"
+                                           class="form-control">
+
+                                </div>
                             </div>
                             <div class="form-group row"
                                  v-show="roomCreateFeeAddInfo.locationTypeCd == '2000' || roomCreateFeeAddInfo.locationTypeCd == '3000' ||roomCreateFeeAddInfo.locationTypeCd == '4000' ">
@@ -41,7 +45,7 @@
                                 </div>
                             </div>
                             <div class="form-group row"
-                                 v-show="roomCreateFeeAddInfo.locationTypeCd == '3000'  ">
+                                 v-show="roomCreateFeeAddInfo.locationTypeCd == '3000' ">
                                 <label class="col-sm-2 col-form-label">房屋</label>
                                 <div class="col-sm-10">
                                     <vc:create name="roomSelect2"

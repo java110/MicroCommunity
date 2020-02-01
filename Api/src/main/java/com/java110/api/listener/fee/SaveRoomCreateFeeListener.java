@@ -192,6 +192,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", roomDto.getRoomId());
+        businessUnit.put("payerObjType", "3333");
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));

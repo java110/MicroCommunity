@@ -189,6 +189,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         businessUnit.put("endTime", paramInJson.getString("endTime"));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", paramInJson.getString("psId"));
+        businessUnit.put("payerObjType", "6666");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
 

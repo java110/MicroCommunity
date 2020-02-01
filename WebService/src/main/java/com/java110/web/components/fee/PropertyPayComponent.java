@@ -2,6 +2,7 @@ package com.java110.web.components.fee;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFeeServiceSMO;
+import com.java110.web.smo.feeConfig.IListFeeConfigsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,11 @@ public class PropertyPayComponent {
     @Autowired
     private IFeeServiceSMO feeServiceSMOImpl;
 
+    @Autowired
+    private IListFeeConfigsSMO listFeeConfigsSMOImpl;
+
     public ResponseEntity<String> loadPropertyConfigData(IPageData pd) {
-        return feeServiceSMOImpl.loadPropertyConfigFee(pd, "");
+        return listFeeConfigsSMOImpl.listFeeConfigs(pd);
     }
 
 

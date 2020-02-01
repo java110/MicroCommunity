@@ -327,6 +327,10 @@
         var urlParameters = location.pathname;
         return urlParameters;
     };
+    vc.getBack = function(){
+        window.location.href = document.referrer;
+        window.history.back(-1);
+    }
     //对象转get参数
     vc.objToGetParam = function (obj) {
         var str = [];

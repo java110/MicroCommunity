@@ -11,7 +11,7 @@
                 receivedAmount:'0.00',
                 remark:'',
                 feeId:'',
-                feeTypeCd:'',
+                configId:'',
                 builtUpArea:'',
                 squarePrice:'',
                 additionalAmount:'',
@@ -38,7 +38,7 @@
 
                 $('#propertyPayModel').modal('show');
                 vc.component.propertyPayInfo.feeId = _params.feeId;
-                vc.component.propertyPayInfo.feeTypeCd = _params.feeTypeCd;
+                vc.component.propertyPayInfo.configId = _params.configId;
                 vc.component.propertyPayInfo.builtUpArea = _params.builtUpArea;
                 vc.component.propertyPayInfo.communityId = vc.getCurrentCommunity().communityId;
 
@@ -137,7 +137,7 @@
                                              remark:'',
                                              builtUpArea:'',
                                              feeId:'',
-                                             feeTypeCd:'',
+                                             configId:'',
                                              squarePrice:'',
                                              additionalAmount:'',
                                              communityId:''
@@ -150,8 +150,9 @@
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        feeTypeCd: vc.component.propertyPayInfo.feeTypeCd,
-                        configId:'',
+                        configId:vc.component.propertyPayInfo.configId,
+                        page:1,
+                        row:1
                     }
                 };
                 vc.http.get(
@@ -162,7 +163,8 @@
                         //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                         if(res.status == 200){
                             //关闭model
-                            vc.copyObject(JSON.parse(json), vc.component.propertyPayInfo);
+                            var _feeConfig  = JSON.parse(json).feeConfigs[0];
+                            vc.copyObject(_feeConfig, vc.component.propertyPayInfo);
                             return ;
                         }
                         vc.message(json);

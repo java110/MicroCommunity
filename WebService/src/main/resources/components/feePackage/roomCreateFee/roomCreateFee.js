@@ -81,13 +81,8 @@
                     room:_room
                 });
             },
-            _openEditRoomModel:function(_room){
-                //_room.floorId = vc.component.roomCreateFeeInfo.conditions.floorId;
-                vc.emit('editRoom','openEditRoomModal',_room);
-            },
-            _openDelRoomModel:function(_room){
-                 //_room.floorId = vc.component.roomCreateFeeInfo.conditions.floorId;
-                 vc.emit('deleteRoom','openRoomModel',_room);
+            _openViewRoomCreateFee:function(_room){
+                 vc.jumpToPage("/flow/listRoomFeeFlow?"+vc.objToGetParam(_room));
             },
             /**
                 根据楼ID加载房屋

@@ -238,6 +238,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", paramInJson.getString("roomId"));
+        businessUnit.put("payerObjType", "3333");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
 

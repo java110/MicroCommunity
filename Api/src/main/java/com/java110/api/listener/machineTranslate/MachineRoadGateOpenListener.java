@@ -474,6 +474,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         businessUnit.put("endTime", DateUtil.getLastTime()); // 临时车将结束时间刷成2038年
         businessUnit.put("communityId", communityId);
         businessUnit.put("payerObjId", paramInJson.getString("inoutId"));
+        businessUnit.put("payerObjType", "9999");
         businessUnit.put("feeFlag", "2006012"); // 一次性费用
         businessUnit.put("state", "2008001"); // 收费中
         businessUnit.put("userId", "-1");

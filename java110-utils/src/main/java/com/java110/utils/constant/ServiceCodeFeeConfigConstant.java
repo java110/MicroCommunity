@@ -33,5 +33,10 @@ public class ServiceCodeFeeConfigConstant {
      */
     public static final String LIST_ROOMS_WHERE_FEE_SET = "fee.listRoomsWhereFeeSet";
 
+    /**
+     * 查询 费用项
+     */
+    public static final String LIST_FEE = "fee.listFee";
+
 
 }

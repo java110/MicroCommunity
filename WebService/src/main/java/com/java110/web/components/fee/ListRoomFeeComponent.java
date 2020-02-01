@@ -2,9 +2,11 @@ package com.java110.web.components.fee;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.report.smo.fee.IListPayFeeSMO;
+import com.java110.web.smo.IFeeServiceSMO;
 import com.java110.web.smo.feeConfig.IDeleteFeeSMO;
 import com.java110.web.smo.feeConfig.IListFeeConfigsSMO;
-import com.java110.web.smo.feeConfig.IRoomCreateFeeSMO;
+import com.java110.web.smo.feeConfig.IListFeeSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,16 +19,17 @@ import org.springframework.stereotype.Component;
  * <p>
  * 2019-06-29
  */
-@Component("roomCreateFeeAdd")
-public class RoomCreateFeeAddComponent {
+@Component("listRoomFee")
+public class ListRoomFeeComponent {
 
     @Autowired
     private IListFeeConfigsSMO listFeeConfigsSMOImpl;
 
     @Autowired
-    private IRoomCreateFeeSMO roomCreateFeeSMOImpl;
+    private IListFeeSMO listFeeSMOImpl;
 
-
+    @Autowired
+    private IDeleteFeeSMO deleteFeeSMOImpl;
 
     /**
      * 查询费用项列表
@@ -35,17 +38,18 @@ public class RoomCreateFeeAddComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listFeeConfigsSMOImpl.listFeeConfigs(pd);
+        return listFeeSMOImpl.list(pd);
+    }
+    /**
+     * 查询费用项列表
+     *
+     * @param pd 页面数据封装
+     * @return 返回 ResponseEntity 对象
+     */
+    public ResponseEntity<String> deleteFee(IPageData pd) {
+        return deleteFeeSMOImpl.deleteFee(pd);
     }
 
-    /**
-     * 批量创建费用
-     * @param pd
-     * @return
-     */
-    public ResponseEntity<String> save(IPageData pd) {
-        return roomCreateFeeSMOImpl.createFee(pd);
-    }
 
     public IListFeeConfigsSMO getListFeeConfigsSMOImpl() {
         return listFeeConfigsSMOImpl;
@@ -55,11 +59,19 @@ public class RoomCreateFeeAddComponent {
         this.listFeeConfigsSMOImpl = listFeeConfigsSMOImpl;
     }
 
-    public IRoomCreateFeeSMO getRoomCreateFeeSMOImpl() {
-        return roomCreateFeeSMOImpl;
+    public IListFeeSMO getListFeeSMOImpl() {
+        return listFeeSMOImpl;
     }
 
-    public void setRoomCreateFeeSMOImpl(IRoomCreateFeeSMO roomCreateFeeSMOImpl) {
-        this.roomCreateFeeSMOImpl = roomCreateFeeSMOImpl;
+    public void setListFeeSMOImpl(IListFeeSMO listFeeSMOImpl) {
+        this.listFeeSMOImpl = listFeeSMOImpl;
+    }
+
+    public IDeleteFeeSMO getDeleteFeeSMOImpl() {
+        return deleteFeeSMOImpl;
+    }
+
+    public void setDeleteFeeSMOImpl(IDeleteFeeSMO deleteFeeSMOImpl) {
+        this.deleteFeeSMOImpl = deleteFeeSMOImpl;
     }
 }

@@ -2,30 +2,41 @@ package com.java110.web.components.fee;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFeeServiceSMO;
-import com.java110.web.smo.feeConfig.IListFeeSMO;
+import com.java110.web.smo.feeConfig.IListFeeConfigsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
  * @ClassName ViewPropertyFeeConfigComponent
- * @Description 查询主费用信息
+ * @Description 展示物业费信息
  * @Author wuxw
  * @Date 2019/6/1 14:33
  * @Version 1.0
  * add by wuxw 2019/6/1
  **/
-@Component("viewMainFee")
-public class ViewMainFeeComponent {
+@Component("payFeeOrder")
+public class PayFeeOrderComponent {
 
     @Autowired
     private IFeeServiceSMO feeServiceSMOImpl;
 
     @Autowired
-    private IListFeeSMO listFeeSMOImpl;
+    private IListFeeConfigsSMO listFeeConfigsSMOImpl;
 
-    public ResponseEntity<String> getFee(IPageData pd) {
-        return listFeeSMOImpl.list(pd);
+    public ResponseEntity<String> loadPropertyConfigData(IPageData pd) {
+        return listFeeConfigsSMOImpl.listFeeConfigs(pd);
+    }
+
+
+    /**
+     * 缴费
+     *
+     * @param pd 页面数据封装
+     * @return 缴费接口
+     */
+    public ResponseEntity<String> payFee(IPageData pd) {
+        return feeServiceSMOImpl.payFee(pd);
     }
 
 

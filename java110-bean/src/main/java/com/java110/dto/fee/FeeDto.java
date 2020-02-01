@@ -31,10 +31,19 @@ public class FeeDto extends PageDto implements Serializable {
     private String squarePrice;
     private String additionalAmount;
     private String state;
+    private String stateName;
     private String feeFlag;
+
+    private String feeName;
+    private String feeTypeCdName;
+    private String feeFlagName;
 
     private Date arrearsEndTime;
     private Date noArrearsEndTime;
+    private double feePrice;
+    private String payerObjType;
+    private String computingFormula;
+    private String isDefault;
 
 
     private Date createTime;
@@ -202,5 +211,69 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String getFeeName() {
+        return feeName;
+    }
+
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
+    }
+
+    public String getFeeTypeCdName() {
+        return feeTypeCdName;
+    }
+
+    public void setFeeTypeCdName(String feeTypeCdName) {
+        this.feeTypeCdName = feeTypeCdName;
+    }
+
+    public String getFeeFlagName() {
+        return feeFlagName;
+    }
+
+    public void setFeeFlagName(String feeFlagName) {
+        this.feeFlagName = feeFlagName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public double getFeePrice() {
+        return feePrice;
+    }
+
+    public void setFeePrice(double feePrice) {
+        this.feePrice = feePrice;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
+    }
+
+    public String getComputingFormula() {
+        return computingFormula;
+    }
+
+    public void setComputingFormula(String computingFormula) {
+        this.computingFormula = computingFormula;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
     }
 }

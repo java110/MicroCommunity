@@ -16,7 +16,9 @@
                 feeTypeCd:'',
                 configId:'',
                 billType:'',
-                roomState:''
+                roomState:'',
+                isMore:false,
+                locationTypeCdName:'',
             }
         },
         _initMethod: function() {
@@ -27,8 +29,16 @@
         },
         _initEvent: function() {
             vc.on('roomCreateFeeAdd', 'openRoomCreateFeeAddModal',
-            function() {
+            function(_room) {
+                vc.component.roomCreateFeeAddInfo.isMore =_room.isMore;
+                if(!_room.isMore){
+                    vc.component.roomCreateFeeAddInfo.locationTypeCd = '5008';
+                    vc.component.roomCreateFeeAddInfo.locationObjId = _room.room.roomId;
+                    var room =  _room.room;
+                    vc.component.roomCreateFeeAddInfo.locationTypeCdName = room.floorNum +'号楼'+room.unitNum+'单元'+room.roomNum+'室';
+                }
                 $('#roomCreateFeeAddModel').modal('show');
+
             });
 
             vc.on("roomCreateFeeAdd", "notify", function (_param) {
@@ -106,7 +116,8 @@
                     vc.component.roomCreateFeeAddInfo.locationObjId = vc.component.roomCreateFeeAddInfo.roomId;
                 } else if (vc.component.roomCreateFeeAddInfo.locationTypeCd == '4000') {
                     vc.component.roomCreateFeeAddInfo.locationObjId = vc.component.roomCreateFeeAddInfo.floorId;
-                } else {
+                } else if (vc.component.roomCreateFeeAddInfo.locationTypeCd == '5008') {
+                }else {
                     vc.toast("收费范围错误");
                     return;
                 }
@@ -117,17 +128,22 @@
                 }
 
                 vc.component.roomCreateFeeAddInfo.communityId = vc.getCurrentCommunity().communityId;
+                var _roomCreateFeeAddInfo = JSON.parse(JSON.stringify(vc.component.roomCreateFeeAddInfo));
+                if(_roomCreateFeeAddInfo.locationTypeCd == '5008'){
+                    _roomCreateFeeAddInfo.locationTypeCd = '3000';
+                }
 
-                vc.http.post('roomCreateFeeAdd', 'save', JSON.stringify(vc.component.roomCreateFeeAddInfo), {
+                vc.http.post('roomCreateFeeAdd', 'save', JSON.stringify(_roomCreateFeeAddInfo), {
                     emulateJSON: true
                 },
                 function(json, res) {
                     //vm.menus = vm.refreshMenuActive(JSON.parse(json),0);
                     if (res.status == 200) {
                         //关闭model
+                        var _json = JSON.parse(json);
                         $('#roomCreateFeeAddModel').modal('hide');
                         vc.component.clearAddFeeConfigInfo();
-                        vc.toast("创建收费成功，总共["+res.totalRoom+"]房屋，成功["+res.successRoom+"],失败["+res.errorRoom+"]",8000);
+                        vc.toast("创建收费成功，总共["+_json.totalRoom+"]房屋，成功["+_json.successRoom+"],失败["+_json.errorRoom+"]",8000);
                         return;
                     }
                     vc.message(json);
@@ -154,7 +170,10 @@
                     roomId: '',
                     feeTypeCd:'',
                     configId:'',
-                    billType:''
+                    billType:'',
+                    roomState:'',
+                    isMore:false,
+                    locationTypeCdName:'',
                 };
 
                 vc.component.roomCreateFeeAddInfo.feeTypeCds = _feeTypeCds;

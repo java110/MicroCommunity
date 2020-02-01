@@ -23,18 +23,21 @@
                 link:"",
                 startTime:"",
                 endTime:"",
-                amount:"-1.00"
+                amount:"-1.00",
+                feeFlagName:'',
+                feeTypeCdName:'',
+                configId:'',
+                stateName:''
+
             }
         },
         _initMethod:function(){
              //加载 业主信息
-            var _ownerId = vc.getParam('ownerId')
-            var _roomId = vc.getParam('roomId')
+            var _feeId = vc.getParam('feeId')
 
-            if(vc.notNull(_roomId)){
+            if(vc.notNull(_feeId)){
                 vc.component.loadMainFeeInfo({
-                    roomId:_roomId,
-                    ownerId:_ownerId,
+                    feeId:_feeId
                 });
             }
 
@@ -61,17 +64,18 @@
             openPayModel:function(){
                 vc.emit($props.payName,'openPayModel',{
                     feeId:vc.component.mainFeeInfo.feeId,
-                    feeTypeCd:vc.component.mainFeeInfo.feeTypeCd,
+                    configId:vc.component.mainFeeInfo.configId,
                     builtUpArea:vc.component.mainFeeInfo.builtUpArea
                 });
             },
-            loadMainFeeInfo:function(_room){
+            loadMainFeeInfo:function(_fee){
                 //vc.copyObject(_fee,vc.component.mainFeeInfo);
                 var param = {
                     params:{
                         communityId:vc.getCurrentCommunity().communityId,
-                        roomId:_room.roomId,
-                        feeTypeCd:$props.feeTypeCd
+                        feeId:_fee.feeId,
+                        row:1,
+                        page:1
                     }
                 };
 
@@ -80,7 +84,7 @@
                             'getFee',
                              param,
                              function(json,res){
-                               var _fee =JSON.parse(json);
+                               var _fee =JSON.parse(json).fees[0];
                                vc.copyObject(_fee,vc.component.mainFeeInfo);
                                vc.emit('propertyFee','listFeeDetail',{
                                     feeId:_fee.feeId
@@ -91,7 +95,7 @@
                            );
             },
             _openCallBackOwner:function(){
-                vc.jumpToPage("/flow/ownerFlow");
+                vc.getBack();
             }
 
         }

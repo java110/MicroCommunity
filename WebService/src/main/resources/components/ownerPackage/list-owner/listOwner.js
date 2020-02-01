@@ -44,7 +44,7 @@
 
             vc.on('listOwner', 'chooseRoom', function (_room) {
                 if (vc.component.listOwnerInfo._eventName == 'PayPropertyFee') {
-                    vc.jumpToPage("/flow/propertyFeeFlow?ownerId=" + vc.component.listOwnerInfo._currentOwnerId + "&roomId=" + _room.roomId);
+                    vc.jumpToPage("/flow/listRoomFeeFlow?" + vc.objToGetParam(_room));
                 } else {
                     vc.jumpToPage("/flow/ownerRepairFlow?ownerId=" + vc.component.listOwnerInfo._currentOwnerId + "&roomId=" + _room.roomId);
                 }
