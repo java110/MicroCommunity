@@ -41,6 +41,7 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+    private boolean withOwnerCar =false;
 
 
     public String getArea() {
@@ -211,5 +212,13 @@ public class ParkingSpaceDto extends PageDto implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public boolean isWithOwnerCar() {
+        return withOwnerCar;
+    }
+
+    public void setWithOwnerCar(boolean withOwnerCar) {
+        this.withOwnerCar = withOwnerCar;
     }
 }

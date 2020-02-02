@@ -80,6 +80,7 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
         }
 
         ParkingSpaceDto parkingSpaceDto = BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class);
+        parkingSpaceDto.setWithOwnerCar(true);
         //查询总记录数
         int total = parkingSpaceInnerServiceSMOImpl.queryParkingSpacesCount(BeanConvertUtil.covertBean(reqJson, ParkingSpaceDto.class));
         apiParkingSpaceVo.setTotal(total);
@@ -176,6 +177,7 @@ public class ListParkingSpacesWhereFeeSetListener extends AbstractServiceApiList
                     tmpParkingSpaceDto.setOwnerName(tmp.getOwnerName());
                     tmpParkingSpaceDto.setIdCard(tmp.getIdCard());
                     tmpParkingSpaceDto.setLink(tmp.getLink());
+                    tmpParkingSpaceDto.setCarNum(tmp.getCarNum());
                 }
             }
         }

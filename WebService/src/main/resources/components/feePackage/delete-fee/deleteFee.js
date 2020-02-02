@@ -33,6 +33,7 @@
                             //关闭model
                             $('#deleteFeeModel').modal('hide');
                             vc.emit('listRoomFee','notify',{});
+                            vc.emit('listParkingSpaceFee','notify',{});
                             vc.toast("删除费用成功");
                             return ;
                         }

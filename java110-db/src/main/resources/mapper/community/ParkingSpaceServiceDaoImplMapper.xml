@@ -114,6 +114,7 @@
             pa.type_cd typeCd
         FROM
           parking_space t,t_dict td,parking_area pa
+
         <where>
             t.state = td.status_cd
             and td.table_name='parking_space'

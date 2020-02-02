@@ -77,8 +77,8 @@
         insert into pay_fee(
         amount,income_obj_id,fee_type_cd,start_time,status_cd,end_time,community_id,b_id,fee_id,user_id,payer_obj_id,fee_flag,state,config_id,payer_obj_type
         ) select
-        t.amount,t.income_obj_id,t.fee_type_cd,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.fee_id,t.user_id,t.payer_obj_id,t.payer_obj_type
-        ,t.fee_flag,t.state,t.config_id
+        t.amount,t.income_obj_id,t.fee_type_cd,t.start_time,'0',t.end_time,t.community_id,t.b_id,t.fee_id,t.user_id,t.payer_obj_id
+        ,t.fee_flag,t.state,t.config_id,t.payer_obj_type
         from business_pay_fee t where 1=1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}

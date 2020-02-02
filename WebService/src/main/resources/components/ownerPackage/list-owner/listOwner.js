@@ -51,7 +51,7 @@
             });
 
             vc.on('listOwner', 'chooseParkingSpace', function (_parkingSpace) {
-                vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId=" + vc.component.listOwnerInfo._currentOwnerId + "&psId=" + _parkingSpace.psId);
+                vc.jumpToPage("/flow/listParkingSpaceFeeFlow?" + vc.objToGetParam(_parkingSpace));
             });
 
             vc.on("listOwner", "notify", function (_param) {
@@ -152,7 +152,7 @@
                             vc.jumpToPage("/flow/ownerRepairFlow?ownerId=" + _owner.ownerId + "&roomId=" + rooms[0].roomId);
                         } else if (rooms.length == 0) {
                             //vc.message("当前业主未查询到房屋信息");
-vc.toast("当前业主未查询到房屋信息");
+                            vc.toast("当前业主未查询到房屋信息");
                         } else {
 
                             vc.emit('searchRoom', 'showOwnerRooms', rooms);
@@ -179,7 +179,8 @@ vc.toast("当前业主未查询到房屋信息");
                         var listRoomData = JSON.parse(json);
                         var rooms = listRoomData.rooms;
                         if (rooms.length == 1) {
-                            vc.jumpToPage("/flow/propertyFeeFlow?ownerId=" + _owner.ownerId + "&roomId=" + rooms[0].roomId);
+                            vc.jumpToPage("/flow/listRoomFeeFlow?" + vc.objToGetParam(rooms[0]));
+
                         } else if (rooms.length == 0) {
                             //vc.message("当前业主未查询到房屋信息");
                             vc.toast("当前业主未查询到房屋信息");
@@ -209,7 +210,8 @@ vc.toast("当前业主未查询到房屋信息");
                         var listParkingSpaceData = JSON.parse(json);
                         var parkingSpaces = listParkingSpaceData.parkingSpaces;
                         if (parkingSpaces.length == 1) {
-                            vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId=" + _owner.ownerId + "&psId=" + parkingSpaces[0].psId);
+                            //vc.jumpToPage("/flow/parkingSpaceFeeFlow?ownerId=" + _owner.ownerId + "&psId=" + parkingSpaces[0].psId);
+                            vc.jumpToPage("/flow/listParkingSpaceFeeFlow?" + vc.objToGetParam(parkingSpaces[0]));
                         } else if (parkingSpaces.length == 0) {
                             //vc.message("当前业主未查询到车位信息");
                             vc.toast("当前业主未查询到车位信息");

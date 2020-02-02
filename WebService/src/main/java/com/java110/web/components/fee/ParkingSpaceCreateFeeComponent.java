@@ -3,6 +3,7 @@ package com.java110.web.components.fee;
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.IFloorServiceSMO;
 import com.java110.web.smo.IUnitServiceSMO;
+import com.java110.web.smo.feeConfig.IListParkingSpacesWhereFeeSetSMO;
 import com.java110.web.smo.feeConfig.IListRoomsWhereFeeSetSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,12 @@ public class ParkingSpaceCreateFeeComponent {
     private IUnitServiceSMO unitServiceSMOImpl;
 
     @Autowired
-    private IListRoomsWhereFeeSetSMO listRoomsWhereFeeSetSMOImpl;
+    private IListParkingSpacesWhereFeeSetSMO listParkingSpacesWhereFeeSetSMOImpl;
 
-    public ResponseEntity<String> listParkingSpace(IPageData pd){
-        return listRoomsWhereFeeSetSMOImpl.listRooms(pd);
+    public ResponseEntity<String> listParkingSpace(IPageData pd) {
+        return listParkingSpacesWhereFeeSetSMOImpl.listParkingSpaces(pd);
     }
+
     /**
      * 根据 floorId 查询单元信息
      *
