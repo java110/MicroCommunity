@@ -23,10 +23,15 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String[] carNums;
     private String communityId;
     private String psId;
+    private String[] psIds;
     private String remark;
     private String ownerId;
     private String userId;
     private String carId;
+    private boolean withOwner =false;
+    private String ownerName;
+    private String idCard;
+    private String link;
 
 
     private Date createTime;
@@ -145,5 +150,45 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setCarNums(String[] carNums) {
         this.carNums = carNums;
+    }
+
+    public String[] getPsIds() {
+        return psIds;
+    }
+
+    public void setPsIds(String[] psIds) {
+        this.psIds = psIds;
+    }
+
+    public boolean isWithOwner() {
+        return withOwner;
+    }
+
+    public void setWithOwner(boolean withOwner) {
+        this.withOwner = withOwner;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
