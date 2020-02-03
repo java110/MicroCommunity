@@ -34,7 +34,8 @@
                             <th class="text-center">时间</th>
                             <th class="text-center">费用项ID</th>
                             <th class="text-center">费用项名称</th>
-                            <th class="text-center">金额</th>
+                            <th class="text-center">应收金额</th>
+                            <th class="text-center">实收金额</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -42,7 +43,8 @@
                             <td class="text-center">{{fee.createTime}}</td>
                             <td class="text-center">{{fee.configId}}</td>
                             <td class="text-center">{{fee.feeName}}</td>
-                            <td class="text-center">{{fee.money}}</td>
+                            <td class="text-center">{{fee.receivableAmounts}}</td>
+                            <td class="text-center">{{fee.receivedAmounts}}</td>
                         </tr>
                         </tbody>
                         <tfoot>
