@@ -8,14 +8,14 @@
         data: {
             payFeeManageInfo: {
                 payFees: [],
-                payFeeTypes:[],
+                payObjTypes:[],
                 total: 0,
                 records: 1,
                 moreCondition: false,
                 name: '',
                 conditions: {
                     communityId: vc.getCurrentCommunity().communityId,
-                    feeTypeCd: '888800010001',
+                    payObjType: '3333',
                     startTime: '',
                     endTime: '',
                     userCode:''
@@ -25,7 +25,10 @@
         _initMethod: function () {
             vc.component._initDate();
             vc.component._listpayFees(DEFAULT_PAGE, DEFAULT_ROWS);
-            vc.component._listFeeType();
+            //vc.component._listFeeType();
+            vc.getDict('pay_fee',"payer_obj_type",function(_data){
+                vc.component.payFeeManageInfo.payObjTypes = _data;
+            });
         },
         _initEvent: function () {
             vc.on('pagination', 'page_event', function (_currentPage) {

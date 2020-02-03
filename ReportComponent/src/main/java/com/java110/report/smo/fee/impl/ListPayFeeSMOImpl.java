@@ -55,10 +55,9 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         paramIn.put("row", page * row);
 
         String apiUrl = "";
-        if (!paramIn.containsKey("feeTypeCd") || FeeTypeConstant.FEE_TYPE_PROPERTY.equals(paramIn.getString("feeTypeCd"))) {
+        if (!paramIn.containsKey("payObjType") || "3333".equals(paramIn.getString("payObjType"))) {
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPropertyPayFee" + mapToUrlParam(paramIn);
-        } else if (FeeTypeConstant.FEE_TYPE_HIRE_PARKING_SPACE.equals(paramIn.getString("feeTypeCd"))) {
-            paramIn.put("feeTypeCd", "");
+        } else if ("6666".equals(paramIn.getString("payObjType"))) {
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
         }else{
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);

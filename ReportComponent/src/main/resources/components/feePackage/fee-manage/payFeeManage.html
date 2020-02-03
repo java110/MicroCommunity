@@ -13,9 +13,8 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-4">
-                            <select class="custom-select" v-model="payFeeManageInfo.conditions.feeTypeCd">
-                                <option value="888800010006">停车费</option>
-                                <option v-for="(item,index) in payFeeManageInfo.payFeeTypes" :key="index" v-bind:value="item.statusCd">{{item.name}}</option>
+                            <select class="custom-select" v-model="payFeeManageInfo.conditions.payObjType">
+                                <option v-for="(item,index) in payFeeManageInfo.payObjTypes" :key="index" v-bind:value="item.statusCd">{{item.name}}</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -63,6 +62,7 @@
                         <thead>
                         <tr>
                             <th class="text-center">费用类型</th>
+                            <th class="text-center">费用项目</th>
                             <th class="text-center">付费方</th>
                             <th class="text-center">缴费ID</th>
                             <th class="text-center">付费周期</th>
@@ -75,6 +75,7 @@
                         <tbody>
                         <tr v-for="payFee in payFeeManageInfo.payFees">
                             <td class="text-center">{{payFee.feeTypeCdName}}</td>
+                            <td class="text-center">{{payFee.feeName}}</td>
                             <td class="text-center">{{payFee.payObjName}}</td>
                             <td class="text-center">{{payFee.detailId}}</td>
                             <td class="text-center">{{payFee.cycles}}个月</td>
