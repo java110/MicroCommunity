@@ -1,0 +1,62 @@
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>缴费汇总表</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button"
+                                    class="btn btn-light btn-sm"
+                                    v-bind:class="{'btn-primary': feeSummaryInfo.feeSummaryType == 1001}"
+                                    v-on:click="_switchFeeSummaryType(1001)"
+                            >日</button>
+                            <button type="button"
+                                    class="btn btn-light btn-sm"
+                                    v-bind:class="{'btn-primary': feeSummaryInfo.feeSummaryType == 1101}"
+                                    v-on:click="_switchFeeSummaryType(1101)"
+                            >月</button>
+                            <button type="button"
+                                    class="btn btn-light btn-sm"
+                                    v-bind:class="{'btn-primary': feeSummaryInfo.feeSummaryType == 1111}"
+                                    v-on:click="_switchFeeSummaryType(1111)"
+                            >年</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny"
+                           data-page-size="15"
+                    >
+                        <thead>
+                        <tr>
+                            <th class="text-center">时间</th>
+                            <th class="text-center">费用项ID</th>
+                            <th class="text-center">费用项名称</th>
+                            <th class="text-center">金额</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="fee in feeSummaryInfo.fees">
+                            <td class="text-center">{{fee.createTime}}</td>
+                            <td class="text-center">{{fee.configId}}</td>
+                            <td class="text-center">{{fee.feeName}}</td>
+                            <td class="text-center">{{fee.money}}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
