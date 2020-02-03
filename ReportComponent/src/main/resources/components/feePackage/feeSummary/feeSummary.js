@@ -16,7 +16,7 @@
             }
         },
         _initMethod: function () {
-            vc.component._listFees(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.component._listFeeSummarys(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent: function () {
             vc.on('pagination', 'page_event', function (_currentPage) {

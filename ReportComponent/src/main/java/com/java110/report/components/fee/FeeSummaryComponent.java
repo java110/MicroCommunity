@@ -2,6 +2,7 @@ package com.java110.report.components.fee;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.report.smo.fee.IListFeeSummarySMO;
 import com.java110.report.smo.fee.IListPayFeeSMO;
 import com.java110.report.smo.feeType.IFeeTypeSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class FeeSummaryComponent {
 
     @Autowired
-    private IListPayFeeSMO listPayFeeSMOImpl;
+    private IListFeeSummarySMO listFeeSummarySMOImpl;
 
 
     /**
@@ -30,14 +31,14 @@ public class FeeSummaryComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listPayFeeSMOImpl.list(pd);
+        return listFeeSummarySMOImpl.list(pd);
     }
 
-    public IListPayFeeSMO getListPayFeeSMOImpl() {
-        return listPayFeeSMOImpl;
+    public IListFeeSummarySMO getListFeeSummarySMOImpl() {
+        return listFeeSummarySMOImpl;
     }
 
-    public void setListPayFeeSMOImpl(IListPayFeeSMO listPayFeeSMOImpl) {
-        this.listPayFeeSMOImpl = listPayFeeSMOImpl;
+    public void setListFeeSummarySMOImpl(IListFeeSummarySMO listFeeSummarySMOImpl) {
+        this.listFeeSummarySMOImpl = listFeeSummarySMOImpl;
     }
 }
