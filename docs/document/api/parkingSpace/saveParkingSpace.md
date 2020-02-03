@@ -1,11 +1,11 @@
 
 
-**1\. 保存业主信息**
+**1\. 保存车位信息**
 ###### 接口功能
-> 用户通过web端或APP保存单元信息接口
+> 删除车位信息接口
 
 ###### URL
-> [http://api.java110.com:8008/api/owner.saveOwner](http://api.java110.com:8008/api/owner.saveOwner)
+> [http://api.java110.com:8008/api/parkingSpace.saveParkingSpace](http://api.java110.com:8008/api/parkingSpace.saveParkingSpace)
 
 ###### 支持格式
 > JSON
@@ -24,13 +24,13 @@
 ###### 请求参数
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|name|1|String|12|业主名称|-|
 |userId|1|String|30|用户ID|-|
-|age|1|int|11|年龄|-|
-|link|1|String|11|联系人手机号|-|
-|sex|1|int|11|性别|-|
-|ownerTypeCd|1|String|4|默认1001|1001 业主本人 1002 家庭成员|
 |communityId|1|String|30|小区ID|-|
+|paId|1|String|30|停车场ID|-|
+|num|1|String|12|停车场编号|-|
+|area|1|decimal|7,2|车位面积|-|
+
+
 
 
 ###### 返回协议
@@ -39,11 +39,9 @@
 
 当http返回状态为200时请求处理成功，body内容为返回内容，
 
-成功
-
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/owner.saveOwner](http://api.java110.com:8008/api/owner.saveOwner)
+> 地址：[http://api.java110.com:8008/api/parkingSpace.saveParkingSpace](http://api.java110.com:8008/api/parkingSpace.saveParkingSpace)
 
 ``` javascript
 请求头信息：
@@ -56,16 +54,18 @@ SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 {
-    "sex":"填写具体值",
-            "name":"填写具体值",
-            "link":"填写具体值",
-            "remark":"填写具体值",
-            "userId":"填写具体值",
-            "ownerTypeCd":"1001",
-            "age":"填写具体值"
+	"area": "12",
+	"parkingSpaceId": -1,
+	"num": "001",
+	"paId": "-1",
+	"remark": "ea",
+	"psId": "",
+	"parkingAreas": [],
+	"communityId": "7020181217000001",
+	"userId": "30518940136629616640"
 }
 
 返回报文：
-成功
+
 
 ```
