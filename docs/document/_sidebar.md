@@ -183,7 +183,7 @@
   * [查询车位](api/parkingSpace/queryParkingSpaces.md)
   * [车位出售](api/parkingSpace/sellParkingSpace.md)
   * [停车位退款-待补充](api/parkingSpace/exitParkingSpace.md)
-  * [查询业主车位-待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
+  * [查询业主车位- 待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
   
   
 
