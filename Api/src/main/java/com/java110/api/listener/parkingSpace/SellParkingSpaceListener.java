@@ -189,6 +189,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", paramInJson.getString("psId"));
         businessUnit.put("payerObjType", "6666");
+        businessUnit.put("configId", paramInJson.getString("configId"));
         businessUnit.put("feeFlag", this.isHireParkingSpace(paramInJson) ? "1003006" : "2006012");
         businessUnit.put("state", this.isHireParkingSpace(paramInJson) ? "2008001" : "2009001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
@@ -322,6 +323,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
                 * Double.parseDouble(paramInJson.getString("cycles")) : Double.parseDouble(feeConfigDto.getAdditionalAmount());
 
         paramInJson.put("receivableAmount", receivableAmount);
+        paramInJson.put("configId",feeConfigDto.getConfigId());
 
         //计算 amount
         String amount = isHireParkingSpace(paramInJson) ? "-1.00" : String.valueOf(receivableAmount);
