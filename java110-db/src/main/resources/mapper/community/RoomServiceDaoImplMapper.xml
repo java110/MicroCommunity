@@ -9,7 +9,8 @@
         insert into business_building_room(
         unit_price,section,remark,user_id,room_id,layer,built_up_area,operate,room_num,unit_id,b_id,apartment,state,community_id
         ) values (
-        #{unitPrice},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},#{communityId}
+        #{unitPrice},#{section},#{remark},#{userId},#{roomId},#{layer},#{builtUpArea},#{operate},#{roomNum},#{unitId},#{bId},#{apartment},#{state},
+        #{communityId}
         )
     </insert>
 

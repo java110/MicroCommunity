@@ -15,6 +15,7 @@
         },
         _initEvent:function(){
             vc.on("addRoomBinding", "notify", function(_info){
+                _info.communityId=vc.getCurrentCommunity().communityId;
                 vc.component.addRoomBindingInfo.infos[vc.component.addRoomBindingInfo.index] = _info;
             });
 

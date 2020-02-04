@@ -29,6 +29,7 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
         JSONArray infos = reqJson.getJSONArray("data");
 
         Assert.hasKeyByFlowData(infos, "addRoomView", "roomNum", "必填，请填写房屋编号");
+        Assert.hasKeyByFlowData(infos, "addRoomView", "communityId", "必填，请填写房屋小区信息");
         Assert.hasKeyByFlowData(infos, "addRoomView", "layer", "必填，请填写房屋楼层");
         Assert.hasKeyByFlowData(infos, "addRoomView", "section", "必填，请填写房屋楼层");
         Assert.hasKeyByFlowData(infos, "addRoomView", "apartment", "必填，请选择房屋户型");
