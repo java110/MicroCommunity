@@ -91,6 +91,7 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFloor = new JSONObject();
         businessFloor.put("floorId", paramInJson.getString("floorId"));
+        businessFloor.put("communityId", paramInJson.getString("communityId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
 
         return business;

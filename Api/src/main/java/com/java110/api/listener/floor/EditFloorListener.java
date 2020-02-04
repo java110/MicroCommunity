@@ -109,6 +109,7 @@ public class EditFloorListener extends AbstractServiceApiDataFlowListener {
         businessFloor.put("remark", paramInJson.getString("remark"));
         businessFloor.put("userId", paramInJson.getString("userId"));
         businessFloor.put("floorNum", paramInJson.getString("floorNum"));
+        businessFloor.put("communityId", paramInJson.getString("communityId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
 
         return business;

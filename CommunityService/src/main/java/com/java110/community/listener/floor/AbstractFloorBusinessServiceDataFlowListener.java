@@ -43,6 +43,7 @@ public abstract class AbstractFloorBusinessServiceDataFlowListener extends Abstr
         businessFloorInfo.put("remark", businessFloorInfo.get("remark"));
         businessFloorInfo.put("userId", businessFloorInfo.get("user_id"));
         businessFloorInfo.put("floorNum", businessFloorInfo.get("floor_num"));
+        businessFloorInfo.put("communityId", businessFloorInfo.get("community_id"));
 
         businessFloorInfo.put("statusCd", statusCd);
     }
@@ -73,6 +74,7 @@ public abstract class AbstractFloorBusinessServiceDataFlowListener extends Abstr
         currentFloorInfo.put("remark", currentFloorInfo.get("remark"));
         currentFloorInfo.put("userId", currentFloorInfo.get("user_id"));
         currentFloorInfo.put("floorNum", currentFloorInfo.get("floor_num"));
+        currentFloorInfo.put("communityId", currentFloorInfo.get("community_id"));
 
 
         currentFloorInfo.put("operate", StatusConstant.OPERATE_DEL);
