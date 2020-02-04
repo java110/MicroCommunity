@@ -31,6 +31,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -135,7 +136,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo",feeDto);
 
-        double feePrice = 0.00;
+        BigDecimal feePrice = new BigDecimal("0.00");
 
         if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
@@ -148,9 +149,15 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                     throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
                 }
                 roomDto = roomDtos.get(0);
-                feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else if ("2002".equals(computingFormula)) { // 固定费用
-                feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
@@ -165,18 +172,25 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                 if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
                     throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
                 }
-                feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else if ("2002".equals(computingFormula)) { // 固定费用
-                feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
 
-        double receivableAmount = feePrice;
-        receivableAmount = Double.parseDouble(paramInJson.getString("cycles")) * receivableAmount;
+        BigDecimal receivableAmount = feePrice;
+        BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
+        double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
-        businessFeeDetail.put("receivableAmount", receivableAmount);
+        businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);
 
         return business;
