@@ -82,7 +82,10 @@
                 var param = {
                         params:{
                             communityId:vc.getCurrentCommunity().communityId,
-                            typeCd:vc.component.sellParkingSpaceFeeInfo.typeCd
+                            typeCd:vc.component.sellParkingSpaceFeeInfo.typeCd,
+                            isDefault:'T',
+                            page:1,
+                            row:1
                         }
                     };
                     vc.http.get(

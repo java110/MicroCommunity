@@ -46,6 +46,7 @@
                vc.component.parkingSpaceInfo.area = vc.getParam("area");
                vc.component.parkingSpaceInfo.state = vc.getParam("state");
                vc.component.parkingSpaceInfo.areaNum = vc.getParam("areaNum");
+               vc.component.parkingSpaceInfo.typeCd = vc.getParam("typeCd");
                if(vc.notNull(vc.getParam("psId"))){
                    vc.component.parkingSpaceInfo.parkingSpaceFlag='ParkingSpace';
                    vc.emit('hireParkingSpaceFee', 'parkingSpaceInfo',vc.component.parkingSpaceInfo);
