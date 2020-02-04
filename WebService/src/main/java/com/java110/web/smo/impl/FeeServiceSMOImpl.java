@@ -55,7 +55,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
             paramIn.put("feeTypeCd", feeTypeCd);
         }
         responseEntity = this.callCenterService(restTemplate, pd, "",
-                ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig" + mapToUrlParam(paramIn),
+                ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs" + mapToUrlParam(paramIn),
                 HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
