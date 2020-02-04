@@ -494,7 +494,6 @@
         WHERE 1 =1
         AND t.`unit_id` = u.`unit_id`
         AND u.`floor_id` = f.`floor_id`
-        AND f.`floor_id` = cm.`member_id`
         AND f.`community_id` = t.`community_id`
         AND u.`status_cd` = '0'
         AND f.`status_cd` = '0'
