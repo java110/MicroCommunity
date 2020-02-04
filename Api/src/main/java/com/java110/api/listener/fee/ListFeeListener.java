@@ -25,6 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,7 +116,7 @@ public class ListFeeListener extends AbstractServiceApiListener {
         for (FeeDto feeDto : feeDtos) {
             if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
                 computeFeePriceByRoom(feeDto);
-            } else if("6666".equals(feeDto.getPayerObjType())) {//车位相关
+            } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
                 computeFeePriceByParkingSpace(feeDto);
             }
         }
@@ -135,9 +136,14 @@ public class ListFeeListener extends AbstractServiceApiListener {
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
         if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("2002".equals(computingFormula)) { // 固定费用
-            feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else {
             feePrice = -1.00;
         }
@@ -165,9 +171,13 @@ public class ListFeeListener extends AbstractServiceApiListener {
         String computingFormula = feeDto.getComputingFormula();
         double feePrice = 0.00;
         if ("1001".equals(computingFormula)) { //面积*单价+附加费
-            feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+            BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else if ("2002".equals(computingFormula)) { // 固定费用
-            feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         } else {
             feePrice = -1.00;
         }
