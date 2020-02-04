@@ -36,7 +36,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         validateLoadPropertyConfigFee(pd);
 
         //校验员工是否有权限操作
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PROPERTY_CONFIG_FEE);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.PRIVILEGE_PROPERTY_CONFIG_FEE);
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         String communityId = paramIn.getString("communityId");
@@ -419,6 +419,8 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
      */
     private void validateLoadPropertyConfigFee(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "page", "请求报文中未包含page节点");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "row", "请求报文中未包含row节点");
 
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasLength(paramIn.getString("communityId"), "小区ID不能为空");
