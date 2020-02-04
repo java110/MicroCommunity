@@ -151,6 +151,7 @@ public class SellRoomListener extends AbstractServiceApiDataFlowListener {
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", paramInJson.getString("roomId"));
         businessUnit.put("payerObjType", "3333");
+        businessUnit.put("feeFlag", "1003006");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
 
