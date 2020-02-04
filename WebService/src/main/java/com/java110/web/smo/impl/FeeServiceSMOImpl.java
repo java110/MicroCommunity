@@ -60,7 +60,7 @@ public class FeeServiceSMOImpl extends BaseComponentSMO implements IFeeServiceSM
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
-        JSONArray feeConfigs = JSONArray.parseArray(responseEntity.getBody().toString());
+        JSONArray feeConfigs = JSONObject.parseObject(responseEntity.getBody().toString()).getJSONArray("feeConfigs");
 
         if (feeConfigs != null && feeConfigs.size() > 1) {
             responseEntity = new ResponseEntity<String>("数据异常，请检查配置数据", HttpStatus.BAD_REQUEST);

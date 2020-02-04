@@ -46,7 +46,12 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         businesses.add(addCommunity(reqJson, context));
         businesses.addAll(addCommunityMember(reqJson));
         //产生物业费配置信息
-        businesses.add(addFeeConfig(reqJson,context));
+        businesses.add(addFeeConfigProperty(reqJson,context));
+        businesses.add(addFeeConfigParkingSpaceUpSell(reqJson,context)); // 地上出售
+        businesses.add(addFeeConfigParkingSpaceDownSell(reqJson,context)); // 地下出售
+        businesses.add(addFeeConfigParkingSpaceUpHire(reqJson,context));//地上出租
+        businesses.add(addFeeConfigParkingSpaceDownHire(reqJson,context));//地下出租
+        businesses.add(addFeeConfigParkingSpaceTemp(reqJson,context));//地下出租
 
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
@@ -65,7 +70,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject addFeeConfigProperty(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
@@ -91,6 +96,160 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         return business;
     }
 
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE);
+        businessFeeConfig.put("feeName", "地上出售车位费[系统默认]");
+        businessFeeConfig.put("feeFlag", "2006012");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfigParkingSpaceDownSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+3);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
+        businessFeeConfig.put("feeName", "地下出售车位费[系统默认]");
+        businessFeeConfig.put("feeFlag", "2006012");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfigParkingSpaceUpHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+4);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE);
+        businessFeeConfig.put("feeName", "地上出租车位费[系统默认]");
+        businessFeeConfig.put("feeFlag", "1003006");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfigParkingSpaceDownHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+5);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE);
+        businessFeeConfig.put("feeName", "地下出租车位费[系统默认]");
+        businessFeeConfig.put("feeFlag", "1003006");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "2002");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
+    }
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    private JSONObject addFeeConfigParkingSpaceTemp(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+6);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessFeeConfig = new JSONObject();
+        businessFeeConfig.putAll(paramInJson);
+        businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        businessFeeConfig.put("feeName", "临时车费用[系统默认]");
+        businessFeeConfig.put("feeFlag", "2006012");
+        businessFeeConfig.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
+        businessFeeConfig.put("computingFormula", "3003");
+        businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("additionalAmount", "0.00");
+        businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
+        businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("isDefault", "T");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
+        return business;
+    }
 
     /**
      * 添加小区成员 开发者 代理商 运维 商户
