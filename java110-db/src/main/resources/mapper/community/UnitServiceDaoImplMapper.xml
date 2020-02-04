@@ -93,14 +93,13 @@
         bId,t.user_id,t.user_id userId
         from building_unit t
         <if test="communityId!=null and communityId != ''">
-            ,f_floor ff ,s_community_member cm
+            ,f_floor ff
         </if>
         where 1 =1
         <if test="communityId!=null and communityId != ''">
             and t.`floor_id` = ff.`floor_id`
-            AND ff.`floor_id` = cm.`member_id`
-            AND cm.`member_type_cd` = '390001200004'
-            and cm.community_id = #{communityId}
+            AND ff.community_id = #{communityId}
+            and ff.status_cd = '0'
         </if>
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
@@ -131,8 +130,8 @@
         </if>
        <!-- <if test="page != -1 and page != null ">
             limit #{page}, #{row}
-        </if>-->
-            limit 10;
+        </if>limit 10;-->
+
     </select>
 
 
@@ -210,15 +209,10 @@
         select t.floor_id,t.floor_id floorId,t.layer_count,t.layer_count layerCount,t.unit_id,t.unit_id
         unitId,t.unit_num,t.unit_num unitNum,t.lift,t.status_cd,t.status_cd statusCd,t.remark,t.b_id,t.b_id
         bId,t.user_id,t.user_id userId
-        from building_unit t,s_community sc,s_community_member scm,f_floor f
+        from building_unit t,f_floor f
         where 1 =1
         and t.floor_id = f.floor_id
-        and f.floor_id = scm.member_id
-        and scm.community_id = sc.community_id
-        and scm.member_type_cd = '390001200004'
-        and sc.community_id = #{communityId}
-        and sc.status_cd = '0'
-        and scm.status_cd = '0'
+        and f.community_id = #{communityId}
         and f.status_cd = '0'
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
