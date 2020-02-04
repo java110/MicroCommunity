@@ -16,6 +16,8 @@ public class ApiFloorDataVo  extends Vo {
      */
     private String floorId;
 
+    private String communityId;
+
     /**
      * 编号
      */
@@ -79,5 +81,13 @@ public class ApiFloorDataVo  extends Vo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

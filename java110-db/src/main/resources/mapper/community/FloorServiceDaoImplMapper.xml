@@ -9,7 +9,7 @@
         insert into business_floor(
         floor_id,operate,name,remark,b_id,user_id,floor_num,community_id
         ) values (
-        #{floorId},#{operate},#{name},#{remark},#{bId},#{userId},#{floorNum},#{floorNum}
+        #{floorId},#{operate},#{name},#{remark},#{bId},#{userId},#{floorNum},#{communityId}
         )
     </insert>
 
