@@ -231,7 +231,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         JSONArray businesses = new JSONArray();
         AppService service = event.getAppService();
         //添加单元信息
-        businesses.add(modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", ""));
+        businesses.add(modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", null));
         businesses.add(addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A)));
         JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
         //将 rest header 信息传递到下层服务中去
@@ -313,6 +313,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
     private JSONObject computeHourAndMoney(String communityId, Date nowTime, Date inTime) {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityId);
+        feeConfigDto.setIsDefault("T");
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
