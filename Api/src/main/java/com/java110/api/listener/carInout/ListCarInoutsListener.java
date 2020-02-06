@@ -25,6 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -147,6 +148,7 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(communityId);
+        feeConfigDto.setIsDefault("T");
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         FeeConfigDto tmpFeeConfigDto = feeConfigDtos.get(0);
@@ -178,8 +180,10 @@ public class ListCarInoutsListener extends AbstractServiceApiListener {
             if (newHour <= 2) {
                 money = Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
             } else {
-                double lastHour = newHour - 2;
-                money = lastHour * Double.parseDouble(tmpFeeConfigDto.getSquarePrice()) + Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount());
+                BigDecimal lastHour = new BigDecimal(newHour - 2);
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(tmpFeeConfigDto.getSquarePrice()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(tmpFeeConfigDto.getAdditionalAmount()));
+                money = squarePrice.multiply(lastHour).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
             }
             apiCarInoutDataVo.setMoney(money);
             apiCarInoutDataVo.setInHours(new Double(hour).intValue());
