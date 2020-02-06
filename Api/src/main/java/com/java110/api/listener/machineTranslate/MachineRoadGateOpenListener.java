@@ -466,7 +466,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         feeConfigDto.setIsDefault("T");
-        feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
+        feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
