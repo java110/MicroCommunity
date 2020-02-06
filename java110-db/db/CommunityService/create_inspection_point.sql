@@ -1,6 +1,6 @@
 --  巡检点表
 CREATE TABLE inspection_point(
-    `inspection_id` VARCHAR(30) NOT NULL UNIQUE COMMENT 'ID', `community_id` varchar(30) NOT NULL COMMENT '小区ID',
+    `inspection_id` VARCHAR(30) NOT NULL UNIQUE COMMENT 'ID',
     `b_id` varchar(30) NOT NULL COMMENT '业务Id',
     `inspection_name` VARCHAR(100) NOT NULL COMMENT '巡检名称',
     `machine_id` VARCHAR(30) NOT NULL COMMENT '设备ID',
