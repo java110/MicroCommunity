@@ -815,4 +815,20 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_ACTIVITIES ="290200050001";
 
+
+    /**
+     *  保存巡检点
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION="300200030001";
+
+    /**
+     * 修改巡检点
+     */
+    public static final String BUSINESS_TYPE_UPDATE_INSPECTION="300200040001";
+    /**
+     *  删除巡检点
+     */
+    public static final String BUSINESS_TYPE_DELETE_INSPECTION ="300200050001";
+
 }
