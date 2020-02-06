@@ -210,6 +210,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
             BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
             BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
             money = squarePrice.multiply(lastHour).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            money = 1.0;
         }
 
         double receivableAmount = money;
