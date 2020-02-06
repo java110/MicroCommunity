@@ -3,7 +3,9 @@ package com.java110.api.listener.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
@@ -25,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.activation.FileDataSource;
 import javax.xml.ws.soap.Addressing;
+import java.util.List;
 
 /**
  * @ClassName SaveOwnerListener
@@ -43,6 +46,9 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     private static Logger logger = LoggerFactory.getLogger(SaveOwnerListener.class);
 
@@ -224,13 +230,23 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
      */
     private JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
+        feeConfigDto.setIsDefault("T");
+        feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
+        }
 
+        feeConfigDto = feeConfigDtos.get(0);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", "-1");
+        businessUnit.put("configId", feeConfigDto.getConfigId());
         businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
