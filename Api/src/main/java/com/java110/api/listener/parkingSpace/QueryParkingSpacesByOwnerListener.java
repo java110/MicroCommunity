@@ -96,6 +96,9 @@ public class QueryParkingSpacesByOwnerListener extends AbstractServiceApiDataFlo
             ApiParkingSpaceDataVo apiParkingSpaceDataVo = BeanConvertUtil.covertBean(tmpOwnerCarDto, ApiParkingSpaceDataVo.class);
 
             apiParkingSpaceDataVo = BeanConvertUtil.covertBean(parkingSpaceDto, apiParkingSpaceDataVo);
+            apiParkingSpaceDataVo.setCarNum(tmpOwnerCarDto.getCarNum());
+            apiParkingSpaceDataVo.setCarType(tmpOwnerCarDto.getCarType());
+            apiParkingSpaceDataVo.setCarTypeName(tmpOwnerCarDto.getCarTypeName());
 
             apiParkingSpaceDataVos.add(apiParkingSpaceDataVo);
 

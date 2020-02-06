@@ -7,14 +7,18 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
+import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
 import com.java110.dto.RoomDto;
+import com.java110.dto.fee.FeeDto;
+import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -27,6 +31,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +59,9 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
 
 
     @Override
@@ -94,15 +102,15 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
 
         ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
-            return ;
+            return;
         }
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
 
-        responseEntity = new ResponseEntity<>(paramOut.toJSONString(),HttpStatus.OK);
+        responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
@@ -149,41 +157,63 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         feeDto = feeDtos.get(0);
         paramInJson.put("feeInfo", feeDto);
 
+        BigDecimal feePrice = new BigDecimal("0.00");
 
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeTypeCd(feeDto.getFeeTypeCd());
-        feeConfigDto.setCommunityId(feeDto.getCommunityId());
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
-        }
-
-        feeConfigDto = feeConfigDtos.get(0);
-        String builtUpArea = "0.00";
-
-        //物业费时 需要建筑面积 但是停车费不需要建筑面积
-        if (FeeTypeConstant.FEE_TYPE_PROPERTY.equals(feeConfigDto.getFeeTypeCd())) {
-
-            RoomDto roomDto = new RoomDto();
-            roomDto.setRoomId(feeDto.getPayerObjId());
-            roomDto.setCommunityId(feeDto.getCommunityId());
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            if (roomDtos == null || roomDtos.size() != 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+        if ("3333".equals(feeDto.getPayerObjType())) { //房屋相关
+            String computingFormula = feeDto.getComputingFormula();
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                RoomDto roomDto = new RoomDto();
+                roomDto.setRoomId(feeDto.getPayerObjId());
+                roomDto.setCommunityId(feeDto.getCommunityId());
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+                if (roomDtos == null || roomDtos.size() != 1) {
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
+                }
+                roomDto = roomDtos.get(0);
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(roomDtos.get(0).getBuiltUpArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(roomDtos.get(0).getBuiltUpArea()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else {
+                throw new IllegalArgumentException("暂不支持该类公式");
             }
-            roomDto = roomDtos.get(0);
-            builtUpArea = roomDto.getBuiltUpArea();
+        } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
+            String computingFormula = feeDto.getComputingFormula();
+            if ("1001".equals(computingFormula)) { //面积*单价+附加费
+                ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
+                parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
+                parkingSpaceDto.setPsId(feeDto.getPayerObjId());
+                List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
+
+                if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+                    throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
+                }
+                //feePrice = Double.parseDouble(feeDto.getSquarePrice()) * Double.parseDouble(parkingSpaceDtos.get(0).getArea()) + Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+                BigDecimal builtUpArea = new BigDecimal(Double.parseDouble(parkingSpaceDtos.get(0).getArea()));
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = squarePrice.multiply(builtUpArea).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else if ("2002".equals(computingFormula)) { // 固定费用
+                //feePrice = Double.parseDouble(feeDto.getAdditionalAmount());
+                BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+                feePrice = additionalAmount.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            } else {
+                throw new IllegalArgumentException("暂不支持该类公式");
+            }
         }
 
+        BigDecimal receivableAmount = feePrice;
+        BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
+        double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
-        double receivableAmount = Double.parseDouble(feeConfigDto.getSquarePrice())
-                * Double.parseDouble(builtUpArea)
-                + Double.parseDouble(feeConfigDto.getAdditionalAmount());
-        receivableAmount = Double.parseDouble(paramInJson.getString("cycles")) * receivableAmount;
-
-        businessFeeDetail.put("receivableAmount", receivableAmount);
+        businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);
-        paramInJson.put("receivableAmount", receivableAmount);
+        paramInJson.put("receivableAmount", tmpReceivableAmount);
         return business;
     }
 

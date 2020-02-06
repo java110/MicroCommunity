@@ -31,6 +31,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -178,6 +179,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         paramInJson.put("feeInfo", feeDto);
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeDto.getFeeTypeCd());
+        feeConfigDto.setConfigId(feeDto.getConfigId());
         feeConfigDto.setCommunityId(feeDto.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
@@ -204,8 +206,10 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         if (newHour <= 2) {
             money = Double.parseDouble(feeConfigDto.getAdditionalAmount());
         } else {
-            double lastHour = newHour - 2;
-            money = lastHour * Double.parseDouble(feeConfigDto.getSquarePrice()) + Double.parseDouble(feeConfigDto.getAdditionalAmount());
+            BigDecimal lastHour = new BigDecimal(newHour - 2);
+            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
+            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
+            money = squarePrice.multiply(lastHour).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
 
         double receivableAmount = money;

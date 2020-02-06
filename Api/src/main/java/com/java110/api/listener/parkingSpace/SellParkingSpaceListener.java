@@ -311,6 +311,7 @@ public class SellParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
+        feeConfigDto.setIsDefault("T");
         feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {

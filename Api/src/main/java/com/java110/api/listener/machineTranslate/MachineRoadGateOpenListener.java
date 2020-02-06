@@ -25,7 +25,9 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.CommunityMemberTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -461,12 +463,24 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
             storeId = communityMemberDtos.get(0).getMemberId();
         }
 
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
+        feeConfigDto.setIsDefault("T");
+        feeConfigDto.setCommunityId(communityId);
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
+        }
+
+        feeConfigDto = feeConfigDtos.get(0);
+
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", "-1");
+        businessUnit.put("configId", feeConfigDto.getConfigId());
         businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
         businessUnit.put("incomeObjId", storeId);
         businessUnit.put("amount", "-1.00");
