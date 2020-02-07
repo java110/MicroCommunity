@@ -7,6 +7,8 @@ package com.java110.entity.assetImport;
  */
 public class ImportParkingSpace {
 
+    private String paNum;
+
     private String psNum;
 
     private String typeCd;
@@ -96,5 +98,13 @@ public class ImportParkingSpace {
 
     public void setSellOrHire(String sellOrHire) {
         this.sellOrHire = sellOrHire;
+    }
+
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
     }
 }

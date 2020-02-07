@@ -132,6 +132,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
 
             JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+            paramIn = new JSONObject();
             // 如果不存在，才插入
             if (savedParkingAreaInfo == null) {
                 apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
@@ -149,8 +150,6 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (savedParkingSpaceInfo != null) {
                 continue;
             }
-
-            paramIn = new JSONObject();
 
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
 
