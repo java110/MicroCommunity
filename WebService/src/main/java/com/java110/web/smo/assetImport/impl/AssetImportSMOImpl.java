@@ -362,6 +362,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("link", owner.getTel());
             paramIn.put("sex", owner.getSex());
             paramIn.put("ownerTypeCd", "1001");
+            paramIn.put("idCard",owner.getIdCard());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
@@ -651,6 +652,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
             importOwner.setAge(Integer.parseInt(os[3].toString()));
             importOwner.setTel(os[4].toString());
+            importOwner.setIdCard(os[5].toString());
             owners.add(importOwner);
         }
     }
