@@ -15,10 +15,13 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
 import com.java110.fee.dao.IFeeServiceDao;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.NumberUtils;
 
 import java.util.*;
 
@@ -126,8 +129,8 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
         feeDetailInfo.put("operate", "ADD");
         List<Map> feeDetails = feeDetailServiceDaoImpl.getBusinessFeeDetailInfo(feeDetailInfo);
         Assert.listOnlyOne(feeDetails, "business表中存在多条缴费记录或没有");
-
-        int cycles = Integer.parseInt(feeDetails.get(0).get("cycles").toString());
+        String cyclesStr = feeDetails.get(0).get("cycles").toString();
+        double cycles = Double.parseDouble(cyclesStr);
 
         Map feeMap = null;
         if (businessFeeInfos != null && businessFeeInfos.size() > 0) {
@@ -147,10 +150,15 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     Assert.listOnlyOne(feeInfo, "查询到多条数据或未查询到数据" + feeMap);
                     //根据当前的结束时间 修改
                     Date endTime = (Date) feeInfo.get(0).get("end_time");
-                    Calendar endCalender = Calendar.getInstance();
-                    endCalender.setTime(endTime);
-                    endCalender.add(Calendar.MONTH, cycles);
                     if(cycles > 0) {
+                        Calendar endCalender = Calendar.getInstance();
+                        endCalender.setTime(endTime);
+                        if(StringUtil.isNumber(cyclesStr)) {
+                            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
+                        }else{
+                            int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
+                            endCalender.add(Calendar.HOUR, hours);
+                        }
                         businessFeeInfo.put("end_time", endCalender.getTime());
                     }
                     flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_VALID);

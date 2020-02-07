@@ -96,7 +96,12 @@
                      });
             },
             _changeMonth:function(_cycles){
-                vc.component.payFeeOrderInfo.totalFeePrice = parseFloat(_cycles)*parseFloat(vc.component.payFeeOrderInfo.feePrice);
+                if('-101' == _cycles){
+                    vc.component.payFeeOrderInfo.totalFeePrice = 0.00;
+                    vc.component.payFeeOrderInfo.receivedAmount = '';
+                    return ;
+                }
+                vc.component.payFeeOrderInfo.totalFeePrice = Math.floor(parseFloat(_cycles)*parseFloat(vc.component.payFeeOrderInfo.feePrice)*100)/100;
                 vc.component.payFeeOrderInfo.receivedAmount = vc.component.payFeeOrderInfo.totalFeePrice ;
             },
             _back:function(){

@@ -387,4 +387,13 @@ public class DateUtil {
         }
         return true;
     }
+
+
+    public static int getCurrentMonthDay() {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
+    }
 }
