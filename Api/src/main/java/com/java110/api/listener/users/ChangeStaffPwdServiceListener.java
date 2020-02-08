@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
  * 修改员工 2018年12月6日
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("modifyStaffServiceListener")
+@Java110Listener("changeStaffPwdServiceListener")
 public class ChangeStaffPwdServiceListener extends AbstractServiceApiDataFlowListener {
 
     private final static Logger logger = LoggerFactory.getLogger(ChangeStaffPwdServiceListener.class);
