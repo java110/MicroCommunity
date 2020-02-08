@@ -576,7 +576,7 @@
     <!-- 查询用户密码 -->
     <select id="getUserHasPwd" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd,u.b_id,u.password
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,u.password
         from u_user u
         <if test="openId != null and openId !=''">
             ,u_user_attr ua
