@@ -69,7 +69,7 @@
                 vc.http.post(
                     'changeStaffPwd',
                     'change',
-                    JSON.stringify(vc.component.addStaffInfo),
+                    JSON.stringify(vc.component.changeStaffPwdInfo),
                     {
                         emulateJSON:true
                      },
