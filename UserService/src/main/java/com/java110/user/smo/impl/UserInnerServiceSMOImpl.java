@@ -90,6 +90,15 @@ public class UserInnerServiceSMOImpl implements IUserInnerServiceSMO {
         return staffs;
     }
 
+    @Override
+    public List<UserDto> getUserHasPwd(@RequestBody UserDto userDto) {
+        //校验是否传了 分页信息
+        List<UserDto> staffs = BeanConvertUtil.covertBeanList(userServiceDaoImpl.getUserHasPwd(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
+
+        return staffs;
+
+    }
+
     private void freshUserAttrs(List<UserDto> userDtos) {
 
         Map param = null;

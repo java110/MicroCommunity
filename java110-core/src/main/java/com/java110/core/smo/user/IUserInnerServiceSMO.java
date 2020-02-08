@@ -79,4 +79,7 @@ public interface IUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getUsers", method = RequestMethod.POST)
     List<UserDto> getUsers(@RequestBody UserDto userDto);
+
+    @RequestMapping(value = "/getUserHasPwd", method = RequestMethod.POST)
+    List<UserDto> getUserHasPwd(@RequestBody UserDto userDto);
 }

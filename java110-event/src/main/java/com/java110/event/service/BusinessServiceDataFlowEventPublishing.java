@@ -115,7 +115,8 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
 
             multicastEvent(businessTypeCd,targetDataFlowEvent, asyn);
         }catch (Exception e){
-            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,"发布侦听失败，失败原因为："+e);
+            logger.error("发布侦听失败",e);
+            throw new BusinessException(ResponseConstant.RESULT_CODE_INNER_ERROR,e.getMessage());
         }
 
     }
@@ -168,7 +169,7 @@ public class BusinessServiceDataFlowEventPublishing extends LoggerEngine {
             listener.soService(event);
         }catch (Exception e){
             LoggerEngine.error("发布侦听失败",e);
-            throw new RuntimeException("发布侦听失败,"+listener+ event + e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

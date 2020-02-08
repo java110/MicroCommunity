@@ -6,6 +6,8 @@ import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -13,13 +15,18 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 修改员工 2018年12月6日
@@ -29,6 +36,9 @@ import org.springframework.http.ResponseEntity;
 public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
 
     private final static Logger logger = LoggerFactory.getLogger(ChangeStaffPwdListener.class);
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
 
     @Override
@@ -109,28 +119,16 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
      */
     private JSONObject builderStaffInfo(JSONObject paramObj, DataFlowContext dataFlowContext) {
 
-        //首先根据员工ID查询员工信息，根据员工信息修改相应的数据
-        ResponseEntity responseEntity = null;
-        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
-        if (appService == null) {
-            throw new ListenerExecuteException(1999, "当前没有权限访问" + ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+        UserDto userDto = new UserDto();
+        userDto.setStatusCd("0");
+        userDto.setUserId(paramObj.getString("userId"));
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUserHasPwd(userDto);
 
-        }
-        String requestUrl = appService.getUrl() + "?userId=" + paramObj.getString("userId");
-        HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
-        dataFlowContext.getRequestHeaders().put("REQUEST_URL", requestUrl);
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
-        doRequest(dataFlowContext, appService, httpEntity);
-        responseEntity = dataFlowContext.getResponseEntity();
+        Assert.listOnlyOne(userDtos, "数据错误查询到多条用户信息或单条");
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            dataFlowContext.setResponseEntity(responseEntity);
-        }
+        JSONObject userInfo = JSONObject.parseObject(JSONObject.toJSONString(userDtos.get(0)));
 
-        JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-
-        if (!paramObj.getString("oldPwd").equals(userInfo.getString("password"))) {
+        if (!paramObj.getString("oldPwd").equals(userDtos.get(0).getPassword())) {
             throw new IllegalArgumentException("原始密码错误");
         }
         userInfo.putAll(paramObj);

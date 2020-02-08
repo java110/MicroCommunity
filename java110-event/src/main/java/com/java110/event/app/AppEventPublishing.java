@@ -228,7 +228,7 @@ public class AppEventPublishing extends LoggerEngine{
             listener.soDataService(event);
         }catch (Exception e){
             LoggerEngine.error("发布侦听失败",e);
-            throw new RuntimeException("发布侦听失败,"+listener+ event + e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
