@@ -61,6 +61,14 @@
                     return;
                 }
 
+                var _userInfo = vc.getData("/nav/getUserInfo");
+
+                if(_userInfo.name == 'wuxw' || _userInfo.name == 'dev' || _userInfo.name == 'dails' || _userInfo.name == 'admin'){
+                    vc.toast("演示环境密码，不允许修改");
+                    return ;
+                }
+
+
                 if(vc.component.changeStaffPwdInfo.newPwd != vc.component.changeStaffPwdInfo.reNewPwd){
                     vc.toast('两次密码不一致');
                     return ;
