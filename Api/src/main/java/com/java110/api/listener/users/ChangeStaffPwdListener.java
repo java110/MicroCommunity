@@ -26,9 +26,9 @@ import org.springframework.http.ResponseEntity;
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("changeStaffPwdServiceListener")
-public class ChangeStaffPwdServiceListener extends AbstractServiceApiDataFlowListener {
+public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(ChangeStaffPwdServiceListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(ChangeStaffPwdListener.class);
 
 
     @Override
@@ -89,9 +89,6 @@ public class ChangeStaffPwdServiceListener extends AbstractServiceApiDataFlowLis
 
     private JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
         //校验json 格式中是否包含 name,email,levelCd,tel
-        Assert.jsonObjectHaveKey(paramObj, "name", "请求参数中未包含name 节点，请确认");
-        Assert.jsonObjectHaveKey(paramObj, "tel", "请求参数中未包含tel 节点，请确认");
-
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
