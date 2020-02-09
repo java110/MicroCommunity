@@ -1,11 +1,12 @@
-package com.java110.api.listener.users;
+package com.java110.api.listener.user;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.center.AppService;
@@ -13,9 +14,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +25,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 /**
  * 修改员工 2018年12月6日
  * Created by wuxw on 2018/5/18.
  */
-@Java110Listener("changeStaffPwdServiceListener")
-public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
+@Java110Listener("resetStaffPwdListener")
+public class ResetStaffPwdListener extends AbstractServiceApiDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(ChangeStaffPwdListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(ResetStaffPwdListener.class);
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
@@ -43,7 +42,7 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_CHANGE_STAFF_PWD;
+        return ServiceCodeConstant.SERVICE_CODE_RESET_STAFF_PWD;
     }
 
     @Override
@@ -69,11 +68,9 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         String paramIn = dataFlowContext.getReqData();
-        Assert.isJsonObject(paramIn, "添加员工时请求参数有误，不是有效的json格式 " + paramIn);
+        Assert.isJsonObject(paramIn, "请求参数有误，不是有效的json格式 " + paramIn);
         JSONObject paramInJson = JSONObject.parseObject(paramIn);
         Assert.jsonObjectHaveKey(paramInJson, "userId", "请求参数中未包含userId 节点，请确认");
-        Assert.jsonObjectHaveKey(paramInJson, "oldPwd", "请求参数中未包含oldPwd 节点，请确认");
-        Assert.jsonObjectHaveKey(paramInJson, "newPwd", "请求参数中未包含newPwd 节点，请确认");
 
         JSONArray businesses = new JSONArray();
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
@@ -93,7 +90,12 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);
 
-        super.doResponse(dataFlowContext);
+        if (dataFlowContext.getResponseEntity().getStatusCode() == HttpStatus.OK) {
+            JSONObject paramOut = new JSONObject();
+            paramOut.put("pwd", paramInJson.getString("pwd"));
+            ResponseEntity<String> responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
     }
 
 
@@ -127,14 +129,13 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
         Assert.listOnlyOne(userDtos, "数据错误查询到多条用户信息或单条");
 
         JSONObject userInfo = JSONObject.parseObject(JSONObject.toJSONString(userDtos.get(0)));
-
-        if (!paramObj.getString("oldPwd").equals(userDtos.get(0).getPassword())) {
-            throw new IllegalArgumentException("原始密码错误");
-        }
+        String pwd = GenerateCodeFactory.getRandomCode(6);
         userInfo.putAll(paramObj);
-        userInfo.put("password", paramObj.getString("newPwd"));
+        userInfo.put("password", AuthenticationFactory.passwdMd5(pwd));
+        paramObj.put("pwd", pwd);
 
         return userInfo;
     }
+
 
 }

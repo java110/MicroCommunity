@@ -142,6 +142,9 @@
                 },
                 _queryStaffMethod:function(){
                     vc.component.loadData(DEFAULT_PAGE,DEFAULT_ROWS)
+                },
+                _resetStaffPwd:function(_staff){
+                    vc.emit('resetStaffPwd','openResetStaffPwd',_staff);
                 }
 
             },

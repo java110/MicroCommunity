@@ -827,4 +827,18 @@ public class GenerateCodeFactory {
         }
         return result;
     }
+
+    /**
+     * 获取随机数
+     *
+     * @return
+     */
+    public static String getRandomCode(int bit) {
+        Random random = new Random();
+        String result = "";
+        for (int i = 0; i < bit; i++) {
+            result += random.nextInt(10);
+        }
+        return result;
+    }
 }
