@@ -5,168 +5,175 @@
 <mapper namespace="inspectionServiceDaoImpl">
 
     <!-- 保存巡检点信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessInspectionInfo" parameterType="Map">
-           insert into business_inspection_point(
-inspection_id,machine_id,operate,remark,inspection_name,community_id,b_id
-) values (
-#{inspectionId},#{machineId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId}
-)
+    <insert id="saveBusinessInspectionInfo" parameterType="Map">
+        insert into business_inspection_point
+                (inspection_id,machine_id,operate,remark,inspection_name,community_id,b_id)
+            values
+                (#{inspectionId},#{machineId},#{operate},#{remark},#{inspectionName},#{communityId},#{bId})
        </insert>
 
 
-       <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessInspectionInfo" parameterType="Map" resultType="Map">
-           select  t.inspection_id,t.inspection_id inspectionId,t.machine_id,t.machine_id machineId,t.operate,t.remark,t.inspection_name,t.inspection_name inspectionName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from business_inspection_point t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="inspectionName !=null and inspectionName != ''">
-   and t.inspection_name= #{inspectionName}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-
-       </select>
-
-
-
-
-
-    <!-- 保存巡检点信息至 instance表中 add by wuxw 2018-07-03 -->
-    <insert id="saveInspectionInfoInstance" parameterType="Map">
-        insert into inspection_point(
-inspection_id,machine_id,remark,status_cd,inspection_name,community_id,b_id
-) select t.inspection_id,t.machine_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id from business_inspection_point t where 1=1
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-   and t.operate= 'ADD'
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="inspectionName !=null and inspectionName != ''">
-   and t.inspection_name= #{inspectionName}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-
-    </insert>
-
-
-
-    <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
-    <select id="getInspectionInfo" parameterType="Map" resultType="Map">
-        select  t.inspection_id,t.inspection_id inspectionId,t.machine_id,t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,t.inspection_name,t.inspection_name inspectionName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from inspection_point t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="inspectionName !=null and inspectionName != ''">
-   and t.inspection_name= #{inspectionName}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+    <!-- 查询巡检点信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessInspectionInfo" parameterType="Map" resultType="Map">
+        select t.inspection_id,t.inspection_id inspectionId,t.machine_id,t.machine_id
+        machineId,t.operate,t.remark,t.inspection_name,t.inspection_name inspectionName,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId
+        from business_inspection_point t
+        where 1 =1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            and t.inspection_name like concat('%',#{inspectionName},'%')
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </select>
 
 
+    <!-- 保存巡检点信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionInfoInstance" parameterType="Map">
+        insert into
+            inspection_point(
+                inspection_id,machine_id,remark,status_cd,inspection_name,community_id,b_id
+            ) select t.inspection_id,t.machine_id,t.remark,'0',t.inspection_name,t.community_id,t.b_id from
+            business_inspection_point t where 1=1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            and t.inspection_name= #{inspectionName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionInfo" parameterType="Map" resultType="Map">
+        select
+            t.inspection_id,t.inspection_id inspectionId,t.machine_id,
+            t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,
+            t.inspection_name,t.inspection_name inspectionName,t.community_id,
+            t.community_id communityId,t.b_id,t.b_id bId,
+            m.machine_code machineCode,m.machine_name machineName,location_type_cd locationTypeCd,location_obj_id locationObjId,m.machine_id machineId,
+            d.name locationTypeName
+        from inspection_point t
+        inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
+        inner join t_dict d on d.status_cd = m.location_type_cd
+        where 1 =1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and m.machine_code= #{machineCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            and t.inspection_name like concat('%',#{inspectionName},'%')
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        group by t.inspection_id
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
 
 
     <!-- 修改巡检点信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionInfoInstance" parameterType="Map">
-        update  inspection_point t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-, t.machine_id= #{machineId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="inspectionName !=null and inspectionName != ''">
-, t.inspection_name= #{inspectionName}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="inspectionId !=null and inspectionId != ''">
-and t.inspection_id= #{inspectionId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update inspection_point t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            , t.machine_id= #{machineId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            , t.inspection_name= #{inspectionName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询巡检点数量 add by wuxw 2018-07-03 -->
-     <select id="queryInspectionsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from inspection_point t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="machineId !=null and machineId != ''">
-   and t.machine_id= #{machineId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="inspectionName !=null and inspectionName != ''">
-   and t.inspection_name= #{inspectionName}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <select id="queryInspectionsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_point t
+        where 1 =1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="machineId !=null and machineId != ''">
+            and t.machine_id= #{machineId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            and t.inspection_name= #{inspectionName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
