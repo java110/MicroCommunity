@@ -40,7 +40,7 @@ public class TencentSendMessageFactory {
 
     public final static int DEFAULT_MESSAGE_CODE_LENGTH = 6;
 
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplateNoLoadBalanced;
 
 
     /**
@@ -84,6 +84,6 @@ public class TencentSendMessageFactory {
     }
 
     private static RestTemplate getRestTemplate() {
-        return ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        return ApplicationContextFactory.getBean("restTemplateNoLoadBalanced", RestTemplate.class);
     }
 }
