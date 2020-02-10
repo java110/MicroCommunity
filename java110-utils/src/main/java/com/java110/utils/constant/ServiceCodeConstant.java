@@ -123,6 +123,11 @@ public class ServiceCodeConstant {
     public static final String LIST_USERS = "user.listUsers";
 
     /**
+     * 查询 组织管理
+     */
+    public static final String USER_SEND_SMS = "user.userSendSms";
+
+    /**
      * 保存商户信息
      */
     public static final String SERVICE_CODE_SAVE_STORE_INFO = "save.store.info";

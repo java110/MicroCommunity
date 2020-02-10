@@ -5,17 +5,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.msg.SmsDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +51,9 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
+    private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
+
+    @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Autowired
@@ -78,10 +84,20 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "appUserName", "未包含用户名称");
         Assert.hasKeyAndValue(reqJson, "idCard", "未包含身份证号");
         Assert.hasKeyAndValue(reqJson, "link", "未包含联系电话");
+        Assert.hasKeyAndValue(reqJson, "msgCode", "未包含联系电话验证码");
+
         //判断是否有用户ID
         Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
 
         Assert.hasKeyAndValue(headers, "user_id", "请求头中未包含用户信息");
+        SmsDto smsDto = new SmsDto();
+        smsDto.setTel(reqJson.getString("link"));
+        smsDto.setCode(reqJson.getString("msgCode"));
+        smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
+
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+            throw new IllegalArgumentException(smsDto.getMsg());
+        }
     }
 
     @Override
@@ -102,7 +118,7 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
 
         Assert.hasLength(openId, "该用户不是能力开放用户");
 
-        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson,OwnerAppUserDto.class);
+        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
         ownerAppUserDto.setStates(new String[]{"10000", "12000"});
 
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
