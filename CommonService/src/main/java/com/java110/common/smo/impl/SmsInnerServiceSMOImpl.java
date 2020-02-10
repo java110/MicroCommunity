@@ -75,7 +75,7 @@ public class SmsInnerServiceSMOImpl extends BaseServiceSMO implements ISmsInnerS
             smsCode = smsCode.substring(0, smsCode.indexOf("-"));
         }
 
-        if (smsCode.equals(smsCode)) {
+        if (smsDto.getCode().equals(smsCode)) {
             smsDto.setSuccess(true);
             smsDto.setMsg("校验成功");
             return smsDto;
