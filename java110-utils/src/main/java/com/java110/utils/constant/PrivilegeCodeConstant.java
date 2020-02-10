@@ -141,7 +141,7 @@ public final class PrivilegeCodeConstant {
     public static final String LIST_APPLICATION_KEY = "502019120169500005";
 
     //巡检点权限编码
-    public static final String AGENT_HAS_LIST_INSPECTION_POINT = "502020020729080005";
+    public static final String AGENT_HAS_LIST_INSPECTION_POINT = "502020021024790007";
 
 
 
