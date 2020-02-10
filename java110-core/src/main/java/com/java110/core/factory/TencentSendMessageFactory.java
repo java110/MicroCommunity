@@ -11,6 +11,12 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.sms.v20190711.SmsClient;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,7 +46,7 @@ public class TencentSendMessageFactory {
 
     public final static int DEFAULT_MESSAGE_CODE_LENGTH = 6;
 
-    private RestTemplate restTemplateNoLoadBalanced;
+   // private RestTemplate restTemplateNoLoadBalanced;
 
 
     /**
@@ -71,19 +77,40 @@ public class TencentSendMessageFactory {
 
         //开始发送验证码
         logger.debug("发送号码为{}，短信码为{}", tel, code);
-        String url = "https://sms.tencentcloudapi.com/?Action=SendSms" +
-                "&PhoneNumberSet.0=+86" + tel +
-                "&TemplateID=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "TemplateID") +
-                "&Sign=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign") +
-                "&TemplateParamSet.0=" + code +
-                "&SmsSdkAppid=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "SmsSdkAppid") +
-                "&Version=2019-07-11";
-        ResponseEntity<String> responseEntity = getRestTemplate().getForEntity(url, String.class);
+//        String url = "https://sms.tencentcloudapi.com/?Action=SendSms" +
+//                "&PhoneNumberSet.0=+86" + tel +
+//                "&TemplateID=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "TemplateID") +
+//                "&Sign=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign") +
+//                "&TemplateParamSet.0=" + code +
+//                "&SmsSdkAppid=" + MappingCache.getValue(TENCENT_SMS_DOMAIN, "SmsSdkAppid") +
+//                "&Version=2019-07-11";
+//        ResponseEntity<String> responseEntity = getRestTemplate().getForEntity(url, String.class);
 
-        logger.debug("腾讯短信验证码发送，请求报文" + url + ",返回日志" + responseEntity);
+        // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey，见《创建secretId和secretKey》小节
+        Credential cred = new Credential(MappingCache.getValue(TENCENT_SMS_DOMAIN, "secretId"),
+                MappingCache.getValue(TENCENT_SMS_DOMAIN, "secretKey"));
+        // 实例化要请求产品(以cvm为例)的client对象
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setSignMethod(ClientProfile.SIGN_TC3_256);
+        SmsClient smsClient = new SmsClient(cred, MappingCache.getValue(TENCENT_SMS_DOMAIN, "region"));//第二个ap-chongqing 填产品所在的区
+        SendSmsRequest sendSmsRequest = new SendSmsRequest();
+        sendSmsRequest.setSmsSdkAppid(MappingCache.getValue(TENCENT_SMS_DOMAIN, "SmsSdkAppid"));//appId ,见《创建应用》小节
+        String[] phones = {"+86" + tel};  //发送短信的目标手机号，可填多个。
+        sendSmsRequest.setPhoneNumberSet(phones);
+        sendSmsRequest.setTemplateID(MappingCache.getValue(TENCENT_SMS_DOMAIN, "TemplateID"));  //模版id,见《创建短信签名和模版》小节
+        String[] templateParam = {code};//模版参数，从前往后对应的是模版的{1}、{2}等,见《创建短信签名和模版》小节
+        sendSmsRequest.setTemplateParamSet(templateParam);
+        sendSmsRequest.setSign(MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign")); //签名内容，不是填签名id,见《创建短信签名和模版》小节
+        try {
+            SendSmsResponse sendSmsResponse = smsClient.SendSms(sendSmsRequest); //发送短信
+            logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + JSONObject.toJSONString(sendSmsResponse));
+        } catch (TencentCloudSDKException e) {
+            logger.error("发送短信失败", e);
+        }
+
     }
 
-    private static RestTemplate getRestTemplate() {
-        return ApplicationContextFactory.getBean("restTemplateNoLoadBalanced", RestTemplate.class);
-    }
+//    private static RestTemplate getRestTemplate() {
+//        return ApplicationContextFactory.getBean("restTemplateNoLoadBalanced", RestTemplate.class);
+//    }
 }
