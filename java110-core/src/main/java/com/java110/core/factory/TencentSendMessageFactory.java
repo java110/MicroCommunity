@@ -46,7 +46,7 @@ public class TencentSendMessageFactory {
 
     public final static int DEFAULT_MESSAGE_CODE_LENGTH = 6;
 
-   // private RestTemplate restTemplateNoLoadBalanced;
+    // private RestTemplate restTemplateNoLoadBalanced;
 
 
     /**
@@ -101,12 +101,15 @@ public class TencentSendMessageFactory {
         String[] templateParam = {code};//模版参数，从前往后对应的是模版的{1}、{2}等,见《创建短信签名和模版》小节
         sendSmsRequest.setTemplateParamSet(templateParam);
         sendSmsRequest.setSign(MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign")); //签名内容，不是填签名id,见《创建短信签名和模版》小节
+        SendSmsResponse sendSmsResponse = null;
         try {
-            SendSmsResponse sendSmsResponse = smsClient.SendSms(sendSmsRequest); //发送短信
-            logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + JSONObject.toJSONString(sendSmsResponse));
+            sendSmsResponse = smsClient.SendSms(sendSmsRequest); //发送短信
         } catch (TencentCloudSDKException e) {
             logger.error("发送短信失败", e);
         }
+
+        logger.debug("腾讯短信验证码发送，请求报文" + sendSmsRequest.toString() + ",返回日志" + sendSmsResponse != null ? sendSmsResponse.toString() : "");
+
 
     }
 
