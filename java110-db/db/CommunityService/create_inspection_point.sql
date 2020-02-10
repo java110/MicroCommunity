@@ -22,6 +22,5 @@ CREATE TABLE `business_inspection_point` (
     `community_id` varchar(30) NOT NULL COMMENT '小区ID',
     `remark` VARCHAR(200) COMMENT '备注说明',
     `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `operate` varchar(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL',
-    KEY `idx_b_inspection_inspection_id` (`inspection_id`)
-);
+    `operate` varchar(4) NOT NULL COMMENT '数据状态，添加ADD，修改MOD 删除DEL'
+)
