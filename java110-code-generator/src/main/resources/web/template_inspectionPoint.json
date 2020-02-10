@@ -1,0 +1,54 @@
+{
+  "templateName":"巡检点",
+  "templateCode":"inspectionPoint",
+  "templateKey":"inspectionId",
+  "templateKeyName":"巡检点ID",
+  "searchCode": "inspectionName",
+  "searchName": "巡检点名称",
+  "conditions": [
+    {
+      "name": "巡检点ID",
+      "inputType": "input",
+      "code": "inspectionId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "设备ID",
+      "inputType": "input",
+      "code": "machineId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "巡检点名称",
+      "inputType": "input",
+      "code": "inspectionName",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code": "inspection_name",
+      "cnCode":"巡检点名称",
+      "desc":"必填，请填写巡检点名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"100",
+      "limitErrInfo":"巡检点名称不能超过100位",
+      "show": true
+    },
+    {
+      "code": "remark",
+      "cnCode":"备注",
+      "desc":"必填，请填写巡检点名称",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注信息不能超过200位",
+      "show": true
+    }
+  ]
+}
