@@ -53,8 +53,8 @@ public class SaveInspectionInfoListener extends AbstractInspectionBusinessServic
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspection 节点
-        if(data.containsKey("businessInspection")){
-            Object bObj = data.get("businessInspection");
+        if(data.containsKey("businessInspectionPoint")){
+            Object bObj = data.get("businessInspectionPoint");
             JSONArray businessInspections = null;
             if(bObj instanceof JSONObject){
                 businessInspections = new JSONArray();
