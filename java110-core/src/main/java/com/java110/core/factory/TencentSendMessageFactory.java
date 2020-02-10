@@ -108,7 +108,7 @@ public class TencentSendMessageFactory {
             logger.error("发送短信失败", e);
         }
 
-        logger.debug("腾讯短信验证码发送，请求报文" + sendSmsRequest.toString() + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
+        logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? sendSmsResponse.toString() : ""));
 
 
     }
