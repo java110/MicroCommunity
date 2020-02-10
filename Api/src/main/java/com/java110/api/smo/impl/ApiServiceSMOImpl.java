@@ -102,7 +102,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         } catch (DecryptException e) { //解密异常
             responseEntity = new ResponseEntity<String>("解密异常：" + e.getMessage(), HttpStatus.NON_AUTHORITATIVE_INFORMATION);
         } catch (BusinessException e) {
-            responseEntity = new ResponseEntity<String>("业务处理异常：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (NoAuthorityException e) {
             responseEntity = new ResponseEntity<String>("鉴权失败：" + e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (InitConfigDataException e) {

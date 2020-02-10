@@ -301,6 +301,16 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_STAFF_BY_NAME = "query.staff.byName";
 
     /**
+     * 修改员工密码
+     */
+    public static final String SERVICE_CODE_CHANGE_STAFF_PWD = "user.changeStaffPwd";
+
+    /**
+     * 修改重置密码
+     */
+    public static final String SERVICE_CODE_RESET_STAFF_PWD = "user.resetStaffPwd";
+
+    /**
      * 保存商户信息
      */
     public static final String SERVICE_CODE_SAVE_COMMUNITY_INFO = "save.community.info";

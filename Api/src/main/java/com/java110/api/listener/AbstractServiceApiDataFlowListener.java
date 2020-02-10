@@ -127,7 +127,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
                 responseEntity = tmpRestTemplate.exchange(serviceUrl, HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>("请求下游系统异常，" + e.getResponseBodyAsString(), e.getStatusCode());
+            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
         }
         return responseEntity;
     }
@@ -175,7 +175,7 @@ public abstract class AbstractServiceApiDataFlowListener implements ServiceDataF
                 responseEntity = tmpRestTemplate.exchange(service.getUrl(), HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>("请求下游系统异常，" + e.getResponseBodyAsString(), e.getStatusCode());
+            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         logger.debug("API 服务调用下游服务请求：{}，返回为：{}", httpEntity, responseEntity);

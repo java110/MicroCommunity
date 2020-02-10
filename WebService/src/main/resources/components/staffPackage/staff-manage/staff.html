@@ -26,7 +26,8 @@
                             <div class="form-group">
                                 <select class="custom-select" v-model="staffInfo.conditions.departmentOrgId">
                                     <option selected value="">必填，请选择部门</option>
-                                    <option v-for="departmentOrg in staffInfo.departmentOrgs" :value="departmentOrg.orgId">
+                                    <option v-for="departmentOrg in staffInfo.departmentOrgs"
+                                            :value="departmentOrg.orgId">
                                         {{departmentOrg.orgName}}
                                     </option>
                                 </select>
@@ -78,45 +79,53 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                            <thead>
-                            <tr>
-                                <th>员工ID</th>
-                                <th>名称</th>
-                                <th>部门</th>
-                                <th>邮箱</th>
-                                <th>地址</th>
-                                <th>性别</th>
-                                <th>手机号</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="gradeX" v-for="staff in staffData">
-                                <td>{{staff.userId}}</td>
-                                <td>{{staff.name}}</td>
-                                <td>{{staff.orgName}}</td>
-                                <td>{{staff.email}}</td>
-                                <td>{{staff.address}}</td>
-                                <td>{{staff.sex == 0 ? '男' : '女'}}</td>
-                                <td>{{staff.tel}}</td>
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th>员工ID</th>
+                            <th>名称</th>
+                            <th>部门</th>
+                            <th>邮箱</th>
+                            <th>地址</th>
+                            <th>性别</th>
+                            <th>手机号</th>
+                            <th  class="text-right">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="gradeX" v-for="staff in staffData">
+                            <td>{{staff.userId}}</td>
+                            <td>{{staff.name}}</td>
+                            <td>{{staff.orgName}}</td>
+                            <td>{{staff.email}}</td>
+                            <td>{{staff.address}}</td>
+                            <td>{{staff.sex == 0 ? '男' : '女'}}</td>
+                            <td>{{staff.tel}}</td>
 
-                                <td>
-                                    <i class="glyphicon glyphicon-edit" style="color: #17a2b8;"
-                                       v-on:click="openEditStaff(staff)"></i>
-                                    <i v-if="staff.relCd != 600311000001" class="glyphicon glyphicon-remove-sign"
-                                       style="color: #dc3545;margin-left:5px"
-                                       v-on:click="openDeleteStaff(staff)"></i>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <!-- 分页 -->
-                        <vc:create name="pagination"></vc:create>
-                    </div>
+                            <td  class="text-right">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="openEditStaff(staff)">修改
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="_resetStaffPwd(staff)">重置密码
+                                    </button>
+                                </div>
+                                <div v-if="staff.relCd != 600311000001" class="btn-group">
+                                    <button class="btn-white btn btn-xs" v-on:click="openDeleteStaff(staff)">删除
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <vc:create name="resetStaffPwd"></vc:create>
 </div>

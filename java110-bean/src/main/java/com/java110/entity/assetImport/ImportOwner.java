@@ -20,6 +20,8 @@ public class ImportOwner {
 
     private String tel;
 
+    private String idCard;
+
     public String getOwnerNum() {
         return ownerNum;
     }
@@ -66,5 +68,13 @@ public class ImportOwner {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

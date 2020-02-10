@@ -831,4 +831,33 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_INSPECTION ="300200050001";
 
+    /**
+     *  保存巡检路线
+     * 3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION_ROUTE="500200030001";
+
+    /**
+     * 修改巡检路线
+     * 4 修改
+     */
+    public static final String BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE="500200040001";
+    /**
+     *  删除巡检路线
+     * 5 删除
+     */
+    public static final String BUSINESS_TYPE_DELETE_INSPECTION_ROUTE ="500200050001";
+    /**
+     *  保存巡检路线设备关联关系
+     * 3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_MACHINE_REL="500200030002";
+
+    /**
+     *  删除巡检路线设备关联关系
+     *  5 删除
+     */
+    public static final String BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_MACHINE_REL ="500200050002";
+
+
 }

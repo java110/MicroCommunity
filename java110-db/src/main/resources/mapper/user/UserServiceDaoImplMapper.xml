@@ -573,4 +573,31 @@
 
     </select>
 
+    <!-- 查询用户密码 -->
+    <select id="getUserHasPwd" parameterType="Map" resultType="Map">
+        select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,u.password
+        from u_user u
+        <if test="openId != null and openId !=''">
+            ,u_user_attr ua
+        </if>
+        where 1= 1
+        <if test="openId != null and openId != ''">
+            and u.user_id = ua.user_id
+            and ua.spec_cd = '100201911001'
+            and ua.value = #{openId}
+            and ua.status_cd = '0'
+        </if>
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and u.user_id = #{userId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and u.status_cd = #{statusCd}
+        </if>
+
+    </select>
+
 </mapper>

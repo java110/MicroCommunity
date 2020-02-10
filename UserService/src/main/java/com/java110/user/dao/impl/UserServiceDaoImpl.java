@@ -690,4 +690,19 @@ public class UserServiceDaoImpl extends BaseServiceDao implements IUserServiceDa
 
         return businessStaffs;
     }
+
+    /**
+     * 查询用户密码
+     * 根据bId 查询组织信息
+     * @param info bId 信息
+     * @return 组织信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getUserHasPwd(Map info) throws DAOException{
+        logger.debug("查询用户密码 入参 info : {}",info);
+
+        List<Map> businessStaffs = sqlSessionTemplate.selectList("userServiceDaoImpl.getUserHasPwd",info);
+       return businessStaffs;
+    }
 }

@@ -130,15 +130,30 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         ImportOwner owner = null;
         for (ImportParkingSpace parkingSpace : parkingSpaces) {
+
+            JSONObject savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+            paramIn = new JSONObject();
+            // 如果不存在，才插入
+            if (savedParkingAreaInfo == null) {
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
+                paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("typeCd",parkingSpace.getTypeCd());
+                paramIn.put("num", parkingSpace.getPaNum());
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
+            }
+            if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+                continue;
+            }
+
             JSONObject savedParkingSpaceInfo = getExistsParkSpace(pd, result, parkingSpace);
             if (savedParkingSpaceInfo != null) {
                 continue;
             }
 
-            paramIn = new JSONObject();
-
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingSpace.saveParkingSpace";
 
+            paramIn.put("paId", savedParkingAreaInfo.getString("paId"));
             paramIn.put("communityId", result.getCommunityId());
             paramIn.put("userId", result.getUserId());
             paramIn.put("num", parkingSpace.getPsNum());
@@ -179,14 +194,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
             String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
                     ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.queryFeeConfig?communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd;
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd+"&isDefault=T";
             responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 continue;
             }
 
-            JSONObject configInfo = JSONArray.parseArray(responseEntity.getBody()).getJSONObject(0);
+            JSONObject configInfo = JSONObject.parseObject(responseEntity.getBody()).getJSONArray("feeConfigs").getJSONObject(0);
             if (!configInfo.containsKey("additionalAmount")) {
                 continue;
             }
@@ -362,6 +377,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("link", owner.getTel());
             paramIn.put("sex", owner.getSex());
             paramIn.put("ownerTypeCd", "1001");
+            paramIn.put("idCard",owner.getIdCard());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
@@ -396,12 +412,13 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 paramIn.put("userId", result.getUserId());
                 paramIn.put("name", importFloor.getFloorNum() + "号楼");
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+                savedFloorInfo = getExistsFloor(pd, result, importFloor);
             }
             if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
                 continue;
             }
 
-            savedFloorInfo = getExistsFloor(pd, result, importFloor);
+
 
             if (savedFloorInfo == null) {
                 continue;
@@ -506,6 +523,36 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     }
 
     /**
+     * 查询存在的停车场
+     *
+     * @param pd
+     * @param result
+     * @param parkingSpace
+     * @return
+     */
+    private JSONObject getExistsParkingArea(IPageData pd, ComponentValidateResult result, ImportParkingSpace parkingSpace) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.listParkingAreas?page=1&row=1&communityId=" + result.getCommunityId()
+                + "&num=" + parkingSpace.getPaNum();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedParkingAreaInfoResult = JSONObject.parseObject(responseEntity.getBody());
+
+        if (!savedParkingAreaInfoResult.containsKey("parkingAreas") || savedParkingAreaInfoResult.getJSONArray("parkingAreas").size() != 1) {
+            return null;
+        }
+
+        JSONObject savedParkingAreaInfo = savedParkingAreaInfoResult.getJSONArray("parkingAreas").getJSONObject(0);
+
+        return savedParkingAreaInfo;
+    }
+
+    /**
      * 数据校验处理
      *
      * @param floors
@@ -536,21 +583,22 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
                 continue;
             }
             importParkingSpace = new ImportParkingSpace();
-            importParkingSpace.setPsNum(os[0].toString());
-            importParkingSpace.setTypeCd(os[1].toString());
-            importParkingSpace.setArea(Double.parseDouble(os[2].toString()));
-            if (StringUtil.isNullOrNone(os[3])) {
+            importParkingSpace.setPaNum(os[0].toString());
+            importParkingSpace.setPsNum(os[1].toString());
+            importParkingSpace.setTypeCd(os[2].toString());
+            importParkingSpace.setArea(Double.parseDouble(os[3].toString()));
+            if (StringUtil.isNullOrNone(os[4])) {
                 parkingSpaces.add(importParkingSpace);
                 continue;
             }
-            ImportOwner importOwner = getImportOwner(owners, os[3].toString());
+            ImportOwner importOwner = getImportOwner(owners, os[4].toString());
             importParkingSpace.setImportOwner(importOwner);
             if (importOwner != null) {
-                importParkingSpace.setCarNum(os[4].toString());
-                importParkingSpace.setCarBrand(os[5].toString());
-                importParkingSpace.setCarType(os[6].toString());
-                importParkingSpace.setCarColor(os[7].toString());
-                importParkingSpace.setSellOrHire(os[8].toString());
+                importParkingSpace.setCarNum(os[5].toString());
+                importParkingSpace.setCarBrand(os[6].toString());
+                importParkingSpace.setCarType(os[7].toString());
+                importParkingSpace.setCarColor(os[8].toString());
+                importParkingSpace.setSellOrHire(os[9].toString());
             }
 
             parkingSpaces.add(importParkingSpace);
@@ -651,6 +699,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
             importOwner.setAge(Integer.parseInt(os[3].toString()));
             importOwner.setTel(os[4].toString());
+            importOwner.setIdCard(os[5].toString());
             owners.add(importOwner);
         }
     }

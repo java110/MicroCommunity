@@ -386,4 +386,13 @@ public interface IUserServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getUsers(Map info) throws DAOException;
+
+    /**
+     * 查询用户密码
+     * 根据bId 查询组织信息
+     * @param info bId 信息
+     * @return 组织信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> getUserHasPwd(Map info) throws DAOException;
 }

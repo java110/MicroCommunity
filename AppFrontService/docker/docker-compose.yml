@@ -7,7 +7,7 @@ services:
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "443:8443"
+       - "8012:8012"
        volumes:
        - ../target/AppFrontService.jar:/root/target/AppFrontService.jar
        networks:

@@ -1,4 +1,4 @@
-package com.java110.api.listener.users;
+package com.java110.api.listener.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;

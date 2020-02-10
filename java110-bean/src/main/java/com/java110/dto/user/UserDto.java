@@ -48,6 +48,7 @@ public class UserDto extends PageDto implements Serializable {
     private String staffName;
 
     private String openId;
+    private String statusCd;
 
     private List<UserAttrDto> userAttrs;
 
@@ -195,5 +196,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setUserAttrs(List<UserAttrDto> userAttrs) {
         this.userAttrs = userAttrs;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }

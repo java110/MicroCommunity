@@ -129,12 +129,12 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() != 1){
+        if (feeDtos == null || feeDtos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
         }
 
         feeDto = feeDtos.get(0);
-        paramInJson.put("feeInfo",feeDto);
+        paramInJson.put("feeInfo", feeDto);
 
         BigDecimal feePrice = new BigDecimal("0.00");
 
@@ -161,7 +161,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
-        } else if("6666".equals(feeDto.getPayerObjType())) {//车位相关
+        } else if ("6666".equals(feeDto.getPayerObjType())) {//车位相关
             String computingFormula = feeDto.getComputingFormula();
             if ("1001".equals(computingFormula)) { //面积*单价+附加费
                 ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
@@ -185,12 +185,20 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
         }
+        BigDecimal cycles = null;
+        //BigDecimal receivableAmount = feePrice;
+        if ("-101".equals(paramInJson.getString("cycles"))) {//自定义缴费
+            BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            cycles = receivedAmount.divide(feePrice,2,BigDecimal.ROUND_HALF_EVEN);
+            paramInJson.put("tmpCycles", cycles);
+            businessFeeDetail.put("cycles", cycles.doubleValue());
+            businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+        } else {
+            cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
+            double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+            businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
+        }
 
-        BigDecimal receivableAmount = feePrice;
-        BigDecimal cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
-        double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-
-        businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);
 
         return business;
@@ -209,14 +217,20 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFee = new JSONObject();
-        FeeDto feeInfo = (FeeDto)paramInJson.get("feeInfo");
+        FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
         Date endTime = feeInfo.getEndTime();
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
-        endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        int hours = 0;
+        if ("-101".equals(paramInJson.getString("cycles"))) {
+            hours = new Double(Double.parseDouble(paramInJson.getString("tmpCycles")) * DateUtil.getCurrentMonthDay() * 24).intValue();
+            endCalender.add(Calendar.HOUR, hours);
+        } else {
+            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
+        }
         feeInfo.setEndTime(endCalender.getTime());
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
@@ -278,4 +292,6 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     public void setRoomInnerServiceSMOImpl(IRoomInnerServiceSMO roomInnerServiceSMOImpl) {
         this.roomInnerServiceSMOImpl = roomInnerServiceSMOImpl;
     }
+
+
 }

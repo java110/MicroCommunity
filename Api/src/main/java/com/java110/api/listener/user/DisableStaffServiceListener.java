@@ -1,4 +1,4 @@
-package com.java110.api.listener.users;
+package com.java110.api.listener.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
@@ -17,19 +17,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 /**
- * 启用员工接口
+ * 员工停用接口
  * @author wuxw
  * @create 2018-12-08 下午2:46
- * @desc 启用员工信息，如二次入职，启用之前工号信息
+ * @desc 停用员工信息，如离职等情况 员工账号信息停用处理
  **/
-@Java110Listener("enableStaffServiceListener")
-public class EnableStaffServiceListener extends AbstractServiceApiDataFlowListener {
+@Java110Listener("disableStaffServiceListener")
+public class DisableStaffServiceListener  extends AbstractServiceApiDataFlowListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(EnableStaffServiceListener.class);
+    private final static Logger logger = LoggerFactory.getLogger(DisableStaffServiceListener.class);
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_USER_STAFF_ENABLE;
+        return ServiceCodeConstant.SERVICE_CODE_USER_STAFF_DISABLE;
     }
 
     /**
@@ -56,7 +56,7 @@ public class EnableStaffServiceListener extends AbstractServiceApiDataFlowListen
         Assert.jsonObjectHaveKey(paramIn,"userId","当前请求报文中未包含userId节点");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_RECOVER_USER_INFO);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
         business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
