@@ -3,6 +3,7 @@ package com.java110.app.smo;
 import com.java110.app.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.PayUtil;
@@ -73,7 +74,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
 
-        double payAmount = PayUtil.getPayAmountByEnv("DEV", money);
+        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), money);
 //添加或更新支付记录(参数跟进自己业务需求添加)
 
         Map<String, String> resMap = this.java110UnifieldOrder(restTemplate,feeName, orderNum, wechatAuthProperties.TRADE_TYPE_JSAPI, payAmount, openId);

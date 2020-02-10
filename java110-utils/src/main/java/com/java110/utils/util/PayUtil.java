@@ -331,7 +331,7 @@ public class PayUtil {
     public static double getPayAmountByEnv(String env, Double money) {
         double pay_money = 0.01;
 //测试环境
-        if ("DEV".equals(env)) {
+        if ("DEV".equals(env) || "TEST".equals(env)) {
             if (money > 10000) {
                 pay_money = 0.03;
             } else if (money > 1000) {
