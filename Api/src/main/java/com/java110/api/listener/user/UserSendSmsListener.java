@@ -11,6 +11,7 @@ import com.java110.dto.msg.SmsDto;
 import com.java110.dto.user.UserDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -96,7 +97,12 @@ public class UserSendSmsListener extends AbstractServiceApiListener {
         SmsDto smsDto = new SmsDto();
         smsDto.setTel(tel);
         smsDto.setCode(msgCode);
-        smsDto = smsInnerServiceSMOImpl.send(smsDto);
+        if ("ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+            smsDto = smsInnerServiceSMOImpl.send(smsDto);
+        } else {
+            smsDto.setSuccess(true);
+            smsDto.setMsg("当前为演示环境，您的验证码为" + msgCode);
+        }
         ResponseEntity<String> sendMessageResult = new ResponseEntity<String>(smsDto.getMsg(), smsDto.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         context.setResponseEntity(sendMessageResult);
 
