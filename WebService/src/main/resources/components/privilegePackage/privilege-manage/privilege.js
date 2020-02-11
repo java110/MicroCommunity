@@ -5,6 +5,7 @@
             privilegeInfo:{
                 _currentPgId:"",
                 _currentPgName:"",
+                _pName:'',
                 _currentStoreId:"9999",
                 _privileges:[]
             }
@@ -49,7 +50,7 @@
             },
             openAddPrivilegeModel:function(){
                 vc.component.$emit('addPrivilege_openPrivilegeModel',{
-                            pgId:vc.component.privilegeInfo._currentPgId
+                            pgId:vc.component.privilegeInfo._pName
                 });
             },
             openDeletePrivilegeModel:function(_p){
