@@ -117,6 +117,9 @@
                     });
 
             },
+            _openDispatchRepairDetail:function(_ownerRepair){
+                vc.emit('ownerRepairDetail','openOwnerRepairDetailModal',_ownerRepair);
+            },
             _queryMyRepairDispatchMethod:function(){
                 vc.component._listOwnerRepairs(DEFAULT_PAGE, DEFAULT_ROWS);
             }

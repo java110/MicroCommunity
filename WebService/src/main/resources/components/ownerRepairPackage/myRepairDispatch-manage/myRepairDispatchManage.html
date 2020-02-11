@@ -79,7 +79,7 @@
                             <th class="text-center">联系方式</th>
                             <th class="text-center">预约时间</th>
                             <th class="text-center">状态</th>
-                            <th class="text-center">操作</th>
+                            <th class="text-right">操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -90,11 +90,16 @@
                             <td class="text-center">{{ownerRepair.tel}}</td>
                             <td class="text-center">{{ownerRepair.appointmentTime}}</td>
                             <td class="text-center">{{ownerRepair.repairDispatchStateName}}</td>
-                            <td class="text-center">
+                            <td class="text-right">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
                                             v-bind:disabled="ownerRepair.repairDispatchState == '10002' || ownerRepair.repairDispatchState == '10003'"
                                             v-on:click="_openDealRepair(ownerRepair)">办理
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDispatchRepairDetail(ownerRepair)">详情
                                     </button>
                                 </div>
                             </td>
@@ -120,8 +125,9 @@
                callBackListener="myRepairDispatch"
                callBackFunction="notifyData"
     >
-
     </vc:create>
+
+    <vc:create name="ownerRepairDetail"></vc:create>
 
 
 </div>
