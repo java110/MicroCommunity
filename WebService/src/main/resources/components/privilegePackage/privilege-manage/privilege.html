@@ -7,17 +7,17 @@
                     data-toggle="tooltip"
                     title="Refresh inbox"
                     v-on:click="openAddPrivilegeModel()"
-            ><i class="fa fa-plus"></i> 添加权限</button>
-            <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" v-model="privilegeInfo._currentPgName" name="search" placeholder="请输入权限名称">
-                    <div class="input-group-btn">
-                        <button v-on:click="queryPrivilege()" class="btn btn-sm btn-primary">
-                            查询
-                        </button>
-                    </div>
+            ><i class="fa fa-plus"></i> 添加权限
+            </button>
+            <div class="input-group">
+                <input type="text" class="form-control form-control-sm" v-model="privilegeInfo._currentPgName"
+                       name="search" placeholder="请输入权限名称">
+                <div class="input-group-btn">
+                    <button v-on:click="queryPrivilege()" class="btn btn-sm btn-primary">
+                        查询
+                    </button>
                 </div>
-            </form>
+            </div>
             <h2>
                 {{privilegeInfo._currentPgName}}
             </h2>
@@ -26,14 +26,14 @@
 
             <table class="table table-hover table-mail">
                 <thead>
-                    <tr>
-                        <th>权限编码</th>
-                        <th>权限名称</th>
-                        <th>资源路径</th>
-                        <th>权限描述</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
+                <tr>
+                    <th>权限编码</th>
+                    <th>权限名称</th>
+                    <th>资源路径</th>
+                    <th>权限描述</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr v-for="privilege in privilegeInfo._privileges" class="read">
@@ -45,9 +45,9 @@
                     <td class="mail-subject">{{privilege.description}}</td>
                     <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
                     <td class="text-right mail-date">
-                        <i  v-if="privilegeInfo._currentStoreId != '9999'"
-                                                         v-on:click="openDeletePrivilegeModel(privilege)"
-                                                         class="glyphicon glyphicon-remove"></i>
+                        <i v-if="privilegeInfo._currentStoreId != '9999'"
+                           v-on:click="openDeletePrivilegeModel(privilege)"
+                           class="glyphicon glyphicon-remove"></i>
                     </td>
                 </tr>
 
