@@ -73,27 +73,34 @@
                     >
                         <thead>
                         <tr>
-                            <th class="text-center">报修ID</th>
+<!--                            <th class="text-center">报修ID</th>-->
                             <th class="text-center">报修类型</th>
                             <th class="text-center">报修人</th>
                             <th class="text-center">联系方式</th>
                             <th class="text-center">预约时间</th>
+                            <th class="text-center">维修师傅</th>
                             <th class="text-center">状态</th>
-                            <th class="text-center">操作</th>
+                            <th class="text-right">操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="ownerRepair in repairDispatchManageInfo.ownerRepairs">
-                            <td class="text-center">{{ownerRepair.repairId}}</td>
+<!--                            <td class="text-center">{{ownerRepair.repairId}}</td>-->
                             <td class="text-center">{{ownerRepair.repairTypeName}}</td>
                             <td class="text-center">{{ownerRepair.repairName}}</td>
                             <td class="text-center">{{ownerRepair.tel}}</td>
                             <td class="text-center">{{ownerRepair.appointmentTime}}</td>
+                            <td class="text-center">{{ownerRepair.repairName}}</td>
                             <td class="text-center">{{ownerRepair.stateName}}</td>
-                            <td class="text-center">
+                            <td class="text-right">
                                 <div class="btn-group" v-if="ownerRepair.state == '1000'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openDispatchRepair(ownerRepair)">派单
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDispatchRepairDetail(ownerRepair)">详情
                                     </button>
                                 </div>
                             </td>
@@ -114,5 +121,7 @@
             </div>
         </div>
     </div>
+
+    <vc:create name="ownerRepairDetail"></vc:create>
 
 </div>

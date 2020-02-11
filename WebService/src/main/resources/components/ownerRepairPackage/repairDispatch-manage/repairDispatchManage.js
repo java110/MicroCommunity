@@ -117,6 +117,9 @@
                  vc.jumpToPage('/flow/repairDispatchStepFlow?repairId=' + _ownerRepair.repairId);
 
             },
+            _openDispatchRepairDetail:function(_ownerRepair){
+                vc.emit('ownerRepairDetail','openOwnerRepairDetailModal',_ownerRepair);
+            },
             _moreCondition:function(){
                 if(vc.component.repairDispatchManageInfo.moreCondition){
                     vc.component.repairDispatchManageInfo.moreCondition = false;
