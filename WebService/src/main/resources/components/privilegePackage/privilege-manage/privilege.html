@@ -8,7 +8,7 @@
                     title="Refresh inbox"
                     v-on:click="openAddPrivilegeModel()"
             ><i class="fa fa-plus"></i> 添加权限</button>
-            <form class="float-right mail-search" style="margin-right:10px">
+            <div class="float-right mail-search" style="margin-right:10px">
                 <div class="input-group">
                     <input type="text" class="form-control form-control-sm" v-model="privilegeInfo._pName" name="search" placeholder="请输入权限名称">
                     <div class="input-group-btn">
@@ -17,7 +17,7 @@
                         </button>
                     </div>
                 </div>
-            </form>
+            </div>
             <h2>
                 {{privilegeInfo._currentPgName}}
             </h2>
