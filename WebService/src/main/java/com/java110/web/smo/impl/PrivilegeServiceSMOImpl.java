@@ -70,9 +70,10 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         Assert.jsonObjectHaveKey(privilegeInfoObj,"pgId","请求报文中未包含pgId 节点");
 
         String pgId = privilegeInfoObj.getString("pgId");
+        String name = privilegeInfoObj.getString("name");
 
         ResponseEntity<String> privilegeGroup = super.callCenterService(restTemplate,pd,"",
-                ServiceConstant.SERVICE_API_URL+"/api/query.privilege.byPgId?pgId="+pgId , HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL+"/api/query.privilege.byPgId?pgId="+pgId+"&name="+name , HttpMethod.GET);
         if(privilegeGroup.getStatusCode() != HttpStatus.OK){
             return privilegeGroup;
         }
