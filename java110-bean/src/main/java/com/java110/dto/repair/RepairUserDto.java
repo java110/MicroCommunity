@@ -17,10 +17,12 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     private String context;
     private String repairId;
+    private String[] repairIds;
     private String ruId;
     private String state;
     private String communityId;
     private String userId;
+    private String userName;
 
 
     private Date createTime;
@@ -91,5 +93,21 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getRepairIds() {
+        return repairIds;
+    }
+
+    public void setRepairIds(String[] repairIds) {
+        this.repairIds = repairIds;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

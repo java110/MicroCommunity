@@ -13,7 +13,9 @@
                 appointmentTime:'',
                 context:'',
                 stateName:'',
-                roomId:''
+                roomId:'',
+                userId:'',
+                userName:''
 
             }
         },
@@ -41,7 +43,9 @@
                         appointmentTime:'',
                         context:'',
                         stateName:'',
-                        roomId:''
+                        roomId:'',
+                        userId:'',
+                        userName:''
                     };
             },
             _getRoom:function(){

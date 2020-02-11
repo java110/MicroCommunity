@@ -92,6 +92,12 @@
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
         </if>
+        <if test="repairIds !=null">
+            and t.repair_id in
+            <foreach collection="repairIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -110,6 +116,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
