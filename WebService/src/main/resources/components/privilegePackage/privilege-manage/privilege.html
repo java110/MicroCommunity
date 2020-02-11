@@ -10,9 +10,9 @@
             ><i class="fa fa-plus"></i> 添加权限</button>
             <form method="get" action="index.html" class="float-right mail-search" style="margin-right:10px">
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" name="search" placeholder="请输入权限名称">
+                    <input type="text" class="form-control form-control-sm" v-model="privilegeInfo._currentPgName" name="search" placeholder="请输入权限名称">
                     <div class="input-group-btn">
-                        <button type="submit" class="btn btn-sm btn-primary">
+                        <button v-on:click="queryPrivilege()" class="btn btn-sm btn-primary">
                             查询
                         </button>
                     </div>

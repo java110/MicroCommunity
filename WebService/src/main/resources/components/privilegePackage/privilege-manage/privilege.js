@@ -28,8 +28,12 @@
             _loadPrivilege:function(_pgId){
                 vc.component.privilegeInfo._privileges=[];
                 var param = {
-                                    params:{pgId:_pgId}
-                                };
+                    params:{
+                        pgId:_pgId,
+                        name:vc.component.privilegeInfo._currentPgName
+
+                    }
+                };
 
                                 //发送get请求
                vc.http.get('privilege',
@@ -51,6 +55,9 @@
             openDeletePrivilegeModel:function(_p){
                 _p.pgId = vc.component.privilegeInfo._currentPgId;
                 vc.emit('deletePrivilege','openDeletePrivilegeModel',_p);
+            },
+            queryPrivilege:function(){
+                vc.component._loadPrivilege(vc.component.privilegeInfo._currentPgId);
             }
         }
     });
