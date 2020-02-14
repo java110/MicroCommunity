@@ -177,6 +177,7 @@
             },
             _openBeyondCommunity:function(_org){
                 vc.component.orgManageInfo.showBelongCommunity = true;
+                vc.emit('orgCommunityManageInfo', 'openOrgCommunity',_org);
             },
             _queryOrgMethod: function () {
                 vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);

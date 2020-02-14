@@ -10,11 +10,11 @@
         _initMethod:function(){
         },
         _initEvent:function(){
-            vc.on('addOrgCommunity','openChooseOrgModel',function(_param){
+            vc.on('addOrgCommunity','openAddOrgCommunityModal',function(_param){
                 $('#addOrgCommunityModel').modal('show');
                 vc.copyObject(_param,vc.component.addOrgCommunityInfo);
                 vc.component._refreshChooseOrgInfo();
-                vc.component._loadAllOrgInfo(1,10,'');
+                vc.component._loadAllCommunityInfo(1,10,'');
             });
         },
         methods:{
@@ -53,10 +53,14 @@
                 $('#addOrgCommunityModel').modal('hide');
             },
             queryCommunitys:function(){
-                vc.component._loadAllOrgInfo(1,10,vc.component.addOrgCommunityInfo.communityName);
+                vc.component._loadAllCommunityInfo(1,10,vc.component.addOrgCommunityInfo.communityName);
             },
             _refreshChooseOrgInfo:function(){
-                vc.component.addOrgCommunityInfo._currentOrgName = "";
+                vc.component.addOrgCommunityInfo={
+                    communitys:[],
+                    communityName:'',
+                    selectCommunitys:[]
+                };
             }
         }
 

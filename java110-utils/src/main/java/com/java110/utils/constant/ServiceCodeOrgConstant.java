@@ -42,6 +42,11 @@ public class ServiceCodeOrgConstant {
 
 
     /**
+     * 查询 组织未隶属小区
+     */
+    public static final String LIST_ORG_NO_COMMUNITYS = "org.listOrgNoCommunitys";
+
+    /**
      * 添加 组织管理
      */
     public static final String ADD_ORG_COMMUNITY = "org.saveOrgCommunity";

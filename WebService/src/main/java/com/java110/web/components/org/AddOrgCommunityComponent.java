@@ -40,12 +40,6 @@ public class AddOrgCommunityComponent {
         return addOrgCommunitySMOImpl.saveOrgCommunity(pd);
     }
 
-    public ResponseEntity<String> listEnterCommunitys(IPageData pd) {
-
-        return communityServiceSMOImpl.listMyCommunity(pd);
-
-    }
-
     /**
      * 查询组织管理列表
      *
