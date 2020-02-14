@@ -12,6 +12,7 @@
                 total: 0,
                 records: 1,
                 moreCondition: false,
+                showBelongCommunity:false,
                 orgName: '',
                 headOrg: [],
                 branchOrg: [],
@@ -173,6 +174,9 @@
             },
             _openDeleteOrgModel: function (_org) {
                 vc.emit('deleteOrg', 'openDeleteOrgModal', _org);
+            },
+            _openBeyondCommunity:function(_org){
+                vc.component.orgManageInfo.showBelongCommunity = true;
             },
             _queryOrgMethod: function () {
                 vc.component._listOrgs(DEFAULT_PAGE, DEFAULT_ROWS);

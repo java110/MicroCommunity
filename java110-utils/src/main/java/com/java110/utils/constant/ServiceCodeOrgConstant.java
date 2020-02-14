@@ -27,10 +27,30 @@ public class ServiceCodeOrgConstant {
      */
     public static final String LIST_ORGS = "org.listOrgs";
 
+
+
     /**
      * 查询 上级组织管理
      */
     public static final String LIST_PARENT_ORGS = "org.listParentOrgs";
+
+
+    /**
+     * 查询 组织管理
+     */
+    public static final String LIST_ORG_COMMUNITYS = "org.listOrgCommunitys";
+
+
+    /**
+     * 添加 组织管理
+     */
+    public static final String ADD_ORG_COMMUNITY = "org.saveOrgCommunity";
+
+
+    /**
+     * 删除 组织管理
+     */
+    public static final String DELETE_ORG_COMMUNITY = "org.deleteOrgCommunity";
 
 
 }
