@@ -473,7 +473,7 @@
             and cm.audit_status_cd = #{auditStatusCd}
         </if>
         <if test="notInCommunityId != null ">
-            t.community_id not in
+            and t.community_id not in
             <foreach collection="notInCommunityId" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
@@ -530,7 +530,7 @@
                 and cm.status_cd = '0'
         </if>
         <if test="notInCommunityId != null ">
-            t.community_id not in
+            and t.community_id not in
             <foreach collection="notInCommunityId" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
