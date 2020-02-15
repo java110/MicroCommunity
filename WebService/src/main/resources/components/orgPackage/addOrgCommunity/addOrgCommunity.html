@@ -53,7 +53,10 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="ibox-content">
+                                <!-- 分页 -->
+                                <vc:create namespace="addOrgCommunity" name="paginationPlus"></vc:create>
+                                <div class="ibox-content" v-if="addOrgCommunityInfo.communitys.length > 0">
+
                                     <button class="btn btn-primary float-right" type="button" v-on:click="addOrgCommunity()"><i
                                             class="fa fa-check"></i>&nbsp;提交
                                     </button>

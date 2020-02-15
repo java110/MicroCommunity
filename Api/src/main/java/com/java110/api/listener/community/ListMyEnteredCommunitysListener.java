@@ -5,9 +5,11 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.smo.org.IOrgCommunityInnerServiceSMO;
 import com.java110.core.smo.org.IOrgInnerServiceSMO;
 import com.java110.core.smo.org.IOrgStaffRelInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
@@ -37,6 +39,9 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
 
     @Autowired
     private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOrgCommunityInnerServiceSMO orgCommunityInnerServiceSMOImpl;
 
     @Autowired
     private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
@@ -92,6 +97,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
         List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
 
         Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
+
         int count = 0;
         List<ApiCommunityDataVo> communitys = null;
         if ("9999".equals(orgDtos.get(0).getBelongCommunityId())) {
@@ -105,10 +111,23 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
                 communitys = new ArrayList<>();
             }
         } else {
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setCommunityId(orgDtos.get(0).getBelongCommunityId());
-            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
-            count = 1;
+            String companyOrgId = orgDtos.get(0).getParentOrgId();
+            OrgCommunityDto orgCommunityDto = new OrgCommunityDto();
+            orgCommunityDto.setOrgId(companyOrgId);
+            count = orgCommunityInnerServiceSMOImpl.queryOrgCommunitysCount(orgCommunityDto);
+            if (count > 0) {
+                List<OrgCommunityDto> orgCommunityDtos = orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto);
+                communitys = BeanConvertUtil.covertBeanList(orgCommunityDtos, ApiCommunityDataVo.class);
+                for (OrgCommunityDto tmpOrgCommunityDto : orgCommunityDtos) {
+                    for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {
+                        if (tmpOrgCommunityDto.getCommunityId().equals(tmpApiCommunityDataVo.getCommunityId())) {
+                            tmpApiCommunityDataVo.setName(tmpOrgCommunityDto.getCommunityName());
+                        }
+                    }
+                }
+            } else {
+                communitys = new ArrayList<>();
+            }
         }
 
 

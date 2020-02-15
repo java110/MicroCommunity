@@ -34,6 +34,10 @@
                 vc.copyObject(_param,vc.component.addOrgCommunityInfo);
                 vc.component._loadAllCommunityInfo(1,10,'');
             });
+
+            vc.on('addOrgCommunity','paginationPlus', 'page_event', function (_currentPage) {
+                vc.component._listOrgCommunitys(_currentPage, DEFAULT_ROWS);
+            });
         },
         methods:{
             _loadAllCommunityInfo:function(_page,_row,_name){
@@ -53,6 +57,10 @@
                              function(json){
                                 var _communityInfo = JSON.parse(json);
                                 vc.component.addOrgCommunityInfo.communitys = _communityInfo.communitys;
+                                vc.emit('addOrgCommunity','paginationPlus', 'init', {
+                                    total: _communityInfo.records,
+                                    currentPage: _page
+                                });
                              },function(){
                                 console.log('请求失败处理');
                              }

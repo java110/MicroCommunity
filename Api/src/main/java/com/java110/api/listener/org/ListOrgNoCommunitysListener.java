@@ -72,8 +72,10 @@ public class ListOrgNoCommunitysListener extends AbstractServiceApiListener {
         for(OrgCommunityDto tmpOrgCommunityDto : orgCommunityDtos){
             communityIds.add(tmpOrgCommunityDto.getCommunityId());
         }
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setNotInCommunityId(communityIds.toArray(new String[communityIds.size()]));
+        CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);;
+        if(communityIds.size()>0) {
+            communityDto.setNotInCommunityId(communityIds.toArray(new String[communityIds.size()]));
+        }
         communityDto.setAuditStatusCd("1100");
         communityDto.setMemberId(reqJson.getString("storeId"));
         int count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);

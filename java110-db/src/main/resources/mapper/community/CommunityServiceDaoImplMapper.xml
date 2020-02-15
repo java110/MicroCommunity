@@ -512,6 +512,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -526,8 +532,11 @@
         </if>
         <if test="memberId !=null and memberId !=''">
             and cm.community_id = t.community_id
-                and cm.member_id = #{memberId}
-                and cm.status_cd = '0'
+            and cm.member_id = #{memberId}
+            and cm.status_cd = '0'
+        </if>
+        <if test="memberId !=null and memberId !='' and auditStatusCd != null and auditStatusCd !=''">
+            and cm.audit_status_cd = #{auditStatusCd}
         </if>
         <if test="notInCommunityId != null ">
             and t.community_id not in

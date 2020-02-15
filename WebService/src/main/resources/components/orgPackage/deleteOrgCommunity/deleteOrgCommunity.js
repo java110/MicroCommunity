@@ -32,7 +32,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#deleteOrgCommunityModel').modal('hide');
-                            vc.emit('orgCommunityManage','listOrgCommunity',{});
+                            vc.emit('orgCommunityManageInfo','listOrgCommunity',{});
                             return ;
                         }
                         vc.message(json);
