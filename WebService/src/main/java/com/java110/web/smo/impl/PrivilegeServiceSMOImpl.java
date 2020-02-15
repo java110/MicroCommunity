@@ -196,7 +196,10 @@ public class PrivilegeServiceSMOImpl extends BaseComponentSMO implements IPrivil
         JSONObject privilegeInfoObj = JSONObject.parseObject(pd.getReqData());
 
         Assert.jsonObjectHaveKey(privilegeInfoObj,"pgId","请求报文中未包含权限组ID 节点");
-        Assert.jsonObjectHaveKey(privilegeInfoObj,"pId","请求报文中未包含权限ID 节点");
+        //Assert.jsonObjectHaveKey(privilegeInfoObj,"pId","请求报文中未包含权限ID 节点");
+        if(!privilegeInfoObj.containsKey("pIds") || privilegeInfoObj.getJSONArray("pIds").size() <1){
+            throw new IllegalArgumentException("请求报文中未包含权限");
+        }
 
         ResponseEntity<String> storeInfo = super.getStoreInfo(pd,restTemplate);
 

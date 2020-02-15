@@ -29,28 +29,34 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-
+                                            <th class="text-center">
+                                                <input type="checkbox"  class="i-checks " @click="checkAll($event)" id="quan">
+                                            </th>
                                             <th>权限编码</th>
                                             <th>权限名称</th>
-                                            <th>资源路径</th>
-                                            <th>权限描述</th>
                                             <th>创建时间</th>
-                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="noAddPrivilege in addPrivilegeInfo._noAddPrivilege">
+                                                <td class="text-center">
+                                                    <input type="checkbox" class="i-checks checkItem" v-bind:value="noAddPrivilege.pId" v-model="addPrivilegeInfo.selectPrivileges" >
+                                                </td>
                                                 <td>{{noAddPrivilege.pId}}</td>
                                                 <td>{{noAddPrivilege.name}}</td>
-                                                <td>{{noAddPrivilege.resource}}</td>
-                                                <td>{{noAddPrivilege.description}}</td>
                                                 <td>{{vc.dateFormat(noAddPrivilege.createTime)}}</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-xs" v-on:click="addPrivilegeToPrivilegeGroup(noAddPrivilege)">添加</button>
-                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="ibox-content" v-if="addOrgCommunityInfo.communitys.length > 0">
+
+                                        <button class="btn btn-primary float-right" type="button" v-on:click="addPrivilegeToPrivilegeGroup()"><i
+                                                class="fa fa-check"></i>&nbsp;提交
+                                        </button>
+                                        <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                                data-dismiss="modal">取消
+                                        </button>
+                                    </div>
                                 </div>
 
                         </div>
