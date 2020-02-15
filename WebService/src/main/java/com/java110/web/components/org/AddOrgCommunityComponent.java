@@ -7,6 +7,8 @@ import com.java110.utils.constant.StateConstant;
 import com.java110.web.smo.ICommunityServiceSMO;
 import com.java110.web.smo.org.IAddOrgCommunitySMO;
 import com.java110.web.smo.org.IAddOrgSMO;
+import com.java110.web.smo.org.IListOrgCommunitysSMO;
+import com.java110.web.smo.org.IListOrgNoCommunitysSMO;
 import com.java110.web.smo.org.IListOrgsSMO;
 import com.java110.web.smo.org.IListParentOrgsSMO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class AddOrgCommunityComponent {
     private IAddOrgCommunitySMO addOrgCommunitySMOImpl;
 
     @Autowired
-    private IListOrgsSMO listOrgsSMOImpl;
+    private IListOrgNoCommunitysSMO listOrgNoCommunitysSMOImpl;
 
     @Autowired
     private IListParentOrgsSMO listParentOrgsSMOImpl;
@@ -47,7 +49,7 @@ public class AddOrgCommunityComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listOrgsSMOImpl.listOrgs(pd);
+        return listOrgNoCommunitysSMOImpl.listOrgNoCommunitys(pd);
     }
 
 
@@ -63,13 +65,7 @@ public class AddOrgCommunityComponent {
         this.listParentOrgsSMOImpl = listParentOrgsSMOImpl;
     }
 
-    public IListOrgsSMO getListOrgsSMOImpl() {
-        return listOrgsSMOImpl;
-    }
 
-    public void setListOrgsSMOImpl(IListOrgsSMO listOrgsSMOImpl) {
-        this.listOrgsSMOImpl = listOrgsSMOImpl;
-    }
 
     public ICommunityServiceSMO getCommunityServiceSMOImpl() {
         return communityServiceSMOImpl;

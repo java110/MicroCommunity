@@ -4,6 +4,10 @@
             <div class="ibox-title">
                 <h5>{{orgCommunityManageInfo.orgName}}隶属小区</h5>
                 <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_goBack()">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        返回
+                    </button>
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOrgCommunityModal()">
                         <i class="glyphicon glyphicon-plus"></i>
                         添加
@@ -54,6 +58,8 @@
         </div>
     </div>
     <vc:create name="addOrgCommunity"
+               emitListener="orgCommunityManageInfo"
+               emitFunction="listOrgCommunity"
     ></vc:create>
     <vc:create name="deleteOrgCommunity"></vc:create>
 </div>

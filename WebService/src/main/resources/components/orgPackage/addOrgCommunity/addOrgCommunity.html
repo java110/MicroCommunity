@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="addOrgCommunityModelLabel">绑定</h3>
+                <h3 class="modal-title" id="addOrgCommunityModelLabel">添加隶属小区</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -34,7 +34,7 @@
                                     <thead>
                                     <tr>
                                         <th class="text-center">
-                                            <input type="checkbox"  class="i-checks" name="input[]">
+                                            <input type="checkbox"  class="i-checks " @click="checkAll($event)" id="quan">
                                         </th>
                                         <th class="text-center">小区ID</th>
                                         <th class="text-center">小区名称</th>
@@ -45,17 +45,17 @@
                                     <tbody>
                                     <tr v-for="community in addOrgCommunityInfo.communitys">
                                         <td class="text-center">
-                                            <input type="checkbox"   class="i-checks" name="input[]">
+                                            <input type="checkbox" class="i-checks checkItem" v-bind:value="community.communityId" v-model="addOrgCommunityInfo.selectCommunitys" >
                                         </td>
                                         <td class="text-center">{{community.communityId}}</td>
-                                        <td class="text-center">{{community.communityName}}</td>
+                                        <td class="text-center">{{community.name}}</td>
                                         <td class="text-center">{{community.address}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <div class="ibox-content">
                                     <button class="btn btn-primary float-right" type="button" v-on:click="addOrgCommunity()"><i
-                                            class="fa fa-check"></i>&nbsp;保存
+                                            class="fa fa-check"></i>&nbsp;提交
                                     </button>
                                     <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
                                             data-dismiss="modal">取消

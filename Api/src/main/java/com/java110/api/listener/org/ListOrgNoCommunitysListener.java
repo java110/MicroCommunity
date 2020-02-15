@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 查询小区侦听类
  */
-@Java110Listener("listOrgCommunitysListener")
+@Java110Listener("listOrgNoCommunitysListener")
 public class ListOrgNoCommunitysListener extends AbstractServiceApiListener {
 
     @Autowired

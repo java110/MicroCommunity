@@ -76,6 +76,9 @@
             vc.on('pagination', 'page_event', function (_currentPage) {
                 vc.component._listOrgs(_currentPage, DEFAULT_ROWS);
             });
+            vc.on('orgManage','onBack',function(_param){
+                 vc.component.orgManageInfo.showBelongCommunity = false;
+            })
 
         },
         methods: {

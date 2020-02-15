@@ -88,6 +88,9 @@
                     vc.component.orgCommunityManageInfo.moreCondition = true;
                 }
             },
+            _goBack:function(){
+                vc.emit('orgManage','onBack',{});
+            }
 
 
 
