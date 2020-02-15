@@ -472,6 +472,12 @@
         <if test="memberId !=null and memberId !='' and auditStatusCd != null and auditStatusCd !=''">
             and cm.audit_status_cd = #{auditStatusCd}
         </if>
+        <if test="notInCommunityId != null ">
+            t.community_id not in
+            <foreach collection="notInCommunityId" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -522,6 +528,12 @@
             and cm.community_id = t.community_id
                 and cm.member_id = #{memberId}
                 and cm.status_cd = '0'
+        </if>
+        <if test="notInCommunityId != null ">
+            t.community_id not in
+            <foreach collection="notInCommunityId" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 
 

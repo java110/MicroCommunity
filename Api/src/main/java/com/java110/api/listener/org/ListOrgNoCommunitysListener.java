@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.org.IOrgCommunityInnerServiceSMO;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeOrgConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.api.community.ApiCommunityDataVo;
+import com.java110.vo.api.community.ApiCommunityVo;
 import com.java110.vo.api.org.ApiOrgCommunityDataVo;
 import com.java110.vo.api.org.ApiOrgCommunityVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class ListOrgNoCommunitysListener extends AbstractServiceApiListener {
 
     @Autowired
     private IOrgCommunityInnerServiceSMO orgCommunityInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -60,23 +67,32 @@ public class ListOrgNoCommunitysListener extends AbstractServiceApiListener {
 
         OrgCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, OrgCommunityDto.class);
 
-        int count = orgCommunityInnerServiceSMOImpl.queryOrgCommunitysCount(orgCommunityDto);
+        List<OrgCommunityDto> orgCommunityDtos = orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto);
+        List<String> communityIds = new ArrayList<>();
+        for(OrgCommunityDto tmpOrgCommunityDto : orgCommunityDtos){
+            communityIds.add(tmpOrgCommunityDto.getCommunityId());
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setNotInCommunityId(communityIds.toArray(new String[communityIds.size()]));
+        communityDto.setAuditStatusCd("1100");
+        communityDto.setMemberId(reqJson.getString("storeId"));
+        int count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
 
-        List<ApiOrgCommunityDataVo> orgCommunitys = null;
+        List<ApiCommunityDataVo> communitys = null;
 
         if (count > 0) {
-            orgCommunitys = BeanConvertUtil.covertBeanList(orgCommunityInnerServiceSMOImpl.queryOrgCommunitys(orgCommunityDto), ApiOrgCommunityDataVo.class);
+            communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
         } else {
-            orgCommunitys = new ArrayList<>();
+            communitys = new ArrayList<>();
         }
 
-        ApiOrgCommunityVo apiOrgVo = new ApiOrgCommunityVo();
+        ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
 
-        apiOrgVo.setTotal(count);
-        apiOrgVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiOrgVo.setOrgCommunitys(orgCommunitys);
+        apiCommunityVo.setTotal(count);
+        apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiCommunityVo.setCommunitys(communitys);
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOrgVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
 
