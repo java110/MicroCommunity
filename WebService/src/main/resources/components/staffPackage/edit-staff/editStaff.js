@@ -47,18 +47,6 @@
                             errInfo:"用户名长度必须在2位至10位"
                         },
                     ],
-                    'editStaffInfo.email':[
-                        {
-                            limit:"required",
-                            param:"",
-                            errInfo:"密码不能为空"
-                        },
-                        {
-                            limit:"email",
-                            param:"",
-                            errInfo:"不是有效的邮箱"
-                        },
-                    ],
                     'editStaffInfo.tel':[
                         {
                             limit:"required",

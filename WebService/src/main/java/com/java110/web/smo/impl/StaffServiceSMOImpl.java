@@ -1,10 +1,12 @@
 package com.java110.web.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.core.component.BaseComponentSMO;
+import com.java110.utils.util.StringUtil;
 import com.java110.web.smo.IStaffServiceSMO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +39,16 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         logger.debug("保存员工信息入参：{}", pd.toString());
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         Assert.hasKeyAndValue(reqJson, "username", "请求报文格式错误或未包含用户名信息");
-        Assert.hasKeyAndValue(reqJson, "email", "请求报文格式错误或未包含邮箱信息");
+        //Assert.hasKeyAndValue(reqJson, "email", "请求报文格式错误或未包含邮箱信息");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文格式错误或未包含手机信息");
         Assert.hasKeyAndValue(reqJson, "sex", "请求报文格式错误或未包含性别信息");
         Assert.hasKeyAndValue(reqJson, "address", "请求报文格式错误或未包含地址信息");
         Assert.hasKeyAndValue(reqJson, "orgId", "请求报文格式错误或未包含部门信息");
         Assert.hasKeyAndValue(reqJson, "relCd", "请求报文格式错误或未包含员工角色");
+
+        if (reqJson.containsKey("email") && !StringUtil.isEmpty(reqJson.getString("email"))) {
+            Assert.isEmail(reqJson, "email", "不是有效的邮箱格式");
+        }
 
 
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
@@ -54,7 +60,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
 
         String storeId = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeId");
         String storeTypeCd = JSONObject.parseObject(responseEntity.getBody().toString()).getString("storeTypeCd");
-       // JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        // JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("name", reqJson.getString("username"));
         reqJson.put("storeId", storeId);
         reqJson.put("storeTypeCd", storeTypeCd);
@@ -84,7 +90,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         if (rows > 50) {
             return new ResponseEntity<String>("rows 数量不能大于50", HttpStatus.BAD_REQUEST);
         }
-       // page = (page - 1) * rows;
+        // page = (page - 1) * rows;
         ResponseEntity responseEntity = super.getStoreInfo(pd, restTemplate);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
@@ -95,8 +101,8 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
         //paramIn.put("page", page);
         paramIn.put("storeId", storeId);
         //if (StringUtil.isEmpty(staffName)) {
-            responseEntity = this.callCenterService(restTemplate, pd, "",
-                    ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos" + super.mapToUrlParam(paramIn), HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/query.staff.infos" + super.mapToUrlParam(paramIn), HttpMethod.GET);
        /* } else {
             responseEntity = this.callCenterService(restTemplate, pd, "",
                     ServiceConstant.SERVICE_API_URL + "/api/query.staff.byName?rows=" + rows + "&page=" + page + "&storeId=" + storeId + "&name=" + staffName, HttpMethod.GET);
@@ -141,11 +147,12 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     public ResponseEntity<String> delete(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         Assert.jsonObjectHaveKey(pd.getReqData(), "userId", "请求报文格式错误或未包含用户ID信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "storeId", "请求报文格式错误或未包含商户ID信息");
+        //Assert.jsonObjectHaveKey(pd.getReqData(), "storeId", "请求报文格式错误或未包含商户ID信息");
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         JSONObject newParam = new JSONObject();
         newParam.put("userId", paramIn.getString("userId"));
-        newParam.put("storeId", paramIn.getString("storeId"));
+        newParam.put("storeId", result.getStoreId());
         //修改用户信息
         responseEntity = this.callCenterService(restTemplate, pd, newParam.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/user.staff.delete", HttpMethod.POST);
@@ -283,10 +290,14 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     private void modifyStaffValidate(IPageData pd) {
         Assert.jsonObjectHaveKey(pd.getReqData(), "userId", "请求报文格式错误或未包含用户ID信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "username", "请求报文格式错误或未包含用户名信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "email", "请求报文格式错误或未包含邮箱信息");
+        //Assert.jsonObjectHaveKey(pd.getReqData(), "email", "请求报文格式错误或未包含邮箱信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "tel", "请求报文格式错误或未包含手机信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "sex", "请求报文格式错误或未包含性别信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "address", "请求报文格式错误或未包含地址信息");
+        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
+        if (reqJson.containsKey("email") && !StringUtil.isEmpty(reqJson.getString("email"))) {
+            Assert.isEmail(reqJson, "email", "不是有效的邮箱格式");
+        }
     }
 
 
