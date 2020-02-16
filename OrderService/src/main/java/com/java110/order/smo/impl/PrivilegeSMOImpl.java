@@ -117,8 +117,6 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
         Assert.jsonObjectHaveKey(privilegeGroupInfo, "storeTypeCd", "请求报文中未包含storeTypeCd节点");
         JSONObject privilegeGroupObj = JSONObject.parseObject(privilegeGroupInfo);
 
-        privilegeGroupObj.put("pgId", GenerateCodeFactory.getPgId());
-
         if (privilegeDAOImpl.updatePrivilegeGroup(privilegeGroupObj)) {
             return new ResponseEntity<String>("成功", HttpStatus.OK);
         }
