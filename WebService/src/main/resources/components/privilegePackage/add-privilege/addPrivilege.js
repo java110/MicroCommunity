@@ -13,7 +13,7 @@
             }
         },
         watch: { // 监视双向绑定的数据数组
-            checkData: {
+            addPrivilegeInfo: {
                 handler(){ // 数据数组有变化将触发此函数
                     if(vc.component.addPrivilegeInfo.selectPrivileges.length == vc.component.addPrivilegeInfo._noAddPrivilege.length){
                         document.querySelector('#quan').checked = true;

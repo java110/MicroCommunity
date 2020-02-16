@@ -234,7 +234,7 @@ public class StaffServiceSMOImpl extends BaseComponentSMO implements IStaffServi
     public ResponseEntity<String> addStaffPrivilegeOrPrivilegeGroup(IPageData pd) {
         ResponseEntity<String> responseEntity = null;
         Assert.jsonObjectHaveKey(pd.getReqData(), "userId", "请求报文格式错误或未包含用户ID信息");
-        Assert.jsonObjectHaveKey(pd.getReqData(), "pId", "请求报文格式错误或未包含权限ID信息");
+        Assert.jsonObjectHaveKey(pd.getReqData(), "pIds", "请求报文格式错误或未包含权限ID信息");
         Assert.jsonObjectHaveKey(pd.getReqData(), "pFlag", "请求报文格式错误");
         JSONObject _paramObj = JSONObject.parseObject(pd.getReqData());
         responseEntity = super.getStoreInfo(pd, restTemplate);

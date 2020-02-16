@@ -9,7 +9,27 @@
                 errorInfo:'',
                 _noAddPrivilege:[],
                 _noAddPrivilegeGroup:[],
-                _currentTab:1
+                _currentTab:1,
+                selectPrivileges:[],
+                selectPrivilegeGroups:[]
+            }
+        },
+        watch: { // 监视双向绑定的数据数组
+            addStaffPrivilegeInfo: {
+                handler(){ // 数据数组有变化将触发此函数
+                    if(vc.component.addStaffPrivilegeInfo.selectPrivileges.length == vc.component.addStaffPrivilegeInfo._noAddPrivilege.length){
+                        document.querySelector('#quan').checked = true;
+                    }else {
+                        document.querySelector('#quan').checked = false;
+                    }
+
+                    if(vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups.length == vc.component.addStaffPrivilegeInfo._noAddPrivilegeGroup.length){
+                        document.querySelector('#quanGroup').checked = true;
+                    }else {
+                        document.querySelector('#quanGroup').checked = false;
+                    }
+                },
+                deep: true // 深度监视
             }
         },
          _initMethod:function(){
@@ -86,12 +106,34 @@
                                 vc.component.addStaffPrivilegeInfo.errorInfo = errInfo;
                              });
             },
-            addStaffPrivilege:function(_pId,_privilegeFlag){
+            addStaffPrivilege:function(){
                 vc.component.addStaffPrivilegeInfo.errorInfo = "";
+                var _pIds = [];
+                var _selectPrivilegeGroups = vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups;
+                var _selectPrivileges = vc.component.addStaffPrivilegeInfo.selectPrivileges;
+                if(vc.component.addStaffPrivilegeInfo._currentTab == 1){
+                    for(var _pIndex = 0;pIndex < _selectPrivilegeGroups.length;pIndex++){
+                        var _pgId = {
+                            pId: _selectPrivilegeGroups[pIndex]
+                        }
+                        _pIds.push(_pgId);
+                    }
+                }else{
+                    for(var _pIndex = 0;pIndex < _selectPrivileges.length;pIndex++){
+                        var _pId = {
+                            pId: _selectPrivileges[pIndex]
+                        }
+                        _pIds.push(_pId);
+                    }
+                }
+                if(_pIds.length < 1){
+                    vc.toast('未选择相应权限或权限组');
+                    return ;
+                }
                 var param = {
                     userId:vc.component.addStaffPrivilegeInfo._currentUserId,
-                    pId:_pId,
-                    pFlag:_privilegeFlag
+                    pIds:_pIds,
+                    pFlag:vc.component.addStaffPrivilegeInfo._currentTab
                 };
                 vc.http.post(
                     'addStaffPrivilege',
@@ -117,14 +159,6 @@
 
                         vc.component.addStaffPrivilegeInfo.errorInfo = errInfo;
                      });
-            },
-            userAddPrivilegeGroup:function(_pgId){
-                console.log("需要添加权限：",_pgId);
-                vc.component.addStaffPrivilege(_pgId,1)
-            },
-            userAddPrivilege:function(_pId){
-                console.log("需要添加权限：",_pId);
-                vc.component.addStaffPrivilege(_pId,2)
             }
         }
     });
