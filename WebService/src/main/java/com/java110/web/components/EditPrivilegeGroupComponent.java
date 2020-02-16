@@ -26,10 +26,10 @@ public class EditPrivilegeGroupComponent {
      * @param pd
      * @return
      */
-    public ResponseEntity<String> savePrivilegeGroupInfo(IPageData pd){
+    public ResponseEntity<String> editPrivilegeGroupInfo(IPageData pd){
         ResponseEntity<String> responseEntity = null;
         try{
-            responseEntity =  privilegeServiceSMOImpl.savePrivilegeGroup(pd);
+            responseEntity =  privilegeServiceSMOImpl.editPrivilegeGroup(pd);
         }catch (Exception e){
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }finally {

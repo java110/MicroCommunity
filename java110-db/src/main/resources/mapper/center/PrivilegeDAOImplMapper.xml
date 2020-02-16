@@ -31,10 +31,10 @@
     <update id="updatePrivilegeGroup" parameterType="Map">
         UPDATE p_privilege_group a SET
         <if test="name != null and name != ''">
-            and a.name = #{name},
+             a.name = #{name},
         </if>
         <if test="description != null and description != ''">
-            and a.description = #{description}
+             a.description = #{description}
         </if>
         WHERE 1= 1
         <if test="storeId != null and storeId != ''">

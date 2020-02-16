@@ -58,7 +58,7 @@
 
                 });
             },
-            saveAddPrivilegeGroup:function(){
+            saveEditPrivilegeGroup:function(){
                 if(!vc.component.editPrivilegeGroupValidate()){
                     vc.component.editPrivilegeGroupInfo.errorInfo = vc.validate.errInfo;
                     return ;
@@ -66,7 +66,7 @@
                 vc.component.editPrivilegeGroupInfo.errorInfo = "";
                 vc.http.post(
                     'editPrivilegeGroup',
-                    'savePrivilegeGroupInfo',
+                    'editPrivilegeGroupInfo',
                     JSON.stringify(vc.component.editPrivilegeGroupInfo),
                     {
                         emulateJSON:true
@@ -76,7 +76,7 @@
                         if(res.status == 200){
                             //关闭model
                             $('#editPrivilegeGroupModel').modal('hide');
-                            vc.component.clearAddPrivilegeGroupInfo();
+                            vc.component.clearEditPrivilegeGroupInfo();
                             vc.component.$emit('privilegeGroup_loadPrivilegeGroup',{});
                             return ;
                         }
@@ -88,7 +88,7 @@
                         vc.component.editPrivilegeGroupInfo.errorInfo = errInfo;
                      });
             },
-            clearAddPrivilegeGroupInfo:function(){
+            clearEditPrivilegeGroupInfo:function(){
                 vc.component.editPrivilegeGroupInfo = {
                     pgId:'',
                     name:'',
