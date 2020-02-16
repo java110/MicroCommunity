@@ -19,7 +19,7 @@
                                         <thead>
                                         <tr>
                                             <th class="text-center">
-                                                <input type="checkbox"  class="i-checks " @click="checkAllGroup($event)" id="quanGroup">
+                                                <input type="checkbox"  class="i-checks" v-bind:checked="addStaffPrivilegeInfo.quanGroup == true" @click="checkAllGroup($event)" >
                                             </th>
                                             <th>权限组编码</th>
                                             <th>权限组名称</th>
@@ -43,7 +43,7 @@
                                         <thead>
                                         <tr>
                                             <th class="text-center">
-                                                <input type="checkbox"  class="i-checks " @click="checkAll($event)" id="quan">
+                                                <input type="checkbox"  class="i-checks " v-bind:checked="addStaffPrivilegeInfo.quan == true" @click="checkAll($event)">
                                             </th>
                                             <th>权限编码</th>
                                             <th>权限名称</th>

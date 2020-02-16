@@ -11,22 +11,24 @@
                 _noAddPrivilegeGroup:[],
                 _currentTab:1,
                 selectPrivileges:[],
-                selectPrivilegeGroups:[]
+                selectPrivilegeGroups:[],
+                quanGroup:false,
+                quan:false
             }
         },
         watch: { // 监视双向绑定的数据数组
             addStaffPrivilegeInfo: {
                 handler(){ // 数据数组有变化将触发此函数
                     if(vc.component.addStaffPrivilegeInfo.selectPrivileges.length == vc.component.addStaffPrivilegeInfo._noAddPrivilege.length){
-                        document.querySelector('#quan').checked = true;
+                       vc.component.addStaffPrivilegeInfo.quan= true;
                     }else {
-                        document.querySelector('#quan').checked = false;
+                       vc.component.addStaffPrivilegeInfo.quan= false;
                     }
 
                     if(vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups.length == vc.component.addStaffPrivilegeInfo._noAddPrivilegeGroup.length){
-                        document.querySelector('#quanGroup').checked = true;
+                       vc.component.addStaffPrivilegeInfo.quanGroup= true;
                     }else {
-                        document.querySelector('#quanGroup').checked = false;
+                       vc.component.addStaffPrivilegeInfo.quanGroup= false;
                     }
                 },
                 deep: true // 深度监视
@@ -112,16 +114,16 @@
                 var _selectPrivilegeGroups = vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups;
                 var _selectPrivileges = vc.component.addStaffPrivilegeInfo.selectPrivileges;
                 if(vc.component.addStaffPrivilegeInfo._currentTab == 1){
-                    for(var _pIndex = 0;pIndex < _selectPrivilegeGroups.length;pIndex++){
+                    for(var _pIndex = 0;_pIndex < _selectPrivilegeGroups.length;_pIndex++){
                         var _pgId = {
-                            pId: _selectPrivilegeGroups[pIndex]
+                            pId: _selectPrivilegeGroups[_pIndex]
                         }
                         _pIds.push(_pgId);
                     }
                 }else{
-                    for(var _pIndex = 0;pIndex < _selectPrivileges.length;pIndex++){
+                    for(var _pIndex = 0;_pIndex < _selectPrivileges.length;_pIndex++){
                         var _pId = {
-                            pId: _selectPrivileges[pIndex]
+                            pId: _selectPrivileges[_pIndex]
                         }
                         _pIds.push(_pId);
                     }
@@ -159,7 +161,31 @@
 
                         vc.component.addStaffPrivilegeInfo.errorInfo = errInfo;
                      });
-            }
+            },
+            checkAll:function(e){
+                    var checkObj = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
+                    if(e.target.checked){ // 判定全选checkbox的勾选状态
+                        for(var i=0;i<checkObj.length;i++){
+                            if(!checkObj[i].checked){ // 将未勾选的checkbox选项push到绑定数组中
+                                vc.component.addStaffPrivilegeInfo.selectPrivileges.push(checkObj[i].value);
+                            }
+                        }
+                    }else { // 如果是去掉全选则清空checkbox选项绑定数组
+                        vc.component.addStaffPrivilegeInfo.selectPrivileges = [];
+                    }
+            },
+            checkAllGroup:function(e){
+                     var checkObj = document.querySelectorAll('.checkGroupItem'); // 获取所有checkbox项
+                     if(e.target.checked){ // 判定全选checkbox的勾选状态
+                         for(var i=0;i<checkObj.length;i++){
+                             if(!checkObj[i].checked){ // 将未勾选的checkbox选项push到绑定数组中
+                                 vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups.push(checkObj[i].value);
+                             }
+                         }
+                     }else { // 如果是去掉全选则清空checkbox选项绑定数组
+                         vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups = [];
+                     }
+             }
         }
     });
 
