@@ -154,8 +154,11 @@ public class PrivilegeSMOImpl implements IPrivilegeSMO {
 
         JSONArray pIds = privilegeObj.getJSONArray("pIds");
         int errorCount = 0;
+        JSONObject tmpPId = null;
         for (int pIdIndex = 0; pIdIndex < pIds.size(); pIdIndex++) {
             try {
+                tmpPId = pIds.getJSONObject(pIdIndex);
+                privilegeObj.put("pId", tmpPId.getString("pId"));
                 if (!privilegeDAOImpl.addPrivilegeRel(privilegeObj)) {
                     errorCount++;
                 }

@@ -74,7 +74,7 @@
                     var _pId = {
                         pId: _selectPrivileges[selectIndex]
                     };
-                    _pIds.push(_pId)l
+                    _pIds.push(_pId);
                 }
                 var _objData = {
                     pgId:vc.component.addPrivilegeInfo._currentPgId,
@@ -83,7 +83,7 @@
                 vc.http.post(
                     'addPrivilege',
                     'addPrivilegeToPrivilegeGroup',
-                    JSON.stringify(_privilegeInfo),
+                    JSON.stringify(_objData),
                     {
                         emulateJSON:true
                      },
