@@ -18,9 +18,9 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <div class="input-group">
-                                            <input placeholder="输入权限名称" type="text" class="form-control form-control-sm">
+                                            <input placeholder="输入权限名称" type="text" v-model = "addPrivilegeInfo._pName" class="form-control form-control-sm">
                                             <span class="input-group-append">
-                                                <button type="button" class="btn btn-sm btn-primary">查询</button>
+                                                <button type="button" class="btn btn-sm btn-primary" @click="listNoAddPrivilege()">查询</button>
                                             </span>
                                         </div>
                                     </div>

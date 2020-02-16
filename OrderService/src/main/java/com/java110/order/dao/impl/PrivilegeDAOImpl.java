@@ -66,6 +66,21 @@ public class PrivilegeDAOImpl extends BaseServiceDao implements IPrivilegeDAO {
     }
 
     /**
+     * 保存权限组
+     * @param info
+     * @return
+     */
+    @Override
+    public boolean updatePrivilegeGroup(Map info) {
+        logger.debug("编辑权限组信息入参：{}",info);
+        int saveFlag = sqlSessionTemplate.insert("privilegeDAOImpl.updatePrivilegeGroup",info);
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"编辑权限组信息失败："+ JSONObject.toJSONString(info));
+        }
+        return true;
+    }
+
+    /**
      * 删除权限组
      * @param info
      * @return

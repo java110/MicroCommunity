@@ -26,6 +26,26 @@
         INSERT INTO p_privilege_group(pg_id,`name`,description,store_id,domain)
         VALUES(#{pgId},#{name},#{description},#{storeId},#{storeTypeCd})
     </insert>
+
+
+    <update id="updatePrivilegeGroup" parameterType="Map">
+        UPDATE p_privilege_group a SET
+        <if test="name != null and name != ''">
+            and a.name = #{name},
+        </if>
+        <if test="description != null and description != ''">
+            and a.description = #{description}
+        </if>
+        WHERE 1= 1
+        <if test="storeId != null and storeId != ''">
+            and a.store_id = #{storeId}
+        </if>
+        and a.pg_id = #{pgId}
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and a.domain= #{storeTypeCd}
+        </if>
+
+    </update>
     <!-- 删除权限组 -->
     <update id="deletePrivilegeGroup" parameterType="Map">
         UPDATE p_privilege_group a SET a.`status_cd` = '1'

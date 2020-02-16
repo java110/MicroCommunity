@@ -11,6 +11,9 @@
                         <a v-on:click="notifyQueryPrivilege(pGroup)">
                             <i class="glyphicon glyphicon-chevron-right text-navy"></i>
                             {{pGroup.name}}
+                            <i v-if="pGroup.storeId != '9999'" class="glyphicon glyphicon-edit float-right"
+                               style="color:#dc3545"
+                               v-on:click.stop="openEditPrivilegeGroupModel(pGroup)"></i>
                             <i v-if="pGroup.storeId != '9999'" class="glyphicon glyphicon-remove-sign float-right"
                                style="color:#dc3545"
                                v-on:click.stop="openDeletePrivilegeGroupModel(pGroup)"></i>
@@ -22,6 +25,7 @@
             </div>
 
             <vc:create name="addPrivilegeGroup"></vc:create>
+            <vc:create name="editPrivilegeGroup"></vc:create>
             <vc:create name="deletePrivilegeGroup"></vc:create>
         </div>
     </div>

@@ -33,6 +33,13 @@ public interface IPrivilegeDAO {
     public boolean savePrivilegeGroup(Map info);
 
     /**
+     * 编辑权限组
+     * @param info
+     * @return
+     */
+    public boolean updatePrivilegeGroup(Map info);
+
+    /**
      * 删除权限组
      * @param info
      * @return

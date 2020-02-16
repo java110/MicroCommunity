@@ -4,6 +4,7 @@
         data:{
             addPrivilegeInfo:{
                 _currentPgId:'',
+                _pName:'',
                 name:'',
                 description:'',
                 errorInfo:'',
@@ -39,7 +40,8 @@
                 vc.component.addPrivilegeInfo._noAddPrivilege=[];
                 var param = {
                     params:{
-                        pgId:vc.component.addPrivilegeInfo._currentPgId
+                        pgId:vc.component.addPrivilegeInfo._currentPgId,
+                        pName:vc.component.addPrivilegeInfo._pName
                     }
                 }
                 vc.http.get(
@@ -92,6 +94,7 @@
                         if(res.status == 200){
                             //关闭model
                             vc.component.listNoAddPrivilege();
+                            $('#addPrivilegeModel').modal('hide');
                             vc.component.$emit('privilege_loadPrivilege',vc.component.addPrivilegeInfo._currentPgId);
                             return ;
                         }

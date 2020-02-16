@@ -31,6 +31,13 @@ public interface IPrivilegeServiceSMO {
     public ResponseEntity<String> savePrivilegeGroup(IPageData pd);
 
     /**
+     * 编辑权限组
+     * @param pd
+     * @return
+     */
+    public ResponseEntity<String> editPrivilegeGroup(IPageData pd);
+
+    /**
      * 删除权限组
      * @param pd
      * @return
