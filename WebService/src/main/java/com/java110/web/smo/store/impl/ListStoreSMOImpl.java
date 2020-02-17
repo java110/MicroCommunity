@@ -47,8 +47,8 @@ public class ListStoreSMOImpl extends AbstractComponentSMO implements IListStore
             throw new IllegalArgumentException("您当前没有权限访问");
         }
 
-        Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+//        Map paramMap = BeanConvertUtil.beanCovertMap(result);
+//        paramIn.putAll(paramMap);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/store.listStores" + mapToUrlParam(paramIn);
 

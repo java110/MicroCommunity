@@ -44,12 +44,13 @@ public class ListCommunitysSMOImpl extends AbstractComponentSMO implements IList
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+        if(!paramIn.containsKey("storeId")) {
+            Map paramMap = BeanConvertUtil.beanCovertMap(result);
+            paramIn.putAll(paramMap);
+        }
 
-
-        if(!StoreTypeConstant.STORE_TYPE_SYSTEM_MANAGER.equals(result.getStoreTypeCd())) {
-            paramIn.put("memberId", result.getStoreId());
+        if(!StoreTypeConstant.STORE_TYPE_SYSTEM_MANAGER.equals(result.getStoreTypeCd()) || paramIn.containsKey("storeId")) {
+            paramIn.put("memberId", paramIn.getString("storeId"));
         }
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/community.listCommunitys" + mapToUrlParam(paramIn);

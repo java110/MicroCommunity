@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * <p>
  * 2019-06-29
  */
-@Component("listStoreManageManage")
+@Component("listStoreManage")
 public class ListStoreManageComponent {
 
     @Autowired

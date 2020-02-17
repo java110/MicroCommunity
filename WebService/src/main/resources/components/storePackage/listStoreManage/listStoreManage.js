@@ -46,7 +46,7 @@
                         var _listStoreManageInfo = JSON.parse(json);
                         vc.component.listStoreManageInfo.total = _listStoreManageInfo.total;
                         vc.component.listStoreManageInfo.records = _listStoreManageInfo.records;
-                        vc.component.listStoreManageInfo.listStores = _listStoreManageInfo.listStores;
+                        vc.component.listStoreManageInfo.listStores = _listStoreManageInfo.stores;
                         vc.emit('pagination', 'init', {
                             total: vc.component.listStoreManageInfo.records,
                             currentPage: _page
@@ -56,8 +56,8 @@
                     }
                 );
             },
-            _openDeleteListStoreModel: function (_listStore) {
-                vc.emit('deleteListStore', 'openDeleteListStoreModal', _listStore);
+            _openStoresCommunityModel: function (_listStore) {
+                vc.emit('storesCommunity','openStoresCommunity', _listStore);
             },
             _queryListStoreMethod: function () {
                 vc.component._listListStores(DEFAULT_PAGE, DEFAULT_ROWS);

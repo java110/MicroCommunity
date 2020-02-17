@@ -58,7 +58,7 @@ public class ListStoresListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
+        //Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
 
     }
 
@@ -95,16 +95,16 @@ public class ListStoresListener extends AbstractServiceApiListener {
         storeAttrDto.setStoreIds(getStoreIds(stores));
         List<StoreAttrDto> storeAttrDtos = storeInnerServiceSMOImpl.getStoreAttrs(storeAttrDto);
 
-        for(ApiStoreDataVo storeDataVo : stores){
-            for(StoreAttrDto tmpStoreAttrDto: storeAttrDtos){
-                if(!storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())){
+        for (ApiStoreDataVo storeDataVo : stores) {
+            for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
+                if (!storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())) {
                     continue;
                 }
-                if("100201903001".equals(tmpStoreAttrDto.getSpecCd())){
+                if ("100201903001".equals(tmpStoreAttrDto.getSpecCd())) {
                     storeDataVo.setArtificialPerson(tmpStoreAttrDto.getValue());
-                }else if("100201903003".equals(tmpStoreAttrDto.getSpecCd())){
+                } else if ("100201903003".equals(tmpStoreAttrDto.getSpecCd())) {
                     storeDataVo.setEstablishment(tmpStoreAttrDto.getValue());
-                }else if("100201903005".equals(tmpStoreAttrDto.getSpecCd())){
+                } else if ("100201903005".equals(tmpStoreAttrDto.getSpecCd())) {
                     storeDataVo.setBusinessScope(tmpStoreAttrDto.getValue());
                 }
             }
