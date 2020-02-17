@@ -1,6 +1,7 @@
 package com.java110.user.dao;
 
 
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.entity.merchant.BoMerchant;
 import com.java110.entity.merchant.BoMerchantAttr;
@@ -77,5 +78,7 @@ public interface IOrgStaffRelServiceDao {
      * @return 组织员工关系数量
      */
     int queryOrgStaffRelsCount(Map info);
+
+    List<OrgStaffRelDto> queryOrgInfoByStaffIds(Map info);
 
 }
