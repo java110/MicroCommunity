@@ -18,10 +18,16 @@
                         </div>
                         <div class="col-sm-4">
                             <select class="custom-select" v-model="inspectionPlanManageInfo.conditions.state">
-                                <option selected value="">请选择当前状态</option>
-                                <option value="888800010001">处理中</option>
-                                <option value="888800010002">已完成</option>
+                                <option selected disabled value="">必填，请选择状态</option>
+                                <option v-for="(item,index) in inspectionPlanManageInfo.states" :key="index"
+                                        v-bind:value="item.statusCd">{{item.name}}
+                                </option>
                             </select>
+<!--                            <select class="custom-select" v-model="inspectionPlanManageInfo.conditions.state">-->
+<!--                                <option selected value="">请选择当前状态</option>-->
+<!--                                <option value="888800010001">处理中</option>-->
+<!--                                <option value="888800010002">已完成</option>-->
+<!--                            </select>-->
                         </div>
                         <div class="col-sm-1">
                             <button type="button" class="btn btn-primary btn-sm"

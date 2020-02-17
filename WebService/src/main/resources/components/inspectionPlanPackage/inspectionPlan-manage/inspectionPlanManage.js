@@ -12,6 +12,7 @@
                 records: 1,
                 moreCondition: false,
                 inspectionPlanName: '',
+                states:'',
                 conditions: {
                     keyWord: '',
                     state: '',
@@ -21,6 +22,9 @@
         },
         _initMethod: function () {
             vc.component._listInspectionPlans(DEFAULT_PAGE, DEFAULT_ROWS);
+            vc.getDict('inspection_plan',"state",function(_data){
+                vc.component.inspectionPlanManageInfo.states = _data;
+            });
         },
         _initEvent: function () {
 

@@ -26,14 +26,14 @@
         },
         _initMethod: function () {
             vc.component._initAddInspectionPlanDateInfo();
-            vc.getDict('pay_fee_config',"fee_type_cd",function(_data){
+            vc.getDict('inspection_plan',"inspection_plan_period",function(_data){
                 console.log("收到字典参数:"+_data);
                 vc.component.addInspectionPlanInfo.inspectionPlanPeriods = _data;
             });
-            vc.getDict('pay_fee_config',"fee_type_cd",function(_data){
+            vc.getDict('inspection_plan',"state",function(_data){
                 vc.component.addInspectionPlanInfo.states = _data;
             });
-            vc.getDict('pay_fee_config',"fee_type_cd",function(_data){
+            vc.getDict('inspection_plan',"sign_type",function(_data){
                 vc.component.addInspectionPlanInfo.signTypes = _data;
             });
 
