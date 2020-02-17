@@ -31,7 +31,7 @@
                 var param = {
                     params:{
                         pgId:_pgId,
-                        name:vc.component.privilegeInfo._currentPgName
+                        name:vc.component.privilegeInfo._pName
 
                     }
                 };
@@ -50,7 +50,7 @@
             },
             openAddPrivilegeModel:function(){
                 vc.component.$emit('addPrivilege_openPrivilegeModel',{
-                            pgId:vc.component.privilegeInfo._pName
+                            pgId:vc.component.privilegeInfo._currentPgId
                 });
             },
             openDeletePrivilegeModel:function(_p){

@@ -1,5 +1,5 @@
 <div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
-    <div class="row">
+    <div class="row" v-show="orgManageInfo.showBelongCommunity == false">
         <div class="col-lg-3">
             <div id="orgTree" class="" style="background: #fff;"></div>
         </div>
@@ -73,8 +73,7 @@
                                     <th class="text-center">组织名称</th>
                                     <th class="text-center">组织级别</th>
                                     <th class="text-center">上级组织</th>
-                                    <th class="text-center">隶属小区</th>
-                                    <th class="text-center">操作</th>
+                                    <th class="text-right">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -83,8 +82,10 @@
                                     <td class="text-center">{{org.orgName}}</td>
                                     <td class="text-center">{{org.orgLevelName}}</td>
                                     <td class="text-center">{{org.orgLevel == 1 ? '无' : org.parentOrgName}}</td>
-                                    <td class="text-center">{{org.belongCommunityName}}</td>
-                                    <td class="text-center">
+                                    <td class="text-right">
+                                        <div v-if="org.allowOperation == 'F' && org.belongCommunityId == '9999'">
+                                            隶属所有小区
+                                        </div>
                                         <div class="btn-group" v-if="org.allowOperation == 'T'">
                                             <button class="btn-white btn btn-xs" v-on:click="_openEditOrgModel(org)">
                                                 修改
@@ -93,6 +94,11 @@
                                         <div class="btn-group" v-if="org.allowOperation == 'T'">
                                             <button class="btn-white btn btn-xs" v-on:click="_openDeleteOrgModel(org)">
                                                 删除
+                                            </button>
+                                        </div>
+                                        <div class="btn-group" v-if="org.orgLevel == 2 && org.allowOperation == 'T'">
+                                            <button class="btn-white btn btn-xs" v-on:click="_openBeyondCommunity(org)">
+                                                隶属小区
                                             </button>
                                         </div>
                                     </td>
@@ -116,11 +122,16 @@
         </div>
     </div>
 
+    <div  v-if="orgManageInfo.showBelongCommunity == true">
+        <vc:create name="orgCommunityManage"></vc:create>
+    </div>
+
     <vc:create name="addOrg"
                callBackListener=""
                callBackFunction=""
     ></vc:create>
     <vc:create name="editOrg"></vc:create>
     <vc:create name="deleteOrg"></vc:create>
+
 
 </div>

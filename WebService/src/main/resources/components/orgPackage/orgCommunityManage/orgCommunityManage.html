@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>{{orgCommunityManageInfo.orgName}}隶属小区</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_goBack()">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        返回
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddOrgCommunityModal()">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        添加
+                    </button>
+                </div>
+            </div>
+            <div class="ibox-content">
+
+                <table class="footable table table-stripped toggle-arrow-tiny"
+                       data-page-size="15"
+                >
+                    <thead>
+                    <tr>
+                        <th class="text-center">组织ID</th>
+                        <th class="text-center">组织名称</th>
+                        <th class="text-center">小区ID</th>
+                        <th class="text-center">小区名称</th>
+                        <th class="text-right">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="orgCommunity in orgCommunityManageInfo.orgCommunitys">
+                        <td class="text-center">{{orgCommunity.orgId}}</td>
+                        <td class="text-center">{{orgCommunity.orgName}}</td>
+                        <td class="text-center">{{orgCommunity.communityId}}</td>
+                        <td class="text-center">{{orgCommunity.communityName}}</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <button class="btn-white btn btn-xs"
+                                        v-on:click="_openDeleteOrgCommunityModel(orgCommunity)">
+                                    删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <ul class="pagination float-right"></ul>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <!-- 分页 -->
+                <vc:create name="pagination"></vc:create>
+            </div>
+        </div>
+    </div>
+    <vc:create name="addOrgCommunity"
+               emitListener="orgCommunityManageInfo"
+               emitFunction="listOrgCommunity"
+    ></vc:create>
+    <vc:create name="deleteOrgCommunity"></vc:create>
+</div>
+
+

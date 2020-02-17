@@ -18,46 +18,48 @@
                                     <table class="table table-striped" v-if="addStaffPrivilegeInfo._currentTab == 1">
                                         <thead>
                                         <tr>
-
+                                            <th class="text-center">
+                                                <input type="checkbox"  class="i-checks" v-bind:checked="addStaffPrivilegeInfo.quanGroup == true" @click="checkAllGroup($event)" >
+                                            </th>
                                             <th>权限组编码</th>
                                             <th>权限组名称</th>
                                             <th>权限组描述</th>
                                             <th>创建时间</th>
-                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="privilegeGroup in addStaffPrivilegeInfo._noAddPrivilegeGroup">
+                                                <td class="text-center">
+                                                    <input type="checkbox" class="i-checks checkGroupItem" v-bind:value="privilegeGroup.pgId" v-model="addStaffPrivilegeInfo.selectPrivilegeGroups" >
+                                                </td>
                                                 <td>{{privilegeGroup.pgId}}</td>
                                                 <td>{{privilegeGroup.name}}</td>
                                                 <td>{{privilegeGroup.description}}</td>
                                                 <td>{{vc.dateFormat(privilegeGroup.createTime)}}</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-xs" v-on:click="userAddPrivilegeGroup(privilegeGroup.pgId)">添加</button>
-                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <table class="table table-striped" v-if="addStaffPrivilegeInfo._currentTab == 2">
                                         <thead>
                                         <tr>
-
+                                            <th class="text-center">
+                                                <input type="checkbox"  class="i-checks " v-bind:checked="addStaffPrivilegeInfo.quan == true" @click="checkAll($event)">
+                                            </th>
                                             <th>权限编码</th>
                                             <th>权限名称</th>
                                             <th>权限描述</th>
                                             <th>创建时间</th>
-                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="privilege in addStaffPrivilegeInfo._noAddPrivilege">
+                                            <td class="text-center">
+                                                <input type="checkbox" class="i-checks checkItem" v-bind:value="privilege.pId" v-model="addStaffPrivilegeInfo.selectPrivileges" >
+                                            </td>
                                             <td>{{privilege.pId}}</td>
                                             <td>{{privilege.name}}</td>
                                             <td>{{privilege.description}}</td>
                                             <td>{{vc.dateFormat(privilege.createTime)}}</td>
-                                            <td>
-                                                <button class="btn btn-primary btn-xs" v-on:click="userAddPrivilege(privilege.pId)">添加</button>
-                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -69,6 +71,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" v-on:click="addStaffPrivilege()">提交</button>
             </div>
         </div>
     </div>

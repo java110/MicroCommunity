@@ -89,18 +89,6 @@
                             errInfo: "上级ID不正确"
                         },
                     ],
-                    'addOrgInfo.belongCommunityId': [
-                        {
-                            limit: "required",
-                            param: "",
-                            errInfo: "隶属小区不能为空"
-                        },
-                        {
-                            limit: "num",
-                            param: "",
-                            errInfo: "隶属小区不正确"
-                        },
-                    ],
                     'addOrgInfo.description': [
 
                         {

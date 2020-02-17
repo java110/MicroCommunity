@@ -29,10 +29,9 @@
                     <tr>
                         <th>权限编码</th>
                         <th>权限名称</th>
-                        <th>资源路径</th>
                         <th>权限描述</th>
                         <th>创建时间</th>
-                        <th>操作</th>
+                        <th class="text-right">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,13 +40,12 @@
                         {{privilege.pId}}
                     </td>
                     <td class="mail-ontact">{{privilege.name}}</td>
-                    <td class="mail-ontact">{{privilege.resource}}</td>
                     <td class="mail-subject">{{privilege.description}}</td>
                     <td class="">{{vc.dateFormat(privilege.createTime)}}</td>
-                    <td class="text-right mail-date">
-                        <i  v-if="privilegeInfo._currentStoreId != '9999'"
-                                                         v-on:click="openDeletePrivilegeModel(privilege)"
-                                                         class="glyphicon glyphicon-remove"></i>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button class="btn-white btn btn-xs" v-on:click="openDeletePrivilegeModel(privilege)">删除</button>
+                        </div>
                     </td>
                 </tr>
 

@@ -54,6 +54,9 @@
             openPrivilegeGroupModel:function(){
                 vc.component.$emit('addPrivilegeGroup_openPrivilegeGroupModel',{});
             },
+            openEditPrivilegeGroupModel:function(_pGroup){
+                vc.emit('editPrivilegeGroup','openPrivilegeGroupModel',_pGroup);
+            },
             openDeletePrivilegeGroupModel:function(_pGroup){
                 vc.component.$emit('deletePrivilegeGroup_openDeletePrivilegeGroupModel',_pGroup);
             }

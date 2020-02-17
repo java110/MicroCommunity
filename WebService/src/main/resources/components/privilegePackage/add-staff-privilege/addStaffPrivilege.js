@@ -9,7 +9,29 @@
                 errorInfo:'',
                 _noAddPrivilege:[],
                 _noAddPrivilegeGroup:[],
-                _currentTab:1
+                _currentTab:1,
+                selectPrivileges:[],
+                selectPrivilegeGroups:[],
+                quanGroup:false,
+                quan:false
+            }
+        },
+        watch: { // 监视双向绑定的数据数组
+            addStaffPrivilegeInfo: {
+                handler(){ // 数据数组有变化将触发此函数
+                    if(vc.component.addStaffPrivilegeInfo.selectPrivileges.length == vc.component.addStaffPrivilegeInfo._noAddPrivilege.length){
+                       vc.component.addStaffPrivilegeInfo.quan= true;
+                    }else {
+                       vc.component.addStaffPrivilegeInfo.quan= false;
+                    }
+
+                    if(vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups.length == vc.component.addStaffPrivilegeInfo._noAddPrivilegeGroup.length){
+                       vc.component.addStaffPrivilegeInfo.quanGroup= true;
+                    }else {
+                       vc.component.addStaffPrivilegeInfo.quanGroup= false;
+                    }
+                },
+                deep: true // 深度监视
             }
         },
          _initMethod:function(){
@@ -86,12 +108,34 @@
                                 vc.component.addStaffPrivilegeInfo.errorInfo = errInfo;
                              });
             },
-            addStaffPrivilege:function(_pId,_privilegeFlag){
+            addStaffPrivilege:function(){
                 vc.component.addStaffPrivilegeInfo.errorInfo = "";
+                var _pIds = [];
+                var _selectPrivilegeGroups = vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups;
+                var _selectPrivileges = vc.component.addStaffPrivilegeInfo.selectPrivileges;
+                if(vc.component.addStaffPrivilegeInfo._currentTab == 1){
+                    for(var _pIndex = 0;_pIndex < _selectPrivilegeGroups.length;_pIndex++){
+                        var _pgId = {
+                            pId: _selectPrivilegeGroups[_pIndex]
+                        }
+                        _pIds.push(_pgId);
+                    }
+                }else{
+                    for(var _pIndex = 0;_pIndex < _selectPrivileges.length;_pIndex++){
+                        var _pId = {
+                            pId: _selectPrivileges[_pIndex]
+                        }
+                        _pIds.push(_pId);
+                    }
+                }
+                if(_pIds.length < 1){
+                    vc.toast('未选择相应权限或权限组');
+                    return ;
+                }
                 var param = {
                     userId:vc.component.addStaffPrivilegeInfo._currentUserId,
-                    pId:_pId,
-                    pFlag:_privilegeFlag
+                    pIds:_pIds,
+                    pFlag:vc.component.addStaffPrivilegeInfo._currentTab
                 };
                 vc.http.post(
                     'addStaffPrivilege',
@@ -118,14 +162,30 @@
                         vc.component.addStaffPrivilegeInfo.errorInfo = errInfo;
                      });
             },
-            userAddPrivilegeGroup:function(_pgId){
-                console.log("需要添加权限：",_pgId);
-                vc.component.addStaffPrivilege(_pgId,1)
+            checkAll:function(e){
+                    var checkObj = document.querySelectorAll('.checkItem'); // 获取所有checkbox项
+                    if(e.target.checked){ // 判定全选checkbox的勾选状态
+                        for(var i=0;i<checkObj.length;i++){
+                            if(!checkObj[i].checked){ // 将未勾选的checkbox选项push到绑定数组中
+                                vc.component.addStaffPrivilegeInfo.selectPrivileges.push(checkObj[i].value);
+                            }
+                        }
+                    }else { // 如果是去掉全选则清空checkbox选项绑定数组
+                        vc.component.addStaffPrivilegeInfo.selectPrivileges = [];
+                    }
             },
-            userAddPrivilege:function(_pId){
-                console.log("需要添加权限：",_pId);
-                vc.component.addStaffPrivilege(_pId,2)
-            }
+            checkAllGroup:function(e){
+                     var checkObj = document.querySelectorAll('.checkGroupItem'); // 获取所有checkbox项
+                     if(e.target.checked){ // 判定全选checkbox的勾选状态
+                         for(var i=0;i<checkObj.length;i++){
+                             if(!checkObj[i].checked){ // 将未勾选的checkbox选项push到绑定数组中
+                                 vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups.push(checkObj[i].value);
+                             }
+                         }
+                     }else { // 如果是去掉全选则清空checkbox选项绑定数组
+                         vc.component.addStaffPrivilegeInfo.selectPrivilegeGroups = [];
+                     }
+             }
         }
     });
 

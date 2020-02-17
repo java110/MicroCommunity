@@ -33,6 +33,12 @@ public interface IPrivilegeSMO {
 
 
     /**
+     * 编辑权限组
+     * @param privilegeGroupInfo
+     * @return
+     */
+    public ResponseEntity<String> editPrivilegeGroup(String privilegeGroupInfo);
+    /**
      * 删除权限组
      * @param privilegeGroupInfo
      * @return
