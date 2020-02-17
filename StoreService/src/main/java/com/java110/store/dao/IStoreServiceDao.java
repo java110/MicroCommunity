@@ -270,4 +270,6 @@ public interface IStoreServiceDao {
      */
     public List<Map> getStores(Map info) throws DAOException;
 
+    public int getStoreCount(Map info) throws DAOException;
+
 }

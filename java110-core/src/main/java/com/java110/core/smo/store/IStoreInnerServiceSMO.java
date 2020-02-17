@@ -1,6 +1,7 @@
 package com.java110.core.smo.store;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,4 +20,10 @@ public interface IStoreInnerServiceSMO {
 
     @RequestMapping(value = "/getStores", method = RequestMethod.POST)
     public List<StoreDto> getStores(@RequestBody StoreDto storeDto);
+
+    @RequestMapping(value = "/getStoreAttrs", method = RequestMethod.POST)
+    public List<StoreAttrDto> getStoreAttrs(@RequestBody StoreAttrDto storeAttrDto);
+
+    @RequestMapping(value = "/getStoreCount", method = RequestMethod.POST)
+    public int getStoreCount(@RequestBody StoreDto storeDto);
 }

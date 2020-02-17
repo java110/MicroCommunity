@@ -3,10 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="storeServiceDaoImpl">
-    
+
     <!-- 保存商户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreInfo" parameterType="Map">
-        insert into business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
+        insert into
+        business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
         values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
     </insert>
     <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
@@ -21,13 +22,15 @@
     </insert>
     <!-- 保存商户证件信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreCerdentials" parameterType="Map">
-        insert into business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
+        insert into
+        business_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,month,operate)
         values(#{storeCerdentialsId},#{bId},#{storeId},#{credentialsCd},#{value},#{validityPeriod},#{positivePhoto},#{negativePhoto},#{month},#{operate})
     </insert>
 
     <!-- 查询商户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessStoreInfo" parameterType="Map" resultType="Map">
-        select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.operate
+        select
+        s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,s.operate
         from business_store s where 1 = 1
         <if test="operate != null and operate != ''">
             and s.operate = #{operate}
@@ -76,7 +79,8 @@
 
     <!-- 查询商户 证件信息 add by wuxw 2018-07-03 -->
     <select id="getBusinessStoreCerdentials" parameterType="Map" resultType="Map">
-        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.operate
+        select
+        sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.operate
         from business_store_cerdentials sc where 1 = 1
         <if test="bId != null and bId !=''">
             and sc.b_id = #{bId}
@@ -93,7 +97,7 @@
     <insert id="saveStoreInfoInstance" parameterType="Map">
         insert into s_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,status_cd)
         select s.store_id,s.b_id,s.user_id,s.name,s.address,s.tel,s.store_type_cd,s.nearby_landmarks,s.map_x,s.map_y,'0'
-        from business_store s where 
+        from business_store s where
         s.operate = 'ADD' and s.b_id=#{bId}
     </insert>
 
@@ -104,18 +108,20 @@
         from business_store_attr sa
         where sa.operate = 'ADD' and sa.b_id=#{bId}
     </insert>
-    
+
     <!-- 保存 商户照片信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveStorePhotoInstance" parameterType="Map">
         insert into s_store_photo(store_photo_id,b_id,store_id,store_photo_type_cd,photo,status_cd)
         select sp.store_photo_id,sp.b_id,sp.store_id,sp.store_photo_type_cd,sp.photo,'0'
         from business_store_photo sp
-        where  sp.operate = 'ADD' and sp.b_id=#{bId}
+        where sp.operate = 'ADD' and sp.b_id=#{bId}
     </insert>
     <!-- 保存 商户证件信息 instance add by wuxw 2018-07-03 -->
     <insert id="saveStoreCerdentialsInstance" parameterType="Map">
-        insert into s_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
-        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
+        insert into
+        s_store_cerdentials(store_cerdentials_id,b_id,store_id,credentials_cd,value,validity_period,positive_photo,negative_photo,status_cd)
+        select
+        sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,'0'
         from business_store_cerdentials sc
         where sc.operate = 'ADD' and sc.b_id=#{bId}
     </insert>
@@ -123,15 +129,15 @@
     <!-- 查询商户信息 add by wuxw 2018-07-03 -->
     <select id="getStoreInfo" parameterType="Map" resultType="Map">
         select s.store_id,s.store_id storeId,
-            s.b_id,
-            s.user_id,
-            s.name,
-            s.address,
-            s.tel,
-            s.store_type_cd,
-            s.nearby_landmarks,
-            s.map_x,s.map_y,
-            s.status_cd
+        s.b_id,
+        s.user_id,
+        s.name,
+        s.address,
+        s.tel,
+        s.store_type_cd,
+        s.nearby_landmarks,
+        s.map_x,s.map_y,
+        s.status_cd
         from s_store s
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -148,7 +154,8 @@
 
     <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
     <select id="getStoreAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.store_id,sa.spec_cd,sa.value,sa.status_cd
+        select sa.b_id,sa.attr_id,sa.attr_id attrId,sa.store_id, sa.store_id storeId,sa.spec_cd,sa.spec_cd
+        specCd,sa.value,sa.status_cd
         from s_store_attr sa
         where
         1=1
@@ -160,6 +167,16 @@
         </if>
         <if test="storeId != null and storeId !=''">
             and sa.store_id = #{storeId}
+        </if>
+        <if test="storeIds != null">
+            and sa.store_id in
+            <foreach collection="storeIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="specCd != null and specCd !=''">
+            and sa.spec_cd = #{specCd}
         </if>
         <if test="attrId != null and attrId != ''">
             and sa.attr_id = #{attrId}
@@ -184,7 +201,8 @@
 
     <!-- 查询商户证件信息 add by wuxw 2018-07-03 -->
     <select id="getStoreCerdentials" parameterType="Map" resultType="Map">
-        select sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
+        select
+        sc.store_cerdentials_id,sc.b_id,sc.store_id,sc.credentials_cd,sc.value,sc.validity_period,sc.positive_photo,sc.negative_photo,sc.status_cd
         from s_store_cerdentials sc
         where 1=1
         <if test="statusCd != null and statusCd != ''">
@@ -491,6 +509,42 @@
         order by s.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询商户 -->
+    <select id="getStoreCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_store s,store_type st
+        where s.status_cd = '0'
+        and s.store_type_cd = st.store_type_cd
+        <if test="userId != null and userId != ''">
+            and s.user_id = #{userId}
+        </if>
+        <if test="name != null and name !=''">
+            and s.name like concat('%',#{name},'%')
+        </if>
+        <if test="address != null and address != ''">
+            and s.address like concat('%',#{address},'%')
+        </if>
+        <if test="tel != null and tel != ''">
+            and s.tel = #{tel}
+        </if>
+        <if test="storeTypeCd != null and storeTypeCd != ''">
+            and s.store_type_cd = #{storeTypeCd}
+        </if>
+        <if test="nearbyLandmarks != null and nearbyLandmarks != ''">
+            and s.nearby_landmarks = #{nearbyLandmarks}
+        </if>
+        <if test="storeId != null and storeId !=''">
+            and s.store_id = #{storeId}
+        </if>
+        <if test="storeIds !=null">
+            and s.store_id in
+            <foreach collection="storeIds" open="(" close=")"
+                     separator="," item="item">
+                #{item}
+            </foreach>
         </if>
     </select>
 

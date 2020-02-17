@@ -76,6 +76,7 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
             //添加用户
             JSONObject business = addUser(paramInJson,dataFlowContext);
             businesses.add(business);
+
         }
 
         paramInJson.put("userId",userId);
@@ -183,6 +184,8 @@ public class AddStaffServiceListener extends AbstractServiceApiDataFlowListener{
 
         return business;
     }
+
+
 
     /**
      * 对请求报文处理

@@ -508,4 +508,12 @@ public class StoreServiceDaoImpl extends BaseServiceDao implements IStoreService
 
         return propertyUsers;
     }
+
+    public int getStoreCount(Map info) throws DAOException{
+        List<Map> stores = sqlSessionTemplate.selectList("storeServiceDaoImpl.getStoreCount", info);
+        if (stores.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(stores.get(0).get("count").toString());
+    }
 }

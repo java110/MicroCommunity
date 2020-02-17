@@ -13,6 +13,9 @@ public class ApiStoreDataVo implements Serializable {
     private String nearByLandmarks;
     private String mapX;
     private String mapY;
+    private String artificialPerson;
+    private String establishment;
+    private String businessScope;
     private String storeName;
     private String storeTypeName;
     private String createTime;
@@ -111,5 +114,29 @@ public class ApiStoreDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getArtificialPerson() {
+        return artificialPerson;
+    }
+
+    public void setArtificialPerson(String artificialPerson) {
+        this.artificialPerson = artificialPerson;
+    }
+
+    public String getEstablishment() {
+        return establishment;
+    }
+
+    public void setEstablishment(String establishment) {
+        this.establishment = establishment;
+    }
+
+    public String getBusinessScope() {
+        return businessScope;
+    }
+
+    public void setBusinessScope(String businessScope) {
+        this.businessScope = businessScope;
     }
 }

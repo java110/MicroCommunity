@@ -1,5 +1,6 @@
 package com.java110.store.smo.impl;
 
+import com.java110.dto.store.StoreAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.store.IStoreInnerServiceSMO;
@@ -8,6 +9,8 @@ import com.java110.dto.store.StoreDto;
 import com.java110.store.dao.IStoreServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -50,6 +53,16 @@ public class StoreInnerServiceSMOImpl  extends BaseServiceSMO implements IStoreI
             refreshOwnerCar(ownerCar, users);
         }*/
         return storeDtos;
+    }
+
+    public List<StoreAttrDto> getStoreAttrs(@RequestBody StoreAttrDto storeAttrDto){
+        List<StoreAttrDto> storeAttrDtos = BeanConvertUtil.covertBeanList(storeServiceDaoImpl.getStoreAttrs(BeanConvertUtil.beanCovertMap(storeAttrDto)), StoreAttrDto.class);
+        return storeAttrDtos;
+    }
+
+
+    public int getStoreCount(@RequestBody StoreDto storeDto){
+        return storeServiceDaoImpl.getStoreCount(BeanConvertUtil.beanCovertMap(storeDto));
     }
 
 

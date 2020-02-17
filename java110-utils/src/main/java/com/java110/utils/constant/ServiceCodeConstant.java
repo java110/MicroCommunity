@@ -138,6 +138,11 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_LIST_STORES_BY_COMMUNITY = "store.listStoresByCommunity";
 
     /**
+     * 查询 商户
+     */
+    public static final String SERVICE_CODE_LIST_STORES = "store.listStores";
+
+    /**
      * 修改商户信息
      */
     public static final String SERVICE_CODE_UPDATE_STORE_INFO = "update.store.info";
