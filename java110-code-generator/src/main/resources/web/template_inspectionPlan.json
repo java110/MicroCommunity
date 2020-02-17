@@ -1,0 +1,140 @@
+{
+  "templateName":"巡检计划",
+  "templateCode":"inspectionPlan",
+  "templateKey":"inspectionPlanId",
+  "templateKeyName":"巡检计划名称",
+  "searchCode": "inspectionPlanName",
+  "searchName": "巡检计划名称",
+  "conditions": [
+    {
+      "name": "计划,路线名称,执行人员姓名",
+      "inputType": "input",
+      "code": "keyWord",
+      "whereCondition": "like"
+    },
+    {
+      "name": "当前状态",
+      "inputType": "select",
+      "selectValue":"888800010001,888800010002",
+      "selectValueName":"处理中,已完成",
+      "code": "state",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code": "inspectionPlanName",
+      "cnCode":"计划名称",
+      "desc":"必填，请填写巡检计划名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,100",
+      "limitErrInfo":"巡检计划名称不能超过100位",
+      "show": true
+    },
+    {
+      "code": "inspectionRouteId",
+      "cnCode":"巡检路线",
+      "desc":"必填，请填写巡检路线",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,30",
+      "limitErrInfo":"巡检路线不能超过30位",
+      "show": true
+    },
+    {
+      "code":"inspectionPlanPeriod",
+      "cnCode":"执行周期",
+      "desc":"必填，请选择执行周期",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1003006,2006012",
+      "selectValueName":"周期A,周期B",
+      "limit":"maxin",
+      "limitParam":"1,12",
+      "limitErrInfo":"执行周期格式错误",
+      "show": true
+    },
+    {
+      "code": "staffId",
+      "cnCode":"执行人员",
+      "desc":"必填，请填写执行人员",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,30",
+      "limitErrInfo":"执行人员不能超过30位",
+      "show": true
+    },
+    {
+      "code": "startTime",
+      "cnCode":"开始时间",
+      "desc":"必填，请选择计划开始时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"计计划开始时间不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "endTime",
+      "cnCode":"结束时间",
+      "desc":"必填，请选择结束时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"计划结束时间不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code":"signType",
+      "cnCode":"签到方式",
+      "desc":"必填，请填写签到方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"拍照签到,定位签到",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"签到方式格式错误",
+      "show": false
+    },
+    {
+      "code":"state",
+      "cnCode":"状态",
+      "desc":"必填，请填写签到方式",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"拍照签到,定位签到",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"签到方式格式错误",
+      "show": false
+    },
+    {
+      "code":"remark",
+      "cnCode":"备注",
+      "desc":"选填，请填写备注",
+      "required":false,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"备注信息不能超过200位",
+      "show": true
+    }
+  ]
+}
