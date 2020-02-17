@@ -143,6 +143,9 @@ public final class PrivilegeCodeConstant {
 
     //巡检点权限编码
     public static final String AGENT_HAS_LIST_INSPECTION_POINT = "502020021024790007";
+    //巡检计划权限编码
+    public static final String AGENT_HAS_LIST_INSPECTION_PLAN = "502020021268740005";
+
 
 
 
