@@ -19,7 +19,12 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
     private String storeId;
     private String orgId;
     private String staffId;
+    private String[] staffIds;
     private String relCd;
+    private String departmentId;
+    private String departmentName;
+    private String companyId;
+    private String companyName;
 
 
     private Date createTime;
@@ -82,5 +87,45 @@ public class OrgStaffRelDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String[] getStaffIds() {
+        return staffIds;
+    }
+
+    public void setStaffIds(String[] staffIds) {
+        this.staffIds = staffIds;
     }
 }
