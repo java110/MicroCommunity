@@ -53,6 +53,13 @@ public class OrgStaffRelInnerServiceSMOImpl extends BaseServiceSMO implements IO
         return orgStaffRelServiceDaoImpl.queryOrgStaffRelsCount(BeanConvertUtil.beanCovertMap(orgStaffRelDto));
     }
 
+    @Override
+    public List<OrgStaffRelDto> queryOrgInfoByStaffIds(@RequestBody OrgStaffRelDto orgStaffRelDto) {
+        List<OrgStaffRelDto> orgStaffRels = BeanConvertUtil.covertBeanList(orgStaffRelServiceDaoImpl.queryOrgInfoByStaffIds(BeanConvertUtil.beanCovertMap(orgStaffRelDto)), OrgStaffRelDto.class);
+        return orgStaffRels;
+
+    }
+
     public IOrgStaffRelServiceDao getOrgStaffRelServiceDaoImpl() {
         return orgStaffRelServiceDaoImpl;
     }
