@@ -2,6 +2,7 @@ package com.java110.user.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.user.dao.IOrgStaffRelServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
@@ -123,6 +124,12 @@ public class OrgStaffRelServiceDaoImpl extends BaseServiceDao implements IOrgSta
         }
 
         return Integer.parseInt(businessOrgStaffRelInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<OrgStaffRelDto> queryOrgInfoByStaffIds(Map info) {
+        List<OrgStaffRelDto> orgStaffRelDtoList = sqlSessionTemplate.selectList("orgStaffRelServiceDaoImpl.queryOrgInfoByStaffIds", info);
+        return orgStaffRelDtoList;
     }
 
 
