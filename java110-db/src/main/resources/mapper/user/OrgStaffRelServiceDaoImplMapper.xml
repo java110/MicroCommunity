@@ -165,4 +165,22 @@
 
     </select>
 
+    <!-- 根据员工ID查询部门，公司信息 add by zc 2020-02-17 -->
+    <select id="queryOrgInfoByStaffIds" parameterType="Map" resultType="Map">
+        select
+        t.org_id departmentId,t.staff_id staffId,u.org_name departmentName,
+        u.parent_org_id companyId,o.org_name companyName
+        from
+        u_org_staff_rel t
+        inner join u_org u on t.org_id = u.org_id
+        inner join u_org o on u.parent_org_id = o.org_id
+        WHERE 1 = 1
+        <if test="staffIds !=null">
+            and t.staff_id in
+            <foreach collection="staffIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
 </mapper>
