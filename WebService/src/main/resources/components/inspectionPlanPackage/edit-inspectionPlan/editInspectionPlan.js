@@ -42,7 +42,6 @@
             vc.component._initEditInspectionPlanDateInfo();
             vc.on('editInspectionPlan', 'openEditInspectionPlanModal', function (_params) {
                 vc.component.refreshEditInspectionPlanInfo();
-                $('#editInspectionPlanModel').modal('show');
                 vc.copyObject(_params, vc.component.editInspectionPlanInfo);
                 vc.component.editInspectionPlanInfo.communityId = vc.getCurrentCommunity().communityId;
                 //公司select2
@@ -53,8 +52,8 @@
 
                 //部门select2
                 vc.emit('editInspectionPlan', 'departmentSelect2', 'setDepartment', {
-                    orgId: vc.component.editInspectionPlanInfo.departmentId,
-                    orgName: vc.component.editInspectionPlanInfo.departmentName,
+                    departmentId: vc.component.editInspectionPlanInfo.departmentId,
+                    departmentName: vc.component.editInspectionPlanInfo.departmentName,
                 });
 
                 //员工select2
@@ -62,6 +61,11 @@
                     staffId: vc.component.editInspectionPlanInfo.staffId,
                     staffName: vc.component.editInspectionPlanInfo.staffName,
                 });
+
+
+
+
+                $('#editInspectionPlanModel').modal('show');
 
 
 
