@@ -5,7 +5,7 @@
 <mapper namespace="inspectionRouteServiceDaoImpl">
 
     <!-- 保存巡检路线信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessInspectionRouteInfo" parameterType="Map">
+    <insert id="saveBusinessInspectionRouteInfo" parameterType="Map">
            insert into business_inspection_route(
 operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b_id,Route_name
 ) values (
@@ -14,174 +14,175 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
        </insert>
 
 
-       <!-- 查询巡检路线信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessInspectionRouteInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.inspection_routeId,t.inspection_routeId inspectionRouteId,t.check_quantity,t.check_quantity checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName 
-from business_inspection_route t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_routeId= #{inspectionRouteId}
-</if> 
-<if test="checkQuantity !=null and checkQuantity != ''">
-   and t.check_quantity= #{checkQuantity}
-</if> 
-<if test="machineQuantity !=null and machineQuantity != ''">
-   and t.machine_quantity= #{machineQuantity}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="routeName !=null and routeName != ''">
-   and t.Route_name= #{routeName}
-</if> 
+    <!-- 查询巡检路线信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessInspectionRouteInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.check_quantity,t.check_quantity
+        checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
+        from business_inspection_route t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_Id= #{inspectionRouteId}
+        </if>
+        <if test="checkQuantity !=null and checkQuantity != ''">
+            and t.check_quantity= #{checkQuantity}
+        </if>
+        <if test="machineQuantity !=null and machineQuantity != ''">
+            and t.machine_quantity= #{machineQuantity}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="routeName !=null and routeName != ''">
+            and t.Route_name= #{routeName}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存巡检路线信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRouteInfoInstance" parameterType="Map">
         insert into inspection_route(
-inspection_routeId,check_quantity,machine_quantity,remark,status_cd,community_id,b_id,Route_name
-) select t.inspection_routeId,t.check_quantity,t.machine_quantity,t.remark,'0',t.community_id,t.b_id,t.Route_name from business_inspection_route t where 1=1
-   and t.operate= 'ADD'
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_routeId= #{inspectionRouteId}
-</if> 
-<if test="checkQuantity !=null and checkQuantity != ''">
-   and t.check_quantity= #{checkQuantity}
-</if> 
-<if test="machineQuantity !=null and machineQuantity != ''">
-   and t.machine_quantity= #{machineQuantity}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="routeName !=null and routeName != ''">
-   and t.Route_name= #{routeName}
-</if> 
+        inspection_routeId,check_quantity,machine_quantity,remark,status_cd,community_id,b_id,Route_name
+        ) select
+        t.inspection_route_Id,t.check_quantity,t.machine_quantity,t.remark,'0',t.community_id,t.b_id,t.Route_name from
+        business_inspection_route t where 1=1
+        and t.operate= 'ADD'
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_Id= #{inspectionRouteId}
+        </if>
+        <if test="checkQuantity !=null and checkQuantity != ''">
+            and t.check_quantity= #{checkQuantity}
+        </if>
+        <if test="machineQuantity !=null and machineQuantity != ''">
+            and t.machine_quantity= #{machineQuantity}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="routeName !=null and routeName != ''">
+            and t.Route_name= #{routeName}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询巡检路线信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRouteInfo" parameterType="Map" resultType="Map">
-        select  t.inspection_routeId,t.inspection_routeId inspectionRouteId,t.check_quantity,t.check_quantity checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName 
-from inspection_route t 
-where 1 =1 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_routeId= #{inspectionRouteId}
-</if> 
-<if test="checkQuantity !=null and checkQuantity != ''">
-   and t.check_quantity= #{checkQuantity}
-</if> 
-<if test="machineQuantity !=null and machineQuantity != ''">
-   and t.machine_quantity= #{machineQuantity}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="routeName !=null and routeName != ''">
-   and t.Route_name= #{routeName}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.check_quantity,t.check_quantity
+        checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
+        from inspection_route t
+        where 1 =1
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_Id= #{inspectionRouteId}
+        </if>
+        <if test="checkQuantity !=null and checkQuantity != ''">
+            and t.check_quantity= #{checkQuantity}
+        </if>
+        <if test="machineQuantity !=null and machineQuantity != ''">
+            and t.machine_quantity= #{machineQuantity}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="routeName !=null and routeName != ''">
+            and t.Route_name= #{routeName}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改巡检路线信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionRouteInfoInstance" parameterType="Map">
-        update  inspection_route t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="checkQuantity !=null and checkQuantity != ''">
-, t.check_quantity= #{checkQuantity}
-</if> 
-<if test="machineQuantity !=null and machineQuantity != ''">
-, t.machine_quantity= #{machineQuantity}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="routeName !=null and routeName != ''">
-, t.Route_name= #{routeName}
-</if> 
- where 1=1 <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-and t.inspection_routeId= #{inspectionRouteId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update inspection_route t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="checkQuantity !=null and checkQuantity != ''">
+            , t.check_quantity= #{checkQuantity}
+        </if>
+        <if test="machineQuantity !=null and machineQuantity != ''">
+            , t.machine_quantity= #{machineQuantity}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="routeName !=null and routeName != ''">
+            , t.Route_name= #{routeName}
+        </if>
+        where 1=1
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_Id= #{inspectionRouteId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询巡检路线数量 add by wuxw 2018-07-03 -->
-     <select id="queryInspectionRoutesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from inspection_route t 
-where 1 =1 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_routeId= #{inspectionRouteId}
-</if> 
-<if test="checkQuantity !=null and checkQuantity != ''">
-   and t.check_quantity= #{checkQuantity}
-</if> 
-<if test="machineQuantity !=null and machineQuantity != ''">
-   and t.machine_quantity= #{machineQuantity}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="routeName !=null and routeName != ''">
-   and t.Route_name= #{routeName}
-</if> 
+    <select id="queryInspectionRoutesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_route t
+        where 1 =1
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_Id= #{inspectionRouteId}
+        </if>
+        <if test="checkQuantity !=null and checkQuantity != ''">
+            and t.check_quantity= #{checkQuantity}
+        </if>
+        <if test="machineQuantity !=null and machineQuantity != ''">
+            and t.machine_quantity= #{machineQuantity}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="routeName !=null and routeName != ''">
+            and t.Route_name= #{routeName}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>
