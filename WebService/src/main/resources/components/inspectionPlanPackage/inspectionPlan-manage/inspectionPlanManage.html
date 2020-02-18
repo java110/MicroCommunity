@@ -65,6 +65,7 @@
                             <th class="text-center">路线</th>
                             <th class="text-center">周期</th>
                             <th class="text-center">执行人</th>
+                            <th class="text-center">签到方式</th>
                             <th class="text-center">开始时间</th>
                             <th class="text-center">结束时间</th>
                             <th class="text-center">制定人</th>
@@ -80,13 +81,14 @@
                         <tr v-for="inspectionPlan in inspectionPlanManageInfo.inspectionPlans">
                             <td class="text-center">{{inspectionPlan.inspectionPlanName}}</td>
                             <td class="text-center">{{inspectionPlan.inspectionRouteName}}</td>
-                            <td class="text-center">{{inspectionPlan.inspectionPlanPeriod}}</td>
+                            <td class="text-center">{{inspectionPlan.inspectionPlanPeriodName}}</td>
                             <td class="text-center">{{inspectionPlan.staffName}}</td>
+                            <td class="text-center">{{inspectionPlan.signTypeName}}</td>
                             <td class="text-center">{{inspectionPlan.startTime}}</td>
                             <td class="text-center">{{inspectionPlan.endTime}}</td>
                             <td class="text-center">{{inspectionPlan.createUserName}}</td>
                             <td class="text-center">{{inspectionPlan.createTime}}</td>
-                            <td class="text-center">{{inspectionPlan.state}}</td>
+                            <td class="text-center">{{inspectionPlan.stateName}}</td>
                             <td class="text-center">{{inspectionPlan.remark}}</td>
                             <td class="text-center">
                                 <div class="btn-group">

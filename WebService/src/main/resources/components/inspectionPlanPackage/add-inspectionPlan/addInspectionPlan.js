@@ -42,12 +42,17 @@
             vc.on('addInspectionPlan', 'openAddInspectionPlanModal', function () {
                 $('#addInspectionPlanModel').modal('show');
             });
+
             vc.on("addInspectionPlanInfo", "notify", function (_param) {
                 if (_param.hasOwnProperty("staffId")) {
                     vc.component.addInspectionPlanInfo.staffId = _param.staffId;
                     vc.component.addInspectionPlanInfo.staffName = _param.staffName;
                 }
+                if (_param.hasOwnProperty("inspectionRouteId")) {
+                    vc.component.addInspectionPlanInfo.inspectionRouteId = _param.inspectionRouteId;
+                }
             });
+
         },
         methods: {
             addInspectionPlanValidate() {
