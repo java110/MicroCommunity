@@ -38,12 +38,10 @@
                                     <thead>
                                     <tr>
                                         <th>房屋ID</th>
+                                        <th>楼栋编号</th>
+                                        <th>单元编号</th>
                                         <th>房屋编号</th>
-                                        <th>单元</th>
                                         <th>楼层</th>
-                                        <th>房间数</th>
-                                        <th>户型</th>
-                                        <th>创建员工</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -52,24 +50,17 @@
                                         <td>
                                             {{room.roomId}}
                                         </td>
-
                                         <td>
-                                            {{room.roomNum}}
+                                            {{room.floorNum}}号楼
                                         </td>
                                         <td>
-                                            {{room.unitNum}}
+                                            {{room.unitNum}}单元
                                         </td>
                                         <td>
-                                            {{room.layer}}
+                                            {{room.roomNum}}室
                                         </td>
                                         <td>
-                                            {{room.section}}
-                                        </td>
-                                        <td>
-                                            {{room.apartmentName}}
-                                        </td>
-                                        <td>
-                                            {{room.userName}}
+                                            {{room.layer}}层
                                         </td>
                                         <td>
                                             <button class="btn btn-primary btn-xs" v-on:click="chooseRoom(room)">选择
