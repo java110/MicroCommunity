@@ -206,6 +206,8 @@
                 });
             },
             clearAddFeeConfigInfo: function() {
+                var _feeTypeCds =  vc.component.addFeeConfigInfo.feeTypeCds;
+                var _computingFormulas = vc.component.addFeeConfigInfo.computingFormulas;
                 vc.component.addFeeConfigInfo = {
                     feeTypeCd: '',
                     feeName: '',
@@ -215,6 +217,8 @@
                     computingFormula: '',
                     squarePrice: '',
                     additionalAmount: '',
+                    feeTypeCds:_feeTypeCds,
+                    computingFormulas:_computingFormulas
 
                 };
             }
