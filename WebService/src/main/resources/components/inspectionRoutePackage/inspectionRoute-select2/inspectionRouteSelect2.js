@@ -20,7 +20,7 @@
             }
         },
         _initMethod: function () {
-            this._initinspectionRouteSelect2();
+            this._initInspectionRouteSelect2();
         },
         _initEvent: function () {
             vc.on('inspectionRouteSelect2', 'setInspectionRoute', function (_param) {
@@ -39,7 +39,7 @@
             });
         },
         methods: {
-            _initinspectionRouteSelect2: function () {
+            _initInspectionRouteSelect2: function () {
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
                 this.inspectionRouteSelect2Info.inspectionRouteSelector = $('#inspectionRouteSelector').select2({
