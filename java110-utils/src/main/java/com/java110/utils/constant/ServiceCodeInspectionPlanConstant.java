@@ -9,23 +9,28 @@ public class ServiceCodeInspectionPlanConstant {
     /**
      * 添加 巡检计划
      */
-    public static final String ADD_INSPECTIONPLAN = "inspectionPlan.saveInspectionPlan";
+    public static final String ADD_INSPECTION_PLAN = "inspectionPlan.saveInspectionPlan";
 
 
     /**
      * 修改 巡检计划
      */
-    public static final String UPDATE_INSPECTIONPLAN = "inspectionPlan.updateInspectionPlan";
+    public static final String UPDATE_INSPECTION_PLAN = "inspectionPlan.updateInspectionPlan";
+
+    /**
+     * 修改 巡检计划
+     */
+    public static final String UPDATE_INSPECTION_PLAN_STATE = "inspectionPlan.updateInspectionPlanState";
     /**
      * 删除 巡检计划
      */
-    public static final String DELETE_INSPECTIONPLAN = "inspectionPlan.deleteInspectionPlan";
+    public static final String DELETE_INSPECTION_PLAN = "inspectionPlan.deleteInspectionPlan";
 
 
     /**
      * 查询 巡检计划
      */
-    public static final String LIST_INSPECTIONPLANS = "inspectionPlan.listInspectionPlans";
+    public static final String LIST_INSPECTION_PLANS = "inspectionPlan.listInspectionPlans";
 
 
 }
