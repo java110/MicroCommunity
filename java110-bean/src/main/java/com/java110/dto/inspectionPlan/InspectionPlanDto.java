@@ -37,6 +37,7 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String stateName;
     private String inspectionPlanPeriodName;
     private String signTypeName;
+    private String keyWord;
 
 
     public String getInspectionPlanName() {
@@ -199,5 +200,13 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setSignTypeName(String signTypeName) {
         this.signTypeName = signTypeName;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 }
