@@ -122,7 +122,7 @@
 
                            vc.message('处理成功',true);
                            //关闭model
-                           vc.jumpToPage("/flow/repairDispatch?" + vc.objToGetParam(JSON.parse(json)));
+                           vc.jumpToPage("/flow/repairDispatchFlow?" + vc.objToGetParam(JSON.parse(json)));
                            return ;
                        }
                        vc.message(json);
