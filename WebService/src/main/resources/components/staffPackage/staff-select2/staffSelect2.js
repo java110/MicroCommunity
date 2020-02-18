@@ -31,7 +31,6 @@
         _initEvent: function () {
 
             vc.on('staffSelect2', 'setStaff', function (_param) {
-                console.log("员工下拉框收到参数:"+_param.staffId);
                 vc.copyObject(_param, this.staffSelect2Info);
                 var option = new Option(_param.staffName, _param.staffId, true, true);
                 this.staffSelect2Info.staffSelector.append(option);
@@ -55,7 +54,7 @@
                 $.fn.modal.Constructor.prototype.enforceFocus = function () {};
                 $.fn.select2.defaults.set('width', '100%');
                 this.staffSelect2Info.staffSelector = $('#staffSelector').select2({
-                    placeholder: '必填，请选择公司',
+                    placeholder: '必填，请选择员工',
                     allowClear: true,//允许清空
                     escapeMarkup: function (markup) {
                         return markup;
