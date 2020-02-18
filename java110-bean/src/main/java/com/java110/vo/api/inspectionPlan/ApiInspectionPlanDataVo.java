@@ -24,6 +24,9 @@ public class ApiInspectionPlanDataVo implements Serializable {
     private String departmentName;
     private String companyId;
     private String companyName;
+    private String stateName;
+    private String inspectionPlanPeriodName;
+    private String signTypeName;
 
     public String getInspectionPlanId() {
         return inspectionPlanId;
@@ -176,5 +179,29 @@ public class ApiInspectionPlanDataVo implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getInspectionPlanPeriodName() {
+        return inspectionPlanPeriodName;
+    }
+
+    public void setInspectionPlanPeriodName(String inspectionPlanPeriodName) {
+        this.inspectionPlanPeriodName = inspectionPlanPeriodName;
+    }
+
+    public String getSignTypeName() {
+        return signTypeName;
+    }
+
+    public void setSignTypeName(String signTypeName) {
+        this.signTypeName = signTypeName;
     }
 }
