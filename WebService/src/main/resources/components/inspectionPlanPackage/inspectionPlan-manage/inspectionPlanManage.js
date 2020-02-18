@@ -73,7 +73,22 @@
             },
             _queryInspectionPlanMethod: function () {
                 vc.component._listInspectionPlans(DEFAULT_PAGE, DEFAULT_ROWS);
-
+            },
+            //启用计划
+            _openEnabledInspectionPlanModel: function (_inspectionPlan) {
+                vc.emit('inspectionPlanState', 'openInspectionPlanStateModal', {
+                    inspectionPlanId: _inspectionPlan.inspectionPlanId,
+                    stateName: '启用',
+                    state: '2020025'
+                });
+            },
+            //停用计划
+            _openDisabledInspectionPlanModel: function (_inspectionPlan) {
+                vc.emit('inspectionPlanState', 'openInspectionPlanStateModal', {
+                    inspectionPlanId: _inspectionPlan.inspectionPlanId,
+                    stateName: '停用',
+                    state: '2020026'
+                });
             },
             _moreCondition: function () {
                 if (vc.component.inspectionPlanManageInfo.moreCondition) {
