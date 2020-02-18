@@ -882,6 +882,7 @@ public class BusinessTypeConstant {
      * 4 修改
      */
     public static final String BUSINESS_TYPE_UPDATE_INSPECTION_PLAN="520200040001";
+
     /**
      *  删除巡计划
      *  5 删除
