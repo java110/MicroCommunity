@@ -28,8 +28,7 @@
         _initEvent: function () {
             vc.on('departmentSelect2', 'setDepartment', function (_param) {
                 vc.copyObject(_param, this.departmentSelect2Info);
-                console.log("收到部门信息："+_param.orgName);
-                var option = new Option(_param.orgName, _param.orgId, true, true);
+                var option = new Option(_param.departmentName, _param.departmentId, true, true);
                 this.departmentSelect2Info.departmentSelector.append(option);
             });
 
@@ -52,7 +51,7 @@
                 };
                 $.fn.select2.defaults.set('width', '100%');
                 this.departmentSelect2Info.departmentSelector = $('#departmentSelector').select2({
-                    placeholder: '必填，请选择公司',
+                    placeholder: '必填，请选择部门',
                     allowClear: true,//允许清空
                     escapeMarkup: function (markup) {
                         return markup;
