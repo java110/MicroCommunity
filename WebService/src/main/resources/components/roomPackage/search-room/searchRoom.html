@@ -38,8 +38,9 @@
                                     <thead>
                                     <tr>
                                         <th>房屋ID</th>
+                                        <th>楼栋编号</th>
+                                        <th>单元编号</th>
                                         <th>房屋编号</th>
-                                        <th>单元</th>
                                         <th>楼层</th>
                                         <th>房间数</th>
                                         <th>户型</th>
@@ -52,12 +53,14 @@
                                         <td>
                                             {{room.roomId}}
                                         </td>
-
                                         <td>
-                                            {{room.roomNum}}
+                                            {{room.floorNum}}
                                         </td>
                                         <td>
                                             {{room.unitNum}}
+                                        </td>
+                                        <td>
+                                            {{room.roomNum}}
                                         </td>
                                         <td>
                                             {{room.layer}}
