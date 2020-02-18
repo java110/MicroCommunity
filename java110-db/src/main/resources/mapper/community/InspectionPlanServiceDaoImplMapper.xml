@@ -315,9 +315,6 @@
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
-        <if test="createUser !=null and createUser != ''">
-            and t.create_user= #{createUser}
-        </if>
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
         </if>
@@ -332,6 +329,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="keyWord !=null and keyWord != ''">
+            and (t.inspection_plan_name like concat('%',#{keyWord},'%') or t.staff_name like concat('%',#{keyWord},'%'))
         </if>
 
 
