@@ -39,6 +39,7 @@
 
         },
         _initEvent: function () {
+            vc.component._initEditInspectionPlanDateInfo();
             vc.on('editInspectionPlan', 'openEditInspectionPlanModal', function (_params) {
                 vc.component.refreshEditInspectionPlanInfo();
                 $('#editInspectionPlanModel').modal('show');
@@ -238,6 +239,35 @@
                 vc.component.editInspectionPlanInfo.signTypes = signTypes;
                 vc.component.editInspectionPlanInfo.states = states;
                 vc.component.editInspectionPlanInfo.inspectionPlanPeriods = inspectionPlanPeriods;
+            },
+            _initEditInspectionPlanDateInfo:function(){
+                $('.editInspectionPlanStartTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd hh:ii:ss',
+                    initTime: true,
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+
+                });
+                $('.editInspectionPlanStartTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".editInspectionPlanStartTime").val();
+                        vc.component.editInspectionPlanInfo.startTime = value;
+                    });
+                $('.editInspectionPlanEndTime').datetimepicker({
+                    language: 'zh-CN',
+                    format: 'yyyy-mm-dd hh:ii:ss',
+                    initTime: true,
+                    initialDate: new Date(),
+                    autoClose: 1,
+                    todayBtn: true
+                });
+                $('.editInspectionPlanEndTime').datetimepicker()
+                    .on('changeDate', function (ev) {
+                        var value = $(".editInspectionPlanEndTime").val();
+                        vc.component.editInspectionPlanInfo.endTime = value;
+                    });
             }
         }
     });
