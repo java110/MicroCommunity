@@ -34,6 +34,9 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String staffId;
     private Date createTime;
     private String statusCd = "0";
+    private String stateName;
+    private String inspectionPlanPeriodName;
+    private String signTypeName;
 
 
     public String getInspectionPlanName() {
@@ -172,5 +175,29 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getInspectionPlanPeriodName() {
+        return inspectionPlanPeriodName;
+    }
+
+    public void setInspectionPlanPeriodName(String inspectionPlanPeriodName) {
+        this.inspectionPlanPeriodName = inspectionPlanPeriodName;
+    }
+
+    public String getSignTypeName() {
+        return signTypeName;
+    }
+
+    public void setSignTypeName(String signTypeName) {
+        this.signTypeName = signTypeName;
     }
 }
