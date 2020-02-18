@@ -37,7 +37,7 @@ public class AuditEnterCommunityManageComponent {
     public ResponseEntity<String> list(IPageData pd) {
 
         JSONObject reqParam = JSONObject.parseObject(pd.getReqData());
-        reqParam.put("auditStatusCd", StateConstant.NO_AUDIT);
+        //reqParam.put("auditStatusCd", StateConstant.NO_AUDIT);
 
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
                 reqParam.toJSONString(), pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId());

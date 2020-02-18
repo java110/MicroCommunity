@@ -36,7 +36,7 @@ public class ListAuditEnterCommunitysSMOImpl extends AbstractComponentSMO implem
 
         super.validatePageInfo(pd);
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDIT_ENTER_COMMUNITY);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_AUDIT_ENTER_COMMUNITY);
     }
 
     @Override

@@ -12,8 +12,10 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
     private String communityMemberId;
 
     private String communityId;
+    private String communityName;
 
     private String memberId;
+    private String subMemberId;
 
     private String memberTypeCd;
 
@@ -97,5 +99,21 @@ public class CommunityMemberDto extends CommunityDto implements Serializable {
 
     public void setAuditStatusCds(String[] auditStatusCds) {
         this.auditStatusCds = auditStatusCds;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getSubMemberId() {
+        return subMemberId;
+    }
+
+    public void setSubMemberId(String subMemberId) {
+        this.subMemberId = subMemberId;
     }
 }
