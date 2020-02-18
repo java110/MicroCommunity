@@ -1,12 +1,14 @@
 (function (vc) {
     vc.extends({
         propTypes: {
-            parentModal: vc.propTypes.string
+            parentModal: vc.propTypes.string,
+            callBackListener: vc.propTypes.string, //父组件名称
+            callBackFunction: vc.propTypes.string //父组件监听方法
         },
         data: {
             inspectionRouteSelect2Info: {
                 inspectionRoutes: [],
-                inspectionRouteId: '-1',
+                inspectionRouteId: '',
                 routeName: '',
                 inspectionRouteSelector: {}
             }
@@ -25,14 +27,20 @@
         _initEvent: function () {
             vc.on('inspectionRouteSelect2', 'setInspectionRoute', function (_param) {
                 vc.copyObject(_param, this.inspectionRouteSelect2Info);
-                var option = new Option(_param.routeName, _param.inspectionRouteId, true, true);
-                this.inspectionRouteSelect2Info.inspectionRouteSelector.append(option);
+                // var option = new Option(_param.routeName, _param.inspectionRouteId, true, true);
+                // this.inspectionRouteSelect2Info.inspectionRouteSelector.append(option);
+                var routeIds = _param.inspectionRouteId.split(",");
+                var routeIdArray = new Array()
+                for( var i = 0; i < routeIds.length; i++){
+                    routeIdArray[i] = routeIds[i];
+                }
+                $("#inspectionRouteSelector").val(routeIdArray).trigger("change");
             });
 
             vc.on('inspectionRouteSelect2', 'clearInspectionRoute', function (_param) {
                 this.inspectionRouteSelect2Info = {
                     inspectionRoutes: [],
-                    inspectionRouteId: '-1',
+                    inspectionRouteId: '',
                     routeName: '',
                     inspectionRouteSelector: {}
                 };
@@ -45,7 +53,7 @@
                 this.inspectionRouteSelect2Info.inspectionRouteSelector = $('#inspectionRouteSelector').select2({
                     placeholder: '必填，请选择巡检路线',
                     allowClear: true,//允许清空
-                    multiple: true,//允许多选
+                    //multiple: true,//允许多选
                     escapeMarkup: function (markup) {
                         return markup;
                     }, // 自定义格式化防止xss注入
@@ -79,6 +87,12 @@
                     //evt.params.data 是选中项的信息
                     this.inspectionRouteSelect2Info.inspectionRouteId = evt.params.data.id;
                     this.inspectionRouteSelect2Info.routeName = evt.params.data.text;
+                    var inspectionRouteIds= $('#inspectionRouteSelector').select2('val');
+                    var routeIds = '';
+                    for( var i = 0; i < inspectionRouteIds.length; i++){
+                        routeIds +=","+inspectionRouteIds[i];
+                    }
+                    this.inspectionRouteSelect2Info.inspectionRouteId = routeIds.substr(1);
                 });
 
                 $('#inspectionRouteSelector').on("select2:unselect", function (evt) {
