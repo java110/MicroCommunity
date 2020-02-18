@@ -71,18 +71,6 @@
                             errInfo: "巡检计划名称不能超过100位"
                         },
                     ],
-                    'addInspectionPlanInfo.inspectionRouteId': [
-                        {
-                            limit: "required",
-                            param: "",
-                            errInfo: "巡检路线不能为空"
-                        },
-                        {
-                            limit: "maxin",
-                            param: "1,30",
-                            errInfo: "巡检路线不能超过30位"
-                        },
-                    ],
                     'addInspectionPlanInfo.inspectionPlanPeriod': [
                         {
                             limit: "required",
