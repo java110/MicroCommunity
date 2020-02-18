@@ -3,36 +3,43 @@ package com.java110.api.listener.inspectionPlan;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.core.smo.inspectionPlan.IInspectionPlanInnerServiceSMO;
+import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
+import com.java110.utils.constant.ServiceCodeMachineConstant;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 /**
- * 保存巡检计划侦听
+ * 保存设备侦听
  * add by wuxw 2019-06-30
  */
-@Java110Listener("updateInspectionPlanListener")
-public class UpdateInspectionPlanListener extends AbstractServiceApiListener {
+@Java110Listener("updateInspectionPlanStateListener")
+public class UpdateInspectionPlanStateListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "inspectionPlanId", "inspectionPlanId不能为空");
-        Assert.hasKeyAndValue(reqJson, "inspectionPlanName", "必填，请填写巡检计划名称");
-        Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "必填，请填写巡检路线");
-        Assert.hasKeyAndValue(reqJson, "inspectionPlanPeriod", "必填，请选择执行周期");
-        Assert.hasKeyAndValue(reqJson, "staffId", "必填，请填写执行人员");
-        Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择计划开始时间");
-        Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
-        Assert.hasKeyAndValue(reqJson, "signType", "必填，请填写签到方式");
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写签到方式");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
+        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写状态");
 
     }
 
@@ -60,7 +67,7 @@ public class UpdateInspectionPlanListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeInspectionPlanConstant.UPDATE_INSPECTION_PLAN;
+        return ServiceCodeInspectionPlanConstant.UPDATE_INSPECTION_PLAN_STATE;
     }
 
     @Override
@@ -75,7 +82,7 @@ public class UpdateInspectionPlanListener extends AbstractServiceApiListener {
 
 
     /**
-     * 添加巡检计划信息
+     * 添加设备信息
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
@@ -83,16 +90,29 @@ public class UpdateInspectionPlanListener extends AbstractServiceApiListener {
      */
     private JSONObject updateInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        InspectionPlanDto inspectionPlanDto = new InspectionPlanDto();
+        inspectionPlanDto.setCommunityId(paramInJson.getString("communityId"));
+        inspectionPlanDto.setInspectionPlanId(paramInJson.getString("inspectionPlanId"));
+        List<InspectionPlanDto> inspectionPlanDtos = inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto);
+
+        Assert.listOnlyOne(inspectionPlanDtos, "根据计划ID查询到多条记录，请检查数据");
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionPlan = new JSONObject();
-        businessInspectionPlan.putAll(paramInJson);
-        //计算 应收金额
+        businessInspectionPlan.putAll(BeanConvertUtil.beanCovertMap(inspectionPlanDtos.get(0)));
+        businessInspectionPlan.put("state", paramInJson.getString("state"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlan", businessInspectionPlan);
         return business;
     }
 
+    public IInspectionPlanInnerServiceSMO getInspectionPlanInnerServiceSMOImpl() {
+        return inspectionPlanInnerServiceSMOImpl;
+    }
+
+    public void setInspectionPlanInnerServiceSMOImpl(IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl) {
+        this.inspectionPlanInnerServiceSMOImpl = inspectionPlanInnerServiceSMOImpl;
+    }
 }

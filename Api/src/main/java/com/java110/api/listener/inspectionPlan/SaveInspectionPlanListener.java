@@ -62,7 +62,7 @@ public class SaveInspectionPlanListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeInspectionPlanConstant.ADD_INSPECTIONPLAN;
+        return ServiceCodeInspectionPlanConstant.ADD_INSPECTION_PLAN;
     }
 
     @Override

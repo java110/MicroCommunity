@@ -54,7 +54,7 @@ public class DeleteInspectionPlanListener extends AbstractServiceApiListener {
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeInspectionPlanConstant.DELETE_INSPECTIONPLAN;
+        return ServiceCodeInspectionPlanConstant.DELETE_INSPECTION_PLAN;
     }
 
     @Override
