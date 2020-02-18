@@ -174,9 +174,15 @@
             t.b_id bId,
             t.staff_id staffId,
             t.staff_name staffName,
-            t.create_time createTime
+            t.create_time createTime,
+            d.name stateName,
+            c.name inspectionPlanPeriodName,
+            i.name signTypeName
         from
             inspection_plan t
+        inner join t_dict d on t.state = d.status_cd and d.table_name = 'inspection_plan' and d.table_columns = 'state'
+        inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and c.table_columns = 'inspection_plan_period'
+        inner join t_dict i on t.sign_type = i.status_cd and i.table_name = 'inspection_plan' and i.table_columns = 'sign_type'
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and t.inspection_plan_name= #{inspectionPlanName}
