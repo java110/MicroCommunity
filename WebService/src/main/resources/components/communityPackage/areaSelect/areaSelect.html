@@ -3,7 +3,7 @@
             style="width: 10vw;display: inline;"
             v-model="this.areaSelectInfo.selectProv"
             @change="this.getProv(this.areaSelectInfo.selectProv)">
-        <option value='' disabled selected style='display:none;'>请选择省</option>
+        <option value=''  selected style='display:none;'>请选择省</option>
         <option v-for="item in this.areaSelectInfo.provs"
                 :label="item.areaName"
                 :value="item.areaCode">{{item.areaName}}
@@ -13,10 +13,9 @@
 
     <select id="city" class="form-control form-control-sm"
             style="width: 10vw;display: inline;"
-            v-if="this.areaSelectInfo.selectProv!=''"
             v-model="this.areaSelectInfo.selectCity"
             @change="this.getCity(this.areaSelectInfo.selectCity)">
-        <option value='' disabled selected style='display:none;'>请选择城市</option>
+        <option value=''  selected style='display:none;'>请选择城市</option>
         <option v-for="item in this.areaSelectInfo.citys"
                 :label="item.areaName"
                 :value="item.areaCode">{{item.areaName}}
@@ -25,10 +24,10 @@
 
     <select id="area" class="form-control form-control-sm"
             style="width: 10vw;display: inline;"
-            v-if="this.areaSelectInfo.selectCity!=''"
+
             v-model="this.areaSelectInfo.selectArea"
             @change="this.getArea(this.areaSelectInfo.selectArea)">
-        <option value='' disabled selected style='display:none;'>请选择区县</option>
+        <option value=''  selected style='display:none;'>请选择区县</option>
         <option v-for="item in this.areaSelectInfo.areas"
                 :label="item.areaName"
                 :value="item.areaCode">{{item.areaName}}

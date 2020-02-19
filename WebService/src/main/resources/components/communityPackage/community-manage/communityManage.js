@@ -13,7 +13,7 @@
                 storeTypeCd:vc.getData('/nav/getUserInfo').storeTypeCd,
                 conditions: {
                     name: '',
-                    areaCode:'',
+                    cityCode:'',
                     communityId:''
                 }
 
@@ -27,7 +27,7 @@
                   vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
             vc.on("communityManage","communityManage","notifyArea",function(_param){
-                vc.component.communityManageInfo.conditions.areaCode = _param.selectArea;
+                vc.component.communityManageInfo.conditions.cityCode = _param.selectArea;
             });
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listCommunitys(_currentPage,DEFAULT_ROWS);
