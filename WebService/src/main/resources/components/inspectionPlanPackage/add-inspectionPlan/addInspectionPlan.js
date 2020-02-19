@@ -227,6 +227,9 @@
                     });
             },
             clearAddInspectionPlanInfo: function () {
+                var states =  vc.component.addInspectionPlanInfo.states;
+                var inspectionPlanPeriods = vc.component.addInspectionPlanInfo.inspectionPlanPeriods;
+                var signTypes = vc.component.addInspectionPlanInfo.signTypes;
                 vc.component.addInspectionPlanInfo = {
                     inspectionPlanName: '',
                     inspectionRouteId: '',
@@ -237,8 +240,15 @@
                     signType:'',
                     state:'',
                     remark: '',
-
+                    states:states,
+                    signTypes:signTypes,
+                    inspectionPlanPeriods:inspectionPlanPeriods
                 };
+            },
+            cleanInspectionPlanAddModel:function(){
+                vc.component.clearAddInspectionPlanInfo();
+                //员工select2
+                vc.emit('addInspectionPlan', 'inspectionRouteSelect2', 'clearInspectionRoute', {});
             }
         }
     });
