@@ -21,6 +21,8 @@ public class InspectionRouteDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private String routeName;
+    //用于批量查询路线
+    private String[] inspectionRouteIds;
 
 
     private Date createTime;
@@ -91,5 +93,13 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getInspectionRouteIds() {
+        return inspectionRouteIds;
+    }
+
+    public void setInspectionRouteIds(String[] inspectionRouteIds) {
+        this.inspectionRouteIds = inspectionRouteIds;
     }
 }
