@@ -27,10 +27,12 @@
         _initEvent: function () {
             vc.on('inspectionRouteSelect2', 'setInspectionRoute', function (_param) {
                 vc.copyObject(_param, this.inspectionRouteSelect2Info);
+                $("#inspectionRouteSelector").val(null).trigger('change');
                 var name = _param.routeName.split(",");
                 var ids = _param.inspectionRouteId.split(",");
                 for( var i = 0; i < name.length; i++){
                     var option = new Option(name[i],ids[i], true, true);
+                    console.log(option);
                     this.inspectionRouteSelect2Info.inspectionRouteSelector.append(option);
                 }
                 //var option = new Option(_param.routeName, _param.inspectionRouteId, true, true);
@@ -105,8 +107,13 @@
                 $('#inspectionRouteSelector').on("select2:unselect", function (evt) {
                     //这里是取消选中触发的事件
                     //如配置allowClear: true后，触发
-                    this.inspectionRouteSelect2Info.inspectionRouteId = '-1';
-                    this.inspectionRouteSelect2Info.routeName = '';
+                    var inspectionRouteIds= $('#inspectionRouteSelector').select2('val');
+                    var routeIds = '';
+                    for( var i = 0; i < inspectionRouteIds.length; i++){
+                        routeIds +=","+inspectionRouteIds[i];
+                    }
+                    this.inspectionRouteSelect2Info.inspectionRouteId = routeIds.substr(1);
+                    //this.inspectionRouteSelect2Info.routeName = '';
 
                 });
             },

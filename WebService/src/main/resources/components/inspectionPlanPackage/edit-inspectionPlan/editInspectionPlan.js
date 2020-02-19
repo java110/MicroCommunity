@@ -63,11 +63,11 @@
                     staffName: vc.component.editInspectionPlanInfo.staffName,
                 });
 
-                //传输数据到machineSelect2组件
-                vc.emit('editInspectionPlan', 'inspectionRouteSelect2', 'setInspectionRoute', {
-                    inspectionRouteId: vc.component.editInspectionPlanInfo.inspectionRouteId,
-                    routeName: vc.component.editInspectionPlanInfo.inspectionRouteName,
-                });
+                // //传输数据到machineSelect2组件
+                // vc.emit('editInspectionPlan', 'inspectionRouteSelect2', 'setInspectionRoute', {
+                //     inspectionRouteId: vc.component.editInspectionPlanInfo.inspectionRouteId,
+                //     routeName: vc.component.editInspectionPlanInfo.inspectionRouteName,
+                // });
 
 
 
