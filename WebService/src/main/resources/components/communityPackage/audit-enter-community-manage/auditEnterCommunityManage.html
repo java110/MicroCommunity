@@ -107,6 +107,7 @@
                                 <!--v-on:click="_openEnterAuditCommunityModal(community)"-->
                                 <div class="btn-group" v-if="community.auditStatusCd!='1000'">
                                     <button class="btn-white btn btn-xs"
+                                            v-on:click="_openRecallAuditFinishCommunityModal(community)
                                             >撤回审核
                                     </button>
                                 </div>
@@ -132,5 +133,7 @@
                callBackListener="auditEnterCommunityManage"
                callBackFunction="notifyAuditInfo"
     ></vc:create>
+    <!--撤回审核-->
+    <vc:create name="recallAuditEnterFinishCommunity"></vc:create>
 
 </div>

@@ -66,6 +66,9 @@
                 vc.component.auditEnterCommunityManageInfo.currentCommunityMemberId = _community.communityMemberId;
                 vc.emit('audit','openAuditModal',{});
             },
+            _openRecallAuditFinishCommunityModal:function(_community){
+                vc.emit('recallAuditEnterFinishCommunity','openRecallAuditEnterFinishCommunityModal',_community);
+            },
             _auditEnterCommunityState:function(_auditInfo){
                 _auditInfo.communityMemberId = vc.component.auditEnterCommunityManageInfo.currentCommunityMemberId;
                 vc.http.post(
