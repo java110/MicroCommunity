@@ -35,8 +35,8 @@
                 vc.component.mappingManageInfo.conditions.row = _rows;
                 var param = {
                     params:vc.component.mappingManageInfo.conditions
-                    }
-               }
+                 };
+
                //发送get请求
                vc.http.get('mappingManage',
                             'list',
