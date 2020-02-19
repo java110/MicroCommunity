@@ -1,6 +1,41 @@
 <div id="component">
     <div class="row">
         <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <vc:create name="areaSelect"
+                                       callBackListener="communityManage"
+                                       callBackFunction="notifyArea"
+                                       namespace="communityManage"
+                                       ></vc:create>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入小区名称"
+                                       v-model="communityManageInfo.conditions.name" class=" form-control">
+                            </div></div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryFeeConfigMethod()">
+                                <i class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>小区信息</h5>
@@ -18,7 +53,7 @@
                         <tr>
                             <th>小区ID</th>
                             <th>小区名称</th>
-                            <th>小区地址</th>
+                            <!--<th>小区地址</th>-->
                             <th>附近地标</th>
                             <th>城市编码</th>
                             <th>状态</th>
@@ -29,7 +64,7 @@
                         <tr v-for="community in communityManageInfo.communitys">
                             <td>{{community.communityId}}</td>
                             <td>{{community.name}}</td>
-                            <td>{{community.address}}</td>
+                            <!--<td>{{community.address}}</td>-->
                             <td>{{community.nearbyLandmarks}}</td>
                             <td>{{community.cityName}}</td>
                             <td>{{community.stateName}}</td>

@@ -10,7 +10,12 @@
                 communitys:[],
                 total:0,
                 records:1,
-                storeTypeCd:vc.getData('/nav/getUserInfo').storeTypeCd
+                storeTypeCd:vc.getData('/nav/getUserInfo').storeTypeCd,
+                conditions: {
+                    name: '',
+                    areaCode:''
+                }
+
             }
         },
         _initMethod:function(){
@@ -20,23 +25,22 @@
             vc.on('communityManage','listCommunity',function(_param){
                   vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
+            vc.on("communityManage","communityManage","notifyArea",function(_param){
+                vc.component.communityManageInfo.conditions.areaCode = _param.selectArea;
+            });
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listCommunitys(_currentPage,DEFAULT_ROWS);
             });
         },
         methods:{
             _listCommunitys:function(_page, _rows){
-                var param = {
-                    params:{
-                        page:_page,
-                        row:_rows
-                    }
 
-               }
+               vc.component.communityManageInfo.conditions.page = _page;
+               vc.component.communityManageInfo.conditions.row = _rows;
                //发送get请求
                vc.http.get('communityManage',
                             'list',
-                             param,
+                             vc.component.communityManageInfo.conditions,
                              function(json,res){
                                 var _communityManageInfo=JSON.parse(json);
                                 vc.component.communityManageInfo.total = _communityManageInfo.total;

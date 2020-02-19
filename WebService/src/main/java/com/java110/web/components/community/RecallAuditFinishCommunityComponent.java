@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
  * <p>
  * 2019-06-29
  */
-@Component("recallAuditCommunity")
-public class RecallAuditCommunityComponent {
+@Component("recallAuditFinishCommunity")
+public class RecallAuditFinishCommunityComponent {
 
     @Autowired
     private IAuditCommunitySMO auditCommunitySMOImpl;
