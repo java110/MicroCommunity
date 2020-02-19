@@ -47,8 +47,8 @@
                         },
                         {
                             limit: "maxin",
-                            param: "2,10",
-                            errInfo: "资源路径必须在1至200字符之间"
+                            param: "2,200",
+                            errInfo: "资源路径必须在2至200字符之间"
                         },
                     ],
                     'editBasePrivilegeInfo.domain': [
@@ -114,6 +114,7 @@
                     name: '',
                     domain: '',
                     description: '',
+                    resource:''
 
                 }
             }

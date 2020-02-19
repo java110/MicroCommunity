@@ -10,7 +10,12 @@
                 mappings:[],
                 name:'',
                 total:0,
-                records:1
+                records:1,
+                conditions:{
+                    domain:'',
+                    name:'',
+                    key:''
+                }
             }
         },
         _initMethod:function(){
@@ -26,13 +31,11 @@
         },
         methods:{
             _listMappings:function(_page, _rows){
+                vc.component.mappingManageInfo.conditions.page = _page;
+                vc.component.mappingManageInfo.conditions.row = _rows;
                 var param = {
-                    params:{
-                        page:_page,
-                        row:_rows,
-                        name:vc.component.mappingManageInfo.name
+                    params:vc.component.mappingManageInfo.conditions
                     }
-
                }
                //发送get请求
                vc.http.get('mappingManage',
