@@ -27,14 +27,20 @@
         _initEvent: function () {
             vc.on('inspectionRouteSelect2', 'setInspectionRoute', function (_param) {
                 vc.copyObject(_param, this.inspectionRouteSelect2Info);
-                // var option = new Option(_param.routeName, _param.inspectionRouteId, true, true);
-                // this.inspectionRouteSelect2Info.inspectionRouteSelector.append(option);
-                var routeIds = _param.inspectionRouteId.split(",");
-                var routeIdArray = new Array()
-                for( var i = 0; i < routeIds.length; i++){
-                    routeIdArray[i] = routeIds[i];
+                var name = _param.routeName.split(",");
+                var ids = _param.inspectionRouteId.split(",");
+                for( var i = 0; i < name.length; i++){
+                    var option = new Option(name[i],ids[i], true, true);
+                    this.inspectionRouteSelect2Info.inspectionRouteSelector.append(option);
                 }
-                $("#inspectionRouteSelector").val(routeIdArray).trigger("change");
+                //var option = new Option(_param.routeName, _param.inspectionRouteId, true, true);
+
+                // var routeIds = _param.inspectionRouteId.split(",");
+                // var routeIdArray = new Array()
+                // for( var i = 0; i < routeIds.length; i++){
+                //     routeIdArray[i] = routeIds[i];
+                // }
+                // $("#inspectionRouteSelector").val(routeIdArray).trigger("change");
             });
 
             vc.on('inspectionRouteSelect2', 'clearInspectionRoute', function (_param) {
@@ -44,6 +50,7 @@
                     routeName: '',
                     inspectionRouteSelector: {}
                 };
+                $("#inspectionRouteSelector").val(null).trigger('change');
             });
         },
         methods: {
