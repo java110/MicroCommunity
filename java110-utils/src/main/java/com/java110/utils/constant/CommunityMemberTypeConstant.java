@@ -28,10 +28,10 @@ public final class CommunityMemberTypeConstant {
 
 
     //运维团队
-    public static final String OPT = "800900000001";
+    public static final String OPT = "390001200000";
 
 
     //开发团队
-    public static final String DEV = "800900000000";
+    public static final String DEV = "390001200005";
 
 }
