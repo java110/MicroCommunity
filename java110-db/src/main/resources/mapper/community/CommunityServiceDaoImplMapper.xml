@@ -315,6 +315,7 @@
         <if test="memberId != null and memberId != '' and needCommunityInfo == true">
             AND ms.`community_id` = msc.`community_id`
             and msc.member_id = #{memberId}
+            and msc.status_cd = '0'
         </if>
         <if test="memberId != null and memberId != '' and needCommunityInfo == false">
             and ms.member_id = #{memberId}
@@ -390,6 +391,7 @@
         <if test="memberId != null and memberId != '' and needCommunityInfo == true">
             AND ms.`community_id` = msc.`community_id`
             and msc.member_id = #{memberId}
+            and msc.status_cd = '0'
         </if>
         <if test="memberId != null and memberId != '' and needCommunityInfo == false">
             and ms.member_id = #{memberId}
