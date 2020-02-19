@@ -23,7 +23,8 @@
                 departmentId:'',
                 departmentName:'',
                 createUserId:'',
-                createUserName:''
+                createUserName:'',
+                inspectionRouteName:''
             }
         },
         _initMethod: function () {
@@ -65,7 +66,7 @@
                 //传输数据到machineSelect2组件
                 vc.emit('editInspectionPlan', 'inspectionRouteSelect2', 'setInspectionRoute', {
                     inspectionRouteId: vc.component.editInspectionPlanInfo.inspectionRouteId,
-                    routeName: vc.component.editInspectionPlanInfo.routeName,
+                    routeName: vc.component.editInspectionPlanInfo.inspectionRouteName,
                 });
 
 
@@ -244,7 +245,8 @@
                     departmentId:'',
                     departmentName:'',
                     createUserId:'',
-                    createUserName:''
+                    createUserName:'',
+                    inspectionRouteName:''
                 };
                 vc.component.editInspectionPlanInfo.signTypes = signTypes;
                 vc.component.editInspectionPlanInfo.states = states;
