@@ -13,7 +13,8 @@
                 storeTypeCd:vc.getData('/nav/getUserInfo').storeTypeCd,
                 conditions: {
                     name: '',
-                    areaCode:''
+                    areaCode:'',
+                    communityId:''
                 }
 
             }
@@ -37,10 +38,13 @@
 
                vc.component.communityManageInfo.conditions.page = _page;
                vc.component.communityManageInfo.conditions.row = _rows;
+               var _param = {
+                    params:vc.component.communityManageInfo.conditions
+               }
                //发送get请求
                vc.http.get('communityManage',
                             'list',
-                             vc.component.communityManageInfo.conditions,
+                             _param,
                              function(json,res){
                                 var _communityManageInfo=JSON.parse(json);
                                 vc.component.communityManageInfo.total = _communityManageInfo.total;
