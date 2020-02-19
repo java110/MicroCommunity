@@ -9,7 +9,8 @@
             communityManageInfo:{
                 communitys:[],
                 total:0,
-                records:1
+                records:1,
+                storeTypeCd:vc.getData('/nav/getUserInfo').storeTypeCd
             }
         },
         _initMethod:function(){
@@ -58,6 +59,9 @@
             },
             _openDeleteCommunityModel:function(_community){
                 vc.emit('deleteCommunity','openDeleteCommunityModal',_community);
+            },
+            _openRecallCommunityModel:function(_community){
+                vc.emit('recallAuditFinishCommunity','openRecallAuditFinishCommunityModal',_community);
             }
         }
     });

@@ -486,23 +486,41 @@ public class StringUtil {
 
     /**
      * json是否包含key 并且存在值
+     *
      * @param param
      * @param key
      * @return
      */
-    public static boolean jsonHasKayAndValue(JSONObject param,String key){
-        if(param == null){
+    public static boolean jsonHasKayAndValue(JSONObject param, String key) {
+        if (param == null) {
             return false;
         }
 
-        if(!param.containsKey(key)){
+        if (!param.containsKey(key)) {
             return false;
         }
 
-        if(isEmpty(param.getString(key))){
+        if (isEmpty(param.getString(key))) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * json是否包含key 并且存在值
+     *
+     * @param param
+     * @param key
+     * @return
+     */
+    public static boolean jsonHasKayAndValue(String param, String key) {
+        JSONObject paramObj = null;
+        try {
+            paramObj = JSONObject.parseObject(param);
+            return jsonHasKayAndValue(paramObj, key);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

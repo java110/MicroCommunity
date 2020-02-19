@@ -36,13 +36,13 @@
                             <td>
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
-                                            v-bind:disabled="community.state == '1100'"
+                                            v-bind:disabled="community.state == '1100' && storeTypeCd != '800900000001'"
                                             v-on:click="_openEditCommunityModel(community)">修改
                                     </button>
                                 </div>
-                                <!-- <div class="btn-group">
-                                     <button class="btn-white btn btn-xs" v-on:click="_openDeleteCommunityModel(community)">删除</button>
-                                 </div></td>-->
+                                 <div class="btn-group" v-if="community.state != '1000' && storeTypeCd == '800900000001'">
+                                     <button class="btn-white btn btn-xs" v-on:click="_openRecallCommunityModel(community)">审核撤回</button>
+                                 </div></td>
 
                         </tr>
                         </tbody>
