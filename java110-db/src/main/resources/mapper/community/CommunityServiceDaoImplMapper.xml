@@ -319,6 +319,9 @@
         <if test="memberId != null and memberId != '' and needCommunityInfo == false">
             and ms.member_id = #{memberId}
         </if>
+        <if test="subMemberId != null and subMemberId != ''">
+            and ms.member_id = #{memberId}
+        </if>
         <if test="noAuditEnterCommunity == true">
             and ms.member_type_cd not in ('390001200003','390001200005','390001200000')
         </if>
@@ -332,6 +335,10 @@
         <if test="communityId != null and communityId != ''">
             and ms.community_id = #{communityId}
         </if>
+        <if test="communityName != null and communityName != '' and needCommunityInfo == true">
+            and sc.name like concat('%',#{communityName},'%')
+        </if>
+        order by ms.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
@@ -388,6 +395,10 @@
             and ms.member_id = #{memberId}
         </if>
 
+        <if test="subMemberId != null and subMemberId != ''">
+            and ms.member_id = #{memberId}
+        </if>
+
         <if test="noAuditEnterCommunity == true">
             and ms.member_type_cd not in ('390001200003','390001200005','390001200000')
         </if>
@@ -407,6 +418,9 @@
         </if>
         <if test="communityId != null and communityId != ''">
             and ms.community_id = #{communityId}
+        </if>
+        <if test="communityName != null and communityName != '' and needCommunityInfo == true">
+            and sc.name like concat('%',#{communityName},'%')
         </if>
     </select>
 

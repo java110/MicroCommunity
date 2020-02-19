@@ -7,6 +7,8 @@
 package com.java110.utils.util;
 
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -480,5 +482,27 @@ public class StringUtil {
         }
 
         return description;
+    }
+
+    /**
+     * json是否包含key 并且存在值
+     * @param param
+     * @param key
+     * @return
+     */
+    public static boolean jsonHasKayAndValue(JSONObject param,String key){
+        if(param == null){
+            return false;
+        }
+
+        if(!param.containsKey(key)){
+            return false;
+        }
+
+        if(isEmpty(param.getString(key))){
+            return false;
+        }
+
+        return true;
     }
 }

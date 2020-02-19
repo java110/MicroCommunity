@@ -10,7 +10,15 @@
                 communitys:[],
                 total:0,
                 records:1,
-                currentCommunityMemberId:''
+                currentCommunityMemberId:'',
+                moreCondition:false,
+                conditions:{
+                    name:'',
+                    memberTypeCd:'',
+                    communityName:'',
+                    auditStatusCd:'1000',
+                    tel:''
+                }
             }
         },
         _initMethod:function(){
@@ -29,13 +37,13 @@
         },
         methods:{
             _listCommunitys:function(_page, _rows){
-                var param = {
-                    params:{
-                        page:_page,
-                        row:_rows
-                    }
 
-               }
+               vc.component.auditEnterCommunityManageInfo.conditions.page = _page;
+               vc.component.auditEnterCommunityManageInfo.conditions.row = _rows;
+               var param = {
+                   params: vc.component.auditEnterCommunityManageInfo.conditions
+               };
+
                //发送get请求
                vc.http.get('auditEnterCommunityManage',
                             'list',
@@ -80,6 +88,17 @@
                         console.log('请求失败处理');
                         vc.message(errInfo);
                 });
+            },
+            _queryEnterCommunityMethod: function () {
+                vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
+
+            },
+            _moreCondition: function () {
+                if (vc.component.auditEnterCommunityManageInfo.moreCondition) {
+                    vc.component.auditEnterCommunityManageInfo.moreCondition = false;
+                } else {
+                    vc.component.auditEnterCommunityManageInfo.moreCondition = true;
+                }
             }
 
         }

@@ -125,7 +125,7 @@ public class SaveParkingSpaceListener extends AbstractServiceApiDataFlowListener
         Assert.jsonObjectHaveKey(paramIn, "num", "请求报文中未包含age");
         Assert.jsonObjectHaveKey(paramIn, "area", "请求报文中未包含name");
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "paId", "请求报文停车场信息");
+        Assert.jsonObjectHaveKey(paramIn, "paId", "请求报文中未包含停车场信息");
     }
 
 
