@@ -70,7 +70,11 @@
             },
             _openRecallCommunityModel:function(_community){
                 vc.emit('recallAuditFinishCommunity','openRecallAuditFinishCommunityModal',_community);
+            },
+            _queryCommunityMethod:function(){
+                  vc.component._listCommunitys(DEFAULT_PAGE, DEFAULT_ROWS);
             }
+
         }
     });
 })(window.vc);

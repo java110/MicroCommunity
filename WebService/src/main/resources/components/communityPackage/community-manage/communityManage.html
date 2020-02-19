@@ -10,12 +10,11 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <vc:create name="areaSelect"
-                                       callBackListener="communityManage"
-                                       callBackFunction="notifyArea"
-                                       namespace="communityManage"
-                            ></vc:create>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入小区ID"
+                                       v-model="communityManageInfo.conditions.communityId" class=" form-control">
+                            </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -23,14 +22,15 @@
                                        v-model="communityManageInfo.conditions.name" class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <input type="text" placeholder="请输入小区ID"
-                                       v-model="communityManageInfo.conditions.communityId" class=" form-control">
-                            </div>
+                        <div class="col-sm-6">
+                            <vc:create name="areaSelect"
+                                       callBackListener="communityManage"
+                                       callBackFunction="notifyArea"
+                                       namespace="communityManage"
+                            ></vc:create>
                         </div>
                         <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryFeeConfigMethod()">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="_queryCommunityMethod()">
                                 <i class="glyphicon glyphicon-search"></i> 查询
                             </button>
                         </div>
@@ -75,7 +75,7 @@
                             <td>{{community.nearbyLandmarks}}</td>
                             <td>{{community.cityName}}</td>
                             <td>{{community.stateName}}</td>
-                            <td>
+                            <td class="text-right">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
                                             v-bind:disabled="community.state == '1100' && communityManageInfo.storeTypeCd != '800900000001'"
