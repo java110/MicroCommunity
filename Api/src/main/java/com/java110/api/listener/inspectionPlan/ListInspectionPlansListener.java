@@ -2,9 +2,11 @@ package com.java110.api.listener.inspectionPlan;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.smo.inspectionRoute.IInspectionRouteInnerServiceSMO;
 import com.java110.core.smo.org.IOrgInnerServiceSMO;
 import com.java110.core.smo.org.IOrgStaffRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
+import com.java110.dto.inspectionRoute.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.user.UserDto;
 import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +39,8 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
     private IInspectionPlanInnerServiceSMO inspectionPlanInnerServiceSMOImpl;
     @Autowired
     private IOrgStaffRelInnerServiceSMO iOrgStaffRelInnerServiceSMO;
+    @Autowired
+    private IInspectionRouteInnerServiceSMO inspectionRouteInnerServiceSMOImpl;
 
 
     @Override
@@ -80,9 +85,12 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
         if (count > 0) {
             inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
             ArrayList staffIds = new ArrayList<>();
+            ArrayList inspectionRouteIds = new ArrayList<>();
             for( ApiInspectionPlanDataVo Plans : inspectionPlans){
-                if(Plans.getStaffId() != null){
-                    staffIds.add(Plans.getStaffId());
+                staffIds.add(Plans.getStaffId());
+                String[] ids = Plans.getInspectionRouteId().split(",");
+                for( String s : ids){
+                    inspectionRouteIds.add(s);
                 }
             }
             if(staffIds.size() > 0){
@@ -102,6 +110,32 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
                     }
                 }
             }
+            if(inspectionRouteIds.size() > 0){
+                //去重
+                HashSet set = new HashSet(inspectionRouteIds);
+                inspectionRouteIds.clear();
+                inspectionRouteIds.addAll(set);
+                InspectionRouteDto inspectionRouteDto = new InspectionRouteDto();
+                String[] routeIds = (String[]) inspectionRouteIds.toArray(new String[inspectionRouteIds.size()]);
+                inspectionRouteDto.setInspectionRouteIds(routeIds);
+                List<InspectionRouteDto> inspectionRouteDtoList = inspectionRouteInnerServiceSMOImpl.queryInspectionRoutes(inspectionRouteDto);
+                for( ApiInspectionPlanDataVo planDataVo : inspectionPlans){
+                    String[] routeIdArray = planDataVo.getInspectionRouteId().split(",");
+                    for( String s : routeIdArray){
+                        for( InspectionRouteDto inspectionRouteDto1 : inspectionRouteDtoList){
+                            if(inspectionRouteDto1.getInspectionRouteId().equals(s)){
+                                if(planDataVo.getInspectionRouteName() == null){
+                                    planDataVo.setInspectionRouteName(inspectionRouteDto1.getRouteName());
+                                }else{
+                                    planDataVo.setInspectionRouteName(planDataVo.getInspectionRouteName()+","+inspectionRouteDto1.getRouteName());
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
         } else {
             inspectionPlans = new ArrayList<>();
         }
