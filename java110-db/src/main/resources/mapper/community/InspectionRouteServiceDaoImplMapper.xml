@@ -113,6 +113,12 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
         <if test="routeName !=null and routeName != ''">
             and t.Route_name= #{routeName}
         </if>
+        <if test="inspectionRouteIds !=null">
+            and t.inspection_route_Id in
+            <foreach collection="inspectionRouteIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
