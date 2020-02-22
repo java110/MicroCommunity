@@ -47,7 +47,8 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
 
         //super.validatePageInfo(pd);
 
-        Assert.hasKeyAndValue(paramIn, "code", "请求报文中未包含code信息");
+        Assert.hasKeyAndValue(paramIn, "name", "请求报文中未包含用户名");
+        Assert.hasKeyAndValue(paramIn, "password", "请求报文中未包含密码");
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_ORG);
     }
 
@@ -57,14 +58,7 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         logger.debug("doLogin入参：" + paramIn.toJSONString());
         ResponseEntity<String> responseEntity;
 
-        Assert.jsonObjectHaveKey(pd.getReqData(),"username","请求报文格式错误或未包含username信息");
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
-
-        //调用 验证码组件验证码是否正确
-        responseEntity = this.invokeComponent("validate-code","validate",pd);
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
-            return responseEntity;
-        }
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
         responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(), "http://api.java110.com:8008/api/user.service.login",HttpMethod.POST);
