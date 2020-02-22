@@ -38,21 +38,10 @@ public class PropertyAppLoginController extends BaseController {
      */
     @RequestMapping(path = "/loginProperty", method = RequestMethod.POST)
     public ResponseEntity<String> loginProperty(@RequestBody String postInfo, HttpServletRequest request) {
-        ResponseEntity<String> responseEntity = null;
-        JSONObject postObj = JSONObject.parseObject(postInfo);
-        String code = JSONObject.parseObject(postInfo).getString("code");
-        JSONObject userInfo = postObj.getJSONObject("userInfo");
-        if (code == null || userInfo == null) {
-            logger.error("code is null");
-            responseEntity = new ResponseEntity<>("code is null", HttpStatus.BAD_REQUEST);
-            return responseEntity;
-        }
-
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         IPageData pd = PageData.newInstance().builder("", "","", postInfo,
                 "", "", "", "",
                 request.getHeader("APP_ID"));
-
         return propertyAppLoginSMOImpl.doLogin(pd);
     }
 
