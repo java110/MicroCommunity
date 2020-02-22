@@ -61,8 +61,8 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-        responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(), "http://api.java110.com:8008/api/user.service.login",HttpMethod.POST);
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "http://api.java110.com:8008/api/user.service.login", HttpMethod.POST);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
 
@@ -71,12 +71,12 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         //根据用户查询商户信息
         String userId = userInfo.getString("userId");
 
-        pd = PageData.newInstance().builder(userId, "","", pd.getReqData(),
+        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
                 "", "", "", "",
                 pd.getAppId());
         responseEntity = super.getStoreInfo(pd, restTemplate);
 
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
 
@@ -84,15 +84,16 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
 
         Assert.jsonObjectHaveKey(storeInfo, "storeId", "根据员工未查到商户信息");
         Assert.jsonObjectHaveKey(storeInfo, "storeTypeCd", "根据员工未查到商户类型信息");
-        userInfo.put("storeId",storeInfo.getString("storeId"));
-        userInfo.put("storeTypeCd",storeInfo.getString("storeTypeCd"));
+        userInfo.put("storeId", storeInfo.getString("storeId"));
+        userInfo.put("storeName", storeInfo.getString("name"));
+        userInfo.put("storeTypeCd", storeInfo.getString("storeTypeCd"));
         JSONObject paramOut = new JSONObject();
         paramOut.put("result", 0);
         paramOut.put("userInfo", userInfo);
         paramOut.put("token", userInfo.getString("token"));
         pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
 
-        return responseEntity;
+        return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
     }
 
     public RestTemplate getRestTemplate() {
