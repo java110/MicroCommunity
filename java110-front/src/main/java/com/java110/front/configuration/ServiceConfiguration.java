@@ -24,7 +24,8 @@ public class ServiceConfiguration {
         exclusions.append("/callComponent/download/getFile/file,");//放开 下载图片也不需要登录
         exclusions.append("/callComponent/download/getFile/fileByObjId,");//放开 下载图片也不需要登录
         exclusions.append("/app/payment/notify,");//微信支付通知
-        exclusions.append("/app/loginWx");// 登录跳过
+        exclusions.append("/app/loginWx,");// 登录跳过
+        exclusions.append("/app/loginProperty");// 物业APP登录跳过
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");
