@@ -142,6 +142,8 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
+
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
