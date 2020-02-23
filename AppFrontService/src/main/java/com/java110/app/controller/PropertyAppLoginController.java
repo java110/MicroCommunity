@@ -6,6 +6,7 @@ import com.java110.app.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.utils.constant.CommonConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,14 @@ public class PropertyAppLoginController extends BaseController {
     @RequestMapping(path = "/loginProperty", method = RequestMethod.POST)
     public ResponseEntity<String> loginProperty(@RequestBody String postInfo, HttpServletRequest request) {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
-        IPageData pd = PageData.newInstance().builder("", "","", postInfo,
+        IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
                 "", "", "", "",
                 request.getHeader("APP_ID"));
-        return propertyAppLoginSMOImpl.doLogin(pd);
+        ResponseEntity<String> responseEntity = propertyAppLoginSMOImpl.doLogin(pd);
+        JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
+        pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+        pd.setToken(outParam.getString("token"));
+        return responseEntity;
     }
 
 }

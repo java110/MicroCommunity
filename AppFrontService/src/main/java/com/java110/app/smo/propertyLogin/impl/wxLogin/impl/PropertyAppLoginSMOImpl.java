@@ -91,7 +91,7 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         paramOut.put("result", 0);
         paramOut.put("userInfo", userInfo);
         paramOut.put("token", userInfo.getString("token"));
-        pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
+        //pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
 
         return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
     }
