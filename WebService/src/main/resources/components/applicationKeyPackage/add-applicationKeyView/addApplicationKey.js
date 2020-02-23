@@ -298,17 +298,17 @@
                         video: true,
                         audio: false
                     };
-                    var video = document.getElementById('AddApplicationKeyPhoto');
+                    var addVideo = document.getElementById('addApplicationKeyPhoto');
                     var media = navigator.getUserMedia(constraints, function (stream) {
                         var url = window.URL || window.webkitURL;
                         //video.src = url ? url.createObjectURL(stream) : stream;
                         vc.component.addApplicationKeyInfo.mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
                         try {
-                            video.src = url ? url.createObjectURL(stream) : stream;
+                            addVideo.src = url ? url.createObjectURL(stream) : stream;
                         } catch (error) {
-                            video.srcObject = stream;
+                            addVideo.srcObject = stream;
                         }
-                        video.play();
+                        addVideo.play();
                         vc.component.addApplicationKeyInfo.videoPlaying = true;
                     }, function (error) {
                         console.log("ERROR");
@@ -321,10 +321,10 @@
             _takePhoto: function () {
                 if (vc.component.addApplicationKeyInfo.videoPlaying) {
                     var canvas = document.getElementById('AddApplicationKeyCanvas');
-                    var video = document.getElementById('AddApplicationKeyPhoto');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var takeAddVideo = document.getElementById('AddApplicationKeyPhoto');
+                    canvas.width = takeAddVideo.videoWidth;
+                    canvas.height = takeAddVideo.videoHeight;
+                    canvas.getContext('2d').drawImage(takeAddVideo, 0, 0);
                     var data = canvas.toDataURL('image/webp');
                     vc.component.addApplicationKeyInfo.photo = data;
                     //document.getElementById('photo').setAttribute('src', data);

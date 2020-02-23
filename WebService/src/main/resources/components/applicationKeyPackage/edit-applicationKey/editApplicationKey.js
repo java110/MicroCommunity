@@ -327,18 +327,18 @@
                         video: true,
                         audio: false
                     };
-                    var video = document.getElementById('editApplicationKeyPhoto');
+                    var editVideo = document.getElementById('editApplicationKeyPhoto');
                     var media = navigator.getUserMedia(constraints, function (stream) {
                         var url = window.URL || window.webkitURL;
                         //video.src = url ? url.createObjectURL(stream) : stream;
 
                         vc.component.editApplicationKeyInfo.mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
                         try {
-                            video.src = url ? url.createObjectURL(stream) : stream;
+                            editVideo.src = url ? url.createObjectURL(stream) : stream;
                         } catch (error) {
-                            video.srcObject = stream;
+                            editVideo.srcObject = stream;
                         }
-                        video.play();
+                        editVideo.play();
                         vc.component.editApplicationKeyInfo.videoPlaying = true;
                     }, function (error) {
                         console.log("ERROR");
@@ -351,10 +351,10 @@
             _takeEditPhoto: function () {
                 if (vc.component.editApplicationKeyInfo.videoPlaying) {
                     var canvas = document.getElementById('editApplicationKeyCanvas');
-                    var video = document.getElementById('editApplicationKeyPhoto');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    var takeEditVideo = document.getElementById('editApplicationKeyPhoto');
+                    canvas.width = takeEditVideo.videoWidth;
+                    canvas.height = takeEditVideo.videoHeight;
+                    canvas.getContext('2d').drawImage(takeEditVideo, 0, 0);
                     var data = canvas.toDataURL('image/webp');
                     vc.component.editApplicationKeyInfo.photo = data;
                     //document.getElementById('photo').setAttribute('src', data);
