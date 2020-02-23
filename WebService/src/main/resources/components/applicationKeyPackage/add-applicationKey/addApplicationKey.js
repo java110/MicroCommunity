@@ -321,7 +321,7 @@
             _takePhoto: function () {
                 if (vc.component.addApplicationKeyInfo.videoPlaying) {
                     var canvas = document.getElementById('AddApplicationKeyCanvas');
-                    var takeAddVideo = document.getElementById('AddApplicationKeyPhoto');
+                    var takeAddVideo = document.getElementById('addApplicationKeyPhoto');
                     canvas.width = takeAddVideo.videoWidth;
                     canvas.height = takeAddVideo.videoHeight;
                     canvas.getContext('2d').drawImage(takeAddVideo, 0, 0);
