@@ -41,12 +41,12 @@ public class PropertyAppLoginController extends BaseController {
     public ResponseEntity<String> loginProperty(@RequestBody String postInfo, HttpServletRequest request) {
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
         IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
-                "", "", "", "",
+                "login", "", "", "",
                 request.getHeader("APP_ID"));
         ResponseEntity<String> responseEntity = propertyAppLoginSMOImpl.doLogin(pd);
         JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
-        pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
         pd.setToken(outParam.getString("token"));
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
         return responseEntity;
     }
 
