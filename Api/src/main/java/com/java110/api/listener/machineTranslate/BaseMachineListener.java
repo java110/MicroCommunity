@@ -78,17 +78,27 @@ public abstract class BaseMachineListener extends AbstractServiceApiListener {
         }
 
         //检查设备是否合法
+        //检查设备是否合法
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqHeader.get("machinecode"));
         machineDto.setCommunityId(communityId);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         if (machineDtos == null || machineDtos.size() < 1) {
             outParam.put("code", -1);
-            outParam.put("message", "该设备【" + reqJson.getString("machineCode") + "】未在该小区【" + communityId + "】注册");
+            outParam.put("message", "该设备【" + reqHeader.get("machinecode") + "】未在该小区【" + communityId + "】注册");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return false;
         }
+
+        if("1600".equals(machineDtos.get(0).getState())){ //设备禁用状态
+            outParam.put("code", -1);
+            outParam.put("message", "该设备【" + reqHeader.get("machinecode") + "】禁用状态");
+            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return false;
+        }
+
 
         reqJson.put("machineCode", machineDtos.get(0).getMachineCode());
         reqJson.put("machineId", machineDtos.get(0).getMachineId());

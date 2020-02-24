@@ -90,9 +90,21 @@ public class TranslateOwnerToMachine implements Runnable {
                     ownerDto.setbId(tmpOrderDto.getbId());
                 }
 
+                List<OwnerDto> ownerDtos = null;
                 //根据bId 查询业主信息
+                //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
+                if(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())){
+                    ownerDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+                    ownerDtos =  ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+                    MachineDto machineDto = new MachineDto();
+                    machineDto.setMachineId("");
+                    deleteMachineTranslate(machineDto,ownerDtos.get(0));
+                    orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
+                    logger.debug("没有数据数据直接刷为C1,当前为删除业主操作" + JSONObject.toJSONString(tmpOrderDto));
+                    continue;
+                }
 
-                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+                ownerDtos =  ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
                 // 房屋信息
                 if (ownerDtos == null || ownerDtos.size() == 0) {
