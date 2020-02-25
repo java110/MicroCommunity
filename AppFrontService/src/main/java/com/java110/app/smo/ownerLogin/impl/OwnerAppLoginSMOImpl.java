@@ -67,7 +67,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
                 "", "", "", "",
                 pd.getAppId());
-        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL + "/api/owner.listAppUserBindingOwners?userId="+userId,HttpMethod.GET);
+        responseEntity = this.callCenterService(restTemplate,pd,"", ServiceConstant.SERVICE_API_URL + "/api/owner.listAppUserBindingOwners?userid="+userId,HttpMethod.GET);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
