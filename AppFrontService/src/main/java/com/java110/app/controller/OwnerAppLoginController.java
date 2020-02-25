@@ -10,6 +10,7 @@ import com.java110.utils.constant.CommonConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,9 @@ public class OwnerAppLoginController extends BaseController {
                 "login", "", "", "",
                 request.getHeader("APP_ID"));
         ResponseEntity<String> responseEntity = ownerAppLoginSMOImpl.doLogin(pd);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
         JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
         pd.setToken(outParam.getString("token"));
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);

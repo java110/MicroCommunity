@@ -81,7 +81,8 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         }
 
         JSONObject appUser = ownerInfo.getJSONArray("auditAppUserBindingOwners").getJSONObject(0);
-
+        appUser.put("userId",userId);
+        appUser.put("userName",paramIn.getString("username"));
         JSONObject paramOut = new JSONObject();
         paramOut.put("result", 0);
         paramOut.put("owner", appUser);

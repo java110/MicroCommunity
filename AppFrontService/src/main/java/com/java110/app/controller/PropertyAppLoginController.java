@@ -44,6 +44,9 @@ public class PropertyAppLoginController extends BaseController {
                 "login", "", "", "",
                 request.getHeader("APP_ID"));
         ResponseEntity<String> responseEntity = propertyAppLoginSMOImpl.doLogin(pd);
+        if(responseEntity.getStatusCode() != HttpStatus.OK){
+            return responseEntity;
+        }
         JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
         pd.setToken(outParam.getString("token"));
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,pd);
