@@ -65,10 +65,10 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
             fileDto.setContext(reqJson.getString("headerImg"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(reqJson.getString("communityId"));
-            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-            }
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
             reqJson.put("headerImg", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
 
             businesses.add(addHeaderImg(reqJson, context));
 
@@ -107,7 +107,7 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", paramInJson.getString("activitiesId"));
         businessUnit.put("fileRealName", paramInJson.getString("headerImg"));
-        businessUnit.put("fileSaveName", paramInJson.getString("headerImg"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
         return business;

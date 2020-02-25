@@ -15,6 +15,8 @@ public class FileDto  implements Serializable {
 
     private String suffix;
 
+    private String fileSaveName;
+
     public String getFileId() {
         return fileId;
     }
@@ -61,5 +63,13 @@ public class FileDto  implements Serializable {
 
     public void setSuffix(String suffix) {
         this.suffix = suffix;
+    }
+
+    public String getFileSaveName() {
+        return fileSaveName;
+    }
+
+    public void setFileSaveName(String fileSaveName) {
+        this.fileSaveName = fileSaveName;
     }
 }

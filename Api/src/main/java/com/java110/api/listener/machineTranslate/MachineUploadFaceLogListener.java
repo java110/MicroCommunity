@@ -151,11 +151,7 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
         fileDto.setFileName(reqJson.getString("fileId"));
         fileDto.setContext(reqJson.getString("photo"));
         fileDto.setSuffix("jpeg");
-        int saveFlag = fileInnerServiceSMOImpl.saveFile(fileDto);
-        if (saveFlag < 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存文件失败");
-        }
-
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
@@ -166,7 +162,7 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", reqJson.getString("userId"));
         businessUnit.put("fileRealName", reqJson.getString("fileId"));
-        businessUnit.put("fileSaveName", reqJson.getString("fileId"));
+        businessUnit.put("fileSaveName", fileName);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
         return business;

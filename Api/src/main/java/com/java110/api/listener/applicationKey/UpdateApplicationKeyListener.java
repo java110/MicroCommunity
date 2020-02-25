@@ -88,10 +88,9 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
             fileDto.setContext(reqJson.getString("photo"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(reqJson.getString("communityId"));
-            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-            }
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
 
             businesses.add(editApplicationKeyPhoto(reqJson, context));
 
@@ -188,7 +187,7 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
             businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
-            businessUnit.put("fileSaveName", paramInJson.getString("applicationKeyPhotoId"));
+            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
             business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
             return business;
         }

@@ -22,7 +22,7 @@ public interface IFileInnerServiceSMO {
      * @return true 成功 false 失败
      */
     @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
-    int saveFile(@RequestBody FileDto fileDto);
+    String saveFile(@RequestBody FileDto fileDto);
 
     /**
      * 查询文件信息

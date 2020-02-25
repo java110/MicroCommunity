@@ -93,10 +93,9 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
             fileDto.setContext(paramObj.getString("ownerPhoto"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(paramObj.getString("communityId"));
-            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-            }
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             paramObj.put("ownerPhotoId", fileDto.getFileId());
+            paramObj.put("fileSaveName", fileName);
 
             businesses.add(editOwnerPhoto(paramObj, dataFlowContext));
 
@@ -198,7 +197,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
         return business;
 

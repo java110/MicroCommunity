@@ -49,66 +49,6 @@ public class QueryStaffServiceListener extends AbstractServiceApiListener {
         return HttpMethod.GET;
     }
 
-    /**
-     *
-     * @param event
-     */
-
-    public void soService1(ServiceDataFlowEvent event) {
-
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-        /*Map<String,String> headers = dataFlowContext.getRequestHeaders();
-
-        Assert.hasKeyAndValue(headers,"page","请求报文中未包含page节点");
-        Assert.hasKeyAndValue(headers,"rows","请求报文中未包含rows节点");
-        Assert.hasKeyAndValue(headers,"storeId","请求报文中未包含storeId节点");
-
-        ResponseEntity responseEntity= null;
-        AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_USERS);
-        if(appService == null){
-            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_USERS, HttpStatus.UNAUTHORIZED);
-            dataFlowContext.setResponseEntity(responseEntity);
-            return ;
-        }
-        String requestUrl = appService.getUrl();
-        HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_STORE_USERS);
-
-        //先查询商户服务查询员工userId
-        requestUrl = requestUrl + "?page="+headers.get("page")+"&rows="+headers.get("rows")+"&storeId="+headers.get("storeId");
-        dataFlowContext.getRequestHeaders().put("REQUEST_URL",requestUrl);
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
-        doRequest(dataFlowContext,appService,httpEntity);
-        responseEntity = dataFlowContext.getResponseEntity();
-
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
-            return ;
-        }
-
-        //然后根据userId 在用户服务查询用户信息
-        JSONObject staffs = JSONObject.parseObject(responseEntity.getBody().toString());
-
-        JSONArray rows = staffs.getJSONArray("datas");
-
-        appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
-        if(appService == null){
-            responseEntity = new ResponseEntity<String>("当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO, HttpStatus.UNAUTHORIZED);
-            dataFlowContext.setResponseEntity(responseEntity);
-            return ;
-        }
-
-        for(int rowIndex = 0 ;rowIndex < rows.size();rowIndex ++){
-            JSONObject tmpObj = rows.getJSONObject(rowIndex);
-            queryUserInfoByUserId(dataFlowContext,tmpObj,appService);
-        }
-        dataFlowContext.setResponseEntity(new ResponseEntity(staffs.toJSONString(),HttpStatus.OK));
-
-*/
-
-    }
-
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson,"page","请求报文中未包含page节点");

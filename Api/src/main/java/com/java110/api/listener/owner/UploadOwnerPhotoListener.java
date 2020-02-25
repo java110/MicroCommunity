@@ -91,10 +91,9 @@ public class UploadOwnerPhotoListener extends AbstractServiceApiListener {
             fileDto.setContext(reqJson.getString("photo"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(reqJson.getString("communityId"));
-            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-            }
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             reqJson.put("ownerPhotoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
 
             businesses.add(editOwnerPhoto(reqJson, dataFlowContext));
 
@@ -175,7 +174,7 @@ public class UploadOwnerPhotoListener extends AbstractServiceApiListener {
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
         return business;
 

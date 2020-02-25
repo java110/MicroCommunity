@@ -48,15 +48,10 @@ public class SaveFileListener extends AbstractServiceApiListener {
 
         fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
 
-        int count = fileInnerServiceSMOImpl.saveFile(fileDto);
-
-
-        if (count < 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存数据失败");
-        }
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
 
         JSONObject outParam = new JSONObject();
-        outParam.put("fileId", fileDto.getFileId());
+        outParam.put("fileId", fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
 

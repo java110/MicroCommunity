@@ -83,10 +83,9 @@ public class ApplicationKeyListener extends AbstractServiceApiDataFlowListener {
         fileDto.setContext(paramObj.getString("ownerPhoto"));
         fileDto.setSuffix("jpeg");
         fileDto.setCommunityId(paramObj.getString("communityId"));
-        if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-        }
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
         paramObj.put("ownerPhotoId", fileDto.getFileId());
+        paramObj.put("fileSaveName", fileName);
 
         businesses.add(addOwnerPhoto(paramObj, dataFlowContext));
 
@@ -169,7 +168,7 @@ public class ApplicationKeyListener extends AbstractServiceApiDataFlowListener {
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", paramInJson.getString("memberId"));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
         return business;

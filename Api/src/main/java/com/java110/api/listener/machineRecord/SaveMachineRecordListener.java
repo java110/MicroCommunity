@@ -36,6 +36,7 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -75,10 +76,9 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
             fileDto.setContext(reqJson.getString("photo"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(communityId);
-            if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-                throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-            }
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
             reqJson.put("photoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
 
             businesses.add(addPhoto(reqJson, context));
 
@@ -120,7 +120,7 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
     private JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         String machineRecordId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId);
-        paramInJson.put("machineRecordId",machineRecordId);
+        paramInJson.put("machineRecordId", machineRecordId);
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -153,7 +153,7 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", paramInJson.getString("machineRecordId"));
         businessUnit.put("fileRealName", paramInJson.getString("photoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("photoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
         return business;

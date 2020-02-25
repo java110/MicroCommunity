@@ -167,10 +167,9 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         fileDto.setContext(photo);
         fileDto.setSuffix("jpeg");
         fileDto.setCommunityId(paramInJson.getString("communityId"));
-        if (fileInnerServiceSMOImpl.saveFile(fileDto) < 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "保存文件出错");
-        }
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
         paramInJson.put("advertPhotoId", fileDto.getFileId());
+        paramInJson.put("fileSaveName", fileName);
         itemTypeCd = "8888";
         url = fileDto.getFileId();
 
@@ -244,7 +243,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         businessUnit.put("saveWay", "40000".equals(relTypeCd) ? "table" : "ftp");
         businessUnit.put("objId", paramInJson.getString("advertId"));
         businessUnit.put("fileRealName", paramInJson.getString("advertPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("advertPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
         return business;
