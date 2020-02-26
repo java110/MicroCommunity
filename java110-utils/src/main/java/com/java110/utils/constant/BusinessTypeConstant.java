@@ -170,6 +170,25 @@ public class BusinessTypeConstant {
 
 
     /**
+     * 保存采购申请
+     */
+    public static final String BUSINESS_TYPE_SAVE_PURCHASE_APPLY = "210100030001";
+
+    /**
+     * 修改采购申请
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PURCHASE_APPLY = "210100040001";
+
+    /**
+     * 删除采购申请
+     */
+    public static final String BUSINESS_TYPE_DELETE_PURCHASE_APPLY = "210100050001";
+
+
+
+
+
+    /**
      * 保存商品信息
      */
     public static final String BUSINESS_TYPE_SAVE_SHOP_INFO = "300100030001";
