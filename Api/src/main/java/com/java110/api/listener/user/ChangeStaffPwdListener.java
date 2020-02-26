@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.center.AppService;
@@ -68,6 +69,9 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramInJson, "userId", "请求参数中未包含userId 节点，请确认");
         Assert.jsonObjectHaveKey(paramInJson, "oldPwd", "请求参数中未包含oldPwd 节点，请确认");
         Assert.jsonObjectHaveKey(paramInJson, "newPwd", "请求参数中未包含newPwd 节点，请确认");
+
+        paramInJson.put("oldPwd", AuthenticationFactory.passwdMd5(paramInJson.getString("oldPwd")));
+        paramInJson.put("newPwd", AuthenticationFactory.passwdMd5(paramInJson.getString("newPwd")));
 
         JSONArray businesses = new JSONArray();
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
