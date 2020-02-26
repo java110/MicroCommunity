@@ -17,6 +17,11 @@
                    callBackListener="addOwnerRoomBinding"
                    callBackFunction="notify"
         ></vc:create>
+        <vc:create name="searchRoom"
+                   emitChooseRoom="sellRoomSelectRoom"
+                   emitLoadData="sellRoomOther"
+                   roomFlag="2"
+        ></vc:create>
     </div>
     <div v-if="addOwnerRoomBindingInfo.index == 2">
         <vc:create name="viewOwnerInfo"
@@ -24,6 +29,7 @@
                    callBackFunction="notify"
         ></vc:create>
     </div>
+
 
 
     <div class="row">
