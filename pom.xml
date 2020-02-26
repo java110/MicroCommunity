@@ -82,6 +82,7 @@
         <spring.version>5.0.8.RELEASE</spring.version>
         <zookeeper.version>3.4.14</zookeeper.version>
         <swagger.version>2.5.0</swagger.version>
+        <pinyin4j.version>2.5.0</pinyin4j.version>
     </properties>
 
     <dependencyManagement>
@@ -101,7 +102,11 @@
                 <version>${spring.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${pinyin4j.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>

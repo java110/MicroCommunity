@@ -17,6 +17,11 @@
                    callBackListener="addComplaintStep"
                    callBackFunction="notify"
         ></vc:create>
+        <vc:create name="searchRoom"
+                   emitChooseRoom="sellRoomSelectRoom"
+                   emitLoadData="sellRoomOther"
+                   roomFlag="1"
+        ></vc:create>
     </div>
     <div v-if="addComplaintStepInfo.index == 2">
         <vc:create name="addComplainView"
