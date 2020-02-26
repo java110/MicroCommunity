@@ -148,5 +148,10 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+        </dependency>
     </dependencies>
 </project>

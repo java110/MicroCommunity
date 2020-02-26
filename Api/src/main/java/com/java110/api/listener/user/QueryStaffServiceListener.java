@@ -9,6 +9,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.PinYinUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -67,6 +68,7 @@ public class QueryStaffServiceListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             staffs = BeanConvertUtil.covertBeanList(userInnerServiceSMOImpl.getStaffs(userDto), ApiStaffDataVo.class);
+            refreshInitials(staffs);
         } else {
             staffs = new ArrayList<>();
         }
@@ -80,6 +82,20 @@ public class QueryStaffServiceListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStaffVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 刷入首字母
+     * @param staffs
+     */
+    private void refreshInitials(List<ApiStaffDataVo> staffs) {
+
+        for(ApiStaffDataVo staffDataVo : staffs){
+            if(StringUtil.isEmpty(staffDataVo.getName())){
+                continue;
+            }
+            staffDataVo.setInitials(PinYinUtil.getFirstSpell(staffDataVo.getName()).toUpperCase().charAt(0)+"");
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ public class ApiStaffDataVo implements Serializable {
     private String userId;
 
     private String userName;
+    private String initials;
     private String name;
 
     private String tel;
@@ -133,5 +134,13 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getInitials() {
+        return initials;
+    }
+
+    public void setInitials(String initials) {
+        this.initials = initials;
     }
 }
