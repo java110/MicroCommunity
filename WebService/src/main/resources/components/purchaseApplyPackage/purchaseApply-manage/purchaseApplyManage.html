@@ -1,0 +1,113 @@
+<div id="component" class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools" style="top:10px;">
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select class="custom-select" v-model="purchaseApplyManageInfo.conditions.state">
+                                <option selected value="">请选择订单状态</option>
+                                <option value="1003006">未审核</option>
+                                <option value="2006012">已审核</option>
+                            </select></div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入订单号"
+                                       v-model="purchaseApplyManageInfo.conditions.applyOrderId" class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    v-on:click="_queryInspectionPlanMethod()">
+                                <i class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>采购申请信息</h5>
+                    <div class="ibox-tools" style="top:10px;">
+                        <button type="button" class="btn btn-primary btn-sm" v-on:click="_openAddPurchaseApplyModal()">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            添加采购申请
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny"
+                           data-page-size="15"
+                    >
+                        <thead>
+                        <tr>
+                            <th class="text-center">审批状态</th>
+                            <th class="text-center">使用人</th>
+                            <th class="text-center">申请时间</th>
+                            <th class="text-center">物品名称</th>
+                            <th class="text-center">总计价格</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="purchaseApply in purchaseApplyManageInfo.purchaseApplys">
+                            <td class="text-center">{{purchaseApply.state}}</td>
+                            <td class="text-center">{{purchaseApply.userName}}</td>
+                            <td class="text-center">{{purchaseApply.createTime}}</td>
+                            <td class="text-center">{{purchaseApply.resourceNames}}</td>
+                            <td class="text-center">{{purchaseApply.totalPrice}}</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditPurchaseApplyModel(purchaseApply)">查看
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openEditPurchaseApplyModel(purchaseApply)">修改
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs"
+                                            v-on:click="_openDeletePurchaseApplyModel(purchaseApply)">删除
+                                    </button>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <!-- 分页 -->
+                    <vc:create name="pagination"></vc:create>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <vc:create name="addPurchaseApply"
+               callBackListener=""
+               callBackFunction=""
+    ></vc:create>
+    <vc:create name="editPurchaseApply"></vc:create>
+    <vc:create name="deletePurchaseApply"></vc:create>
+
+</div>
