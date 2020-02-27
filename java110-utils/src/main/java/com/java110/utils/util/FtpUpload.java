@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.UUID;
 
 public class FtpUpload {
-    private static Logger logger = LoggerFactory.getLogger(FtpUpload.class);
+//    private static Logger logger = LoggerFactory.getLogger(FtpUpload.class);
 
     /*
      * private static String server = "www.datasvisser.cn"; //地址 private static
@@ -51,7 +51,20 @@ public class FtpUpload {
             if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
                 LOCAL_CHARSET = "UTF-8";
             }
-            fileName = UUID.randomUUID().toString() + DEFAULT_IMG_SUFFIX;
+            fileName = UUID.randomUUID().toString();
+
+            if (imageBase64.contains("data:image/png;base64,")) {
+                imageBase64 = imageBase64.replace("data:image/png;base64,", "");
+                fileName += ".png";
+            }else if(imageBase64.contains("data:image/jpeg;base64,")){
+                imageBase64 = imageBase64.replace("data:image/jpeg;base64,", "");
+                fileName += ".jpg";
+            }else if(imageBase64.contains("data:image/webp;base64,")){
+                imageBase64 = imageBase64.replace("data:image/webp;base64,", "");
+                fileName += ".jpg";
+            }else{
+                fileName += ".jpg";
+            }
             FTPFile[] fs = ftpClient.listFiles(fileName);
             if (fs.length == 0) {
                 System.out.println("this file not exist ftp");
@@ -59,21 +72,24 @@ public class FtpUpload {
                 System.out.println("this file exist ftp");
                 ftpClient.deleteFile(fs[0].getName());
             }
-            ByteArrayInputStream is = new ByteArrayInputStream(Base64Convert.base64ToByte(imageBase64));
+
+
+            byte[] context = Base64Convert.base64ToByte(imageBase64);
+            ByteArrayInputStream is = new ByteArrayInputStream(context);
             boolean saveFlag = ftpClient.storeFile(fileName, is);
             is.close();
             if (!saveFlag) {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-            logger.error("上传文件失败", e);
+            //logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
                 ftpClient.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
-                logger.error("关闭ftpClient 失败", e);
+                //logger.error("关闭ftpClient 失败", e);
             }
         }
         return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
@@ -115,7 +131,7 @@ public class FtpUpload {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-            logger.error("上传文件失败", e);
+           // logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
@@ -136,49 +152,31 @@ public class FtpUpload {
             ftpClient.connect(server, port);
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
-            if (remotePath != null && !remotePath.equals("")) {
-                ftpClient.changeWorkingDirectory(remotePath);
-                System.out.println("file success");
-            }
-
             if (ftpClient != null) {
-
-                FTPFile[] files = ftpClient.listFiles();
-                for (FTPFile file : files) {
-                    String f = new String(file.getName().getBytes("iso-8859-1"), "utf-8");//防止乱码
-                    System.out.println(f);
-                    System.out.println(f.equals(fileName));
-                    if (f.equals(fileName)) {
-                        InputStream ins = ftpClient.retrieveFileStream(file.getName());//需使用file.getName获值，若用f会乱码
-                        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                        byte[] buf = new byte[204800];
-                        int bufsize = 0;
-                        while ((bufsize = ins.read(buf, 0, buf.length)) != -1) {
-                            byteOut.write(buf, 0, bufsize);
-                        }
-                        return_arraybyte = byteOut.toByteArray();
-
-                        File localFile = new File(localpath + fileSeparator + f);
-                        OutputStream is = new FileOutputStream(localFile);
-                        ftpClient.retrieveFile(f, is);
-                        is.close();
-                        byteOut.close();
-                        ins.close();
-                        break;
-                    }
+                String f = new String(
+                        (remotePath + fileName).getBytes("GBK"),
+                        FTP.DEFAULT_CONTROL_ENCODING);//防止乱码
+                InputStream ins = ftpClient.retrieveFileStream(f);//需使用file.getName获值，若用f会乱码
+                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                byte[] buf = new byte[204800];
+                int bufsize = 0;
+                while (ins != null && (bufsize = ins.read(buf, 0, buf.length)) != -1) {
+                    byteOut.write(buf, 0, bufsize);
                 }
-
+                return_arraybyte = byteOut.toByteArray();
+                byteOut.close();
+                if(ins != null) {
+                    ins.close();
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("从ftp读取文件失败", e);
+            //logger.error("从ftp读取文件失败", e);
         } finally {
             closeConnect();
         }
         return return_arraybyte;
     }
-
 
     public static void closeConnect() {
         try {

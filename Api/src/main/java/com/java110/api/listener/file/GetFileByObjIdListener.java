@@ -70,7 +70,7 @@ public class GetFileByObjIdListener extends AbstractServiceApiListener {
         Assert.listOnlyOne(fileRelDtos,"存在多条数据或未存在数据");
 
         FileDto fileDto = BeanConvertUtil.covertBean(reqJson, FileDto.class);
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
+        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
 
         Assert.listOnlyOne(fileDtos,"存在多个文件，数据错误" + reqJson.toJSONString());
