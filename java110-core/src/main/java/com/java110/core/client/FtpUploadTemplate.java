@@ -154,6 +154,7 @@ public class FtpUploadTemplate {
     public byte[] downFileByte(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
         byte[] return_arraybyte = null;
         try {
+            ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
