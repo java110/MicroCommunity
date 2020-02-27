@@ -24,7 +24,7 @@ public class FtpUploadTemplate {
      * private static String userPassword ="MXUsssMjhssE+*=a3C4\\0";//密码
      */
     private static String ftpPath = "uploadFiles"; // 文件上传目录
-    private FTPClient ftpClient = null;
+
     private static String LOCAL_CHARSET = "GBK";
     private static String SERVER_CHARSET = "ISO-8859-1";
     private final static String localpath = "F:/";//下载到F盘下
@@ -41,6 +41,7 @@ public class FtpUploadTemplate {
     public String upload(String imageBase64, String server, int port,
                          String userName, String userPassword, String ftpPath) {
         String fileName = "";
+        FTPClient ftpClient = null;
         try {
             ftpClient = new FTPClient();
             // request.setCharacterEncoding("utf-8");
@@ -106,6 +107,7 @@ public class FtpUploadTemplate {
     public String upload(MultipartFile uploadFile, String server, int port,
                          String userName, String userPassword, String ftpPath) {
         String fileName = "";
+        FTPClient ftpClient = null;
         try {
             // request.setCharacterEncoding("utf-8");
             ftpClient = new FTPClient();
@@ -153,6 +155,7 @@ public class FtpUploadTemplate {
      */
     public byte[] downFileByte(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
         byte[] return_arraybyte = null;
+        FTPClient ftpClient = null;
         try {
             ftpClient = new FTPClient();
             ftpClient.connect(server, port);
