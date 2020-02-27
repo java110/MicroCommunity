@@ -1,19 +1,22 @@
-package com.java110.utils.util;
+package com.java110.core.client;
 
+import com.java110.utils.util.Base64Convert;
+import com.java110.utils.util.DateUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.util.UUID;
 
-public class FtpUpload {
-//    private static Logger logger = LoggerFactory.getLogger(FtpUpload.class);
+@Component
+public class FtpUploadTemplate {
+    private static Logger logger = LoggerFactory.getLogger(FtpUploadTemplate.class);
 
     /*
      * private static String server = "www.datasvisser.cn"; //地址 private static
@@ -21,7 +24,7 @@ public class FtpUpload {
      * private static String userPassword ="MXUsssMjhssE+*=a3C4\\0";//密码
      */
     private static String ftpPath = "uploadFiles"; // 文件上传目录
-    private static FTPClient ftpClient = new FTPClient();
+    private FTPClient ftpClient = null;
     private static String LOCAL_CHARSET = "GBK";
     private static String SERVER_CHARSET = "ISO-8859-1";
     private final static String localpath = "F:/";//下载到F盘下
@@ -35,17 +38,18 @@ public class FtpUpload {
      *图片上传工具方法
      * 默认上传至 img 文件下的当前日期下
      */
-    public static String upload(String imageBase64, String server, int port,
-                                String userName, String userPassword, String ftpPath) {
+    public String upload(String imageBase64, String server, int port,
+                         String userName, String userPassword, String ftpPath) {
         String fileName = "";
         try {
+            ftpClient = new FTPClient();
             // request.setCharacterEncoding("utf-8");
             ftpClient.connect(server, port);
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             ftpPath = ftpPath + IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/";
-            mkDir(ftpPath);// 创建目录
+            mkDir(ftpClient, ftpPath);// 创建目录
             // 设置上传目录 must
             ftpClient.changeWorkingDirectory(ftpPath);
             if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
@@ -56,13 +60,13 @@ public class FtpUpload {
             if (imageBase64.contains("data:image/png;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/png;base64,", "");
                 fileName += ".png";
-            }else if(imageBase64.contains("data:image/jpeg;base64,")){
+            } else if (imageBase64.contains("data:image/jpeg;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/jpeg;base64,", "");
                 fileName += ".jpg";
-            }else if(imageBase64.contains("data:image/webp;base64,")){
+            } else if (imageBase64.contains("data:image/webp;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/webp;base64,", "");
                 fileName += ".jpg";
-            }else{
+            } else {
                 fileName += ".jpg";
             }
             FTPFile[] fs = ftpClient.listFiles(fileName);
@@ -82,14 +86,14 @@ public class FtpUpload {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-            //logger.error("上传文件失败", e);
+            logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
                 ftpClient.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
-                //logger.error("关闭ftpClient 失败", e);
+                logger.error("关闭ftpClient 失败", e);
             }
         }
         return IMAGE_DEFAULT_PATH + DateUtil.getNowII() + "/" + fileName;
@@ -99,16 +103,17 @@ public class FtpUpload {
     /*
      *文件上传工具方法
      */
-    public static String upload(MultipartFile uploadFile, String server, int port,
-                                String userName, String userPassword, String ftpPath) {
+    public String upload(MultipartFile uploadFile, String server, int port,
+                         String userName, String userPassword, String ftpPath) {
         String fileName = "";
         try {
             // request.setCharacterEncoding("utf-8");
+            ftpClient = new FTPClient();
             ftpClient.connect(server, port);
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            mkDir(ftpPath);// 创建目录
+            mkDir(ftpClient, ftpPath);// 创建目录
             // 设置上传目录 must
             ftpClient.changeWorkingDirectory(ftpPath);
             if (FTPReply.isPositiveCompletion(ftpClient.sendCommand("OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
@@ -131,7 +136,7 @@ public class FtpUpload {
                 throw new IllegalArgumentException("存储文件失败");
             }
         } catch (Exception e) {
-           // logger.error("上传文件失败", e);
+            // logger.error("上传文件失败", e);
             throw new IllegalArgumentException("上传文件失败");
         } finally {
             try {
@@ -146,7 +151,7 @@ public class FtpUpload {
     /*
      *文件下载工具方法
      */
-    public static byte[] downFileByte(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
+    public byte[] downFileByte(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
         byte[] return_arraybyte = null;
         try {
             ftpClient.connect(server, port);
@@ -165,20 +170,20 @@ public class FtpUpload {
                 }
                 return_arraybyte = byteOut.toByteArray();
                 byteOut.close();
-                if(ins != null) {
+                if (ins != null) {
                     ins.close();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            //logger.error("从ftp读取文件失败", e);
+            logger.error("从ftp读取文件失败", e);
         } finally {
-            closeConnect();
+            closeConnect(ftpClient);
         }
         return return_arraybyte;
     }
 
-    public static void closeConnect() {
+    public void closeConnect(FTPClient ftpClient) {
         try {
             ftpClient.disconnect();
         } catch (Exception e) {
@@ -192,7 +197,7 @@ public class FtpUpload {
      * @param ftpPath 需要上传、创建的目录
      * @return
      */
-    public static boolean mkDir(String ftpPath) {
+    public static boolean mkDir(FTPClient ftpClient, String ftpPath) {
         if (!ftpClient.isConnected()) {
             return false;
         }

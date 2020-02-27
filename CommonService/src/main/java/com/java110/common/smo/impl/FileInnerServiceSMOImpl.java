@@ -5,9 +5,7 @@ import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
-import com.java110.utils.util.Base64Convert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.FtpUpload;
+import com.java110.core.client.FtpUploadTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +23,9 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
     @Autowired
     private Java110Properties java110Properties;
 
+    @Autowired
+    private FtpUploadTemplate ftpUploadTemplate;
+
 
     @Override
     public String saveFile(@RequestBody FileDto fileDto) {
@@ -32,7 +33,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         //int saveFileFlag = fileServiceDaoImpl.saveFile(BeanConvertUtil.beanCovertMap(fileDto));
 
 
-        String fileName = FtpUpload.upload(fileDto.getContext(), java110Properties.getFtpServer(),
+        String fileName = ftpUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
 
@@ -49,7 +50,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             ftpPath += fileName.substring(0, fileName.lastIndexOf("/")+1);
             fileName = fileName.substring(fileName.lastIndexOf("/")+1, fileName.length());
         }
-        byte[] fileImg = FtpUpload.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
+        byte[] fileImg = ftpUploadTemplate.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword());
 
