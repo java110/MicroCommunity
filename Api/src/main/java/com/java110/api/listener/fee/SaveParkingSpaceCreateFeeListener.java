@@ -106,7 +106,7 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         }
 
         if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
-            throw new IllegalArgumentException("未查到需要付费的房屋");
+            throw new IllegalArgumentException("未查到需要付费的车位");
         }
 
         dealParkingSpaceFee(parkingSpaceDtos, context, reqJson, event);

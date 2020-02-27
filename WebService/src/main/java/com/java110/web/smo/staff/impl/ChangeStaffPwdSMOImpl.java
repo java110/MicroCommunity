@@ -34,7 +34,7 @@ public class ChangeStaffPwdSMOImpl extends AbstractComponentSMO implements IChan
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区信息");
+        //Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区信息");
         Assert.hasKeyAndValue(paramIn, "oldPwd", "必填，请填写原始密码");
         Assert.hasKeyAndValue(paramIn, "newPwd", "必填，请填写新密码");
 
@@ -48,8 +48,8 @@ public class ChangeStaffPwdSMOImpl extends AbstractComponentSMO implements IChan
         Map paramMap = BeanConvertUtil.beanCovertMap(result);
         paramIn.putAll(paramMap);
 
-        paramIn.put("oldPwd", AuthenticationFactory.passwdMd5(paramIn.getString("oldPwd")));
-        paramIn.put("newPwd", AuthenticationFactory.passwdMd5(paramIn.getString("newPwd")));
+//        paramIn.put("oldPwd", AuthenticationFactory.passwdMd5(paramIn.getString("oldPwd")));
+//        paramIn.put("newPwd", AuthenticationFactory.passwdMd5(paramIn.getString("newPwd")));
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/user.changeStaffPwd";
 

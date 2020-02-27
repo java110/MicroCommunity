@@ -6,7 +6,6 @@
     vc.extends({
         data: {
             changeStaffPwdInfo: {
-                communityId: vc.getCurrentCommunity().communityId,
                 oldPwd: '',
                 newPwd: '',
                 reNewPwd:''
@@ -44,13 +43,6 @@
                             limit: "required",
                             param: "",
                             errInfo: "确认密码不能为空"
-                        }
-                    ],
-                    'changeStaffPwdInfo.communityId': [
-                        {
-                            limit: "required",
-                            param: "",
-                            errInfo: "还未入驻小区，请先入驻小区"
                         }
                     ]
                 });
