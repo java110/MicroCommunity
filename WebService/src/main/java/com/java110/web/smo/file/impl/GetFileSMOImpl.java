@@ -72,6 +72,7 @@ public class GetFileSMOImpl extends BaseComponentSMO implements IGetFileSMO {
                 .replace("data:image/webp;base64,", "")
                 .replace("data:image/png;base64,", "")
                 .replace("data:image/jpeg;base64,", "")
+                .replace("data:application/octet-stream;base64,","")
         );
 
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
