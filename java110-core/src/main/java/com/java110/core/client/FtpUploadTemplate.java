@@ -67,7 +67,10 @@ public class FtpUploadTemplate {
             } else if (imageBase64.contains("data:image/webp;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/webp;base64,", "");
                 fileName += ".jpg";
-            } else {
+            } else if(imageBase64.contains("data:application/octet-stream;base64,")){
+                imageBase64 = imageBase64.replace("data:application/octet-stream;base64,", "");
+                fileName += ".jpg";
+            }else {
                 fileName += ".jpg";
             }
             FTPFile[] fs = ftpClient.listFiles(fileName);
