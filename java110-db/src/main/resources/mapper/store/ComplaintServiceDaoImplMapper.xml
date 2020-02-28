@@ -97,7 +97,7 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
     <select id="getComplaintInfo" parameterType="Map" resultType="Map">
         select t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd
         typeCd,td2.name typeCdName,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.status_cd,t.status_cd
-        statusCd,t.state,td.name stateName,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId
+        statusCd,t.state,td.name stateName,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId,t.create_time createTime
         from complaint t,t_dict td,t_dict td2
         where 1 =1
         and t.state = td.status_cd

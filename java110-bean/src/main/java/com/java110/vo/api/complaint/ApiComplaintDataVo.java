@@ -28,6 +28,8 @@ public class ApiComplaintDataVo implements Serializable {
 
     private String auditMessage;
 
+    private String createTime;
+
 
     public String getComplaintId() {
         return complaintId;
@@ -171,5 +173,13 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setAuditMessage(String auditMessage) {
         this.auditMessage = auditMessage;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
