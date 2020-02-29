@@ -76,6 +76,10 @@ public class ListAuditHistoryComplaintsListener extends AbstractServiceApiListen
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
 
+        if(reqJson.containsKey("start")&& reqJson.getBoolean("start")){
+            auditUser.setAuditLink("START");
+        }
+
         long count = complaintUserInnerServiceSMOImpl.getUserHistoryTaskCount(auditUser);
 
         List<ApiComplaintDataVo> auditComplaints = null;

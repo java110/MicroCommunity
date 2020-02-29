@@ -9,12 +9,14 @@ import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.query.Query;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -159,9 +161,19 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public long getUserHistoryTaskCount(@RequestBody AuditUser user) {
         HistoryService historyService = processEngine.getHistoryService();
-        Query query = historyService.createHistoricTaskInstanceQuery()
+//        Query query = historyService.createHistoricTaskInstanceQuery()
+//                .processDefinitionKey("complaint")
+//                .taskAssignee(user.getUserId());
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
-                .taskAssignee(user.getUserId());
+                .taskAssignee(user.getUserId())
+                .orderByHistoricTaskInstanceStartTime();
+        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+            historicTaskInstanceQuery.taskName("complaint");
+        }
+
+        Query query = historicTaskInstanceQuery;
         return query.count();
     }
 
@@ -172,11 +184,16 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
      */
     public List<ComplaintDto> getUserHistoryTasks(@RequestBody AuditUser user) {
         HistoryService historyService = processEngine.getHistoryService();
-        Query query = historyService.createHistoricTaskInstanceQuery()
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
                 .taskAssignee(user.getUserId())
-                .orderByHistoricTaskInstanceStartTime()
-                .desc();
+                .orderByHistoricTaskInstanceStartTime();
+        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+            historicTaskInstanceQuery.taskName("complaint");
+        }
+
+        Query query = historicTaskInstanceQuery.desc();
 
         List<HistoricTaskInstance> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
