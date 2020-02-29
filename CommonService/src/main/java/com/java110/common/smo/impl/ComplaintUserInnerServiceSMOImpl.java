@@ -167,10 +167,11 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
-                .taskAssignee(user.getUserId())
-                .orderByHistoricTaskInstanceStartTime();
+                .taskAssignee(user.getUserId());
         if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
             historicTaskInstanceQuery.taskName("complaint");
+        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+            historicTaskInstanceQuery.taskName("complaitDealUser");
         }
 
         Query query = historicTaskInstanceQuery;
@@ -187,13 +188,14 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
-                .taskAssignee(user.getUserId())
-                .orderByHistoricTaskInstanceStartTime();
+                .taskAssignee(user.getUserId()) ;
         if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
             historicTaskInstanceQuery.taskName("complaint");
+        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+            historicTaskInstanceQuery.taskName("complaitDealUser");
         }
 
-        Query query = historicTaskInstanceQuery.desc();
+        Query query = historicTaskInstanceQuery.orderByHistoricTaskInstanceStartTime().desc();
 
         List<HistoricTaskInstance> list = null;
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
