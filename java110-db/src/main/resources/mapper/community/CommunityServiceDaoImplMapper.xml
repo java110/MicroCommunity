@@ -494,6 +494,7 @@
                 #{item}
             </foreach>
         </if>
+        group by t.community_id
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
