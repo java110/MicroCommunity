@@ -29,7 +29,7 @@
                   vc.component._listInspectionRoutes(DEFAULT_PAGE, DEFAULT_ROWS);
             });
             vc.on('inspectionRouteManage','goBack',function(_param){
-                vc.component.inspectionRouteManageInfo.inspectionPoint == false;
+                vc.component.inspectionRouteManageInfo.inspectionPoint = false;
             });
              vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listInspectionRoutes(_currentPage,DEFAULT_ROWS);
