@@ -10,6 +10,8 @@ public class ApiInspectionRouteDataVo implements Serializable {
     private String seq;
     private String remark;
 
+    private String[] InspectionRouteIds;
+
     private String createTime;
 
     public String getInspectionRouteId() {
@@ -50,5 +52,13 @@ public class ApiInspectionRouteDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String[] getInspectionRouteIds() {
+        return InspectionRouteIds;
+    }
+
+    public void setInspectionRouteIds(String[] inspectionRouteIds) {
+        InspectionRouteIds = inspectionRouteIds;
     }
 }

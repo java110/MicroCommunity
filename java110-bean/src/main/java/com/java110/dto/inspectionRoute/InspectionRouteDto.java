@@ -20,6 +20,8 @@ public class InspectionRouteDto extends PageDto implements Serializable {
     private int seq;
     private String remark;
 
+    private String[] InspectionRouteIds;
+
     private Date createTime;
 
     private String statusCd = "0";
@@ -70,5 +72,13 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getInspectionRouteIds() {
+        return InspectionRouteIds;
+    }
+
+    public void setInspectionRouteIds(String[] inspectionRouteIds) {
+        InspectionRouteIds = inspectionRouteIds;
     }
 }
