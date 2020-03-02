@@ -23,7 +23,14 @@
                                        class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入巡检点ID"
+                                       v-model="inspectionPointManageInfo.conditions.inspectionId"
+                                       class=" form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
                             <button type="button" class="btn btn-primary btn-sm"
                                     v-on:click="_queryInspectionPointMethod()">
                                 <i class="glyphicon glyphicon-search"></i> 查询
@@ -45,7 +52,7 @@
                         <button type="button" class="btn btn-primary btn-sm"
                                 v-on:click="_openAddInspectionPointModal()">
                             <i class="glyphicon glyphicon-plus"></i>
-                            添加巡检点
+                            添加
                         </button>
                     </div>
                 </div>
@@ -57,10 +64,10 @@
                         <thead>
                         <tr>
                             <th class="text-center">巡检点名称</th>
+                            <th class="text-center">巡检点ID</th>
                             <th class="text-center">设备位置</th>
                             <th class="text-center">设备编码</th>
                             <th class="text-center">设备名称</th>
-                            <th class="text-center">备注</th>
                             <th class="text-center">操作</th>
 
 
@@ -69,10 +76,11 @@
                         <tbody>
                         <tr v-for="inspectionPoint in inspectionPointManageInfo.inspectionPoints">
                             <td class="text-center">{{inspectionPoint.inspectionName}}</td>
+                            <td class="text-center">{{inspectionPoint.inspectionId}}</td>
                             <td class="text-center">{{inspectionPoint.locationObjName}}</td>
                             <td class="text-center">{{inspectionPoint.machineCode}}</td>
                             <td class="text-center">{{inspectionPoint.machineName}}</td>
-                            <td class="text-center">{{inspectionPoint.remark}}</td>
+
                             <td class="text-center">
                                 <div class="btn-group">
                                     <button class="btn-white btn btn-xs"
