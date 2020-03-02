@@ -76,8 +76,9 @@
             _queryInspectionRouteMethod:function(){
                 vc.component._listInspectionRoutes(DEFAULT_PAGE, DEFAULT_ROWS);
             },
-            _openInspectionPointModel:function(){
-                vc.component.inspectionRouteManageInfo.inspectionPoint == true;
+            _openInspectionPointModel:function(_inspectionRoute){
+                vc.component.inspectionRouteManageInfo.inspectionPoint = true;
+                vc.emit('inspectionRoutePointManage','listInspectionPoint',_inspectionRoute);
             },
             _moreCondition:function(){
                 if(vc.component.inspectionRouteManageInfo.moreCondition){

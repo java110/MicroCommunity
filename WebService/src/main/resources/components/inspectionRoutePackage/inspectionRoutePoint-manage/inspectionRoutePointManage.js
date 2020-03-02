@@ -8,17 +8,22 @@
         data:{
             inspectionRoutePointManageInfo:{
                 inspectionRoutes:[],
+                inspectionRouteId:'',
                 total:0,
                 records:1,
                 routeName:'',
             }
         },
         _initMethod:function(){
-            vc.component._listInspectionRoutePoints(DEFAULT_PAGE, DEFAULT_ROWS);
+            //vc.component._listInspectionRoutePoints(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
             
             vc.on('inspectionRoutePointManage','listInspectionPoint',function(_param){
+                  if(!_param.hasOwnProperty('inspectionRouteId')){
+                        return ;
+                  }
+                  vc.component.inspectionRoutePointManageInfo.inspectionRouteId = _param.inspectionRouteId;
                   vc.component._listInspectionRoutePoints(DEFAULT_PAGE, DEFAULT_ROWS);
             });
              vc.on('pagination','page_event',function(_currentPage){
@@ -32,7 +37,8 @@
                     params:{
                         page:_page,
                         row:_rows,
-                        communityId:vc.getCurrentCommunity().communityId
+                        communityId:vc.getCurrentCommunity().communityId,
+                        inspectionRouteId:vc.component.inspectionRoutePointManageInfo.inspectionRouteId
                     }
                };
 
