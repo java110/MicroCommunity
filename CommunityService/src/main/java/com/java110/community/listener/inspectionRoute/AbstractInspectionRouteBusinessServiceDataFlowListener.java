@@ -43,7 +43,7 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
         businessInspectionRouteInfo.put("seq", businessInspectionRouteInfo.get("seq"));
         businessInspectionRouteInfo.put("remark", businessInspectionRouteInfo.get("remark"));
         businessInspectionRouteInfo.put("communityId", businessInspectionRouteInfo.get("community_id"));
-        businessInspectionRouteInfo.put("routeName", businessInspectionRouteInfo.get("Route_name"));
+        businessInspectionRouteInfo.put("routeName", businessInspectionRouteInfo.get("route_name"));
         businessInspectionRouteInfo.remove("bId");
         businessInspectionRouteInfo.put("statusCd", statusCd);
     }
@@ -73,7 +73,7 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
         currentInspectionRouteInfo.put("seq", currentInspectionRouteInfo.get("seq"));
         currentInspectionRouteInfo.put("remark", currentInspectionRouteInfo.get("remark"));
         currentInspectionRouteInfo.put("communityId", currentInspectionRouteInfo.get("community_id"));
-        currentInspectionRouteInfo.put("routeName", currentInspectionRouteInfo.get("Route_name"));
+        currentInspectionRouteInfo.put("routeName", currentInspectionRouteInfo.get("route_name"));
 
 
         currentInspectionRouteInfo.put("operate", StatusConstant.OPERATE_DEL);

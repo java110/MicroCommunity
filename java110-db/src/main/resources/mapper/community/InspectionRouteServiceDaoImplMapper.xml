@@ -7,7 +7,7 @@
     <!-- 保存巡检路线信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionRouteInfo" parameterType="Map">
         insert into business_inspection_route(
-        operate,inspection_route_id,seq,remark,community_id,b_id,Route_name
+        operate,inspection_route_id,seq,remark,community_id,b_id,route_name
         ) values (
         #{operate},#{inspectionRouteId},#{seq},#{remark},#{communityId},#{bId},#{routeName}
         )
@@ -16,15 +16,15 @@
 
     <!-- 查询巡检路线信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionRouteInfo" parameterType="Map" resultType="Map">
-        select t.operate,t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.seq,t.remark,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
+        select t.operate,t.inspection_route_id,t.inspection_route_id inspectionRouteId,t.seq,t.remark,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.route_name,t.route_name routeName
         from business_inspection_route t
         where 1 =1
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-            and t.inspection_route_Id= #{inspectionRouteId}
+            and t.inspection_route_id= #{inspectionRouteId}
         </if>
         <if test="seq !=null and seq != 0">
             and t.seq= #{seq}
@@ -39,7 +39,7 @@
             and t.b_id= #{bId}
         </if>
         <if test="routeName !=null and routeName != ''">
-            and t.Route_name= #{routeName}
+            and t.route_name= #{routeName}
         </if>
 
     </select>
@@ -48,13 +48,13 @@
     <!-- 保存巡检路线信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRouteInfoInstance" parameterType="Map">
         insert into inspection_route(
-        inspection_route_id,seq,remark,status_cd,community_id,b_id,Route_name
+        inspection_route_id,seq,remark,status_cd,community_id,b_id,route_name
         ) select
-        t.inspection_route_Id,t.seq,t.remark,'0',t.community_id,t.b_id,t.Route_name from
+        t.inspection_route_id,t.seq,t.remark,'0',t.community_id,t.b_id,t.route_name from
         business_inspection_route t where 1=1
         and t.operate= 'ADD'
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-            and t.inspection_route_Id= #{inspectionRouteId}
+            and t.inspection_route_id= #{inspectionRouteId}
         </if>
         <if test="seq !=null and seq != 0">
             and t.seq= #{seq}
@@ -69,7 +69,7 @@
             and t.b_id= #{bId}
         </if>
         <if test="routeName !=null and routeName != ''">
-            and t.Route_name= #{routeName}
+            and t.route_name= #{routeName}
         </if>
 
     </insert>
@@ -77,12 +77,12 @@
 
     <!-- 查询巡检路线信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRouteInfo" parameterType="Map" resultType="Map">
-        select t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.seq,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName,t.create_time createTime
+        select t.inspection_route_id,t.inspection_route_id inspectionRouteId,t.seq,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.route_name,t.route_name routeName,t.create_time createTime
         from inspection_route t
         where 1 =1
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-            and t.inspection_route_Id= #{inspectionRouteId}
+            and t.inspection_route_id= #{inspectionRouteId}
         </if>
         <if test="seq !=null and seq != 0">
             and t.seq= #{seq}
@@ -100,10 +100,10 @@
             and t.b_id= #{bId}
         </if>
         <if test="routeName !=null and routeName != ''">
-            and t.Route_name= #{routeName}
+            and t.route_name= #{routeName}
         </if>
         <if test="inspectionRouteIds !=null">
-            and t.inspection_route_Id in
+            and t.inspection_route_id in
             <foreach collection="inspectionRouteIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
@@ -132,11 +132,11 @@
             , t.community_id= #{communityId}
         </if>
         <if test="routeName !=null and routeName != ''">
-            , t.Route_name= #{routeName}
+            , t.route_name= #{routeName}
         </if>
         where 1=1
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-            and t.inspection_route_Id= #{inspectionRouteId}
+            and t.inspection_route_id= #{inspectionRouteId}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -150,7 +150,7 @@
         from inspection_route t
         where 1 =1
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
-            and t.inspection_route_Id= #{inspectionRouteId}
+            and t.inspection_route_id= #{inspectionRouteId}
         </if>
         <if test="seq !=null and seq != 0">
             and t.seq= #{seq}
@@ -168,7 +168,7 @@
             and t.b_id= #{bId}
         </if>
         <if test="routeName !=null and routeName != ''">
-            and t.Route_name= #{routeName}
+            and t.route_name= #{routeName}
         </if>
 
 
