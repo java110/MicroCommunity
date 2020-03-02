@@ -20,6 +20,8 @@ public class InspectionRouteDto extends PageDto implements Serializable {
     private int seq;
     private String remark;
 
+    private String communityId;
+
     private String[] InspectionRouteIds;
 
     private Date createTime;
@@ -80,5 +82,13 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setInspectionRouteIds(String[] inspectionRouteIds) {
         InspectionRouteIds = inspectionRouteIds;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
