@@ -26,12 +26,9 @@ public class SaveInspectionRouteListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "routeName", "必填，请填写路线名称，字数100个以内");
-        Assert.hasKeyAndValue(reqJson, "inspectionName", "必填，请选择巡点名称");
-        Assert.hasKeyAndValue(reqJson, "machineQuantity", "无需填写，系统自动生成");
-        Assert.hasKeyAndValue(reqJson, "checkQuantity", "必填，请输入巡检路线的检查项数量");
-
+        Assert.hasKeyAndValue(reqJson, "seq", "必填，请选择巡点名称");
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
     }
 
     @Override

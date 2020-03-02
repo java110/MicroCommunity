@@ -16,19 +16,13 @@ import java.util.Date;
 public class InspectionRouteDto extends PageDto implements Serializable {
 
     private String inspectionRouteId;
-    private String checkQuantity;
-    private String machineQuantity;
-    private String remark;
-    private String communityId;
     private String routeName;
-    //用于批量查询路线
-    private String[] inspectionRouteIds;
-
+    private int seq;
+    private String remark;
 
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getInspectionRouteId() {
         return inspectionRouteId;
@@ -36,38 +30,6 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setInspectionRouteId(String inspectionRouteId) {
         this.inspectionRouteId = inspectionRouteId;
-    }
-
-    public String getCheckQuantity() {
-        return checkQuantity;
-    }
-
-    public void setCheckQuantity(String checkQuantity) {
-        this.checkQuantity = checkQuantity;
-    }
-
-    public String getMachineQuantity() {
-        return machineQuantity;
-    }
-
-    public void setMachineQuantity(String machineQuantity) {
-        this.machineQuantity = machineQuantity;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
     }
 
     public String getRouteName() {
@@ -78,6 +40,21 @@ public class InspectionRouteDto extends PageDto implements Serializable {
         this.routeName = routeName;
     }
 
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -93,13 +70,5 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
-    }
-
-    public String[] getInspectionRouteIds() {
-        return inspectionRouteIds;
-    }
-
-    public void setInspectionRouteIds(String[] inspectionRouteIds) {
-        this.inspectionRouteIds = inspectionRouteIds;
     }
 }

@@ -29,7 +29,8 @@ public class DeleteInspectionRouteSMOImpl extends AbstractComponentSMO implement
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
-        Assert.hasKeyAndValue(paramIn, "configId", "inspectionRouteId不能为空");
+        Assert.hasKeyAndValue(paramIn, "inspectionRouteId", "路线ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_INSPECTIONROUTE);

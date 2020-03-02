@@ -5,20 +5,19 @@ import java.util.Date;
 
 public class ApiInspectionRouteDataVo implements Serializable {
 
-    private String configId;
-    private String routeName;
-    private String inspectionName;
-    private String machineQuantity;
-    private String checkQuantity;
-    private String remark;
     private String inspectionRouteId;
+    private String routeName;
+    private String seq;
+    private String remark;
 
-    public String getConfigId() {
-        return configId;
+    private String createTime;
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
     }
 
-    public void setConfigId(String configId) {
-        this.configId = configId;
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
     }
 
     public String getRouteName() {
@@ -29,28 +28,12 @@ public class ApiInspectionRouteDataVo implements Serializable {
         this.routeName = routeName;
     }
 
-    public String getInspectionName() {
-        return inspectionName;
+    public String getSeq() {
+        return seq;
     }
 
-    public void setInspectionName(String inspectionName) {
-        this.inspectionName = inspectionName;
-    }
-
-    public String getMachineQuantity() {
-        return machineQuantity;
-    }
-
-    public void setMachineQuantity(String machineQuantity) {
-        this.machineQuantity = machineQuantity;
-    }
-
-    public String getCheckQuantity() {
-        return checkQuantity;
-    }
-
-    public void setCheckQuantity(String checkQuantity) {
-        this.checkQuantity = checkQuantity;
+    public void setSeq(String seq) {
+        this.seq = seq;
     }
 
     public String getRemark() {
@@ -61,11 +44,11 @@ public class ApiInspectionRouteDataVo implements Serializable {
         this.remark = remark;
     }
 
-    public String getInspectionRouteId() {
-        return inspectionRouteId;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setInspectionRouteId(String inspectionRouteId) {
-        this.inspectionRouteId = inspectionRouteId;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

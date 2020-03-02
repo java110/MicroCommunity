@@ -39,9 +39,8 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
     protected void flushBusinessInspectionRouteInfo(Map businessInspectionRouteInfo, String statusCd) {
         businessInspectionRouteInfo.put("newBId", businessInspectionRouteInfo.get("b_id"));
         businessInspectionRouteInfo.put("operate", businessInspectionRouteInfo.get("operate"));
-        businessInspectionRouteInfo.put("inspectionRouteId", businessInspectionRouteInfo.get("inspection_routeId"));
-        businessInspectionRouteInfo.put("checkQuantity", businessInspectionRouteInfo.get("check_quantity"));
-        businessInspectionRouteInfo.put("machineQuantity", businessInspectionRouteInfo.get("machine_quantity"));
+        businessInspectionRouteInfo.put("inspectionRouteId", businessInspectionRouteInfo.get("inspection_route_id"));
+        businessInspectionRouteInfo.put("seq", businessInspectionRouteInfo.get("seq"));
         businessInspectionRouteInfo.put("remark", businessInspectionRouteInfo.get("remark"));
         businessInspectionRouteInfo.put("communityId", businessInspectionRouteInfo.get("community_id"));
         businessInspectionRouteInfo.put("routeName", businessInspectionRouteInfo.get("Route_name"));
@@ -71,8 +70,7 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
 
         currentInspectionRouteInfo.put("operate", currentInspectionRouteInfo.get("operate"));
         currentInspectionRouteInfo.put("inspectionRouteId", currentInspectionRouteInfo.get("inspection_routeId"));
-        currentInspectionRouteInfo.put("checkQuantity", currentInspectionRouteInfo.get("check_quantity"));
-        currentInspectionRouteInfo.put("machineQuantity", currentInspectionRouteInfo.get("machine_quantity"));
+        currentInspectionRouteInfo.put("seq", currentInspectionRouteInfo.get("seq"));
         currentInspectionRouteInfo.put("remark", currentInspectionRouteInfo.get("remark"));
         currentInspectionRouteInfo.put("communityId", currentInspectionRouteInfo.get("community_id"));
         currentInspectionRouteInfo.put("routeName", currentInspectionRouteInfo.get("Route_name"));

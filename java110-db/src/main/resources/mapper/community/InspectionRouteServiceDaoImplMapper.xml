@@ -6,18 +6,17 @@
 
     <!-- 保存巡检路线信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionRouteInfo" parameterType="Map">
-           insert into business_inspection_route(
-operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b_id,Route_name
-) values (
-#{operate},#{inspectionRouteId},#{checkQuantity},#{machineQuantity},#{remark},#{communityId},#{bId},#{routeName}
-)
-       </insert>
+        insert into business_inspection_route(
+        operate,inspection_routeId,seq,remark,community_id,b_id,Route_name
+        ) values (
+        #{operate},#{inspectionRouteId},#{seq},#{remark},#{communityId},#{bId},#{routeName}
+        )
+    </insert>
 
 
     <!-- 查询巡检路线信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionRouteInfo" parameterType="Map" resultType="Map">
-        select t.operate,t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.check_quantity,t.check_quantity
-        checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.community_id,t.community_id
+        select t.operate,t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.seq,t.remark,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
         from business_inspection_route t
         where 1 =1
@@ -27,11 +26,8 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_Id= #{inspectionRouteId}
         </if>
-        <if test="checkQuantity !=null and checkQuantity != ''">
-            and t.check_quantity= #{checkQuantity}
-        </if>
-        <if test="machineQuantity !=null and machineQuantity != ''">
-            and t.machine_quantity= #{machineQuantity}
+        <if test="seq !=null ">
+            and t.seq= #{seq}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -52,19 +48,16 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
     <!-- 保存巡检路线信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRouteInfoInstance" parameterType="Map">
         insert into inspection_route(
-        inspection_routeId,check_quantity,machine_quantity,remark,status_cd,community_id,b_id,Route_name
+        inspection_routeId,seq,remark,status_cd,community_id,b_id,Route_name
         ) select
-        t.inspection_route_Id,t.check_quantity,t.machine_quantity,t.remark,'0',t.community_id,t.b_id,t.Route_name from
+        t.inspection_route_Id,t.seq,t.remark,'0',t.community_id,t.b_id,t.Route_name from
         business_inspection_route t where 1=1
         and t.operate= 'ADD'
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_Id= #{inspectionRouteId}
         </if>
-        <if test="checkQuantity !=null and checkQuantity != ''">
-            and t.check_quantity= #{checkQuantity}
-        </if>
-        <if test="machineQuantity !=null and machineQuantity != ''">
-            and t.machine_quantity= #{machineQuantity}
+        <if test="seq !=null ">
+            and t.seq= #{seq}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -84,19 +77,15 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
 
     <!-- 查询巡检路线信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRouteInfo" parameterType="Map" resultType="Map">
-        select t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.check_quantity,t.check_quantity
-        checkQuantity,t.machine_quantity,t.machine_quantity machineQuantity,t.remark,t.status_cd,t.status_cd
+        select t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.seq,t.remark,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
         from inspection_route t
         where 1 =1
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_Id= #{inspectionRouteId}
         </if>
-        <if test="checkQuantity !=null and checkQuantity != ''">
-            and t.check_quantity= #{checkQuantity}
-        </if>
-        <if test="machineQuantity !=null and machineQuantity != ''">
-            and t.machine_quantity= #{machineQuantity}
+        <if test="seq !=null ">
+            and t.seq= #{seq}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -133,11 +122,8 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="checkQuantity !=null and checkQuantity != ''">
-            , t.check_quantity= #{checkQuantity}
-        </if>
-        <if test="machineQuantity !=null and machineQuantity != ''">
-            , t.machine_quantity= #{machineQuantity}
+        <if test="seq !=null ">
+            , t.seq= #{seq}
         </if>
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
@@ -166,11 +152,8 @@ operate,inspection_routeId,check_quantity,machine_quantity,remark,community_id,b
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             and t.inspection_route_Id= #{inspectionRouteId}
         </if>
-        <if test="checkQuantity !=null and checkQuantity != ''">
-            and t.check_quantity= #{checkQuantity}
-        </if>
-        <if test="machineQuantity !=null and machineQuantity != ''">
-            and t.machine_quantity= #{machineQuantity}
+        <if test="seq !=null ">
+            and t.seq= #{seq}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}

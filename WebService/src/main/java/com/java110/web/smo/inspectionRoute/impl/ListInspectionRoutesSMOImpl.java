@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
@@ -34,6 +35,7 @@ public class ListInspectionRoutesSMOImpl extends AbstractComponentSMO implements
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         super.validatePageInfo(pd);
+        Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_INSPECTIONROUTE);
     }

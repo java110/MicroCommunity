@@ -2,6 +2,7 @@ package com.java110.api.listener.inspectionRoute;
 
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.constant.ServiceCodeInspectionRouteConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -57,6 +58,8 @@ public class ListInspectionRoutesListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+
     }
 
     @Override

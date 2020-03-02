@@ -29,9 +29,8 @@ public class AddInspectionRouteSMOImpl extends AbstractComponentSMO implements I
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "routeName", "必填，请填写路线名称，字数100个以内");
-        Assert.hasKeyAndValue(paramIn, "inspectionName", "必填，请选择巡点名称");
-        Assert.hasKeyAndValue(paramIn, "machineQuantity", "无需填写，系统自动生成");
-        Assert.hasKeyAndValue(paramIn, "checkQuantity", "必填，请输入巡检路线的检查项数量");
+        Assert.hasKeyAndValue(paramIn, "seq", "必填，请选择巡点名称");
+        Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_INSPECTIONROUTE);
