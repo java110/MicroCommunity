@@ -7,7 +7,7 @@
     <!-- 保存巡检路线信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionRouteInfo" parameterType="Map">
         insert into business_inspection_route(
-        operate,inspection_routeId,seq,remark,community_id,b_id,Route_name
+        operate,inspection_route_id,seq,remark,community_id,b_id,Route_name
         ) values (
         #{operate},#{inspectionRouteId},#{seq},#{remark},#{communityId},#{bId},#{routeName}
         )
@@ -48,7 +48,7 @@
     <!-- 保存巡检路线信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRouteInfoInstance" parameterType="Map">
         insert into inspection_route(
-        inspection_routeId,seq,remark,status_cd,community_id,b_id,Route_name
+        inspection_route_id,seq,remark,status_cd,community_id,b_id,Route_name
         ) select
         t.inspection_route_Id,t.seq,t.remark,'0',t.community_id,t.b_id,t.Route_name from
         business_inspection_route t where 1=1
