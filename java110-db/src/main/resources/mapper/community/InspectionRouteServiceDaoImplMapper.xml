@@ -78,7 +78,7 @@
     <!-- 查询巡检路线信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRouteInfo" parameterType="Map" resultType="Map">
         select t.inspection_route_Id,t.inspection_route_Id inspectionRouteId,t.seq,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName
+        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.Route_name,t.Route_name routeName,t.create_time createTime
         from inspection_route t
         where 1 =1
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
