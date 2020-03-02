@@ -69,7 +69,7 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
         currentInspectionRouteInfo.put("bId", business.getbId());
 
         currentInspectionRouteInfo.put("operate", currentInspectionRouteInfo.get("operate"));
-        currentInspectionRouteInfo.put("inspectionRouteId", currentInspectionRouteInfo.get("inspection_routeId"));
+        currentInspectionRouteInfo.put("inspectionRouteId", currentInspectionRouteInfo.get("inspection_route_id"));
         currentInspectionRouteInfo.put("seq", currentInspectionRouteInfo.get("seq"));
         currentInspectionRouteInfo.put("remark", currentInspectionRouteInfo.get("remark"));
         currentInspectionRouteInfo.put("communityId", currentInspectionRouteInfo.get("community_id"));
