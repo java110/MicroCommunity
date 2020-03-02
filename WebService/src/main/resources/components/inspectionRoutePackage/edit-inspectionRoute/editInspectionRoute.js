@@ -69,7 +69,7 @@
                     vc.toast(vc.validate.errInfo);
                     return;
                 }
-
+                vc.component.editInspectionRouteInfo.communityId = vc.getCurrentCommunity().communityId;
                 vc.http.post('editInspectionRoute', 'update', JSON.stringify(vc.component.editInspectionRouteInfo), {
                     emulateJSON: true
                 },

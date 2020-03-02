@@ -14,9 +14,8 @@
                 routeName:'',
                 conditions:{
                     routeName:'',
-inspectionName:'',
-remark:'',
-
+                    inspectionRouteId:'',
+                    seq:'',
                 }
             }
         },
@@ -37,6 +36,8 @@ remark:'',
 
                 vc.component.inspectionRouteManageInfo.conditions.page = _page;
                 vc.component.inspectionRouteManageInfo.conditions.row = _rows;
+                vc.component.inspectionRouteManageInfo.conditions.communityId = vc.getCurrentCommunity().communityId;
+
                 var param = {
                     params:vc.component.inspectionRouteManageInfo.conditions
                };

@@ -16,20 +16,20 @@
                                        v-model="inspectionRouteManageInfo.conditions.routeName" class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" placeholder="请输入巡检点名称"
-                                       v-model="inspectionRouteManageInfo.conditions.inspectionName"
+                                <input type="text" placeholder="请输入路线顺序"
+                                       v-model="inspectionRouteManageInfo.conditions.seq"
                                        class=" form-control">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <input type="text" placeholder="请输入路线ID"
-                                       v-model="inspectionRouteManageInfo.conditions.configId" class=" form-control">
+                                       v-model="inspectionRouteManageInfo.conditions.inspectionRouteId" class=" form-control">
                             </div>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-sm-2">
                             <button type="button" class="btn btn-primary btn-sm"
                                     v-on:click="_queryInspectionRouteMethod()">
                                 <i class="glyphicon glyphicon-search"></i> 查询
