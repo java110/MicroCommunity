@@ -52,8 +52,8 @@
                     ],
                     'editInspectionRouteInfo.remark': [{
                         limit: "maxin",
-                        param: "1,200",
-                        errInfo: "收费项目不能超过100位"
+                        param: "0,200",
+                        errInfo: "备注不能超过200位"
                     },
                     ],
                     'editInspectionRouteInfo.inspectionRouteId': [{

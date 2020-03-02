@@ -52,7 +52,7 @@
                     ],
                     'addInspectionRouteInfo.remark': [{
                         limit: "maxin",
-                        param: "1,200",
+                        param: "0,200",
                         errInfo: "备注不能超过200位"
                     },
                     ],

@@ -85,7 +85,7 @@ public class SaveInspectionRouteListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionRoute = new JSONObject();
         businessInspectionRoute.putAll(paramInJson);
-        businessInspectionRoute.put("configId", "-1");
+        businessInspectionRoute.put("inspectionRouteId", "-1");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoute", businessInspectionRoute);
         return business;
