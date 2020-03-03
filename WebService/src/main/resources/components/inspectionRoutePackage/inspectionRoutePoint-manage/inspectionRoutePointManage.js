@@ -18,6 +18,9 @@
             //vc.component._listInspectionRoutePoints(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
+            vc.on('inspectionRoutePointManage','notify',function(_param){
+                  vc.component._listInspectionRoutePoints(DEFAULT_PAGE, DEFAULT_ROWS);
+            });
             
             vc.on('inspectionRoutePointManage','listInspectionPoint',function(_param){
                   if(!_param.hasOwnProperty('inspectionRouteId')){
@@ -60,11 +63,13 @@
                              }
                            );
             },
-            _openAddInspectionRouteModal:function(){
-                vc.emit('addInspectionRoutePointRel','openAddInspectionPointModal',{});
+            _openAddInspectionRoutePointModal:function(){
+                vc.emit('addInspectionRoutePoint','openAddInspectionRoutePointModal',{
+                    inspectionRouteId:vc.component.inspectionRoutePointManageInfo.inspectionRouteId
+                });
             },
-            _openDeleteInspectionRouteModel:function(_inspectionPoint){
-                vc.emit('deleteInspectionRoutePointRel','openDeleteInspectionPointModal',_inspectionPoint);
+            _openDeleteInspectionPointModel:function(_inspectionPoint){
+                vc.emit('deleteInspectionRoutePoint','openDeleteInspectionRoutePointModal',_inspectionPoint);
             },
             _goBack:function(){
                 vc.emit('inspectionRouteManage','goBack',{});

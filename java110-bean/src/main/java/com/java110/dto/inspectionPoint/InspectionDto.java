@@ -26,6 +26,7 @@ public class InspectionDto extends PageDto implements Serializable {
     private String locationObjName;
     private String machineId;
     private String communityId;
+    private String inspectionRouteId;
 
 
     private Date createTime;
@@ -136,5 +137,14 @@ public class InspectionDto extends PageDto implements Serializable {
 
     public void setLocationObjName(String locationObjName) {
         this.locationObjName = locationObjName;
+    }
+
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
+    }
+
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
     }
 }

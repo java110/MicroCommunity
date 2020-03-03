@@ -87,6 +87,11 @@
         from inspection_point t
         inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
         inner join t_dict d on d.status_cd = m.location_type_cd
+        <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
+            left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
+            and t.status_cd = '0'
+            and t.inspection_route_id is null
+        </if>
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -150,6 +155,11 @@
     <select id="queryInspectionsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_point t
+        <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
+            left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
+            and t.status_cd = '0'
+            and t.inspection_route_id is null
+        </if>
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
