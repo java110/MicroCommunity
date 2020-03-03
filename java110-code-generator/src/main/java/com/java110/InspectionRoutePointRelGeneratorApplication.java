@@ -25,19 +25,21 @@ public class InspectionRoutePointRelGeneratorApplication {
     public static void main(String[] args) {
         Data data = new Data();
         data.setId("irmRelId");
-        data.setName("inspection_route_point_rel");
-        data.setDesc("巡检路线巡检点关系维护");
+        data.setName("inspectionRoutePointRel");
+        data.setDesc("巡检路线巡检点关系");
         data.setShareParam("communityId");
         data.setShareColumn("community_id");
-        data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_MACHINE_REL");
-        data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_MACHINE_REL");
+        data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL");
+        data.setUpdateBusinessTypeCd("123");
+        data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL");
         data.setNewBusinessTypeCdValue("500200030002");
+        data.setUpdateBusinessTypeCdValue("2222");
         data.setDeleteBusinessTypeCdValue("500200050002");
-        data.setBusinessTableName("business_inspection_route_machine_rel");
-        data.setTableName("inspection_route_machine_rel");
+        data.setBusinessTableName("business_inspection_route_point_rel");
+        data.setTableName("inspection_route_point_rel");
         Map<String, String> param = new HashMap<String, String>();
-        param.put("irmRelId", "irm_relId");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
-        param.put("inspectionRouteId", "inspection_routeId");
+        param.put("irmRelId", "irm_rel_id");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
+        param.put("inspectionRouteId", "inspection_route_id");
         param.put("inspectionId", "inspection_id");
         param.put("communityId", "community_id");
         param.put("remark", "remark");

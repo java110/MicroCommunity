@@ -881,13 +881,13 @@ public class BusinessTypeConstant {
      *  保存巡检路线设备关联关系
      * 3保存
      */
-    public static final String BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_MACHINE_REL="500200030002";
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL="500200030002";
 
     /**
      *  删除巡检路线设备关联关系
      *  5 删除
      */
-    public static final String BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_MACHINE_REL ="500200050002";
+    public static final String BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL ="500200050002";
 
 
     /**

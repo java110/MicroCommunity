@@ -27,7 +27,7 @@ java1.8 + idea/eclipse + mysql
 
 Java + spring cloud + mybatis + mysql + kafka + redis
 
-![image](docs/images/system.png)
+![image](java110-core/src/main/java/com/java110/core/smo/inspectionRoute/docs/images/system.png)
 
 3. 硬件要求:
 
@@ -45,7 +45,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     
 ### 业主小程序
 
-   ![image](docs/images/hcOwner.png)
+   ![image](java110-core/src/main/java/com/java110/core/smo/inspectionRoute/docs/images/hcOwner.png)
     
    github: [https://github.com/java110/WechatOwnerService](https://github.com/java110/WechatOwnerService)
    
@@ -53,7 +53,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
     
 ### 系统功能（function） 
 
-   ![image](docs/images/hc_function.png)
+   ![image](java110-core/src/main/java/com/java110/core/smo/inspectionRoute/docs/images/hc_function.png)
    
    主要系统功能请查看
      
@@ -86,7 +86,7 @@ Java + spring cloud + mybatis + mysql + kafka + redis
 
 ### 硬件接入
 
-![流程图](docs/document/images/machineFlow.png)
+![流程图](java110-core/src/main/java/com/java110/core/smo/inspectionRoute/docs/document/images/machineFlow.png)
 
 目前对接锐目门禁系统，如果您想将您的硬件对接到此项目，请加qq群号827669685 联系我们
 
