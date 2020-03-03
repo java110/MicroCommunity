@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class ApiInspectionPointDataVo implements Serializable {
 
+    private String inspectionRouteId;
     private String inspectionId;
     private String inspectionName;
     private String remark;
@@ -103,5 +104,13 @@ public class ApiInspectionPointDataVo implements Serializable {
 
     public void setLocationTypeName(String locationTypeName) {
         this.locationTypeName = locationTypeName;
+    }
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
+    }
+
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
     }
 }

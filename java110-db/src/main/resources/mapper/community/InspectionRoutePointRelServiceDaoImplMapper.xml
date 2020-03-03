@@ -5,168 +5,176 @@
 <mapper namespace="inspectionRoutePointRelServiceDaoImpl">
 
     <!-- 保存巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessInspectionRoutePointRelInfo" parameterType="Map">
-           insert into business_inspection_route_point_rel(
-inspection_id,operate,inspection_route_id,irm_rel_id,remark,community_id,b_id
-) values (
-#{inspectionId},#{operate},#{inspectionRouteId},#{irmRelId},#{remark},#{communityId},#{bId}
-)
-       </insert>
+    <insert id="saveBusinessInspectionRoutePointRelInfo" parameterType="Map">
+        insert into business_inspection_route_point_rel(
+        inspection_id,operate,inspection_route_id,irm_rel_id,remark,community_id,b_id
+        ) values (
+        #{inspectionId},#{operate},#{inspectionRouteId},#{irmRelId},#{remark},#{communityId},#{bId}
+        )
+    </insert>
 
 
-       <!-- 查询巡检路线巡检点关系信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
-           select  t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_route_id,t.inspection_route_id inspectionRouteId,t.irm_rel_id,t.irm_rel_id irmRelId,t.remark,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from business_inspection_route_point_rel t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_route_id= #{inspectionRouteId}
-</if> 
-<if test="irmRelId !=null and irmRelId != ''">
-   and t.irm_rel_id= #{irmRelId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <!-- 查询巡检路线巡检点关系信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
+        select t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_route_id,t.inspection_route_id
+        inspectionRouteId,t.irm_rel_id,t.irm_rel_id irmRelId,t.remark,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId
+        from business_inspection_route_point_rel t
+        where 1 =1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="irmRelId !=null and irmRelId != ''">
+            and t.irm_rel_id= #{irmRelId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存巡检路线巡检点关系信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRoutePointRelInfoInstance" parameterType="Map">
         insert into inspection_route_point_rel(
-inspection_id,inspection_route_id,irm_rel_id,remark,status_cd,community_id,b_id
-) select t.inspection_id,t.inspection_route_id,t.irm_rel_id,t.remark,'0',t.community_id,t.b_id from business_inspection_route_point_rel t where 1=1
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-   and t.operate= 'ADD'
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_route_id= #{inspectionRouteId}
-</if> 
-<if test="irmRelId !=null and irmRelId != ''">
-   and t.irm_rel_id= #{irmRelId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+        inspection_id,inspection_route_id,irm_rel_id,remark,status_cd,community_id,b_id
+        ) select t.inspection_id,t.inspection_route_id,t.irm_rel_id,t.remark,'0',t.community_id,t.b_id from
+        business_inspection_route_point_rel t where 1=1
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="irmRelId !=null and irmRelId != ''">
+            and t.irm_rel_id= #{irmRelId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
-        select  t.inspection_id,t.inspection_id inspectionId,t.inspection_route_id,t.inspection_route_id inspectionRouteId,t.irm_rel_id,t.irm_rel_id irmRelId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
-from inspection_route_point_rel t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_route_id= #{inspectionRouteId}
-</if> 
-<if test="irmRelId !=null and irmRelId != ''">
-   and t.irm_rel_id= #{irmRelId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.inspection_id,t.inspection_id inspectionId,t.inspection_route_id,t.inspection_route_id
+        inspectionRouteId,t.irm_rel_id,t.irm_rel_id irmRelId,t.remark,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
+        ip.inspection_id inspectionId,ip.machine_id machineId,ip.remark,
+        ip.inspection_name inspectionName
+        from inspection_route_point_rel t,inspection_point ip
+        where 1 =1
+        and t.inspection_id = ip.inspection_id
+        and ip.status_cd = '0'
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="irmRelId !=null and irmRelId != ''">
+            and t.irm_rel_id= #{irmRelId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+            and ip.community_id = #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionRoutePointRelInfoInstance" parameterType="Map">
-        update  inspection_route_point_rel t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="inspectionId !=null and inspectionId != ''">
-, t.inspection_id= #{inspectionId}
-</if> 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-, t.inspection_route_id= #{inspectionRouteId}
-</if> 
-<if test="remark !=null and remark != ''">
-, t.remark= #{remark}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
- where 1=1 <if test="irmRelId !=null and irmRelId != ''">
-and t.irm_rel_id= #{irmRelId}
-</if> 
-<if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
+        update inspection_route_point_rel t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="inspectionId !=null and inspectionId != ''">
+            , t.inspection_id= #{inspectionId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            , t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="irmRelId !=null and irmRelId != ''">
+            and t.irm_rel_id= #{irmRelId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
     </update>
 
     <!-- 查询巡检路线巡检点关系数量 add by wuxw 2018-07-03 -->
-     <select id="queryInspectionRoutePointRelsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from inspection_route_point_rel t 
-where 1 =1 
-<if test="inspectionId !=null and inspectionId != ''">
-   and t.inspection_id= #{inspectionId}
-</if> 
-<if test="inspectionRouteId !=null and inspectionRouteId != ''">
-   and t.inspection_route_id= #{inspectionRouteId}
-</if> 
-<if test="irmRelId !=null and irmRelId != ''">
-   and t.irm_rel_id= #{irmRelId}
-</if> 
-<if test="remark !=null and remark != ''">
-   and t.remark= #{remark}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
+    <select id="queryInspectionRoutePointRelsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_route_point_rel t,inspection_point ip
+        where 1 =1
+        and t.inspection_id = ip.inspection_id
+        and ip.status_cd = '0'
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="inspectionRouteId !=null and inspectionRouteId != ''">
+            and t.inspection_route_id= #{inspectionRouteId}
+        </if>
+        <if test="irmRelId !=null and irmRelId != ''">
+            and t.irm_rel_id= #{irmRelId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+            and ip.community_id = #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

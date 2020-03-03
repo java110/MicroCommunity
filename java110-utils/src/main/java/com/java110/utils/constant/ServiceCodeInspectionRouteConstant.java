@@ -27,5 +27,22 @@ public class ServiceCodeInspectionRouteConstant {
      */
     public static final String LIST_INSPECTIONROUTES = "inspectionRoute.listInspectionRoutes";
 
+    /**
+     * 查询 巡检路线
+     */
+    public static final String LIST_INSPECTIONROUTE_POINTS = "inspectionRoute.listInspectionRoutePoints";
+
+    /**
+     * 添加 巡检路线
+     */
+    public static final String ADD_INSPECTIONROUTE_POINT = "inspectionRoute.saveInspectionRoutePoint";
+
+
+    /**
+     * 删除 巡检路线
+     */
+    public static final String DELETE_INSPECTIONROUTE_POINT = "inspectionRoute.deleteInspectionRoutePoint";
+
+
 
 }
