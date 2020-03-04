@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 查询inspectionRoute服务类
  */
-@Service("listInspectionRoutesSMOImpl")
+@Service("listInspectionRoutePointsSMOImpl")
 public class ListInspectionRoutePointsSMOImpl extends AbstractComponentSMO implements IListInspectionRoutePointsSMO {
 
     @Autowired

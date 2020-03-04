@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
  * 保存小区侦听
  * add by wuxw 2019-06-30
  */
-@Java110Listener("deleteInspectionRouteListener")
+@Java110Listener("deleteInspectionRoutePointListener")
 public class DeleteInspectionRoutePointListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
