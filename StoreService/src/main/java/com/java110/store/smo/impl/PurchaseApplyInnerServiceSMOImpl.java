@@ -5,6 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
@@ -91,7 +92,15 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
 
     @Override
     public int queryPurchaseApplysCount(@RequestBody PurchaseApplyDto purchaseApplyDto) {
-        return purchaseApplyServiceDaoImpl.queryPurchaseApplysCount(BeanConvertUtil.beanCovertMap(purchaseApplyDto));    }
+        return purchaseApplyServiceDaoImpl.queryPurchaseApplysCount(BeanConvertUtil.beanCovertMap(purchaseApplyDto));
+    }
+
+    //查询订单明细表
+    @Override
+    public List<PurchaseApplyDetailDto> queryPurchaseApplyDetails(PurchaseApplyDetailDto purchaseApplyDetailDto) {
+        List<PurchaseApplyDetailDto> purchaseApplyDetails = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getPurchaseApplyDetailInfo(BeanConvertUtil.beanCovertMap(purchaseApplyDetailDto)), PurchaseApplyDetailDto.class);
+        return purchaseApplyDetails;
+    }
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {
         return purchaseApplyServiceDaoImpl;
