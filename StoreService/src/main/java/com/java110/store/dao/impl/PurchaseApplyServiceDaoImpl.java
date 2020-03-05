@@ -6,6 +6,7 @@ import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,26 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         }
     }
 
+    @Override
+    public void saveBusinessPurchaseApplyDetailInfo(List<PurchaseApplyDetailVo> list) throws DAOException {
+        logger.debug("保存采购申请明细信息buiness表 入参 list : {}",list);
+        int saveFlag = sqlSessionTemplate.insert("purchaseApplyServiceDaoImpl.saveBusinessPurchaseApplyDetailInfo",list);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存采购申请数据失败："+ JSONObject.toJSONString(list));
+        }
+    }
+
+    @Override
+    public void savePurchaseApplyDetailInfo(List<PurchaseApplyDetailVo> list) throws DAOException {
+        logger.debug("保存采购申请明细信息 入参 list : {}",list);
+        int saveFlag = sqlSessionTemplate.insert("purchaseApplyServiceDaoImpl.savePurchaseApplyDetailInfo",list);
+
+        if(saveFlag < 1){
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存采购申请数据失败："+ JSONObject.toJSONString(list));
+        }
+    }
+
 
     /**
      * 查询采购申请信息
@@ -57,6 +78,12 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         return businessPurchaseApplyInfos;
     }
 
+    @Override
+    public List<Map> getBusinessPurchaseApplyDetailInfo(Map info) throws DAOException {
+        logger.debug("查询采购申请明细信息 入参 info : {}",info);
+        List<Map> businessPurchaseApplyDetailInfos = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyDetailInfo",info);
+        return businessPurchaseApplyDetailInfos;
+    }
 
 
     /**
@@ -89,6 +116,15 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         List<Map> businessPurchaseApplyInfos = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getPurchaseApplyInfo",info);
 
         return businessPurchaseApplyInfos;
+    }
+
+    @Override
+    public List<Map> getPurchaseApplyDetailInfo(Map info) throws DAOException {
+        logger.debug("查询采购申请明细信息 入参 info : {}",info);
+
+        List<Map> businessPurchaseApplyDetailInfos = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getPurchaseApplyDetailInfo",info);
+
+        return businessPurchaseApplyDetailInfos;
     }
 
 

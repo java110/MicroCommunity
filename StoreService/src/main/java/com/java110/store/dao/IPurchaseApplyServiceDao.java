@@ -2,6 +2,7 @@ package com.java110.store.dao;
 
 
 import com.java110.utils.exception.DAOException;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,12 @@ public interface IPurchaseApplyServiceDao {
      */
     void saveBusinessPurchaseApplyInfo(Map businessPurchaseApplyInfo) throws DAOException;
 
+    //保存采购明细
+    void saveBusinessPurchaseApplyDetailInfo(List<PurchaseApplyDetailVo> list) throws DAOException;
+
+    //保存采购明细
+    void savePurchaseApplyDetailInfo(List<PurchaseApplyDetailVo> list) throws DAOException;
+
 
 
     /**
@@ -32,6 +39,11 @@ public interface IPurchaseApplyServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getBusinessPurchaseApplyInfo(Map info) throws DAOException;
+
+
+    //查询采购明细business表
+    List<Map> getBusinessPurchaseApplyDetailInfo(Map info) throws DAOException;
+
 
 
 
@@ -46,6 +58,7 @@ public interface IPurchaseApplyServiceDao {
 
 
 
+
     /**
      * 查询采购申请信息（instance过程）
      * 根据bId 查询采购申请信息
@@ -54,6 +67,11 @@ public interface IPurchaseApplyServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getPurchaseApplyInfo(Map info) throws DAOException;
+
+
+    //查询采购明细
+    List<Map> getPurchaseApplyDetailInfo(Map info) throws DAOException;
+
 
 
 
