@@ -1,5 +1,6 @@
 package com.java110.store.listener.purchaseApply;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
@@ -10,11 +11,13 @@ import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,9 +91,18 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
 
         //采购申请信息
         List<Map> businessPurchaseApplyInfo = purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyInfo(info);
+        List<Map> businessPurchaseApplyDetailInfo = purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyDetailInfo(info);
+
+        List<PurchaseApplyDetailVo> purchaseApplyDetailVos = new ArrayList<>();
+        for( int i = 0; i < businessPurchaseApplyDetailInfo.size(); i++){
+            PurchaseApplyDetailVo purchaseApplyDetailVo = JSON.parseObject(JSON.toJSONString(businessPurchaseApplyDetailInfo.get(i)), PurchaseApplyDetailVo.class);
+            purchaseApplyDetailVos.add(purchaseApplyDetailVo);
+        }
+
         if( businessPurchaseApplyInfo != null && businessPurchaseApplyInfo.size() >0) {
             reFreshShareColumn(info, businessPurchaseApplyInfo.get(0));
             purchaseApplyServiceDaoImpl.savePurchaseApplyInfoInstance(info);
+            purchaseApplyServiceDaoImpl.savePurchaseApplyDetailInfo(purchaseApplyDetailVos);
             if(businessPurchaseApplyInfo.size() == 1) {
                 dataFlowContext.addParamOut("applyOrderId", businessPurchaseApplyInfo.get(0).get("apply_order_id"));
             }
@@ -151,17 +163,27 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
         Assert.jsonObjectHaveKey(businessPurchaseApply,"applyOrderId","businessPurchaseApply 节点下没有包含 applyOrderId 节点");
 
         if(businessPurchaseApply.getString("applyOrderId").startsWith("-")){
-            //刷新缓存
-            //flushPurchaseApplyId(business.getDatas());
-
             businessPurchaseApply.put("applyOrderId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
 
         }
 
+        //状态
+        businessPurchaseApply.put("state","1000");
+        //出入库类型
+        businessPurchaseApply.put("resOrderType","10000");
         businessPurchaseApply.put("bId",business.getbId());
         businessPurchaseApply.put("operate", StatusConstant.OPERATE_ADD);
+        Object jsonArray = businessPurchaseApply.get("resourceStores");
+        List<PurchaseApplyDetailVo> list = JSONObject.parseArray(jsonArray.toString(),PurchaseApplyDetailVo.class);
+        for( PurchaseApplyDetailVo purchaseApplyDetailVo : list){
+            purchaseApplyDetailVo.setApplyOrderId(businessPurchaseApply.get("applyOrderId").toString());
+            purchaseApplyDetailVo.setbId(business.getbId());
+            purchaseApplyDetailVo.setOperate(StatusConstant.OPERATE_ADD);
+        }
         //保存采购申请信息
         purchaseApplyServiceDaoImpl.saveBusinessPurchaseApplyInfo(businessPurchaseApply);
+        //保存订单明细
+        purchaseApplyServiceDaoImpl.saveBusinessPurchaseApplyDetailInfo(list);
 
     }
 
