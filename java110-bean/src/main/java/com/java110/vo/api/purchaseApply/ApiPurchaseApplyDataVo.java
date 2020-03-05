@@ -2,6 +2,7 @@ package com.java110.vo.api.purchaseApply;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ApiPurchaseApplyDataVo implements Serializable {
 
@@ -14,6 +15,7 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String resourceNames;
     //累计价格
     private String totalPrice;
+    private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
 
 
     public String getApplyOrderId() {
@@ -62,5 +64,13 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<PurchaseApplyDetailVo> getPurchaseApplyDetailVo() {
+        return purchaseApplyDetailVo;
+    }
+
+    public void setPurchaseApplyDetailVo(List<PurchaseApplyDetailVo> purchaseApplyDetailVo) {
+        this.purchaseApplyDetailVo = purchaseApplyDetailVo;
     }
 }
