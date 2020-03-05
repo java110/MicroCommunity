@@ -15,7 +15,6 @@ import java.util.Date;
  **/
 public class PurchaseApplyDto extends PageDto implements Serializable {
 
-    private String applyDetailId;
     private String resOrderType;
     private String description;
     private String applyOrderId;
@@ -30,13 +29,6 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
-    public String getApplyDetailId() {
-        return applyDetailId;
-    }
-
-    public void setApplyDetailId(String applyDetailId) {
-        this.applyDetailId = applyDetailId;
-    }
 
     public String getResOrderType() {
         return resOrderType;
