@@ -49,7 +49,7 @@
                            );
             },
             chooseStaff:function(_staff){
-                //vc.emit('privilegeStaffInfo','chooseStaff',_staff);
+                vc.emit('privilegeStaffInfo','chooseStaff',_staff);
                 vc.emit($props.callBackListener,$props.callBackFunction,_staff);
 
                 vc.emit('staffPrivilege','_loadStaffPrivileges',{
