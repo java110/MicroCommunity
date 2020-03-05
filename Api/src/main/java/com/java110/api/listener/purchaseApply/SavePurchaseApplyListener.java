@@ -23,9 +23,8 @@ import org.springframework.http.ResponseEntity;
 public class SavePurchaseApplyListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填订单状态");
+        Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
+        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
 
     }
 
