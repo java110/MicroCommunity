@@ -146,6 +146,9 @@ public final class PrivilegeCodeConstant {
     //巡检计划权限编码
     public static final String AGENT_HAS_LIST_INSPECTION_PLAN = "502020021268740005";
 
+    //采购申请
+    public static final String AGENT_HAS_LIST_PURCHASE_APPLY = "500201906022";
+
 
 
 
