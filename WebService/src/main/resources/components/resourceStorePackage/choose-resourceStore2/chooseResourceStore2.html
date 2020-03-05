@@ -1,0 +1,74 @@
+<div id="chooseResourceStoreModel2" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="chooseResourceStoreModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="chooseResourceStoreModelLabel2">选择物品管理</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="row">
+
+                                <div class="col-sm-7 m-b-xs">
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input placeholder="输入物品管理名称" type="text"
+                                               v-model="chooseResourceStoreInfo2._currentResourceStoreName"
+                                               class="form-control form-control-sm">
+                                        <span class="input-group-append">
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                        v-on:click="queryResourceStores()">查询</button>
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="margin-top:15px">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">选择</th>
+                                        <th class="text-center">物品ID</th>
+                                        <th class="text-center">物品名称</th>
+                                        <th class="text-center">物品编码</th>
+                                        <th class="text-center">物品价格</th>
+                                        <th class="text-center">物品库存</th>
+                                        <th class="text-center">描述</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="resourceStore in chooseResourceStoreInfo2.resourceStores">
+                                        <td class="text-center">
+                                            <input type="checkbox" class="i-checks checkItem" v-bind:value="resourceStore.resId" v-model="chooseResourceStoreInfo2.selectResourceStores">
+                                        </td>
+                                        <td class="text-center">{{resourceStore.resId}}</td>
+                                        <td class="text-center">{{resourceStore.resName}}</td>
+                                        <td class="text-center">{{resourceStore.resCode}}</td>
+                                        <td class="text-center">{{resourceStore.price}}</td>
+                                        <td class="text-center">{{resourceStore.stock}}</td>
+                                        <td class="text-center">{{resourceStore.description}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="ibox-content" v-if="chooseResourceStoreInfo2.resourceStores.length > 0">
+
+                                    <button class="btn btn-primary float-right" type="button" v-on:click="getSelectResourceStores()">
+                                        <i class="fa fa-check"></i>&nbsp;提交
+                                    </button>
+                                    <button type="button" class="btn btn-warning float-right" style="margin-right:20px;"
+                                            data-dismiss="modal">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

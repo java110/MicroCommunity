@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>物品信息</h5>
+                <div class="ibox-tools" style="top:10px;">
+                    <button type="button" v-if="viewResourceStoreInfo2.index != 2" class="btn btn-primary btn-sm"
+                            style="margin-right:10px;" v-on:click="_openSelectResourceStoreInfoModel()">
+                        <i class="glyphicon glyphicon-search"></i> 选择物品
+                    </button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny"
+                           data-page-size="15"
+                    >
+                        <thead>
+                        <tr>
+                            <th class="text-center">物品名称</th>
+                            <th class="text-center">物品编码</th>
+                            <th class="text-center">物品价格</th>
+                            <th class="text-center">物品库存</th>
+                            <th class="text-center">采购数量</th>
+                            <th class="text-center">备注</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="resourceStore in viewResourceStoreInfo2.resourceStores">
+                            <td class="text-center">{{resourceStore.resName}}</td>
+                            <td class="text-center">{{resourceStore.resCode}}</td>
+                            <td class="text-center">{{resourceStore.price}}</td>
+                            <td class="text-center">{{resourceStore.stock}}</td>
+                            <td class="text-center">
+                                <input v-model="resourceStore.quantity" type="text"
+                                       placeholder="必填，请填写采购数量" class="form-control">
+                            </td>
+                            <td class="text-center">
+                                <input v-model="resourceStore.remark" type="text" class="form-control">
+                            </td>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination float-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+            </div>
+        </div>
+    </div>
+    <vc:create name="chooseResourceStore2"
+               emitChooseResourceStore="viewResourceStoreInfo"
+               emitLoadData="viewResourceStoreInfo"
+    ></vc:create>
+</div>
+</div>
