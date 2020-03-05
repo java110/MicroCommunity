@@ -1,6 +1,6 @@
 /**
-    入驻小区
-**/
+ 入驻小区
+ **/
 (function(vc){
     var DEFAULT_PAGE = 1;
     var DEFAULT_ROWS = 10;
@@ -26,11 +26,11 @@
             // });
         },
         _initEvent:function(){
-            
+
             vc.on('purchaseApplyManage','listPurchaseApply',function(_param){
-                  vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
+                vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
-             vc.on('pagination','page_event',function(_currentPage){
+            vc.on('pagination','page_event',function(_currentPage){
                 vc.component._listPurchaseApplys(_currentPage,DEFAULT_ROWS);
             });
         },
@@ -41,25 +41,25 @@
                 vc.component.purchaseApplyManageInfo.conditions.row = _rows;
                 var param = {
                     params:vc.component.purchaseApplyManageInfo.conditions
-               };
+                };
 
-               //发送get请求
-               vc.http.get('purchaseApplyManage',
-                            'list',
-                             param,
-                             function(json,res){
-                                var _purchaseApplyManageInfo=JSON.parse(json);
-                                vc.component.purchaseApplyManageInfo.total = _purchaseApplyManageInfo.total;
-                                vc.component.purchaseApplyManageInfo.records = _purchaseApplyManageInfo.records;
-                                vc.component.purchaseApplyManageInfo.purchaseApplys = _purchaseApplyManageInfo.purchaseApplys;
-                                vc.emit('pagination','init',{
-                                     total:vc.component.purchaseApplyManageInfo.records,
-                                     currentPage:_page
-                                 });
-                             },function(errInfo,error){
-                                console.log('请求失败处理');
-                             }
-                           );
+                //发送get请求
+                vc.http.get('purchaseApplyManage',
+                    'list',
+                    param,
+                    function(json,res){
+                        var _purchaseApplyManageInfo=JSON.parse(json);
+                        vc.component.purchaseApplyManageInfo.total = _purchaseApplyManageInfo.total;
+                        vc.component.purchaseApplyManageInfo.records = _purchaseApplyManageInfo.records;
+                        vc.component.purchaseApplyManageInfo.purchaseApplys = _purchaseApplyManageInfo.purchaseApplys;
+                        vc.emit('pagination','init',{
+                            total:vc.component.purchaseApplyManageInfo.records,
+                            currentPage:_page
+                        });
+                    },function(errInfo,error){
+                        console.log('请求失败处理');
+                    }
+                );
             },
             _openAddPurchaseApplyModal:function(){
                 //vc.emit('addPurchaseApply','openAddPurchaseApplyModal',{});
@@ -88,7 +88,7 @@
                 }
             }
 
-             
+
         }
     });
 })(window.vc);
