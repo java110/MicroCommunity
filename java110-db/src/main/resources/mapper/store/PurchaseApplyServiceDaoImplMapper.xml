@@ -7,9 +7,9 @@
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyInfo" parameterType="Map">
            insert into business_purchase_apply
-                (operate,res_order_type,description,apply_order_id,state,store_id,entry_person,b_id)
+                (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id)
            values
-                (#{operate},'20000',#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{bId})
+                (#{operate},'20000',#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId})
     </insert>
 
     <!-- 保存采购明细表备份表 -->
@@ -54,7 +54,7 @@
             t.description,
             t.apply_order_id applyOrderId,t.state,
             t.store_id storeId,
-            t.entry_person entryPerson,t.b_id bId,t.user_id userId
+            t.user_name userName,t.b_id bId,t.user_id userId
         from business_purchase_apply t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -74,9 +74,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
-        </if>
-        <if test="entryPerson !=null and entryPerson != ''">
-            and t.entry_person= #{entryPerson}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -111,9 +108,9 @@
     <!-- 保存采购申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyInfoInstance" parameterType="Map">
         insert into purchase_apply
-        (res_order_type,description,apply_order_id,status_cd,state,store_id,entry_person,b_id,user_id)
+        (res_order_type,description,apply_order_id,status_cd,state,store_id,user_name,b_id,user_id)
         select
-        t.res_order_type,t.description,t.apply_order_id,'0',t.state,t.store_id,t.entry_person,t.b_id,t.user_id
+        t.res_order_type,t.description,t.apply_order_id,'0',t.state,t.store_id,t.user_name,t.b_id,t.user_id
         from business_purchase_apply t where 1=1
         and t.operate= 'ADD'
         <if test="resOrderType !=null and resOrderType != ''">
@@ -131,9 +128,6 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="entryPerson !=null and entryPerson != ''">
-            and t.entry_person= #{entryPerson}
-        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -149,9 +143,9 @@
         select
             t.res_order_type resOrderType,t.description,
             t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
-            t.store_id storeId,t.entry_person entryPerson,
-            t.b_id bId,t.user_id userId,t.create_time createTime
-        from purchase_apply t
+            t.store_id storeId,t.user_name userName,
+            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName
+        from purchase_apply t inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
@@ -170,9 +164,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
-        </if>
-        <if test="entryPerson !=null and entryPerson != ''">
-            and t.entry_person= #{entryPerson}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -231,9 +222,6 @@
         <if test="storeId !=null and storeId != ''">
             , t.store_id= #{storeId}
         </if>
-        <if test="entryPerson !=null and entryPerson != ''">
-            , t.entry_person= #{entryPerson}
-        </if>
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
         </if>
@@ -269,9 +257,6 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
-        </if>
-        <if test="entryPerson !=null and entryPerson != ''">
-            and t.entry_person= #{entryPerson}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
