@@ -103,8 +103,8 @@
                         },
                         {
                             limit: "maxin",
-                            param: "1,30",
-                            errInfo: "巡检路线不能超过30位"
+                            param: "1,300",
+                            errInfo: "巡检路线不能超过300位"
                         },
                     ],
                     'editInspectionPlanInfo.inspectionPlanPeriod': [
