@@ -20,7 +20,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String applyOrderId;
     private String state;
     private String storeId;
-    private String entryPerson;
+    private String userName;
     private String userId;
 
 
@@ -70,12 +70,12 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
         this.storeId = storeId;
     }
 
-    public String getEntryPerson() {
-        return entryPerson;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setEntryPerson(String entryPerson) {
-        this.entryPerson = entryPerson;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserId() {
