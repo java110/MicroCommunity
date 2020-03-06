@@ -96,7 +96,7 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                 List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
                 StringBuffer resNames = new StringBuffer();
                 BigDecimal totalPrice = new BigDecimal(0);
-                for( PurchaseApplyDetailVo purchaseApplyDetailVo : purchaseApplyDetailVos){
+                for( PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList){
                     resNames.append(purchaseApplyDetailVo.getResName()+";");
                     BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
                     BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());
