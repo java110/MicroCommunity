@@ -2,10 +2,10 @@ package com.java110.web.smo.inspectionPlan.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
-import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.core.context.IPageData;
+import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
 import com.java110.web.smo.inspectionPlan.IAddInspectionPlanSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -46,8 +46,9 @@ public class AddInspectionPlanSMOImpl extends AbstractComponentSMO implements IA
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("createUserId", result.getUserId());
+        paramIn.put("createUserName", result.getUserName());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/inspectionPlan.saveInspectionPlan",
                 HttpMethod.POST);
