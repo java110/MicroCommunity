@@ -17,6 +17,7 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     //累计价格
     private String totalPrice;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
+    private String description;
 
 
     public String getApplyOrderId() {
@@ -81,5 +82,13 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
