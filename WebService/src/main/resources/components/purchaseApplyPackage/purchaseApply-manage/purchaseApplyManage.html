@@ -63,18 +63,16 @@
                     >
                         <thead>
                         <tr>
-                            <th class="text-center">订单号</th>
                             <th class="text-center">审批状态</th>
                             <th class="text-center">申请人</th>
                             <th class="text-center">申请时间</th>
-                            <th class="text-center">物品名称</th>
+                            <th class="text-center">物品</th>
                             <th class="text-center">总计价格</th>
                             <th class="text-center">操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="purchaseApply in purchaseApplyManageInfo.purchaseApplys">
-                            <td class="text-center">{{purchaseApply.applyOrderId}}</td>
                             <td class="text-center">{{purchaseApply.state}}</td>
                             <td class="text-center">{{purchaseApply.entryPerson}}</td>
                             <td class="text-center">{{purchaseApply.createTime}}</td>
@@ -118,6 +116,5 @@
 
     <vc:create name="editPurchaseApply"></vc:create>
     <vc:create name="deletePurchaseApply"></vc:create>
-    <vc:create name="resourceStoreTable"></vc:create>
 
 </div>
