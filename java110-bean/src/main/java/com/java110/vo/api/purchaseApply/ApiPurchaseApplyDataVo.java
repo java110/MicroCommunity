@@ -1,7 +1,6 @@
 package com.java110.vo.api.purchaseApply;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class ApiPurchaseApplyDataVo implements Serializable {
@@ -11,7 +10,7 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String userName;
     private String stateName;
     //申请时间
-    private Date createTime;
+    private String createTime;
     //物品名称是
     private String resourceNames;
     //累计价格
@@ -44,11 +43,11 @@ public class ApiPurchaseApplyDataVo implements Serializable {
         this.userName = userName;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
