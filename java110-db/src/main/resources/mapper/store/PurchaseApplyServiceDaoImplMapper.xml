@@ -9,7 +9,7 @@
            insert into business_purchase_apply
                 (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id)
            values
-                (#{operate},'20000',#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId})
+                (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId})
     </insert>
 
     <!-- 保存采购明细表备份表 -->
