@@ -11,7 +11,7 @@
  Target Server Version : 50645
  File Encoding         : 65001
 
- Date: 05/03/2020 16:56:24
+ Date: 06/03/2020 15:35:04
 */
 
 SET NAMES utf8mb4;
@@ -25,8 +25,8 @@ CREATE TABLE `business_purchase_apply`  (
   `apply_order_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '订单号',
   `b_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '业务Id',
   `store_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '商户ID',
-  `user_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '使用人ID',
-  `entry_person` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '录入人ID',
+  `user_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '申请人id',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '申请人姓名',
   `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '申请说明',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `res_order_type` varchar(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '出库类型 10000 入库 20000 出库 在t_dict表查看',
@@ -57,8 +57,8 @@ CREATE TABLE `purchase_apply`  (
   `apply_order_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '订单号',
   `b_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '业务Id',
   `store_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '商户ID',
-  `user_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '使用人ID',
-  `entry_person` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '录入人ID',
+  `user_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '申请人id',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '申请人姓名',
   `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '申请说明',
   `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `res_order_type` varchar(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '出库类型 10000 入库 20000 出库 在t_dict表查看',
@@ -81,6 +81,6 @@ CREATE TABLE `purchase_apply_detail`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apply_detail_id`(`apply_order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
