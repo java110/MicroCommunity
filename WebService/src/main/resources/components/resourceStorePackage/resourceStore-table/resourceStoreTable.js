@@ -24,7 +24,7 @@
         },
         _initMethod: function () {
             vc.component._listResourceStores(DEFAULT_PAGE,DEFAULT_ROWS);
-            vc.component._initResourceStoreTable();
+            //vc.component._initResourceStoreTable();
             // console.log("table加载本地数据："+vc.component.resourceStoreManageInfo.data.rows);
             // console.log("table加载本地数据："+vc.component.resourceStoreManageInfo.data.total);
             // $('#resourceStore_table').bootstrapTable('load', vc.component.resourceStoreManageInfo.data);
