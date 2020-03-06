@@ -6,15 +6,12 @@ import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.web.smo.purchaseApply.IListPurchaseApplysSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 /**
  * 查询purchaseApply服务类
@@ -42,8 +39,11 @@ public class ListPurchaseApplysSMOImpl extends AbstractComponentSMO implements I
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) {
         ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        Map paramMap = BeanConvertUtil.beanCovertMap(result);
-        paramIn.putAll(paramMap);
+//        Map paramMap = BeanConvertUtil.beanCovertMap(result);
+//        paramIn.putAll(paramMap);
+        paramIn.put("storeId",result.getStoreId());
+        paramIn.put("storeTypeCd",result.getStoreTypeCd());
+        paramIn.put("communityId",result.getCommunityId());
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.listPurchaseApplys" + mapToUrlParam(paramIn);
 
