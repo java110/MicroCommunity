@@ -12,7 +12,7 @@
                     resourceStores:[],
                     description:'',
                     file:'',
-
+                    resOrderType:'10000'
                 }
             }
         },
