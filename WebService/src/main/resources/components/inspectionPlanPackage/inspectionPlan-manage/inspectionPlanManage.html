@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-sm-4">
                             <select class="custom-select" v-model="inspectionPlanManageInfo.conditions.state">
-                                <option selected disabled value="">必填，请选择状态</option>
+                                <option selected value="">必填，请选择状态</option>
                                 <option v-for="(item,index) in inspectionPlanManageInfo.states" :key="index"
                                         v-bind:value="item.statusCd">{{item.name}}
                                 </option>
