@@ -63,12 +63,12 @@
                             <td class="text-center">{{resourceStore.stock}}</td>
                             <td class="text-center">{{resourceStore.quantity}}</td>
                             <td class="text-center">
-                                <div class="btn-group">
+                                <div class="btn-group" v-if="purchaseApplyDetailInfo.state == '1000'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openEditPurchaseApplyDetailModel(resourceStore)">编辑
                                     </button>
                                 </div>
-                                <div class="btn-group">
+                                <div class="btn-group" v-if="purchaseApplyDetailInfo.state == '1000'">
                                     <button class="btn-white btn btn-xs"
                                             v-on:click="_openDeletePurchaseApplyDetailModel(resourceStore)">删除
                                     </button>
