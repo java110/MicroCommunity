@@ -21,9 +21,6 @@
         },
         _initMethod:function(){
             vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
-            // vc.getDict('purchase_apply',"state",function(_data){
-            //     vc.component.purchaseApplyManageInfo.states = _data;
-            // });
         },
         _initEvent:function(){
             
@@ -62,16 +59,10 @@
                            );
             },
             _openAddPurchaseApplyModal:function(){
-                //vc.emit('addPurchaseApply','openAddPurchaseApplyModal',{});
                 vc.jumpToPage("/flow/addPurchaseApplyStepFlow");
             },
-            // _openAddComplaintModal: function () {
-            //     //vc.emit('addComplaint', 'openAddComplaintModal', {});
-            //     vc.jumpToPage("/flow/addComplaintStepFlow")
-            // },
-            _openEditPurchaseApplyModel:function(_purchaseApply){
-                //vc.emit('editPurchaseApply','openEditPurchaseApplyModal',_purchaseApply);
-                vc.jumpToPage("/flow/purchaseApplyDetailFlow");
+            _openDetailPurchaseApplyModel:function(_purchaseApply){
+                vc.jumpToPage("/flow/purchaseApplyDetailFlow?applyOrderId="+_purchaseApply.applyOrderId);
             },
             _openDeletePurchaseApplyModel:function(_purchaseApply){
                 vc.emit('deletePurchaseApply','openDeletePurchaseApplyModal',_purchaseApply);
