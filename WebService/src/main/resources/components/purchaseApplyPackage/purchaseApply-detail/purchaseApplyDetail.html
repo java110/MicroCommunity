@@ -52,6 +52,7 @@
                             <th class="text-center">单价</th>
                             <th class="text-center">库存</th>
                             <th class="text-center">采购数量</th>
+                            <th class="text-center">备注</th>
                             <th class="text-center">操作</th>
                         </tr>
                         </thead>
@@ -62,6 +63,7 @@
                             <td class="text-center">{{resourceStore.price}}</td>
                             <td class="text-center">{{resourceStore.stock}}</td>
                             <td class="text-center">{{resourceStore.quantity}}</td>
+                            <td class="text-center">{{resourceStore.remark}}</td>
                             <td class="text-center">
                                 <div class="btn-group" v-if="purchaseApplyDetailInfo.state == '1000'">
                                     <button class="btn-white btn btn-xs"
