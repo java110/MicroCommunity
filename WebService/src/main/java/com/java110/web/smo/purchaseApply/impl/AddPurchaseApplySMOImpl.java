@@ -27,6 +27,8 @@ public class AddPurchaseApplySMOImpl extends AbstractComponentSMO implements IAd
     protected void validate(IPageData pd, JSONObject paramIn) {
 
         Assert.hasKeyAndValue(paramIn, "description", "必填，请填申请说明");
+        Assert.hasKeyAndValue(paramIn, "resOrderType", "必填，请填出入库类型");
+        Assert.hasKeyAndValue(paramIn, "resourceStores", "必填，请填写申请物资信息");
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_PURCHASE_APPLY);
 
