@@ -15,7 +15,7 @@
                 states:'',
                 conditions:{
                     state:'',
-                    applyOrderId:'',
+                    userName:''
                 }
             }
         },
@@ -77,6 +77,9 @@
                 }else{
                     vc.component.purchaseApplyManageInfo.moreCondition = true;
                 }
+            },
+            _queryInspectionPlanMethod:function () {
+                vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
             }
 
              
