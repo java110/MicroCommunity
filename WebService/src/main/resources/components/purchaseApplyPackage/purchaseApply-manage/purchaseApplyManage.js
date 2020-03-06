@@ -23,7 +23,6 @@
             vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
         },
         _initEvent:function(){
-            
             vc.on('purchaseApplyManage','listPurchaseApply',function(_param){
                   vc.component._listPurchaseApplys(DEFAULT_PAGE, DEFAULT_ROWS);
             });
