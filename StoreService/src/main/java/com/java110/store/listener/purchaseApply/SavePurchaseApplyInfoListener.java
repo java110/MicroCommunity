@@ -169,8 +169,6 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
 
         //状态
         businessPurchaseApply.put("state","1000");
-        //出入库类型
-        businessPurchaseApply.put("resOrderType","10000");
         businessPurchaseApply.put("bId",business.getbId());
         businessPurchaseApply.put("operate", StatusConstant.OPERATE_ADD);
         Object jsonArray = businessPurchaseApply.get("resourceStores");
