@@ -15,7 +15,8 @@
                 states:'',
                 conditions:{
                     state:'',
-                    userName:''
+                    userName:'',
+                    resOrderType:'10000'
                 }
             }
         },
