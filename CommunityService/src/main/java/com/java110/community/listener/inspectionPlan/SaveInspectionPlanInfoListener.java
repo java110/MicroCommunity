@@ -160,8 +160,7 @@ public class SaveInspectionPlanInfoListener extends AbstractInspectionPlanBusine
 
         businessInspectionPlan.put("bId",business.getbId());
         businessInspectionPlan.put("operate", StatusConstant.OPERATE_ADD);
-        businessInspectionPlan.put("createUserId", "111");
-        businessInspectionPlan.put("createUserName", "zcc");
+
 
         //保存巡检计划信息
         inspectionPlanServiceDaoImpl.saveBusinessInspectionPlanInfo(businessInspectionPlan);
