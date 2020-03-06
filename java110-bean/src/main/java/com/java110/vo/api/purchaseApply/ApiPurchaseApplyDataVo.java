@@ -9,6 +9,7 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String applyOrderId;
     private String state;
     private String userName;
+    private String stateName;
     //申请时间
     private Date createTime;
     //物品名称是
@@ -72,5 +73,13 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setPurchaseApplyDetailVo(List<PurchaseApplyDetailVo> purchaseApplyDetailVo) {
         this.purchaseApplyDetailVo = purchaseApplyDetailVo;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
