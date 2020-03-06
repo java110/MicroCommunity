@@ -13,7 +13,6 @@ public class PurchaseApplyDetailDto {
     private String resCode;
     private String price;
     private String stock;
-    private String description;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -87,13 +86,6 @@ public class PurchaseApplyDetailDto {
         this.stock = stock;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
 
 
