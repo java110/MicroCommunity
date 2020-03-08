@@ -1,8 +1,0 @@
-<div class="form-group row" component="validate-code">
-    <div class="col-sm-8 ">
-        <input type="text" class="form-control" v-model="validateCode" placeholder="请输入验证码" required="" @keyup.enter="enterToLogin"/>
-    </div>
-    <div class="col-sm-4 ">
-        <img v-bind:src="codeImage" border="0" style="cursor:pointer" alt="点击刷新验证码" class="form-control no_padding" v-on:click="generateCode()"/>
-    </div>
-</div>

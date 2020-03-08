@@ -24,7 +24,6 @@
         <module>java110-event</module>
         <module>OrderService</module>
         <module>java110-cacheAgent</module>
-        <module>WebService</module>
         <module>java110-logAgent</module>
         <module>zipkin</module>
         <module>ShopService</module>
@@ -38,8 +37,7 @@
         <module>ReportService</module>
         <module>ReportComponent</module>
         <module>HardwareAdapationService</module>
-        <module>AppFrontService</module>
-        <module>java110-front</module>
+        <module>FrontService</module>
     </modules>
 
     <parent>

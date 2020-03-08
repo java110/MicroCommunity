@@ -92,6 +92,14 @@ import org.springframework.http.ResponseEntity;
      void setResponseEntity(ResponseEntity responseEntity);
 
     /**
+     * 获取调用api 地址
+     * @return
+     */
+    public String getApiUrl();
+    //设置调用api 服务地址
+    public void setApiUrl(String apiUrl);
+
+    /**
      * 构建 pd 对象
      * @param userId 用户ID
      * @param token token

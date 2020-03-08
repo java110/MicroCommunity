@@ -46,6 +46,8 @@ public class PageData implements IPageData, Serializable {
 
     private String url;
 
+    private String apiUrl;
+
     private ResponseEntity responseEntity;
 
     public String getUserId() {
@@ -216,5 +218,13 @@ public class PageData implements IPageData, Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 }

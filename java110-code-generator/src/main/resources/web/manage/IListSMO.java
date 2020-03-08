@@ -1,4 +1,4 @@
-package com.java110.web.smo.community;
+package com.java110.front.smo.community;
 
 import com.java110.utils.exception.SMOException;
 import com.java110.core.context.IPageData;

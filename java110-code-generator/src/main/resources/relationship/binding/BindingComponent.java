@@ -1,4 +1,4 @@
-package com.java110.web.components.@@templateCode@@;
+package com.java110.front.components.@@templateCode@@;
 
 import com.java110.core.context.IPageData;
 import com.java110.web.smo.@@templateCode@@.I@@TemplateCode@@BindingSMO;
