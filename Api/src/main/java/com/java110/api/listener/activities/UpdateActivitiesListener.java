@@ -2,6 +2,7 @@ package com.java110.api.listener.activities;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.activities.IActivitiesBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -40,6 +41,9 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
     private IActivitiesInnerServiceSMO activitiesInnerServiceSMOImpl;
 
     @Autowired
+    private IActivitiesBMO activitiesBMOImpl;
+
+    @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
@@ -62,12 +66,8 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
         AppService service = event.getAppService();
-
 
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
             FileDto fileDto = new FileDto();
@@ -81,64 +81,17 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
             reqJson.put("headerImg", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(editHeaderImg(reqJson, context));
+            businesses.add(activitiesBMOImpl.editHeaderImg(reqJson, context));
 
         }
         //添加单元信息
-        businesses.add(updateActivities(reqJson, context));
+        businesses.add(activitiesBMOImpl.updateActivities(reqJson, context));
 
-
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = activitiesBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 修改头部照片
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject editHeaderImg(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setRelTypeCd("70000");
-        fileRelDto.setObjId(paramInJson.getString("activitiesId"));
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if (fileRelDtos == null || fileRelDtos.size() == 0) {
-            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-            JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", "-1");
-            businessUnit.put("relTypeCd", "70000");
-            businessUnit.put("saveWay", "table");
-            businessUnit.put("objId", paramInJson.getString("activitiesId"));
-            businessUnit.put("fileRealName", paramInJson.getString("headerImg"));
-            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-            return business;
-        }
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-        businessUnit.put("fileRealName", paramInJson.getString("headerImg"));
-        businessUnit.put("fileSaveName", paramInJson.getString("headerImg"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-        return business;
-
-
-    }
 
     @Override
     public String getServiceCode() {
@@ -155,39 +108,5 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
         return DEFAULT_ORDER;
     }
 
-
-    /**
-     * 添加活动信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateActivities(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        ActivitiesDto activitiesDto = new ActivitiesDto();
-        activitiesDto.setActivitiesId(paramInJson.getString("activitiesId"));
-        activitiesDto.setCommunityId(paramInJson.getString("communityId"));
-        List<ActivitiesDto> activitiesDtos = activitiesInnerServiceSMOImpl.queryActivitiess(activitiesDto);
-
-        Assert.listOnlyOne(activitiesDtos, "未找到需要修改的活动 或多条数据");
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ACTIVITIES);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessActivities = new JSONObject();
-        businessActivities.putAll(paramInJson);
-        businessActivities.put("userId",activitiesDtos.get(0).getUserId());
-        businessActivities.put("userName",activitiesDtos.get(0).getUserName());
-        businessActivities.put("readCount",activitiesDtos.get(0).getReadCount());
-        businessActivities.put("likeCount",activitiesDtos.get(0).getLikeCount());
-        businessActivities.put("collectCount",activitiesDtos.get(0).getCollectCount());
-        businessActivities.put("state",activitiesDtos.get(0).getState()); // 先设置为不审核
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessActivities", businessActivities);
-        return business;
-    }
 
 }
