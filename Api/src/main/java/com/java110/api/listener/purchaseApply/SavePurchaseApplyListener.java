@@ -25,6 +25,7 @@ public class SavePurchaseApplyListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
+        Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
 
     }
 
