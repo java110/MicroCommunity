@@ -2,6 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -65,6 +66,9 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
 
     private static final String CAR_BLACK = "1111"; // 车辆黑名单
     private static final String CAR_WHITE = "2222"; // 车辆白名单
+
+    @Autowired
+    private IMachineTranslateBMO machineTranslateBMOImpl;
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -233,10 +237,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         //添加单元信息
         businesses.add(modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", null));
         businesses.add(addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A)));
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+
+        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
         reqJson.put("feeRestartTime", tmpFeeDto.getEndTime());
 
@@ -366,10 +368,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
                 businesses.add(tmpModifyCarInoutFee);
             }
         }
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+
+        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
     }
 
@@ -422,12 +422,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         businesses.add(addCarInoutDetail(reqJson, context, communityId, machineDto));
         businesses.add(addCarInoutFee(reqJson, context, communityId));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(MachineResDataVo.getResData(MachineResDataVo.CODE_ERROR, responseEntity.getBody()));
             return;

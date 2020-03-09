@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -50,6 +51,8 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(PayFeePreListener.class);
 
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -96,12 +99,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         businesses.add(addFeeDetail(paramObj, dataFlowContext));
         businesses.add(modifyFee(paramObj, dataFlowContext));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
             return;
@@ -121,7 +119,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
      * @param headers 头部信息
      */
     protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
-        super.freshOrderProtocol(orders, headers);
+        feeBMOImpl.freshOrderProtocol(orders, headers);
         orders.put("orderProcess", Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
 
     }

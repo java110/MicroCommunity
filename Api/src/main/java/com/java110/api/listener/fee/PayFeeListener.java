@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.parking.ParkingSpaceDto;
@@ -51,6 +52,9 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(PayFeeListener.class);
 
     @Autowired
+    private IFeeBMO feeBMOImpl;
+
+    @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -94,12 +98,8 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         businesses.add(addFeeDetail(paramObj, dataFlowContext));
         businesses.add(modifyFee(paramObj, dataFlowContext));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 

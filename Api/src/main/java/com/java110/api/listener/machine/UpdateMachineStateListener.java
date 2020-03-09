@@ -2,6 +2,7 @@ package com.java110.api.listener.machine;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.machine.IMachineBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -31,6 +32,9 @@ public class UpdateMachineStateListener extends AbstractServiceApiListener {
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
 
+    @Autowired
+    private IMachineBMO machineBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -52,12 +56,9 @@ public class UpdateMachineStateListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(updateMachine(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = machineBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

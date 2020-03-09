@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -12,6 +13,7 @@ import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ import java.util.Map;
 public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(PayFeeConfirmListener.class);
+
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -60,12 +65,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
         dataFlowContext.getRequestCurrentHeaders().put("oId", paramObj.getString("oId"));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 
@@ -78,7 +78,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
      * @param headers 头部信息
      */
     protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
-        super.freshOrderProtocol(orders, headers);
+        feeBMOImpl.freshOrderProtocol(orders, headers);
         orders.put("orderProcess", Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT);
         orders.put("oId", headers.get("oId"));
     }

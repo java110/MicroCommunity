@@ -2,6 +2,7 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -30,6 +31,9 @@ import java.util.Map;
 public class AuditCommunityListener extends AbstractServiceApiListener {
 
     @Autowired
+    private ICommunityBMO communityBMOImpl;
+
+    @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     @Override
@@ -53,12 +57,9 @@ public class AuditCommunityListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(updateCommunity(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

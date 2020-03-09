@@ -2,6 +2,7 @@ package com.java110.api.listener.applicationKey;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -38,6 +39,9 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
+
+    @Autowired
+    private IApplicationKeyBMO applicationKeyBMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -80,7 +84,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
             //添加单元信息
             reqJson.put("machineId", machineIds.getJSONObject(machineIndex).getString("machineId"));
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
-            businesses.add(addApplicationKey(reqJson, context));
+            businesses.add(applicationKeyBMOImpl.addApplicationKey(reqJson, context));
             if (reqJson.containsKey("photos")) {
                 JSONArray photos = reqJson.getJSONArray("photos");
                 for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
@@ -96,49 +100,21 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
                     reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
                     reqJson.put("fileSaveName", fileName);
 
-                    businesses.add(addPhoto(reqJson, context));
+                    businesses.add(applicationKeyBMOImpl.addPhoto(reqJson, context));
                 }
             }
         }
 
-        businesses.add(addMsg(reqJson, context));
+        businesses.add(applicationKeyBMOImpl.addMsg(reqJson, context));
 
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", "60000");
-        businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
-        businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
-    }
 
     @Override
     public String getServiceCode() {
@@ -155,54 +131,8 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         return DEFAULT_ORDER;
     }
 
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        businessApplicationKey.put("applicationKeyId", paramInJson.getString("applicationKeyId"));
-        businessApplicationKey.put("state", "10002");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
-    }
-
-
-    private Object addMsg(JSONObject paramInJson, DataFlowContext context) {
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setMemberTypeCd("390001200002");
-        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        Assert.listOnlyOne(communityMemberDtos, "小区存在零个或多个物业");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMsg = new JSONObject();
-        //businessApplicationKey.putAll(paramInJson);
-        businessMsg.put("msgId", "-1");
-        businessMsg.put("msgType", "10002");
-        businessMsg.put("title", "您有一条钥匙审核单");
-        businessMsg.put("url", "/flow/auditApplicationKeyFlow");
-        businessMsg.put("viewTypeCd", "30000");
-        businessMsg.put("viewObjId", communityMemberDtos.get(0).getMemberId());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMsg", businessMsg);
-        return business;
-    }
 
     /**
      * 获取随机数

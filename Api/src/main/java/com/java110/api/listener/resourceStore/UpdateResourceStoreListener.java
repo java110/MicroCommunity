@@ -2,6 +2,7 @@ package com.java110.api.listener.resourceStore;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.resourceStore.IResourceStoreBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.smo.resourceStore.IResourceStoreInnerServiceSMO;
 import com.java110.dto.resourceStore.ResourceStoreDto;
@@ -31,6 +32,9 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
+    @Autowired
+    private IResourceStoreBMO resourceStoreBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -56,12 +60,9 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(updateResourceStore(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = resourceStoreBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

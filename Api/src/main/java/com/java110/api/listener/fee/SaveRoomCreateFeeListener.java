@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
@@ -39,6 +40,9 @@ import java.util.List;
 @Java110Listener("saveRoomCreateFeeListener")
 public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
     private static Logger logger = LoggerFactory.getLogger(SaveRoomCreateFeeListener.class);
+
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     private static final int DEFAULT_ADD_FEE_COUNT = 200;
 
@@ -134,11 +138,8 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
             businesses.add(addFee(roomDtos.get(roomIndex), reqJson, context));
 
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-                paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-                //将 rest header 信息传递到下层服务中去
-                super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-                responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+                responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
 
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {
                     failRooms += businesses.size();
@@ -149,10 +150,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         }
         if (businesses != null && businesses.size() > 0) {
 
-            paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-            //将 rest header 信息传递到下层服务中去
-            super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-            responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+            responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 failRooms += businesses.size();
             }

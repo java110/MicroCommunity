@@ -2,6 +2,7 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
@@ -27,6 +28,8 @@ import org.springframework.http.ResponseEntity;
 @Java110Listener("communityMemberJoinedListener")
 public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(CommunityMemberJoinedListener.class);
+    @Autowired
+    private ICommunityBMO communityBMOImpl;
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -62,12 +65,8 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         //添加商户
         businesses.add(addCommunityMember(paramObj));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

@@ -2,6 +2,7 @@ package com.java110.api.listener.complaint;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.complaintUser.IComplaintUserInnerServiceSMO;
@@ -29,6 +30,9 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("saveComplaintListener")
 public class SaveComplaintListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IComplaintBMO complaintBMOImpl;
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
@@ -60,12 +64,8 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(addComplaint(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         if(HttpStatus.OK == responseEntity.getStatusCode()){
             ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);

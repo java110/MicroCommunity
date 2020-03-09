@@ -2,6 +2,7 @@ package com.java110.api.listener.user;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.user.IUserBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -12,6 +13,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 
 /**
@@ -24,6 +26,8 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
     public int getOrder() {
         return 0;
     }
+    @Autowired
+    private IUserBMO userBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -61,10 +65,10 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
 
 
-        String paramInObj = super.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+        String paramInObj = userBMOImpl.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
 
         //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        userBMOImpl.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
@@ -101,7 +105,7 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
         String requestUrl = appService.getUrl();
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_DELETE_USER_ALL_PRIVILEGE);
-        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        userBMOImpl.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
         JSONObject paramInObj = new JSONObject();
         paramInObj.put("userId",paramInJson.getString("userId"));
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);

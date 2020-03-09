@@ -2,6 +2,7 @@ package com.java110.api.listener.ownerRepair;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -34,6 +35,9 @@ import java.util.List;
 public class CloseRepairDispatchListener extends AbstractServiceApiListener {
 
     private static Logger logger = LoggerFactory.getLogger(CloseRepairDispatchListener.class);
+
+    @Autowired
+    private IOwnerRepairBMO ownerRepairBMOImpl;
 
 
     @Autowired
@@ -72,12 +76,8 @@ public class CloseRepairDispatchListener extends AbstractServiceApiListener {
         businesses.add(modifyBusinessRepair(reqJson, context));
 
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = ownerRepairBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

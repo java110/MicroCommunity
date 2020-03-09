@@ -2,6 +2,7 @@ package com.java110.api.listener.applicationKey;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -33,6 +34,8 @@ import java.util.Random;
 @Java110Listener("applyVisitorApplicationKey")
 public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
 
+    @Autowired
+    private IApplicationKeyBMO applicationKeyBMOImpl;
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
 
@@ -93,11 +96,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
             businesses.add(addApplicationKey(reqJson, context));
         }
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-        responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(responseEntity);

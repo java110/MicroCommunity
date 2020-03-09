@@ -2,6 +2,7 @@ package com.java110.api.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -37,6 +38,10 @@ import java.util.List;
 @Java110Listener("saveParkingSpaceCreateFeeListener")
 public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListener {
     private static Logger logger = LoggerFactory.getLogger(SaveParkingSpaceCreateFeeListener.class);
+
+
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     private static final int DEFAULT_ADD_FEE_COUNT = 200;
 
@@ -129,11 +134,8 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
             businesses.add(addFee(parkingSpaceDtos.get(parkingSpaceIndex), reqJson, context));
 
             if (parkingSpaceIndex % DEFAULT_ADD_FEE_COUNT == 0 && parkingSpaceIndex != 0) {
-                paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-                //将 rest header 信息传递到下层服务中去
-                super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-                responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+                responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
 
                 if (responseEntity.getStatusCode() != HttpStatus.OK) {
                     failParkingSpaces += businesses.size();
@@ -144,10 +146,7 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         }
         if (businesses != null && businesses.size() > 0) {
 
-            paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-            //将 rest header 信息传递到下层服务中去
-            super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-            responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+            responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 failParkingSpaces += businesses.size();
             }

@@ -2,6 +2,7 @@ package com.java110.api.listener.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -28,6 +29,9 @@ import java.util.List;
 public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(DeleteFloorListener.class);
+
+    @Autowired
+    private IFloorBMO floorBMOImpl;
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -60,18 +64,11 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
-
         //添加小区楼
         businesses.add(deleteFloor(paramObj));
         businesses.add(exitCommunityMember(paramObj));
 
-
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

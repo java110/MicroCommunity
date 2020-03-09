@@ -2,6 +2,7 @@ package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -36,6 +37,8 @@ import java.util.List;
 @Java110Listener("applicationKeyListener")
 public class ApplicationKeyListener extends AbstractServiceApiDataFlowListener {
 
+    @Autowired
+    private IApplicationKeyBMO applicationKeyBMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -94,13 +97,9 @@ public class ApplicationKeyListener extends AbstractServiceApiDataFlowListener {
             addMachineTranslate(paramObj, dataFlowContext);
         }*/
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
 
 
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 

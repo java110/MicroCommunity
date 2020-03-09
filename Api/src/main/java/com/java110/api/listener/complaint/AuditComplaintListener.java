@@ -2,6 +2,7 @@ package com.java110.api.listener.complaint;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -32,6 +33,9 @@ import java.util.List;
  */
 @Java110Listener("auditComplaintListener")
 public class AuditComplaintListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IComplaintBMO complaintBMOImpl;
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
@@ -97,10 +101,8 @@ public class AuditComplaintListener extends AbstractServiceApiListener {
             AppService service = event.getAppService();
             //添加单元信息
             businesses.add(updateComplaint(reqJson, context));
-            JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-            //将 rest header 信息传递到下层服务中去
-            super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-            responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+
+            responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
         }
         context.setResponseEntity(responseEntity);
 

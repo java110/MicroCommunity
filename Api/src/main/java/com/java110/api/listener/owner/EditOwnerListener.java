@@ -2,6 +2,7 @@ package com.java110.api.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
@@ -43,6 +44,9 @@ import java.util.List;
 public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(EditOwnerListener.class);
+
+    @Autowired
+    private IOwnerBMO ownerBMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -103,13 +107,7 @@ public class EditOwnerListener extends AbstractServiceApiDataFlowListener {
         //添加小区楼
         businesses.add(editOwner(paramObj));
 
-
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = ownerBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

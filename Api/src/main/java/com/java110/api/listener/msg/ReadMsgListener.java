@@ -2,6 +2,7 @@ package com.java110.api.listener.msg;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.msg.IMsgBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -32,7 +33,8 @@ import java.util.List;
 @Java110Listener("readMsgListener")
 public class ReadMsgListener extends AbstractServiceApiListener {
 
-
+    @Autowired
+    private IMsgBMO msgBMOImpl;
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_READ_MSGS;
@@ -72,12 +74,8 @@ public class ReadMsgListener extends AbstractServiceApiListener {
 
         businesses.add(addReadMsg(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = msgBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
 

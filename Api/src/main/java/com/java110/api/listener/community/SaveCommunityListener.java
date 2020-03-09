@@ -2,6 +2,7 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
@@ -10,6 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,10 @@ import com.java110.core.annotation.Java110Listener;
  */
 @Java110Listener("saveCommunityListener")
 public class SaveCommunityListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private ICommunityBMO communityBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -46,19 +52,14 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         businesses.add(addCommunity(reqJson, context));
         businesses.addAll(addCommunityMember(reqJson));
         //产生物业费配置信息
-        businesses.add(addFeeConfigProperty(reqJson,context));
-        businesses.add(addFeeConfigParkingSpaceUpSell(reqJson,context)); // 地上出售
-        businesses.add(addFeeConfigParkingSpaceDownSell(reqJson,context)); // 地下出售
-        businesses.add(addFeeConfigParkingSpaceUpHire(reqJson,context));//地上出租
-        businesses.add(addFeeConfigParkingSpaceDownHire(reqJson,context));//地下出租
-        businesses.add(addFeeConfigParkingSpaceTemp(reqJson,context));//地下出租
+        businesses.add(addFeeConfigProperty(reqJson, context));
+        businesses.add(addFeeConfigParkingSpaceUpSell(reqJson, context)); // 地上出售
+        businesses.add(addFeeConfigParkingSpaceDownSell(reqJson, context)); // 地下出售
+        businesses.add(addFeeConfigParkingSpaceUpHire(reqJson, context));//地上出租
+        businesses.add(addFeeConfigParkingSpaceDownHire(reqJson, context));//地下出租
+        businesses.add(addFeeConfigParkingSpaceTemp(reqJson, context));//地下出租
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
@@ -76,7 +77,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+1);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -107,7 +108,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+2);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -138,7 +139,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+3);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -169,7 +170,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+4);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 4);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -200,7 +201,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+5);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 5);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -231,7 +232,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+6);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 6);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
@@ -338,7 +339,7 @@ public class SaveCommunityListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunity = new JSONObject();
         businessCommunity.putAll(paramInJson);
-        businessCommunity.put("state","1000");
+        businessCommunity.put("state", "1000");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
         return business;

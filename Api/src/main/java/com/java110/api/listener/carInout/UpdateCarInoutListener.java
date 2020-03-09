@@ -2,6 +2,7 @@ package com.java110.api.listener.carInout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.carInout.ICarInoutBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -11,6 +12,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeCarInoutConstant;
 import com.java110.utils.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("updateCarInoutListener")
 public class UpdateCarInoutListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private ICarInoutBMO carInoutBMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -44,14 +49,9 @@ public class UpdateCarInoutListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateCarInout(reqJson, context));
+        businesses.add(carInoutBMOImpl.updateCarInout(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = carInoutBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
@@ -72,25 +72,5 @@ public class UpdateCarInoutListener extends AbstractServiceApiListener {
     }
 
 
-    /**
-     * 添加车辆进场信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarInout = new JSONObject();
-        businessCarInout.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
-    }
 
 }

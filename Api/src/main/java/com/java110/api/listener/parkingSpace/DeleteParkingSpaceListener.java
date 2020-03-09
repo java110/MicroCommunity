@@ -2,6 +2,7 @@ package com.java110.api.listener.parkingSpace;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -26,6 +27,9 @@ import org.springframework.http.ResponseEntity;
 public class DeleteParkingSpaceListener extends AbstractServiceApiDataFlowListener {
 
     private static Logger logger = LoggerFactory.getLogger(DeleteParkingSpaceListener.class);
+
+    @Autowired
+    private IParkingSpaceBMO parkingSpaceBMOImpl;
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
@@ -63,12 +67,7 @@ public class DeleteParkingSpaceListener extends AbstractServiceApiDataFlowListen
         businesses.add(deleteParkingSpace(paramObj));
 
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = parkingSpaceBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

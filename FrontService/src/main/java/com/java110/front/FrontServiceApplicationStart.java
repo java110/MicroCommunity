@@ -1,7 +1,6 @@
 package com.java110.front;
 
 import com.java110.service.init.ServiceStartInit;
-import com.java110.front.core.VueComponentTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

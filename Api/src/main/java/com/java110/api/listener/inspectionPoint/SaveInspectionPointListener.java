@@ -2,6 +2,7 @@ package com.java110.api.listener.inspectionPoint;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.inspection.IInspectionBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
@@ -16,6 +17,7 @@ import com.java110.utils.constant.ServiceCodeInspectionPointConstant;
 
 
 import com.java110.core.annotation.Java110Listener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("saveInspectionPointListener")
 public class SaveInspectionPointListener extends AbstractServiceApiListener {
+    @Autowired
+    private IInspectionBMO inspectionBMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "machineId", "必填，请填写设备ID");
@@ -44,12 +48,7 @@ public class SaveInspectionPointListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(addInspectionPoint(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

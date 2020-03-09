@@ -2,6 +2,7 @@ package com.java110.api.listener.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -32,6 +33,8 @@ import org.springframework.http.ResponseEntity;
 @Java110Listener("saveFloorListener")
 public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
 
+    @Autowired
+    private IFloorBMO floorBMOImpl;
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
@@ -80,12 +83,8 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
         //小区楼添加到小区中
         businesses.add(addCommunityMember(paramObj));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 

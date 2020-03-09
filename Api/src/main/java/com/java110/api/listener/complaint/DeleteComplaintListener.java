@@ -2,6 +2,7 @@ package com.java110.api.listener.complaint;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
@@ -13,6 +14,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 
 import com.java110.core.annotation.Java110Listener;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("deleteComplaintListener")
 public class DeleteComplaintListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IComplaintBMO complaintBMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -43,12 +48,8 @@ public class DeleteComplaintListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(deleteComplaint(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

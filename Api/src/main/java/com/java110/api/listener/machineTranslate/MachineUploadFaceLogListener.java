@@ -2,6 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -44,6 +45,9 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
+
+    @Autowired
+    private IMachineTranslateBMO machineTranslateBMOImpl;
 
     @Autowired
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
@@ -112,12 +116,9 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
             //保存文件信息
             businesses.add(savePhoto(reqJson, context));
 
-            JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-            //将 rest header 信息传递到下层服务中去
-            super.freshHttpHeader(header, context.getRequestCurrentHeaders());
 
-            responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+            responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "上报记录失败" + responseEntity);

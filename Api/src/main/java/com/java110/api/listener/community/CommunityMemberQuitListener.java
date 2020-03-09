@@ -2,6 +2,7 @@ package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -13,6 +14,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 @Java110Listener("communityMemberQuitListener")
 public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListener {
     private final static Logger logger = LoggerFactory.getLogger(CommunityMemberQuitListener.class);
+    @Autowired
+    private ICommunityBMO communityBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -50,7 +54,7 @@ public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListe
 
         //根据 memberId communityId memberTypeCd  query.myCommunity.byMember
 
-        ResponseEntity<String> responseEntity = super.callService(dataFlowContext,"query.myCommunity.byMember",paramObj);
+        ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext,"query.myCommunity.byMember",paramObj);
 
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             dataFlowContext.setResponseEntity(responseEntity);
@@ -78,12 +82,7 @@ public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListe
         //添加商户
         businesses.add(deleteCommunityMember(paramObj));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
-
-         responseEntity = this.callService(dataFlowContext,service.getServiceCode(),paramInObj);
+         responseEntity = communityBMOImpl.callService(dataFlowContext,service.getServiceCode(),businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }

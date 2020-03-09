@@ -2,6 +2,7 @@ package com.java110.api.listener.user;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.user.IUserBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -14,6 +15,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 
 import java.util.HashMap;
@@ -31,7 +33,8 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
     public int getOrder() {
         return 0;
     }
-
+    @Autowired
+    private IUserBMO userBMOImpl;
     @Override
     public String getServiceCode() {
         return ServiceCodeConstant.SERVICE_CODE_QUERY_STAFF_BY_NAME;
@@ -60,7 +63,7 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
 
         JSONObject resultJson = JSONObject.parseObject("{\"total:\":10,\"datas\":[]}");
         //根据名称查询用户信息
-        responseEntity = super.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_USER_BY_NAME,data);
+        responseEntity = userBMOImpl.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_USER_BY_NAME,data);
 
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             dataFlowContext.setResponseEntity(responseEntity);
@@ -76,11 +79,11 @@ public class QueryStaffByUserNameServiceListener extends AbstractServiceApiDataF
         }
 
         JSONArray userInfos = getUserInfos(responseEntity);
-        Map<String,String> paramIn = new HashMap<>();
+        JSONObject paramIn = new JSONObject();
         paramIn.put("userIds",useIds);
         paramIn.put("storeId",data.getString("storeId"));
         //查询是商户员工的userId
-        responseEntity = super.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_STOREUSER_BYUSERIDS,paramIn);
+        responseEntity = userBMOImpl.callService(dataFlowContext,ServiceCodeConstant.SERVICE_CODE_QUERY_STOREUSER_BYUSERIDS,paramIn);
 
         if(responseEntity.getStatusCode() != HttpStatus.OK){
             return ;

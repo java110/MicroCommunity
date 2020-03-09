@@ -2,6 +2,7 @@ package com.java110.api.listener.demo;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.demo.IDemoBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -31,6 +32,8 @@ import org.springframework.http.ResponseEntity;
 public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
     private static Logger logger = LoggerFactory.getLogger(SaveDemoConfigListener.class);
 
+    @Autowired
+    private IDemoBMO demoBMOImpl;
 
     @Autowired
     private IDemoInnerServiceSMO demoInnerServiceSMOImpl;
@@ -66,12 +69,8 @@ public class SaveDemoConfigListener extends AbstractServiceApiDataFlowListener {
         //添加DEMO信息
         businesses.add(addDemoConfig(paramObj, dataFlowContext));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(dataFlowContext, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = demoBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 

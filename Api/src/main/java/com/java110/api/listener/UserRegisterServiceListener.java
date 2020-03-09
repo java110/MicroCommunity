@@ -1,6 +1,7 @@
 package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.user.IUserBMO;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
@@ -9,6 +10,7 @@ import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 
 /**
@@ -21,6 +23,8 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
     private final static Logger logger = LoggerFactory.getLogger(UserRegisterServiceListener.class);
 
 
+    @Autowired
+    private IUserBMO userBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -76,9 +80,9 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
-        String paramInObj = super.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+        String paramInObj = userBMOImpl.restToCenterProtocol(business,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
         //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
+        userBMOImpl.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
         //http://user-service/test/sayHello
         super.doRequest(dataFlowContext, service, httpEntity);

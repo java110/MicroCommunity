@@ -34,7 +34,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param event
      * @return
      */
-    protected ResponseEntity<String> callService(ServiceDataFlowEvent event) {
+    public ResponseEntity<String> callService(ServiceDataFlowEvent event) {
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
@@ -51,6 +51,18 @@ public class ApiBaseBMO implements IApiBaseBMO{
      */
     public ResponseEntity<String> callService(DataFlowContext context, String serviceCode,JSONArray businesses) {
         JSONObject paramInObj = restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
+        return callService(context,serviceCode,paramInObj);
+    }
+
+    /**
+     * 调用下游服务
+     *
+     * @param context
+     * @param serviceCode 下游服务
+     * @return
+     */
+    public ResponseEntity<String> callService(DataFlowContext context, String serviceCode,JSONObject paramInObj) {
+
         //将 rest header 信息传递到下层服务中去
         HttpHeaders header = new HttpHeaders();
         freshHttpHeader(header, context.getRequestCurrentHeaders());
@@ -72,7 +84,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param appService 下游服务
      * @return
      */
-    protected ResponseEntity<String> callService(DataFlowContext context, AppService appService, Map paramIn) {
+    public ResponseEntity<String> callService(DataFlowContext context, AppService appService, Map paramIn) {
 
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
 
@@ -130,7 +142,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param headers    订单头信息
      * @return
      */
-    protected JSONObject restToCenterProtocol(JSONArray businesses, Map<String, String> headers) {
+    public JSONObject restToCenterProtocol(JSONArray businesses, Map<String, String> headers) {
 
         JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         freshOrderProtocol(centerProtocol.getJSONObject("orders"), headers);
@@ -145,7 +157,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param business
      * @return
      */
-    protected JSONObject restToCenterProtocol(JSONObject business, Map<String, String> headers) {
+    public JSONObject restToCenterProtocol(JSONObject business, Map<String, String> headers) {
 
         JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         freshOrderProtocol(centerProtocol.getJSONObject("orders"), headers);
@@ -161,7 +173,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param orders  订单信息
      * @param headers 头部信息
      */
-    protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
+    public void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
         for (String key : headers.keySet()) {
 
             if (CommonConstant.HTTP_APP_ID.equals(key)) {
@@ -193,7 +205,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @param httpHeaders http 头信息
      * @param headers     头部信息
      */
-    protected void freshHttpHeader(HttpHeaders httpHeaders, Map<String, String> headers) {
+    public void freshHttpHeader(HttpHeaders httpHeaders, Map<String, String> headers) {
         for (String key : headers.keySet()) {
 
             if (CommonConstant.HTTP_APP_ID.equals(key)) {

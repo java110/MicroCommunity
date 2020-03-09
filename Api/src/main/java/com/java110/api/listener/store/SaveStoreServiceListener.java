@@ -2,6 +2,7 @@ package com.java110.api.listener.store;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.utils.cache.MappingCache;
@@ -12,6 +13,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 
 /**
@@ -20,6 +22,9 @@ import org.springframework.http.*;
  */
 @Java110Listener("saveStoreServiceListener")
 public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener {
+
+    @Autowired
+    private IStoreBMO storeBMOImpl;
     @Override
     public int getOrder() {
         return 0;
@@ -106,22 +111,23 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businesses.add(addStaffOrg(paramObj));
 
 
-        String paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders()).toJSONString();
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-
-        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
-        //http://user-service/test/sayHello
-        super.doRequest(dataFlowContext, service, httpEntity);
+//        String paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders()).toJSONString();
+//
+//        //将 rest header 信息传递到下层服务中去
+//        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
+//
+//        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
+//        //http://user-service/test/sayHello
+//        super.doRequest(dataFlowContext, service, httpEntity);
 
         //super.doResponse(dataFlowContext);
+        ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
-        if (dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK) {
-            return;
-        }
-        String resData = dataFlowContext.getResponseEntity().getBody().toString();
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONArray.parseArray(resData).get(0).toString(), HttpStatus.OK);
+//        if (dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK) {
+//            return;
+//        }
+//        String resData = dataFlowContext.getResponseEntity().getBody().toString();
+//       responseEntity = new ResponseEntity<String>(JSONArray.parseArray(resData).get(0).toString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
         //如果不成功直接返回
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -151,7 +157,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         String requestUrl = appService.getUrl();
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
-        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
+        storeBMOImpl.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
         JSONObject paramInObj = new JSONObject();
         paramInObj.put("userId", paramObj.getJSONObject("businessStore").getString("userId"));
         paramInObj.put("storeTypeCd", paramObj.getJSONObject("businessStore").getString("storeTypeCd"));

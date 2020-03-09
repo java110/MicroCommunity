@@ -2,6 +2,7 @@ package com.java110.api.listener.advert;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.advert.IAdvertBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -37,6 +38,8 @@ import java.util.List;
 @Java110Listener("updateAdvertListener")
 public class UpdateAdvertListener extends AbstractServiceApiListener {
 
+    @Autowired
+    private IAdvertBMO advertBMOImpl;
     @Autowired
     private IAdvertInnerServiceSMO advertInnerServiceSMOImpl;
 
@@ -92,7 +95,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
         //添加单元信息
-        businesses.add(updateAdvert(reqJson, context));
+        businesses.add(advertBMOImpl.updateAdvert(reqJson, context));
 
         AdvertItemDto advertItemDto = new AdvertItemDto();
         advertItemDto.setAdvertId(reqJson.getString("advertId"));
@@ -101,7 +104,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
         //删除照片或视频
         for (AdvertItemDto tmpAdvertItemDto : advertItemDtos) {
-            businesses.add(delAdvertItemPhotoOrVideo(tmpAdvertItemDto, context));
+            businesses.add(advertBMOImpl.delAdvertItemPhotoOrVideo(tmpAdvertItemDto, context));
         }
 
         //删除文件和 广告的关系
@@ -110,164 +113,27 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
         fileRelDto.setRelTypeCds(new String[]{"40000","50000"});
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         for (FileRelDto tmpFileRelDto : fileRelDtos) {
-            businesses.add(delAdvertFileRel(tmpFileRelDto, context));
+            businesses.add(advertBMOImpl.delAdvertFileRel(tmpFileRelDto, context));
         }
 
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                businesses.add(addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex)));
-                businesses.add(addAdvertFileRel(reqJson, context, "40000"));
+                businesses.add(advertBMOImpl.addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex)));
+                businesses.add(advertBMOImpl.addAdvertFileRel(reqJson, context, "40000"));
             }
 
         } else {
-            businesses.add(addAdvertItemVedio(reqJson, context));
-            businesses.add(addAdvertFileRel(reqJson, context, "50000"));
+            businesses.add(advertBMOImpl.addAdvertItemVedio(reqJson, context));
+            businesses.add(advertBMOImpl.addAdvertFileRel(reqJson, context, "50000"));
         }
 
-
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = advertBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 删除所有的照片或视频信息
-     *
-     * @param advertItemDto
-     * @param context
-     * @return
-     */
-    private JSONObject delAdvertItemPhotoOrVideo(AdvertItemDto advertItemDto, DataFlowContext context) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ADVERT_ITEM);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessAdvertItem = new JSONObject();
-        businessAdvertItem.put("advertItemId", advertItemDto.getAdvertItemId());
-        businessAdvertItem.put("communityId", advertItemDto.getCommunityId());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessAdvertItem", businessAdvertItem);
-        return business;
-    }
 
-    private JSONObject addAdvertItemPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext, String photo) {
-
-        String itemTypeCd = "";
-        String url = "";
-
-        FileDto fileDto = new FileDto();
-        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-        fileDto.setFileName(fileDto.getFileId());
-        fileDto.setContext(photo);
-        fileDto.setSuffix("jpeg");
-        fileDto.setCommunityId(paramInJson.getString("communityId"));
-        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-        paramInJson.put("advertPhotoId", fileDto.getFileId());
-        paramInJson.put("fileSaveName", fileName);
-        itemTypeCd = "8888";
-        url = fileDto.getFileId();
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessAdvertItem = new JSONObject();
-        businessAdvertItem.put("advertId", paramInJson.getString("advertId"));
-        businessAdvertItem.put("itemTypeCd", itemTypeCd);
-        businessAdvertItem.put("url", url);
-        businessAdvertItem.put("seq", 1);
-        businessAdvertItem.put("advertItemId", "-1");
-        businessAdvertItem.put("communityId", paramInJson.getString("communityId"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessAdvertItem", businessAdvertItem);
-        return business;
-    }
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addAdvertItemVedio(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        String itemTypeCd = "";
-        String url = "";
-
-        itemTypeCd = "9999";
-        url = paramInJson.getString("vedioName");
-        paramInJson.put("advertPhotoId", url);
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessAdvertItem = new JSONObject();
-        businessAdvertItem.put("advertId", paramInJson.getString("advertId"));
-        businessAdvertItem.put("itemTypeCd", itemTypeCd);
-        businessAdvertItem.put("url", url);
-        businessAdvertItem.put("seq", 1);
-        businessAdvertItem.put("advertItemId", "-1");
-        businessAdvertItem.put("communityId", paramInJson.getString("communityId"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessAdvertItem", businessAdvertItem);
-        return business;
-    }
-
-
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addAdvertFileRel(JSONObject paramInJson, DataFlowContext dataFlowContext, String relTypeCd) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", relTypeCd);
-        businessUnit.put("saveWay", "40000".equals(relTypeCd) ? "table" : "ftp");
-        businessUnit.put("objId", paramInJson.getString("advertId"));
-        businessUnit.put("fileRealName", paramInJson.getString("advertPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
-    }
-
-    /**
-     * 删除广告文件关系
-     *
-     * @param fileRelDto      接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject delAdvertFileRel(FileRelDto fileRelDto, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", fileRelDto.getFileRelId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-        return business;
-    }
 
     @Override
     public String getServiceCode() {
@@ -285,33 +151,7 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
     }
 
 
-    /**
-     * 添加发布广告信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateAdvert(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        AdvertDto advertDto = new AdvertDto();
-        advertDto.setAdvertId(paramInJson.getString("advertId"));
-        advertDto.setCommunityId(paramInJson.getString("communityId"));
-        List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
-
-        Assert.listOnlyOne(advertDtos, "不存在该条广告 或存在多条数据");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessAdvert = new JSONObject();
-        businessAdvert.putAll(paramInJson);
-        businessAdvert.put("state", advertDtos.get(0).getState());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessAdvert", businessAdvert);
-        return business;
-    }
 
     public IAdvertInnerServiceSMO getAdvertInnerServiceSMOImpl() {
         return advertInnerServiceSMOImpl;

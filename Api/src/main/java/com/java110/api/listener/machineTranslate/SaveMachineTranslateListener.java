@@ -2,6 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
@@ -14,6 +15,7 @@ import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 
 
 import com.java110.core.annotation.Java110Listener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ import org.springframework.http.ResponseEntity;
  */
 @Java110Listener("saveMachineTranslateListener")
 public class SaveMachineTranslateListener extends AbstractServiceApiListener {
+
+    @Autowired
+    private IMachineTranslateBMO machineTranslateBMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -49,12 +54,7 @@ public class SaveMachineTranslateListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(addMachineTranslate(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
-
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }

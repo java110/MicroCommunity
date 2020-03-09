@@ -1,6 +1,7 @@
 package com.java110.api.listener.community;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Java110Listener("listAuditEnterCommunitysListener")
 public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener {
+
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;

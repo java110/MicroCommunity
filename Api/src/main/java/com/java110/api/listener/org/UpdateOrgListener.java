@@ -2,6 +2,7 @@ package com.java110.api.listener.org;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.org.IOrgBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.smo.org.IOrgInnerServiceSMO;
 import com.java110.dto.org.OrgDto;
@@ -30,6 +31,8 @@ public class UpdateOrgListener extends AbstractServiceApiListener {
 
     @Autowired
     private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
+    @Autowired
+    private IOrgBMO orgBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -56,12 +59,8 @@ public class UpdateOrgListener extends AbstractServiceApiListener {
         //添加单元信息
         businesses.add(updateOrg(reqJson, context));
 
-        JSONObject paramInObj = super.restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
 
-        //将 rest header 信息传递到下层服务中去
-        super.freshHttpHeader(header, context.getRequestCurrentHeaders());
-
-        ResponseEntity<String> responseEntity = this.callService(context, service.getServiceCode(), paramInObj);
+        ResponseEntity<String> responseEntity = orgBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
