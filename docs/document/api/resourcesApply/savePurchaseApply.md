@@ -1,8 +1,8 @@
 
 
-**1\. 添加采购申请**
+**1\. 添加采购/出库申请**
 ###### 接口功能
-> 用户通过web端或APP添加采购申请接口
+> 用户通过web端或APP添加采购/出库申请接口
 
 ###### URL
 > [http://api.java110.com:8008/api/purchaseApply.savePurchaseApply](http://api.java110.com:8008/api/purchaseApply.savePurchaseApply)
