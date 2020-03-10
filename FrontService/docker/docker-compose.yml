@@ -1,6 +1,6 @@
 version: '2'
 services:
-   appfrontserivce:
+   frontserivce:
        container_name: frontserivce-1
        build:
           context: .
