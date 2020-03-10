@@ -69,7 +69,7 @@
     </dependencies>
 
     <build>
-        <finalName>AppFrontService</finalName>
+        <finalName>FrontService</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

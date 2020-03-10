@@ -11,6 +11,6 @@
 #### normal dev model
 #nohup java -jar -Dspring.profiles.active=dev target/AppFrontService.jar > appFront.log 2>&1 &
 
-nohup java -jar -Dspring.profiles.active=$1 target/AppFrontService.jar > appFront.log 2>&1 &
+nohup java -jar -Dspring.profiles.active=$1 target/FrontService.jar > front.log 2>&1 &
 
-tail -100f appFront.log
+tail -100f front.log

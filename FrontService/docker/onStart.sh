@@ -4,8 +4,8 @@ cp -r ../bin .
 
 cp  -r ../target .
 
-docker build -t java110/appFront .
+docker build -t java110/front .
 
-docker run -ti --name appFront_test -p8012:8012 -idt java110/appFront:latest
+docker run -ti --name front_test -p8020:8020 -idt java110/front:latest
 
-docker logs -f appFront_test
+docker logs -f front_test
