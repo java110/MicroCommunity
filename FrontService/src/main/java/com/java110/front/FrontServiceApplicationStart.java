@@ -27,12 +27,9 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {
-        "com.java110.front.aop",
         "com.java110.service.configuration",
-        "com.java110.front.configuration",
-        "com.java110.front.filter",
         "com.java110.service.init",
-        "com.java110.app",
+        "com.java110.front",
         "com.java110.core",
         "com.java110.config.properties.code",
         "com.java110.cache",

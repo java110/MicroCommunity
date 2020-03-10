@@ -1,15 +1,15 @@
 version: '2'
 services:
-   appfrontserivce:
-       container_name: appfrontserivce-1
+   frontserivce:
+       container_name: frontserivce-1
        build:
           context: .
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "8012:8012"
+       - "8020:8020"
        volumes:
-       - ../target/AppFrontService.jar:/root/target/AppFrontService.jar
+       - ../target/FrontService.jar:/root/target/FrontService.jar
        networks:
        - java110-net
 #       mem_limit: 1024m
