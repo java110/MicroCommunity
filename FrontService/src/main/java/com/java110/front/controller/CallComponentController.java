@@ -37,6 +37,7 @@ public class CallComponentController extends BaseController {
 
     /**
      * 调用组件方法
+     * add by wuxw 2020-03-16
      *
      * @return
      */
