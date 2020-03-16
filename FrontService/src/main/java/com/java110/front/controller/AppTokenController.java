@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  * add by wuxw 2020/3/16
  **/
 @RestController
-public class TokenController extends BaseController {
+public class AppTokenController extends BaseController {
 
-    @RequestMapping(path = "/token/checkToken")
+    @RequestMapping(path = "/app/checkToken")
     public ResponseEntity<String> checkToken(HttpServletRequest request) {
         return new ResponseEntity<String>("", HttpStatus.OK);
     }
