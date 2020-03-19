@@ -11,6 +11,6 @@ docker-compose -f ./OrderService/docker/docker-compose.yml       up -d --build -
 docker-compose -f ./CommunityService/docker/docker-compose.yml       up -d --build --force-recreate;
 docker-compose -f ./StoreService/docker/docker-compose.yml       up -d --build --force-recreate;
 docker-compose -f ./UserService/docker/docker-compose.yml       up -d --build --force-recreate;
-docker-compose -f ./WebService/docker/docker-compose.yml       up -d --build --force-recreate;
+docker-compose -f ./FrontService/docker/docker-compose.yml       up -d --build --force-recreate;
 docker-compose -f ./FeeService/docker/docker-compose.yml       up -d --build --force-recreate;
 #docker-compose -f ./CommonService/docker/docker-compose.yml       up -d --build --force-recreate;
