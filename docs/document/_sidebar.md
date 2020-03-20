@@ -9,6 +9,7 @@
 
   * [开发环境部署](start/dev_install.md)
   * [生产环境部署](start/prod_install.md)
+  * [前后端分离版本部署](start/frontBack.md)
   
 * 系统功能
 
