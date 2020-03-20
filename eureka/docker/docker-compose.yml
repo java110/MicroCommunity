@@ -10,8 +10,8 @@ services:
        - "8761:8761"
        volumes:
        - ../target/eureka.jar:/root/target/eureka.jar
-       networks:
-       - java110-net
+#       networks:
+#       - java110-net
 #       mem_limit: 1024m
 #       extra_hosts:
 #       - "dev.java110.com:192.168.1.18"
@@ -20,6 +20,6 @@ services:
 #       - "dev.kafka.java110.com:192.168.1.18"
 #       - "dev.redis.java110.com:192.168.1.18"
 #       - "api.java110.com:92.168.1.18"
-networks:
-  java110-net:
-    external: true
+#networks:
+#  java110-net:
+#    external: true
