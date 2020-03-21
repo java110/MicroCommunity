@@ -7,7 +7,7 @@ jedis:
     host: prod.redis.java110.com
     port: 6379
     timeout: 3000
-    password:
+    password: hc
 
 eureka:
   instance:
@@ -36,6 +36,7 @@ spring:
     database: 0
     host: prod.redis.java110.com
     port: 6379
+    password: hc
     pool:
       max-active: 300
       max-wait: 10000
