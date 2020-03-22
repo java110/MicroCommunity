@@ -6,13 +6,13 @@
 
     <!-- 保存活动信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessActivitiesInfo" parameterType="Map">
-           insert into business_activities(
-collect_count,like_count,title,read_count,user_name,user_id,activities_id,operate,type_cd,context,start_time,end_time,community_id,b_id,header_img,state
-) values (
-#{collectCount},#{likeCount},#{title},#{readCount},#{userName},#{userId},#{activitiesId},#{operate},#{typeCd},#{context},#{startTime},#{endTime},
-#{communityId},#{bId},#{headerImg},#{state}
-)
-       </insert>
+        insert into business_activities(
+        collect_count,like_count,title,read_count,user_name,user_id,activities_id,operate,type_cd,context,start_time,end_time,community_id,b_id,header_img,state
+        ) values (
+        #{collectCount},#{likeCount},#{title},#{readCount},#{userName},#{userId},#{activitiesId},#{operate},#{typeCd},#{context},#{startTime},#{endTime},
+        #{communityId},#{bId},#{headerImg},#{state}
+        )
+    </insert>
 
 
     <!-- 查询活动信息（Business） add by wuxw 2018-07-03 -->
