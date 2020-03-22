@@ -35,6 +35,66 @@ public class CallComponentController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
+
+    /**
+     * 前台调用api方法
+     * add by wuxw 2020-03-16
+     *
+     * @return
+     */
+
+    @RequestMapping(path = "/callComponent/{api}")
+    public ResponseEntity<String> callApi(
+            @PathVariable String api,
+            //@RequestBody String info,
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        String componentCode = "api";
+        String componentMethod = "callApi";
+        try {
+            Assert.hasLength(api, "参数错误，未传入api编码");
+
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            pd.setApiUrl("/api/" + api);
+            //权限校验
+            hasPrivilege(restTemplate, pd, "/" + api);
+
+            Object componentInstance = ApplicationContextFactory.getBean(componentCode);
+
+            Assert.notNull(componentInstance, "未找到组件对应的处理类，请确认 " + componentCode);
+
+            Method cMethod = componentInstance.getClass().getDeclaredMethod(componentMethod, IPageData.class);
+
+            Assert.notNull(cMethod, "未找到组件对应处理类的方法，请确认 " + componentCode + "方法：" + componentMethod);
+
+
+            logger.debug("组件编码{}，组件方法{}，pd 为{}", componentCode, componentMethod, pd.toString());
+
+            responseEntity = (ResponseEntity<String>) cMethod.invoke(componentInstance, pd);
+
+        } catch (SMOException e) {
+            /*MultiValueMap<String, String> headers = new HttpHeaders();
+            headers.add("code", e.getResult().getCode());*/
+            logger.error("调用api异常", e);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("调用api异常", e);
+            String msg = "";
+            if (e instanceof InvocationTargetException) {
+                Throwable targetEx = ((InvocationTargetException) e).getTargetException();
+                if (targetEx != null) {
+                    msg = targetEx.getMessage();
+                }
+            } else {
+                msg = e.getMessage();
+            }
+            responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.debug("api调用返回信息为{}", responseEntity);
+            return responseEntity;
+        }
+    }
+
     /**
      * 调用组件方法
      * add by wuxw 2020-03-16
@@ -236,7 +296,7 @@ public class CallComponentController extends BaseController {
             reqData = paramObj.toJSONString();
         }
 
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(),pd.getUserName(), pd.getToken(),
+        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(),
                 reqData, pd.getComponentCode(), pd.getComponentMethod(), "", pd.getSessionId(), "");
         return newPd;
     }
