@@ -9,7 +9,6 @@ import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyDataVo;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyVo;
@@ -60,7 +59,7 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写订单类型");
+        //Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写订单类型");
         super.validatePageInfo(reqJson);
     }
 

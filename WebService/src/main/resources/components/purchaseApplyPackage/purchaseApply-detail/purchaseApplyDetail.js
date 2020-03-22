@@ -35,8 +35,7 @@
                     params:{
                         page:_page,
                         row:_rows,
-                        applyOrderId:vc.component.purchaseApplyDetailInfo.applyOrderId,
-                        resOrderType:'10000'
+                        applyOrderId:vc.component.purchaseApplyDetailInfo.applyOrderId
                     }
                 };
 
