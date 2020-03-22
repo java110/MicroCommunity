@@ -26,17 +26,11 @@ public class ListCordersSMOImpl extends AbstractComponentSMO implements IListCor
 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
-
+        super.validatePageInfo(pd);
     }
 
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws IOException {
-        //ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
-//        Map paramMap = BeanConvertUtil.beanCovertMap(result);
-//        paramIn.putAll(paramMap);
-//        paramIn.put("row", 50);
-//        paramIn.put("page", 1);
 
         String apiUrl = ServiceConstant.SERVICE_API_URL + "/api/corders.listCorders" + mapToUrlParam(paramIn);
 
