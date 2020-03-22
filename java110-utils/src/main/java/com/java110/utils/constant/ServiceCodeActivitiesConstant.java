@@ -28,4 +28,7 @@ public class ServiceCodeActivitiesConstant {
     public static final String LIST_ACTIVITIESS = "activities.listActivitiess";
 
 
+    public static final String LIST_CORDERS = "corders.listCorders";
+
+
 }
