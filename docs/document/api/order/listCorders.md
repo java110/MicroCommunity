@@ -26,6 +26,10 @@
 | :-: | :-: | :-: | :-: | :-: | :-: |
 |page|1|int|-|分页信息|页数|
 |row|1|int|最大50|分页信息|每页显示数|
+|appId|1|String|30|应用ID|-|
+|oId|1|String|30|订单id|-|
+|extTransactionId|1|String|36|-|-|
+|orderTypeCd|1|String|4|订单类型|参考c_order_type表|
 
 
 ###### 返回协议
@@ -35,7 +39,7 @@
 |-|appId|1|String|30|应用ID|-|
 |-|createTime|1|datetime|-|创建时间|-|
 |-|extTransactionId|1|String|36|-|-|
-|-|o_id|1|String|30|订单id|-|
+|-|oId|1|String|30|订单id|-|
 |-|orderTypeCd|1|String|4|订单类型|参考c_order_type表|
 |-|requestTime|1|datetime|-|外部系统请求时间|-|
 |-|userId|1|String|30|用户ID|-|
