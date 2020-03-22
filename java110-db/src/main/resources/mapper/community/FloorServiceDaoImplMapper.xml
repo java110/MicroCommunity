@@ -83,7 +83,7 @@
     <!-- 查询小区楼信息 add by wuxw 2018-07-03 -->
     <select id="getFloorInfo" parameterType="Map" resultType="Map">
         select t.floor_id,t.floor_id floorId,t.name,t.status_cd, t.status_cd statusCd,t.remark,t.b_id,
-        t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum,t.community_id communityId
+        t.b_id bId,t.user_id, t.user_id userId,t.floor_num ,t.floor_num floorNum,t.community_id communityId,t.community_id
         from f_floor t
         where 1 =1
         <if test="floorId !=null and floorId != ''">
