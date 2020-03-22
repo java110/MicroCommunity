@@ -1,4 +1,4 @@
-package com.java110.code;
+package com.java110.code.back;
 
 public class GeneratorServiceDaoImplListener extends BaseGenerator {
 

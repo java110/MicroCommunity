@@ -3,7 +3,7 @@ package com.java110.code.relationship;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.BaseGenerator;
+import com.java110.code.back.BaseGenerator;
 import com.java110.code.web.GeneratorStart;
 import org.springframework.util.StringUtils;
 

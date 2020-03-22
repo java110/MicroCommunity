@@ -1,17 +1,19 @@
-package com.java110;
+package com.java110.code.back;
 
 
-import com.java110.code.Data;
-import com.java110.code.GeneratorAbstractBussiness;
-import com.java110.code.GeneratorDeleteInfoListener;
-import com.java110.code.GeneratorDtoBean;
-import com.java110.code.GeneratorIInnerServiceSMO;
-import com.java110.code.GeneratorIServiceDaoListener;
-import com.java110.code.GeneratorInnerServiceSMOImpl;
-import com.java110.code.GeneratorSaveInfoListener;
-import com.java110.code.GeneratorServiceDaoImplListener;
-import com.java110.code.GeneratorServiceDaoImplMapperListener;
-import com.java110.code.GeneratorUpdateInfoListener;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.code.back.Data;
+import com.java110.code.back.GeneratorAbstractBussiness;
+import com.java110.code.back.GeneratorDeleteInfoListener;
+import com.java110.code.back.GeneratorDtoBean;
+import com.java110.code.back.GeneratorIInnerServiceSMO;
+import com.java110.code.back.GeneratorIServiceDaoListener;
+import com.java110.code.back.GeneratorInnerServiceSMOImpl;
+import com.java110.code.back.GeneratorSaveInfoListener;
+import com.java110.code.back.GeneratorServiceDaoImplListener;
+import com.java110.code.back.GeneratorServiceDaoImplMapperListener;
+import com.java110.code.back.GeneratorUpdateInfoListener;
+import com.java110.code.web.GeneratorStart;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +21,9 @@ import java.util.Map;
 /**
  * Hello world!
  */
-public class RepairUserGeneratorApplication {
+public class BackCoderGeneratorStart extends BaseGenerator {
 
-    protected RepairUserGeneratorApplication() {
+    protected BackCoderGeneratorStart() {
         // prevents calls from subclass
         throw new UnsupportedOperationException();
     }
@@ -33,31 +35,12 @@ public class RepairUserGeneratorApplication {
      * @param args 参数
      */
     public static void main(String[] args) {
-        Data data = new Data();
-        data.setId("ruId");
-        data.setName("repairUser");
-        data.setDesc("报修派单");
-        data.setShareParam("communityId");
-        data.setShareColumn("community_id");
-        data.setNewBusinessTypeCd("BUSINESS_TYPE_SAVE_REPAIR_USER");
-        data.setUpdateBusinessTypeCd("BUSINESS_TYPE_UPDATE_REPAIR_USER");
-        data.setDeleteBusinessTypeCd("BUSINESS_TYPE_DELETE_REPAIR_USER");
-        data.setNewBusinessTypeCdValue("130200030001");
-        data.setUpdateBusinessTypeCdValue("130200040001");
-        data.setDeleteBusinessTypeCdValue("130200050001");
-        data.setBusinessTableName("business_repair_user");
-        data.setTableName("r_repair_user");
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("repairId", "repair_id");       //map的key为你自定义的字段名就是驼峰命名法的那个，value为数据库表的字段名
-        param.put("ruId", "ru_id");
-        param.put("communityId", "community_id");
-        param.put("userId", "user_id");
-        param.put("context", "context");
-        param.put("state", "state");
-        param.put("statusCd", "status_cd");
-        param.put("operate", "operate");
-        param.put("bId", "b_id");
-        data.setParams(param);
+
+        //加载配置
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_1.json").getFile());
+
+        JSONObject data = JSONObject.parseObject(sb.toString());
+
         GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
         generatorSaveInfoListener.generator(data);
 

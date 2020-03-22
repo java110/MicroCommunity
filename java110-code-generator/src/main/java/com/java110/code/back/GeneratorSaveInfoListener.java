@@ -1,5 +1,6 @@
-package com.java110.code;
+package com.java110.code.back;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -12,11 +13,11 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
      *
      * @param data
      */
-    public void generator(Data data) {
+    public void generator(JSONObject data) {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
-        if (StringUtils.isEmpty(data.getShareParam())) {
-            data.setShareParam(data.getId());
+        if (StringUtils.isEmpty(data.getString("shareParam"))) {
+            data.put("shareParam",data.getString("id"));
         }
 
         if (StringUtils.isEmpty(data.getShareColumn())) {

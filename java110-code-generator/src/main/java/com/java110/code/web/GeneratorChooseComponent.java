@@ -2,7 +2,7 @@ package com.java110.code.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.BaseGenerator;
+import com.java110.code.back.BaseGenerator;
 
 /**
  * @ClassName GeneratorChooseComponent
