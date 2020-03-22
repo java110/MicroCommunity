@@ -24,8 +24,9 @@ public class GeneratorUpdateInfoListener extends BaseGenerator {
                 .replace("BUSINESS_TYPE_UPDATE_STORE_INFO", data.getUpdateBusinessTypeCd())
                 .replace(data.getName()+"Id", data.getId())
                 .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
-        String writePath = this.getClass().getResource("/listener").getPath()
-                + "/Update" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/back/listener/" + data.getName() + "/Update" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         writeFile(writePath,
                 fileContext);
 

@@ -13,11 +13,11 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
      *
      * @param data
      */
-    public void generator(JSONObject data) {
+    public void generator(Data data) {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
-        if (StringUtils.isEmpty(data.getString("shareParam"))) {
-            data.put("shareParam",data.getString("id"));
+        if (StringUtils.isEmpty(data.getShareParam())) {
+            data.setShareParam(data.getId());
         }
 
         if (StringUtils.isEmpty(data.getShareColumn())) {
@@ -31,8 +31,9 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
                 .replace("shareId", data.getShareParam())
                 .replace(data.getName()+"Id", data.getId())
                 .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
-        System.out.println(this.getClass().getResource("/listener").getPath());
-        String writePath = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/back/listener/" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
+        System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
 
@@ -62,7 +63,8 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
         fileContextDoc = fileContextDoc.replace("$busienssInfo$", tmpLine);
         fileContextDoc = fileContextDoc.replace("$businessInfoJson$", _tmpLine);
         System.out.println(this.getClass().getResource("/listener").getPath());
-        String writePathDoc = this.getClass().getResource("/listener").getPath() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md";
+        String writePathDoc = this.getClass().getResource("/").getPath()
+                + "out/back/docs/" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md";
         writeFile(writePathDoc,
                 fileContextDoc);
     }

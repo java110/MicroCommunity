@@ -12,9 +12,9 @@ public class GeneratorManagerComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
+        //generatorComponentJava(data);
+        //genneratorIListSmo(data);
+        //genneratorListSmoImpl(data);
         genneratorListListener(data);
         genneratorVo(data);
 

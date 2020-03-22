@@ -12,8 +12,8 @@ public class GeneratorStart extends BaseGenerator {
         JSONObject data = JSONObject.parseObject(sb.toString());
 
 
-        GeneratorFlow flow = new GeneratorFlow();
-        flow.generator(data);
+//        GeneratorFlow flow = new GeneratorFlow();
+//        flow.generator(data);
 
 
         GeneratorManagerComponent managerComponent = new GeneratorManagerComponent();

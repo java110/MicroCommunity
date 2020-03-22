@@ -39,7 +39,24 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         //加载配置
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_1.json").getFile());
 
-        JSONObject data = JSONObject.parseObject(sb.toString());
+        JSONObject dataJson = JSONObject.parseObject(sb.toString());
+
+        Data data = new Data();
+
+        data.setId(dataJson.getString("id"));
+        data.setName(dataJson.getString("name"));
+        data.setDesc(dataJson.getString("desc"));
+        data.setShareParam(dataJson.getString("shareParam"));
+        data.setShareColumn(dataJson.getString("shareColumn"));
+        data.setNewBusinessTypeCd(dataJson.getString("newBusinessTypeCd"));
+        data.setUpdateBusinessTypeCd(dataJson.getString("updateBusinessTypeCd"));
+        data.setDeleteBusinessTypeCd(dataJson.getString("deleteBusinessTypeCd"));
+        data.setNewBusinessTypeCdValue(dataJson.getString("newBusinessTypeCdValue"));
+        data.setUpdateBusinessTypeCdValue(dataJson.getString("updateBusinessTypeCdValue"));
+        data.setDeleteBusinessTypeCdValue(dataJson.getString("deleteBusinessTypeCdValue"));
+        data.setBusinessTableName(dataJson.getString("businessTableName"));
+        data.setTableName(dataJson.getString("tableName"));
+        data.setParams(dataJson.getJSONObject("param"));
 
         GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
         generatorSaveInfoListener.generator(data);

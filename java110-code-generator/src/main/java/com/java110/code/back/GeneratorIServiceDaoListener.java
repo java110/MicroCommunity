@@ -16,8 +16,9 @@ public class GeneratorIServiceDaoListener extends BaseGenerator {
         fileContext = fileContext.replace("store",toLowerCaseFirstOne(data.getName()))
                 .replace("Store",toUpperCaseFirstOne(data.getName()))
                 .replace("商户",data.getDesc());
-        System.out.println(this.getClass().getResource("/listener").getPath());
-        String writePath = this.getClass().getResource("/listener").getPath()+"/I"+toUpperCaseFirstOne(data.getName())+"ServiceDao.java";
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/back/listener/" + data.getName() + "/I"+toUpperCaseFirstOne(data.getName())+"ServiceDao.java";
         writeFile(writePath,
                 fileContext);
     }

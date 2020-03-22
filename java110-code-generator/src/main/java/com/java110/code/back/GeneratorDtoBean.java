@@ -59,8 +59,9 @@ public class GeneratorDtoBean extends BaseGenerator {
                 .replace("商户", data.getDesc());
 
         fileContext = dealVariableAndGetSet(data, fileContext);
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/back/dto/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "Dto.java";
 
-        String writePath = this.getClass().getResource("/listener").getPath() + "/" + toUpperCaseFirstOne(data.getName()) + "Dto.java";
         writeFile(writePath,
                 fileContext);
     }
