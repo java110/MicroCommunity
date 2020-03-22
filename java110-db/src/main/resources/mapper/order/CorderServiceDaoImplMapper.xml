@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="corderServiceDaoImpl">
+
+    <resultMap type="com.java110.vo.api.corder.ApiCorderDataVo" id="orderMap">
+        <id column="oId"  property="oId"/>
+        <result column="appId"  property="appId"/>
+        <result column="extTransactionId"  property="extTransactionId"/>
+        <result column="userId"  property="userId"/>
+        <result column="requestTime"  property="requestTime"/>
+        <result column="createTime"  property="createTime"/>
+        <result column="orderTypeCd"  property="orderTypeCd"/>
+        <result column="finishTime"  property="finishTime"/>
+        <result column="remark" property="remark"/>
+        <result column="orderTypeCdName" property="orderTypeCdName"/>
+        <!-- 一对多关系 -->
+        <collection property="cBusiness" ofType="com.java110.vo.api.corder.CbusinessVo"  javaType="java.util.ArrayList">
+            <id property="bId" column="bId"/>
+            <result property="oId" column="oId"/>
+            <result property="createTime" column="createTime"/>
+            <result property="businessTypeCd" column="businessTypeCd"/>
+            <result property="finishTime" column="finishTime"/>
+            <result property="remark" column="remark"/>
+            <result property="businessTypeCdName" column="businessTypeCdName"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="getCorderInfo" parameterType="Map" resultMap="orderMap">
+        select
+            t.o_id oId,t.app_id appId,t.ext_transaction_id extTransactionId,
+            t.user_id userId,
+            t.request_time requestTime,t.create_time createtime,
+            t.order_type_cd orderTypeCd,t.finish_time finishTime,
+            t.remark,b.b_id bId,b.o_id oId,b.create_time createTime,
+            b.business_type_cd businessTypecd,b.finish_time finishTime,
+            b.remark remark,
+            t1.name orderTypeCdName,t2.name businessTypeCdName
+        from c_orders t left join c_business b on t.o_id = b.o_id
+        left join c_business_type t2 on b.business_type_cd = t2.business_type_cd
+        inner join c_order_type t1 on t.order_type_cd = t1.order_type_cd
+        where 1 =1
+        <if test="oId !=null and oId != ''">
+            and t.o_id= #{oId}
+        </if>
+        <if test="extTransactionId !=null and extTransactionId != ''">
+            and t.ext_transaction_id= #{extTransactionId}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            and t.order_type_cd= #{orderTypeCd}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+    <select id="queryCordersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from c_orders t
+        where 1 =1
+        <if test="oId !=null and oId != ''">
+            and t.o_id= #{oId}
+        </if>
+        <if test="appId !=null and appId != ''">
+            and t.app_id= #{appId}
+        </if>
+
+    </select>
+
+</mapper>
