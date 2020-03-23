@@ -42,6 +42,8 @@ public class Data {
 
     private Map params;
 
+    private String[] requiredParam;
+
     public String getPackagePath() {
         return packagePath;
     }
@@ -161,5 +163,13 @@ public class Data {
 
     public void setShareParam(String shareParam) {
         this.shareParam = shareParam;
+    }
+
+    public String[] getRequiredParam() {
+        return requiredParam;
+    }
+
+    public void setRequiredParam(String[] requiredParam) {
+        this.requiredParam = requiredParam;
     }
 }

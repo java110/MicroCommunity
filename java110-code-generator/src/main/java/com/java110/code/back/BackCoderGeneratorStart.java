@@ -1,6 +1,7 @@
 package com.java110.code.back;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.code.back.Data;
 import com.java110.code.back.GeneratorAbstractBussiness;
@@ -15,8 +16,7 @@ import com.java110.code.back.GeneratorServiceDaoImplMapperListener;
 import com.java110.code.back.GeneratorUpdateInfoListener;
 import com.java110.code.web.GeneratorStart;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Hello world!
@@ -30,8 +30,9 @@ public class BackCoderGeneratorStart extends BaseGenerator {
 
     /**
      * 代码生成器 入口方法
-     *  此处生成的mapper文件包含过程表和实例表的sql,所以要求两张表的特殊字段也要写上
-     *   BusinessTypeCd
+     * 此处生成的mapper文件包含过程表和实例表的sql,所以要求两张表的特殊字段也要写上
+     * BusinessTypeCd
+     *
      * @param args 参数
      */
     public static void main(String[] args) {
@@ -57,6 +58,15 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         data.setBusinessTableName(dataJson.getString("businessTableName"));
         data.setTableName(dataJson.getString("tableName"));
         data.setParams(dataJson.getJSONObject("param"));
+
+        JSONArray required = dataJson.getJSONArray("required");
+
+        List<String> paramList = new ArrayList<String>();
+        for (int reqIndex = 0; reqIndex < required.size(); reqIndex++) {
+            JSONObject require = required.getJSONObject(reqIndex);
+            paramList.add(require.getString("code"));
+        }
+        data.setRequiredParam(paramList.toArray(new String[required.size()]));
 
         GeneratorSaveInfoListener generatorSaveInfoListener = new GeneratorSaveInfoListener();
         generatorSaveInfoListener.generator(data);

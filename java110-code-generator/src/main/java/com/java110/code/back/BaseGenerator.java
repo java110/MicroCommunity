@@ -89,4 +89,16 @@ public class BaseGenerator {
                 .replace("@@searchCode@@", data.getString("searchCode"))
                 .replace("@@searchName@@", data.getString("searchName"));
     }
+
+    protected String replaceTemplateContext(String srcStr, Data data){
+        return srcStr.replace("@@templateName@@", data.getDesc())
+                .replace("@@templateCode@@", data.getName())
+                .replace("@@TemplateCode@@", toUpperCaseFirstOne(data.getName()))
+                .replace("@@templateKey@@", data.getId())
+                .replace("@@TemplateKey@@", toUpperCaseFirstOne(data.getId()))
+                .replace("@@templateKeyName@@", data.getId())
+                .replace("@@TEMPLATECODE@@", data.getName())
+                .replace("@@searchCode@@", data.getId())
+                .replace("@@searchName@@", data.getId());
+    }
 }

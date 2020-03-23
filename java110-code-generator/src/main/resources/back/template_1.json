@@ -29,5 +29,10 @@
     "statusCd": "status_cd",
     "operate": "operate",
     "bId": "b_id"
-  }
+  },
+  "required": [
+    {
+      "code": "activitiesId"
+    }
+  ]
 }
