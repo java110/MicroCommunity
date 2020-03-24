@@ -89,16 +89,15 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         //校验数据
         validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
+        JSONObject paramObj = JSONObject.parseObject(paramIn)   ;
 
-        HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
         businesses.add(addFeeDetail(paramObj, dataFlowContext));
         businesses.add(modifyFee(paramObj, dataFlowContext));
-
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
@@ -112,17 +111,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 刷入order信息
-     *
-     * @param orders  订单信息
-     * @param headers 头部信息
-     */
-    protected void freshOrderProtocol(JSONObject orders, Map<String, String> headers) {
-        feeBMOImpl.freshOrderProtocol(orders, headers);
-        orders.put("orderProcess", Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
 
-    }
 
     /**
      * 添加费用明细信息

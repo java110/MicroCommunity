@@ -99,7 +99,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         businesses.add(modifyFee(paramObj, dataFlowContext));
         businesses.add(modifyCarInout(paramObj, dataFlowContext));
 
-
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);

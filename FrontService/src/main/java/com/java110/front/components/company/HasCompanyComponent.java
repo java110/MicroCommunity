@@ -26,7 +26,7 @@ public class HasCompanyComponent {
 
     /**
      * 查询小区列表
-     * @param pd 页面数据封装
+     * @param pd 页面数据封装ApiServiceSMOImpl
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> check(IPageData pd){
