@@ -1,4 +1,6 @@
 (function(vc){
+    var DEFAULT_PAGE = 1;
+    var DEFAULT_ROWS = 10;
     vc.extends({
         propTypes: {
            emitChooseResourceStore:vc.propTypes.string,
@@ -16,18 +18,21 @@
         _initEvent:function(){
             vc.on('chooseResourceStore2','openChooseResourceStoreModel2',function(_param){
                 $('#chooseResourceStoreModel2').modal('show');
-                vc.component._refreshchooseResourceStoreInfo2();
-                vc.component._loadAllResourceStoreInfo(1,10,'');
+                vc.component.chooseResourceStoreInfo2._currentResourceStoreName = "";
+                vc.component._loadAllResourceStoreInfo(_currentPage, DEFAULT_ROWS);
             });
+            vc.on('pagination', 'page_event', function (_currentPage) {
+                vc.component._loadAllResourceStoreInfo(_currentPage, DEFAULT_ROWS);
+            });
+
         },
         methods:{
-            _loadAllResourceStoreInfo:function(_page,_row,_name){
+            _loadAllResourceStoreInfo:function(_page,_row){
                 var param = {
                     params:{
                         page:_page,
                         row:_row,
-                        communityId:vc.getCurrentCommunity().communityId,
-                        name:_name
+                        communityId:vc.getCurrentCommunity().communityId
                     }
                 };
 
@@ -38,6 +43,12 @@
                              function(json){
                                 var _resourceStoreInfo = JSON.parse(json);
                                 vc.component.chooseResourceStoreInfo2.resourceStores = _resourceStoreInfo.resourceStores;
+                                 vc.component.chooseResourceStoreInfo2.total = _resourceStoreInfo.total;
+                                 vc.component.chooseResourceStoreInfo2.records = _resourceStoreInfo.records;
+                                 vc.emit('pagination', 'init', {
+                                     total: vc.component.chooseResourceStoreInfo2.records,
+                                     currentPage: _page
+                                 });
                              },function(){
                                 console.log('请求失败处理');
                              }
@@ -55,9 +66,6 @@
             },
             queryResourceStores:function(){
                 vc.component._loadAllResourceStoreInfo(1,10,vc.component.chooseResourceStoreInfo2._currentResourceStoreName);
-            },
-            _refreshchooseResourceStoreInfo2:function(){
-                vc.component.chooseResourceStoreInfo2._currentResourceStoreName = "";
             },
             getSelectResourceStores:function () {
                 var selectResourceStores = vc.component.chooseResourceStoreInfo2.selectResourceStores;
