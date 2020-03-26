@@ -1,9 +1,11 @@
 package com.java110.dto.purchaseApply;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -18,12 +20,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String resOrderType;
     private String description;
     private String applyOrderId;
+    private String bId;
     private String state;
     private String storeId;
     private String userName;
     private String userId;
     private String stateName;
-
+    private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
 
     private Date createTime;
 
@@ -34,6 +37,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String taskId;
     private String auditCode;
     private String auditMessage;
+
 
 
 
@@ -156,5 +160,21 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setAuditMessage(String auditMessage) {
         this.auditMessage = auditMessage;
+    }
+
+    public List<PurchaseApplyDetailVo> getPurchaseApplyDetailVo() {
+        return purchaseApplyDetailVo;
+    }
+
+    public void setPurchaseApplyDetailVo(List<PurchaseApplyDetailVo> purchaseApplyDetailVo) {
+        this.purchaseApplyDetailVo = purchaseApplyDetailVo;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

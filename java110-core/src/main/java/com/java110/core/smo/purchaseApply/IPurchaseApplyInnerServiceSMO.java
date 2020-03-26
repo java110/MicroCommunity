@@ -32,6 +32,10 @@ public interface IPurchaseApplyInnerServiceSMO {
     @RequestMapping(value = "/queryPurchaseApplys", method = RequestMethod.POST)
     List<PurchaseApplyDto> queryPurchaseApplys(@RequestBody PurchaseApplyDto purchaseApplyDto);
 
+
+    @RequestMapping(value = "/queryPurchaseApplyAndDetails", method = RequestMethod.POST)
+    List<PurchaseApplyDto> queryPurchaseApplyAndDetails(@RequestBody PurchaseApplyDto purchaseApplyDto);
+
     /**
      * 查询<p>小区楼</p>总记录数
      *
