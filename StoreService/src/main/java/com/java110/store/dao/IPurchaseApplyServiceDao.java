@@ -1,6 +1,7 @@
 package com.java110.store.dao;
 
 
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.utils.exception.DAOException;
 import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 
@@ -67,6 +68,8 @@ public interface IPurchaseApplyServiceDao {
      * @throws DAOException DAO异常
      */
     List<Map> getPurchaseApplyInfo(Map info) throws DAOException;
+
+    List<PurchaseApplyDto> getPurchaseApplyInfo2(Map info) throws DAOException;
 
 
     //查询采购明细

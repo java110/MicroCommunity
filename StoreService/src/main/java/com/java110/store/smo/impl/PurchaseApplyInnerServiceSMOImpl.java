@@ -61,6 +61,33 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         return purchaseApplys;
     }
 
+    @Override
+    public List<PurchaseApplyDto> queryPurchaseApplyAndDetails(@RequestBody  PurchaseApplyDto purchaseApplyDto) {
+
+        //校验是否传了 分页信息
+
+        int page = purchaseApplyDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            purchaseApplyDto.setPage((page - 1) * purchaseApplyDto.getRow());
+        }
+
+        List<PurchaseApplyDto> purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getPurchaseApplyInfo2(BeanConvertUtil.beanCovertMap(purchaseApplyDto)), PurchaseApplyDto.class);
+
+        if (purchaseApplys == null || purchaseApplys.size() == 0) {
+            return purchaseApplys;
+        }
+
+        String[] userIds = getUserIds(purchaseApplys);
+        //根据 userId 查询用户信息
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
+
+        for (PurchaseApplyDto purchaseApply : purchaseApplys) {
+            refreshPurchaseApply(purchaseApply, users);
+        }
+        return purchaseApplys;
+    }
+
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *

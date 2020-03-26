@@ -72,25 +72,10 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
 
         List<ApiPurchaseApplyDataVo> purchaseApplys = null;
         if (count > 0) {
+            List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
+            purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ApiPurchaseApplyDataVo.class);
             purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto), ApiPurchaseApplyDataVo.class);
-            List<String> orderIds = new ArrayList<>();
-            for( ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys){
-                orderIds.add(apiPurchaseApplyDataVo.getApplyOrderId());
-            }
-            //明细列表
-            PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
-            purchaseApplyDetailDto.setApplyOrderIds(orderIds);
-            List<PurchaseApplyDetailVo> purchaseApplyDetailVos = BeanConvertUtil.covertBeanList(purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto), PurchaseApplyDetailVo.class);
 
-            for( ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys){
-                List<PurchaseApplyDetailVo> applyDetailList = new ArrayList<>();
-                for( PurchaseApplyDetailVo purchaseApplyDetailVo : purchaseApplyDetailVos){
-                    if(apiPurchaseApplyDataVo.getApplyOrderId().equals(purchaseApplyDetailVo.getApplyOrderId())){
-                        applyDetailList.add(purchaseApplyDetailVo);
-                    }
-                }
-                apiPurchaseApplyDataVo.setPurchaseApplyDetailVo(applyDetailList);
-            }
             for( ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys){
                 List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
                 StringBuffer resNames = new StringBuffer();

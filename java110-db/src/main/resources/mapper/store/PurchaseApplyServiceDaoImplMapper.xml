@@ -4,6 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="purchaseApplyServiceDaoImpl">
 
+
+    <resultMap type="com.java110.dto.purchaseApply.PurchaseApplyDto" id="applyMap">
+        <id column="applyOrderId"  property="applyOrderId"/>
+        <result column="description"  property="description"/>
+        <result column="resOrderType"  property="resOrderType"/>
+        <result column="statusCd"  property="statusCd"/>
+        <result column="state"  property="state"/>
+        <result column="storeId"  property="storeId"/>
+        <result column="userName"  property="userName"/>
+        <result column="bId"  property="bId"/>
+        <result column="userId" property="userId"/>
+        <result column="createTime" property="createTime"/>
+        <result column="stateName" property="stateName"/>
+        <!-- 一对多关系 -->
+        <collection property="purchaseApplyDetailVo" ofType="com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo"  javaType="java.util.ArrayList">
+            <id property="id" column="id"/>
+            <result property="applyOrderId" column="applyOrderId"/>
+            <result property="resId" column="resId"/>
+            <result property="quantity" column="quantity"/>
+            <result property="resName" column="resName"/>
+            <result property="remark" column="remark"/>
+            <result property="resCode" column="resCode"/>
+            <result property="price" column="price"/>
+            <result property="stock" column="stock"/>
+        </collection>
+    </resultMap>
+
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyInfo" parameterType="Map">
            insert into business_purchase_apply
@@ -17,14 +44,14 @@
         insert into business_purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-        (
+            (
             #{item.applyOrderId},
             #{item.resId},
             #{item.quantity},
             #{item.remark},
             #{item.bId},
             #{item.operate}
-        )
+            )
         </foreach>
     </insert>
 
@@ -50,11 +77,11 @@
     <!-- 查询采购申请信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessPurchaseApplyInfo" parameterType="Map" resultType="Map">
         select
-            t.operate,t.res_order_type resOrderType,
-            t.description,
-            t.apply_order_id applyOrderId,t.state,
-            t.store_id storeId,
-            t.user_name userName,t.b_id bId,t.user_id userId
+        t.operate,t.res_order_type resOrderType,
+        t.description,
+        t.apply_order_id applyOrderId,t.state,
+        t.store_id storeId,
+        t.user_name userName,t.b_id bId,t.user_id userId
         from business_purchase_apply t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -141,11 +168,12 @@
     <!-- 查询采购申请信息 add by wuxw 2018-07-03 -->
     <select id="getPurchaseApplyInfo" parameterType="Map" resultType="Map">
         select
-            t.res_order_type resOrderType,t.description,
-            t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
-            t.store_id storeId,t.user_name userName,
-            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName
-        from purchase_apply t inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
+        t.res_order_type resOrderType,t.description,
+        t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
+        t.store_id storeId,t.user_name userName,
+        t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
+        from purchase_apply t
+        inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
@@ -179,15 +207,61 @@
 
     </select>
 
+
+
+    <select id="getPurchaseApplyInfo2" parameterType="Map" resultMap="applyMap">
+        select
+        t.res_order_type resOrderType,t.description,
+        t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
+        t.store_id storeId,t.user_name userName,
+        t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
+        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,de.id,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode
+        from purchase_apply t
+        inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
+        inner join purchase_apply_detail de on de.apply_order_id = t.apply_order_id
+        inner join resource_store rs on de.res_id = rs.res_id
+
+        where 1 =1
+        <if test="resOrderType !=null and resOrderType != ''">
+            and t.res_order_type= #{resOrderType}
+        </if>
+        <if test="description !=null and description != ''">
+            and t.description= #{description}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name like concat('%',#{userName},'%')
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
     <!-- 查询采购明细 -->
     <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
-            p.apply_order_id applyOrderId,
-            p.res_id resId,p.quantity,p.remark,
-            r.res_name resName,r.res_code resCode,
-            r.price,r.stock
+        p.apply_order_id applyOrderId,
+        p.res_id resId,p.quantity,p.remark,
+        r.res_name resName,r.res_code resCode,
+        r.price,r.stock
         from
-            purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id
+        purchase_apply_detail p inner join resource_store r on p.res_id = r.res_id
         where 1=1
         <if test="applyOrderIds !=null">
             and p.apply_order_id in
