@@ -51,6 +51,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @return
      */
     public ResponseEntity<String> callService(DataFlowContext context, String serviceCode,JSONArray businesses) {
+        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONObject paramInObj = restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
         return callService(context,serviceCode,paramInObj);
     }
@@ -66,6 +67,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
 
         //将 rest header 信息传递到下层服务中去
         HttpHeaders header = new HttpHeaders();
+
         freshHttpHeader(header, context.getRequestCurrentHeaders());
 
         ResponseEntity responseEntity = null;
