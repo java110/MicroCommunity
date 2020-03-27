@@ -103,7 +103,9 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
         }
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(communityId);
-        ownerCarDto.setCarNums(carNums.toArray(new String[carNums.size()]));
+        if(!carNums.isEmpty()) {
+            ownerCarDto.setCarNums(carNums.toArray(new String[carNums.size()]));
+        }
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         List<String> psIds = new ArrayList<>();
