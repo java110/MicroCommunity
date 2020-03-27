@@ -367,7 +367,7 @@
 
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMemberCount" parameterType="Map" resultType="Map">
-        select count(1) count
+        select ms.community_id,count(1) count
         from s_community_member ms
         <if test="needCommunityInfo == true">
             ,s_community sc,
