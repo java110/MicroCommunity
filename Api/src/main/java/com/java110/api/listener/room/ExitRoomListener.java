@@ -84,6 +84,9 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         //添加单元信息
         businesses.add(exitRoom(paramObj, dataFlowContext));
 
+        paramObj.put("state","2002");
+        //修改房屋状态
+        businesses.add(roomBMOImpl.updateRoom(paramObj,dataFlowContext));
 
         //删除费用信息
         businesses.add(exitPropertyFee(paramObj, dataFlowContext));
@@ -126,6 +129,8 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
 
         return business;
     }
+
+
 
     /**
      * 删除物业费用信息
