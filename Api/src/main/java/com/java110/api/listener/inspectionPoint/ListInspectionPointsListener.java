@@ -12,6 +12,7 @@ import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.inspectionPoint.InspectionDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.utils.constant.ServiceCodeInspectionPointConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -73,6 +74,7 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
     }
 
     @Override
