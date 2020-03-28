@@ -7,9 +7,9 @@
     <!-- 保存巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionRoutePointRelInfo" parameterType="Map">
         insert into business_inspection_route_point_rel(
-        inspection_id,operate,inspection_route_id,irp_rel_id,remark,community_id,b_id
+        inspection_id,operate,inspection_route_id,irp_rel_id,community_id,b_id
         ) values (
-        #{inspectionId},#{operate},#{inspectionRouteId},#{irpRelId},#{remark},#{communityId},#{bId}
+        #{inspectionId},#{operate},#{inspectionRouteId},#{irpRelId},#{communityId},#{bId}
         )
     </insert>
 
@@ -17,7 +17,7 @@
     <!-- 查询巡检路线巡检点关系信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
         select t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_route_id,t.inspection_route_id
-        inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.remark,t.community_id,t.community_id
+        inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId
         from business_inspection_route_point_rel t
         where 1 =1
@@ -33,9 +33,6 @@
         <if test="irpRelId !=null and irpRelId != ''">
             and t.irp_rel_id= #{irpRelId}
         </if>
-        <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
-        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -49,8 +46,8 @@
     <!-- 保存巡检路线巡检点关系信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionRoutePointRelInfoInstance" parameterType="Map">
         insert into inspection_route_point_rel(
-        inspection_id,inspection_route_id,irp_rel_id,remark,status_cd,community_id,b_id
-        ) select t.inspection_id,t.inspection_route_id,t.irp_rel_id,t.remark,'0',t.community_id,t.b_id from
+        inspection_id,inspection_route_id,irp_rel_id,status_cd,community_id,b_id
+        ) select t.inspection_id,t.inspection_route_id,t.irp_rel_id,'0',t.community_id,t.b_id from
         business_inspection_route_point_rel t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -61,9 +58,6 @@
         </if>
         <if test="irpRelId !=null and irpRelId != ''">
             and t.irp_rel_id= #{irpRelId}
-        </if>
-        <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -78,7 +72,7 @@
     <!-- 查询巡检路线巡检点关系信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionRoutePointRelInfo" parameterType="Map" resultType="Map">
         select t.inspection_id,t.inspection_id inspectionId,t.inspection_route_id,t.inspection_route_id
-        inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.remark,t.status_cd,t.status_cd
+        inspectionRouteId,t.irp_rel_id,t.irp_rel_id irpRelId,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
         ip.inspection_id inspectionId,ip.machine_id machineId,ip.remark,
         ip.inspection_name inspectionName
@@ -94,9 +88,6 @@
         </if>
         <if test="irpRelId !=null and irpRelId != ''">
             and t.irp_rel_id= #{irpRelId}
-        </if>
-        <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -128,9 +119,6 @@
         <if test="inspectionRouteId !=null and inspectionRouteId != ''">
             , t.inspection_route_id= #{inspectionRouteId}
         </if>
-        <if test="remark !=null and remark != ''">
-            , t.remark= #{remark}
-        </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
@@ -159,9 +147,6 @@
         </if>
         <if test="irpRelId !=null and irpRelId != ''">
             and t.irp_rel_id= #{irpRelId}
-        </if>
-        <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
