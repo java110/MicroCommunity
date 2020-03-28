@@ -205,11 +205,9 @@
         where 1 =1
 
         <if test="relationship != null  and  relationship == 1">
-
             and c.inspection_id is not null
         </if>
         <if test="relationship != null  and  relationship == 0">
-            and c.inspection_route_id = #{inspectionRouteId}
             and c.inspection_id is null
         </if>
         <if test="inspectionId !=null and inspectionId != ''">
@@ -254,7 +252,6 @@
             and c.inspection_id is not null
         </if>
         <if test="relationship != null  and  relationship == 0">
-            and c.inspection_route_id = #{inspectionRouteId}
             and c.inspection_id is null
         </if>
         <if test="inspectionId !=null and inspectionId != ''">
