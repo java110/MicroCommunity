@@ -90,8 +90,8 @@
         inner join t_dict d on d.status_cd = m.location_type_cd
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
-            and t.status_cd = '0'
-            and t.inspection_route_id is null
+            and c.status_cd = '0'
+            and c.inspection_route_id is null
         </if>
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -158,8 +158,8 @@
         from inspection_point t
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">
             left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
-            and t.status_cd = '0'
-            and t.inspection_route_id is null
+            and c.status_cd = '0'
+            and c.inspection_route_id is null
         </if>
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -203,8 +203,8 @@
         inner join t_dict d on d.status_cd = m.location_type_cd
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
         where 1 =1
-        and t.status_cd = '0'
         <if test="relationship != null  and  relationship == '1'">
+            and c.status_cd = '0'
             and c.inspection_route_id = #{inspectionRouteId}
             and c.inspection_id is not null
         </if>
@@ -248,8 +248,9 @@
         inner join t_dict d on d.status_cd = m.location_type_cd
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
         where 1 =1
-        and t.status_cd = '0'
+
         <if test="relationship != null  and  relationship == '1'">
+            and c.status_cd = '0'
             and c.inspection_route_id = #{inspectionRouteId}
             and c.inspection_id is not null
         </if>

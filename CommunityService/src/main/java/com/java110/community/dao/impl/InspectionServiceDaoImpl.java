@@ -152,7 +152,7 @@ public class InspectionServiceDaoImpl extends BaseServiceDao implements IInspect
     public List<Map> getInspectionRelationShipInfo(Map info) throws DAOException {
         logger.debug("查询巡检点信息 入参 info : {}",info);
 
-        List<Map> businessInspectionInfos = sqlSessionTemplate.selectList("inspectionServiceDaoImpl.getInspectionInfo",info);
+        List<Map> businessInspectionInfos = sqlSessionTemplate.selectList("inspectionServiceDaoImpl.getInspectionRelationShipInfo",info);
 
         return businessInspectionInfos;
     }
