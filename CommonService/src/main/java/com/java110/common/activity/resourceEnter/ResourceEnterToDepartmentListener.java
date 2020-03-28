@@ -6,7 +6,9 @@ import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.TaskListener;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * 部门领导 监听类
  */
-public class ResourceEnterToDepartmentListener implements TaskListener {
+public class ResourceEnterToDepartmentListener implements TaskListener , ExecutionListener {
 
     private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
 
@@ -31,9 +33,15 @@ public class ResourceEnterToDepartmentListener implements TaskListener {
 
         for (AuditUserDto tmpAuditUser : auditUserDtos) {
             AuditUser auditUser = BeanConvertUtil.covertBean(tmpAuditUser, AuditUser.class);
+            System.err.println("审核人id："+tmpAuditUser.getUserName()+tmpAuditUser.getUserId());
 
             delegateTask.setVariable(auditUser.getUserId(), auditUser);
 
         }
+    }
+
+    @Override
+    public void notify(DelegateExecution execution) {
+
     }
 }

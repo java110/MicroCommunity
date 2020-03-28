@@ -56,11 +56,11 @@ public class SavePurchaseApplyListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = purchaseApplyBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         //开始流程
-//        if(HttpStatus.OK == responseEntity.getStatusCode()){
-//            PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
-//            purchaseApplyDto.setCurrentUserId(reqJson.getString("userId"));
-//            iPurchaseApplyUserInnerServiceSMO.startProcess(purchaseApplyDto);
-//        }
+        if(HttpStatus.OK == responseEntity.getStatusCode()){
+            PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
+            purchaseApplyDto.setCurrentUserId(reqJson.getString("userId"));
+            iPurchaseApplyUserInnerServiceSMO.startProcess(purchaseApplyDto);
+        }
         context.setResponseEntity(responseEntity);
     }
 
