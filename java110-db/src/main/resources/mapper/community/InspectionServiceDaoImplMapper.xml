@@ -201,11 +201,11 @@
         from inspection_point t
         inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
         inner join t_dict d on d.status_cd = m.location_type_cd
-        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
+        left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
-        and c.status_cd = '0'
+
         <if test="relationship != null  and  relationship == 1">
-            and c.inspection_route_id = #{inspectionRouteId}
+
             and c.inspection_id is not null
         </if>
         <if test="relationship != null  and  relationship == 0">
@@ -247,10 +247,10 @@
         inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
         inner join t_dict d on d.status_cd = m.location_type_cd
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
-        where 1 =1
         and c.status_cd = '0'
+        and c.inspection_route_id = #{inspectionRouteId}
+        where 1 =1
         <if test="relationship != null  and  relationship == 1">
-            and c.inspection_route_id = #{inspectionRouteId}
             and c.inspection_id is not null
         </if>
         <if test="relationship != null  and  relationship == 0">
