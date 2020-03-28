@@ -1,11 +1,10 @@
-package com.java110.report.smo.feeType.impl;
+package com.java110.front.smo.feeType.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
-import com.java110.report.smo.feeType.IFeeTypeSMO;
+import com.java110.front.smo.feeType.IFeeTypeSMO;
 import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ public class FeeTypeSMOImpl extends BaseComponentSMO implements IFeeTypeSMO {
     private RestTemplate restTemplate;
 
 
-
     @Override
     public ResponseEntity<String> list(IPageData pd) {
         validate(pd);
@@ -39,8 +37,8 @@ public class FeeTypeSMOImpl extends BaseComponentSMO implements IFeeTypeSMO {
         reqParam.put("name", "pay_fee");
         reqParam.put("type", "fee_type_cd");
         //拉取数据
-        String url=ServiceConstant.SERVICE_API_URL.concat("/api/dict.queryDict").concat(mapToUrlParam(reqParam));
-        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",url , HttpMethod.GET);
+        String url = ServiceConstant.SERVICE_API_URL.concat("/api/dict.queryDict").concat(mapToUrlParam(reqParam));
+        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "", url, HttpMethod.GET);
         return responseEntity;
     }
 

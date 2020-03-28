@@ -1,10 +1,8 @@
-package com.java110.report.components.fee;
+package com.java110.front.components.fee;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.report.smo.fee.IListPayFeeSMO;
-import com.java110.report.smo.fee.IListStaffFeeSMO;
-import com.java110.report.smo.feeType.IFeeTypeSMO;
+import com.java110.front.smo.fee.IListStaffFeeSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

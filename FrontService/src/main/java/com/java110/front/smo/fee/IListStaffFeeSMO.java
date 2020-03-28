@@ -1,4 +1,4 @@
-package com.java110.report.smo.fee;
+package com.java110.front.smo.fee;
 
 import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;
