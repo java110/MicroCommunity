@@ -200,7 +200,7 @@
         d.name locationTypeName
         from inspection_point t
         inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        inner join t_dict d on d.status_cd = m.location_type_cd
+        INNER JOIN t_dict d ON d.status_cd = m.location_type_cd and d.table_name = 'machine' and d.table_columns = 'location_type_cd'
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id and c.status_cd = '0' and c.inspection_route_id = #{inspectionRouteId}
         where 1 =1
 
@@ -231,7 +231,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        group by t.inspection_id
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -243,7 +242,7 @@
         select count(1) count
         from inspection_point t
         inner join machine m on t.machine_id = m.machine_id and m.status_cd = 0
-        inner join t_dict d on d.status_cd = m.location_type_cd
+        INNER JOIN t_dict d ON d.status_cd = m.location_type_cd and d.table_name = 'machine' and d.table_columns = 'location_type_cd'
         left join inspection_route_point_rel c on t.inspection_id = c.inspection_id
         and c.status_cd = '0'
         and c.inspection_route_id = #{inspectionRouteId}
