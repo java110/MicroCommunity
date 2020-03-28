@@ -1,29 +1,25 @@
-package com.java110.report.smo.fee.impl;
+package com.java110.front.smo.fee.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.report.smo.fee.IListPayFeeSMO;
-import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.front.smo.fee.IListStaffFeeSMO;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-
 /**
  * 查询app服务类
  */
-@Service("listPayFeeSMOImpl")
-public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayFeeSMO {
+@Service("listStaffFeeSMOImpl")
+public class ListStaffFeeSMOImpl extends AbstractComponentSMO implements IListStaffFeeSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -39,7 +35,7 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         super.validatePageInfo(pd);
         Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区信息");
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_PAY_FEE);
+        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_STAFF_FEE);
     }
 
     @Override
@@ -55,14 +51,8 @@ public class ListPayFeeSMOImpl extends AbstractComponentSMO implements IListPayF
         paramIn.put("row", page * row);
 
         String apiUrl = "";
-        if (!paramIn.containsKey("payObjType") || "3333".equals(paramIn.getString("payObjType"))) {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getPropertyPayFee" + mapToUrlParam(paramIn);
-        } else if ("6666".equals(paramIn.getString("payObjType"))) {
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
-        }else{
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getParkingSpacePayFee" + mapToUrlParam(paramIn);
-        }
 
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getStaffFee" + mapToUrlParam(paramIn);
 
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,

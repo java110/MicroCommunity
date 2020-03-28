@@ -1,12 +1,10 @@
-package com.java110.report.smo.fee.impl;
+package com.java110.front.smo.fee.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.report.smo.fee.IListStaffFeeSMO;
-import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.PrivilegeCodeConstant;
+import com.java110.front.smo.fee.IListTempCarInoutFeeSMO;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
@@ -19,8 +17,8 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 查询app服务类
  */
-@Service("listStaffFeeSMOImpl")
-public class ListStaffFeeSMOImpl extends AbstractComponentSMO implements IListStaffFeeSMO {
+@Service("listTempCarInoutFeeSMOImpl")
+public class ListTempCarInoutFeeSMOImpl extends AbstractComponentSMO implements IListTempCarInoutFeeSMO {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -36,7 +34,7 @@ public class ListStaffFeeSMOImpl extends AbstractComponentSMO implements IListSt
         super.validatePageInfo(pd);
         Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区信息");
 
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_STAFF_FEE);
+        //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.LIST_PAY_FEE);
     }
 
     @Override
@@ -52,9 +50,7 @@ public class ListStaffFeeSMOImpl extends AbstractComponentSMO implements IListSt
         paramIn.put("row", page * row);
 
         String apiUrl = "";
-
-        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getStaffFee" + mapToUrlParam(paramIn);
-
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/api.getTempCarInoutFee" + mapToUrlParam(paramIn);
         ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, "",
                 apiUrl,
                 HttpMethod.GET);

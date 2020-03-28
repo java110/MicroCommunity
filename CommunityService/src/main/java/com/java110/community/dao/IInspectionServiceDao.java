@@ -78,4 +78,18 @@ public interface IInspectionServiceDao {
      */
     int queryInspectionsCount(Map info);
 
+    /**
+     * 查询巡检点数量
+     * @param info 巡检点信息
+     * @return 巡检点数量
+     */
+    public int queryInspectionsRelationShipCount(Map info);
+    /**
+     * 查询巡检点信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    public List<Map> getInspectionRelationShipInfo(Map info) throws DAOException ;
+
 }

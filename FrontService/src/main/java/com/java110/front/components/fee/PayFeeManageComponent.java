@@ -1,10 +1,9 @@
-package com.java110.report.components.fee;
+package com.java110.front.components.fee;
 
 
 import com.java110.core.context.IPageData;
-import com.java110.report.smo.fee.IListPayFeeSMO;
-import com.java110.report.smo.fee.IListTempCarInoutFeeSMO;
-import com.java110.report.smo.feeType.IFeeTypeSMO;
+import com.java110.front.smo.fee.IListPayFeeSMO;
+import com.java110.front.smo.feeType.IFeeTypeSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,21 +16,22 @@ import org.springframework.stereotype.Component;
  * <p>
  * 2019-06-29
  */
-@Component("tempCarInoutFeeManage")
-public class TempCarInoutFeeManageComponent {
+@Component("payFeeManage")
+public class PayFeeManageComponent {
 
     @Autowired
-    private IListTempCarInoutFeeSMO listTempCarInoutFeeSMOImpl;
+    private IListPayFeeSMO listPayFeeSMOImpl;
 
     @Autowired
     private IFeeTypeSMO feeTypeSMOImpl;
 
     /**
      * 查询费用类型
+     *
      * @param pd
      * @return
      */
-    public ResponseEntity<String> listFeeType(IPageData pd){
+    public ResponseEntity<String> listFeeType(IPageData pd) {
         return feeTypeSMOImpl.list(pd);
     }
 
@@ -42,8 +42,14 @@ public class TempCarInoutFeeManageComponent {
      * @return 返回 ResponseEntity 对象
      */
     public ResponseEntity<String> list(IPageData pd) {
-        return listTempCarInoutFeeSMOImpl.list(pd);
+        return listPayFeeSMOImpl.list(pd);
     }
 
+    public IListPayFeeSMO getListPayFeeSMOImpl() {
+        return listPayFeeSMOImpl;
+    }
 
+    public void setListPayFeeSMOImpl(IListPayFeeSMO listPayFeeSMOImpl) {
+        this.listPayFeeSMOImpl = listPayFeeSMOImpl;
+    }
 }
