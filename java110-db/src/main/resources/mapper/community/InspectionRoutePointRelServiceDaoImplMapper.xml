@@ -80,7 +80,7 @@
         where 1 =1
         and t.inspection_id = ip.inspection_id
         and ip.machine_id = m.machine_id
-        and m.status_cd = 0
+        and m.status_cd = '0'
         and ip.status_cd = '0'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -141,8 +141,8 @@
         where 1 =1
         and t.inspection_id = ip.inspection_id
         and ip.machine_id = m.machine_id
-        and m.status_cd = 0
-        and ip.status_cd = '0
+        and m.status_cd = '0'
+        and ip.status_cd = '0'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
