@@ -4,7 +4,7 @@
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="department">
       <extensionElements>
-        <activiti:executionListener class="com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener" event="start"/>
+        <activiti:executionListener class="com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener" event="department"/>
       </extensionElements>
     </userTask>
     <userTask activiti:exclusive="true" id="_4" name="finance"/>

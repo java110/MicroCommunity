@@ -78,6 +78,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         Task task = null;
         TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(purchaseApplyDto.getCurrentUserId()).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
+        List<Task> list = taskService.createTaskQuery().list();
         for (Task tmp : todoList) {
             if (tmp.getProcessInstanceId().equals(purchaseApplyDto.getProcessInstanceId())) {
                 task = tmp;//获取当前流程实例，当前申请人的待办任务
