@@ -27,6 +27,7 @@ public class InspectionDto extends PageDto implements Serializable {
     private String machineId;
     private String communityId;
     private String inspectionRouteId;
+    private String relationship; //1 查询关联的巡检点 0 还未关联巡检点
 
 
     private Date createTime;
@@ -146,5 +147,13 @@ public class InspectionDto extends PageDto implements Serializable {
 
     public void setInspectionRouteId(String inspectionRouteId) {
         this.inspectionRouteId = inspectionRouteId;
+    }
+
+    public String getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
     }
 }

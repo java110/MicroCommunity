@@ -1,7 +1,9 @@
 package com.java110.core.smo.inspectionPoint;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.PageDto;
 import com.java110.dto.inspectionPoint.InspectionDto;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +41,10 @@ public interface IInspectionInnerServiceSMO {
      */
     @RequestMapping(value = "/queryInspectionsCount", method = RequestMethod.POST)
     int queryInspectionsCount(@RequestBody InspectionDto inspectionDto);
+
+    @RequestMapping(value = "/getInspectionRelationShip", method = RequestMethod.POST)
+    public List<InspectionDto> getInspectionRelationShip(@RequestBody  InspectionDto inspectionDto);
+
+    @RequestMapping(value = "/queryInspectionsRelationShipCount", method = RequestMethod.POST)
+    public int queryInspectionsRelationShipCount(@RequestBody InspectionDto inspectionDto);
 }

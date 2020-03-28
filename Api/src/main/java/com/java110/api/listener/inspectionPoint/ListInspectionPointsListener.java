@@ -78,6 +78,53 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+        if(reqJson.containsKey("relationship")){
+            queryRelationship(event,context,reqJson);
+        }else{
+            queryCommon(event,context,reqJson);
+        }
+
+    }
+
+    /**
+     * 关系查询
+     * @param event
+     * @param context
+     * @param reqJson
+     */
+    private void queryRelationship(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        InspectionDto inspectionPointDto = BeanConvertUtil.covertBean(reqJson, InspectionDto.class);
+
+        int count = inspectionPointInnerServiceSMOImpl.queryInspectionsRelationShipCount(inspectionPointDto);
+
+        List<ApiInspectionPointDataVo> inspectionPoints = null;
+
+        if (count > 0) {
+            inspectionPoints = BeanConvertUtil.covertBeanList(inspectionPointInnerServiceSMOImpl.getInspectionRelationShip(inspectionPointDto), ApiInspectionPointDataVo.class);
+            // 刷新 位置信息
+            refreshMachines(inspectionPoints);
+        } else {
+            inspectionPoints = new ArrayList<>();
+        }
+
+        ApiInspectionPointVo apiInspectionPointVo = new ApiInspectionPointVo();
+
+        apiInspectionPointVo.setTotal(count);
+        apiInspectionPointVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
+        apiInspectionPointVo.setInspectionPoints(inspectionPoints);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionPointVo), HttpStatus.OK);
+
+        context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 普通查询
+     * @param event
+     * @param context
+     * @param reqJson
+     */
+    private void queryCommon(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         InspectionDto inspectionPointDto = BeanConvertUtil.covertBean(reqJson, InspectionDto.class);
 
         int count = inspectionPointInnerServiceSMOImpl.queryInspectionsCount(inspectionPointDto);
@@ -101,7 +148,6 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiInspectionPointVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 
 
@@ -187,7 +233,6 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
 
     /**
      * 获取批量单元
-     *
      */
     private void refreshRooms(List<ApiInspectionPointDataVo> inspectionPoints) {
         List<String> roomIds = new ArrayList<String>();
@@ -210,7 +255,7 @@ public class ListInspectionPointsListener extends AbstractServiceApiListener {
         //根据 userId 查询用户信息
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
-        for (ApiInspectionPointDataVo inspectionPointDataVo: tmpInspectionPoint) {
+        for (ApiInspectionPointDataVo inspectionPointDataVo : tmpInspectionPoint) {
             for (RoomDto tmpRoomDto : roomDtos) {
                 if (inspectionPointDataVo.getLocationObjId().equals(tmpRoomDto.getRoomId())) {
                     inspectionPointDataVo.setLocationObjName(tmpRoomDto.getFloorNum() + "栋" + tmpRoomDto.getUnitNum() + "单元" + tmpRoomDto.getRoomNum() + "室");
