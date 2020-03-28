@@ -78,7 +78,7 @@ public class DeleteInspectionRoutePointRelInfoListener extends AbstractInspectio
                     JSONObject businessInspectionRoutePointRel = businessInspectionRoutePointRels.getJSONObject(_inspectionRoutePointRelIndex);
                     doBusinessInspectionRoutePointRel(business, businessInspectionRoutePointRel);
                     if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("irmRelId", businessInspectionRoutePointRel.getString("irmRelId"));
+                        dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));
                     }
                 }
             }
@@ -110,7 +110,7 @@ public class DeleteInspectionRoutePointRelInfoListener extends AbstractInspectio
                 Map businessInspectionRoutePointRelInfo = businessInspectionRoutePointRelInfos.get(_inspectionRoutePointRelIndex);
                 flushBusinessInspectionRoutePointRelInfo(businessInspectionRoutePointRelInfo, StatusConstant.STATUS_CD_INVALID);
                 inspectionRoutePointRelServiceDaoImpl.updateInspectionRoutePointRelInfoInstance(businessInspectionRoutePointRelInfo);
-                dataFlowContext.addParamOut("irmRelId", businessInspectionRoutePointRelInfo.get("irm_rel_id"));
+                dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRelInfo.get("irp_rel_id"));
             }
         }
 
@@ -161,10 +161,10 @@ public class DeleteInspectionRoutePointRelInfoListener extends AbstractInspectio
      */
     private void doBusinessInspectionRoutePointRel(Business business, JSONObject businessInspectionRoutePointRel) {
 
-        Assert.jsonObjectHaveKey(businessInspectionRoutePointRel, "irmRelId", "businessInspectionRoutePointRel 节点下没有包含 irmRelId 节点");
+        Assert.jsonObjectHaveKey(businessInspectionRoutePointRel, "irpRelId", "businessInspectionRoutePointRel 节点下没有包含 irpRelId 节点");
 
-        if (businessInspectionRoutePointRel.getString("irmRelId").startsWith("-")) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "irmRelId 错误，不能自动生成（必须已经存在的irmRelId）" + businessInspectionRoutePointRel);
+        if (businessInspectionRoutePointRel.getString("irpRelId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "irpRelId 错误，不能自动生成（必须已经存在的irpRelId）" + businessInspectionRoutePointRel);
         }
         //自动插入DEL
         autoSaveDelBusinessInspectionRoutePointRel(business, businessInspectionRoutePointRel);

@@ -17,7 +17,7 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
 
     private String inspectionId;
     private String inspectionRouteId;
-    private String irmRelId;
+    private String irpRelId;
     private String remark;
     private String communityId;
 
@@ -43,12 +43,12 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
         this.inspectionRouteId = inspectionRouteId;
     }
 
-    public String getIrmRelId() {
-        return irmRelId;
+    public String getIrpRelId() {
+        return irpRelId;
     }
 
-    public void setIrmRelId(String irmRelId) {
-        this.irmRelId = irmRelId;
+    public void setIrpRelId(String irpRelId) {
+        this.irpRelId = irpRelId;
     }
 
     public String getRemark() {

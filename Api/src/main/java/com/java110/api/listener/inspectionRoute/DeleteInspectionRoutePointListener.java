@@ -29,7 +29,7 @@ public class DeleteInspectionRoutePointListener extends AbstractServiceApiListen
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
-        Assert.hasKeyAndValue(reqJson, "irmRelId", "路线巡检点关系ID不能为空");
+        Assert.hasKeyAndValue(reqJson, "irpRelId", "路线巡检点关系ID不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
 
     }
