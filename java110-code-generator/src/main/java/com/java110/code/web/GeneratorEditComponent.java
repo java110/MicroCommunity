@@ -13,10 +13,10 @@ public class GeneratorEditComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
-        genneratorListListener(data);
+//        generatorComponentJava(data);
+//        genneratorIListSmo(data);
+//        genneratorListSmoImpl(data);
+//        genneratorListListener(data);
 
 
 
@@ -86,7 +86,7 @@ public class GeneratorEditComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/edit-" + data.getString("templateCode") + "/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/component/"+data.getString("templateCode")+"Package/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + "/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -153,7 +153,7 @@ public class GeneratorEditComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/edit-" + data.getString("templateCode") + "/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/component/"+data.getString("templateCode")+"Package/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + "/edit" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

@@ -31,9 +31,8 @@
                     return ;
                 }
 
-                vc.http.post(
-                    'edit@@TemplateCode@@',
-                    'update',
+                vc.http.apiPost(
+                    '@@templateCode@@.update@@TemplateCode@@',
                     JSON.stringify(vc.component.edit@@TemplateCode@@Info),
                     {
                         emulateJSON:true

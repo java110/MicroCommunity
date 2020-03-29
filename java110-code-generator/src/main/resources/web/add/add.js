@@ -45,9 +45,8 @@
                     return ;
                 }
 
-                vc.http.post(
-                    'add@@TemplateCode@@',
-                    'save',
+                vc.http.apiPost(
+                    '@@templateCode@@.save@@TemplateCode@@',
                     JSON.stringify(vc.component.add@@TemplateCode@@Info),
                     {
                         emulateJSON:true

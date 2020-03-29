@@ -39,8 +39,7 @@
                };
 
                //发送get请求
-               vc.http.get('@@templateCode@@Manage',
-                            'list',
+               vc.http.apiGet('@@templateCode@@.list@@TemplateCode@@s',
                              param,
                              function(json,res){
                                 var _@@templateCode@@ManageInfo=JSON.parse(json);

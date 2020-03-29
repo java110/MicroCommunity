@@ -24,7 +24,7 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String planUserName;
     private String communityId;
     private String actUserId;
-    private String inspectionTaskId;
+    private String taskId;
 
 
     private Date createTime;
@@ -104,12 +104,12 @@ public class InspectionTaskDto extends PageDto implements Serializable {
         this.actUserId = actUserId;
     }
 
-    public String getInspectionTaskId() {
-        return inspectionTaskId;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setInspectionTaskId(String inspectionTaskId) {
-        this.inspectionTaskId = inspectionTaskId;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public Date getCreateTime() {
