@@ -98,5 +98,8 @@ public class BackCoderGeneratorStart extends BaseGenerator {
 
         GeneratorIInnerServiceSMO generatorIInnerServiceSMO = new GeneratorIInnerServiceSMO();
         generatorIInnerServiceSMO.generator(data);
+
+        GeneratorApiListener generatorApiListener = new GeneratorApiListener();
+        generatorApiListener.generator(data);
     }
 }

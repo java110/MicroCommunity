@@ -97,7 +97,7 @@ public class BaseGenerator {
                 .replace("@@templateKey@@", data.getId())
                 .replace("@@TemplateKey@@", toUpperCaseFirstOne(data.getId()))
                 .replace("@@templateKeyName@@", data.getId())
-                .replace("@@TEMPLATECODE@@", data.getName())
+                .replace("@@TEMPLATECODE@@", data.getName().toUpperCase())
                 .replace("@@searchCode@@", data.getId())
                 .replace("@@searchName@@", data.getId());
     }

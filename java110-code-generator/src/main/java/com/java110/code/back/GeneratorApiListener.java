@@ -23,6 +23,9 @@ public class GeneratorApiListener extends BaseGenerator {
         genneratorIBmo(data);
         genneratorBmoImpl(data);
         genneratorSaveListener(data);
+        genneratorEditListener(data);
+        genneratorDeleteListener(data);
+        genneratorServiceCodeConstant(data);
     }
 
     /**
@@ -90,7 +93,7 @@ public class GeneratorApiListener extends BaseGenerator {
         fileContext = fileContext.replace("@@templateColumns@@", variable + variableGetSet);
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/api/vo/" +data.getName() + "/Api" + toUpperCaseFirstOne(data.getName()) + "DataVo.java";
+                + "out/api/vo/" + data.getName() + "/Api" + toUpperCaseFirstOne(data.getName()) + "DataVo.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -126,7 +129,7 @@ public class GeneratorApiListener extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/api/bmo/" + data.getName() + "/impl/I" + toUpperCaseFirstOne(data.getName()) + "BMO.java";
+                + "out/api/bmo/" + data.getName() + "/impl/" + toUpperCaseFirstOne(data.getName()) + "BMOImpl.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -149,7 +152,7 @@ public class GeneratorApiListener extends BaseGenerator {
         StringBuffer validateStr = new StringBuffer();
         for (String key : data.getRequiredParam()) {
             //JSONObject column = columns.getJSONObject(columnIndex);
-                validateStr.append("Assert.hasKeyAndValue(reqJson, \""+key+"\", \"请求报文中未包含"+key+"\");\n");
+            validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + key + "\", \"请求报文中未包含" + key + "\");\n");
 
         }
 
@@ -161,6 +164,81 @@ public class GeneratorApiListener extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+    }
+
+    /**
+     * 生成API 侦听处理类
+     *
+     * @param data
+     */
+    private void genneratorEditListener(Data data) {
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/template/UpdateListener.java").getFile());
+        String fileContext = sb.toString();
+
+        fileContext = super.replaceTemplateContext(fileContext, data);
+
+        //替换校验部分代码 @@validateTemplateColumns@@
+        StringBuffer validateStr = new StringBuffer();
+        validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + data.getId() + "\", \"" + data.getId() + "不能为空\");\n");
+        for (String key : data.getRequiredParam()) {
+            //JSONObject column = columns.getJSONObject(columnIndex);
+            validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + key + "\", \"请求报文中未包含" + key + "\");\n");
+
+        }
+
+        fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
+
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/api/listener/" + data.getName() + "/Update" + toUpperCaseFirstOne(data.getName()) + "Listener.java";
+        System.out.printf("writePath: " + writePath);
+        writeFile(writePath,
+                fileContext);
+    }
+
+    /**
+     * 生成API 侦听处理类
+     *
+     * @param data
+     */
+    private void genneratorDeleteListener(Data data) {
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/template/DeleteListener.java").getFile());
+        String fileContext = sb.toString();
+
+        fileContext = super.replaceTemplateContext(fileContext, data);
+
+        //替换校验部分代码 @@validateTemplateColumns@@
+        StringBuffer validateStr = new StringBuffer();
+        validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + data.getId() + "\", \"" + data.getId() + "不能为空\");\n");
+
+        fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
+
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/api/listener/" + data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "Listener.java";
+        System.out.printf("writePath: " + writePath);
+        writeFile(writePath,
+                fileContext);
+    }
+
+
+    /**
+     * 生成常量类
+     *
+     * @param data
+     */
+    private void genneratorServiceCodeConstant(Data data) {
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/template/ServiceCodeConstant.java").getFile());
+        String fileContext = sb.toString();
+
+        fileContext = super.replaceTemplateContext(fileContext, data);
+
+        String writePath = this.getClass().getResource("/").getPath()
+                + "out/back/constant/" + data.getName() + "/ServiceCode" + toUpperCaseFirstOne(data.getName()) + "Constant.java";
+        System.out.printf("writePath: " + writePath);
+        writeFile(writePath,
+                fileContext);
+
     }
 
 }
