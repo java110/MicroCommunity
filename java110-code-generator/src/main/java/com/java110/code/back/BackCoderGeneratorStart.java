@@ -38,7 +38,7 @@ public class BackCoderGeneratorStart extends BaseGenerator {
     public static void main(String[] args) {
 
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_1.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/back/template_1.json").getFile());
 
         JSONObject dataJson = JSONObject.parseObject(sb.toString());
 

@@ -15,7 +15,7 @@ public class GeneratorServiceDaoImplListener extends BaseGenerator {
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc());
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/listener/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java";
+                + "out/back/dao/impl/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java";
         writeFile(writePath,
                 fileContext);
     }

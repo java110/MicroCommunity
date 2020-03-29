@@ -322,7 +322,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         fileContext = dealUpdateInfoInstance(data, fileContext);
         fileContext = dealGetCount(data, fileContext);
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/listener/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml";
+                + "out/back/mapper/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml";
 
         writeFile(writePath,
                 fileContext);

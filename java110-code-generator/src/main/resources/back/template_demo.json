@@ -1,0 +1,38 @@
+{
+  "id": "activitiesId",
+  "name": "activities",
+  "desc": "活动",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_ACTIVITIES",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_ACTIVITIES",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_ACTIVITIES",
+  "newBusinessTypeCdValue": "290200030001",
+  "updateBusinessTypeCdValue": "290200040001",
+  "deleteBusinessTypeCdValue": "290200050001",
+  "businessTableName": "business_activities",
+  "tableName": "activities",
+  "param": {
+    "activitiesId": "activities_id",
+    "title": "title",
+    "typeCd": "type_cd",
+    "headerImg": "header_img",
+    "context": "context",
+    "communityId": "community_id",
+    "readCount": "read_count",
+    "likeCount": "like_count",
+    "collectCount": "collect_count",
+    "userId": "user_id",
+    "userName": "user_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "statusCd": "status_cd",
+    "operate": "operate",
+    "bId": "b_id"
+  },
+  "required": [
+    {
+      "code": "activitiesId"
+    }
+  ]
+}

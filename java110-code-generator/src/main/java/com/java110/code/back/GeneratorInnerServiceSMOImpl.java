@@ -17,7 +17,7 @@ public class GeneratorInnerServiceSMOImpl extends BaseGenerator {
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc());
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/back/listener/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMOImpl.java";
+                + "out/back/smo/impl/" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMOImpl.java";
         writeFile(writePath,
                 fileContext);
     }
