@@ -202,7 +202,7 @@ public abstract class AbstractOrderServiceSMOImpl {
 
             serviceBusiness = ServiceBusinessUtil.getServiceBusiness(business.getBusinessTypeCd());
             requestBusinessJson = OrderDataFlowContextFactory.getRequestBusinessJson(dataFlow, business);
-
+            //调用下游中心
             JSONObject responseJson = doRequestBusinessSystem(dataFlow, serviceBusiness, requestBusinessJson);
 
             //发布事件

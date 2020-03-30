@@ -909,4 +909,10 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_INSPECTION_PLAN ="520200050001";
 
 
+    /**
+     *  保存用户标题测试
+     * 14开头  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_FASTUSER="666666668888888";
+
 }
