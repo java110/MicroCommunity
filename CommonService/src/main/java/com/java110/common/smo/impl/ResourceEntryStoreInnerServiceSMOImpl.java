@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.common.IResourceEntryStoreInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;
 import org.activiti.engine.ProcessEngine;
@@ -75,28 +76,32 @@ public class ResourceEntryStoreInnerServiceSMOImpl extends BaseServiceSMO implem
      *
      * @param user 用户信息
      */
-    public List<ResourceOrderDto> getUserTasks(@RequestBody AuditUser user) {
+    public List<PurchaseApplyDto> getUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
         TaskQuery query = taskService.createTaskQuery().processDefinitionKey("resourceEntry");
         query.taskAssignee(user.getUserId());
         query.orderByTaskCreateTime().desc();
         List<Task> list = null;
+        if(user.getPage()  >=1){
+            user.setPage(user.getPage()-1);
+        }
         if (user.getPage() != PageDto.DEFAULT_PAGE) {
             list = query.listPage(user.getPage(), user.getRow());
         }else{
             list = query.list();
         }
 
-        List<ResourceOrderDto> resourceOrderDtos = new ArrayList<>();
+        List<PurchaseApplyDto> purchaseApplyDtos = new ArrayList<>();
 
         for (Task task : list) {
             String id = task.getId();
             //System.out.println("tasks:" + JSONObject.toJSONString(task));
-            ResourceOrderDto resourceOrderDto = (ResourceOrderDto) taskService.getVariable(id, "resourceOrderDto");
-            resourceOrderDto.setTaskId(id);
-            resourceOrderDtos.add(resourceOrderDto);
+            PurchaseApplyDto purchaseApplyDto = (PurchaseApplyDto) taskService.getVariable(id, "purchaseApplyDto");
+            purchaseApplyDto.setTaskId(id);
+            purchaseApplyDto.setProcessInstanceId(task.getProcessInstanceId());
+            purchaseApplyDtos.add(purchaseApplyDto);
         }
-        return resourceOrderDtos;
+        return purchaseApplyDtos;
     }
 
     public boolean agreeCompleteTask(@RequestBody ResourceOrderDto resourceOrderDto) {

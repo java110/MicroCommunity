@@ -162,13 +162,8 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
 
         Assert.jsonObjectHaveKey(businessPurchaseApply,"applyOrderId","businessPurchaseApply 节点下没有包含 applyOrderId 节点");
 
-        if(businessPurchaseApply.getString("applyOrderId").startsWith("-")){
-            businessPurchaseApply.put("applyOrderId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
-
-        }
-
         //状态
-        businessPurchaseApply.put("state","1000");
+        //businessPurchaseApply.put("state","1000");
         businessPurchaseApply.put("bId",business.getbId());
         businessPurchaseApply.put("operate", StatusConstant.OPERATE_ADD);
         Object jsonArray = businessPurchaseApply.get("resourceStores");

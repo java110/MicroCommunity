@@ -96,7 +96,6 @@ public class SavePurchaseApplyListener extends AbstractServiceApiListener {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessPurchaseApply = new JSONObject();
         businessPurchaseApply.putAll(paramInJson);
-        businessPurchaseApply.put("applyOrderId", "-1");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
         return business;

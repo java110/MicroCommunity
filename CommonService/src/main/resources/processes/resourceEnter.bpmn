@@ -4,7 +4,9 @@
     <startEvent id="_2" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_3" name="department">
       <extensionElements>
-        <activiti:executionListener class="com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener" event="department"/>
+        <activiti:taskListener class="com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener" event="create"/>
+        <activiti:taskListener class="com.java110.common.activity.FreshActHiTaskInstAssigneeListener" event="department"/>
+
       </extensionElements>
     </userTask>
     <userTask activiti:exclusive="true" id="_4" name="finance"/>

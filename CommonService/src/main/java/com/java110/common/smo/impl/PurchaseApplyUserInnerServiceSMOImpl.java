@@ -2,13 +2,16 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.smo.audit.IAuditUserInnerServiceSMO;
 import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
 import com.java110.core.smo.purchaseApplyUser.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.auditUser.AuditUserDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
@@ -48,6 +51,8 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
     @Autowired
     private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
 
+    @Autowired
+    private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
 
     /**
      * 启动流程
@@ -58,16 +63,15 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
-        variables.put("userId", purchaseApplyDto.getCurrentUserId());
+        //variables.put("userId", purchaseApplyDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", purchaseApplyDto.getApplyOrderId(), variables);
-        //将得到的实例流程id值赋给之前设置的变量
-        String processInstanceId = processInstance.getId();
-        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
-
-        purchaseApplyDto.setProcessInstanceId(processInstanceId);
-        //第一个节点自动提交
-        autoFinishFirstTask(purchaseApplyDto);
+//        //将得到的实例流程id值赋给之前设置的变量
+//        String processInstanceId = processInstance.getId();
+//        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
+//
+//        purchaseApplyDto.setProcessInstanceId(processInstanceId);
+//        autoFinishFirstTask(purchaseApplyDto);
         return purchaseApplyDto;
     }
 
@@ -75,10 +79,18 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
      * 自动提交第一步
      */
     private void autoFinishFirstTask(PurchaseApplyDto purchaseApplyDto) {
+        AuditUserDto auditUserDto = new AuditUserDto();
+        auditUserDto.setStoreId(purchaseApplyDto.getStoreId());
+        auditUserDto.setObjCode("resourceEntry");
+        auditUserDto.setAuditLink("809001");
+        List<AuditUserDto> auditUserDtos = auditUserInnerServiceSMOImpl.queryAuditUsers(auditUserDto);
+        if(auditUserDtos.size() == 0 || auditUserDtos == null){
+            throw new IllegalArgumentException("未找的采购部门审核人员信息");
+        }
         Task task = null;
-        TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(purchaseApplyDto.getCurrentUserId()).active();
+        TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(auditUserDtos.get(0).getUserId()).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
-        List<Task> list = taskService.createTaskQuery().list();
+
         for (Task tmp : todoList) {
             if (tmp.getProcessInstanceId().equals(purchaseApplyDto.getProcessInstanceId())) {
                 task = tmp;//获取当前流程实例，当前申请人的待办任务
@@ -241,6 +253,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         //taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
+        taskService.setVariable(purchaseApplyDto.getTaskId(),"purchaseApplyDto",purchaseApplyDto);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {

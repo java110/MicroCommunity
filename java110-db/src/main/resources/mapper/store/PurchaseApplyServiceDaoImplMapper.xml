@@ -225,14 +225,9 @@
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
-        <if test="description !=null and description != ''">
-            and t.description= #{description}
-        </if>
+
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
-        </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name like concat('%',#{userName},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

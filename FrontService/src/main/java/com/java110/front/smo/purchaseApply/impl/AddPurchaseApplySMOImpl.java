@@ -3,10 +3,12 @@ package com.java110.front.smo.purchaseApply.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.component.ComponentValidateResult;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.front.smo.purchaseApply.IAddPurchaseApplySMO;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,9 @@ public class AddPurchaseApplySMOImpl extends AbstractComponentSMO implements IAd
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", pd.getUserId());
         paramIn.put("userName", pd.getUserName());
+        paramIn.put("state", "1000");
+        paramIn.put("createTime", DateUtil.getCurrentDate());
+        paramIn.put("applyOrderId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.savePurchaseApply",
                 HttpMethod.POST);
