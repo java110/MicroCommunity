@@ -2,7 +2,9 @@ package com.java110.front.components.auditUser;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.front.smo.auditUser.IAuditOrdersSMO;
 import com.java110.front.smo.auditUser.IListAuditOrdersSMO;
+import com.java110.front.smo.complaint.IAuditComplaintSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,11 +17,16 @@ import org.springframework.stereotype.Component;
  * <p>
  * 2019-06-29
  */
+
+
 @Component("myAuditOrders")
 public class MyAuditOrdersComponent {
 
     @Autowired
     private IListAuditOrdersSMO listAuditOrdersSMOImpl;
+
+    @Autowired
+    private IAuditOrdersSMO auditAuditOrdersSMOImpl;
 
     /**
      * 查询审核人员列表
@@ -30,6 +37,11 @@ public class MyAuditOrdersComponent {
     public ResponseEntity<String> list(IPageData pd) {
         return listAuditOrdersSMOImpl.listAuditOrders(pd);
     }
+
+    public ResponseEntity<String> audit(IPageData pd) {
+        return auditAuditOrdersSMOImpl.auditOrder(pd);
+    }
+
 
     public IListAuditOrdersSMO getListAuditOrdersSMOImpl() {
         return listAuditOrdersSMOImpl;
