@@ -1,5 +1,6 @@
 package com.java110.common.activity.complaint;
 
+import com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener;
 import com.java110.core.smo.audit.IAuditUserInnerServiceSMO;
 import com.java110.dto.auditUser.AuditUserDto;
 import com.java110.dto.complaint.ComplaintDto;
@@ -10,6 +11,8 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.delegate.TaskListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
  * 采购人员采购
  */
 public class ComplaintUserListener implements TaskListener , ExecutionListener {
+    private final static Logger logger = LoggerFactory.getLogger(ComplaintUserListener.class);
 
     private IAuditUserInnerServiceSMO auditUserInnerServiceSMOImpl;
 
@@ -41,6 +45,7 @@ public class ComplaintUserListener implements TaskListener , ExecutionListener {
             return;
         }
         //delegateTask.addCandidateUser(auditUserDtos.get(0).getUserId());
+        logger.info("开始设置投诉建议审核人员："+auditUserDtos.get(0).getUserId());
 
         delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
     }

@@ -1,6 +1,7 @@
 package com.java110.core.smo.common;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.resourceStore.ResourceOrderDto;
 import com.java110.entity.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -38,7 +39,7 @@ public interface IResourceEntryStoreInnerServiceSMO {
      * @param user 用户信息
      */
     @RequestMapping(value = "/getUserTasks", method = RequestMethod.POST)
-    public List<ResourceOrderDto> getUserTasks(@RequestBody AuditUser user);
+    public List<PurchaseApplyDto> getUserTasks(@RequestBody AuditUser user);
 
     /**
      * 同意

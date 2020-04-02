@@ -78,5 +78,4 @@ public class SavePurchaseApplyListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 }

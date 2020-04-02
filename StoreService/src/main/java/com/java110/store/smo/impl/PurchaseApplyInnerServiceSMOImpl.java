@@ -72,7 +72,7 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
             purchaseApplyDto.setPage((page - 1) * purchaseApplyDto.getRow());
         }
 
-        List<PurchaseApplyDto> purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getPurchaseApplyInfo2(BeanConvertUtil.beanCovertMap(purchaseApplyDto)), PurchaseApplyDto.class);
+        List<PurchaseApplyDto> purchaseApplys = purchaseApplyServiceDaoImpl.getPurchaseApplyInfo2(BeanConvertUtil.beanCovertMap(purchaseApplyDto));
 
         if (purchaseApplys == null || purchaseApplys.size() == 0) {
             return purchaseApplys;

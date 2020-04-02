@@ -132,6 +132,7 @@ public final class PrivilegeCodeConstant {
 
     //审核工单
     public static final String AGENT_HAS_LIST_AUDIT_COMPLAINT = "502019110360380006";
+
     public static final String AGENT_HAS_LIST_AUDIT_HISTORY_COMPLAINT = "502019110534240006";
 
     //设备信息
@@ -148,6 +149,8 @@ public final class PrivilegeCodeConstant {
 
     //采购申请
     public static final String AGENT_HAS_LIST_PURCHASE_APPLY = "500201906022";
+    //审核采购申请
+    public static final String AGENT_HAS_LIST_AUDIT_APPLY_ORDER = "502019110360380006";
 
 
 

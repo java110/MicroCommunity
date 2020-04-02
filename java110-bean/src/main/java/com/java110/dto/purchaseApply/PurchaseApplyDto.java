@@ -28,7 +28,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String stateName;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
 
-    private Date createTime;
+    private String createTime;
 
     private String statusCd = "0";
 
@@ -98,11 +98,11 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     }
 
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
