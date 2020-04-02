@@ -38,8 +38,9 @@ public class CommonPostSMOImpl extends AbstractComponentSMO implements ICommonPo
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
         ResponseEntity<String> responseEntity = null;
-        super.validateStoreStaffCommunityRelationship(pd, restTemplate);
-
+        ComponentValidateResult result = super.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        paramIn.put("userId",result.getUserId());
+        paramIn.put("storeId",result.getStoreId());
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + pd.getApiUrl(),
                 HttpMethod.POST);

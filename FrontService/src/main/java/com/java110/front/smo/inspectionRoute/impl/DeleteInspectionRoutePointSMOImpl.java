@@ -28,7 +28,7 @@ public class DeleteInspectionRoutePointSMOImpl extends AbstractComponentSMO impl
         //super.validatePageInfo(pd);
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
-        Assert.hasKeyAndValue(paramIn, "irmRelId", "路线巡检点关系ID不能为空");
+        Assert.hasKeyAndValue(paramIn, "irpRelId", "路线巡检点关系ID不能为空");
         Assert.hasKeyAndValue(paramIn, "communityId", "小区ID不能为空");
 
 

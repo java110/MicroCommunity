@@ -339,6 +339,7 @@
         <if test="communityName != null and communityName != '' and needCommunityInfo == true">
             and sc.name like concat('%',#{communityName},'%')
         </if>
+        group by ms.community_id
         order by ms.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
@@ -366,7 +367,7 @@
 
     <!-- 查询小区成员  add by wuxw 2018-07-03 -->
     <select id="getCommunityMemberCount" parameterType="Map" resultType="Map">
-        select count(1) count
+        select ms.community_id,count(1) count
         from s_community_member ms
         <if test="needCommunityInfo == true">
             ,s_community sc,
@@ -424,6 +425,7 @@
         <if test="communityName != null and communityName != '' and needCommunityInfo == true">
             and sc.name like concat('%',#{communityName},'%')
         </if>
+        group by ms.community_id
     </select>
 
     <!-- 查询小区信息 add by wuxw 2018-07-03 -->

@@ -3,7 +3,7 @@ package com.java110.code.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.BaseGenerator;
+import com.java110.code.back.BaseGenerator;
 
 public class GeneratorManagerComponent extends BaseGenerator {
 
@@ -12,13 +12,13 @@ public class GeneratorManagerComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
-        genneratorListListener(data);
-        genneratorVo(data);
+        //generatorComponentJava(data);
+        //genneratorIListSmo(data);
+        //genneratorListSmoImpl(data);
+        //genneratorListListener(data);
+        //genneratorVo(data);
 
-        genneratorDataVo(data);
+        //genneratorDataVo(data);
 
 
     }
@@ -165,7 +165,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "-manage/" + data.getString("templateCode") + "Manage.html";
+                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -221,7 +221,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = fileContext.replace("@@extendEvent@@", conditionEvent.toString());
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "-manage/" + data.getString("templateCode") + "Manage.js";
+                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

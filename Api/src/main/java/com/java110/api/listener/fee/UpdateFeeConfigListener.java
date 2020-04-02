@@ -59,7 +59,7 @@ public class UpdateFeeConfigListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateFeeConfig(reqJson, context));
+        businesses.add(feeBMOImpl.updateFeeConfig(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -80,34 +80,6 @@ public class UpdateFeeConfigListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加费用项信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
-        feeConfigDto.setConfigId(paramInJson.getString("configId"));
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        Assert.listOnlyOne(feeConfigDtos, "未找到该费用项");
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFeeConfig = new JSONObject();
-        businessFeeConfig.putAll(paramInJson);
-        businessFeeConfig.put("isDefault", feeConfigDtos.get(0).getIsDefault());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
     }
 
 }

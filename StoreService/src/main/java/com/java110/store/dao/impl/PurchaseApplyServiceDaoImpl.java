@@ -2,6 +2,7 @@ package com.java110.store.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
@@ -114,6 +115,15 @@ public class PurchaseApplyServiceDaoImpl extends BaseServiceDao implements IPurc
         logger.debug("查询采购申请信息 入参 info : {}",info);
 
         List<Map> businessPurchaseApplyInfos = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getPurchaseApplyInfo",info);
+
+        return businessPurchaseApplyInfos;
+    }
+
+    @Override
+    public List<PurchaseApplyDto> getPurchaseApplyInfo2(Map info) throws DAOException {
+        logger.debug("查询采购申请信息 入参 info : {}",info);
+
+        List<PurchaseApplyDto> businessPurchaseApplyInfos = sqlSessionTemplate.selectList("purchaseApplyServiceDaoImpl.getPurchaseApplyInfo2",info);
 
         return businessPurchaseApplyInfos;
     }

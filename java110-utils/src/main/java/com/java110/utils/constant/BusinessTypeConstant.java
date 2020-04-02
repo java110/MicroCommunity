@@ -911,8 +911,14 @@ public class BusinessTypeConstant {
 
     /**
      *  保存用户标题测试
-     * 14开头  3保存
+     * 3保存
      */
     public static final String BUSINESS_TYPE_SAVE_FASTUSER="666666668888888";
+    /**
+     *  保存巡检任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION_TASK="530200030001";
+
 
 }

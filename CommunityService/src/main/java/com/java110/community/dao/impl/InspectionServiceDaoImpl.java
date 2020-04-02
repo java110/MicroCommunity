@@ -125,5 +125,37 @@ public class InspectionServiceDaoImpl extends BaseServiceDao implements IInspect
         return Integer.parseInt(businessInspectionInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询巡检点数量
+     * @param info 巡检点信息
+     * @return 巡检点数量
+     */
+    @Override
+    public int queryInspectionsRelationShipCount(Map info) {
+        logger.debug("查询巡检点数据 入参 info : {}",info);
+
+        List<Map> businessInspectionInfos = sqlSessionTemplate.selectList("inspectionServiceDaoImpl.queryInspectionsRelationShipCount", info);
+        if (businessInspectionInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessInspectionInfos.get(0).get("count").toString());
+    }
+
+    /**
+     * 查询巡检点信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getInspectionRelationShipInfo(Map info) throws DAOException {
+        logger.debug("查询巡检点信息 入参 info : {}",info);
+
+        List<Map> businessInspectionInfos = sqlSessionTemplate.selectList("inspectionServiceDaoImpl.getInspectionRelationShipInfo",info);
+
+        return businessInspectionInfos;
+    }
+
 
 }

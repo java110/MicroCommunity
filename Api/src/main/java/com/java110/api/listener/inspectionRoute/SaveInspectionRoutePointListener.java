@@ -25,10 +25,15 @@ import org.springframework.http.ResponseEntity;
 public class SaveInspectionRoutePointListener extends AbstractServiceApiListener {
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-        Assert.hasKeyAndValue(reqJson, "inspectionId", "必填，请填写巡检点");
+        if (reqJson.containsKey("inspectionId")) {
+            Assert.hasKeyAndValue(reqJson, "inspectionId", "必填，请填写巡检点");
+        } else {
+            Assert.hasKeyAndValue(reqJson, "points", "必填，请填写多个巡检点");
+        }
         Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "必填，请填写巡检路线");
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
     }
@@ -42,9 +47,17 @@ public class SaveInspectionRoutePointListener extends AbstractServiceApiListener
 
         AppService service = event.getAppService();
 
-        //添加单元信息
-        businesses.add(addInspectionRoute(reqJson, context));
-
+        if (reqJson.containsKey("inspectionId")) {
+            //添加单元信息
+            businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, 1));
+        } else { //批量的情况
+            JSONArray points = reqJson.getJSONArray("points");
+            for (int pointIndex = 0; pointIndex < points.size(); pointIndex++) {
+                reqJson.put("inspectionId", points.getJSONObject(pointIndex).getString("inspectionId"));
+                reqJson.put("inspectionName", points.getJSONObject(pointIndex).getString("inspectionName"));
+                businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, pointIndex + 1));
+            }
+        }
 
 
         ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -65,29 +78,6 @@ public class SaveInspectionRoutePointListener extends AbstractServiceApiListener
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        businessInspectionRoute.put("irmRelId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoutePointRel", businessInspectionRoute);
-        return business;
     }
 
 }

@@ -70,10 +70,10 @@ public class CloseRepairDispatchListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加派单员工关联关系
-        businesses.add(modifyBusinessRepairUser(reqJson, context));
+        businesses.add(ownerRepairBMOImpl.modifyBusinessRepairUser(reqJson, context));
 
         //修改报修单状态
-        businesses.add(modifyBusinessRepair(reqJson, context));
+        businesses.add(ownerRepairBMOImpl.modifyBusinessRepair(reqJson, context));
 
 
 
@@ -96,55 +96,6 @@ public class CloseRepairDispatchListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
-    private JSONObject modifyBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        RepairUserDto repairUserDto = new RepairUserDto();
-        repairUserDto.setRepairId(paramInJson.getString("repairId"));
-        repairUserDto.setUserId(paramInJson.getString("staffId"));
-        List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        Assert.isOne(repairUserDtos, "查询到多条数据，repairId=" + repairUserDto.getRepairId() + " userId = " + repairUserDto.getUserId());
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessObj = new JSONObject();
-        businessObj.putAll(BeanConvertUtil.beanCovertMap(repairUserDtos.get(0)));
-        businessObj.put("state", paramInJson.getString("state"));
-        businessObj.put("context", paramInJson.getString("context"));
-        //businessObj.put("ruId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepairUser", businessObj);
-        return business;
-    }
-
-    private JSONObject modifyBusinessRepair(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        //查询报修单
-        RepairDto repairDto = new RepairDto();
-        repairDto.setRepairId(paramInJson.getString("repairId"));
-
-        List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-
-        Assert.isOne(repairDtos, "查询到多条数据，repairId=" + repairDto.getRepairId());
-
-        logger.debug("查询报修单结果：" + JSONObject.toJSONString(repairDtos.get(0)));
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_REPAIR);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerRepair = new JSONObject();
-        businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
-        businessOwnerRepair.put("state", "10002".equals(paramInJson.getString("state")) ? StateConstant.REPAIR_DISPATCH_FINISH : StateConstant.REPAIR_NO_DISPATCH);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRepair", businessOwnerRepair);
-        logger.debug("拼装修改 报修单状态报文：" + business.toJSONString());
-
-        return business;
-    }
-
 
     public IRepairInnerServiceSMO getRepairInnerServiceSMOImpl() {
         return repairInnerServiceSMOImpl;

@@ -31,8 +31,7 @@
                 };
 
                 //发送get请求
-               vc.http.get('choose@@TemplateCode@@',
-                            'list',
+               vc.http.apiGet('@@templateCode@@.list@@TemplateCode@@s',
                              param,
                              function(json){
                                 var _@@templateCode@@Info = JSON.parse(json);

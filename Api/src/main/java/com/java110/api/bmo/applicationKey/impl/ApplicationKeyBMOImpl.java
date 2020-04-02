@@ -9,9 +9,13 @@ import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -22,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +52,8 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
 
     @Autowired
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
     /**
      * 添加小区信息
      *
@@ -246,6 +253,35 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         return business;
     }
 
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addApplicationVisitKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        //查询 是否住户密码已经审核完成
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessApplicationKey = new JSONObject();
+        businessApplicationKey.putAll(paramInJson);
+        businessApplicationKey.put("applicationKeyId", paramInJson.getString("applicationKeyId"));
+        businessApplicationKey.put("state", "10001");
+        businessApplicationKey.put("typeFlag", "1100103");
+        businessApplicationKey.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
+        return business;
+    }
+
     /**
      * 获取随机数
      *
@@ -280,6 +316,99 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         businessUnit.put("saveWay", "table");
         businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
         businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+
+        return business;
+    }
+
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        //paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        paramInJson.put("name", "匿名");
+        paramInJson.put("tel", "");
+        paramInJson.put("idCard", "");
+        paramInJson.put("openTypeCd", "2000");
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessMachineRecord = new JSONObject();
+        businessMachineRecord.putAll(paramInJson);
+        businessMachineRecord.put("machineRecordId", "-1");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
+        return business;
+    }
+    /**
+     * 添加小区楼信息
+     * <p>
+     * * name:'',
+     * *                 age:'',
+     * *                 link:'',
+     * *                 sex:'',
+     * *                 remark:''
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addMember(JSONObject paramInJson) {
+
+        //根据房屋ID查询业主ID，自动生成成员ID
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(paramInJson.getString("roomId"));
+        List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        Assert.listOnlyOne(ownerRoomRelDtoList, "根据房屋查询不到业主信息或查询到多条");
+        paramInJson.put("ownerId", ownerRoomRelDtoList.get(0).getOwnerId());
+
+
+        String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
+        paramInJson.put("memberId", memberId);
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessOwner = new JSONObject();
+        businessOwner.putAll(paramInJson);
+        businessOwner.put("ownerTypeCd", "1004");//临时人员
+        businessOwner.put("state", "1000");//待审核
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
+
+        return business;
+    }
+
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("fileRelId", "-1");
+        businessUnit.put("relTypeCd", "10000");
+        businessUnit.put("saveWay", "table");
+        businessUnit.put("objId", paramInJson.getString("memberId"));
+        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 

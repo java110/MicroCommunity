@@ -55,7 +55,7 @@ public class AuditCommunityListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateCommunity(reqJson, context));
+        businesses.add(communityBMOImpl.updateCommunity(reqJson, context));
 
 
 
@@ -80,43 +80,5 @@ public class AuditCommunityListener extends AbstractServiceApiListener {
     }
 
 
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(paramInJson.getString("communityId"));
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listOnlyOne(communityDtos, "未查询到该小区信息【" + communityDto.getCommunityId() + "】");
-        communityDto = communityDtos.get(0);
-
-        Map oldCommunityInfo = BeanConvertUtil.beanCovertMap(communityDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(oldCommunityInfo);
-        businessCommunity.put("state", paramInJson.getString("state"));
-
-        //审核未通过原因未记录，后期存储在工作流框架中
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
-    }
-
-
-    public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
-        return communityInnerServiceSMOImpl;
-    }
-
-    public void setCommunityInnerServiceSMOImpl(ICommunityInnerServiceSMO communityInnerServiceSMOImpl) {
-        this.communityInnerServiceSMOImpl = communityInnerServiceSMOImpl;
-    }
 }

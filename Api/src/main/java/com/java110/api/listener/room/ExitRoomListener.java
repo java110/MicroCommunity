@@ -82,11 +82,14 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(exitRoom(paramObj, dataFlowContext));
+        businesses.add(roomBMOImpl.exitRoom(paramObj, dataFlowContext));
 
+        paramObj.put("state","2002");
+        //修改房屋状态
+        businesses.add(roomBMOImpl.updateRoom(paramObj,dataFlowContext));
 
         //删除费用信息
-        businesses.add(exitPropertyFee(paramObj, dataFlowContext));
+        businesses.add(roomBMOImpl.exitPropertyFee(paramObj, dataFlowContext));
 
 
 
@@ -95,74 +98,6 @@ public class ExitRoomListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.setResponseEntity(responseEntity);
 
     }
-
-    /**
-     * 售卖房屋信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        //根据ownerId 和 roomId 查询relId 删除
-        OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(paramInJson, OwnerRoomRelDto.class);
-        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
-        }
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        //businessUnit.putAll(paramInJson);
-        businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
-        //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
-
-        return business;
-    }
-
-    /**
-     * 删除物业费用信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        //校验物业费是否已经交清
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(paramInJson.getString("communityId"));
-        feeDto.setIncomeObjId(paramInJson.getString("storeId"));
-        feeDto.setPayerObjId(paramInJson.getString("roomId"));
-        feeDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，物业费对应关系不是一条");
-        }
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFee = new JSONObject();
-        //businessUnit.putAll(paramInJson);
-        businessFee.put("feeId", feeDtos.get(0).getFeeId());
-        //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessFee);
-
-        return business;
-    }
-
     /**
      * 数据校验
      *

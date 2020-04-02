@@ -3,11 +3,7 @@ package com.java110.code.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.BaseGenerator;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.Map;
+import com.java110.code.back.BaseGenerator;
 
 public class GeneratorViewComponent extends BaseGenerator {
 
@@ -66,7 +62,7 @@ public class GeneratorViewComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/view-" + data.getString("templateCode") + "-info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.html";
+                + "out/web/component/"+data.getString("templateCode")+"Package/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -103,8 +99,8 @@ public class GeneratorViewComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/view-"
-                + data.getString("templateCode") + "-info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.js";
+                + "out/web/component/"+data.getString("templateCode")+"Package/view"
+                + toUpperCaseFirstOne(data.getString("templateCode")) + "Info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

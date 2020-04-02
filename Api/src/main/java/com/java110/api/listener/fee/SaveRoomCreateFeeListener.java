@@ -135,7 +135,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         //添加单元信息
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
 
-            businesses.add(addFee(roomDtos.get(roomIndex), reqJson, context));
+            businesses.add(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context));
 
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
 
@@ -166,38 +166,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addFee(RoomDto roomDto, JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", "-1");
-        businessUnit.put("configId", paramInJson.getString("configId"));
-        businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
-        businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
-        businessUnit.put("amount", "-1.00");
-        businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("communityId", paramInJson.getString("communityId"));
-        businessUnit.put("payerObjId", roomDto.getRoomId());
-        businessUnit.put("payerObjType", "3333");
-        businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
-        businessUnit.put("state", "2008001");
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
-
-        return business;
-    }
 
     @Override
     public int getOrder() {

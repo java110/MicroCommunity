@@ -66,7 +66,7 @@ public class EditFloorListener extends AbstractServiceApiDataFlowListener {
 
 
         //添加小区楼
-        businesses.add(editFloor(paramObj));
+        businesses.add(floorBMOImpl.editFloor(paramObj));
         
 
         ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -88,31 +88,6 @@ public class EditFloorListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
         Assert.jsonObjectHaveKey(paramIn, "floorNum", "请求报文中未包含floorNum");
         Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
-    }
-
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject editFloor(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("name", paramInJson.getString("name"));
-        businessFloor.put("remark", paramInJson.getString("remark"));
-        businessFloor.put("userId", paramInJson.getString("userId"));
-        businessFloor.put("floorNum", paramInJson.getString("floorNum"));
-        businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
-
-        return business;
     }
 
     @Override

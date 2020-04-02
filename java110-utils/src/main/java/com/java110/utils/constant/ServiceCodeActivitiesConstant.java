@@ -36,4 +36,7 @@ public class ServiceCodeActivitiesConstant {
      * 添加 活动
      */
     public static final String ADD_FASTUSER = "fastuser.saveFastuser";
+
+    public static final String LIST_CORDERS = "corders.listCorders";
+
 }

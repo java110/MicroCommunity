@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
+import com.java110.entity.order.Orders;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -50,6 +51,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
      * @return
      */
     public ResponseEntity<String> callService(DataFlowContext context, String serviceCode,JSONArray businesses) {
+        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONObject paramInObj = restToCenterProtocol(businesses, context.getRequestCurrentHeaders());
         return callService(context,serviceCode,paramInObj);
     }
@@ -65,6 +67,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
 
         //将 rest header 信息传递到下层服务中去
         HttpHeaders header = new HttpHeaders();
+
         freshHttpHeader(header, context.getRequestCurrentHeaders());
 
         ResponseEntity responseEntity = null;
@@ -195,6 +198,10 @@ public class ApiBaseBMO implements IApiBaseBMO{
             if (CommonConstant.HTTP_USER_ID.equals(key)) {
                 orders.put("userId", headers.get(key));
             }
+
+            if(CommonConstant.ORDER_PROCESS.equals(key)){
+                orders.put("orderProcess", headers.get(CommonConstant.ORDER_PROCESS));
+            }
         }
 
     }
@@ -222,6 +229,8 @@ public class ApiBaseBMO implements IApiBaseBMO{
             if (CommonConstant.HTTP_USER_ID.equals(key)) {
                 httpHeaders.add("user_id", headers.get(key));
             }
+
+
         }
 
     }

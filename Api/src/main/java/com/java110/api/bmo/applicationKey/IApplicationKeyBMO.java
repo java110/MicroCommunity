@@ -3,6 +3,8 @@ package com.java110.api.bmo.applicationKey;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.owner.OwnerDto;
 
 /**
  * @ClassName IAppBMO
@@ -58,6 +60,25 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      */
     public JSONObject addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addApplicationVisitKey(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加物业费用
      *
@@ -66,4 +87,26 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区楼信息
+     * <p>
+     * * name:'',
+     * *                 age:'',
+     * *                 link:'',
+     * *                 sex:'',
+     * *                 remark:''
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addMember(JSONObject paramInJson);
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
 }

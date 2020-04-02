@@ -68,7 +68,7 @@ public class SaveInspectionRoutePointRelInfoListener extends AbstractInspectionR
                 JSONObject businessInspectionRoutePointRel = businessInspectionRoutePointRels.getJSONObject(bInspectionRoutePointRelIndex);
                 doBusinessInspectionRoutePointRel(business, businessInspectionRoutePointRel);
                 if (bObj instanceof JSONObject) {
-                    dataFlowContext.addParamOut("irmRelId", businessInspectionRoutePointRel.getString("irmRelId"));
+                    dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));
                 }
             }
         }
@@ -94,7 +94,7 @@ public class SaveInspectionRoutePointRelInfoListener extends AbstractInspectionR
             reFreshShareColumn(info, businessInspectionRoutePointRelInfo.get(0));
             inspectionRoutePointRelServiceDaoImpl.saveInspectionRoutePointRelInfoInstance(info);
             if (businessInspectionRoutePointRelInfo.size() == 1) {
-                dataFlowContext.addParamOut("irmRelId", businessInspectionRoutePointRelInfo.get(0).get("irm_rel_id"));
+                dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRelInfo.get(0).get("irpRelId"));
             }
         }
     }
@@ -152,13 +152,13 @@ public class SaveInspectionRoutePointRelInfoListener extends AbstractInspectionR
      */
     private void doBusinessInspectionRoutePointRel(Business business, JSONObject businessInspectionRoutePointRel) {
 
-        Assert.jsonObjectHaveKey(businessInspectionRoutePointRel, "irmRelId", "businessInspectionRoutePointRel 节点下没有包含 irmRelId 节点");
+        Assert.jsonObjectHaveKey(businessInspectionRoutePointRel, "irpRelId", "businessInspectionRoutePointRel 节点下没有包含 irpRelId 节点");
 
-        if (businessInspectionRoutePointRel.getString("irmRelId").startsWith("-")) {
+        if (businessInspectionRoutePointRel.getString("irpRelId").startsWith("-")) {
             //刷新缓存
             //flushInspectionRoutePointRelId(business.getDatas());
 
-            businessInspectionRoutePointRel.put("irmRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_irmRelId));
+            businessInspectionRoutePointRel.put("irpRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_irpRelId));
 
         }
 

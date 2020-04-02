@@ -11,6 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -108,6 +109,9 @@ public class PageProcessAspect {
             if (urls.length == 6) {
                 componentCode = urls[4];
                 componentMethod = urls[5];
+            } else {
+                componentCode = "api";
+                componentMethod = "callApi";
             }
         } else if (url.contains("flow")) { //流程处理
             String[] urls = url.split("/");
@@ -117,8 +121,8 @@ public class PageProcessAspect {
             }
         }
         pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId);
+        pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
         request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
-
     }
 
     @AfterReturning(returning = "ret", pointcut = "dataProcess()")

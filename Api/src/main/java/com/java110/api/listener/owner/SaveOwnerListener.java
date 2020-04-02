@@ -42,9 +42,6 @@ import java.util.List;
 @Java110Listener("saveOwnerListener")
 public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
-
-    private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
-
     @Autowired
     private IOwnerBMO ownerBMOImpl;
 
@@ -88,20 +85,20 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
         generateMemberId(paramObj);
 
         //添加小区楼
-        businesses.add(addOwner(paramObj));
+        businesses.add(ownerBMOImpl.addOwner(paramObj));
 
         if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
             //小区楼添加到小区中
-            businesses.add(addCommunityMember(paramObj));
+            businesses.add(ownerBMOImpl.addCommunityMember(paramObj));
         }
 
         //有房屋信息，则直接绑定房屋和 业主的关系
         if (paramObj.containsKey("roomId")) {
             //添加单元信息
-            businesses.add(sellRoom(paramObj, dataFlowContext));
+            businesses.add(ownerBMOImpl.sellRoom(paramObj, dataFlowContext));
 
             //添加物业费用信息
-            businesses.add(addPropertyFee(paramObj, dataFlowContext));
+            businesses.add(ownerBMOImpl.addPropertyFee(paramObj, dataFlowContext));
         }
         if (paramObj.containsKey("ownerPhoto") && !StringUtils.isEmpty(paramObj.getString("ownerPhoto"))) {
             FileDto fileDto = new FileDto();
@@ -114,7 +111,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             paramObj.put("ownerPhotoId", fileDto.getFileId());
             paramObj.put("fileSaveName", fileName);
 
-            businesses.add(addOwnerPhoto(paramObj, dataFlowContext));
+            businesses.add(ownerBMOImpl.addOwnerPhoto(paramObj, dataFlowContext));
 
         }
 
@@ -143,150 +140,6 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             paramObj.put("ownerId", memberId);
         }
     }
-
-
-    /**
-     * 添加小区楼信息
-     * <p>
-     * * name:'',
-     * *                 age:'',
-     * *                 link:'',
-     * *                 sex:'',
-     * *                 remark:''
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addOwner(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwner = new JSONObject();
-        businessOwner.putAll(paramInJson);
-        businessOwner.put("state", "2000");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
-
-        return business;
-    }
-
-
-    /**
-     * 添加小区成员
-     *
-     * @param paramInJson 组装 楼小区关系
-     * @return 小区成员信息
-     */
-    private JSONObject addCommunityMember(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ_COMMUNITY_MEMBER);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId", "-1");
-        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", paramInJson.getString("ownerId"));
-        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
-        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
-    }
-
-
-    /**
-     * 售卖房屋信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.putAll(paramInJson);
-        businessUnit.put("relId", "-1");
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
-
-        return business;
-    }
-
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
-        feeConfigDto.setIsDefault("T");
-        feeConfigDto.setCommunityId(paramInJson.getString("communityId"));
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
-        }
-
-        feeConfigDto = feeConfigDtos.get(0);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", "-1");
-        businessUnit.put("configId", feeConfigDto.getConfigId());
-        businessUnit.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
-        businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
-        businessUnit.put("amount", "-1.00");
-        businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("communityId", paramInJson.getString("communityId"));
-        businessUnit.put("payerObjId", paramInJson.getString("roomId"));
-        businessUnit.put("payerObjType", "3333");
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
-
-        return business;
-    }
-
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", "10000");
-        businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("memberId"));
-        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
-    }
-
 
     /**
      * 数据校验

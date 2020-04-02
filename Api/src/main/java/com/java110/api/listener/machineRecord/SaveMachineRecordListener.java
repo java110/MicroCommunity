@@ -71,7 +71,7 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(addMachineRecord(reqJson, context));
+        businesses.add(machineRecordBMOImpl.addMachineRecord(reqJson, context));
 
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
             FileDto fileDto = new FileDto();
@@ -84,7 +84,7 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
             reqJson.put("photoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(addPhoto(reqJson, context));
+            businesses.add(machineRecordBMOImpl.addPhoto(reqJson, context));
 
         }
 
@@ -107,56 +107,6 @@ public class SaveMachineRecordListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        String machineRecordId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId);
-        paramInJson.put("machineRecordId", machineRecordId);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineRecord = new JSONObject();
-        businessMachineRecord.putAll(paramInJson);
-        businessMachineRecord.put("machineRecordId", machineRecordId);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
-    }
-
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", "60000");
-        businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("machineRecordId"));
-        businessUnit.put("fileRealName", paramInJson.getString("photoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
     }
 
 }

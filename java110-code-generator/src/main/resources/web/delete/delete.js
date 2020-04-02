@@ -20,9 +20,8 @@
         methods:{
             delete@@TemplateCode@@:function(){
                 vc.component.delete@@TemplateCode@@Info.communityId=vc.getCurrentCommunity().communityId;
-                vc.http.post(
-                    'delete@@TemplateCode@@',
-                    'delete',
+                vc.http.apiPost(
+                    '@@templateCode@@.delete@@TemplateCode@@',
                     JSON.stringify(vc.component.delete@@TemplateCode@@Info),
                     {
                         emulateJSON:true

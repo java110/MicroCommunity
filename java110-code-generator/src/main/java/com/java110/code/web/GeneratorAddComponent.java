@@ -3,7 +3,7 @@ package com.java110.code.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.BaseGenerator;
+import com.java110.code.back.BaseGenerator;
 import org.springframework.util.StringUtils;
 
 public class GeneratorAddComponent extends BaseGenerator {
@@ -13,19 +13,19 @@ public class GeneratorAddComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
-        genneratorListListener(data);
-
-        genneratorServiceCodeConstant(data);
-
+//        generatorComponentJava(data);
+//        genneratorIListSmo(data);
+//        genneratorListSmoImpl(data);
+//        genneratorListListener(data);
+//
+//        genneratorServiceCodeConstant(data);
 
 
     }
 
     /**
      * 生成常量类
+     *
      * @param data
      */
     private void genneratorServiceCodeConstant(JSONObject data) {
@@ -81,22 +81,22 @@ public class GeneratorAddComponent extends BaseGenerator {
 
                 }
 
-                inputStr = "<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\">\n" +
-                        "         <option selected  disabled value=\"\">"+ required + "，请选择" + column.getString("cnCode") + "</option>\n" +
-                        "         " +option+
+                inputStr = "<select class=\"custom-select\" v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">\n" +
+                        "         <option selected  disabled value=\"\">" + required + "，请选择" + column.getString("cnCode") + "</option>\n" +
+                        "         " + option +
                         "  </select>";
-            } else if("textarea".equals(column.getString("inputType"))){
-                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\""+
-                        " v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\">"+
+            } else if ("textarea".equals(column.getString("inputType"))) {
+                inputStr = "<textarea  placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\"" +
+                        " v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\">" +
                         "</textarea>";
-            }else {
-                inputStr = "           <input v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info."+column.getString("code")+"\" " +
+            } else {
+                inputStr = "           <input v-model=\"add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "\" " +
                         "                  type=\"text\" placeholder=\"" + required + "，请填写" + column.getString("cnCode") + "\" class=\"form-control\">\n";
             }
             thSb.append("<div class=\"form-group row\">\n" +
                     "         <label class=\"col-sm-2 col-form-label\">" + column.getString("cnCode") + "</label>\n" +
                     "         <div class=\"col-sm-10\">\n" +
-                    inputStr+
+                    inputStr +
                     "         </div>\n" +
                     "</div>\n");
 
@@ -106,7 +106,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/component" + data.getString("templateCode") + "Package/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -139,33 +139,33 @@ public class GeneratorAddComponent extends BaseGenerator {
             defaultValue = "'" + defaultValue + "'";
             variable.append(column.getString("code") + ":" + defaultValue + ",\n");
 
-            validateInfo += "'add"+toUpperCaseFirstOne(data.getString("templateCode"))+"Info."+column.getString("code")+"':[\n" ;
-            if(column.getBoolean("required")) {
-                validateInfo +="{\n" +
+            validateInfo += "'add" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "':[\n";
+            if (column.getBoolean("required")) {
+                validateInfo += "{\n" +
                         "                            limit:\"required\",\n" +
                         "                            param:\"\",\n" +
-                        "                            errInfo:\""+column.getString("cnCode")+"不能为空\"\n" +
+                        "                            errInfo:\"" + column.getString("cnCode") + "不能为空\"\n" +
                         "                        },\n";
             }
 
-            if(column.containsKey("limit") && !StringUtils.isEmpty(column.getString("limit"))) {
-                validateInfo +=" {\n" +
-                        "                            limit:\""+column.getString("limit")+"\",\n" +
-                        "                            param:\""+column.getString("limitParam")+"\",\n" +
-                        "                            errInfo:\""+column.getString("limitErrInfo")+"\"\n" +
+            if (column.containsKey("limit") && !StringUtils.isEmpty(column.getString("limit"))) {
+                validateInfo += " {\n" +
+                        "                            limit:\"" + column.getString("limit") + "\",\n" +
+                        "                            param:\"" + column.getString("limitParam") + "\",\n" +
+                        "                            errInfo:\"" + column.getString("limitErrInfo") + "\"\n" +
                         "                        },\n" +
                         "                    ],\n";
             }
 
         }
-        fileContext =  fileContext.replace("@@templateCodeColumns@@", variable.toString());
+        fileContext = fileContext.replace("@@templateCodeColumns@@", variable.toString());
         fileContext = fileContext.replace("@@addTemplateCodeValidate@@", validateInfo);
 
         // 替换 数据校验部分代码
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/add-" + data.getString("templateCode") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/component/" + data.getString("templateCode") + "Package/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -228,8 +228,8 @@ public class GeneratorAddComponent extends BaseGenerator {
         StringBuffer validateStr = new StringBuffer();
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            if(column.getBoolean("required")) {
-                validateStr.append("Assert.hasKeyAndValue(paramIn, \""+column.getString("code")+"\", \""+column.getString("desc")+"\");\n");
+            if (column.getBoolean("required")) {
+                validateStr.append("Assert.hasKeyAndValue(paramIn, \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
             }
         }
 
@@ -259,8 +259,8 @@ public class GeneratorAddComponent extends BaseGenerator {
         StringBuffer validateStr = new StringBuffer();
         for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
             JSONObject column = columns.getJSONObject(columnIndex);
-            if(column.getBoolean("required")) {
-                validateStr.append("Assert.hasKeyAndValue(reqJson, \""+column.getString("code")+"\", \""+column.getString("desc")+"\");\n");
+            if (column.getBoolean("required")) {
+                validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + column.getString("code") + "\", \"" + column.getString("desc") + "\");\n");
             }
         }
 
@@ -273,7 +273,6 @@ public class GeneratorAddComponent extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
     }
-
 
 
 }

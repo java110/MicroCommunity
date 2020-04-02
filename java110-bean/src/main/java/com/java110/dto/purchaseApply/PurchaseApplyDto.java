@@ -1,9 +1,11 @@
 package com.java110.dto.purchaseApply;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -18,16 +20,24 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String resOrderType;
     private String description;
     private String applyOrderId;
+    private String bId;
     private String state;
     private String storeId;
     private String userName;
     private String userId;
     private String stateName;
-
+    private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String currentUserId;
+    private String processInstanceId;
+    private String taskId;
+    private String auditCode;
+    private String auditMessage;
+
 
 
 
@@ -110,5 +120,61 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getAuditCode() {
+        return auditCode;
+    }
+
+    public void setAuditCode(String auditCode) {
+        this.auditCode = auditCode;
+    }
+
+    public String getAuditMessage() {
+        return auditMessage;
+    }
+
+    public void setAuditMessage(String auditMessage) {
+        this.auditMessage = auditMessage;
+    }
+
+    public List<PurchaseApplyDetailVo> getPurchaseApplyDetailVo() {
+        return purchaseApplyDetailVo;
+    }
+
+    public void setPurchaseApplyDetailVo(List<PurchaseApplyDetailVo> purchaseApplyDetailVo) {
+        this.purchaseApplyDetailVo = purchaseApplyDetailVo;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

@@ -112,9 +112,9 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
             reqJson.put("fileId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
 
             //添加单元信息
-            businesses.add(addMachineRecord(reqJson, context));
+            businesses.add(machineTranslateBMOImpl.addMachineRecord(reqJson, context));
             //保存文件信息
-            businesses.add(savePhoto(reqJson, context));
+            businesses.add(machineTranslateBMOImpl.savePhoto(reqJson, context));
 
 
 
@@ -135,99 +135,6 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), HttpStatus.OK);
             context.setResponseEntity(responseEntity);
         }
-    }
-
-    /**
-     * 保存照片
-     *
-     * @param reqJson
-     * @param context
-     */
-    private JSONObject savePhoto(JSONObject reqJson, DataFlowContext context) {
-
-
-        FileDto fileDto = new FileDto();
-        fileDto.setCommunityId(reqJson.getString("communityId"));
-        fileDto.setFileId(reqJson.getString("fileId"));
-        fileDto.setFileName(reqJson.getString("fileId"));
-        fileDto.setContext(reqJson.getString("photo"));
-        fileDto.setSuffix("jpeg");
-        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", reqJson.getString("relTypeCd"));
-        businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", reqJson.getString("userId"));
-        businessUnit.put("fileRealName", reqJson.getString("fileId"));
-        businessUnit.put("fileSaveName", fileName);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        if (!paramInJson.containsKey("openTypeCd")) {
-            paramInJson.put("openTypeCd", "1000");
-        }
-
-        if (!paramInJson.containsKey("recordTypeCd")) {
-            paramInJson.put("openTypeCd", "8888");
-        }
-        paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-
-        String objId = paramInJson.getString("userId");
-        //这里objId 可能是 业主ID 也可能是钥匙ID
-        //先根据业主ID去查询
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setCommunityId(paramInJson.getString("communityId"));
-        ownerDto.setMemberId(objId);
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-
-        if (ownerDtos != null && ownerDtos.size() > 0) {
-            Assert.listOnlyOne(ownerDtos, "根据业主ID查询到多条记录");
-            paramInJson.put("name", ownerDtos.get(0).getName());
-            paramInJson.put("tel", ownerDtos.get(0).getLink());
-            paramInJson.put("idCard", ownerDtos.get(0).getIdCard());
-            paramInJson.put("relTypeCd", "10000");
-        } else { //钥匙申请ID
-            ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
-            applicationKeyDto.setCommunityId(paramInJson.getString("communityId"));
-            applicationKeyDto.setApplicationKeyId(objId);
-            List<ApplicationKeyDto> applicationKeyDtos = applicationKeyInnerServiceSMOImpl.queryApplicationKeys(applicationKeyDto);
-
-            Assert.listOnlyOne(applicationKeyDtos, "根据钥匙ID未查询到记录或查询到多条记录");
-
-            paramInJson.put("name", applicationKeyDtos.get(0).getName());
-            paramInJson.put("tel", applicationKeyDtos.get(0).getTel());
-            paramInJson.put("idCard", applicationKeyDtos.get(0).getIdCard());
-            paramInJson.put("relTypeCd", "30000");
-
-        }
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineRecord = new JSONObject();
-        businessMachineRecord.putAll(paramInJson);
-        businessMachineRecord.put("machineRecordId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
     }
 
     @Override

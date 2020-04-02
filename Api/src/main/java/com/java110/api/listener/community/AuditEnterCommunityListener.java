@@ -52,7 +52,7 @@ public class AuditEnterCommunityListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //修改小区成员
-        businesses.add(updateCommunityMember(reqJson, context));
+        businesses.add(communityBMOImpl.updateCommunityMember(reqJson, context));
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
 
@@ -72,38 +72,6 @@ public class AuditEnterCommunityListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityMemberId(paramInJson.getString("communityMemberId"));
-        List<CommunityMemberDto> communityMemberDtos = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-        Assert.listOnlyOne(communityMemberDtos, "未查询到该小区成员信息【" + communityMemberDto.getCommunityMemberId() + "】");
-        communityMemberDto = communityMemberDtos.get(0);
-
-        Map oldCommunityInfo = BeanConvertUtil.beanCovertMap(communityMemberDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(oldCommunityInfo);
-        businessCommunity.put("auditStatusCd", paramInJson.getString("state"));
-
-        //审核未通过原因未记录，后期存储在工作流框架中
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunity);
-        return business;
     }
 
 

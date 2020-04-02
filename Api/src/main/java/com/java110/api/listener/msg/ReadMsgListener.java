@@ -72,28 +72,12 @@ public class ReadMsgListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
-        businesses.add(addReadMsg(reqJson, context));
+        businesses.add(msgBMOImpl.addReadMsg(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = msgBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
 
-    }
-
-    private Object addReadMsg(JSONObject paramInJson, DataFlowContext context) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG_READ);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMsgRead = new JSONObject();
-        //businessApplicationKey.putAll(paramInJson);
-        businessMsgRead.put("msgReadId", "-1");
-        businessMsgRead.putAll(paramInJson);
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMsgRead", businessMsgRead);
-        return business;
     }
 }

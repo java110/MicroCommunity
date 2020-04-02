@@ -40,7 +40,7 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
         businessInspectionRoutePointRelInfo.put("inspectionId", businessInspectionRoutePointRelInfo.get("inspection_id"));
         businessInspectionRoutePointRelInfo.put("operate", businessInspectionRoutePointRelInfo.get("operate"));
         businessInspectionRoutePointRelInfo.put("inspectionRouteId", businessInspectionRoutePointRelInfo.get("inspection_route_id"));
-        businessInspectionRoutePointRelInfo.put("irmRelId", businessInspectionRoutePointRelInfo.get("irm_rel_id"));
+        businessInspectionRoutePointRelInfo.put("irpRelId", businessInspectionRoutePointRelInfo.get("irp_rel_id"));
         businessInspectionRoutePointRelInfo.put("remark", businessInspectionRoutePointRelInfo.get("remark"));
         businessInspectionRoutePointRelInfo.put("communityId", businessInspectionRoutePointRelInfo.get("community_id"));
         businessInspectionRoutePointRelInfo.remove("bId");
@@ -56,7 +56,7 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
     protected void autoSaveDelBusinessInspectionRoutePointRel(Business business, JSONObject businessInspectionRoutePointRel) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("irmRelId", businessInspectionRoutePointRel.getString("irmRelId"));
+        info.put("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentInspectionRoutePointRelInfos = getInspectionRoutePointRelServiceDaoImpl().getInspectionRoutePointRelInfo(info);
         if (currentInspectionRoutePointRelInfos == null || currentInspectionRoutePointRelInfos.size() != 1) {
@@ -70,7 +70,7 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
         currentInspectionRoutePointRelInfo.put("inspectionId", currentInspectionRoutePointRelInfo.get("inspection_id"));
         currentInspectionRoutePointRelInfo.put("operate", currentInspectionRoutePointRelInfo.get("operate"));
         currentInspectionRoutePointRelInfo.put("inspectionRouteId", currentInspectionRoutePointRelInfo.get("inspection_route_id"));
-        currentInspectionRoutePointRelInfo.put("irmRelId", currentInspectionRoutePointRelInfo.get("irm_rel_id"));
+        currentInspectionRoutePointRelInfo.put("irpRelId", currentInspectionRoutePointRelInfo.get("irp_rel_id"));
         currentInspectionRoutePointRelInfo.put("remark", currentInspectionRoutePointRelInfo.get("remark"));
         currentInspectionRoutePointRelInfo.put("communityId", currentInspectionRoutePointRelInfo.get("community_id"));
 

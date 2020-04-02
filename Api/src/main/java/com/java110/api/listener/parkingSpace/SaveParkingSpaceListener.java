@@ -69,42 +69,13 @@ public class SaveParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
 
         //添加小区楼
-        businesses.add(addParkingSpace(paramObj));
+        businesses.add(parkingSpaceBMOImpl.addParkingSpace(paramObj));
 
 
         ResponseEntity<String> responseEntity = parkingSpaceBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
 
-    }
-
-
-    /**
-     * 添加小区楼信息
-     * <p>
-     * * name:'',
-     * *                 age:'',
-     * *                 link:'',
-     * *                 sex:'',
-     * *                 remark:''
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addParkingSpace(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessParkingSpace = new JSONObject();
-        businessParkingSpace.putAll(paramInJson);
-        businessParkingSpace.put("state", "F");
-        businessParkingSpace.put("psId", "-1");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
-
-        return business;
     }
 
 

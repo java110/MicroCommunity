@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionTaskServiceDaoImpl">
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessInspectionTaskInfo" parameterType="Map">
+           insert into business_inspection_task(
+plan_user_id,act_ins_time,plan_ins_time,act_user_name,operate,sign_type,inspection_plan_id,plan_user_name,community_id,b_id,act_user_id,task_id
+) values (
+#{planUserId},#{actInsTime},#{planInsTime},#{actUserName},#{operate},#{signType},#{inspectionPlanId},#{planUserName},#{communityId},#{bId},#{actUserId},#{taskId}
+)
+       </insert>
+
+
+       <!-- 查询活动信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessInspectionTaskInfo" parameterType="Map" resultType="Map">
+           select  t.plan_user_id,t.plan_user_id planUserId,t.act_ins_time,t.act_ins_time actInsTime,t.plan_ins_time,t.plan_ins_time planInsTime,t.act_user_name,t.act_user_name actUserName,t.operate,t.sign_type,t.sign_type signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id actUserId,t.task_id,t.task_id taskId 
+from business_inspection_task t 
+where 1 =1 
+<if test="planUserId !=null and planUserId != ''">
+   and t.plan_user_id= #{planUserId}
+</if> 
+<if test="actInsTime !=null and actInsTime != ''">
+   and t.act_ins_time= #{actInsTime}
+</if> 
+<if test="planInsTime !=null and planInsTime != ''">
+   and t.plan_ins_time= #{planInsTime}
+</if> 
+<if test="actUserName !=null and actUserName != ''">
+   and t.act_user_name= #{actUserName}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="signType !=null and signType != ''">
+   and t.sign_type= #{signType}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="planUserName !=null and planUserName != ''">
+   and t.plan_user_name= #{planUserName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="actUserId !=null and actUserId != ''">
+   and t.act_user_id= #{actUserId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存活动信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionTaskInfoInstance" parameterType="Map">
+        insert into inspection_task(
+plan_user_id,act_ins_time,plan_ins_time,status_cd,act_user_name,sign_type,inspection_plan_id,plan_user_name,community_id,b_id,act_user_id,task_id
+) select t.plan_user_id,t.act_ins_time,t.plan_ins_time,'0',t.act_user_name,t.sign_type,t.inspection_plan_id,t.plan_user_name,t.community_id,t.b_id,t.act_user_id,t.task_id from business_inspection_task t where 1=1
+<if test="planUserId !=null and planUserId != ''">
+   and t.plan_user_id= #{planUserId}
+</if> 
+<if test="actInsTime !=null and actInsTime != ''">
+   and t.act_ins_time= #{actInsTime}
+</if> 
+<if test="planInsTime !=null and planInsTime != ''">
+   and t.plan_ins_time= #{planInsTime}
+</if> 
+<if test="actUserName !=null and actUserName != ''">
+   and t.act_user_name= #{actUserName}
+</if> 
+   and t.operate= 'ADD'
+<if test="signType !=null and signType != ''">
+   and t.sign_type= #{signType}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="planUserName !=null and planUserName != ''">
+   and t.plan_user_name= #{planUserName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="actUserId !=null and actUserId != ''">
+   and t.act_user_id= #{actUserId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询活动信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionTaskInfo" parameterType="Map" resultType="Map">
+        select  t.plan_user_id,t.plan_user_id planUserId,t.act_ins_time,t.act_ins_time actInsTime,t.plan_ins_time,t.plan_ins_time planInsTime,t.status_cd,t.status_cd statusCd,t.act_user_name,t.act_user_name actUserName,t.sign_type,t.sign_type signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id actUserId,t.task_id,t.task_id taskId 
+from inspection_task t 
+where 1 =1 
+<if test="planUserId !=null and planUserId != ''">
+   and t.plan_user_id= #{planUserId}
+</if> 
+<if test="actInsTime !=null and actInsTime != ''">
+   and t.act_ins_time= #{actInsTime}
+</if> 
+<if test="planInsTime !=null and planInsTime != ''">
+   and t.plan_ins_time= #{planInsTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="actUserName !=null and actUserName != ''">
+   and t.act_user_name= #{actUserName}
+</if> 
+<if test="signType !=null and signType != ''">
+   and t.sign_type= #{signType}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="planUserName !=null and planUserName != ''">
+   and t.plan_user_name= #{planUserName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="actUserId !=null and actUserId != ''">
+   and t.act_user_id= #{actUserId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改活动信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionTaskInfoInstance" parameterType="Map">
+        update  inspection_task t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="planUserId !=null and planUserId != ''">
+, t.plan_user_id= #{planUserId}
+</if> 
+<if test="actInsTime !=null and actInsTime != ''">
+, t.act_ins_time= #{actInsTime}
+</if> 
+<if test="planInsTime !=null and planInsTime != ''">
+, t.plan_ins_time= #{planInsTime}
+</if> 
+<if test="actUserName !=null and actUserName != ''">
+, t.act_user_name= #{actUserName}
+</if> 
+<if test="signType !=null and signType != ''">
+, t.sign_type= #{signType}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+, t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="planUserName !=null and planUserName != ''">
+, t.plan_user_name= #{planUserName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="actUserId !=null and actUserId != ''">
+, t.act_user_id= #{actUserId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+and t.task_id= #{taskId}
+</if> 
+
+    </update>
+
+    <!-- 查询活动数量 add by wuxw 2018-07-03 -->
+     <select id="queryInspectionTasksCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from inspection_task t 
+where 1 =1 
+<if test="planUserId !=null and planUserId != ''">
+   and t.plan_user_id= #{planUserId}
+</if> 
+<if test="actInsTime !=null and actInsTime != ''">
+   and t.act_ins_time= #{actInsTime}
+</if> 
+<if test="planInsTime !=null and planInsTime != ''">
+   and t.plan_ins_time= #{planInsTime}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="actUserName !=null and actUserName != ''">
+   and t.act_user_name= #{actUserName}
+</if> 
+<if test="signType !=null and signType != ''">
+   and t.sign_type= #{signType}
+</if> 
+<if test="inspectionPlanId !=null and inspectionPlanId != ''">
+   and t.inspection_plan_id= #{inspectionPlanId}
+</if> 
+<if test="planUserName !=null and planUserName != ''">
+   and t.plan_user_name= #{planUserName}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="actUserId !=null and actUserId != ''">
+   and t.act_user_id= #{actUserId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+
+
+     </select>
+
+</mapper>

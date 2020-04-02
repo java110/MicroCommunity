@@ -43,7 +43,7 @@ public class DeleteAppUserBindingOwnerListener extends AbstractServiceApiListene
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(deleteAuditAppUserBindingOwner(reqJson, context));
+        businesses.add(ownerBMOImpl.deleteAuditAppUserBindingOwner(reqJson, context));
 
 
 
@@ -65,28 +65,6 @@ public class DeleteAppUserBindingOwnerListener extends AbstractServiceApiListene
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerAppUser = new JSONObject();
-        businessOwnerAppUser.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
     }
 
 }

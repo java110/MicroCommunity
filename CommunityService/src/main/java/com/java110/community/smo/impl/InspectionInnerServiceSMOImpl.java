@@ -54,6 +54,27 @@ public class InspectionInnerServiceSMOImpl extends BaseServiceSMO implements IIn
     public int queryInspectionsCount(@RequestBody InspectionDto inspectionDto) {
         return inspectionServiceDaoImpl.queryInspectionsCount(BeanConvertUtil.beanCovertMap(inspectionDto));    }
 
+    @Override
+    public List<InspectionDto> getInspectionRelationShip(@RequestBody  InspectionDto inspectionDto) {
+
+        //校验是否传了 分页信息
+
+        int page = inspectionDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            inspectionDto.setPage((page - 1) * inspectionDto.getRow());
+        }
+
+        List<InspectionDto> inspections = BeanConvertUtil.covertBeanList(inspectionServiceDaoImpl.getInspectionRelationShipInfo(BeanConvertUtil.beanCovertMap(inspectionDto)), InspectionDto.class);
+
+        return inspections;
+    }
+
+
+    @Override
+    public int queryInspectionsRelationShipCount(@RequestBody InspectionDto inspectionDto) {
+        return inspectionServiceDaoImpl.queryInspectionsRelationShipCount(BeanConvertUtil.beanCovertMap(inspectionDto));    }
+
     public IInspectionServiceDao getInspectionServiceDaoImpl() {
         return inspectionServiceDaoImpl;
     }

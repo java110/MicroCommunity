@@ -1,52 +1,46 @@
 {
-  "templateName":"费用项",
-  "templateCode":"feeConfig",
-  "templateKey":"configId",
-  "templateKeyName":"费用项ID",
-  "searchCode": "feeName",
-  "searchName": "费用项目",
+  "templateName":"巡检任务",
+  "templateCode":"inspectionTask",
+  "templateKey":"taskId",
+  "templateKeyName":"任务编码",
+  "searchCode": "taskId",
+  "searchName": "任务编码",
   "conditions": [
     {
-      "name": "费用标识",
-      "inputType": "select",
-      "selectValue":"1003006,2006012",
-      "selectValueName":"周期性费用,一次性费用",
-      "code": "feeFlag",
-      "whereCondition": "equal"
-    },
-    {
-      "name": "费用项目",
+      "name": "执行人",
       "inputType": "input",
-      "code": "feeName",
+      "code": "planUserName",
       "whereCondition": "equal"
     },
     {
-      "name": "费用类型",
-      "inputType": "select",
-      "selectValue":"888800010001,888800010002,888800010003,888800010004,888800010005,888800010007",
-      "selectValueName":"物业费,地上出售车位费,地下出售车位费,地上出租车位费,地下出租车位费,临时车费用",
-      "code": "feeTypeCd",
+      "name": "巡检计划",
+      "inputType": "input",
+      "code": "inspectionPlanId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "巡检时间",
+      "inputType": "input",
+      "code": "actInsTime",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"feeTypeCd",
-      "cnCode":"费用类型",
-      "desc":"必填，请选择费用类型",
+      "code":"taskId",
+      "cnCode":"任务编码",
+      "desc":"必填，请选择任务编码",
       "required":true,
       "hasDefaultValue":false,
-      "inputType": "select",
-      "selectValue":"888800010001,888800010002,888800010003,888800010004,888800010005,888800010007",
-      "selectValueName":"物业费,地上出售车位费,地下出售车位费,地上出租车位费,地下出租车位费,临时车费用",
+      "inputType": "input",
       "limit":"num",
       "limitParam":"",
-      "limitErrInfo":"费用类型格式错误",
+      "limitErrInfo":"任务编码格式错误",
       "show": true
     },
     {
-      "code": "feeName",
-      "cnCode":"收费项目",
+      "code": "inspectionPlanId",
+      "cnCode":"巡检计划",
       "desc":"必填，请填写收费项目",
       "required":true,
       "hasDefaultValue":false,
@@ -57,8 +51,8 @@
       "show": true
     },
     {
-      "code":"feeFlag",
-      "cnCode":"费用标识",
+      "code":"planInsTime",
+      "cnCode":"巡检时间",
       "desc":"必填，请选择费用标识",
       "required":true,
       "hasDefaultValue":false,
@@ -71,8 +65,8 @@
       "show": true
     },
     {
-      "code": "startTime",
-      "cnCode":"计费起始时间",
+      "code": "actInsTime",
+      "cnCode":"实际巡检时间",
       "desc":"必填，请选择计费起始时间",
       "required":true,
       "hasDefaultValue":false,
@@ -83,8 +77,8 @@
       "show": true
     },
     {
-      "code": "endTime",
-      "cnCode":"计费终止时间",
+      "code": "planUserName",
+      "cnCode":"巡检人",
       "desc":"必填，请选择计费终止时间",
       "required":true,
       "hasDefaultValue":false,
@@ -95,8 +89,8 @@
       "show": true
     },
     {
-      "code":"computingFormula",
-      "cnCode":"计算公式",
+      "code":"actUserName",
+      "cnCode":"实际巡检人",
       "desc":"必填，请填写附加费用",
       "required":true,
       "hasDefaultValue":false,
@@ -109,8 +103,8 @@
       "show": false
     },
     {
-      "code":"squarePrice",
-      "cnCode":"计费单价",
+      "code":"signType",
+      "cnCode":"巡检方式",
       "desc":"必填，请填写计费单价",
       "required":true,
       "hasDefaultValue":false,
@@ -118,18 +112,6 @@
       "limit":"money",
       "limitParam":"",
       "limitErrInfo":"计费单价格式错误",
-      "show": true
-    },
-    {
-      "code":"additionalAmount",
-      "cnCode":"附加费用",
-      "desc":"必填，请填写附加费用",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"money",
-      "limitParam":"",
-      "limitErrInfo":"附加费用格式错误",
       "show": true
     }
   ]

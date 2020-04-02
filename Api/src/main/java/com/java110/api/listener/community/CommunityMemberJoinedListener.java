@@ -63,37 +63,12 @@ public class CommunityMemberJoinedListener extends AbstractServiceApiDataFlowLis
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
         //添加商户
-        businesses.add(addCommunityMember(paramObj));
+        businesses.add(communityBMOImpl.addCommunityMember(paramObj));
 
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    /**
-     * 添加小区成员
-     *
-     * @param paramInJson 接口请求数据封装
-     * @return 封装好的 data数据
-     */
-    private JSONObject addCommunityMember(JSONObject paramInJson) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId", "-1");
-        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", paramInJson.getString("memberId"));
-        businessCommunityMember.put("memberTypeCd", paramInJson.getString("memberTypeCd"));
-        String auditStatusCd = MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd"));
-        auditStatusCd = StringUtils.isEmpty(auditStatusCd) ? StateConstant.AGREE_AUDIT : auditStatusCd;
-        businessCommunityMember.put("auditStatusCd", auditStatusCd);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
     }
 
     /**

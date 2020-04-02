@@ -55,10 +55,10 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
 
         //删除商户用户
 
-        businesses.add(deleteStaff(paramInJson));
+        businesses.add(userBMOImpl.deleteStaff(paramInJson));
 
         //删除用户
-        businesses.add(deleteUser(paramInJson));
+        businesses.add(userBMOImpl.deleteUser(paramInJson));
 
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,paramInJson.getString("userId"));
@@ -110,48 +110,5 @@ public class DeleteStaffServiceListener extends AbstractServiceApiDataFlowListen
         paramInObj.put("userId",paramInJson.getString("userId"));
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext,appService,httpEntity);
-    }
-
-
-    /**
-     * 删除商户
-     * @param paramInJson
-     * @return
-     */
-    private JSONObject deleteStaff(JSONObject paramInJson) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_USER);
-        business.put(CommonConstant.HTTP_SEQ,1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessStoreUsers = new JSONArray();
-        JSONObject businessStoreUser = new JSONObject();
-        businessStoreUser.put("storeId",paramInJson.getString("storeId"));
-        businessStoreUser.put("userId",paramInJson.getString("userId"));
-        businessStoreUsers.add(businessStoreUser);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser",businessStoreUsers);
-
-        return business;
-
-    }
-
-    /**
-     * 删除商户
-     * @param paramInJson
-     * @return
-     */
-    private JSONObject deleteUser(JSONObject paramInJson) {
-        //校验json 格式中是否包含 name,email,levelCd,tel
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ,1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessStoreUser = new JSONObject();
-        businessStoreUser.put("userId",paramInJson.getString("userId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",businessStoreUser);
-
-        return business;
-
     }
 }

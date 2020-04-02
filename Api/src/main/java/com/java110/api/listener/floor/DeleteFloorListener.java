@@ -65,65 +65,14 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加小区楼
-        businesses.add(deleteFloor(paramObj));
-        businesses.add(exitCommunityMember(paramObj));
+        businesses.add(floorBMOImpl.deleteFloor(paramObj));
+        businesses.add(floorBMOImpl.exitCommunityMember(paramObj));
 
         ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteFloor(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
-
-        return business;
-    }
-
-    /**
-     * 退出小区成员
-     *
-     * @param paramInJson 接口传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitCommunityMember(JSONObject paramInJson) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberId(paramInJson.getString("floorId"));
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.FLOOR);
-        List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区楼和小区存在关系存在异常，请检查");
-        }
-
-
-        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
-    }
 
     /**
      * 校验数据

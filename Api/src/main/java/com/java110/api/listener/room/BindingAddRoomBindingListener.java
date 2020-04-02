@@ -63,20 +63,20 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
         if (!hasKey(viewFloorInfo, "floorId")) {
             viewFloorInfo.put("floorId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             viewFloorInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-            businesses.add(addBusinessFloor(viewFloorInfo, context));
-            businesses.add(addCommunityMember(viewFloorInfo, context));
+            businesses.add(roomBMOImpl.addBusinessFloor(viewFloorInfo, context));
+            businesses.add(roomBMOImpl.addCommunityMember(viewFloorInfo, context));
         }
         if (!hasKey(viewUnitInfo, "unitId")) {
             viewUnitInfo.put("unitId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_unitId));
             viewUnitInfo.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             viewUnitInfo.put("floorId", viewFloorInfo.getString("floorId"));
-            businesses.add(addBusinessUnit(viewUnitInfo, context));
+            businesses.add(roomBMOImpl.addBusinessUnit(viewUnitInfo, context));
         }
         if (!hasKey(addRoomView, "roomId")) {
             addRoomView.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
             addRoomView.put("userId", context.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
             addRoomView.put("unitId", viewUnitInfo.getString("unitId"));
-            businesses.add(addBusinessRoom(addRoomView, context));
+            businesses.add(roomBMOImpl.addBusinessRoom(addRoomView, context));
         }
 
 
@@ -107,68 +107,6 @@ public class BindingAddRoomBindingListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
-    private JSONObject addBusinessFloor(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessObj = new JSONObject();
-        businessObj.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessObj);
-        return business;
-    }
-
-    /**
-     * 添加小区成员
-     *
-     * @param paramInJson 组装 楼小区关系
-     * @return 小区成员信息
-     */
-    private JSONObject addCommunityMember(JSONObject paramInJson,DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId", "-1");
-        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", paramInJson.getString("floorId"));
-        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
-        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
-    }
-
-    private JSONObject addBusinessUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessObj = new JSONObject();
-        businessObj.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessObj);
-        return business;
-    }
-
-    private JSONObject addBusinessRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessObj = new JSONObject();
-        businessObj.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessRoom", businessObj);
-        return business;
-    }
-
 
     private boolean hasKey(JSONObject info, String key) {
         if (!info.containsKey(key)
