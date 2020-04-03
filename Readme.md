@@ -74,7 +74,13 @@ java1.8 + idea/eclipse + mysql + redis
 
 ### 如何安装（how to install）
 
-[安装文档](http://www.homecommunity.cn//document/#/start/dev_install)
+请加群827669685，在群文件中【HC系统部署文档】中获取hcAutoInstall.tar 自动部署shell脚本部署
+
+在root用户下解压tar -xvf hcAutoInstall.tar
+
+编辑env.sh 修改相应信息
+
+执行 sh install.sh
 
 ### 解决方案
 

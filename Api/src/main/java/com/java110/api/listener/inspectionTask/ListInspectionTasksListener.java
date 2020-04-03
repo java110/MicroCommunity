@@ -8,6 +8,7 @@ import com.java110.core.smo.inspectionTask.IInspectionTaskInnerServiceSMO;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeInspectionTaskConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskDataVo;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskVo;
@@ -57,6 +58,7 @@ public class ListInspectionTasksListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
     }
 
     @Override
