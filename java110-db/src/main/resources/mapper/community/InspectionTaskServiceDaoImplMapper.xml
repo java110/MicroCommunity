@@ -121,7 +121,7 @@
         statusCd,t.act_user_name,t.act_user_name actUserName,t.sign_type,t.sign_type
         signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name
         planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id
-        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,
+        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName
         from inspection_task t,t_dict td1,t_dict td2
         where 1 =1
         and t.sign_type = td1.status_cd
