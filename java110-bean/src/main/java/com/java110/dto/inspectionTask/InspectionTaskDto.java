@@ -20,11 +20,15 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String planInsTime;
     private String actUserName;
     private String signType;
+    private String signTypeName;
     private String inspectionPlanId;
     private String planUserName;
     private String communityId;
     private String actUserId;
     private String taskId;
+    private String state;
+    private String stateName;
+
 
 
     private Date createTime;
@@ -126,5 +130,29 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSignTypeName() {
+        return signTypeName;
+    }
+
+    public void setSignTypeName(String signTypeName) {
+        this.signTypeName = signTypeName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
