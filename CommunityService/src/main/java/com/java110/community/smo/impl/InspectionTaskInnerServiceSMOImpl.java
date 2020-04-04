@@ -74,17 +74,37 @@ public class InspectionTaskInnerServiceSMOImpl extends BaseServiceSMO implements
         List<Map> inspectPlans = inspectionTaskServiceDaoImpl.queryTodayInspectionPlan(param);
         Map taskParam = new HashMap();
         //#{task.planUserId},#{task.planInsTime},#{task.signType},#{task.inspectionPlanId},#{task.planUserName},#{task.communityId},'-1',#{task.taskId}
-        for (Map inspectPlan : inspectPlans) {
-            inspectPlan.put("planInsTime", new Date());
-            inspectPlan.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
+        if (inspectPlans != null && inspectPlans.size() > 0) {
+            for (Map inspectPlan : inspectPlans) {
+                inspectPlan.put("planInsTime", new Date());
+                inspectPlan.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
+            }
+            taskParam.put("tasks", inspectPlans);
+            inspectionTaskServiceDaoImpl.insertInspectionTask(taskParam);
         }
-        taskParam.put("tasks", inspectPlans);
-        inspectionTaskServiceDaoImpl.insertInspectionTask(taskParam);
 
         //2.0查询当前周是否有执行任务（按每周）
         param.put("inspectionPlanPeriod", "2020023");
         inspectPlans = inspectionTaskServiceDaoImpl.queryTodayInspectionPlan(param);
-
+        if (inspectPlans != null && inspectPlans.size() > 0) {
+            for (Map inspectPlan : inspectPlans) {
+                inspectPlan.put("planInsTime", new Date());
+                inspectPlan.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
+            }
+            taskParam.put("tasks", inspectPlans);
+            inspectionTaskServiceDaoImpl.insertInspectionTask(taskParam);
+        }
+        //2.0查询当前周是否有执行任务（按每周）
+        param.put("inspectionPlanPeriod", "2020024");
+        inspectPlans = inspectionTaskServiceDaoImpl.queryTodayInspectionPlan(param);
+        if (inspectPlans != null && inspectPlans.size() > 0) {
+            for (Map inspectPlan : inspectPlans) {
+                inspectPlan.put("planInsTime", new Date());
+                inspectPlan.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
+            }
+            taskParam.put("tasks", inspectPlans);
+            inspectionTaskServiceDaoImpl.insertInspectionTask(taskParam);
+        }
 
 
         return param;

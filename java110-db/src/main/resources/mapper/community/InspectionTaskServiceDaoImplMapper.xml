@@ -291,6 +291,12 @@
         AND ip.staff_id = it.plan_user_id
         AND it.status_cd = '0'
         AND ip.community_id = it.community_id
+        <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod == '2020023'">
+        and it.plan_ins_time &gt; DATE_SUB(curdate(),INTERVAL 7 DAY)
+        </if>
+        <if test="inspectionPlanPeriod !=null and inspectionPlanPeriod == '2020024'">
+            and it.plan_ins_time &gt; DATE_SUB(curdate(),INTERVAL 30 DAY)
+        </if>
         WHERE
         ip.status_cd = '0'
         and ip.end_time &gt; now()
