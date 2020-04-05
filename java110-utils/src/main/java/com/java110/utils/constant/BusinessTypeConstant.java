@@ -914,11 +914,28 @@ public class BusinessTypeConstant {
      * 3保存
      */
     public static final String BUSINESS_TYPE_SAVE_FASTUSER="666666668888888";
+
     /**
      *  保存巡检任务
      *  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_INSPECTION_TASK="530200030001";
+
+    /**
+     *  保存巡检任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL="540200030001";
+
+
+    /**
+     *  保存巡检任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL="540200040001";
+    public static final String BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL="540200050001";
+
+
 
 
 }

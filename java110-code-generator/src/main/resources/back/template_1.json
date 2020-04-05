@@ -1,52 +1,48 @@
 {
-  "id": "taskId",
-  "name": "inspectionTask",
-  "desc": "活动",
+  "id": "taskDetailId",
+  "name": "inspectionTaskDetail",
+  "desc": "巡检任务明细",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_INSPECTION_TASK",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK",
-  "newBusinessTypeCdValue": "530200030001",
-  "updateBusinessTypeCdValue": "530200030001",
-  "deleteBusinessTypeCdValue": "530200030001",
-  "businessTableName": "business_inspection_task",
-  "tableName": "inspection_task",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL",
+  "newBusinessTypeCdValue": "540200030001",
+  "updateBusinessTypeCdValue": "540200040001",
+  "deleteBusinessTypeCdValue": "540200040001",
+  "businessTableName": "business_inspection_task_detail",
+  "tableName": "inspection_task_detail",
   "param": {
+    "taskDetailId": "task_detail_id",
     "taskId": "task_id",
-    "inspectionPlanId": "inspection_plan_id",
-    "planInsTime": "plan_ins_time",
-    "actInsTime": "act_ins_time",
-    "planUserId": "plan_user_id",
+    "inspectionId": "inspection_id",
+    "inspectionName": "inspection_name",
+    "state": "state",
     "communityId": "community_id",
-    "planUserName": "plan_user_name",
-    "actUserId": "act_user_id",
-    "actUserName": "act_user_name",
-    "signType": "sign_type",
     "statusCd": "status_cd",
     "operate": "operate",
     "bId": "b_id"
   },
   "required": [
     {
-      "code": "inspectionPlanId",
-      "msg": "巡检计划不能为空"
+      "code": "taskDetailId",
+      "msg": "任务明细ID不能为空"
     },
     {
-      "code": "actInsTime",
-      "msg": "巡检时间不能为空"
+      "code": "taskId",
+      "msg": "巡检任务不能为空"
     },
     {
       "code": "communityId",
       "msg": "小区不能为空"
     },
     {
-      "code": "actUserId",
-      "msg": "巡检人不能为空"
+      "code": "inspectionId",
+      "msg": "巡检点不能为空"
     },
     {
-      "code": "actUserName",
-      "msg": "巡检人不能为空"
+      "code": "inspectionName",
+      "msg": "巡检点名称不能为空"
     },
     {
       "code": "signType",

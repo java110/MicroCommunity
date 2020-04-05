@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionTaskDetailServiceDaoImpl">
+
+    <!-- 保存巡检任务明细信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessInspectionTaskDetailInfo" parameterType="Map">
+           insert into business_inspection_task_detail(
+inspection_id,operate,inspection_name,state,community_id,b_id,task_id,task_detail_id
+) values (
+#{inspectionId},#{operate},#{inspectionName},#{state},#{communityId},#{bId},#{taskId},#{taskDetailId}
+)
+       </insert>
+
+
+       <!-- 查询巡检任务明细信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessInspectionTaskDetailInfo" parameterType="Map" resultType="Map">
+           select  t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_name,t.inspection_name inspectionName,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.task_id,t.task_id taskId,t.task_detail_id,t.task_detail_id taskDetailId 
+from business_inspection_task_detail t 
+where 1 =1 
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+<if test="taskDetailId !=null and taskDetailId != ''">
+   and t.task_detail_id= #{taskDetailId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存巡检任务明细信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionTaskDetailInfoInstance" parameterType="Map">
+        insert into inspection_task_detail(
+inspection_id,status_cd,inspection_name,state,community_id,b_id,task_id,task_detail_id
+) select t.inspection_id,'0',t.inspection_name,t.state,t.community_id,t.b_id,t.task_id,t.task_detail_id from business_inspection_task_detail t where 1=1
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+   and t.operate= 'ADD'
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+<if test="taskDetailId !=null and taskDetailId != ''">
+   and t.task_detail_id= #{taskDetailId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询巡检任务明细信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionTaskDetailInfo" parameterType="Map" resultType="Map">
+        select  t.inspection_id,t.inspection_id inspectionId,t.status_cd,t.status_cd statusCd,t.inspection_name,t.inspection_name inspectionName,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.task_id,t.task_id taskId,t.task_detail_id,t.task_detail_id taskDetailId 
+from inspection_task_detail t 
+where 1 =1 
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+<if test="taskDetailId !=null and taskDetailId != ''">
+   and t.task_detail_id= #{taskDetailId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改巡检任务明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionTaskDetailInfoInstance" parameterType="Map">
+        update  inspection_task_detail t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="inspectionId !=null and inspectionId != ''">
+, t.inspection_id= #{inspectionId}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+, t.inspection_name= #{inspectionName}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+, t.task_id= #{taskId}
+</if> 
+ where 1=1 <if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+<if test="taskDetailId !=null and taskDetailId != ''">
+and t.task_detail_id= #{taskDetailId}
+</if> 
+
+    </update>
+
+    <!-- 查询巡检任务明细数量 add by wuxw 2018-07-03 -->
+     <select id="queryInspectionTaskDetailsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from inspection_task_detail t 
+where 1 =1 
+<if test="inspectionId !=null and inspectionId != ''">
+   and t.inspection_id= #{inspectionId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="inspectionName !=null and inspectionName != ''">
+   and t.inspection_name= #{inspectionName}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+<if test="taskId !=null and taskId != ''">
+   and t.task_id= #{taskId}
+</if> 
+<if test="taskDetailId !=null and taskDetailId != ''">
+   and t.task_detail_id= #{taskDetailId}
+</if> 
+
+
+     </select>
+
+</mapper>
