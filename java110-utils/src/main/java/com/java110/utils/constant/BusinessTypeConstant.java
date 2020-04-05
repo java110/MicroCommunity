@@ -933,6 +933,7 @@ public class BusinessTypeConstant {
      *  3保存
      */
     public static final String BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL="540200040001";
+
     public static final String BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL="540200050001";
 
 

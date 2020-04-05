@@ -287,6 +287,7 @@
         ip.staff_name planUserName
         FROM
         inspection_plan ip
+        inner join
         LEFT JOIN inspection_task it ON ip.inspection_plan_id = it.inspection_plan_id
         AND ip.staff_id = it.plan_user_id
         AND it.status_cd = '0'
@@ -319,5 +320,17 @@
             (#{task.planUserId},#{task.planInsTime},#{task.signType},#{task.inspectionPlanId},#{task.planUserName},#{task.communityId},'-1',#{task.taskId},'20200405')
         </foreach>
     </insert>
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+    <insert id="insertInspectionTaskDetail" parameterType="Map">
+        insert into inspection_task_detail(
+        task_detail_id,b_id,community_id,task_id,inspection_id,inspection_name,state
+        )
+        <foreach collection="tasks" item="task" separator=",">
+            (#{task.taskDetailId},'-1',#{task.communityId},#{task.taskId},#{task.inspectionId},#{task.inspectionName},'20200405')
+        </foreach>
+    </insert>
+
+
 
 </mapper>

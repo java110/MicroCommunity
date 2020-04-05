@@ -157,5 +157,21 @@ public class InspectionServiceDaoImpl extends BaseServiceDao implements IInspect
         return businessInspectionInfos;
     }
 
+    /**
+     * 查询巡检点信息（instance过程）
+     * 根据bId 查询巡检点信息
+     * @param info bId 信息
+     * @return 巡检点信息
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryInspectionsByPlan(Map info) throws DAOException{
+        logger.debug("查询巡检点信息 入参 info : {}",info);
+
+        List<Map> businessInspectionInfos = sqlSessionTemplate.selectList("inspectionServiceDaoImpl.queryInspectionsByPlan",info);
+
+        return businessInspectionInfos;
+    }
+
 
 }

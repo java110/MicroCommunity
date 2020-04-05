@@ -90,4 +90,10 @@ public interface IInspectionTaskServiceDao {
      */
      int insertInspectionTask(Map info);
 
+    /**
+     * 生成巡检任务明细信息
+     * @return
+     */
+    int insertInspectionTaskDetail(Map info);
+
 }

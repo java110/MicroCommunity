@@ -152,5 +152,14 @@ public class InspectionTaskServiceDaoImpl extends BaseServiceDao implements IIns
         return sqlSessionTemplate.update("inspectionTaskServiceDaoImpl.insertInspectionTask", info);
     }
 
+    /**
+     * 生成巡检任务明细信息
+     * @return
+     */
+    public int insertInspectionTaskDetail(Map info){
+        logger.debug("插入 巡检任务明细 入参 info : {}", info);
+
+        return sqlSessionTemplate.update("inspectionTaskServiceDaoImpl.insertInspectionTaskDetail", info);
+    }
 
 }
