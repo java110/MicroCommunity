@@ -56,8 +56,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "inspectionId", "请求报文中未包含inspectionId");
-        Assert.hasKeyAndValue(reqJson, "inspectionName", "请求报文中未包含inspectionName");
-        Assert.hasKeyAndValue(reqJson, "signType", "请求报文中未包含signType");
+        Assert.hasKeyAndValue(reqJson, "photo", "请求报文中未包含照片");
 
     }
 
@@ -71,6 +70,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         AppService service = event.getAppService();
 
         //添加单元信息
+        reqJson.put("state", "20200407");//巡检点完成
         businesses.add(inspectionTaskDetailBMOImpl.updateInspectionTaskDetail(reqJson, context));
 
         InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
