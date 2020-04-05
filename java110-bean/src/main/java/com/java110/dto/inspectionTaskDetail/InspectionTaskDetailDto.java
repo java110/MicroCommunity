@@ -18,6 +18,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String inspectionId;
     private String inspectionName;
     private String state;
+    private String stateName;
     private String communityId;
     private String taskId;
     private String taskDetailId;
@@ -91,5 +92,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
