@@ -14,6 +14,7 @@ public class ApiInspectionTaskDataVo implements Serializable {
     private String signType;
     private String signTypeName;
     private String inspectionPlanId;
+    private String inspectionPlanName;
     private String planUserName;
     private String communityId;
     private String bId;
@@ -156,5 +157,13 @@ public class ApiInspectionTaskDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getInspectionPlanName() {
+        return inspectionPlanName;
+    }
+
+    public void setInspectionPlanName(String inspectionPlanName) {
+        this.inspectionPlanName = inspectionPlanName;
     }
 }

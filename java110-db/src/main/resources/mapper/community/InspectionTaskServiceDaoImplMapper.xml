@@ -121,8 +121,8 @@
         statusCd,t.act_user_name,t.act_user_name actUserName,t.sign_type,t.sign_type
         signType,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.plan_user_name,t.plan_user_name
         planUserName,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.act_user_id,t.act_user_id
-        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName
-        from inspection_task t,t_dict td1,t_dict td2
+        actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,ip.inspection_plan_name inspectionPlanName
+        from inspection_task t,inspection_plan ip,t_dict td1,t_dict td2
         where 1 =1
         and t.sign_type = td1.status_cd
         and td1.table_name = 'inspection_task'
@@ -130,6 +130,8 @@
         and t.state = td2.status_cd
         and td2.table_name = 'inspection_task'
         and td2.table_columns = 'state'
+        and ip.inspection_plan_id = t.inspection_plan_id
+        and ip.status_cd = '0'
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
@@ -226,7 +228,7 @@
     <!-- 查询活动数量 add by wuxw 2018-07-03 -->
     <select id="queryInspectionTasksCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from inspection_task t,t_dict td1,t_dict td2
+        from inspection_task t,inspection_plan ip,t_dict td1,t_dict td2
         where 1 =1
         and t.sign_type = td1.status_cd
         and td1.table_name = 'inspection_task'
@@ -234,6 +236,8 @@
         and t.state = td2.status_cd
         and td2.table_name = 'inspection_task'
         and td2.table_columns = 'state'
+        and ip.inspection_plan_id = t.inspection_plan_id
+        and ip.status_cd = '0'
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
