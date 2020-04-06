@@ -26,7 +26,9 @@ public class ServiceConfiguration {
         exclusions.append("/app/payment/notify,");//微信支付通知
         exclusions.append("/app/loginWx,");// 登录跳过
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
-        exclusions.append("/app/loginOwner");// 业主APP登录跳过
+        exclusions.append("/app/loginOwner,");// 业主APP登录跳过
+        exclusions.append("/app/area.listAreas,");// 加载地区
+        exclusions.append("/app/community.listCommunitys,");// 加载小区
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");

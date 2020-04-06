@@ -40,6 +40,23 @@ public class RegisterComponent {
         }
     }
 
+    /**
+     * 用户注册
+     *
+     * @param pd 页面封装数据
+     * @return
+     */
+    public ResponseEntity<String> loadArea(IPageData pd) {
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = registerServiceSMOImpl.loadArea(pd);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            return responseEntity;
+        }
+    }
+
     public ResponseEntity<String> getSysInfo(IPageData pd) {
         return sysServiceSMOImpl.getSysInfo(pd);
     }
