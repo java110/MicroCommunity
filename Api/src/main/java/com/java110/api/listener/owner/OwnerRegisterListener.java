@@ -161,6 +161,8 @@ public class OwnerRegisterListener extends AbstractServiceApiListener {
         JSONArray businesses = new JSONArray();
         //添加小区楼
         businesses.add(ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto));
+        paramObj.put("name",paramObj.getString("appUserName"));
+        paramObj.put("tel",paramObj.getString("link"));
         businesses.add(userBMOImpl.registerUser(paramObj, dataFlowContext));
 
 
