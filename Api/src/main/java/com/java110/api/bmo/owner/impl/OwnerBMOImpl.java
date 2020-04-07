@@ -68,7 +68,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         JSONObject businessOwnerAppUser = new JSONObject();
         businessOwnerAppUser.putAll(paramInJson);
         //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        businessOwnerAppUser.put("state", "10000");
+        businessOwnerAppUser.put("state", "12000");
         businessOwnerAppUser.put("appTypeCd", "10010");
         businessOwnerAppUser.put("appUserId", "-1");
         businessOwnerAppUser.put("memberId", ownerDto.getMemberId());
@@ -77,6 +77,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessOwnerAppUser.put("appUserName", ownerDto.getName());
         businessOwnerAppUser.put("idCard", ownerDto.getIdCard());
         businessOwnerAppUser.put("link", ownerDto.getLink());
+        businessOwnerAppUser.put("userId", paramInJson.getString("userId"));
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
         return business;
     }

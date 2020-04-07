@@ -14,28 +14,45 @@ import com.java110.core.context.DataFlowContext;
  **/
 public interface IUserBMO extends IApiBaseBMO {
     public JSONObject addStaffOrg(JSONObject paramInJson);
+
     /**
      * 添加员工
+     *
      * @param paramInJson
      * @return
      */
     public JSONObject addStaff(JSONObject paramInJson);
+
     /**
      * 添加用户
+     *
      * @param paramObj
      */
     public JSONObject addUser(JSONObject paramObj, DataFlowContext dataFlowContext);
+
     public JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext);
+
     /**
      * 删除商户
+     *
      * @param paramInJson
      * @return
      */
     public JSONObject deleteStaff(JSONObject paramInJson);
+
     /**
      * 删除商户
+     *
      * @param paramInJson
      * @return
      */
     public JSONObject deleteUser(JSONObject paramInJson);
+
+
+    /**
+     * 注册用户
+     *
+     * @param paramObj
+     */
+    public JSONObject registerUser(JSONObject paramObj, DataFlowContext dataFlowContext);
 }
