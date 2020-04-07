@@ -29,6 +29,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/loginOwner,");// 业主APP登录跳过
         exclusions.append("/app/area.listAreas,");// 加载地区
         exclusions.append("/app/community.listCommunitys,");// 加载小区
+        exclusions.append("/app/user.userSendSms,");// 发送短信验证码
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");
