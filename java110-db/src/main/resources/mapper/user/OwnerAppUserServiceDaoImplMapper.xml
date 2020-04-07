@@ -282,6 +282,9 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
 
 
     </select>
