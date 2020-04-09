@@ -171,7 +171,7 @@
             t.res_order_type resOrderType,t.description,
             t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
             t.store_id storeId,t.user_name userName,
-            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
+            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
@@ -215,7 +215,7 @@
         t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
         t.store_id storeId,t.user_name userName,
         t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
-        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,de.id,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode
+        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         inner join purchase_apply_detail de on de.apply_order_id = t.apply_order_id

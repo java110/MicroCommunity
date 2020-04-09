@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="purchaseApplyDetailServiceDaoImpl">
+
+    <!-- 保存订单明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessPurchaseApplyDetailInfo" parameterType="Map">
+           insert into business_purchase_apply_detail
+                (operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
+           (#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
+       </insert>
+
+
+    <!-- 查询订单明细信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
+        select
+            t.operate,t.apply_order_id,t.apply_order_id applyOrderId,
+            t.b_id,t.b_id bId,t.res_id,t.res_id resId
+        from business_purchase_apply_detail t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存订单明细信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="savePurchaseApplyDetailInfoInstance" parameterType="Map">
+        insert into purchase_apply_detail(
+        apply_order_id,status_cd,id,b_id,res_id
+        ) select t.apply_order_id,'0',t.id,t.b_id,t.res_id from business_purchase_apply_detail t where 1=1
+        and t.operate= 'ADD'
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询订单明细信息 add by wuxw 2018-07-03 -->
+    <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
+        select
+        t.apply_order_id applyOrderId,
+        t.status_cd statusCd,
+        t.b_id bId,
+        t.res_id resId,
+        t.remark remark,
+        t.quantity quantity
+        from purchase_apply_detail t
+        where 1 =1
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改订单明细信息 add by wuxw 2018-07-03 -->
+    <update id="updatePurchaseApplyDetailInfoInstance" parameterType="Map">
+        update purchase_apply_detail t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            , t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            , t.res_id= #{resId}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询订单明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryPurchaseApplyDetailsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from purchase_apply_detail t
+        where 1 =1
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="resId !=null and resId != ''">
+            and t.res_id= #{resId}
+        </if>
+
+
+    </select>
+
+</mapper>

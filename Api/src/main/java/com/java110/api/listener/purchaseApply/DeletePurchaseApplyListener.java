@@ -18,8 +18,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 /**
- * 保存小区侦听
- * add by wuxw 2019-06-30
+ * 删除采购/出库订单
+ * add by zcc 2020/04/01
  */
 @Java110Listener("deletePurchaseApplyListener")
 public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
@@ -28,27 +28,19 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
     private IPurchaseApplyBMO purchaseApplyBMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
-
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单号不能为空");
 
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
         AppService service = event.getAppService();
-
-        //添加单元信息
         businesses.add(deletePurchaseApply(reqJson, context));
-
-
+        businesses.add(deletePurchaseApplyDetail(reqJson, context));
         ResponseEntity<String> responseEntity = purchaseApplyBMOImpl.callService(context, service.getServiceCode(), businesses);
-
         context.setResponseEntity(responseEntity);
     }
 
@@ -69,15 +61,12 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
 
 
     /**
-     * 添加小区信息
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
     private JSONObject deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
@@ -86,6 +75,18 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
         businessPurchaseApply.putAll(paramInJson);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
+        return business;
+    }
+
+    //删除订单明细
+    private JSONObject deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessPurchaseApply = new JSONObject();
+        businessPurchaseApply.putAll(paramInJson);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApplyDetail", businessPurchaseApply);
         return business;
     }
 

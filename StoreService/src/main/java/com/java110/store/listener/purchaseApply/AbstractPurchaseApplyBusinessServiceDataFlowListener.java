@@ -69,18 +69,16 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         Map currentPurchaseApplyInfo = currentPurchaseApplyInfos.get(0);
 
         currentPurchaseApplyInfo.put("bId", business.getbId());
-
         currentPurchaseApplyInfo.put("operate", currentPurchaseApplyInfo.get("operate"));
-        currentPurchaseApplyInfo.put("applyDetailId", currentPurchaseApplyInfo.get("apply_detail_id"));
-        currentPurchaseApplyInfo.put("resOrderType", currentPurchaseApplyInfo.get("res_order_type"));
+        currentPurchaseApplyInfo.put("applyDetailId", currentPurchaseApplyInfo.get("applyDetailId"));
+        currentPurchaseApplyInfo.put("resOrderType", currentPurchaseApplyInfo.get("resOrderType"));
         currentPurchaseApplyInfo.put("description", currentPurchaseApplyInfo.get("description"));
-        currentPurchaseApplyInfo.put("applyOrderId", currentPurchaseApplyInfo.get("apply_order_id"));
+        currentPurchaseApplyInfo.put("applyOrderId", currentPurchaseApplyInfo.get("applyOrderId"));
         currentPurchaseApplyInfo.put("state", currentPurchaseApplyInfo.get("state"));
-        currentPurchaseApplyInfo.put("storeId", currentPurchaseApplyInfo.get("store_id"));
-        currentPurchaseApplyInfo.put("entryPerson", currentPurchaseApplyInfo.get("entry_person"));
-        currentPurchaseApplyInfo.put("userId", currentPurchaseApplyInfo.get("user_id"));
-
-
+        currentPurchaseApplyInfo.put("storeId", currentPurchaseApplyInfo.get("storeId"));
+        currentPurchaseApplyInfo.put("userId", currentPurchaseApplyInfo.get("userId"));
+        currentPurchaseApplyInfo.put("userName", currentPurchaseApplyInfo.get("userName"));
+        currentPurchaseApplyInfo.put("createTime", currentPurchaseApplyInfo.get("createTime"));
         currentPurchaseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
         getPurchaseApplyServiceDaoImpl().saveBusinessPurchaseApplyInfo(currentPurchaseApplyInfo);
     }

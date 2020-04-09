@@ -101,7 +101,7 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
         info.put("bId",business.getbId());
         info.put("operate",StatusConstant.OPERATE_DEL);
 
-        //采购申请信息
+
         List<Map> businessPurchaseApplyInfos = purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyInfo(info);
         if( businessPurchaseApplyInfos != null && businessPurchaseApplyInfos.size() >0) {
             for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplyInfos.size();_purchaseApplyIndex++) {

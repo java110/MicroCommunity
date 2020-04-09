@@ -25,13 +25,7 @@ public class DeletePurchaseApplySMOImpl extends AbstractComponentSMO implements 
     @Override
     protected void validate(IPageData pd, JSONObject paramIn) {
 
-        //super.validatePageInfo(pd);
-
-        //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "applyOrderId", "订单号不能为空");
-
-
-
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_PURCHASEAPPLY);
 
     }
