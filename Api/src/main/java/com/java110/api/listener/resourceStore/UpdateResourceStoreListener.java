@@ -58,7 +58,7 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateResourceStore(reqJson, context));
+        businesses.add(resourceStoreBMOImpl.updateResourceStore(reqJson, context));
 
 
 
@@ -80,37 +80,6 @@ public class UpdateResourceStoreListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加物品管理信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setResId(paramInJson.getString("resId"));
-        resourceStoreDto.setStoreId(paramInJson.getString("storeId"));
-
-        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-
-        Assert.isOne(resourceStoreDtos, "查询到多条物品 或未查到物品，resId=" + resourceStoreDto.getResId());
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessResourceStore = new JSONObject();
-        businessResourceStore.putAll(paramInJson);
-        businessResourceStore.put("stock", resourceStoreDtos.get(0).getStock());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
-        return business;
     }
 
     public IResourceStoreInnerServiceSMO getResourceStoreInnerServiceSMOImpl() {

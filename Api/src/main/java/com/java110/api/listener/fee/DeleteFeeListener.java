@@ -86,7 +86,7 @@ public class DeleteFeeListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(deleteFee(reqJson, context));
+        businesses.add(feeBMOImpl.deleteFee(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -95,29 +95,6 @@ public class DeleteFeeListener extends AbstractServiceApiListener {
 
 
     }
-
-
-    /**
-     * 添加物业费用
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("feeId", paramInJson.getString("feeId"));
-        businessUnit.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
-
-        return business;
-    }
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;

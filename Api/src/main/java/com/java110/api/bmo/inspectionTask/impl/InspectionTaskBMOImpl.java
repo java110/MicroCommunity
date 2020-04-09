@@ -5,10 +5,15 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.inspectionTask.IInspectionTaskBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.inspectionTask.IInspectionTaskInnerServiceSMO;
+import com.java110.dto.inspectionTask.InspectionTaskDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("inspectionTaskBMOImpl")
 public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTaskBMO {
@@ -46,27 +51,27 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-   /* public JSONObject updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public JSONObject updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
-        inspectionTaskDto.setInspectionTaskId(paramInJson.getString("inspectionTaskId"));
+        inspectionTaskDto.setTaskId(paramInJson.getString("taskId"));
         inspectionTaskDto.setCommunityId(paramInJson.getString("communityId"));
         List<InspectionTaskDto> inspectionTaskDtos = inspectionTaskInnerServiceSMOImpl.queryInspectionTasks(inspectionTaskDto);
 
-        Assert.listOnlyOne(inspectionTaskDtos, "未找到需要修改的活动 或多条数据");
+        Assert.listOnlyOne(inspectionTaskDtos, "未找到需要修改的巡检任务 或多条数据");
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_inspectionTask);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionTask = new JSONObject();
-        businessInspectionTask.putAll(activitiesDtos.get(0));
+        businessInspectionTask.putAll(BeanConvertUtil.beanCovertMap(inspectionTaskDtos.get(0)));
         businessInspectionTask.putAll(paramInJson);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionTask", businessInspectionTask);
         return business;
-    }*/
+    }
 
 
     /**
@@ -76,11 +81,11 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    /*public JSONObject deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public JSONObject deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_inspectionTask);
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_TASK);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionTask = new JSONObject();
@@ -89,5 +94,4 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionTask", businessInspectionTask);
         return business;
     }
-*/
 }

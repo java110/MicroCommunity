@@ -10,6 +10,7 @@ import com.java110.dto.inspectionRoute.InspectionRouteDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.user.UserDto;
 import com.java110.utils.constant.ServiceCodeInspectionPlanConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
@@ -71,6 +72,7 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
     }
 
     @Override
@@ -86,22 +88,22 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
             inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
             ArrayList staffIds = new ArrayList<>();
             ArrayList inspectionRouteIds = new ArrayList<>();
-            for( ApiInspectionPlanDataVo Plans : inspectionPlans){
+            for (ApiInspectionPlanDataVo Plans : inspectionPlans) {
                 staffIds.add(Plans.getStaffId());
                 String[] ids = Plans.getInspectionRouteId().split(",");
-                for( String s : ids){
+                for (String s : ids) {
                     inspectionRouteIds.add(s);
                 }
             }
-            if(staffIds.size() > 0){
+            if (staffIds.size() > 0) {
                 OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-                String[] staffIdsArray=new String[staffIds.size()];
+                String[] staffIdsArray = new String[staffIds.size()];
                 staffIds.toArray(staffIdsArray);
                 orgStaffRelDto.setStaffIds(staffIdsArray);
                 List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIds(orgStaffRelDto);
-                for( ApiInspectionPlanDataVo planDataVo : inspectionPlans){
-                    for(OrgStaffRelDto orgs : orgStaffRelDtos){
-                        if(planDataVo.getStaffId().equals(orgs.getStaffId())){
+                for (ApiInspectionPlanDataVo planDataVo : inspectionPlans) {
+                    for (OrgStaffRelDto orgs : orgStaffRelDtos) {
+                        if (planDataVo.getStaffId().equals(orgs.getStaffId())) {
                             planDataVo.setDepartmentId(orgs.getDepartmentId());
                             planDataVo.setDepartmentName(orgs.getDepartmentName());
                             planDataVo.setCompanyId(orgs.getCompanyId());
@@ -110,7 +112,7 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
                     }
                 }
             }
-            if(inspectionRouteIds.size() > 0){
+            if (inspectionRouteIds.size() > 0) {
                 //去重
                 HashSet set = new HashSet(inspectionRouteIds);
                 inspectionRouteIds.clear();
@@ -119,15 +121,15 @@ public class ListInspectionPlansListener extends AbstractServiceApiListener {
                 String[] routeIds = (String[]) inspectionRouteIds.toArray(new String[inspectionRouteIds.size()]);
                 inspectionRouteDto.setInspectionRouteIds(routeIds);
                 List<InspectionRouteDto> inspectionRouteDtoList = inspectionRouteInnerServiceSMOImpl.queryInspectionRoutes(inspectionRouteDto);
-                for( ApiInspectionPlanDataVo planDataVo : inspectionPlans){
+                for (ApiInspectionPlanDataVo planDataVo : inspectionPlans) {
                     String[] routeIdArray = planDataVo.getInspectionRouteId().split(",");
-                    for( String s : routeIdArray){
-                        for( InspectionRouteDto inspectionRouteDto1 : inspectionRouteDtoList){
-                            if(inspectionRouteDto1.getInspectionRouteId().equals(s)){
-                                if(planDataVo.getInspectionRouteName() == null){
+                    for (String s : routeIdArray) {
+                        for (InspectionRouteDto inspectionRouteDto1 : inspectionRouteDtoList) {
+                            if (inspectionRouteDto1.getInspectionRouteId().equals(s)) {
+                                if (planDataVo.getInspectionRouteName() == null) {
                                     planDataVo.setInspectionRouteName(inspectionRouteDto1.getRouteName());
-                                }else{
-                                    planDataVo.setInspectionRouteName(planDataVo.getInspectionRouteName()+","+inspectionRouteDto1.getRouteName());
+                                } else {
+                                    planDataVo.setInspectionRouteName(planDataVo.getInspectionRouteName() + "," + inspectionRouteDto1.getRouteName());
                                 }
                             }
                         }

@@ -27,8 +27,16 @@ public class ServiceCodeActivitiesConstant {
      */
     public static final String LIST_ACTIVITIESS = "activities.listActivitiess";
 
+    /**
+     * 查询 用户测试标题
+     */
+    public static final String LIST_FASTUSER = "fastuser.listFastuser";
+
+    /**
+     * 添加 活动
+     */
+    public static final String ADD_FASTUSER = "fastuser.saveFastuser";
 
     public static final String LIST_CORDERS = "corders.listCorders";
-
 
 }

@@ -276,4 +276,52 @@
         </if>
     </select>
 
+
+
+    <!-- 查询巡检点信息 add by wuxw 2018-07-03 -->
+    <select id="queryInspectionsByPlan" parameterType="Map" resultType="Map">
+        select
+        t.inspection_id,t.inspection_id inspectionId,t.machine_id,
+        t.machine_id machineId,t.remark,t.status_cd,t.status_cd statusCd,
+        t.inspection_name,t.inspection_name inspectionName,t.community_id,
+        t.community_id communityId,t.b_id,t.b_id bId,
+        m.machine_code machineCode,m.machine_name machineName,location_type_cd locationTypeCd,location_obj_id
+        locationObjId,m.machine_id machineId,
+        d.name locationTypeName
+        from inspection_point t,machine m,t_dict d,inspection_route_point_rel c,inspection_plan ip
+        where 1 =1
+        and t.machine_id = m.machine_id
+        and m.status_cd = 0
+        and d.status_cd = m.location_type_cd
+        and d.table_name = 'machine'
+        and d.table_columns = 'location_type_cd'
+        and t.inspection_id = c.inspection_id
+        and c.status_cd = '0'
+        and c.inspection_route_id = ip.inspection_route_id
+        and ip.inspection_plan_id = #{inspectionPlanId}
+        <if test="inspectionId !=null and inspectionId != ''">
+            and t.inspection_id= #{inspectionId}
+        </if>
+        <if test="machineCode !=null and machineCode != ''">
+            and m.machine_code= #{machineCode}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="inspectionName !=null and inspectionName != ''">
+            and t.inspection_name like concat('%',#{inspectionName},'%')
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        group by t.inspection_id
+        order by t.create_time desc
+    </select>
+
 </mapper>

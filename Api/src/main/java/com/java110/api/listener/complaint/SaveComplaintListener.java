@@ -62,7 +62,7 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(addComplaint(reqJson, context));
+        businesses.add(complaintBMOImpl.addComplaint(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -89,32 +89,6 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        paramInJson.put("complaintId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_complaintId));
-        paramInJson.put("state", "10001");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMPLAINT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessComplaint = new JSONObject();
-        businessComplaint.putAll(paramInJson);
-        //businessComplaint.put("complaintId", "-1");
-        //businessComplaint.put("state", "10001");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessComplaint", businessComplaint);
-        return business;
     }
 
     public IComplaintUserInnerServiceSMO getComplaintUserInnerServiceSMOImpl() {

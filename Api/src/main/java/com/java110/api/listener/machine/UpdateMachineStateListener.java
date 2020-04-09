@@ -54,7 +54,7 @@ public class UpdateMachineStateListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateMachine(reqJson, context));
+        businesses.add(machineBMOImpl.updateMachineState(reqJson, context));
 
 
 
@@ -76,35 +76,6 @@ public class UpdateMachineStateListener extends AbstractServiceApiListener {
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加设备信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateMachine(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        MachineDto machineDto = new MachineDto();
-        machineDto.setCommunityId(paramInJson.getString("communityId"));
-        machineDto.setMachineId(paramInJson.getString("machineId"));
-        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-
-        Assert.listOnlyOne(machineDtos, "根据设备编码查询到多条记录，请检查数据");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachine = new JSONObject();
-        businessMachine.putAll(BeanConvertUtil.beanCovertMap(machineDtos.get(0)));
-        businessMachine.put("state", paramInJson.getString("state"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachine", businessMachine);
-        return business;
     }
 
 

@@ -1,0 +1,52 @@
+{
+  "id": "taskDetailId",
+  "name": "inspectionTaskDetail",
+  "desc": "巡检任务明细",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL",
+  "newBusinessTypeCdValue": "540200030001",
+  "updateBusinessTypeCdValue": "540200040001",
+  "deleteBusinessTypeCdValue": "540200040001",
+  "businessTableName": "business_inspection_task_detail",
+  "tableName": "inspection_task_detail",
+  "param": {
+    "taskDetailId": "task_detail_id",
+    "taskId": "task_id",
+    "inspectionId": "inspection_id",
+    "inspectionName": "inspection_name",
+    "state": "state",
+    "communityId": "community_id",
+    "statusCd": "status_cd",
+    "operate": "operate",
+    "bId": "b_id"
+  },
+  "required": [
+    {
+      "code": "taskDetailId",
+      "msg": "任务明细ID不能为空"
+    },
+    {
+      "code": "taskId",
+      "msg": "巡检任务不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "inspectionId",
+      "msg": "巡检点不能为空"
+    },
+    {
+      "code": "inspectionName",
+      "msg": "巡检点名称不能为空"
+    },
+    {
+      "code": "signType",
+      "msg": "巡检方式不能为空"
+    }
+  ]
+}

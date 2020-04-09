@@ -1,8 +1,8 @@
 package com.java110.api.bmo.activities.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.ApiBaseBMO;
-import com.java110.api.bmo.activities.I@@TemplateCode@@BMO;
+
+@@TemplateCode@@BMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.I@@TemplateCode@@InnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
@@ -69,7 +69,7 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject business@@TemplateCode@@ = new JSONObject();
-        business@@TemplateCode@@.putAll(activitiesDtos.get(0));
+        business@@TemplateCode@@.putAll(BeanConvertUtil.beanCovertMap(@@templateCode@@Dtos.get(0)));
         business@@TemplateCode@@.putAll(paramInJson);
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("business@@TemplateCode@@", business@@TemplateCode@@);

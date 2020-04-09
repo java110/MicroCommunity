@@ -32,4 +32,11 @@ public interface IRegisterServiceSMO {
      * @return
      */
     public ResponseEntity<String> validate(IPageData pd);
+
+    /**
+     * 加载地区
+     * @param pd 页面请求对象
+     * @return
+     */
+    public ResponseEntity<String> loadArea(IPageData pd);
 }

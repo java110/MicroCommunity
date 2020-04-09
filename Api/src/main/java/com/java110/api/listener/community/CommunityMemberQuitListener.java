@@ -80,7 +80,7 @@ public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListe
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
         JSONArray businesses = new JSONArray();
         //添加商户
-        businesses.add(deleteCommunityMember(paramObj));
+        businesses.add(communityBMOImpl.deleteCommunityMember(paramObj));
 
          responseEntity = communityBMOImpl.callService(dataFlowContext,service.getServiceCode(),businesses);
 
@@ -99,24 +99,6 @@ public class CommunityMemberQuitListener extends AbstractServiceApiDataFlowListe
         Assert.jsonObjectHaveKey(paramIn,"communityId","请求报文中未包含communityId");
         Assert.jsonObjectHaveKey(paramIn,"memberId","请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(paramIn,"memberTypeCd","请求报文中未包含memberTypeCd");
-    }
-
-    /**
-     * 添加小区成员
-     * @param paramInJson
-     * @return
-     */
-    private JSONObject deleteCommunityMember(JSONObject paramInJson){
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ,2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId",paramInJson.getString("communityMemberId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember",businessCommunityMember);
-
-        return business;
     }
 
     @Override

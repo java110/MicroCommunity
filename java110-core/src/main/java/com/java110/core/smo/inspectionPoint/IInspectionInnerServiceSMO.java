@@ -47,4 +47,7 @@ public interface IInspectionInnerServiceSMO {
 
     @RequestMapping(value = "/queryInspectionsRelationShipCount", method = RequestMethod.POST)
     public int queryInspectionsRelationShipCount(@RequestBody InspectionDto inspectionDto);
+
+    @RequestMapping(value = "/queryInspectionsByPlan", method = RequestMethod.POST)
+    List<InspectionDto> queryInspectionsByPlan(@RequestBody InspectionDto inspectionDto);
 }

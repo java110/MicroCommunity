@@ -49,8 +49,8 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(deleteCommunity(reqJson, context));
-        businesses.addAll(exitCommunityMember(reqJson));
+        businesses.add(communityBMOImpl.deleteCommunity(reqJson, context));
+        businesses.addAll(communityBMOImpl.exitCommunityMember(reqJson));
 
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -58,82 +58,6 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * 退出小区成员
-     *
-     * @param paramInJson 接口传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONArray exitCommunityMember(JSONObject paramInJson) {
-
-        JSONArray businesses = new JSONArray();
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.AGENT);
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和代理商存在关系存在异常，请检查");
-        }
-
-
-        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        businesses.add(business);
-
-        //开发者
-         business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-         businessCommunityMember = new JSONObject();
-         communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.DEV);
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-         communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和开发者存在关系存在异常，请检查");
-        }
-
-
-        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        businesses.add(business);
-        //运维团队
-         business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-         businessCommunityMember = new JSONObject();
-         communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OPT);
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-         communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区和运维团队存在关系存在异常，请检查");
-        }
-
-
-        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        businesses.add(business);
-
-        return businesses;
-    }
 
     @Override
     public String getServiceCode() {
@@ -150,27 +74,6 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
         return DEFAULT_ORDER;
     }
 
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
-    }
 
     public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
         return communityInnerServiceSMOImpl;

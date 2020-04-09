@@ -1,5 +1,6 @@
 package com.java110.core.smo.inspectionTask;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -38,4 +39,13 @@ public interface IInspectionTaskInnerServiceSMO {
      */
     @RequestMapping(value = "/queryInspectionTasksCount", method = RequestMethod.POST)
     int queryInspectionTasksCount(@RequestBody InspectionTaskDto inspectionTaskDto);
+
+    /**
+     * 生成巡检任务
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/generateInspectionTask", method = RequestMethod.POST)
+    JSONObject generateInspectionTask(@RequestBody JSONObject param);
 }

@@ -8,8 +8,8 @@
   "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK",
   "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK",
   "newBusinessTypeCdValue": "530200030001",
-  "updateBusinessTypeCdValue": "530200030001",
-  "deleteBusinessTypeCdValue": "530200030001",
+  "updateBusinessTypeCdValue": "530200040001",
+  "deleteBusinessTypeCdValue": "530200050001",
   "businessTableName": "business_inspection_task",
   "tableName": "inspection_task",
   "param": {

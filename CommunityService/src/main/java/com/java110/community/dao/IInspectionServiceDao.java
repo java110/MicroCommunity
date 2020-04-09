@@ -62,6 +62,7 @@ public interface IInspectionServiceDao {
 
 
 
+
     /**
      * 修改巡检点信息
      * @param info 修改信息
@@ -91,5 +92,15 @@ public interface IInspectionServiceDao {
      * @throws DAOException DAO异常
      */
     public List<Map> getInspectionRelationShipInfo(Map info) throws DAOException ;
+
+
+    /**
+     * 查询巡检点信息（instance过程）
+     * 根据bId 查询巡检点信息
+     * @param info bId 信息
+     * @return 巡检点信息
+     * @throws DAOException DAO异常
+     */
+    List<Map> queryInspectionsByPlan(Map info) throws DAOException;
 
 }

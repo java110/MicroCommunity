@@ -95,9 +95,9 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         JSONArray businesses = new JSONArray();
         paramObj.put("cycles", 0);
         //添加单元信息
-        businesses.add(addFeeDetail(paramObj, dataFlowContext));
-        businesses.add(modifyFee(paramObj, dataFlowContext));
-        businesses.add(modifyCarInout(paramObj, dataFlowContext));
+        businesses.add(feeBMOImpl.addFeeTempDetail(paramObj, dataFlowContext));
+        businesses.add(feeBMOImpl.modifyTempFee(paramObj, dataFlowContext));
+        businesses.add(feeBMOImpl.modifyTempCarInout(paramObj, dataFlowContext));
 
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_PRE_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -113,28 +113,7 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
         dataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context) {
 
-        FeeDto feeDto = (FeeDto) reqJson.get("feeInfo");
-        CarInoutDto tempCarInoutDto = new CarInoutDto();
-        tempCarInoutDto.setCommunityId(reqJson.getString("communityId"));
-        tempCarInoutDto.setInoutId(feeDto.getPayerObjId());
-        List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(tempCarInoutDto);
-
-        Assert.listOnlyOne(carInoutDtos, "根据费用信息反差车辆进场记录未查到 或查到多条");
-
-        CarInoutDto carInoutDto = carInoutDtos.get(0);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ+2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarInout = new JSONObject();
-        businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
-        businessCarInout.put("state", "100400");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
-    }
 
     /**
      * 刷入order信息
@@ -148,104 +127,6 @@ public class PayFeePreTempCarInoutListener extends AbstractServiceApiDataFlowLis
 
     }
 
-    /**
-     * 添加费用明细信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFeeDetail = new JSONObject();
-        businessFeeDetail.putAll(paramInJson);
-        businessFeeDetail.put("detailId", "-1");
-        businessFeeDetail.put("primeRate", "1.00");
-        //计算 应收金额
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(paramInJson.getString("feeId"));
-        feeDto.setCommunityId(paramInJson.getString("communityId"));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
-        }
-        feeDto = feeDtos.get(0);
-        paramInJson.put("feeInfo", feeDto);
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setFeeTypeCd(feeDto.getFeeTypeCd());
-        feeConfigDto.setConfigId(feeDto.getConfigId());
-        feeConfigDto.setCommunityId(feeDto.getCommunityId());
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到费用配置信息，查询多条数据");
-        }
-        feeConfigDto = feeConfigDtos.get(0);
-        Date nowTime = new Date();
-
-        long diff = nowTime.getTime() - feeDto.getStartTime().getTime();
-        long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
-        long nh = 1000 * 60 * 60;// 一小时的毫秒数
-        long nm = 1000 * 60;// 一分钟的毫秒数
-        double day = 0;
-        double hour = 0;
-        double min = 0;
-        day = diff / nd;// 计算差多少天
-        hour = diff % nd / nh + day * 24;// 计算差多少小时
-        min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
-        double money = 0.00;
-        double newHour = hour;
-        if (min > 0) { //一小时超过
-            newHour += 1;
-        }
-        if (newHour <= 2) {
-            money = Double.parseDouble(feeConfigDto.getAdditionalAmount());
-        } else {
-            BigDecimal lastHour = new BigDecimal(newHour - 2);
-            BigDecimal squarePrice = new BigDecimal(Double.parseDouble(feeDto.getSquarePrice()));
-            BigDecimal additionalAmount = new BigDecimal(Double.parseDouble(feeDto.getAdditionalAmount()));
-            money = squarePrice.multiply(lastHour).add(additionalAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-        }
-
-        double receivableAmount = money;
-
-        businessFeeDetail.put("receivableAmount", receivableAmount);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessFeeDetail);
-        paramInJson.put("receivableAmount", receivableAmount);
-        return business;
-    }
-
-
-    /**
-     * 修改费用信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject modifyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFee = new JSONObject();
-        FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
-        Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
-        feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        feeMap.put("endTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-        feeMap.put("amount", paramInJson.getString("receivableAmount"));
-        feeMap.put("state", "2009001");
-        businessFee.putAll(feeMap);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessFee);
-
-        return business;
-    }
 
     /**
      * 数据校验

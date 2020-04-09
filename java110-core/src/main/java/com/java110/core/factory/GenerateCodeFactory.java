@@ -120,7 +120,9 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_irpRelId = "51";
     public static final String CODE_PREFIX_inspectionPlanId = "14";
     public static final String CODE_PREFIX_taskId = "52";
+    public static final String CODE_PREFIX_taskDetailId = "53";
     public static final String CODE_PREFIX_applyOrderId = "15";
+    public static final String CODE_PREFIX_fastuserId = "68";
 
 
 

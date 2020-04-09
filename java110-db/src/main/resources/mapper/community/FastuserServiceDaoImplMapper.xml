@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fastuserServiceDaoImpl">
+
+    <!-- 保存活动信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessFastuserInfo" parameterType="Map">
+
+        insert into business_fast_user(
+        fast_user_id,fast_user_title,user_name,user_id,operate,fast_user_context,start_time,end_time,community_id,b_id,state
+        ) values (
+        #{fastUserId},#{fastUserTitle},#{userName},#{userId},#{operate},#{fastUserContext},#{startTime},#{endTime},
+        #{communityId},#{bId},#{state}
+
+       </insert>
+
+
+    <!-- 保存活动信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveFastuserInfoInstance" parameterType="Map">
+        insert into fast_user(
+        fast_user_id,fast_user_title,user_name,user_id,operate,fast_user_context,start_time,end_time,community_id,b_id,state
+        ) select
+        fast_user_id,fast_user_title,user_name,user_id,operate,fast_user_context,start_time,end_time,community_id,b_id,state
+        from business_fast_user t where 1=1
+
+        <if test="fastUserId !=null and fastUserId != ''">
+            and t.fast_user_id= #{fastUserId}
+        </if>
+        <if test="fastUserTitle !=null and fastUserTitle != ''">
+            and t.fast_user_title= #{fastUserTitle}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询活动信息 add by wuxw 2018-07-03 -->
+    <select id="getFastuserInfo" parameterType="Map" resultType="Map">
+        select t.fast_user_id,t.fast_user_id fastUserId,t.status_cd,t.status_cd
+        statusCd,t.fast_user_title,t.fast_user_title fastUserTitle,t.fast_user_context,t.fast_user_context fastUserContext,t.user_name,t.user_name userName,t.user_id,t.user_id
+        userId,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.state
+        from fast_user t
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="fastUserTitle !=null and fastUserTitle != ''">
+            and t.fast_user_title= #{fastUserTitle}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+    </select>
+
+    <!-- 查询活动信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessFastuserInfo" parameterType="Map" resultType="Map">
+        select t.fast_user_id,t.fast_user_id fastUserId,t.operate,t.fast_user_title,t.fast_user_title fastUserTitle,t.fast_user_context,t.fast_user_context fastUserContext,t.user_name,t.user_name userName,t.user_id,t.user_id
+        userId,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
+        communityId,t.b_id,t.b_id bId,t.state
+        from business_fast_user t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="fastUserTitle !=null and fastUserTitle != ''">
+            and t.fast_user_title= #{fastUserTitle}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="fastUserId !=null and fastUserId != ''">
+            and t.fast_user_id= #{fastUserId}
+        </if>
+    </select>
+
+
+    <!-- 查询活动数量 add by wuxw 2018-07-03 -->
+    <select id="queryFastuserCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from fast_user t
+        where 1 =1
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="fastUserTitle !=null and fastUserTitle != ''">
+            and t.fast_user_title= #{fastUserTitle}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+
+        <if test="startTime !=null ">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+
+
+    </select>
+
+    <!-- 修改活动信息 add by wuxw 2018-07-03 -->
+    <update id="updateFastuserInfoInstance" parameterType="Map">
+        update fast_user t set t.status_cd = #{statusCd}
+        <if test="fastUserTitle !=null and fastUserTitle != ''">
+            , t.fast_user_title= #{fastUserTitle}
+        </if>
+        <if test="userName !=null and userName != ''">
+            , t.user_name= #{userName}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
+        </if>
+        <if test="fastUserContext !=null and fastUserContext != ''">
+            , t.fast_user_context= #{fastUserContext}
+        </if>
+        <if test="startTime !=null ">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="endTime !=null ">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        where 1=1
+        <if test="fastUserId !=null and fastUserId != ''">
+            and t.fast_user_id= #{fastUserId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+</mapper>

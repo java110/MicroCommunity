@@ -88,14 +88,14 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
         JSONArray businesses = new JSONArray();
 
         //退出 业主和停车位之间关系
-        businesses.add(exitParkingSpace(paramObj, dataFlowContext));
+        businesses.add(parkingSpaceBMOImpl.exitParkingSpace(paramObj, dataFlowContext));
 
         //将车位状态改为空闲状态
-        businesses.add(modifyParkingSpaceState(paramObj));
+        businesses.add(parkingSpaceBMOImpl.modifyParkingSpaceState(paramObj));
 
 
         //删除费用信息
-        businesses.add(exitParkingSpaceFee(paramObj, dataFlowContext));
+        businesses.add(parkingSpaceBMOImpl.exitParkingSpaceFee(paramObj, dataFlowContext));
 
 
         ResponseEntity<String> responseEntity = parkingSpaceBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -104,108 +104,6 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
 
     }
 
-    /**
-     * 售卖房屋信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        OwnerCarDto ownerCarDto = (OwnerCarDto) paramInJson.get("ownerCarDto");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerCar = new JSONObject();
-        //businessUnit.putAll(paramInJson);
-        businessOwnerCar.put("carId", ownerCarDto.getCarId());
-        //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerCar", businessOwnerCar);
-
-        return business;
-    }
-
-    /**
-     * 修改停车位状态信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject modifyParkingSpaceState(JSONObject paramInJson) {
-
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(paramInJson.getString("communityId"));
-        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
-        }
-
-        parkingSpaceDto = parkingSpaceDtos.get(0);
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessParkingSpace = new JSONObject();
-
-        businessParkingSpace.putAll(BeanConvertUtil.beanCovertMap(parkingSpaceDto));
-        businessParkingSpace.put("state", "F");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
-
-        paramInJson.put("parkingSpaceDto", parkingSpaceDto);
-
-        return business;
-    }
-
-    /**
-     * 删除物业费用信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        ParkingSpaceDto parkingSpaceDto = (ParkingSpaceDto) paramInJson.get("parkingSpaceDto");
-        //校验物业费是否已经交清
-        FeeDto feeDto = new FeeDto();
-        feeDto.setCommunityId(paramInJson.getString("communityId"));
-        feeDto.setIncomeObjId(paramInJson.getString("storeId"));
-        feeDto.setPayerObjId(paramInJson.getString("psId"));
-        feeDto.setFeeTypeCd("1001".equals(parkingSpaceDto.getTypeCd())
-                ? ("H".equals(parkingSpaceDto.getState())
-                        ? FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE
-                        : FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE)
-                : ("H".equals(parkingSpaceDto.getState())
-                        ?FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE
-                        :FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，停车费对应关系不是一条");
-        }
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFee = new JSONObject();
-        //businessUnit.putAll(paramInJson);
-        businessFee.put("feeId", feeDtos.get(0).getFeeId());
-        //businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessFee);
-
-        return business;
-    }
 
     /**
      * 数据校验

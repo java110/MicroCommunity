@@ -49,13 +49,13 @@ public class SaveInspectionRoutePointListener extends AbstractServiceApiListener
 
         if (reqJson.containsKey("inspectionId")) {
             //添加单元信息
-            businesses.add(addInspectionRoute(reqJson, context, 1));
+            businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, 1));
         } else { //批量的情况
             JSONArray points = reqJson.getJSONArray("points");
             for (int pointIndex = 0; pointIndex < points.size(); pointIndex++) {
                 reqJson.put("inspectionId", points.getJSONObject(pointIndex).getString("inspectionId"));
                 reqJson.put("inspectionName", points.getJSONObject(pointIndex).getString("inspectionName"));
-                businesses.add(addInspectionRoute(reqJson, context, pointIndex + 1));
+                businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, pointIndex + 1));
             }
         }
 
@@ -78,29 +78,6 @@ public class SaveInspectionRoutePointListener extends AbstractServiceApiListener
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext, int index) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        businessInspectionRoute.put("irpRelId", "-" + index);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoutePointRel", businessInspectionRoute);
-        return business;
     }
 
 }

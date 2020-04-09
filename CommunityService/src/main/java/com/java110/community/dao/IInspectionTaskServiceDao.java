@@ -78,4 +78,22 @@ public interface IInspectionTaskServiceDao {
      */
     int queryInspectionTasksCount(Map info);
 
+    /**
+     * 查询今天巡检计划信息
+     * @return
+     */
+    List<Map> queryTodayInspectionPlan(Map info);
+
+    /**
+     * 生成巡检任务信息
+     * @return
+     */
+     int insertInspectionTask(Map info);
+
+    /**
+     * 生成巡检任务明细信息
+     * @return
+     */
+    int insertInspectionTaskDetail(Map info);
+
 }

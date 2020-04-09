@@ -54,7 +54,7 @@ public class DeleteInspectionRoutePointListener extends AbstractServiceApiListen
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(deleteInspectionRoute(reqJson, context));
+        businesses.add(inspectionBMOImpl.deleteInspectionRoute(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -75,34 +75,6 @@ public class DeleteInspectionRoutePointListener extends AbstractServiceApiListen
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        InspectionRoutePointRelDto inspectionRoutePointRelDto = new InspectionRoutePointRelDto();
-        inspectionRoutePointRelDto.setCommunityId(paramInJson.getString("communityId"));
-        inspectionRoutePointRelDto.setInspectionId(paramInJson.getString("inspectionId"));
-        inspectionRoutePointRelDto.setInspectionRouteId(paramInJson.getString("inspectionRouteId"));
-        List<InspectionRoutePointRelDto> inspectionRoutePointRelDtos = inspectionRoutePointRelInnerServiceSMOImpl.queryInspectionRoutePointRels(inspectionRoutePointRelDto);
-
-        Assert.listOnlyOne(inspectionRoutePointRelDtos, "未查询到（或多条）要删除的 巡检路线下的巡检点");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(BeanConvertUtil.beanCovertMap(inspectionRoutePointRelDtos.get(0)));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoutePointRel", businessInspectionRoute);
-        return business;
     }
 
 }

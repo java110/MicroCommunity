@@ -159,11 +159,12 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         paramObj.put("openId", openId);
+        paramObj.put("userId", userId);
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
         //添加小区楼
-        businesses.add(addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto));
+        businesses.add(ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto));
 
 
 
@@ -171,35 +172,6 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
 
         dataFlowContext.setResponseEntity(responseEntity);
 
-    }
-
-    /**
-     * 添加业主应用用户关系
-     *
-     * @param paramInJson
-     * @return
-     */
-    private JSONObject addOwnerAppUser(JSONObject paramInJson, CommunityDto communityDto, OwnerDto ownerDto) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerAppUser = new JSONObject();
-        businessOwnerAppUser.putAll(paramInJson);
-        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        businessOwnerAppUser.put("state", "10000");
-        businessOwnerAppUser.put("appTypeCd", "10010");
-        businessOwnerAppUser.put("appUserId", "-1");
-        businessOwnerAppUser.put("memberId", ownerDto.getMemberId());
-        businessOwnerAppUser.put("communityName", communityDto.getName());
-        businessOwnerAppUser.put("communityId", communityDto.getCommunityId());
-        businessOwnerAppUser.put("appUserName", ownerDto.getName());
-        businessOwnerAppUser.put("idCard", ownerDto.getIdCard());
-        businessOwnerAppUser.put("link", ownerDto.getLink());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
     }
 
 

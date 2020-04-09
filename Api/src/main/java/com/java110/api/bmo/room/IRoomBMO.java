@@ -23,5 +23,65 @@ public interface IRoomBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject updateRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addBusinessRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addBusinessUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public JSONObject addCommunityMember(JSONObject paramInJson,DataFlowContext dataFlowContext);
+    public JSONObject addBusinessFloor(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区楼信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject deleteRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 售卖房屋信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject exitRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 删除物业费用信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject exitPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区楼信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区楼信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject updateShellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 售卖房屋信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

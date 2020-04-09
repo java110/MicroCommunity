@@ -11,6 +11,8 @@ import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -74,6 +76,12 @@ public class InspectionInnerServiceSMOImpl extends BaseServiceSMO implements IIn
     @Override
     public int queryInspectionsRelationShipCount(@RequestBody InspectionDto inspectionDto) {
         return inspectionServiceDaoImpl.queryInspectionsRelationShipCount(BeanConvertUtil.beanCovertMap(inspectionDto));    }
+
+    @RequestMapping(value = "/queryInspectionsByPlan", method = RequestMethod.POST)
+    public List<InspectionDto> queryInspectionsByPlan(@RequestBody InspectionDto inspectionDto){
+        List<InspectionDto> inspections = BeanConvertUtil.covertBeanList(inspectionServiceDaoImpl.queryInspectionsByPlan(BeanConvertUtil.beanCovertMap(inspectionDto)), InspectionDto.class);
+        return inspections;
+    }
 
     public IInspectionServiceDao getInspectionServiceDaoImpl() {
         return inspectionServiceDaoImpl;

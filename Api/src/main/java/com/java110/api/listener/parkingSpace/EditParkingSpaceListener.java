@@ -75,7 +75,7 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
         JSONArray businesses = new JSONArray();
 
         //添加小区楼
-        businesses.add(editParkingSpace(paramObj));
+        businesses.add(parkingSpaceBMOImpl.editParkingSpace(paramObj));
 
 
         ResponseEntity<String> responseEntity = parkingSpaceBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -106,39 +106,6 @@ public class EditParkingSpaceListener extends AbstractServiceApiDataFlowListener
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "停车位ID必须为已有ID");
         }
     }
-
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject editParkingSpace(JSONObject paramInJson) {
-
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(paramInJson.getString("communityId"));
-        parkingSpaceDto.setPsId(paramInJson.getString("psId"));
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查询到停车位信息" + JSONObject.toJSONString(parkingSpaceDto));
-        }
-
-        parkingSpaceDto = parkingSpaceDtos.get(0);
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessParkingSpace = new JSONObject();
-
-        businessParkingSpace.putAll(paramInJson);
-        businessParkingSpace.put("state", parkingSpaceDto.getState());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingSpace", businessParkingSpace);
-
-        return business;
-    }
-
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;

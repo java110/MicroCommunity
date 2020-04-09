@@ -40,8 +40,6 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
 
-    private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
-
 
     private static Logger logger = LoggerFactory.getLogger(SaveFloorListener.class);
 
@@ -78,10 +76,10 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
         generateFloorId(paramObj);
 
         //添加小区楼
-        businesses.add(addFloor(paramObj));
+        businesses.add(floorBMOImpl.addFloor(paramObj));
 
         //小区楼添加到小区中
-        businesses.add(addCommunityMember(paramObj));
+        businesses.add(floorBMOImpl.addCommunityMember(paramObj));
 
 
         ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
@@ -98,57 +96,6 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
     private void generateFloorId(JSONObject paramObj) {
         String floorId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId);
         paramObj.put("floorId", floorId);
-    }
-
-
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addFloor(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("name", paramInJson.getString("name"));
-        businessFloor.put("remark", paramInJson.getString("remark"));
-        businessFloor.put("userId", paramInJson.getString("userId"));
-        businessFloor.put("floorNum", paramInJson.getString("floorNum"));
-        businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
-
-        return business;
-    }
-
-
-    /**
-     * 添加小区成员
-     *
-     * @param paramInJson 组装 楼小区关系
-     * @return 小区成员信息
-     */
-    private JSONObject addCommunityMember(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ_COMMUNITY_MEMBER);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId", "-1");
-        businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
-        businessCommunityMember.put("memberId", paramInJson.getString("floorId"));
-        businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
-        businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
     }
 
     /**

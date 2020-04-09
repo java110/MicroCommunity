@@ -68,7 +68,7 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(addUnit(paramObj, dataFlowContext));
+        businesses.add(unitBMOImpl.addUnit(paramObj, dataFlowContext));
 
 
 
@@ -76,33 +76,6 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
 
         dataFlowContext.setResponseEntity(responseEntity);
 
-    }
-
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("floorId", paramInJson.getString("floorId"));
-        businessUnit.put("layerCount", paramInJson.getString("layerCount"));
-        businessUnit.put("unitId", "-1");
-        businessUnit.put("unitNum", paramInJson.getString("unitNum"));
-        businessUnit.put("lift", paramInJson.getString("lift"));
-        businessUnit.put("remark", paramInJson.getString("remark"));
-        businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
-
-        return business;
     }
 
     /**

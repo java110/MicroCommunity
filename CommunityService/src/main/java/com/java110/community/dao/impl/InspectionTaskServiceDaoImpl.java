@@ -130,5 +130,36 @@ public class InspectionTaskServiceDaoImpl extends BaseServiceDao implements IIns
         return Integer.parseInt(businessInspectionTaskInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询今天巡检计划信息
+     * @return
+     */
+    public List<Map> queryTodayInspectionPlan(Map info){
+        logger.debug("查询活动数据 入参 info : {}", info);
+
+        List<Map> InspectionPlans = sqlSessionTemplate.selectList("inspectionTaskServiceDaoImpl.queryTodayInspectionPlan", info);
+
+        return InspectionPlans;
+    }
+
+    /**
+     * 生成巡检任务信息
+     * @return
+     */
+    public int insertInspectionTask(Map info){
+        logger.debug("插入 巡检任务 入参 info : {}", info);
+
+        return sqlSessionTemplate.update("inspectionTaskServiceDaoImpl.insertInspectionTask", info);
+    }
+
+    /**
+     * 生成巡检任务明细信息
+     * @return
+     */
+    public int insertInspectionTaskDetail(Map info){
+        logger.debug("插入 巡检任务明细 入参 info : {}", info);
+
+        return sqlSessionTemplate.update("inspectionTaskServiceDaoImpl.insertInspectionTaskDetail", info);
+    }
 
 }

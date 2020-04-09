@@ -93,7 +93,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
             reqJson.put("endTime", endTime);
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
             reqJson.put("pwd", pwd);
-            businesses.add(addApplicationKey(reqJson, context));
+            businesses.add(applicationKeyBMOImpl.addApplicationVisitKey(reqJson, context));
         }
 
         responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -110,34 +110,6 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
         responseEntity = new ResponseEntity<>(resObj.toJSONString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
 
-    }
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        //查询 是否住户密码已经审核完成
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        businessApplicationKey.put("applicationKeyId", paramInJson.getString("applicationKeyId"));
-        businessApplicationKey.put("state", "10001");
-        businessApplicationKey.put("typeFlag", "1100103");
-        businessApplicationKey.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
     }
 
 

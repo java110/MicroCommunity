@@ -7,9 +7,9 @@
     <!-- 保存绑定业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerAppUserInfo" parameterType="Map">
         insert into business_owner_app_user(
-        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
+        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id
         ) values (
-        #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{bId},#{memberId}
+        #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{bId},#{memberId},#{userId}
         )
     </insert>
 
@@ -19,7 +19,7 @@
         select t.id_card,t.id_card idCard,t.open_id,t.open_id
         openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
-        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,t.user_id,t.user_id userId
         from business_owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
@@ -61,6 +61,9 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
 
     </select>
 
@@ -68,9 +71,9 @@
     <!-- 保存绑定业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerAppUserInfoInstance" parameterType="Map">
         insert into owner_app_user(
-        id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id
+        id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id
         ) select
-        t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,t.member_id
+        t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,t.member_id,t.user_id
         from business_owner_app_user t where 1=1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
@@ -109,6 +112,9 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
 
     </insert>
 
@@ -118,7 +124,7 @@
         select t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.status_cd,t.status_cd
         statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
-        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,td1.name stateName
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,td1.name stateName,t.user_id,t.user_id userId
         from owner_app_user t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
@@ -170,6 +176,9 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id = #{userId}
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -212,6 +221,9 @@
         </if>
         <if test="memberId !=null and memberId != ''">
             , t.member_id= #{memberId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            , t.user_id= #{userId}
         </if>
         where 1=1
         <if test="appUserId !=null and appUserId != ''">
@@ -269,6 +281,9 @@
         </if>
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
+        </if>
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
         </if>
 
 

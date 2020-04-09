@@ -66,12 +66,12 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
 
         //添加小区楼
-        businesses.add(deleteOwner(paramObj));
+        businesses.add(ownerBMOImpl.deleteOwner(paramObj));
         if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
             //ownerId 写为 memberId
             paramObj.put("ownerId", paramObj.getString("memberId"));
             //小区楼添加到小区中
-            businesses.add(exitCommunityMember(paramObj));
+            businesses.add(ownerBMOImpl.exitCommunityMember(paramObj));
         }
 
 
@@ -79,60 +79,6 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
         dataFlowContext.setResponseEntity(responseEntity);
     }
-
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject deleteOwner(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwner = new JSONObject();
-        businessOwner.put("memberId", paramInJson.getString("memberId"));
-        businessOwner.put("communityId", paramInJson.getString("communityId"));
-
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
-
-        return business;
-    }
-
-    /**
-     * 退出小区成员
-     *
-     * @param paramInJson 接口传入入参
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject exitCommunityMember(JSONObject paramInJson) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunityMember = new JSONObject();
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setMemberId(paramInJson.getString("ownerId"));
-        communityMemberDto.setCommunityId(paramInJson.getString("communityId"));
-        communityMemberDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
-        List<CommunityMemberDto> communityMemberDtoList = communityInnerServiceSMOImpl.getCommunityMembers(communityMemberDto);
-
-        if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "业主和小区存在关系存在异常，请检查");
-        }
-
-
-        businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
-    }
-
     /**
      * 校验数据
      *

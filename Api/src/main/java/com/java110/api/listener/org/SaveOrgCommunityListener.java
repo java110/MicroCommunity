@@ -49,7 +49,7 @@ public class SaveOrgCommunityListener extends AbstractServiceApiListener {
         //添加单元信息
         JSONArray communitys = reqJson.getJSONArray("communitys");
         for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
-            businesses.add(addOrgCommunity(reqJson, communitys.getJSONObject(communityIndex), communityIndex, context));
+            businesses.add(orgBMOImpl.addOrgCommunity(reqJson, communitys.getJSONObject(communityIndex), communityIndex, context));
         }
 
         ResponseEntity<String> responseEntity = orgBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -71,30 +71,4 @@ public class SaveOrgCommunityListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
-    /**
-     * 添加小区信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject addOrgCommunity(JSONObject paramInJson, JSONObject communityObj, int seq, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + seq);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOrg = new JSONObject();
-        businessOrg.putAll(paramInJson);
-        businessOrg.put("orgCommunityId", "-1");
-        businessOrg.put("communityId", communityObj.getString("communityId"));
-        businessOrg.put("communityName", communityObj.getString("communityName"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrgCommunity", businessOrg);
-        return business;
-    }
-
 }

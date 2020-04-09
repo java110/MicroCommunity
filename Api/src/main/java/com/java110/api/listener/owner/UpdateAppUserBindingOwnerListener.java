@@ -54,7 +54,7 @@ public class UpdateAppUserBindingOwnerListener extends AbstractServiceApiListene
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(updateAuditAppUserBindingOwner(reqJson, context));
+        businesses.add(ownerBMOImpl.updateAuditAppUserBindingOwner(reqJson, context));
 
 
         ResponseEntity<String> responseEntity = ownerBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -75,35 +75,6 @@ public class UpdateAppUserBindingOwnerListener extends AbstractServiceApiListene
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
-    }
-
-
-    /**
-     * 添加审核业主绑定信息
-     *
-     * @param paramInJson     接口调用放传入入参
-     * @param dataFlowContext 数据上下文
-     * @return 订单服务能够接受的报文
-     */
-    private JSONObject updateAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setAppUserId(paramInJson.getString("appUserId"));
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-
-        Assert.listOnlyOne(ownerAppUserDtos, "存在多条审核单或未找到审核单");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerAppUser = new JSONObject();
-        businessOwnerAppUser.putAll(BeanConvertUtil.beanCovertMap(ownerAppUserDtos.get(0)));
-        businessOwnerAppUser.put("state", paramInJson.getString("state"));
-        businessOwnerAppUser.put("appUserId", paramInJson.getString("appUserId"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
     }
 
     public IOwnerAppUserInnerServiceSMO getOwnerAppUserInnerServiceSMOImpl() {

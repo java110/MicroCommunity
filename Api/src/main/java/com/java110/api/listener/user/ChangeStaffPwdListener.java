@@ -78,7 +78,7 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
 
         JSONArray businesses = new JSONArray();
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
-        JSONObject staffBusiness = modifyStaff(paramInJson, dataFlowContext);
+        JSONObject staffBusiness = userBMOImpl.modifyStaff(paramInJson, dataFlowContext);
         businesses.add(staffBusiness);
 
         HttpHeaders header = new HttpHeaders();
@@ -95,47 +95,6 @@ public class ChangeStaffPwdListener extends AbstractServiceApiDataFlowListener {
         super.doRequest(dataFlowContext, service, httpEntity);
 
         super.doResponse(dataFlowContext);
-    }
-
-
-    private JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
-        //校验json 格式中是否包含 name,email,levelCd,tel
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", builderStaffInfo(paramObj, dataFlowContext));
-
-        return business;
-    }
-
-    /**
-     * 构建员工信息
-     *
-     * @param paramObj
-     * @param dataFlowContext
-     * @return
-     */
-    private JSONObject builderStaffInfo(JSONObject paramObj, DataFlowContext dataFlowContext) {
-
-        UserDto userDto = new UserDto();
-        userDto.setStatusCd("0");
-        userDto.setUserId(paramObj.getString("userId"));
-        List<UserDto> userDtos = userInnerServiceSMOImpl.getUserHasPwd(userDto);
-
-        Assert.listOnlyOne(userDtos, "数据错误查询到多条用户信息或单条");
-
-        JSONObject userInfo = JSONObject.parseObject(JSONObject.toJSONString(userDtos.get(0)));
-
-        if (!paramObj.getString("oldPwd").equals(userDtos.get(0).getPassword())) {
-            throw new IllegalArgumentException("原始密码错误");
-        }
-        userInfo.putAll(paramObj);
-        userInfo.put("password", paramObj.getString("newPwd"));
-
-        return userInfo;
     }
 
 }

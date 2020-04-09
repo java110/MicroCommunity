@@ -1,6 +1,8 @@
 package com.java110.api.bmo.machine;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
+import com.java110.core.context.DataFlowContext;
 
 /**
  * @ClassName IMachineBMO
@@ -11,4 +13,40 @@ import com.java110.api.bmo.IApiBaseBMO;
  * add by wuxw 2020/3/9
  **/
 public interface IMachineBMO extends IApiBaseBMO {
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject deleteMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
+    /**
+     * 添加设备信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject updateMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    /**
+     * 添加设备信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject updateMachineState(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
 }
+

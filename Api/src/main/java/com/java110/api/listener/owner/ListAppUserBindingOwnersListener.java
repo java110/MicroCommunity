@@ -13,6 +13,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,12 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         }
 
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        ownerAppUserDto.setOpenId(openId);
+        if(!StringUtil.isEmpty(openId)) {//这里微信小程序
+            ownerAppUserDto.setOpenId(openId);
+        }else{ //这种是业主注册的
+
+            ownerAppUserDto.setUserId(userId);
+        }
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 

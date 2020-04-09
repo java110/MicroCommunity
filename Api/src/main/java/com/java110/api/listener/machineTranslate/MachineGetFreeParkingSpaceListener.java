@@ -24,7 +24,9 @@ import org.springframework.http.HttpMethod;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName MachineRoadGateOpenListener
@@ -95,33 +97,44 @@ public class MachineGetFreeParkingSpaceListener extends BaseMachineListener {
         //查询出小区内的在场车辆
         CarInoutDto carInoutDto = new CarInoutDto();
         carInoutDto.setCommunityId(communityId);
-        carInoutDto.setStates(new String[]{"100300", "100400", "100600"});
+        carInoutDto.setStates(new String[]{"100300", "100400", "100600"});//状态，100300 进场状态 100400 支付完成 100500 离场状态 100600 支付超时重新支付
         List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(carInoutDto);
-        List<String> carNums = new ArrayList<>();
+        List<String> carNums = new ArrayList<>();//小区内的在场车辆车牌
         for (CarInoutDto tmpCarInoutDto : carInoutDtos) {
             carNums.add(tmpCarInoutDto.getCarNum());
         }
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(communityId);
-        if(!carNums.isEmpty()) {
+        if(!carNums.isEmpty()){
             ownerCarDto.setCarNums(carNums.toArray(new String[carNums.size()]));
         }
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
+        //付款方ID-车牌号
+        Map<String,String> psIdAndCarNumMap = new HashMap<>();
         List<String> psIds = new ArrayList<>();
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
             psIds.add(tmpOwnerCarDto.getPsId());
+            psIdAndCarNumMap.put(tmpOwnerCarDto.getPsId(),tmpOwnerCarDto.getCarNum());
         }
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(communityId);
         feeDto.setPayerObjIds(psIds.toArray(new String[psIds.size()]));
         feeDto.setNoArrearsEndTime(new Date());
-        int communityCarCount = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
 
-        //不是 出租或出售 车辆数
-        int realCarCount = carInoutDtos.size() - communityCarCount;
+//        int communityCarCount = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
+        List<FeeDto> communityCars = feeInnerServiceSMOImpl.queryFees(feeDto);//有效的月报车位信息，已经支付租金的
+        for(FeeDto communityCar:communityCars){
+            if(psIdAndCarNumMap.containsKey(communityCar.getPayerObjId())){
+                carNums.remove(psIdAndCarNumMap.get(communityCar.getPayerObjId()));//把场内月租车位的业主车牌去掉，不算进场车辆
+            }
+        }
+
+        //在场车辆车牌号【数组】-业主车牌号（有效的已租已售）【数组】，业主车牌有进场才去扣除，没进场不进行扣减
+//        int realCarCount = carInoutDtos.size() - communityCarCount;
+        int realCarCount = carNums.size();
 
         int realFreeParkingSpaceCount = freeParkingSpaceCount - realCarCount;
+
         JSONObject realFreeParkingSpace = new JSONObject();
         realFreeParkingSpace.put("total", freeParkingSpaceCount);
         realFreeParkingSpace.put("freeCount", realFreeParkingSpaceCount < 0 ? 0 : realFreeParkingSpaceCount);
