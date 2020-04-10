@@ -174,7 +174,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
-
+        businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
         businessOwner.putAll(paramInJson);
         businessOwner.put("state", ownerDtos.get(0).getState());
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
