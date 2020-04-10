@@ -63,6 +63,17 @@ public class Java110Converter implements Converter {
             }
             return newDate;
         }
+        // 3.0 Timestamp 转 String
+        if (value instanceof Timestamp && target == String.class) {
+            Date date = new Date(((Timestamp) value).getTime());
+            String newDate = null;
+            try {
+                newDate = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return newDate;
+        }
 
         if (value instanceof BigDecimal) {
             BigDecimal bd = (BigDecimal) value;
