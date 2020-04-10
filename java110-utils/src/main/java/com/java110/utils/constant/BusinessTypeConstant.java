@@ -922,6 +922,12 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_SAVE_INSPECTION_TASK="530200030001";
 
+    /**
+     *  保存用户标题测试
+     * 3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_FASTUSER="666666668888888";
+
 
 
 }
