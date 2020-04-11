@@ -6,16 +6,21 @@ import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
+import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 删除采购/出库订单
@@ -26,10 +31,17 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
 
     @Autowired
     private IPurchaseApplyBMO purchaseApplyBMOImpl;
+
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单号不能为空");
-
+        PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
+        List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
+        if(!"1000".equals(purchaseApplyDtos.get(0).getState())){
+            throw new IllegalArgumentException("只能取消未审核的订单");
+        }
     }
 
     @Override

@@ -41,7 +41,7 @@
 
     <!-- 保存采购明细表备份表 -->
     <insert id="saveBusinessPurchaseApplyDetailInfo" parameterType="List">
-        insert into business_purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate)
+        insert into business_purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
         values
         <foreach collection="list" item="item" index="index" separator=",">
         (
@@ -50,7 +50,8 @@
             #{item.quantity},
             #{item.remark},
             #{item.bId},
-            #{item.operate}
+            #{item.operate},
+            #{item.statusCd}
         )
         </foreach>
     </insert>
@@ -58,7 +59,7 @@
 
     <!-- 保存采购明细表-->
     <insert id="savePurchaseApplyDetailInfo" parameterType="List">
-        insert into purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate)
+        insert into purchase_apply_detail (apply_order_id,res_id,quantity,remark,b_id,operate,status_cd)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -67,7 +68,8 @@
             #{item.quantity},
             #{item.remark},
             #{item.bId},
-            #{item.operate}
+            #{item.operate},
+            #{item.statusCd}
             )
         </foreach>
     </insert>
@@ -81,7 +83,8 @@
             t.description,
             t.apply_order_id applyOrderId,t.state,
             t.store_id storeId,
-            t.user_name userName,t.b_id bId,t.user_id userId
+            t.user_name userName,t.b_id bId,t.user_id userId,
+            t.status_cd statusCd
         from business_purchase_apply t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -113,7 +116,7 @@
 
     <select id="getBusinessPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
         select
-        t.apply_order_id applyOrderId,t.b_id bId,t.res_id resId,t.quantity,t.remark,t.operate
+        t.apply_order_id applyOrderId,t.b_id bId,t.res_id resId,t.quantity,t.remark,t.operate,t.status_cd statusCd
         from business_purchase_apply_detail t
         where 1 =1
         <if test="operate !=null and operate != ''">

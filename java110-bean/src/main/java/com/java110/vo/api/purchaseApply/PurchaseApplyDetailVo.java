@@ -15,7 +15,7 @@ public class PurchaseApplyDetailVo {
     private List<String> applyOrderIds;
     private String bId;
     private String operate;
-    private String id;
+    private String statusCd;
 
 
     public String getApplyOrderId() {
@@ -106,12 +106,12 @@ public class PurchaseApplyDetailVo {
         this.operate = operate;
     }
 
-    public String getId() {
-        return id;
+    public String getStatusCd() {
+        return statusCd;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
     }
 }
 
