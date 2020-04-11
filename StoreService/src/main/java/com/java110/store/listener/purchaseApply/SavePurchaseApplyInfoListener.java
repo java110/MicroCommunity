@@ -171,6 +171,7 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
         for( PurchaseApplyDetailVo purchaseApplyDetailVo : list){
             purchaseApplyDetailVo.setApplyOrderId(businessPurchaseApply.get("applyOrderId").toString());
             purchaseApplyDetailVo.setbId(business.getbId());
+            purchaseApplyDetailVo.setStatusCd("0");
             purchaseApplyDetailVo.setOperate(StatusConstant.OPERATE_ADD);
         }
         //保存采购申请信息
