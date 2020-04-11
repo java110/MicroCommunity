@@ -352,15 +352,11 @@
         select
         count(1) count
         FROM
-        building_room t,
-        building_unit u,
-        f_floor f
+        building_room t
+        INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
-        AND t.`unit_id` = u.`unit_id`
-        AND u.`floor_id` = f.`floor_id`
-        AND f.`community_id` = t.`community_id`
-        AND u.`status_cd` = '0'
-        AND f.`status_cd` = '0'
         AND t.`community_id` = #{communityId}
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -407,11 +403,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        AND NOT EXISTS(
-        SELECT 1 FROM building_owner_room_rel borr
-        WHERE borr.`status_cd` = '0'
-        AND borr.`room_id` = t.`room_id`
-        )
+        and borr.`room_id` is null
 
 
     </select>
@@ -421,15 +413,11 @@
         select
         count(1) count
         FROM
-        building_room t,
-        building_unit u,
-        f_floor f
+        building_room t
+        INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
-        AND t.`unit_id` = u.`unit_id`
-        AND u.`floor_id` = f.`floor_id`
-        AND f.`community_id` = t.`community_id`
-        AND u.`status_cd` = '0'
-        AND f.`status_cd` = '0'
         AND t.`community_id` = #{communityId}
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -476,11 +464,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        AND EXISTS(
-        SELECT 1 FROM building_owner_room_rel borr
-        WHERE borr.`status_cd` = '0'
-        AND borr.`room_id` = t.`room_id`
-        )
+        AND borr.`room_id` is not null
 
 
     </select>
@@ -490,13 +474,12 @@
         SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
-        FROM building_room t,building_unit u,f_floor f
+        FROM
+        building_room t
+        INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
-        AND t.`unit_id` = u.`unit_id`
-        AND u.`floor_id` = f.`floor_id`
-        AND f.`community_id` = t.`community_id`
-        AND u.`status_cd` = '0'
-        AND f.`status_cd` = '0'
         AND t.`community_id` = #{communityId}
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -543,11 +526,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        AND NOT EXISTS(
-        SELECT 1 FROM building_owner_room_rel borr
-        WHERE borr.`status_cd` = '0'
-        AND borr.`room_id` = t.`room_id`
-        )
+        and borr.`room_id` is null
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
@@ -559,13 +538,12 @@
         SELECT t.unit_price,t.unit_price unitPrice,t.section,t.status_cd,t.status_cd statusCd,t.remark,t.user_id,
         t.user_id userId,t.room_id,t.room_id roomId,t.layer,t.built_up_area,t.built_up_area builtUpArea,t.room_num,
         t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id bId,t.apartment,t.state,u.`unit_num` unitNum
-        FROM building_room t,building_unit u,f_floor f
+        FROM
+        building_room t
+        INNER JOIN building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+        INNER JOIN f_floor f on u.`floor_id` = f.`floor_id` and f.`community_id` = t.`community_id` and f.`status_cd` = '0'
+        LEFT JOIN building_owner_room_rel borr on borr.`room_id` = t.`room_id` and borr.`status_cd` = '0'
         WHERE 1 =1
-        AND t.`unit_id` = u.`unit_id`
-        AND u.`floor_id` = f.`floor_id`
-        AND f.`community_id` = t.`community_id`
-        AND u.`status_cd` = '0'
-        AND f.`status_cd` = '0'
         AND t.`community_id` = #{communityId}
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -612,11 +590,7 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        AND EXISTS(
-        SELECT 1 FROM building_owner_room_rel borr
-        WHERE borr.`status_cd` = '0'
-        AND borr.`room_id` = t.`room_id`
-        )
+        AND borr.`room_id` is not null
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
