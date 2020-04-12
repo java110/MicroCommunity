@@ -5,6 +5,7 @@ import com.java110.front.smo.wxLogin.IWxLoginSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,13 @@ public class WxLoginController extends BaseController {
         }
 
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if(StringUtil.isEmpty(appId)){
+            appId = request.getHeader("APP-ID");
+        }
         IPageData pd = PageData.newInstance().builder("", "","", postInfo,
                 "", "", "", "",
-                request.getHeader("APP_ID"));
+                appId);
 
         return wxLoginSMOImpl.doLogin(pd);
     }
