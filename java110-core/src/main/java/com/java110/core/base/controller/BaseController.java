@@ -127,6 +127,10 @@ public class BaseController extends AppBase {
         headers.put("hostName", request.getLocalName());
         headers.put("port", request.getLocalPort() + "");
 
+        if(headers.containsKey("app-id")){
+            headers.put("app_id",headers.get("app-id"));
+        }
+
     }
 
     /**

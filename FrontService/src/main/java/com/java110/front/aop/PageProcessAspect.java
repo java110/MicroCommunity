@@ -11,6 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -58,6 +59,9 @@ public class PageProcessAspect {
         String appId = "";
         String sessionId = request.getSession().getId();
         appId = request.getHeader("APP_ID");
+        if(StringUtil.isEmpty(appId)){
+            appId = request.getHeader("APP-ID");
+        }
         logger.debug("请求头信息：" + request.getHeaderNames());
         if ("POST,PUT".contains(request.getMethod())) {
             InputStream in = request.getInputStream();
