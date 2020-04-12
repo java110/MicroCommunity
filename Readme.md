@@ -15,6 +15,32 @@
 
 分支管理说明，master 为前后端未分离代码，back  为前后端分离后端代码
 
+
+### 如何开始（how to start）
+
+[http://www.homecommunity.cn/](http://www.homecommunity.cn/)
+
+### 如何安装（how to install）
+
+方案一、centos7.6一键式自动安装
+
+> wget https://www.zyunshe.com/hcAutoInstall.tar
+
+如果下载不下来，请加群827669685在群文件中【HC系统部署文档】中获取hcAutoInstall.tar 自动部署shell脚本部署
+
+> tar -xvf hcAutoInstall.tar
+
+> 修改env.sh 中的相应IP和密码
+
+> sh install.sh
+
+[参考视频](https://www.bilibili.com/video/BV1Dk4y19728/)
+
+方案二、根据需求自助部署
+
+[参考视频](https://www.bilibili.com/video/BV1N7411E7rf/)
+
+
 ### 系统简介（introduction）
 1. 开发工具：
 
@@ -68,40 +94,6 @@ java1.8 + idea/eclipse + mysql + redis
 
 开发团队 账号/密码：dev/(由于开发者权限较大，删除数据会影响稳定性，查看具体功能，可以单独部署查看)
 
-### 如何开始（how to start）
-
-[http://www.homecommunity.cn/](http://www.homecommunity.cn/)
-
-### 如何安装（how to install）
-
-请加群827669685，在群文件中【HC系统部署文档】中获取hcAutoInstall.tar 自动部署shell脚本部署
-
-在root用户下解压tar -xvf hcAutoInstall.tar
-
-编辑env.sh 修改相应信息
-
-执行 sh install.sh
-
-### 解决方案
-
-[解决方案](https://docs.qq.com/doc/DQW9XWW50R3NjWmN6) 不断完善中
-
-### 硬件接入
-
-![流程图](docs/document/images/machineFlow.png)
-
-目前对接锐目门禁系统，如果您想将您的硬件对接到此项目，请加qq群号827669685 联系我们
-
-### 二次开发视频
-
-[视频](http://www.homecommunity.cn//document/#/start/vedio)
-
-### 接口协议
-
-1. [Api协议](http://www.homecommunity.cn//document/#/api/user/register)
-
-2. [后台协议](http://www.homecommunity.cn//document/#/dictionary)
-
 ### 运行效果（view）
 1.在浏览器输入 https://localhost:8443/ 如下图
 
@@ -122,13 +114,7 @@ java1.8 + idea/eclipse + mysql + redis
 
 加入微小区交流群随时了解项目进度，和java110开发者零距离沟通 qq群号 827669685，邮箱：928255095@qq.com
 
-![image](MicroCommunity_qq.png)
+![image](docs/images/MicroCommunity_qq.png)
 
-### 成为开发者
-
-如果您对小区 物业 有较深的理解，也致力于开发一套系统方便与物业，业主沟通交流，如果您还有空闲的时间，不怕吃苦，hc小区开发团队欢迎您的加入！
-qq群号 992420128  微信：wuxw2977 （添加时请备注HC小区开发）
-
-![image](join_me.JPG)
 
 

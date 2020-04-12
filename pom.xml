@@ -25,7 +25,6 @@
         <module>OrderService</module>
         <module>java110-cacheAgent</module>
         <module>java110-logAgent</module>
-        <module>zipkin</module>
         <module>ShopService</module>
         <module>CommentService</module>
         <module>Api</module>
