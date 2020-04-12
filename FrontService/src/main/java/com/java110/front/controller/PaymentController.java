@@ -7,6 +7,7 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,14 @@ public class PaymentController extends BaseController {
     public ResponseEntity<String> toPay(@RequestBody String postInfo, HttpServletRequest request) {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+       String appId = request.getHeader("APP_ID");
+        if(StringUtil.isEmpty(appId)){
+            appId = request.getHeader("APP-ID");
+        }
+
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
-                request.getHeader("APP_ID"));
+                appId);
         return toPaySMOImpl.toPay(newPd);
     }
 
@@ -61,9 +67,13 @@ public class PaymentController extends BaseController {
     public ResponseEntity<String> toPayTempCarInout(@RequestBody String postInfo, HttpServletRequest request) {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
         /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if(StringUtil.isEmpty(appId)){
+            appId = request.getHeader("APP-ID");
+        }
         IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
                 "", "", "", pd.getSessionId(),
-                request.getHeader("APP_ID"));
+                appId);
         return toPayTempCarInoutSMOImpl.toPay(newPd);
     }
 
