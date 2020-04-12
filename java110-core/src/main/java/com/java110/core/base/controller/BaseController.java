@@ -127,8 +127,24 @@ public class BaseController extends AppBase {
         headers.put("hostName", request.getLocalName());
         headers.put("port", request.getLocalPort() + "");
 
+        //处理app-id
         if(headers.containsKey("app-id")){
             headers.put("app_id",headers.get("app-id"));
+        }
+
+        //处理transaction-id
+        if(headers.containsKey("transaction-id")){
+            headers.put("transaction_id",headers.get("transaction-id"));
+        }
+
+        //处理req-time
+        if(headers.containsKey("req-time")){
+            headers.put("req_time",headers.get("req-time"));
+        }
+
+        //处理req-time
+        if(headers.containsKey("user-id")){
+            headers.put("user_id",headers.get("user-id"));
         }
 
     }
