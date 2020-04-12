@@ -1,4 +1,4 @@
-# HC小区管理系统是前后端完全开源的小区物业管理系统，包含小区后端项目，小区前段项目，物业版APP和业主版小程序,最新SQL文件加群获取827669685
+# HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，物业版uni-app和业主版uni-app,最新SQL文件加群获取827669685
 
 ## 开源代码说明
 
@@ -8,7 +8,7 @@
 [https://gitee.com/java110/MicrCommunityWeb](https://gitee.com/java110/MicrCommunityWeb)
 ### HC智慧家庭（业主版）
 [https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
-### HC掌上物业（物业版）
+### HC掌上物业（物业版uni-app）
 [https://gitee.com/java110/PropertyApp](https://gitee.com/java110/PropertyApp)
 
 ### 分支说明（branch）
