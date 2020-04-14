@@ -28,6 +28,7 @@
             <result property="resCode" column="resCode"/>
             <result property="price" column="price"/>
             <result property="stock" column="stock"/>
+            <result property="description" column="description"/>
         </collection>
     </resultMap>
 
@@ -218,7 +219,7 @@
         t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
         t.store_id storeId,t.user_name userName,
         t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
-        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode
+        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode,rs.description
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         inner join purchase_apply_detail de on de.apply_order_id = t.apply_order_id
@@ -266,6 +267,9 @@
             <foreach collection="applyOrderIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="resOrderType !=null and resOrderType != ''">
+            and t.res_order_type= #{resOrderType}
         </if>
         <if test="bId !=null and bId != ''">
             and p.b_id= #{bId}
