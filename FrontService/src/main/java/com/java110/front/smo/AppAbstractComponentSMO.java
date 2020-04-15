@@ -69,7 +69,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
      * @return
      * @throws Exception
      */
-    protected Map<String, String> java110Payment(RestTemplate restTemplate,String feeName, String orderNum, double money, String openId) throws Exception {
+    protected Map<String, String> java110Payment(RestTemplate restTemplate,String feeName, String tradeType,String orderNum, double money, String openId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -77,14 +77,24 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), money);
 //添加或更新支付记录(参数跟进自己业务需求添加)
 
-        Map<String, String> resMap = this.java110UnifieldOrder(restTemplate,feeName, orderNum, wechatAuthProperties.TRADE_TYPE_JSAPI, payAmount, openId);
+        Map<String, String> resMap = this.java110UnifieldOrder(restTemplate,feeName, orderNum, tradeType, payAmount, openId);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
-            resultMap.put("appId", wechatAuthProperties.getAppId());
-            resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
-            resultMap.put("nonceStr", PayUtil.makeUUID(32));
-            resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
-            resultMap.put("signType", "MD5");
-            resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
+            if(WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
+                resultMap.put("appId", wechatAuthProperties.getAppId());
+                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
+                resultMap.put("nonceStr", PayUtil.makeUUID(32));
+                resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
+                resultMap.put("signType", "MD5");
+                resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
+            }else if(WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)){
+                resultMap.put("appId", wechatAuthProperties.getAppId());
+                resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
+                resultMap.put("nonceStr", PayUtil.makeUUID(32));
+                resultMap.put("partnerid", wechatAuthProperties.getMchId());
+                resultMap.put("prepayid", resMap.get("prepay_id"));
+                //resultMap.put("signType", "MD5");
+                resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
+            }
             resultMap.put("code", "0");
             resultMap.put("msg", "下单成功");
             logger.info("【小程序支付】统一下单成功，返回参数:" + resultMap);
