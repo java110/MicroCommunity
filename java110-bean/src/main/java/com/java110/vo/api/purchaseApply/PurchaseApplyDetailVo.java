@@ -16,6 +16,7 @@ public class PurchaseApplyDetailVo {
     private String bId;
     private String operate;
     private String statusCd;
+    private String description;
 
 
     public String getApplyOrderId() {
@@ -112,6 +113,14 @@ public class PurchaseApplyDetailVo {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

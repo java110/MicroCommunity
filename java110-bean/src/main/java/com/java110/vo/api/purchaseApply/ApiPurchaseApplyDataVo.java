@@ -6,6 +6,7 @@ import java.util.List;
 public class ApiPurchaseApplyDataVo implements Serializable {
 
     private String applyOrderId;
+    private String resOrderType;
     private String state;
     private String userName;
     private String stateName;
@@ -89,5 +90,13 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getResOrderType() {
+        return resOrderType;
+    }
+
+    public void setResOrderType(String resOrderType) {
+        this.resOrderType = resOrderType;
     }
 }
