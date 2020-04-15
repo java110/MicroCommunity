@@ -78,7 +78,7 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
         String openId = realUserInfo.getString("openId");
 
         //微信下单PayUtil
-        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"), orderId, money, openId);
+        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"), orderId, money, openId);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;
