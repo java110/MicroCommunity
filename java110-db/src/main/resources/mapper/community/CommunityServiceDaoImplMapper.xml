@@ -445,12 +445,14 @@
         THEN '审核完成'
         ELSE
         '审核拒绝'
-        END) stateName
-        from s_community t
+        END) stateName,ca.area_code areaCode,ca.area_name areaName
+        from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
         </if>
         where 1 =1
+        and t.city_code = ca.area_code
+        and ca.status_cd = '0'
         <if test="address !=null and address != ''">
             and t.address= #{address}
         </if>
