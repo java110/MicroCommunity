@@ -140,6 +140,8 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
                 if(apiAuditAppUserBindingOwnerDataVo.getCommunityId().equals(tmpCommunityDto.getCommunityId())){
                     apiAuditAppUserBindingOwnerDataVo.setAreaCode(tmpCommunityDto.getAreaCode());
                     apiAuditAppUserBindingOwnerDataVo.setAreaName(tmpCommunityDto.getAreaName());
+                    apiAuditAppUserBindingOwnerDataVo.setParentAreaCode(tmpCommunityDto.getParentAreaCode());
+                    apiAuditAppUserBindingOwnerDataVo.setParentAreaName(tmpCommunityDto.getParentAreaName());
                 }
             }
         }

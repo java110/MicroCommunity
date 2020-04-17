@@ -445,7 +445,8 @@
         THEN '审核完成'
         ELSE
         '审核拒绝'
-        END) stateName,ca.area_code areaCode,ca.area_name areaName
+        END) stateName,ca.area_code areaCode,ca.area_name areaName,
+        ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName
         from s_community t,city_area ca
         <if test="memberId !=null and memberId !=''">
             ,s_community_member cm
