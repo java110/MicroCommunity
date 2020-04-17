@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 保存商户信息
+ * 查询商户信息
  * Created by Administrator on 2019/3/29.
  */
 @Java110Listener("listStoresByCommunityListener")
