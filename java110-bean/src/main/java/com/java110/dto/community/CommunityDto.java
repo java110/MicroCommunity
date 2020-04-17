@@ -30,7 +30,8 @@ public class CommunityDto extends PageDto implements Serializable {
     private String auditStatusCd;
     private String areaCode;
     private String areaName;
-
+    private String parentAreaCode;
+    private String parentAreaName;
 
 
     private Date createTime;
@@ -173,5 +174,21 @@ public class CommunityDto extends PageDto implements Serializable {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getParentAreaCode() {
+        return parentAreaCode;
+    }
+
+    public void setParentAreaCode(String parentAreaCode) {
+        this.parentAreaCode = parentAreaCode;
+    }
+
+    public String getParentAreaName() {
+        return parentAreaName;
+    }
+
+    public void setParentAreaName(String parentAreaName) {
+        this.parentAreaName = parentAreaName;
     }
 }

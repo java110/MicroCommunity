@@ -39,7 +39,7 @@ public class CallComponentController extends BaseController {
     /**
      * 前台调用api方法
      * add by wuxw 2020-03-16
-     *
+     * /callComponent/activities.listActivitiess
      * @return
      */
 
