@@ -31,15 +31,15 @@ public class UpdateJunkRequirementListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
         Assert.hasKeyAndValue(reqJson, "junkRequirementId", "junkRequirementId不能为空");
-        Assert.hasKeyAndValue(reqJson, "typeCd", "请求报文中未包含typeCd");
-        Assert.hasKeyAndValue(reqJson, "classification", "请求报文中未包含classification");
+//        Assert.hasKeyAndValue(reqJson, "typeCd", "请求报文中未包含typeCd");
+//        Assert.hasKeyAndValue(reqJson, "classification", "请求报文中未包含classification");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
-        Assert.hasKeyAndValue(reqJson, "referencePrice", "请求报文中未包含referencePrice");
-        Assert.hasKeyAndValue(reqJson, "publishUserId", "请求报文中未包含publishUserId");
-        Assert.hasKeyAndValue(reqJson, "publishUserName", "请求报文中未包含publishUserName");
-        Assert.hasKeyAndValue(reqJson, "publishUserLink", "请求报文中未包含publishUserLink");
-
+//        Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
+//        Assert.hasKeyAndValue(reqJson, "referencePrice", "请求报文中未包含referencePrice");
+//        Assert.hasKeyAndValue(reqJson, "publishUserId", "请求报文中未包含publishUserId");
+//        Assert.hasKeyAndValue(reqJson, "publishUserName", "请求报文中未包含publishUserName");
+//        Assert.hasKeyAndValue(reqJson, "publishUserLink", "请求报文中未包含publishUserLink");
+        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
     }
 
     @Override
@@ -51,8 +51,13 @@ public class UpdateJunkRequirementListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
+        JSONObject paramObj = new JSONObject();
+        paramObj.put("junkRequirementId",reqJson.getString("junkRequirementId"));
+        paramObj.put("communityId",reqJson.getString("communityId"));
+        paramObj.put("state",reqJson.getString("state"));
+
         //添加单元信息
-        businesses.add(junkRequirementBMOImpl.updateJunkRequirement(reqJson, context));
+        businesses.add(junkRequirementBMOImpl.updateJunkRequirement(paramObj, context));
 
         ResponseEntity<String> responseEntity = junkRequirementBMOImpl.callService(context, service.getServiceCode(), businesses);
 
