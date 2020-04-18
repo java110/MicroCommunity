@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="junkRequirementServiceDaoImpl">
+
+    <!-- 保存旧货市场信息 add by wuxw 2018-07-03 -->
+       <insert id="saveBusinessJunkRequirementInfo" parameterType="Map">
+           insert into business_junk_requirement(
+publish_user_name,publish_user_id,junk_requirement_id,classification,reference_price,operate,type_cd,publish_user_link,context,state,community_id,b_id
+) values (
+#{publishUserName},#{publishUserId},#{junkRequirementId},#{classification},#{referencePrice},#{operate},#{typeCd},#{publishUserLink},#{context},#{state},#{communityId},#{bId}
+)
+       </insert>
+
+
+       <!-- 查询旧货市场信息（Business） add by wuxw 2018-07-03 -->
+       <select id="getBusinessJunkRequirementInfo" parameterType="Map" resultType="Map">
+           select  t.publish_user_name,t.publish_user_name publishUserName,t.publish_user_id,t.publish_user_id publishUserId,t.junk_requirement_id,t.junk_requirement_id junkRequirementId,t.classification,t.reference_price,t.reference_price referencePrice,t.operate,t.type_cd,t.type_cd typeCd,t.publish_user_link,t.publish_user_link publishUserLink,t.context,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
+from business_junk_requirement t 
+where 1 =1 
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+<if test="operate !=null and operate != ''">
+   and t.operate= #{operate}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+
+       </select>
+
+
+
+
+
+    <!-- 保存旧货市场信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveJunkRequirementInfoInstance" parameterType="Map">
+        insert into junk_requirement(
+publish_user_name,publish_user_id,status_cd,junk_requirement_id,classification,reference_price,type_cd,publish_user_link,context,state,community_id,b_id
+) select t.publish_user_name,t.publish_user_id,'0',t.junk_requirement_id,t.classification,t.reference_price,t.type_cd,t.publish_user_link,t.context,t.state,t.community_id,t.b_id from business_junk_requirement t where 1=1
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+   and t.operate= 'ADD'
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+
+    </insert>
+
+
+
+    <!-- 查询旧货市场信息 add by wuxw 2018-07-03 -->
+    <select id="getJunkRequirementInfo" parameterType="Map" resultType="Map">
+        select  t.publish_user_name,t.publish_user_name publishUserName,t.publish_user_id,t.publish_user_id publishUserId,t.status_cd,t.status_cd statusCd,t.junk_requirement_id,t.junk_requirement_id junkRequirementId,t.classification,t.reference_price,t.reference_price referencePrice,t.type_cd,t.type_cd typeCd,t.publish_user_link,t.publish_user_link publishUserLink,t.context,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId 
+from junk_requirement t 
+where 1 =1 
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改旧货市场信息 add by wuxw 2018-07-03 -->
+    <update id="updateJunkRequirementInfoInstance" parameterType="Map">
+        update  junk_requirement t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="publishUserName !=null and publishUserName != ''">
+, t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+, t.publish_user_id= #{publishUserId}
+</if> 
+<if test="classification !=null and classification != ''">
+, t.classification= #{classification}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+, t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+, t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+, t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+, t.context= #{context}
+</if> 
+<if test="state !=null and state != ''">
+, t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+ where 1=1 <if test="junkRequirementId !=null and junkRequirementId != ''">
+and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="bId !=null and bId != ''">
+and t.b_id= #{bId}
+</if> 
+
+    </update>
+
+    <!-- 查询旧货市场数量 add by wuxw 2018-07-03 -->
+     <select id="queryJunkRequirementsCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from junk_requirement t 
+where 1 =1 
+<if test="publishUserName !=null and publishUserName != ''">
+   and t.publish_user_name= #{publishUserName}
+</if> 
+<if test="publishUserId !=null and publishUserId != ''">
+   and t.publish_user_id= #{publishUserId}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="junkRequirementId !=null and junkRequirementId != ''">
+   and t.junk_requirement_id= #{junkRequirementId}
+</if> 
+<if test="classification !=null and classification != ''">
+   and t.classification= #{classification}
+</if> 
+<if test="referencePrice !=null and referencePrice != ''">
+   and t.reference_price= #{referencePrice}
+</if> 
+<if test="typeCd !=null and typeCd != ''">
+   and t.type_cd= #{typeCd}
+</if> 
+<if test="publishUserLink !=null and publishUserLink != ''">
+   and t.publish_user_link= #{publishUserLink}
+</if> 
+<if test="context !=null and context != ''">
+   and t.context= #{context}
+</if> 
+<if test="state !=null and state != ''">
+   and t.state= #{state}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="bId !=null and bId != ''">
+   and t.b_id= #{bId}
+</if> 
+
+
+     </select>
+
+</mapper>

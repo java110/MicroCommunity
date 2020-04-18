@@ -123,6 +123,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_taskDetailId = "53";
     public static final String CODE_PREFIX_applyOrderId = "15";
     public static final String CODE_PREFIX_fastuserId = "68";
+    public static final String CODE_PREFIX_junkRequirementId = "69";
 
 
 
