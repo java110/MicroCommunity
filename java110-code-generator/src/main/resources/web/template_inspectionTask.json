@@ -1,0 +1,118 @@
+{
+  "templateName":"巡检任务",
+  "templateCode":"inspectionTask",
+  "templateKey":"taskId",
+  "templateKeyName":"任务编码",
+  "searchCode": "taskId",
+  "searchName": "任务编码",
+  "conditions": [
+    {
+      "name": "执行人",
+      "inputType": "input",
+      "code": "planUserName",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "巡检计划",
+      "inputType": "input",
+      "code": "inspectionPlanId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "巡检时间",
+      "inputType": "input",
+      "code": "actInsTime",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"taskId",
+      "cnCode":"任务编码",
+      "desc":"必填，请选择任务编码",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"任务编码格式错误",
+      "show": true
+    },
+    {
+      "code": "inspectionPlanId",
+      "cnCode":"巡检计划",
+      "desc":"必填，请填写收费项目",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,100",
+      "limitErrInfo":"收费项目不能超过100位",
+      "show": true
+    },
+    {
+      "code":"planInsTime",
+      "cnCode":"巡检时间",
+      "desc":"必填，请选择费用标识",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1003006,2006012",
+      "selectValueName":"周期性费用,一次性费用",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"费用类型格式错误",
+      "show": true
+    },
+    {
+      "code": "actInsTime",
+      "cnCode":"实际巡检时间",
+      "desc":"必填，请选择计费起始时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"计费起始时间不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code": "planUserName",
+      "cnCode":"巡检人",
+      "desc":"必填，请选择计费终止时间",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"dateTime",
+      "limitParam":"",
+      "limitErrInfo":"计费终止时间不是有效的时间格式",
+      "show": true
+    },
+    {
+      "code":"actUserName",
+      "cnCode":"实际巡检人",
+      "desc":"必填，请填写附加费用",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "select",
+      "selectValue":"1001,2002",
+      "selectValueName":"面积*单价+附加费,固定费用",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"计算公式格式错误",
+      "show": false
+    },
+    {
+      "code":"signType",
+      "cnCode":"巡检方式",
+      "desc":"必填，请填写计费单价",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"money",
+      "limitParam":"",
+      "limitErrInfo":"计费单价格式错误",
+      "show": true
+    }
+  ]
+}
