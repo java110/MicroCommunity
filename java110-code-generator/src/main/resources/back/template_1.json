@@ -1,56 +1,64 @@
 {
-  "id": "taskId",
-  "name": "inspectionTask",
-  "desc": "活动",
+  "id": "junkRequirementId",
+  "name": "junkRequirement",
+  "desc": "旧货市场",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_INSPECTION_TASK",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK",
-  "newBusinessTypeCdValue": "530200030001",
-  "updateBusinessTypeCdValue": "530200040001",
-  "deleteBusinessTypeCdValue": "530200050001",
-  "businessTableName": "business_inspection_task",
-  "tableName": "inspection_task",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_JUNK_REQUIREMENT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT",
+  "newBusinessTypeCdValue": "550200030001",
+  "updateBusinessTypeCdValue": "550200040001",
+  "deleteBusinessTypeCdValue": "550200050001",
+  "businessTableName": "business_junk_requirement",
+  "tableName": "junk_requirement",
   "param": {
-    "taskId": "task_id",
-    "inspectionPlanId": "inspection_plan_id",
-    "planInsTime": "plan_ins_time",
-    "actInsTime": "act_ins_time",
-    "planUserId": "plan_user_id",
+    "junkRequirementId": "junk_requirement_id",
+    "typeCd": "type_cd",
+    "classification": "classification",
+    "context": "context",
+    "referencePrice": "reference_price",
     "communityId": "community_id",
-    "planUserName": "plan_user_name",
-    "actUserId": "act_user_id",
-    "actUserName": "act_user_name",
-    "signType": "sign_type",
+    "publishUserId": "publish_user_id",
+    "publishUserName": "publish_user_name",
+    "publishUserLink": "publish_user_link",
+    "state": "state",
     "statusCd": "status_cd",
     "operate": "operate",
     "bId": "b_id"
   },
   "required": [
     {
-      "code": "inspectionPlanId",
-      "msg": "巡检计划不能为空"
+      "code": "typeCd",
+      "msg": "类型不能为空"
     },
     {
-      "code": "actInsTime",
-      "msg": "巡检时间不能为空"
+      "code": "classification",
+      "msg": "分类不能为空"
     },
     {
       "code": "communityId",
       "msg": "小区不能为空"
     },
     {
-      "code": "actUserId",
-      "msg": "巡检人不能为空"
+      "code": "context",
+      "msg": "内容不能为空"
     },
     {
-      "code": "actUserName",
-      "msg": "巡检人不能为空"
+      "code": "referencePrice",
+      "msg": "参考价格不能为空"
     },
     {
-      "code": "signType",
-      "msg": "巡检方式不能为空"
+      "code": "publishUserId",
+      "msg": "发布人ID不能为空"
+    },
+    {
+      "code": "publishUserName",
+      "msg": "发布人名称不能为空"
+    },
+    {
+      "code": "publishUserLink",
+      "msg": "发布人联系电话不能为空"
     }
   ]
 }
