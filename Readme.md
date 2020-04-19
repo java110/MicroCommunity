@@ -5,7 +5,7 @@
 ### HC小区后端代码
  [https://gitee.com/wuxw7/MicroCommunity](https://gitee.com/wuxw7/MicroCommunity)
 ### HC小区前段代码
-[https://gitee.com/java110/MicrCommunityWeb](https://gitee.com/java110/MicrCommunityWeb)
+[https://gitee.com/java110/MicroCommunityWeb](https://gitee.com/java110/MicroCommunityWeb)
 ### HC智慧家庭（业主版）
 [https://gitee.com/java110/WechatOwnerService](https://gitee.com/java110/WechatOwnerService)
 ### HC掌上物业（物业版uni-app）
