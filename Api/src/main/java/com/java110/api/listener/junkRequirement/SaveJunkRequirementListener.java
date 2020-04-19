@@ -50,6 +50,8 @@ public class SaveJunkRequirementListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
+        reqJson.put("state","12001");
+
         //添加单元信息
         businesses.add(junkRequirementBMOImpl.addJunkRequirement(reqJson, context));
 
