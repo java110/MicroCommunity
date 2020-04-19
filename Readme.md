@@ -95,7 +95,7 @@ java1.8 + idea/eclipse + mysql + redis
 开发团队 账号/密码：dev/(由于开发者权限较大，删除数据会影响稳定性，查看具体功能，可以单独部署查看)
 
 ### 运行效果（view）
-1.在浏览器输入 https://localhost:8443/ 如下图
+1.在浏览器输入 http://localhost:3000/ 如下图
 
 ![image](docs/img/login.png)
 
