@@ -114,9 +114,12 @@
         publishUserId,t.status_cd,t.status_cd statusCd,t.junk_requirement_id,t.junk_requirement_id
         junkRequirementId,t.classification,t.reference_price,t.reference_price referencePrice,t.type_cd,t.type_cd
         typeCd,t.publish_user_link,t.publish_user_link publishUserLink,t.context,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.create_time createTime
-        from junk_requirement t
+        communityId,t.b_id,t.b_id bId,t.create_time createTime,td1.name stateName
+        from junk_requirement t,t_dict td1
         where 1 =1
+        and td1.table_name = 'junk_requirement'
+        and td1.table_columns = 'state'
+        and td1.status_cd = t.state
         <if test="publishUserName !=null and publishUserName != ''">
             and t.publish_user_name= #{publishUserName}
         </if>
@@ -207,8 +210,11 @@
     <!-- 查询旧货市场数量 add by wuxw 2018-07-03 -->
     <select id="queryJunkRequirementsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from junk_requirement t
+        from junk_requirement t,t_dict td1
         where 1 =1
+        and td1.table_name = 'junk_requirement'
+        and td1.table_columns = 'state'
+        and td1.status_cd = t.state
         <if test="publishUserName !=null and publishUserName != ''">
             and t.publish_user_name= #{publishUserName}
         </if>

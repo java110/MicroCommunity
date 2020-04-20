@@ -56,8 +56,8 @@ public class SaveJunkRequirementListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
-        reqJson.put("state", "12001");
-
+        //reqJson.put("state", "12001");
+        reqJson.put("state", "13001");
         String junkRequirementId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_junkRequirementId);
         reqJson.put("junkRequirementId",junkRequirementId);
 
