@@ -108,7 +108,7 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
                 photoVos.add(photoVo);
             }
 
-            junkRequirementDataVo.setPhotoVos(photoVos);
+            junkRequirementDataVo.setPhotos(photoVos);
 
         }
     }

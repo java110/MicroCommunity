@@ -18,7 +18,7 @@ public class ApiJunkRequirementDataVo implements Serializable {
     private String state;
     private String communityId;
     private String bId;
-    private List<PhotoVo> photoVos;
+    private List<PhotoVo> photos;
 
     public String getPublishUserName() {
         return publishUserName;
@@ -124,11 +124,12 @@ public class ApiJunkRequirementDataVo implements Serializable {
         this.bId = bId;
     }
 
-    public List<PhotoVo> getPhotoVos() {
-        return photoVos;
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
     }
 
-    public void setPhotoVos(List<PhotoVo> photoVos) {
-        this.photoVos = photoVos;
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }
