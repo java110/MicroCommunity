@@ -96,4 +96,30 @@ public class JunkRequirementBMOImpl extends ApiBaseBMO implements IJunkRequireme
         return business;
     }
 
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessUnit = new JSONObject();
+        businessUnit.put("fileRelId", "-1");
+        businessUnit.put("relTypeCd", "80000");
+        businessUnit.put("saveWay", "ftp");
+        businessUnit.put("objId", paramInJson.getString("junkRequirementId"));
+        businessUnit.put("fileRealName", paramInJson.getString("photoId"));
+        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+
+        return business;
+    }
+
 }
