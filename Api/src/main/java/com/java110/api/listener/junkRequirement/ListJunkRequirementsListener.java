@@ -102,11 +102,13 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
             fileRelDto.setObjId(junkRequirementDataVo.getJunkRequirementId());
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
             photoVos = new ArrayList<>();
-            for(FileRelDto tmpFileRelDto : fileRelDtos){
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
                 photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + junkRequirementDataVo.getCommunityId());
                 photoVos.add(photoVo);
             }
+
+            junkRequirementDataVo.setPhotoVos(photoVos);
 
         }
     }
