@@ -1,6 +1,7 @@
 package com.java110.vo.api.junkRequirement;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ApiJunkRequirementDataVo implements Serializable {
 
@@ -17,6 +18,7 @@ public class ApiJunkRequirementDataVo implements Serializable {
     private String state;
     private String communityId;
     private String bId;
+    private List<PhotoVo> photoVos;
 
     public String getPublishUserName() {
         return publishUserName;
@@ -122,5 +124,11 @@ public class ApiJunkRequirementDataVo implements Serializable {
         this.bId = bId;
     }
 
+    public List<PhotoVo> getPhotoVos() {
+        return photoVos;
+    }
 
+    public void setPhotoVos(List<PhotoVo> photoVos) {
+        this.photoVos = photoVos;
+    }
 }

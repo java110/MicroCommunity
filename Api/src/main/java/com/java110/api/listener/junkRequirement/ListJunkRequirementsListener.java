@@ -4,13 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.junkRequirement.IJunkRequirementInnerServiceSMO;
+import com.java110.dto.advert.AdvertItemDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.junkRequirement.JunkRequirementDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeJunkRequirementConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.junkRequirement.ApiJunkRequirementDataVo;
 import com.java110.vo.api.junkRequirement.ApiJunkRequirementVo;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -28,11 +32,14 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IJunkRequirementInnerServiceSMO junkRequirementInnerServiceSMOImpl;
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
         return ServiceCodeJunkRequirementConstant.LIST_JUNKREQUIREMENTS;
     }
+
 
     @Override
     public HttpMethod getHttpMethod() {
@@ -70,6 +77,7 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             junkRequirements = BeanConvertUtil.covertBeanList(junkRequirementInnerServiceSMOImpl.queryJunkRequirements(junkRequirementDto), ApiJunkRequirementDataVo.class);
+            refreshPhotos(junkRequirements);
         } else {
             junkRequirements = new ArrayList<>();
         }
@@ -84,5 +92,22 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+    private void refreshPhotos(List<ApiJunkRequirementDataVo> junkRequirements) {
+        List<PhotoVo> photoVos = null;
+        PhotoVo photoVo = null;
+        for (ApiJunkRequirementDataVo junkRequirementDataVo : junkRequirements) {
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(junkRequirementDataVo.getJunkRequirementId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            photoVos = new ArrayList<>();
+            for(FileRelDto tmpFileRelDto : fileRelDtos){
+                photoVo = new PhotoVo();
+                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + junkRequirementDataVo.getCommunityId());
+                photoVos.add(photoVo);
+            }
+
+        }
     }
 }
