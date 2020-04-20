@@ -38,7 +38,9 @@ public class JunkRequirementBMOImpl extends ApiBaseBMO implements IJunkRequireme
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessJunkRequirement = new JSONObject();
         businessJunkRequirement.putAll(paramInJson);
-        businessJunkRequirement.put("junkRequirementId", "-1");
+        if (!paramInJson.containsKey("junkRequirementId")) {
+            businessJunkRequirement.put("junkRequirementId", "-1");
+        }
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessJunkRequirement", businessJunkRequirement);
         return business;
