@@ -150,7 +150,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     }
 
     /**
-     * 获取批量userId
+     * 获取批量userIdsaveOwner
      *
      * @param auditAppUserBindingOwners 业主绑定信息
      * @return 批量userIds 信息

@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.msg.SmsDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -44,6 +46,9 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IOwnerBMO ownerBMOImpl;
+
+    @Autowired
+    private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -174,6 +179,17 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             Assert.hasLength(paramObj.getString("roomId"), "roomId不能为空");
             Assert.hasLength(paramObj.getString("state"), "state不能为空");
             Assert.hasLength(paramObj.getString("storeId"), "storeId不能为空");
+        }
+
+        if(paramObj.containsKey("msgCode")){
+            SmsDto smsDto = new SmsDto();
+            smsDto.setTel(paramObj.getString("link"));
+            smsDto.setCode(paramObj.getString("msgCode"));
+            smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
+
+            if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+                throw new IllegalArgumentException(smsDto.getMsg());
+            }
         }
     }
 
