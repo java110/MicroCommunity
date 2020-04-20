@@ -20,6 +20,8 @@ public class ApiJunkRequirementDataVo implements Serializable {
     private String bId;
     private List<PhotoVo> photos;
 
+    private String createTime;
+
     public String getPublishUserName() {
         return publishUserName;
     }
@@ -131,5 +133,13 @@ public class ApiJunkRequirementDataVo implements Serializable {
 
     public void setPhotos(List<PhotoVo> photos) {
         this.photos = photos;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
