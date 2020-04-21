@@ -119,6 +119,9 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="resOrderType == '20000'">
+            and t.stock > 0
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -191,6 +194,9 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="resOrderType == '20000'">
+            and t.stock > 0
         </if>
 
 

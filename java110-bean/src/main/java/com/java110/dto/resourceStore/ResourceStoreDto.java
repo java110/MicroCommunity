@@ -22,6 +22,8 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String storeId;
     private String stock;
     private String resId;
+    //10000 采购 20000出库
+    private String resOrderType;
 
 
     private Date createTime;
@@ -100,5 +102,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getResOrderType() {
+        return resOrderType;
+    }
+
+    public void setResOrderType(String resOrderType) {
+        this.resOrderType = resOrderType;
     }
 }
