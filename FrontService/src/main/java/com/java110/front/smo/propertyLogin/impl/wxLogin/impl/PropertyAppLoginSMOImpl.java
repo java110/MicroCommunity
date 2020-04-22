@@ -6,6 +6,7 @@ import com.java110.front.smo.propertyLogin.impl.wxLogin.IPropertyAppLoginSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class PropertyAppLoginSMOImpl extends AppAbstractComponentSMO implements 
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "http://api.java110.com:8008/api/user.service.login", HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL +"/api/user.service.login", HttpMethod.POST);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
