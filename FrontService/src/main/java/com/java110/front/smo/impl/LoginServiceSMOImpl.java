@@ -2,6 +2,7 @@ package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.AuthenticationFactory;
@@ -50,7 +51,7 @@ public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServi
         }
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
-        responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(), "http://api.java110.com:8008/api/user.service.login",HttpMethod.POST);
+        responseEntity = this.callCenterService(restTemplate,pd,loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL +"/api/user.service.login",HttpMethod.POST);
         if(responseEntity.getStatusCode() == HttpStatus.OK){
             pd.setToken(JSONObject.parseObject(responseEntity.getBody()).getString("token"));
         }
