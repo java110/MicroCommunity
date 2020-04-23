@@ -107,7 +107,7 @@ public class OrgBMOImpl extends ApiBaseBMO implements IOrgBMO {
         businessOrg.putAll(paramInJson);
         businessOrg.put("orgId", "-1");
         businessOrg.put("allowOperation", "T");
-        businessOrg.put("belongCommunityId", "8888");
+        businessOrg.put("belongCommunityId", "");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
         return business;

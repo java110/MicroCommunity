@@ -91,9 +91,9 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
 
         //2.0 再根据 部门对应的 小区ID查询小区信息
         OrgDto orgDto = new OrgDto();
-        orgDto.setOrgId(orgStaffRelDtos.get(0).getOrgId());
+        orgDto.setOrgId(orgStaffRelDtos.get(0).getParentOrgId());
         orgDto.setStoreId(reqJson.getString("storeId"));
-        orgDto.setOrgLevel("3");
+        orgDto.setOrgLevel("2");
         List<OrgDto> orgDtos = orgInnerServiceSMOImpl.queryOrgs(orgDto);
 
         Assert.listOnlyOne(orgDtos, "根据组织ID未查询到员工对应部门信息或查询到多条数据");
@@ -111,7 +111,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
                 communitys = new ArrayList<>();
             }
         } else {
-            String companyOrgId = orgDtos.get(0).getParentOrgId();
+            String companyOrgId = orgDtos.get(0).getOrgId();
             OrgCommunityDto orgCommunityDto = new OrgCommunityDto();
             orgCommunityDto.setOrgId(companyOrgId);
             count = orgCommunityInnerServiceSMOImpl.queryOrgCommunitysCount(orgCommunityDto);
