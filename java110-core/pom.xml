@@ -43,6 +43,10 @@
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
 
 
         <dependency>

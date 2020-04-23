@@ -3,6 +3,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IFileServiceDao;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.client.JSchFtpUploadTemplate;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.core.client.FtpUploadTemplate;
@@ -26,6 +27,9 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
 
+    @Autowired
+    private JSchFtpUploadTemplate jSchFtpUploadTemplate;
+
 
     @Override
     public String saveFile(@RequestBody FileDto fileDto) {
@@ -37,6 +41,9 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
 
+//        String fileName = jSchFtpUploadTemplate.upload(fileDto.getContext(), java110Properties.getFtpServer(),
+//                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+//                java110Properties.getFtpUserPassword(), java110Properties.getFtpPath());
         return fileName;
     }
 
