@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.dto.community.CommunityDto;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -47,10 +48,18 @@ public class DeleteCommunityListener extends AbstractServiceApiListener {
         JSONArray businesses = new JSONArray();
 
         AppService service = event.getAppService();
-
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId((String)reqJson.get("communityId"));
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(communityDtos.size() == 0 || communityDtos == null){
+            throw new IllegalArgumentException("没有查询到communityId为："+communityDto.getCommunityId()+"小区信息");
+        }
+        if("1100".equals(communityDtos.get(0).getState())){
+            throw new IllegalArgumentException("删除失败,该小区已审核通过");
+        }
         //添加单元信息
         businesses.add(communityBMOImpl.deleteCommunity(reqJson, context));
-        businesses.addAll(communityBMOImpl.exitCommunityMember(reqJson));
+        //businesses.addAll(communityBMOImpl.exitCommunityMember(reqJson));
 
 
         ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
