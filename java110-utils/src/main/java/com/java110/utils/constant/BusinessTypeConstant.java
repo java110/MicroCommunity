@@ -248,6 +248,9 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_SAVE_COMMUNITY_INFO = "500100030001";
 
+    //删除小区
+    public static final String BUSINESS_TYPE_DELETE_COMMUNITY = "500100050011";
+
     /**
      * 小区成员加入信息
      */

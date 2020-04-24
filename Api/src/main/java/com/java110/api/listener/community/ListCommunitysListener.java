@@ -104,19 +104,18 @@ public class ListCommunitysListener extends AbstractServiceApiListener {
         for (ApiCommunityDataVo communityDataVo : communitys) {
             areaCodes.add(communityDataVo.getCityCode());
         }
-
-        AreaDto areaDto = new AreaDto();
-        areaDto.setAreaCodes(areaCodes.toArray(new String[areaCodes.size()]));
-
-        List<AreaDto> areaDtos = areaInnerServiceSMOImpl.getProvCityArea(areaDto);
-
-        for (ApiCommunityDataVo communityDataVo : communitys) {
-            for (AreaDto tmpAreaDto : areaDtos) {
-                if (communityDataVo.getCityCode().equals(tmpAreaDto.getAreaCode())) {
-                    communityDataVo.setCityName(tmpAreaDto.getProvName() + tmpAreaDto.getCityName() + tmpAreaDto.getAreaName());
-                    continue;
+        if(areaCodes.size() > 0){
+            AreaDto areaDto = new AreaDto();
+            areaDto.setAreaCodes(areaCodes.toArray(new String[areaCodes.size()]));
+            List<AreaDto> areaDtos = areaInnerServiceSMOImpl.getProvCityArea(areaDto);
+            for (ApiCommunityDataVo communityDataVo : communitys) {
+                for (AreaDto tmpAreaDto : areaDtos) {
+                    if (communityDataVo.getCityCode().equals(tmpAreaDto.getAreaCode())) {
+                        communityDataVo.setCityName(tmpAreaDto.getProvName() + tmpAreaDto.getCityName() + tmpAreaDto.getAreaName());
+                        continue;
+                    }
+                    communityDataVo.setCityName("未知");
                 }
-                communityDataVo.setCityName("未知");
             }
         }
     }

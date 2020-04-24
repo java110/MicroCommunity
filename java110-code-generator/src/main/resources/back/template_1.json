@@ -1,64 +1,36 @@
 {
-  "id": "junkRequirementId",
-  "name": "junkRequirement",
-  "desc": "旧货市场",
+  "id": "communityId",
+  "name": "community",
+  "desc": "小区",
   "shareParam": "communityId",
   "shareColumn": "community_id",
   "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT",
   "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_JUNK_REQUIREMENT",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_COMMUNITY",
   "newBusinessTypeCdValue": "550200030001",
   "updateBusinessTypeCdValue": "550200040001",
-  "deleteBusinessTypeCdValue": "550200050001",
-  "businessTableName": "business_junk_requirement",
-  "tableName": "junk_requirement",
+  "deleteBusinessTypeCdValue": "500100050011",
+  "businessTableName": "business_community",
+  "tableName": "s_community",
   "param": {
-    "junkRequirementId": "junk_requirement_id",
-    "typeCd": "type_cd",
-    "classification": "classification",
-    "context": "context",
-    "referencePrice": "reference_price",
     "communityId": "community_id",
-    "publishUserId": "publish_user_id",
-    "publishUserName": "publish_user_name",
-    "publishUserLink": "publish_user_link",
+    "b_id": "bId",
+    "name": "name",
+    "address": "address",
+    "cityCode": "city_code",
+    "nearbyLandmarks": "nearby_landmarks",
+    "mapX": "map_x",
+    "mapY": "map_y",
+    "month": "month",
+    "createTime": "create_time",
     "state": "state",
     "statusCd": "status_cd",
-    "operate": "operate",
-    "bId": "b_id"
+    "operate": "operate"
   },
   "required": [
     {
-      "code": "typeCd",
-      "msg": "类型不能为空"
-    },
-    {
-      "code": "classification",
-      "msg": "分类不能为空"
-    },
-    {
       "code": "communityId",
-      "msg": "小区不能为空"
-    },
-    {
-      "code": "context",
-      "msg": "内容不能为空"
-    },
-    {
-      "code": "referencePrice",
-      "msg": "参考价格不能为空"
-    },
-    {
-      "code": "publishUserId",
-      "msg": "发布人ID不能为空"
-    },
-    {
-      "code": "publishUserName",
-      "msg": "发布人名称不能为空"
-    },
-    {
-      "code": "publishUserLink",
-      "msg": "发布人联系电话不能为空"
+      "msg": "小区id不能为空"
     }
   ]
 }
