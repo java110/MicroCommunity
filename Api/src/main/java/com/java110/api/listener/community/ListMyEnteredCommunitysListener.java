@@ -81,6 +81,8 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+
+
         //1.0 先查询 员工对应的部门
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStoreId(reqJson.getString("storeId"));
@@ -104,6 +106,9 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
+            if(reqJson.containsKey("communityName")){
+                communityDto.setName(reqJson.getString("communityName"));
+            }
             count = communityInnerServiceSMOImpl.queryCommunitysCount(communityDto);
             if (count > 0) {
                 communitys = BeanConvertUtil.covertBeanList(communityInnerServiceSMOImpl.queryCommunitys(communityDto), ApiCommunityDataVo.class);
@@ -112,7 +117,7 @@ public class ListMyEnteredCommunitysListener extends AbstractServiceApiListener 
             }
         } else {
             String companyOrgId = orgDtos.get(0).getOrgId();
-            OrgCommunityDto orgCommunityDto = new OrgCommunityDto();
+            OrgCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, OrgCommunityDto.class);
             orgCommunityDto.setOrgId(companyOrgId);
             count = orgCommunityInnerServiceSMOImpl.queryOrgCommunitysCount(orgCommunityDto);
             if (count > 0) {
