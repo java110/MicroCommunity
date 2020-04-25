@@ -287,6 +287,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
 
         if(users == null || users.size() == 0){
+            complaintDto.setCurrentUserId("");
+            complaintDto.setCurrentUserName("");
+            complaintDto.setCurrentUserTel("");
             return complaintDto;
         }
 
