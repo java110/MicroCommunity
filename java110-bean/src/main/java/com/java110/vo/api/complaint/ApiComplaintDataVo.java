@@ -30,6 +30,10 @@ public class ApiComplaintDataVo implements Serializable {
 
     private String createTime;
 
+    private String currentUserId;
+    private String currentUserName;
+    private String currentUserTel;
+
 
     public String getComplaintId() {
         return complaintId;
@@ -181,5 +185,29 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
+    }
+
+    public void setCurrentUserName(String currentUserName) {
+        this.currentUserName = currentUserName;
+    }
+
+    public String getCurrentUserTel() {
+        return currentUserTel;
+    }
+
+    public void setCurrentUserTel(String currentUserTel) {
+        this.currentUserTel = currentUserTel;
     }
 }
