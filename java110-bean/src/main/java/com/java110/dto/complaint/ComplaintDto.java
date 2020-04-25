@@ -34,8 +34,9 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String unitNum;
     private String floorNum;
     private String communityId;
-
     private String currentUserId;
+    private String currentUserName;
+    private String currentUserTel;
 
     //
     private String auditCode;
@@ -223,5 +224,21 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setComplaintIds(String[] complaintIds) {
         this.complaintIds = complaintIds;
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
+    }
+
+    public void setCurrentUserName(String currentUserName) {
+        this.currentUserName = currentUserName;
+    }
+
+    public String getCurrentUserTel() {
+        return currentUserTel;
+    }
+
+    public void setCurrentUserTel(String currentUserTel) {
+        this.currentUserTel = currentUserTel;
     }
 }
