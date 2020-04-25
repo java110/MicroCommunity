@@ -58,14 +58,10 @@ public class ListStoresListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        //Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
-
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
         StoreDto storeDto = BeanConvertUtil.covertBean(reqJson, StoreDto.class);
         int storeCount = storeInnerServiceSMOImpl.getStoreCount(storeDto);
         List<StoreDto> storeDtos = null;
@@ -77,15 +73,11 @@ public class ListStoresListener extends AbstractServiceApiListener {
         } else {
             stores = new ArrayList<>();
         }
-
         ApiStoreVo apiStoreVo = new ApiStoreVo();
-
         apiStoreVo.setTotal(storeCount);
         apiStoreVo.setRecords((int) Math.ceil((double) storeCount / (double) reqJson.getInteger("row")));
         apiStoreVo.setStores(stores);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiStoreVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
 
     }
@@ -94,7 +86,6 @@ public class ListStoresListener extends AbstractServiceApiListener {
         StoreAttrDto storeAttrDto = new StoreAttrDto();
         storeAttrDto.setStoreIds(getStoreIds(stores));
         List<StoreAttrDto> storeAttrDtos = storeInnerServiceSMOImpl.getStoreAttrs(storeAttrDto);
-
         for (ApiStoreDataVo storeDataVo : stores) {
             for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
                 if (!storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())) {
