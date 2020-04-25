@@ -61,46 +61,46 @@
     </appender>
 
     <logger name="org.springframework" level="ERROR">
-        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
     <logger name="com.java110.api" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
     <logger name="com.java110.order" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
     <!--<logger name="com.java110" level="DEBUG"/>-->
 
     <!--myibatis log configure-->
     <logger name="com.apache.ibatis" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <logger name="org.mybatis" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
     <logger name="druid.sql.Statement" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
     <logger name="druid.sql.ResultSet" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
 
     <logger name="com.java110" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <logger name="io.shardingsphere" level="DEBUG">
-        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <logger name="org.thymeleaf" level="ERROR">
-        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
     <logger name="org.apache.kafka" level="ERROR">
-       <appender-ref ref="ERROR_FILE"/>
+       <appender-ref ref="STDOUT_FILE"/>
      </logger>
 
     <!-- 日志输出级别
