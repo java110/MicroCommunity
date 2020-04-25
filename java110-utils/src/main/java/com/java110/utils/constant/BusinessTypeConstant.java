@@ -134,6 +134,7 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_SAVE_STORE_INFO = "200100030001";
 
+
     /**
      * 商户成员加入信息
      */

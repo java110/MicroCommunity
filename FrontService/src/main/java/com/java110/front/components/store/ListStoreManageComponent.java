@@ -2,6 +2,7 @@ package com.java110.front.components.store;
 
 
 import com.java110.core.context.IPageData;
+import com.java110.front.smo.store.IGetStoreSMO;
 import com.java110.front.smo.store.IListStoreSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ public class ListStoreManageComponent {
 
     @Autowired
     private IListStoreSMO listStoreSMOImpl;
+    @Autowired
+    private IGetStoreSMO getStoreSMOImpl;
 
     /**
      * 查询钥匙申请列表
@@ -29,6 +32,11 @@ public class ListStoreManageComponent {
      */
     public ResponseEntity<String> list(IPageData pd) {
         return listStoreSMOImpl.listStores(pd);
+    }
+
+
+    public ResponseEntity<String> getStoreInfo(IPageData pd) {
+        return getStoreSMOImpl.getStoreInfo(pd);
     }
 
     public IListStoreSMO getListStoreSMOImpl() {
