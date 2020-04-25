@@ -73,4 +73,12 @@ public interface IComplaintUserInnerServiceSMO {
     @RequestMapping(value = "/getAuditMessage", method = RequestMethod.POST)
     public List<AuditMessageDto> getAuditMessage(@RequestBody ComplaintDto complaintDto);
 
+    /**
+     * 获取任务当前处理人
+     * @param complaintDto
+     * @return
+     */
+    @RequestMapping(value = "/getTaskCurrentUser", method = RequestMethod.POST)
+    public ComplaintDto getTaskCurrentUser(@RequestBody ComplaintDto complaintDto);
+
 }
