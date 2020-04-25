@@ -5,13 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.dto.store.StoreDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.StoreUserRelConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @ClassName StoreBMOImpl
@@ -23,7 +29,8 @@ import org.springframework.stereotype.Service;
  **/
 @Service("storeBMOImpl")
 public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
-
+    @Autowired
+    private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
     /**
      * 添加商户
      *
@@ -40,6 +47,24 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
 
         return business;
 
+    }
+
+    @Override
+    public JSONObject updateStore(JSONObject paramInJson) {
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(paramInJson.getString("storeId"));
+        List<StoreDto> storeDtos = storeInnerServiceSMOImpl.getStores(storeDto);
+        Assert.listOnlyOne(storeDtos, "未找到需要修改的商户或多条数据");
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_STORE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessStore = new JSONObject();
+        businessStore.putAll(BeanConvertUtil.beanCovertMap(storeDtos.get(0)));
+        businessStore.putAll(paramInJson);
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStore", businessStore);
+        return business;
     }
 
     /**
