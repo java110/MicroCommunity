@@ -99,6 +99,10 @@
         <appender-ref ref="ERROR_FILE"/>
     </logger>
 
+    <logger name="org.apache.kafka" level="ERROR">
+       <appender-ref ref="ERROR_FILE"/>
+     </logger>
+
     <!-- 日志输出级别
     <root level="DEBUG">
         <appender-ref ref="STDOUT_FILE" />
