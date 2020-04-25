@@ -176,9 +176,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
                 .taskAssignee(user.getUserId());
-        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
-        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaitDealUser");
         }
 
@@ -196,10 +196,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("complaint")
-                .taskAssignee(user.getUserId()) ;
-        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+                .taskAssignee(user.getUserId());
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaint");
-        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("complaitDealUser");
         }
 
@@ -276,6 +276,7 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
     /**
      * 获取任务当前处理人
+     *
      * @param complaintDto
      * @return
      */
@@ -283,10 +284,18 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().processInstanceBusinessKey(complaintDto.getComplaintId()).singleResult();
+
+        if (task == null) {
+            complaintDto.setCurrentUserId("");
+            complaintDto.setCurrentUserName("");
+            complaintDto.setCurrentUserTel("");
+            return complaintDto;
+        }
+
         String userId = task.getAssignee();
         List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
 
-        if(users == null || users.size() == 0){
+        if (users == null || users.size() == 0) {
             complaintDto.setCurrentUserId("");
             complaintDto.setCurrentUserName("");
             complaintDto.setCurrentUserTel("");
