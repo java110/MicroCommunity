@@ -87,7 +87,13 @@ public class ListStoresListener extends AbstractServiceApiListener {
         storeAttrDto.setStoreIds(getStoreIds(stores));
         List<StoreAttrDto> storeAttrDtos = storeInnerServiceSMOImpl.getStoreAttrs(storeAttrDto);
         for (ApiStoreDataVo storeDataVo : stores) {
+            List<StoreAttrDto> storeAttrs = new ArrayList<StoreAttrDto>();
             for (StoreAttrDto tmpStoreAttrDto : storeAttrDtos) {
+
+                if(storeDataVo.getStoreId().equals(storeDataVo.getStoreId())){
+                    storeAttrs.add(tmpStoreAttrDto);
+                }
+
                 if (!storeDataVo.getStoreId().equals(tmpStoreAttrDto.getStoreId())) {
                     continue;
                 }
@@ -99,6 +105,7 @@ public class ListStoresListener extends AbstractServiceApiListener {
                     storeDataVo.setBusinessScope(tmpStoreAttrDto.getValue());
                 }
             }
+            storeDataVo.setStoreAttrDtoList(storeAttrs);
         }
     }
 

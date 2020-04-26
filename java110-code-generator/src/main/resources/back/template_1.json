@@ -1,36 +1,31 @@
 {
-  "id": "communityId",
-  "name": "community",
-  "desc": "小区",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
+  "id": "attrId",
+  "name": "storeAttr",
+  "desc": "商户属性",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
   "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_JUNK_REQUIREMENT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_STORE_ATTR",
   "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_COMMUNITY",
   "newBusinessTypeCdValue": "550200030001",
-  "updateBusinessTypeCdValue": "550200040001",
+  "updateBusinessTypeCdValue": "200100040003",
   "deleteBusinessTypeCdValue": "500100050011",
-  "businessTableName": "business_community",
-  "tableName": "s_community",
+  "businessTableName": "business_store_attr",
+  "tableName": "s_store_attr",
   "param": {
-    "communityId": "community_id",
-    "b_id": "bId",
-    "name": "name",
-    "address": "address",
-    "cityCode": "city_code",
-    "nearbyLandmarks": "nearby_landmarks",
-    "mapX": "map_x",
-    "mapY": "map_y",
-    "month": "month",
+    "storeId": "store_id",
+    "bId": "bId",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "createTime": "create_time",
-    "state": "state",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "communityId",
-      "msg": "小区id不能为空"
+      "code": "attrId",
+      "msg": "attrId不能为空"
     }
   ]
 }
