@@ -8,7 +8,7 @@
     <insert id="saveBusinessStoreInfo" parameterType="Map">
         insert into
         business_store(store_id,b_id,user_id,name,address,tel,store_type_cd,nearby_landmarks,map_x,map_y,month,operate)
-        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearbyLandmarks},#{mapX},#{mapY},#{month},#{operate})
+        values(#{storeId},#{bId},#{userId},#{name},#{address},#{tel},#{storeTypeCd},#{nearByLandmarks},#{mapX},#{mapY},#{month},#{operate})
     </insert>
     <!-- 保存商户属性信息  add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreAttr" parameterType="Map">
