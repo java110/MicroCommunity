@@ -6,6 +6,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.store.IStoreBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -66,6 +67,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStore", businessStore);
         return business;
     }
+
 
     /**
      * 添加员工

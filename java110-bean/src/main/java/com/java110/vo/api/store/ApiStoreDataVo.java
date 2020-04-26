@@ -1,7 +1,11 @@
 package com.java110.vo.api.store;
 
+import com.java110.dto.store.StoreAttrDto;
+import com.java110.dto.store.StoreDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ApiStoreDataVo implements Serializable {
     private String storeId;
@@ -19,6 +23,7 @@ public class ApiStoreDataVo implements Serializable {
     private String storeName;
     private String storeTypeName;
     private String createTime;
+    private List<StoreAttrDto> storeAttrDtoList;
 
     public String getStoreId() {
         return storeId;
@@ -138,5 +143,13 @@ public class ApiStoreDataVo implements Serializable {
 
     public void setBusinessScope(String businessScope) {
         this.businessScope = businessScope;
+    }
+
+    public List<StoreAttrDto> getStoreAttrDtoList() {
+        return storeAttrDtoList;
+    }
+
+    public void setStoreAttrDtoList(List<StoreAttrDto> storeAttrDtoList) {
+        this.storeAttrDtoList = storeAttrDtoList;
     }
 }

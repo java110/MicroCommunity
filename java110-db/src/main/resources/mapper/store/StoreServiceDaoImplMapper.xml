@@ -154,9 +154,11 @@
 
     <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
     <select id="getStoreAttrs" parameterType="Map" resultType="Map">
-        select sa.b_id,sa.attr_id,sa.attr_id attrId,sa.store_id, sa.store_id storeId,sa.spec_cd,sa.spec_cd
-        specCd,sa.value,sa.status_cd
-        from s_store_attr sa
+        select
+            sa.b_id,sa.attr_id,sa.attr_id attrId,
+            sa.store_id, sa.store_id storeId,sa.spec_cd,sa.spec_cd specCd,sa.value,sa.status_cd,
+            c.name
+        from s_store_attr sa inner join spec c on sa.spec_cd = c.spec_cd
         where
         1=1
         <if test="statusCd != null and statusCd != ''">

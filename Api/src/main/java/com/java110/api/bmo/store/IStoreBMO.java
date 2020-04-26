@@ -51,4 +51,5 @@ public interface IStoreBMO extends IApiBaseBMO {
     public JSONObject addStore(JSONObject paramInJson);
 
     public JSONObject updateStore(JSONObject paramInJson);
+
 }

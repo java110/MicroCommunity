@@ -21,6 +21,7 @@ public class StoreAttrDto extends PageDto implements Serializable {
     private String attrId;
     private String specCd;
     private String value;
+    private String name;
 
 
     private Date createTime;
@@ -81,5 +82,13 @@ public class StoreAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

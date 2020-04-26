@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="storeAttrServiceDaoImpl">
+
+    <!-- 保存商户属性信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessStoreAttrInfo" parameterType="Map">
+        insert into
+            business_store_attr(attr_id,operate,create_time,spec_cd,store_id,b_id,value)
+            values (#{attrId},#{operate},#{createTime},#{specCd},#{storeId},#{bId},#{value})
+       </insert>
+
+
+    <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessStoreAttrInfo" parameterType="Map" resultType="Map">
+        select t.attr_id,t.attr_id attrId,t.operate,t.create_time,t.create_time createTime,t.spec_cd,t.spec_cd
+        specCd,t.store_id,t.store_id storeId,t.bId,t.value
+        from business_store_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </select>
+
+
+    <!-- 保存商户属性信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveStoreAttrInfoInstance" parameterType="Map">
+        insert into s_store_attr(
+        attr_id,create_time,spec_cd,status_cd,store_id,bId,value
+        ) select t.attr_id,t.create_time,t.spec_cd,'0',t.store_id,t.bId,t.value from business_store_attr t where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询商户属性信息 add by wuxw 2018-07-03 -->
+    <select id="getStoreAttrInfo" parameterType="Map" resultType="Map">
+        select
+            t.attr_id,t.attr_id attrId,
+            t.create_time,t.create_time createTime,
+            t.spec_cd,t.spec_cd specCd,
+            t.status_cd,t.status_cd statusCd,
+            t.store_id,t.store_id storeId,
+            t.b_id, t.b_id bId,
+            t.value
+        from s_store_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改商户属性信息 add by wuxw 2018-07-03 -->
+    <update id="updateStoreAttrInfoInstance" parameterType="Map">
+        update s_store_attr t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            , t.spec_cd= #{specCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="value !=null and value != ''">
+            , t.value= #{value}
+        </if>
+        where 1=1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询商户属性数量 add by wuxw 2018-07-03 -->
+    <select id="queryStoreAttrsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from s_store_attr t
+        where 1 =1
+        <if test="attrId !=null and attrId != ''">
+            and t.attr_id= #{attrId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="value !=null and value != ''">
+            and t.value= #{value}
+        </if>
+
+
+    </select>
+
+</mapper>

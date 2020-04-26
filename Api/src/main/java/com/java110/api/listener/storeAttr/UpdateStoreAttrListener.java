@@ -1,16 +1,16 @@
-package com.java110.api.listener.store;
+package com.java110.api.listener.storeAttr;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.store.IStoreBMO;
+import com.java110.api.bmo.storeAttr.IStoreAttrBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeStoreAttrConstant;
+import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,18 +18,19 @@ import org.springframework.http.ResponseEntity;
 
 
 /**
- * 保存商户侦听
+ * 保存商户属性侦听
  * add by wuxw 2019-06-30
  */
-@Java110Listener("updateStoreListener")
-public class UpdateStoreListener extends AbstractServiceApiListener {
+@Java110Listener("updateStoreAttrListener")
+public class UpdateStoreAttrListener extends AbstractServiceApiListener {
 
     @Autowired
-    private IStoreBMO storeBMOImpl;
+    private IStoreAttrBMO storeAttrBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+
+        Assert.hasKeyAndValue(reqJson, "attrId", "attrId不能为空");
 
     }
 
@@ -42,15 +43,17 @@ public class UpdateStoreListener extends AbstractServiceApiListener {
 
         AppService service = event.getAppService();
 
-        businesses.add(storeBMOImpl.updateStore(reqJson));
-        ResponseEntity<String> responseEntity = storeBMOImpl.callService(context, service.getServiceCode(), businesses);
+        //添加单元信息
+        businesses.add(storeAttrBMOImpl.updateStoreAttr(reqJson, context));
+
+        ResponseEntity<String> responseEntity = storeAttrBMOImpl.callService(context, service.getServiceCode(), businesses);
 
         context.setResponseEntity(responseEntity);
     }
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.SERVICE_CODE_UPDATE_STORE_INFO;
+        return ServiceCodeStoreAttrConstant.UPDATE_STOREATTR;
     }
 
     @Override
