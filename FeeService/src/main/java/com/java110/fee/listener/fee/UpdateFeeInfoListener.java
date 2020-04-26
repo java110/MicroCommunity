@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.dto.order.BusinessDto;
 import com.java110.fee.dao.IFeeDetailServiceDao;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
@@ -161,6 +159,21 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                         }
                         businessFeeInfo.put("end_time", endCalender.getTime());
                     }
+
+                    // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
+                    if(FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))){
+                        businessFeeInfo.put("state", FeeStateConstant.END);
+                        businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
+                    }
+
+                    // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
+                    if(FeeFlagTypeConstant.CYCLE.equals(feeInfo.get(0).get("feeFlag"))){
+                        if(((Date)businessFeeInfo.get("endTime")).after((Date)feeInfo.get(0).get("configEndTime"))) {
+                            businessFeeInfo.put("state", FeeStateConstant.END);
+                            businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
+                        }
+                    }
+
                     flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_VALID);
                     feeServiceDaoImpl.updateFeeInfoInstance(businessFeeInfo);
                     if (businessFeeInfo.size() == 1) {

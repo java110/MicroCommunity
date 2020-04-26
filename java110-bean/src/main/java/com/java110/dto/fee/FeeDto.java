@@ -50,6 +50,16 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    /**
+     * 费用项开始时间
+     */
+    private  Date configStartTime;
+    /**
+     * 费用项结束时间
+     */
+    private Date  configEndTime;
+
+
 
     public String getAmount() {
         return amount;
@@ -275,5 +285,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public Date getConfigStartTime() {
+        return configStartTime;
+    }
+
+    public void setConfigStartTime(Date configStartTime) {
+        this.configStartTime = configStartTime;
+    }
+
+    public Date getConfigEndTime() {
+        return configEndTime;
+    }
+
+    public void setConfigEndTime(Date configEndTime) {
+        this.configEndTime = configEndTime;
     }
 }
