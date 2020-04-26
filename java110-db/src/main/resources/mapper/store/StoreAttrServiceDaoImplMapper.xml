@@ -7,15 +7,21 @@
     <!-- 保存商户属性信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessStoreAttrInfo" parameterType="Map">
         insert into
-            business_store_attr(attr_id,operate,create_time,spec_cd,store_id,b_id,value)
-            values (#{attrId},#{operate},#{createTime},#{specCd},#{storeId},#{bId},#{value})
+            business_store_attr(attr_id,operate,spec_cd,store_id,b_id,value,month)
+            values (#{attrId},#{operate},#{specCd},#{storeId},#{bId},#{value},#{month})
        </insert>
 
 
     <!-- 查询商户属性信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessStoreAttrInfo" parameterType="Map" resultType="Map">
-        select t.attr_id,t.attr_id attrId,t.operate,t.create_time,t.create_time createTime,t.spec_cd,t.spec_cd
-        specCd,t.store_id,t.store_id storeId,t.bId,t.value
+        select
+            t.attr_id,t.attr_id attrId,
+            t.operate,
+            t.create_time,t.create_time createTime,
+            t.spec_cd,t.spec_cd specCd,
+            t.store_id,t.store_id storeId,
+            t.b_id,t.b_id bId,
+            t.value
         from business_store_attr t
         where 1 =1
         <if test="attrId !=null and attrId != ''">
@@ -34,7 +40,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
         <if test="value !=null and value != ''">
             and t.value= #{value}
@@ -117,9 +123,6 @@
         update s_store_attr t set t.status_cd = #{statusCd}
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
-        </if>
-        <if test="createTime !=null and createTime != ''">
-            , t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">
             , t.spec_cd= #{specCd}

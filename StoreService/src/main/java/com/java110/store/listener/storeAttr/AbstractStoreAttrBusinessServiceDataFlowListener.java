@@ -7,6 +7,7 @@ import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,12 +70,11 @@ public abstract class AbstractStoreAttrBusinessServiceDataFlowListener extends A
 
         currentStoreAttrInfo.put("attrId", currentStoreAttrInfo.get("attr_id"));
         currentStoreAttrInfo.put("operate", currentStoreAttrInfo.get("operate"));
-        currentStoreAttrInfo.put("createTime", currentStoreAttrInfo.get("create_time"));
+//        currentStoreAttrInfo.put("createTime", currentStoreAttrInfo.get("create_time"));
         currentStoreAttrInfo.put("specCd", currentStoreAttrInfo.get("spec_cd"));
         currentStoreAttrInfo.put("storeId", currentStoreAttrInfo.get("store_id"));
         currentStoreAttrInfo.put("value", currentStoreAttrInfo.get("value"));
-
-
+        currentStoreAttrInfo.put("month", DateUtil.getCurrentMonth());
         currentStoreAttrInfo.put("operate", StatusConstant.OPERATE_DEL);
         getStoreAttrServiceDaoImpl().saveBusinessStoreAttrInfo(currentStoreAttrInfo);
     }
