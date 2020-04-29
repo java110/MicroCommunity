@@ -59,6 +59,7 @@ public class ListResourceStoresListener extends AbstractServiceApiListener {
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户ID");
     }
 
     @Override

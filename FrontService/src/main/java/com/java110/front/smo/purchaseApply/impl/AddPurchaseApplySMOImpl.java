@@ -43,9 +43,6 @@ public class AddPurchaseApplySMOImpl extends AbstractComponentSMO implements IAd
         paramIn.put("storeId", result.getStoreId());
         paramIn.put("userId", pd.getUserId());
         paramIn.put("userName", pd.getUserName());
-        paramIn.put("state", "1000");
-        paramIn.put("createTime", DateUtil.getCurrentDate());
-        paramIn.put("applyOrderId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
                 ServiceConstant.SERVICE_API_URL + "/api/purchaseApply.savePurchaseApply",
                 HttpMethod.POST);

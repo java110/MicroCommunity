@@ -6,6 +6,7 @@ import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.purchaseApplyUser.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.center.AppService;
@@ -15,6 +16,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -42,7 +44,9 @@ public class SavePurchaseApplyListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
+        reqJson.put("state", "1000");
+        reqJson.put("createTime", DateUtil.getCurrentDate());
+        reqJson.put("applyOrderId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
