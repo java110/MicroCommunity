@@ -26,10 +26,10 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null and actInsTime != ''">
+        <if test="actInsTime !=null ">
             and t.act_ins_time= #{actInsTime}
         </if>
-        <if test="planInsTime !=null and planInsTime != ''">
+        <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
         </if>
         <if test="actUserName !=null and actUserName != ''">
@@ -76,10 +76,10 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null and actInsTime != ''">
+        <if test="actInsTime !=null">
             and t.act_ins_time= #{actInsTime}
         </if>
-        <if test="planInsTime !=null and planInsTime != ''">
+        <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
         </if>
         <if test="actUserName !=null and actUserName != ''">
@@ -135,10 +135,10 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null and actInsTime != ''">
+        <if test="actInsTime !=null ">
             and t.act_ins_time= #{actInsTime}
         </if>
-        <if test="planInsTime !=null and planInsTime != ''">
+        <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
@@ -191,10 +191,10 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="actInsTime !=null and actInsTime != ''">
+        <if test="actInsTime !=null ">
             , t.act_ins_time= #{actInsTime}
         </if>
-        <if test="planInsTime !=null and planInsTime != ''">
+        <if test="planInsTime !=null ">
             , t.plan_ins_time= #{planInsTime}
         </if>
         <if test="actUserName !=null and actUserName != ''">
@@ -241,10 +241,10 @@
         <if test="planUserId !=null and planUserId != ''">
             and t.plan_user_id= #{planUserId}
         </if>
-        <if test="actInsTime !=null and actInsTime != ''">
+        <if test="actInsTime !=null ">
             and t.act_ins_time= #{actInsTime}
         </if>
-        <if test="planInsTime !=null and planInsTime != ''">
+        <if test="planInsTime !=null ">
             and t.plan_ins_time= #{planInsTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
