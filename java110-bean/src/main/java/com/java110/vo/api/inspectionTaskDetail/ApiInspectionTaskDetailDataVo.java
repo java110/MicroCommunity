@@ -16,6 +16,9 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
     private String taskId;
     private String taskDetailId;
 
+    private String patrolType;
+    private String description;
+
     public String getInspectionId() {
         return inspectionId;
     }
@@ -95,5 +98,21 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPatrolType() {
+        return patrolType;
+    }
+
+    public void setPatrolType(String patrolType) {
+        this.patrolType = patrolType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

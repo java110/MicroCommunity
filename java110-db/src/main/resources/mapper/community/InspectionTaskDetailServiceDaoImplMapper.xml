@@ -7,9 +7,9 @@
     <!-- 保存巡检任务明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionTaskDetailInfo" parameterType="Map">
         insert into business_inspection_task_detail(
-        inspection_id,operate,inspection_name,state,community_id,b_id,task_id,task_detail_id
+        inspection_id,operate,inspection_name,state,community_id,b_id,task_id,task_detail_id,patrol_type,description
         ) values (
-        #{inspectionId},#{operate},#{inspectionName},#{state},#{communityId},#{bId},#{taskId},#{taskDetailId}
+        #{inspectionId},#{operate},#{inspectionName},#{state},#{communityId},#{bId},#{taskId},#{taskDetailId},#{patrolType},#{description}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <select id="getBusinessInspectionTaskDetailInfo" parameterType="Map" resultType="Map">
         select t.inspection_id,t.inspection_id inspectionId,t.operate,t.inspection_name,t.inspection_name
         inspectionName,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.task_id,t.task_id
-        taskId,t.task_detail_id,t.task_detail_id taskDetailId
+        taskId,t.task_detail_id,t.task_detail_id taskDetailId,t.patrol_type,t.description,t.patrol_type patrolType
         from business_inspection_task_detail t
         where 1 =1
         <if test="inspectionId !=null and inspectionId != ''">
@@ -52,8 +52,9 @@
     <!-- 保存巡检任务明细信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionTaskDetailInfoInstance" parameterType="Map">
         insert into inspection_task_detail(
-        inspection_id,status_cd,inspection_name,state,community_id,b_id,task_id,task_detail_id
-        ) select t.inspection_id,'0',t.inspection_name,t.state,t.community_id,t.b_id,t.task_id,t.task_detail_id from
+        inspection_id,status_cd,inspection_name,state,community_id,b_id,task_id,task_detail_id,patrol_type,description
+        ) select t.inspection_id,'0',t.inspection_name,t.state,t.community_id,t.b_id,t.task_id,t.task_detail_id,t.patrol_type,t.description
+        from
         business_inspection_task_detail t where 1=1
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
@@ -86,7 +87,7 @@
         select t.inspection_id,t.inspection_id inspectionId,t.status_cd,t.status_cd
         statusCd,t.inspection_name,t.inspection_name inspectionName,t.state,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.task_id,t.task_id taskId,t.task_detail_id,t.task_detail_id taskDetailId,
-        td1.name stateName
+        td1.name stateName,t.patrol_type,t.description,t.patrol_type patrolType
         from inspection_task_detail t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
@@ -116,6 +117,9 @@
         <if test="taskDetailId !=null and taskDetailId != ''">
             and t.task_detail_id= #{taskDetailId}
         </if>
+        <if test="patrolType !=null and patrolType != ''">
+            and t.patrol_type= #{patrolType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -144,6 +148,12 @@
         </if>
         <if test="taskId !=null and taskId != ''">
             , t.task_id= #{taskId}
+        </if>
+        <if test="description !=null and description != ''">
+            , t.description= #{description}
+        </if>
+        <if test="patrolType !=null and patrolType != ''">
+            , t.patrol_type= #{patrolType}
         </if>
         where 1=1
         <if test="bId !=null and bId != ''">
@@ -186,6 +196,9 @@
         </if>
         <if test="taskDetailId !=null and taskDetailId != ''">
             and t.task_detail_id= #{taskDetailId}
+        </if>
+        <if test="patrolType !=null and patrolType != ''">
+            and t.patrol_type= #{patrolType}
         </if>
 
 

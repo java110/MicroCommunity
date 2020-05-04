@@ -44,6 +44,8 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
         businessInspectionTaskDetailInfo.put("communityId", businessInspectionTaskDetailInfo.get("community_id"));
         businessInspectionTaskDetailInfo.put("taskId", businessInspectionTaskDetailInfo.get("task_id"));
         businessInspectionTaskDetailInfo.put("taskDetailId", businessInspectionTaskDetailInfo.get("task_detail_id"));
+        businessInspectionTaskDetailInfo.put("patrolType", businessInspectionTaskDetailInfo.get("patrol_type"));
+        businessInspectionTaskDetailInfo.put("description", businessInspectionTaskDetailInfo.get("description"));
         businessInspectionTaskDetailInfo.remove("bId");
         businessInspectionTaskDetailInfo.put("statusCd", statusCd);
     }
@@ -75,6 +77,9 @@ public abstract class AbstractInspectionTaskDetailBusinessServiceDataFlowListene
         currentInspectionTaskDetailInfo.put("communityId", currentInspectionTaskDetailInfo.get("community_id"));
         currentInspectionTaskDetailInfo.put("taskId", currentInspectionTaskDetailInfo.get("task_id"));
         currentInspectionTaskDetailInfo.put("taskDetailId", currentInspectionTaskDetailInfo.get("task_detail_id"));
+
+        currentInspectionTaskDetailInfo.put("patrolType", currentInspectionTaskDetailInfo.get("patrol_type"));
+        currentInspectionTaskDetailInfo.put("description", currentInspectionTaskDetailInfo.get("description"));
 
 
         currentInspectionTaskDetailInfo.put("operate", StatusConstant.OPERATE_DEL);

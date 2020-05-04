@@ -22,6 +22,8 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String communityId;
     private String taskId;
     private String taskDetailId;
+    private String patrolType;
+    private String description;
 
 
     private Date createTime;
@@ -100,5 +102,21 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPatrolType() {
+        return patrolType;
+    }
+
+    public void setPatrolType(String patrolType) {
+        this.patrolType = patrolType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
