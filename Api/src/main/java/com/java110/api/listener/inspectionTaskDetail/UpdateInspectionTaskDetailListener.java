@@ -7,9 +7,12 @@ import com.java110.api.bmo.inspectionTaskDetail.IInspectionTaskDetailBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.inspectionPoint.IInspectionInnerServiceSMO;
 import com.java110.core.smo.inspectionTask.IInspectionTaskInnerServiceSMO;
 import com.java110.core.smo.inspectionTaskDetail.IInspectionTaskDetailInnerServiceSMO;
+import com.java110.dto.file.FileDto;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
 import com.java110.dto.inspectionTaskDetail.InspectionTaskDetailDto;
 import com.java110.entity.center.AppService;
@@ -17,6 +20,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeInspectionTaskDetailConstant;
 import com.java110.utils.util.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,6 +43,9 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
     @Autowired
     private IInspectionTaskBMO inspectionTaskBMOImpl;
 
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
 
     @Autowired
     private IInspectionInnerServiceSMO inspectionInnerServiceSMOImpl;
@@ -56,7 +63,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         Assert.hasKeyAndValue(reqJson, "taskId", "请求报文中未包含taskId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "inspectionId", "请求报文中未包含inspectionId");
-        Assert.hasKeyAndValue(reqJson, "photo", "请求报文中未包含照片");
+        Assert.hasKeyAndValue(reqJson, "photos", "请求报文中未包含照片");
 
     }
 
@@ -68,6 +75,10 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         JSONArray businesses = new JSONArray();
 
         AppService service = event.getAppService();
+
+        if (reqJson.containsKey("photos")) {
+            dealPhotos(businesses,reqJson,context);
+        }
 
         //添加单元信息
         reqJson.put("state", "20200407");//巡检点完成
@@ -109,6 +120,26 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         businesses.add(inspectionTaskBMOImpl.updateInspectionTask(reqJson, context));
         responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
+    }
+
+
+    private void dealPhotos(JSONArray businesses, JSONObject reqJson,DataFlowContext context) {
+        JSONArray photos = reqJson.getJSONArray("photos");
+        JSONObject photo = null;
+        for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
+            photo = photos.getJSONObject(photoIndex);
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(photo.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(reqJson.getString("communityId"));
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+            reqJson.put("photoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
+
+            businesses.add(inspectionTaskBMOImpl.addPhoto(reqJson, context));
+        }
     }
 
     @Override

@@ -34,5 +34,15 @@ public interface IInspectionTaskBMO extends IApiBaseBMO {
      JSONObject deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
+
 
 }

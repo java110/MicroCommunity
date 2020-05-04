@@ -1,7 +1,10 @@
 package com.java110.vo.api.inspectionTaskDetail;
 
+import com.java110.vo.api.junkRequirement.PhotoVo;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ApiInspectionTaskDetailDataVo implements Serializable {
 
@@ -15,6 +18,8 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
     private String bId;
     private String taskId;
     private String taskDetailId;
+
+    private List<PhotoVo> photos;
 
     private String patrolType;
     private String description;
@@ -114,5 +119,13 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }
