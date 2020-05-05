@@ -87,12 +87,15 @@
         select t.inspection_id,t.inspection_id inspectionId,t.status_cd,t.status_cd
         statusCd,t.inspection_name,t.inspection_name inspectionName,t.state,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.task_id,t.task_id taskId,t.task_detail_id,t.task_detail_id taskDetailId,
-        td1.name stateName,t.patrol_type,t.description,t.patrol_type patrolType
-        from inspection_task_detail t,t_dict td1
+        td1.name stateName,t.patrol_type,t.description,t.patrol_type patrolType,td2.name patrolTypeName
+        from inspection_task_detail t,t_dict td1,t_dict td2
         where 1 =1
         and t.state = td1.status_cd
         and td1.table_name = 'inspection_task_detail'
         and td1.table_columns = 'state'
+        and t.state = td2.status_cd
+        and td2.table_name = 'inspection_task_detail'
+        and td2.table_columns = 'patrol_type'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>
@@ -168,11 +171,14 @@
     <!-- 查询巡检任务明细数量 add by wuxw 2018-07-03 -->
     <select id="queryInspectionTaskDetailsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from inspection_task_detail t,t_dict td1
+        from inspection_task_detail t,t_dict td1,t_dict td2
         where 1 =1
         and t.state = td1.status_cd
         and td1.table_name = 'inspection_task_detail'
         and td1.table_columns = 'state'
+        and t.state = td2.status_cd
+        and td2.table_name = 'inspection_task_detail'
+        and td2.table_columns = 'patrol_type'
         <if test="inspectionId !=null and inspectionId != ''">
             and t.inspection_id= #{inspectionId}
         </if>

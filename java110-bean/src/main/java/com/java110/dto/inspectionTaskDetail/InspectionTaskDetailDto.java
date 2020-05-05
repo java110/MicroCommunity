@@ -23,6 +23,7 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
     private String taskId;
     private String taskDetailId;
     private String patrolType;
+    private String patrolTypeName;
     private String description;
 
 
@@ -118,5 +119,13 @@ public class InspectionTaskDetailDto extends PageDto implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPatrolTypeName() {
+        return patrolTypeName;
+    }
+
+    public void setPatrolTypeName(String patrolTypeName) {
+        this.patrolTypeName = patrolTypeName;
     }
 }

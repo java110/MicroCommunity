@@ -22,6 +22,8 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
     private List<PhotoVo> photos;
 
     private String patrolType;
+    private String patrolTypeName;
+
     private String description;
 
     public String getInspectionId() {
@@ -127,5 +129,13 @@ public class ApiInspectionTaskDetailDataVo implements Serializable {
 
     public void setPhotos(List<PhotoVo> photos) {
         this.photos = photos;
+    }
+
+    public String getPatrolTypeName() {
+        return patrolTypeName;
+    }
+
+    public void setPatrolTypeName(String patrolTypeName) {
+        this.patrolTypeName = patrolTypeName;
     }
 }
