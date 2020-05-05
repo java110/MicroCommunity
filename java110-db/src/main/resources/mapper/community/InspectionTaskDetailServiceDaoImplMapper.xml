@@ -93,7 +93,7 @@
         and t.state = td1.status_cd
         and td1.table_name = 'inspection_task_detail'
         and td1.table_columns = 'state'
-        and t.state = td2.status_cd
+        and t.patrol_type = td2.status_cd
         and td2.table_name = 'inspection_task_detail'
         and td2.table_columns = 'patrol_type'
         <if test="inspectionId !=null and inspectionId != ''">
@@ -176,7 +176,7 @@
         and t.state = td1.status_cd
         and td1.table_name = 'inspection_task_detail'
         and td1.table_columns = 'state'
-        and t.state = td2.status_cd
+        and t.patrol_type = td2.status_cd
         and td2.table_name = 'inspection_task_detail'
         and td2.table_columns = 'patrol_type'
         <if test="inspectionId !=null and inspectionId != ''">
