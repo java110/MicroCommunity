@@ -1,0 +1,31 @@
+{
+  "id": "attrId",
+  "name": "storeAttr",
+  "desc": "商户属性",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_STORE_ATTR",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_COMMUNITY",
+  "newBusinessTypeCdValue": "550200030001",
+  "updateBusinessTypeCdValue": "200100040003",
+  "deleteBusinessTypeCdValue": "500100050011",
+  "businessTableName": "business_store_attr",
+  "tableName": "s_store_attr",
+  "param": {
+    "storeId": "store_id",
+    "bId": "bId",
+    "attrId": "attr_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "createTime": "create_time",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "attrId",
+      "msg": "attrId不能为空"
+    }
+  ]
+}

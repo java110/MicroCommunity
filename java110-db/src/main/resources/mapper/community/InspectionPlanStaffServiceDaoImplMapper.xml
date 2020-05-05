@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inspectionPlanStaffServiceDaoImpl">
+
+    <!-- 保存执行计划人信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessInspectionPlanStaffInfo" parameterType="Map">
+        insert into business_inspection_plan_staff(
+        operate,create_time,ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,bId,community_id,staff_id
+        ) values (
+        #{operate},#{createTime},#{ipStaffId},#{staffName},#{startTime},#{inspectionPlanId},#{endTime},#{bId},#{communityId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询执行计划人信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessInspectionPlanStaffInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id
+        ipStaffId,t.staff_name,t.staff_name staffName,t.start_time,t.start_time
+        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
+        endTime,t.bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
+        from business_inspection_plan_staff t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="ipStaffId !=null and ipStaffId != ''">
+            and t.ip_staff_id= #{ipStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存执行计划人信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveInspectionPlanStaffInfoInstance" parameterType="Map">
+        insert into inspection_plan_staff(
+        create_time,ip_staff_id,staff_name,start_time,status_cd,inspection_plan_id,end_time,bId,community_id,staff_id
+        ) select
+        t.create_time,t.ip_staff_id,t.staff_name,t.start_time,'0',t.inspection_plan_id,t.end_time,t.bId,t.community_id,t.staff_id
+        from business_inspection_plan_staff t where 1=1
+        and t.operate= 'ADD'
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="ipStaffId !=null and ipStaffId != ''">
+            and t.ip_staff_id= #{ipStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询执行计划人信息 add by wuxw 2018-07-03 -->
+    <select id="getInspectionPlanStaffInfo" parameterType="Map" resultType="Map">
+        select t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id ipStaffId,t.staff_name,t.staff_name
+        staffName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
+        statusCd,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
+        endTime,t.bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
+        from inspection_plan_staff t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="ipStaffId !=null and ipStaffId != ''">
+            and t.ip_staff_id= #{ipStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改执行计划人信息 add by wuxw 2018-07-03 -->
+    <update id="updateInspectionPlanStaffInfoInstance" parameterType="Map">
+        update inspection_plan_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            , t.start_time= #{startTime}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            , t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            , t.end_time= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="ipStaffId !=null and ipStaffId != ''">
+            and t.ip_staff_id= #{ipStaffId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询执行计划人数量 add by wuxw 2018-07-03 -->
+    <select id="queryInspectionPlanStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from inspection_plan_staff t
+        where 1 =1
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="ipStaffId !=null and ipStaffId != ''">
+            and t.ip_staff_id= #{ipStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.start_time= #{startTime}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="inspectionPlanId !=null and inspectionPlanId != ''">
+            and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.end_time= #{endTime}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.bId= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

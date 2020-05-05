@@ -923,6 +923,24 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_INSPECTION_PLAN ="520200050001";
 
+    /**
+     *  保存巡检计划
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_PLAN_STAFF="520300030001";
+
+    /**
+     * 修改巡检计划
+     * 4 修改
+     */
+    public static final String BUSINESS_TYPE_UPDATE_PLAN_STAFF="520300040001";
+
+    /**
+     *  删除巡计划
+     *  5 删除
+     */
+    public static final String BUSINESS_TYPE_DELETE_PLAN_STAFF ="520300050001";
+
 
     /**
      *  保存用户标题测试
