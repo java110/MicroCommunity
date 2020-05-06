@@ -7,7 +7,7 @@
     <!-- 保存执行计划人信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionPlanStaffInfo" parameterType="Map">
         insert into business_inspection_plan_staff(
-        operate,create_time,ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,bId,community_id,staff_id
+        operate,create_time,ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,b_id,community_id,staff_id
         ) values (
         #{operate},#{createTime},#{ipStaffId},#{staffName},#{startTime},#{inspectionPlanId},#{endTime},#{bId},#{communityId},#{staffId}
         )
@@ -19,7 +19,7 @@
         select t.operate,t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id
         ipStaffId,t.staff_name,t.staff_name staffName,t.start_time,t.start_time
         startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
-        endTime,t.bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
+        endTime,t.b_id,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
         from business_inspection_plan_staff t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -44,7 +44,7 @@
             and t.end_time= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -59,9 +59,9 @@
     <!-- 保存执行计划人信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionPlanStaffInfoInstance" parameterType="Map">
         insert into inspection_plan_staff(
-        create_time,ip_staff_id,staff_name,start_time,status_cd,inspection_plan_id,end_time,bId,community_id,staff_id
+        create_time,ip_staff_id,staff_name,start_time,status_cd,inspection_plan_id,end_time,b_id,community_id,staff_id
         ) select
-        t.create_time,t.ip_staff_id,t.staff_name,t.start_time,'0',t.inspection_plan_id,t.end_time,t.bId,t.community_id,t.staff_id
+        t.create_time,t.ip_staff_id,t.staff_name,t.start_time,'0',t.inspection_plan_id,t.end_time,t.b_id,t.community_id,t.staff_id
         from business_inspection_plan_staff t where 1=1
         and t.operate= 'ADD'
         <if test="createTime !=null and createTime != ''">
@@ -83,7 +83,7 @@
             and t.end_time= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -100,7 +100,7 @@
         select t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id ipStaffId,t.staff_name,t.staff_name
         staffName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
         statusCd,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
-        endTime,t.bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
+        endTime,t.b_id,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
         from inspection_plan_staff t
         where 1 =1
         <if test="createTime !=null and createTime != ''">
@@ -125,7 +125,7 @@
             and t.end_time= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -173,7 +173,7 @@
             and t.ip_staff_id= #{ipStaffId}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
 
     </update>
@@ -205,7 +205,7 @@
             and t.end_time= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
-            and t.bId= #{bId}
+            and t.b_id= #{bId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
