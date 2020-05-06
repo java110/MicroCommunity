@@ -152,7 +152,6 @@
             t.remark,
             t.status_cd statusCd,
             t.end_time endTime,
-            t.staff_name staffName,
             t.sign_type signType,
             t.start_time startTime,
             t.create_user_id createUserId,
@@ -304,9 +303,6 @@
             and t.b_id= #{bId}
         </if>
 
-        <if test="keyWord !=null and keyWord != ''">
-            and (t.inspection_plan_name like concat('%',#{keyWord},'%') or t.staff_name like concat('%',#{keyWord},'%'))
-        </if>
 
 
     </select>
