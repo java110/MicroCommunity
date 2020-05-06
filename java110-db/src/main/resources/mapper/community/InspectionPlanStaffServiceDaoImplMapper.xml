@@ -7,16 +7,16 @@
     <!-- 保存执行计划人信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionPlanStaffInfo" parameterType="Map">
         insert into business_inspection_plan_staff(
-        operate,create_time,ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,b_id,community_id,staff_id
+        operate,ip_staff_id,staff_name,start_time,inspection_plan_id,end_time,b_id,community_id,staff_id
         ) values (
-        #{operate},#{createTime},#{ipStaffId},#{staffName},#{startTime},#{inspectionPlanId},#{endTime},#{bId},#{communityId},#{staffId}
+        #{operate},#{ipStaffId},#{staffName},#{startTime},#{inspectionPlanId},#{endTime},#{bId},#{communityId},#{staffId}
         )
     </insert>
 
 
     <!-- 查询执行计划人信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionPlanStaffInfo" parameterType="Map" resultType="Map">
-        select t.operate,t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id
+        select t.operate,t.create_time createTime,t.ip_staff_id,t.ip_staff_id
         ipStaffId,t.staff_name,t.staff_name staffName,t.start_time,t.start_time
         startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
         endTime,t.b_id,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
@@ -24,9 +24,6 @@
         where 1 =1
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
-        </if>
-        <if test="createTime !=null and createTime != ''">
-            and t.create_time= #{createTime}
         </if>
         <if test="ipStaffId !=null and ipStaffId != ''">
             and t.ip_staff_id= #{ipStaffId}
@@ -59,14 +56,11 @@
     <!-- 保存执行计划人信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionPlanStaffInfoInstance" parameterType="Map">
         insert into inspection_plan_staff(
-        create_time,ip_staff_id,staff_name,start_time,status_cd,inspection_plan_id,end_time,b_id,community_id,staff_id
+        ip_staff_id,staff_name,start_time,status_cd,inspection_plan_id,end_time,b_id,community_id,staff_id
         ) select
-        t.create_time,t.ip_staff_id,t.staff_name,t.start_time,'0',t.inspection_plan_id,t.end_time,t.b_id,t.community_id,t.staff_id
+        t.ip_staff_id,t.staff_name,t.start_time,'0',t.inspection_plan_id,t.end_time,t.b_id,t.community_id,t.staff_id
         from business_inspection_plan_staff t where 1=1
         and t.operate= 'ADD'
-        <if test="createTime !=null and createTime != ''">
-            and t.create_time= #{createTime}
-        </if>
         <if test="ipStaffId !=null and ipStaffId != ''">
             and t.ip_staff_id= #{ipStaffId}
         </if>
@@ -97,15 +91,13 @@
 
     <!-- 查询执行计划人信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionPlanStaffInfo" parameterType="Map" resultType="Map">
-        select t.create_time,t.create_time createTime,t.ip_staff_id,t.ip_staff_id ipStaffId,t.staff_name,t.staff_name
+        select t.create_time createTime,t.ip_staff_id,t.ip_staff_id ipStaffId,t.staff_name,t.staff_name
         staffName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
         statusCd,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
         endTime,t.b_id,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
         from inspection_plan_staff t
         where 1 =1
-        <if test="createTime !=null and createTime != ''">
-            and t.create_time= #{createTime}
-        </if>
+
         <if test="ipStaffId !=null and ipStaffId != ''">
             and t.ip_staff_id= #{ipStaffId}
         </if>
@@ -147,9 +139,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="createTime !=null and createTime != ''">
-            , t.create_time= #{createTime}
-        </if>
+
         <if test="staffName !=null and staffName != ''">
             , t.staff_name= #{staffName}
         </if>
@@ -183,9 +173,7 @@
         select count(1) count
         from inspection_plan_staff t
         where 1 =1
-        <if test="createTime !=null and createTime != ''">
-            and t.create_time= #{createTime}
-        </if>
+
         <if test="ipStaffId !=null and ipStaffId != ''">
             and t.ip_staff_id= #{ipStaffId}
         </if>
