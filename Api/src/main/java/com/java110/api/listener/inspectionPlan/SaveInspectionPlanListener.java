@@ -34,7 +34,6 @@ public class SaveInspectionPlanListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "inspectionPlanName", "必填，请填写巡检计划名称");
         Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "必填，请填写巡检路线");
         Assert.hasKeyAndValue(reqJson, "inspectionPlanPeriod", "必填，请选择执行周期");
-        Assert.hasKeyAndValue(reqJson, "staffId", "必填，请填写执行人员");
         Assert.hasKeyAndValue(reqJson, "startTime", "必填，请选择计划开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(reqJson, "signType", "必填，请填写签到方式");

@@ -32,7 +32,6 @@ public class AddInspectionPlanSMOImpl extends AbstractComponentSMO implements IA
         Assert.hasKeyAndValue(paramIn, "inspectionPlanName", "必填，请填写巡检计划名称");
         Assert.hasKeyAndValue(paramIn, "inspectionRouteId", "必填，请填写巡检路线");
         Assert.hasKeyAndValue(paramIn, "inspectionPlanPeriod", "必填，请选择执行周期");
-        Assert.hasKeyAndValue(paramIn, "staffId", "必填，请填写执行人员");
         Assert.hasKeyAndValue(paramIn, "startTime", "必填，请选择计划开始时间");
         Assert.hasKeyAndValue(paramIn, "endTime", "必填，请选择结束时间");
         Assert.hasKeyAndValue(paramIn, "signType", "必填，请填写签到方式");

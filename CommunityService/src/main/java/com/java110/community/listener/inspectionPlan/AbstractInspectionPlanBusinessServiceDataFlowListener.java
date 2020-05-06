@@ -51,8 +51,6 @@ public abstract class AbstractInspectionPlanBusinessServiceDataFlowListener exte
         businessInspectionPlanInfo.put("inspectionPlanId", businessInspectionPlanInfo.get("inspectionPlanId"));
         businessInspectionPlanInfo.put("state", businessInspectionPlanInfo.get("state"));
         businessInspectionPlanInfo.put("communityId", businessInspectionPlanInfo.get("communityId"));
-        businessInspectionPlanInfo.put("staffId", businessInspectionPlanInfo.get("staffId"));
-        businessInspectionPlanInfo.put("staffName", businessInspectionPlanInfo.get("staffName"));
         businessInspectionPlanInfo.remove("bId");
         businessInspectionPlanInfo.put("statusCd", statusCd);
     }
@@ -91,8 +89,6 @@ public abstract class AbstractInspectionPlanBusinessServiceDataFlowListener exte
         currentInspectionPlanInfo.put("inspectionPlanId", businessInspectionPlan.get("inspectionPlanId"));
         currentInspectionPlanInfo.put("state", businessInspectionPlan.get("state"));
         currentInspectionPlanInfo.put("communityId", businessInspectionPlan.get("communityId"));
-        currentInspectionPlanInfo.put("staffId", businessInspectionPlan.get("staffId"));
-        currentInspectionPlanInfo.put("staffName", businessInspectionPlan.get("staffName"));
         currentInspectionPlanInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionPlanServiceDaoImpl().saveBusinessInspectionPlanInfo(currentInspectionPlanInfo);
     }

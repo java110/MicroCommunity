@@ -14,19 +14,17 @@
             remark,
             end_time,
             operate,
-            staff_name,
             sign_type,
             start_time,
             inspection_plan_id,
             state,
             community_id,
             b_id,
-            staff_id,
             create_user_id,
             create_user_name)
         values (#{inspectionPlanName},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
-                #{endTime},#{operate},#{staffName},#{signType},#{startTime},
-                #{inspectionPlanId},#{state},#{communityId},#{bId},#{staffId},#{createUserId},
+                #{endTime},#{operate},#{signType},#{startTime},
+                #{inspectionPlanId},#{state},#{communityId},#{bId},#{createUserId},
                 #{createUserName})
        </insert>
 
@@ -38,10 +36,10 @@
             t.inspection_route_id inspectionRouteId,
             t.inspection_plan_period inspectionPlanPeriod,
             t.remark,t.end_time endTime,
-            t.operate,t.staff_name staffName,t.sign_type signType,
+            t.operate,t.sign_type signType,
             t.start_time startTime,t.create_user_id createUserId,
             t.inspection_plan_id inspectionPlanId,t.state,
-            t.community_id communityId,t.b_id bId,t.staff_id staffId
+            t.community_id communityId,t.b_id bId
         from business_inspection_plan t
         where 1 =1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
@@ -62,9 +60,7 @@
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
-        <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
-        </if>
+
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -86,9 +82,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="staffId !=null and staffId != ''">
-            and t.staff_id= #{staffId}
-        </if>
+
 
     </select>
 
@@ -100,12 +94,12 @@
             inspection_plan_name,inspection_route_id,
             inspection_plan_period,remark,status_cd,end_time,
             sign_type,start_time,create_user_id,create_user_name,
-            inspection_plan_id,state,community_id,b_id,staff_id,staff_name
+            inspection_plan_id,state,community_id,b_id
         ) select
         t.inspection_plan_name,t.inspection_route_id,t.inspection_plan_period,t.remark,'0',
         t.end_time,t.sign_type,t.start_time,t.create_user_id,t.create_user_name,
         t.inspection_plan_id,t.state,
-        t.community_id,t.b_id,t.staff_id,t.staff_name
+        t.community_id,t.b_id
         from business_inspection_plan t where 1=1
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and t.inspection_plan_name= #{inspectionPlanName}
@@ -123,9 +117,6 @@
             and t.end_time= #{endTime}
         </if>
         and t.operate= 'ADD'
-        <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
-        </if>
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -147,9 +138,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="staffId !=null and staffId != ''">
-            and t.staff_id= #{staffId}
-        </if>
+
 
     </insert>
 
@@ -172,8 +161,6 @@
             t.state,
             t.community_id communityId,
             t.b_id bId,
-            t.staff_id staffId,
-            t.staff_name staffName,
             t.create_time createTime,
             d.name stateName,
             c.name inspectionPlanPeriodName,
@@ -199,9 +186,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
-        <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
-        </if>
+
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -222,9 +207,6 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
-        </if>
-        <if test="staffId !=null and staffId != ''">
-            and t.staff_id= #{staffId}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -255,9 +237,7 @@
         <if test="endTime !=null">
             , t.end_time= #{endTime}
         </if>
-        <if test="staffName !=null and staffName != ''">
-            , t.staff_name= #{staffName}
-        </if>
+
         <if test="signType !=null and signType != ''">
             , t.sign_type= #{signType}
         </if>
@@ -270,9 +250,7 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
-        <if test="staffId !=null and staffId != ''">
-            , t.staff_id= #{staffId}
-        </if>
+
         where 1=1
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
@@ -306,9 +284,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
-        <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
-        </if>
+
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -327,9 +303,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-        <if test="staffId !=null and staffId != ''">
-            and t.staff_id= #{staffId}
-        </if>
+
         <if test="keyWord !=null and keyWord != ''">
             and (t.inspection_plan_name like concat('%',#{keyWord},'%') or t.staff_name like concat('%',#{keyWord},'%'))
         </if>
