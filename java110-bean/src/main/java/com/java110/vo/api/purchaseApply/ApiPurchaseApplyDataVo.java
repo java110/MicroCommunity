@@ -16,6 +16,8 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String resourceNames;
     //累计价格
     private String totalPrice;
+    private String endUserName;
+    private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
     private String description;
 
@@ -98,5 +100,21 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setResOrderType(String resOrderType) {
         this.resOrderType = resOrderType;
+    }
+
+    public String getEndUserName() {
+        return endUserName;
+    }
+
+    public void setEndUserName(String endUserName) {
+        this.endUserName = endUserName;
+    }
+
+    public String getEndUserTel() {
+        return endUserTel;
+    }
+
+    public void setEndUserTel(String endUserTel) {
+        this.endUserTel = endUserTel;
     }
 }

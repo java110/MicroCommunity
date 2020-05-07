@@ -35,9 +35,9 @@
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyInfo" parameterType="Map">
            insert into business_purchase_apply
-                (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id)
+                (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel)
            values
-                (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId})
+                (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId},#{endUserName},#{endUserTel})
     </insert>
 
     <!-- 保存采购明细表备份表 -->
@@ -85,7 +85,11 @@
             t.apply_order_id applyOrderId,t.state,
             t.store_id storeId,
             t.user_name userName,t.b_id bId,t.user_id userId,
-            t.status_cd statusCd
+            t.status_cd statusCd,
+            t.end_user_name,
+            t.end_user_tel,
+            t.end_user_name endUserName,
+            t.end_user_tel endUserTel
         from business_purchase_apply t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -111,6 +115,12 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="endUserName !=null and endUserName != ''">
+            and t.end_user_name= #{endUserName}
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and t.end_user_tel= #{endUserTel}
         </if>
 
     </select>
@@ -139,9 +149,9 @@
     <!-- 保存采购申请信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyInfoInstance" parameterType="Map">
         insert into purchase_apply
-        (res_order_type,description,apply_order_id,status_cd,state,store_id,user_name,b_id,user_id)
+        (res_order_type,description,apply_order_id,status_cd,state,store_id,user_name,b_id,user_id,end_user_name,end_user_tel)
         select
-        t.res_order_type,t.description,t.apply_order_id,'0',t.state,t.store_id,t.user_name,t.b_id,t.user_id
+        t.res_order_type,t.description,t.apply_order_id,'0',t.state,t.store_id,t.user_name,t.b_id,t.user_id,t.end_user_name,t.end_user_tel
         from business_purchase_apply t where 1=1
         and t.operate= 'ADD'
         <if test="resOrderType !=null and resOrderType != ''">
@@ -175,7 +185,11 @@
             t.res_order_type resOrderType,t.description,
             t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
             t.store_id storeId,t.user_name userName,
-            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName
+            t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
+            t.end_user_name,
+            t.end_user_tel,
+            t.end_user_name endUserName,
+            t.end_user_tel endUserTel
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 =1
@@ -203,6 +217,12 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        <if test="endUserName !=null and endUserName != ''">
+            and t.end_user_name= #{endUserName}
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and t.end_user_tel= #{endUserTel}
+        </if>
 
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -219,7 +239,11 @@
         t.apply_order_id applyOrderId,t.status_cd statusCd,t.state,
         t.store_id storeId,t.user_name userName,
         t.b_id bId,t.user_id userId,t.create_time createTime,d.name stateName,
-        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode,rs.description
+        de.apply_order_id applyOrderId,de.res_id resId,de.quantity,de.remark,rs.res_name resName,rs.price,rs.stock,rs.res_code resCode,rs.description,
+        t.end_user_name,
+        t.end_user_tel,
+        t.end_user_name endUserName,
+        t.end_user_tel endUserTel
         from purchase_apply t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         inner join purchase_apply_detail de on de.apply_order_id = t.apply_order_id
@@ -244,6 +268,12 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="endUserName !=null and endUserName != ''">
+            and t.end_user_name= #{endUserName}
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and t.end_user_tel= #{endUserTel}
         </if>
 
         order by t.create_time desc
@@ -304,6 +334,12 @@
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
         </if>
+        <if test="endUserName !=null and endUserName != ''">
+            , t.end_user_name= #{endUserName}
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            , t.end_user_tel= #{endUserTel}
+        </if>
         where 1=1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
@@ -340,8 +376,12 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
+        <if test="endUserName !=null and endUserName != ''">
+            and t.end_user_name= #{endUserName}
+        </if>
+        <if test="endUserTel !=null and endUserTel != ''">
+            and t.end_user_tel= #{endUserTel}
+        </if>
 
     </select>
 

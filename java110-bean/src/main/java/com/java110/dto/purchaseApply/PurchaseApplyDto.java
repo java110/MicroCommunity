@@ -26,6 +26,8 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String userName;
     private String userId;
     private String stateName;
+    private String endUserName;
+    private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
 
     private String createTime;
@@ -176,5 +178,22 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+
+    public String getEndUserName() {
+        return endUserName;
+    }
+
+    public void setEndUserName(String endUserName) {
+        this.endUserName = endUserName;
+    }
+
+    public String getEndUserTel() {
+        return endUserTel;
+    }
+
+    public void setEndUserTel(String endUserTel) {
+        this.endUserTel = endUserTel;
     }
 }

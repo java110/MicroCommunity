@@ -46,6 +46,8 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         businessPurchaseApplyInfo.put("storeId", businessPurchaseApplyInfo.get("store_id"));
         businessPurchaseApplyInfo.put("entryPerson", businessPurchaseApplyInfo.get("entry_person"));
         businessPurchaseApplyInfo.put("userId", businessPurchaseApplyInfo.get("user_id"));
+        businessPurchaseApplyInfo.put("endUserName", businessPurchaseApplyInfo.get("end_user_name"));
+        businessPurchaseApplyInfo.put("endUserTel", businessPurchaseApplyInfo.get("end_user_tel"));
         businessPurchaseApplyInfo.remove("bId");
         businessPurchaseApplyInfo.put("statusCd", statusCd);
     }
@@ -77,6 +79,8 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         currentPurchaseApplyInfo.put("state", currentPurchaseApplyInfo.get("state"));
         currentPurchaseApplyInfo.put("storeId", currentPurchaseApplyInfo.get("storeId"));
         currentPurchaseApplyInfo.put("userId", currentPurchaseApplyInfo.get("userId"));
+        currentPurchaseApplyInfo.put("endUserName", currentPurchaseApplyInfo.get("end_user_name"));
+        currentPurchaseApplyInfo.put("endUserTel", currentPurchaseApplyInfo.get("end_user_tel"));
         currentPurchaseApplyInfo.put("userName", currentPurchaseApplyInfo.get("userName"));
         currentPurchaseApplyInfo.put("createTime", currentPurchaseApplyInfo.get("createTime"));
         currentPurchaseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
