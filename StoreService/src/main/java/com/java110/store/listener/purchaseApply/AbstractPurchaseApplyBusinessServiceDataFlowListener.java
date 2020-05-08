@@ -72,7 +72,7 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
 
         currentPurchaseApplyInfo.put("bId", business.getbId());
         currentPurchaseApplyInfo.put("operate", currentPurchaseApplyInfo.get("operate"));
-        currentPurchaseApplyInfo.put("applyDetailId", currentPurchaseApplyInfo.get("applyDetailId"));
+        currentPurchaseApplyInfo.put("applyDstaffetailId", currentPurchaseApplyInfo.get("applyDetailId"));
         currentPurchaseApplyInfo.put("resOrderType", currentPurchaseApplyInfo.get("resOrderType"));
         currentPurchaseApplyInfo.put("description", currentPurchaseApplyInfo.get("description"));
         currentPurchaseApplyInfo.put("applyOrderId", currentPurchaseApplyInfo.get("applyOrderId"));
