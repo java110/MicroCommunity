@@ -17,6 +17,8 @@
         <result column="userId" property="userId"/>
         <result column="createTime" property="createTime"/>
         <result column="stateName" property="stateName"/>
+        <result column="endUserName" property="endUserName"/>
+        <result column="endUserTel" property="endUserTel"/>
         <!-- 一对多关系 -->
         <collection property="purchaseApplyDetailVo" ofType="com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo"  javaType="java.util.ArrayList">
             <id property="id" column="id"/>
