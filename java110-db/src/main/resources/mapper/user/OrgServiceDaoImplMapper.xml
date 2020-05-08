@@ -113,7 +113,7 @@
         and t.parent_org_id = uo.org_id
         and uo.status_cd = '0'
         <if test="staffId != null and staffId !=''">
-            and uosr.org_id = uo.org_id
+            and uosr.org_id = t.org_id
             and uosr.staff_id = #{staffId}
             and uosr.status_cd = '0'
         </if>
@@ -205,7 +205,7 @@
         and t.parent_org_id = uo.org_id
         and uo.status_cd = '0'
         <if test="staffId != null and staffId !=''">
-            and uosr.org_id = uo.org_id
+            and uosr.org_id = t.org_id
             and uosr.staff_id = #{staffId}
             and uosr.status_cd = '0'
         </if>
