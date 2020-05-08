@@ -14,6 +14,7 @@ public class ApiOrgDataVo implements Serializable {
     private String belongCommunityName;
     private String description;
     private String allowOperation;
+    private String staffId;
 
     private String orgLevelName;
 
@@ -95,5 +96,13 @@ public class ApiOrgDataVo implements Serializable {
 
     public void setAllowOperation(String allowOperation) {
         this.allowOperation = allowOperation;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }
