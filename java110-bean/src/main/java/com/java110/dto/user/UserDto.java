@@ -47,6 +47,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String staffName;
 
+    private String staffId;
+
     private String openId;
     private String statusCd;
 
@@ -215,5 +217,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setParentOrgName(String parentOrgName) {
         this.parentOrgName = parentOrgName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }
