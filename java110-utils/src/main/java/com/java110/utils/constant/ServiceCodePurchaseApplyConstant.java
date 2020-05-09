@@ -27,6 +27,12 @@ public class ServiceCodePurchaseApplyConstant {
      */
     public static final String LIST_PURCHASE_APPLY = "purchaseApply.listPurchaseApplys";
 
+    /**
+     * 查询  流程图
+     */
+    public static final String LIST_WORKFLOW_IMAGE = "purchaseApply.listWorkflowImage";
+
+
     //审核
     public static final String AUDIT_PURCHASE_APPLY = "purchaseApply.auditApplyOrder";
 

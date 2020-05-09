@@ -14,10 +14,13 @@ import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -33,7 +36,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +57,13 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private HistoryService historyService;
+
+    @Autowired
+    private RepositoryService repositoryService;
+
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
@@ -317,6 +331,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         return purchaseApplyDto;
 
     }
+
 
 
     public ProcessEngine getProcessEngine() {

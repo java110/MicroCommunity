@@ -84,7 +84,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiListener {
             context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
             JSONArray businesses = new JSONArray();
             AppService service = event.getAppService();
-            businesses.add(updateComplaint(reqJson, context));
+            businesses.add(updatePurchaseApply(reqJson, context));
             responseEntity = iApplyOrderBMOImpl.callService(context, service.getServiceCode(), businesses);
         }
         context.setResponseEntity(responseEntity);
@@ -99,7 +99,7 @@ public class AuditApplyOrderListener extends AbstractServiceApiListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject updateComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private JSONObject updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setStoreId(paramInJson.getString("storeId"));
