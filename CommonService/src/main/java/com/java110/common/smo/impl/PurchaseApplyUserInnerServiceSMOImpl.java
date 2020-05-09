@@ -247,7 +247,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         //taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
-        taskService.setVariable(purchaseApplyDto.getTaskId(), "purchaseApplyDto", purchaseApplyDto);
+        //taskService.setVariable(purchaseApplyDto.getTaskId(), "purchaseApplyDto", purchaseApplyDto);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
