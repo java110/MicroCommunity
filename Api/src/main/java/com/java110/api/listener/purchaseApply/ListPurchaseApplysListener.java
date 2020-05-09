@@ -5,6 +5,8 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
+import com.java110.core.smo.purchaseApplyUser.IPurchaseApplyUserInnerServiceSMO;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
@@ -32,6 +34,9 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
 
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IPurchaseApplyUserInnerServiceSMO purchaseApplyUserInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -74,6 +79,7 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
         List<ApiPurchaseApplyDataVo> purchaseApplys = null;
         if (count > 0) {
             List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
+            purchaseApplyDtos = freshCurrentUser(purchaseApplyDtos);
             purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ApiPurchaseApplyDataVo.class);
             for( ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys){
                 List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
@@ -89,7 +95,9 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
                     apiPurchaseApplyDataVo.setResourceNames(resNames.toString());
                     apiPurchaseApplyDataVo.setTotalPrice(totalPrice.toString());
                 }
+
             }
+
         } else {
             purchaseApplys = new ArrayList<>();
         }
@@ -104,5 +112,16 @@ public class ListPurchaseApplysListener extends AbstractServiceApiListener {
 
         context.setResponseEntity(responseEntity);
 
+    }
+
+
+    private List<PurchaseApplyDto>  freshCurrentUser(List<PurchaseApplyDto> purchaseApplyDtos) {
+        List<PurchaseApplyDto> tmpPurchaseApplyDtos = new ArrayList<>();
+        for(PurchaseApplyDto purchaseApplyDto : purchaseApplyDtos){
+            purchaseApplyDto = purchaseApplyUserInnerServiceSMOImpl.getTaskCurrentUser(purchaseApplyDto);
+            tmpPurchaseApplyDtos.add(purchaseApplyDto);
+        }
+
+        return tmpPurchaseApplyDtos;
     }
 }

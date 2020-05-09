@@ -1,6 +1,7 @@
 package com.java110.core.smo.purchaseApply;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -49,4 +50,5 @@ public interface IPurchaseApplyInnerServiceSMO {
     //查询采购明细表
     @RequestMapping(value = "/queryPurchaseApplyDetails", method = RequestMethod.POST)
     List<PurchaseApplyDetailDto> queryPurchaseApplyDetails(@RequestBody PurchaseApplyDetailDto purchaseApplyDetailDto);
+
 }

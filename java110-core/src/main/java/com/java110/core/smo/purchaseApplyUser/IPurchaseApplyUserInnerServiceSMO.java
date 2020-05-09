@@ -2,6 +2,7 @@ package com.java110.core.smo.purchaseApplyUser;
 
 import com.java110.core.feign.FeignConfiguration;
 import com.java110.dto.auditMessage.AuditMessageDto;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.entity.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -70,5 +71,13 @@ public interface IPurchaseApplyUserInnerServiceSMO {
      */
     @RequestMapping(value = "/getAuditMessage", method = RequestMethod.POST)
     public List<AuditMessageDto> getAuditMessage(@RequestBody PurchaseApplyDto purchaseApplyDto);
+
+    /**
+     * 获取任务当前处理人
+     * @param purchaseApplyDto
+     * @return
+     */
+    @RequestMapping(value = "/getTaskCurrentUser", method = RequestMethod.POST)
+    public PurchaseApplyDto getTaskCurrentUser(@RequestBody PurchaseApplyDto purchaseApplyDto);
 
 }

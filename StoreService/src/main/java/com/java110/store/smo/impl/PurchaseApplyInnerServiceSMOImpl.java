@@ -5,6 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDetailDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
@@ -129,6 +130,8 @@ public class PurchaseApplyInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<PurchaseApplyDetailDto> purchaseApplyDetails = BeanConvertUtil.covertBeanList(purchaseApplyServiceDaoImpl.getPurchaseApplyDetailInfo(BeanConvertUtil.beanCovertMap(purchaseApplyDetailDto)), PurchaseApplyDetailDto.class);
         return purchaseApplyDetails;
     }
+
+
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {
         return purchaseApplyServiceDaoImpl;

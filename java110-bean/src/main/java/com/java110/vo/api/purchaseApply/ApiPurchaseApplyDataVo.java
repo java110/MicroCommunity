@@ -20,6 +20,9 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String endUserTel;
     private List<PurchaseApplyDetailVo> purchaseApplyDetailVo;
     private String description;
+    private String staffId;
+    private String staffName;
+    private String staffTel;
 
 
     public String getApplyOrderId() {
@@ -116,5 +119,29 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setEndUserTel(String endUserTel) {
         this.endUserTel = endUserTel;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
     }
 }

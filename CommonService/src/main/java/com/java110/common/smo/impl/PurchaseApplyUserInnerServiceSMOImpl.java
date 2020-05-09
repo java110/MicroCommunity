@@ -5,10 +5,13 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.audit.IAuditUserInnerServiceSMO;
 import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
 import com.java110.core.smo.purchaseApplyUser.IPurchaseApplyUserInnerServiceSMO;
+import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.auditMessage.AuditMessageDto;
 import com.java110.dto.auditUser.AuditUserDto;
+import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.user.UserDto;
 import com.java110.entity.audit.AuditUser;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -47,6 +50,9 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
     private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
@@ -275,6 +281,41 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         }
 
         return auditMessageDtos;
+    }
+
+    /**
+     * 获取任务当前处理人
+     *
+     * @param purchaseApplyDto
+     * @return
+     */
+    public PurchaseApplyDto getTaskCurrentUser(@RequestBody PurchaseApplyDto purchaseApplyDto) {
+
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().processInstanceBusinessKey(purchaseApplyDto.getApplyOrderId()).singleResult();
+
+        if (task == null) {
+            purchaseApplyDto.setStaffId("");
+            purchaseApplyDto.setStaffName("");
+            purchaseApplyDto.setStaffTel("");
+            return purchaseApplyDto;
+        }
+
+        String userId = task.getAssignee();
+        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
+
+        if (users == null || users.size() == 0) {
+            purchaseApplyDto.setStaffId("");
+            purchaseApplyDto.setStaffName("");
+            purchaseApplyDto.setStaffTel("");
+            return purchaseApplyDto;
+        }
+
+        purchaseApplyDto.setCurrentUserId(userId);
+        purchaseApplyDto.setStaffName(users.get(0).getName());
+        purchaseApplyDto.setStaffTel(users.get(0).getTel());
+        return purchaseApplyDto;
+
     }
 
 

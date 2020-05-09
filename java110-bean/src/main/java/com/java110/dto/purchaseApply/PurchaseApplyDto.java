@@ -41,6 +41,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String auditMessage;
     private String staffId;
     private String staffName;
+    private String staffTel;
 
 
 
@@ -213,5 +214,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public String getStaffTel() {
+        return staffTel;
+    }
+
+    public void setStaffTel(String staffTel) {
+        this.staffTel = staffTel;
     }
 }
