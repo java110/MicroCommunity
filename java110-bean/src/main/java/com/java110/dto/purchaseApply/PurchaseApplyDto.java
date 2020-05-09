@@ -20,6 +20,7 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String resOrderType;
     private String description;
     private String applyOrderId;
+    private String[] applyOrderIds;
     private String bId;
     private String state;
     private String storeId;
@@ -222,5 +223,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setStaffTel(String staffTel) {
         this.staffTel = staffTel;
+    }
+
+    public String[] getApplyOrderIds() {
+        return applyOrderIds;
+    }
+
+    public void setApplyOrderIds(String[] applyOrderIds) {
+        this.applyOrderIds = applyOrderIds;
     }
 }
