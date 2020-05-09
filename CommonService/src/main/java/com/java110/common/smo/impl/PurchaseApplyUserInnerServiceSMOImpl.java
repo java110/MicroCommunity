@@ -65,7 +65,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         variables.put("purchaseApplyDto", purchaseApplyDto);
         //variables.put("userId", purchaseApplyDto.getCurrentUserId());
         //开启流程
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", purchaseApplyDto.getApplyOrderId(), variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEnter", purchaseApplyDto.getApplyOrderId(), variables);
 //        //将得到的实例流程id值赋给之前设置的变量
         String processInstanceId = processInstance.getId();
 //        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
