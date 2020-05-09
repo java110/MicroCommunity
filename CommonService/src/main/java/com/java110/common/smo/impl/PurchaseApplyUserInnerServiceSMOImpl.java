@@ -80,16 +80,8 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
      * 自动提交第一步
      */
     private void autoFinishFirstTask(PurchaseApplyDto purchaseApplyDto) {
-        AuditUserDto auditUserDto = new AuditUserDto();
-        auditUserDto.setStoreId(purchaseApplyDto.getStoreId());
-        auditUserDto.setObjCode("resourceEntry");
-        auditUserDto.setAuditLink("809001");
-        List<AuditUserDto> auditUserDtos = auditUserInnerServiceSMOImpl.queryAuditUsers(auditUserDto);
-        if (auditUserDtos.size() == 0 || auditUserDtos == null) {
-            throw new IllegalArgumentException("未找的采购部门审核人员信息");
-        }
         Task task = null;
-        TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(auditUserDtos.get(0).getUserId()).active();
+        TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(purchaseApplyDto.getCurrentUserId()).active();
         List<Task> todoList = query.list();//获取申请人的待办任务列表
 
         for (Task tmp : todoList) {
