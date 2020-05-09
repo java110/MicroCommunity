@@ -67,11 +67,11 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", purchaseApplyDto.getApplyOrderId(), variables);
 //        //将得到的实例流程id值赋给之前设置的变量
-//        String processInstanceId = processInstance.getId();
+        String processInstanceId = processInstance.getId();
 //        // System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
 //
-//        purchaseApplyDto.setProcessInstanceId(processInstanceId);
-//        autoFinishFirstTask(purchaseApplyDto);
+        purchaseApplyDto.setProcessInstanceId(processInstanceId);
+        autoFinishFirstTask(purchaseApplyDto);
         return purchaseApplyDto;
     }
 
@@ -84,7 +84,7 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         auditUserDto.setObjCode("resourceEntry");
         auditUserDto.setAuditLink("809001");
         List<AuditUserDto> auditUserDtos = auditUserInnerServiceSMOImpl.queryAuditUsers(auditUserDto);
-        if(auditUserDtos.size() == 0 || auditUserDtos == null){
+        if (auditUserDtos.size() == 0 || auditUserDtos == null) {
             throw new IllegalArgumentException("未找的采购部门审核人员信息");
         }
         Task task = null;
@@ -184,9 +184,9 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("resourceEnter")
                 .taskAssignee(user.getUserId());
-        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("resourceEnter");
-        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("resourceEnterDealUser");
         }
 
@@ -204,10 +204,10 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
                 .processDefinitionKey("resourceEnter")
-                .taskAssignee(user.getUserId()) ;
-        if(!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())){
+                .taskAssignee(user.getUserId());
+        if (!StringUtil.isEmpty(user.getAuditLink()) && "START".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("resourceEnter");
-        }else if(!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())){
+        } else if (!StringUtil.isEmpty(user.getAuditLink()) && "AUDIT".equals(user.getAuditLink())) {
             historicTaskInstanceQuery.taskName("resourceEnterDealUser");
         }
 
@@ -249,11 +249,12 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("auditCode", purchaseApplyDto.getAuditCode());
         variables.put("currentUserId", purchaseApplyDto.getCurrentUserId());
+        variables.put("nextAuditStaffId",purchaseApplyDto.getStaffId());
         //taskService.setAssignee(complaintDto.getTaskId(),complaintDto.getCurrentUserId());
         //taskService.addCandidateUser(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         //taskService.claim(complaintDto.getTaskId(), complaintDto.getCurrentUserId());
         taskService.complete(purchaseApplyDto.getTaskId(), variables);
-        taskService.setVariable(purchaseApplyDto.getTaskId(),"purchaseApplyDto",purchaseApplyDto);
+        taskService.setVariable(purchaseApplyDto.getTaskId(), "purchaseApplyDto", purchaseApplyDto);
 
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
@@ -282,8 +283,6 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
 
         return auditMessageDtos;
     }
-
-
 
 
     public ProcessEngine getProcessEngine() {

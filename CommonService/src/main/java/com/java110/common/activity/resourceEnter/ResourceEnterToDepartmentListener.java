@@ -28,10 +28,11 @@ public class ResourceEnterToDepartmentListener implements TaskListener , Executi
     public void notify(DelegateTask delegateTask) {
         logger.info("查询部门审核人员");
 
-        auditUserInnerServiceSMOImpl = ApplicationContextFactory.getBean("auditUserInnerServiceSMOImpl", IAuditUserInnerServiceSMO.class);
-        AuditUserDto auditUserDto = new AuditUserDto();
-        PurchaseApplyDto purchaseApplyDto = (PurchaseApplyDto)delegateTask.getVariable("purchaseApplyDto");
-        auditUserDto.setStoreId(purchaseApplyDto.getStoreId());
+//        auditUserInnerServiceSMOImpl = ApplicationContextFactory.getBean("auditUserInnerServiceSMOImpl", IAuditUserInnerServiceSMO.class);
+//        AuditUserDto auditUserDto = new AuditUserDto();
+//        PurchaseApplyDto purchaseApplyDto = (PurchaseApplyDto)delegateTask.getVariable("purchaseApplyDto");
+        String nextAuditStaffId = delegateTask.getVariable("nextAuditStaffId").toString();
+        /*auditUserDto.setStoreId(purchaseApplyDto.getStoreId());
         auditUserDto.setObjCode("resourceEntry");
         auditUserDto.setAuditLink("809001");
         List<AuditUserDto> auditUserDtos = auditUserInnerServiceSMOImpl.queryAuditUsers(auditUserDto);
@@ -49,10 +50,10 @@ public class ResourceEnterToDepartmentListener implements TaskListener , Executi
 
         if (auditUserDtos == null || auditUserDtos.size() < 1) {
             return;
-        }
+        }*/
 
-        delegateTask.setAssignee(auditUserDtos.get(0).getUserId());
-        logger.info("设置部门审核人员："+auditUserDtos.get(0).getUserId()+auditUserDtos.get(0).getUserName());
+        delegateTask.setAssignee(nextAuditStaffId);
+        logger.info("设置部门审核人员："+nextAuditStaffId);
     }
 
 
