@@ -63,7 +63,8 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         //将信息加入map,以便传入流程中
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("purchaseApplyDto", purchaseApplyDto);
-        //variables.put("userId", purchaseApplyDto.getCurrentUserId());
+        variables.put("nextAuditStaffId",purchaseApplyDto.getStaffId());
+        variables.put("userId", purchaseApplyDto.getCurrentUserId());
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("resourceEntry", purchaseApplyDto.getApplyOrderId(), variables);
 //        //将得到的实例流程id值赋给之前设置的变量
