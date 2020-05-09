@@ -32,6 +32,8 @@ public class ApiStaffDataVo implements Serializable {
 
     private String parentOrgId;
 
+    private String orgId;
+
     private String parentOrgName;
 
     private String staffId;
@@ -183,4 +185,13 @@ public class ApiStaffDataVo implements Serializable {
     public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
 }

@@ -103,12 +103,20 @@
         t.belong_community_id ,t.belong_community_id belongCommunityId,
         t.allow_operation ,t.allow_operation allowOperation
         from u_org t,t_dict td,u_org uo
+        <if test="staffId != null and staffId !=''">
+            ,u_org_staff_rel uosr
+        </if>
         where 1 =1
         and t.org_level = td.status_cd
         and td.table_name='u_org'
         and td.table_columns = 'org_level'
         and t.parent_org_id = uo.org_id
         and uo.status_cd = '0'
+        <if test="staffId != null and staffId !=''">
+            and uosr.org_id = t.org_id
+            and uosr.staff_id = #{staffId}
+            and uosr.status_cd = '0'
+        </if>
         <if test="orgName !=null and orgName != ''">
             and t.org_name= #{orgName}
         </if>
@@ -187,12 +195,20 @@
     <select id="queryOrgsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from u_org t,t_dict td,u_org uo
+        <if test="staffId != null and staffId !=''">
+            ,u_org_staff_rel uosr
+        </if>
         where 1 =1
         and t.org_level = td.status_cd
         and td.table_name='u_org'
         and td.table_columns = 'org_level'
         and t.parent_org_id = uo.org_id
         and uo.status_cd = '0'
+        <if test="staffId != null and staffId !=''">
+            and uosr.org_id = t.org_id
+            and uosr.staff_id = #{staffId}
+            and uosr.status_cd = '0'
+        </if>
         <if test="orgName !=null and orgName != ''">
             and t.org_name= #{orgName}
         </if>

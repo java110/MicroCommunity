@@ -80,6 +80,7 @@ public class NavServiceSMOImpl extends BaseComponentSMO implements INavServiceSM
         resultUserInfo.put("levelCd", tmpUserInfo.getString("levelCd"));
         resultUserInfo.put("tel", CommonUtil.mobileEncrypt(tmpUserInfo.getString("tel")));
         resultUserInfo.put("email", tmpUserInfo.getString("email"));
+        resultUserInfo.put("userId",tmpUserInfo.getString("userId"));
         responseEntity = new ResponseEntity<String>(resultUserInfo.toJSONString(), HttpStatus.OK);
 
         return responseEntity;
