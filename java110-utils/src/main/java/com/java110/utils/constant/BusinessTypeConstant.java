@@ -454,6 +454,19 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_FEE_CONFIG = "620100050001";
 
+    /**
+     * 保存退费信息
+     */
+    public static final String BUSINESS_TYPE_SAVE_RETURN_PAY_FEE = "621100030001";
+    /**
+     * 修改退费信息
+     */
+    public static final String BUSINESS_TYPE_UPDATE_RETURN_PAY_FEE = "621100040001";
+    /**
+     * 删除退费信息
+     */
+    public static final String BUSINESS_TYPE_DELETE_RETURN_PAY_FEE = "621100050001";
+
 
     /**
      * 删除住户
