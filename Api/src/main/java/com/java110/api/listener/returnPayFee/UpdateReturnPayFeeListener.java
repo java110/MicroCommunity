@@ -2,6 +2,7 @@ package com.java110.api.listener.returnPayFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
@@ -26,26 +27,25 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiListener {
 
     @Autowired
     private IReturnPayFeeBMO returnPayFeeBMOImpl;
+    @Autowired
+    private IFeeBMO feeBMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "returnFeeId", "returnFeeId不能为空");
+        Assert.hasKeyAndValue(reqJson, "state", "state不能为空");
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
         AppService service = event.getAppService();
-
-        //添加单元信息
         businesses.add(returnPayFeeBMOImpl.updateReturnPayFee(reqJson, context));
-
+        if("1100".equals( reqJson.getString("state"))){
+            businesses.add(returnPayFeeBMOImpl.addFeeDetail(reqJson, context));
+        }
         ResponseEntity<String> responseEntity = returnPayFeeBMOImpl.callService(context, service.getServiceCode(), businesses);
-
         context.setResponseEntity(responseEntity);
     }
 

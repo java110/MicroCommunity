@@ -76,6 +76,19 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
         return business;
     }
 
+    public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessReturnPayFee = new JSONObject();
+        businessReturnPayFee.putAll(paramInJson);
+        businessReturnPayFee.put("detailId", "-1");
+        //计算 应收金额
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessReturnPayFee);
+        return business;
+    }
+
 
     /**
      * 添加小区信息
