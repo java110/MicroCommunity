@@ -47,6 +47,8 @@ public class SaveReturnPayFeeListener extends AbstractServiceApiListener {
 
         //添加单元信息
         businesses.add(returnPayFeeBMOImpl.addReturnPayFee(reqJson, context));
+        reqJson.put("state","1000");
+        businesses.add(returnPayFeeBMOImpl.updateFeeDetail(reqJson, context));
 
         ResponseEntity<String> responseEntity = returnPayFeeBMOImpl.callService(context, service.getServiceCode(), businesses);
 

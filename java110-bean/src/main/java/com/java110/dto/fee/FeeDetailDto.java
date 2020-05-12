@@ -16,13 +16,13 @@ import java.util.Date;
 public class FeeDetailDto extends PageDto implements Serializable {
 
     private String primeRate;
-private String detailId;
-private String receivableAmount;
-private String cycles;
-private String remark;
-private String receivedAmount;
-private String communityId;
-private String feeId;
+    private String detailId;
+    private String receivableAmount;
+    private String cycles;
+    private String remark;
+    private String receivedAmount;
+    private String communityId;
+    private String feeId;
 
 
     private Date createTime;
@@ -30,54 +30,71 @@ private String feeId;
     private Date endTime;
 
     private String statusCd = "0";
+    private String state;
+    private String stateName;
 
 
     public String getPrimeRate() {
         return primeRate;
     }
-public void setPrimeRate(String primeRate) {
+
+    public void setPrimeRate(String primeRate) {
         this.primeRate = primeRate;
     }
-public String getDetailId() {
+
+    public String getDetailId() {
         return detailId;
     }
-public void setDetailId(String detailId) {
+
+    public void setDetailId(String detailId) {
         this.detailId = detailId;
     }
-public String getReceivableAmount() {
+
+    public String getReceivableAmount() {
         return receivableAmount;
     }
-public void setReceivableAmount(String receivableAmount) {
+
+    public void setReceivableAmount(String receivableAmount) {
         this.receivableAmount = receivableAmount;
     }
-public String getCycles() {
+
+    public String getCycles() {
         return cycles;
     }
-public void setCycles(String cycles) {
+
+    public void setCycles(String cycles) {
         this.cycles = cycles;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getReceivedAmount() {
+
+    public String getReceivedAmount() {
         return receivedAmount;
     }
-public void setReceivedAmount(String receivedAmount) {
+
+    public void setReceivedAmount(String receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
 
@@ -112,5 +129,21 @@ public void setFeeId(String feeId) {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

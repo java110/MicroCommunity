@@ -42,9 +42,28 @@ public class UpdateReturnPayFeeListener extends AbstractServiceApiListener {
         JSONArray businesses = new JSONArray();
         AppService service = event.getAppService();
         businesses.add(returnPayFeeBMOImpl.updateReturnPayFee(reqJson, context));
-        if("1100".equals( reqJson.getString("state"))){
+        //退费审核通过
+        if("1100".equals(reqJson.getString("state"))){
+            reqJson.put("state","1300");
             businesses.add(returnPayFeeBMOImpl.addFeeDetail(reqJson, context));
+            reqJson.put("state","1100");
+            String cycles = (String) reqJson.get("cycles");
+            String receivableAmount = (String) reqJson.get("receivableAmount");
+            String receivedAmount = (String) reqJson.get("receivedAmount");
+            reqJson.put("cycles",cycles.split("-")[1]);
+            reqJson.put("receivableAmount",receivableAmount.split("-")[1]);
+            reqJson.put("receivedAmount",receivedAmount.split("-")[1]);
+            reqJson.put("createTime",reqJson.get("payTime"));
+            businesses.add(returnPayFeeBMOImpl.updateFeeDetail(reqJson, context));
         }
+        //不通过
+        if("1200".equals(reqJson.getString("state"))){
+            reqJson.put("state","1200");
+            businesses.add(returnPayFeeBMOImpl.updateFeeDetail(reqJson, context));
+        }
+
+
+
         ResponseEntity<String> responseEntity = returnPayFeeBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
     }

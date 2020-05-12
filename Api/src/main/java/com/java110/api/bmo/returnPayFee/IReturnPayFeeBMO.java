@@ -24,6 +24,7 @@ public interface IReturnPayFeeBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     JSONObject updateReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    JSONObject updateFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
