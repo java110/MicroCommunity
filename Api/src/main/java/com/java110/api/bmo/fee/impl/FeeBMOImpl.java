@@ -96,6 +96,15 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         return business;
     }
 
+    public JSONObject updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", paramInJson);
+        return business;
+    }
+
     /**
      * 添加费用明细信息
      *
