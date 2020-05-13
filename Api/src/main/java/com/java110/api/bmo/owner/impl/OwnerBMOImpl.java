@@ -124,6 +124,19 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         return business;
     }
 
+
+    public JSONObject deleteOwnerRoomRel(JSONObject paramInJson) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessOwner = new JSONObject();
+        businessOwner.put("ownerId", paramInJson.getString("ownerId"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessOwner);
+
+        return business;
+    }
+
     /**
      * 退出小区成员
      *

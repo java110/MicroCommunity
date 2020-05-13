@@ -3,7 +3,10 @@ package com.java110.api.listener.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
+import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.room.IRoomInnerServiceSMO;
+import com.java110.dto.RoomDto;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -13,6 +16,8 @@ import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.api.ApiRoomVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,11 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+    @Autowired
+    private IRoomBMO roomBMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -73,8 +83,20 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
             //小区楼添加到小区中
             businesses.add(ownerBMOImpl.exitCommunityMember(paramObj));
         }
-
-
+        RoomDto roomDto = new RoomDto();
+        roomDto.setOwnerId((String) paramObj.get("ownerId"));
+        List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+        //判断改业主是否有房屋信息
+        if(roomDtoList.size() > 0){
+            //删除房屋关系
+            businesses.add(ownerBMOImpl.deleteOwnerRoomRel(paramObj));
+            //更新房屋信息为未出售
+            for(int i =0; i < roomDtoList.size(); i ++){
+                paramObj.put("state","2002");
+                paramObj.put("roomId",roomDtoList.get(i).getRoomId());
+                businesses.add(roomBMOImpl.updateShellRoom(paramObj, dataFlowContext));
+            }
+        }
         ResponseEntity<String> responseEntity = ownerBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
         dataFlowContext.setResponseEntity(responseEntity);
