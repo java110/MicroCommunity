@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -43,8 +45,9 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
     @Autowired
-    private IRoomBMO roomBMOImpl;
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -73,19 +76,24 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
         //dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-
-
-        //添加小区楼
         businesses.add(ownerBMOImpl.deleteOwner(paramObj));
         if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
             //ownerId 写为 memberId
             paramObj.put("ownerId", paramObj.getString("memberId"));
             RoomDto roomDto = new RoomDto();
-            roomDto.setOwnerId((String) paramObj.get("ownerId"));
+            roomDto.setOwnerId(paramObj.getString("ownerId"));
             List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
             if(roomDtoList.size() > 0){
                 throw new IllegalArgumentException("删除失败,删除前请先解绑房屋信息");
             }
+            //查询车位信息
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setOwnerId(paramObj.getString("ownerId"));
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            if(ownerCarDtos.size() > 0){
+                throw new IllegalArgumentException("删除失败,删除前请先解绑车位信息");
+            }
+
             //小区楼添加到小区中
             businesses.add(ownerBMOImpl.exitCommunityMember(paramObj));
         }
