@@ -161,11 +161,11 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
      */
     private void doBusinessOwnerRoomRel(Business business, JSONObject businessOwnerRoomRel) {
 
-        Assert.jsonObjectHaveKey(businessOwnerRoomRel, "ownerId", "businessOwnerRoomRel 节点下没有包含 ownerId 节点");
+        Assert.jsonObjectHaveKey(businessOwnerRoomRel, "relId", "businessOwnerRoomRel 节点下没有包含 relId 节点");
 
-//        if (businessOwnerRoomRel.getString("relId").startsWith("-")) {
-//            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "relId 错误，不能自动生成（必须已经存在的relId）" + businessOwnerRoomRel);
-//        }
+        if (businessOwnerRoomRel.getString("relId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "relId 错误，不能自动生成（必须已经存在的relId）" + businessOwnerRoomRel);
+        }
         //自动插入DEL
         autoSaveDelBusinessOwnerRoomRel(business, businessOwnerRoomRel);
     }

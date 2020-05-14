@@ -38,7 +38,6 @@ public interface IOwnerBMO extends IApiBaseBMO {
      */
     public JSONObject deleteOwner(JSONObject paramInJson);
 
-    public JSONObject deleteOwnerRoomRel(JSONObject paramInJson);
 
     /**
      * 退出小区成员

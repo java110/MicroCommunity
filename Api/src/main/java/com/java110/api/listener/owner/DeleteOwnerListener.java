@@ -80,22 +80,14 @@ public class DeleteOwnerListener extends AbstractServiceApiDataFlowListener {
         if ("1001".equals(paramObj.getString("ownerTypeCd"))) {
             //ownerId 写为 memberId
             paramObj.put("ownerId", paramObj.getString("memberId"));
+            RoomDto roomDto = new RoomDto();
+            roomDto.setOwnerId((String) paramObj.get("ownerId"));
+            List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
+            if(roomDtoList.size() > 0){
+                throw new IllegalArgumentException("删除失败,删除前请先解绑房屋信息");
+            }
             //小区楼添加到小区中
             businesses.add(ownerBMOImpl.exitCommunityMember(paramObj));
-        }
-        RoomDto roomDto = new RoomDto();
-        roomDto.setOwnerId((String) paramObj.get("ownerId"));
-        List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
-        //判断改业主是否有房屋信息
-        if(roomDtoList.size() > 0){
-            //删除房屋关系
-            businesses.add(ownerBMOImpl.deleteOwnerRoomRel(paramObj));
-            //更新房屋信息为未出售
-            for(int i =0; i < roomDtoList.size(); i ++){
-                paramObj.put("state","2002");
-                paramObj.put("roomId",roomDtoList.get(i).getRoomId());
-                businesses.add(roomBMOImpl.updateShellRoom(paramObj, dataFlowContext));
-            }
         }
         ResponseEntity<String> responseEntity = ownerBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 

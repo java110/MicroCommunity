@@ -57,25 +57,25 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
     protected void autoSaveDelBusinessOwnerRoomRel(Business business, JSONObject businessOwnerRoomRel) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("ownerId", businessOwnerRoomRel.getString("ownerId"));
+        info.put("relId", businessOwnerRoomRel.getString("relId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentOwnerRoomRelInfos = getOwnerRoomRelServiceDaoImpl().getOwnerRoomRelInfo(info);
         if (currentOwnerRoomRelInfos == null || currentOwnerRoomRelInfos.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
-        for ( int i = 0; i < currentOwnerRoomRelInfos.size(); i++){
-            Map currentOwnerRoomRelInfo = currentOwnerRoomRelInfos.get(0);
-            currentOwnerRoomRelInfo.put("bId", business.getbId());
-            currentOwnerRoomRelInfo.put("relId", currentOwnerRoomRelInfo.get("rel_id"));
-            currentOwnerRoomRelInfo.put("operate", currentOwnerRoomRelInfo.get("operate"));
-            currentOwnerRoomRelInfo.put("remark", currentOwnerRoomRelInfo.get("remark"));
-            currentOwnerRoomRelInfo.put("state", currentOwnerRoomRelInfo.get("state"));
-            currentOwnerRoomRelInfo.put("ownerId", currentOwnerRoomRelInfo.get("owner_id"));
-            currentOwnerRoomRelInfo.put("userId", currentOwnerRoomRelInfo.get("user_id"));
-            currentOwnerRoomRelInfo.put("roomId", currentOwnerRoomRelInfo.get("room_id"));
-            currentOwnerRoomRelInfo.put("operate", StatusConstant.OPERATE_DEL);
-            getOwnerRoomRelServiceDaoImpl().saveBusinessOwnerRoomRelInfo(currentOwnerRoomRelInfo);
-        }
+
+        Map currentOwnerRoomRelInfo = currentOwnerRoomRelInfos.get(0);
+        currentOwnerRoomRelInfo.put("bId", business.getbId());
+        currentOwnerRoomRelInfo.put("relId", currentOwnerRoomRelInfo.get("rel_id"));
+        currentOwnerRoomRelInfo.put("operate", currentOwnerRoomRelInfo.get("operate"));
+        currentOwnerRoomRelInfo.put("remark", currentOwnerRoomRelInfo.get("remark"));
+        currentOwnerRoomRelInfo.put("state", currentOwnerRoomRelInfo.get("state"));
+        currentOwnerRoomRelInfo.put("ownerId", currentOwnerRoomRelInfo.get("owner_id"));
+        currentOwnerRoomRelInfo.put("userId", currentOwnerRoomRelInfo.get("user_id"));
+        currentOwnerRoomRelInfo.put("roomId", currentOwnerRoomRelInfo.get("room_id"));
+        currentOwnerRoomRelInfo.put("operate", StatusConstant.OPERATE_DEL);
+        getOwnerRoomRelServiceDaoImpl().saveBusinessOwnerRoomRelInfo(currentOwnerRoomRelInfo);
+
     }
 
 
