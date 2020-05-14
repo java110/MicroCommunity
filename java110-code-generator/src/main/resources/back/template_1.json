@@ -14,7 +14,7 @@
   "tableName": "inspection_plan_staff",
   "param": {
     "ipStaffId": "ip_staff_id",
-    "bId": "bId",
+    "bId": "b_id",
     "inspectionPlanId": "inspection_plan_id",
     "communityId": "community_id",
     "staffId": "staff_id",
