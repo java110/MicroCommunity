@@ -37,6 +37,8 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @return 订单服务能够接受的报文
      */
     public JSONObject deleteOwner(JSONObject paramInJson);
+
+
     /**
      * 退出小区成员
      *

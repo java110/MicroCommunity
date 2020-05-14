@@ -65,9 +65,7 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
         }
 
         Map currentOwnerRoomRelInfo = currentOwnerRoomRelInfos.get(0);
-
         currentOwnerRoomRelInfo.put("bId", business.getbId());
-
         currentOwnerRoomRelInfo.put("relId", currentOwnerRoomRelInfo.get("rel_id"));
         currentOwnerRoomRelInfo.put("operate", currentOwnerRoomRelInfo.get("operate"));
         currentOwnerRoomRelInfo.put("remark", currentOwnerRoomRelInfo.get("remark"));
@@ -75,10 +73,9 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
         currentOwnerRoomRelInfo.put("ownerId", currentOwnerRoomRelInfo.get("owner_id"));
         currentOwnerRoomRelInfo.put("userId", currentOwnerRoomRelInfo.get("user_id"));
         currentOwnerRoomRelInfo.put("roomId", currentOwnerRoomRelInfo.get("room_id"));
-
-
         currentOwnerRoomRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerRoomRelServiceDaoImpl().saveBusinessOwnerRoomRelInfo(currentOwnerRoomRelInfo);
+
     }
 
 

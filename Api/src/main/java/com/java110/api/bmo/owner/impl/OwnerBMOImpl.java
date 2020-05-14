@@ -124,6 +124,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         return business;
     }
 
+
     /**
      * 退出小区成员
      *
