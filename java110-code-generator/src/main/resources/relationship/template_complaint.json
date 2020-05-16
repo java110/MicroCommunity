@@ -1,0 +1,101 @@
+{
+  "tableName":"complaint",
+  "templateName":"登记投诉建议",
+  "templateCode":"addComplaintStep",
+  "templateKey":"complaintId",
+  "templateKeyName":"投诉ID",
+  "package": "complaintPackage",
+  "successUrl": "/flow/complaintFlow",
+  "needAffirm": false,
+  "flows":[
+    {
+      "index": 0,
+      "code":"viewFloorInfo",
+      "flowKey": "floorId",
+      "cnCode":"选择楼栋",
+      "vcName":"viewFloorInfo",
+      "businessName": "businessFloor",
+      "businessType": "BUSINESS_TYPE_SAVE_FlOOR_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 1,
+      "code":"sellRoomSelectRoom",
+      "flowKey": "roomId",
+      "cnCode":"选择房屋",
+      "vcName":"sellRoomSelectRoom",
+      "businessName": "businessRoom",
+      "businessType": "BUSINESS_TYPE_SAVE_ROOM_INFO",
+      "existsComponent": true
+    },
+    {
+      "index": 2,
+      "code":"addComplain",
+      "flowKey": "complainId",
+      "cnCode":"投诉建议",
+      "vcName":"addComplain",
+      "businessName": "businessComplain",
+      "businessType": "BUSINESS_TYPE_SAVE_COMPLAIN_INFO",
+      "existsComponent": false
+    }
+  ],
+  "components": {
+    "addComplain": {
+      "templateName": "投诉建议",
+      "templateCode": "addComplain",
+      "package": "complaintPackage",
+      "columns": [
+        {
+          "code": "typeCd",
+          "cnCode":"投诉类型",
+          "desc":"必填，请选择投诉类型",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType": "select",
+          "selectValue":"809001,809002",
+          "selectValueName":"投诉,建议",
+          "limit":"num",
+          "limitParam":"",
+          "limitErrInfo":"投诉类型格式错误",
+          "show": true
+        },
+        {
+          "code":"complaintName",
+          "cnCode":"投诉人",
+          "desc":"必填，请填写投诉人",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"maxLength",
+          "limitParam":"200",
+          "limitErrInfo":"投诉人不能大于200位",
+          "show": false
+        },
+        {
+          "code":"tel",
+          "cnCode":"投诉电话",
+          "desc":"必填，请填写投诉电话",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"input",
+          "limit":"phone",
+          "limitParam":"",
+          "limitErrInfo":"投诉电话格式错误",
+          "show": true
+        },
+        {
+          "code":"context",
+          "cnCode":"投诉内容",
+          "desc":"必填，请填写投诉内容",
+          "required":true,
+          "hasDefaultValue":false,
+          "inputType":"textarea",
+          "limit":"maxLength",
+          "limitParam":"4000",
+          "limitErrInfo":"投诉状态超过4000位",
+          "show": false
+        }
+      ]
+    }
+  }
+}

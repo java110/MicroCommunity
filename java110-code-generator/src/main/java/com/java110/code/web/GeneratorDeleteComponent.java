@@ -4,17 +4,18 @@ package com.java110.code.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.code.back.BaseGenerator;
+import com.java110.code.util.FileUtilBase;
 
 public class GeneratorDeleteComponent extends BaseGenerator {
 
-    public void generator(JSONObject data) {
+    public void generator(JSONObject data) throws Exception {
 
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-//        generatorComponentJava(data);
-//        genneratorIListSmo(data);
-//        genneratorListSmoImpl(data);
+        generatorComponentJava(data);
+        genneratorIListSmo(data);
+        genneratorListSmoImpl(data);
 //        genneratorListListener(data);
 
 
@@ -32,7 +33,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
-        
+
 
 
         String writePath = this.getClass().getResource("/").getPath()
@@ -55,7 +56,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         String fileContext = sb.toString();
 
         fileContext = super.replaceTemplateContext(fileContext, data);
-        
+
 
         // 替换 数据校验部分代码
 
@@ -74,7 +75,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void generatorComponentJava(JSONObject data) {
+    private void generatorComponentJava(JSONObject data) throws Exception {
 
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/delete/DeleteComponent.java").getFile());
         String fileContext = sb.toString();
@@ -86,6 +87,9 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\components\\" +data.getString("templateCode") + "/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java");
+
 
 
     }
@@ -95,7 +99,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void genneratorIListSmo(JSONObject data) {
+    private void genneratorIListSmo(JSONObject data) throws Exception {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/delete/IDeleteSMO.java").getFile());
         String fileContext = sb.toString();
 
@@ -106,6 +110,9 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/IDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMO.java");
+
     }
 
     /**
@@ -113,7 +120,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void genneratorListSmoImpl(JSONObject data) {
+    private void genneratorListSmoImpl(JSONObject data) throws Exception {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/delete/DeleteSMOImpl.java").getFile());
         String fileContext = sb.toString();
 
@@ -133,6 +140,9 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/impl/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMOImpl.java");
+
     }
 
     /**

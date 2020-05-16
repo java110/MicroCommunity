@@ -1,11 +1,11 @@
-package com.java110.web.smo.@@templateCode@@.impl;
+package com.java110.front.smo.@@templateCode@@.impl;
 
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.IPageData;
-import com.java110.web.core.AbstractComponentSMO;
-import com.java110.web.smo.@@templateCode@@
+import com.java110.front.core.AbstractComponentSMO;
+import com.java110.front.smo.@@templateCode@@
 import org.springframework.stereotype.Service;.IAdd@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

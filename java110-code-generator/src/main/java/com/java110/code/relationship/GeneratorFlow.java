@@ -10,7 +10,7 @@ public class GeneratorFlow extends BaseGenerator {
     public void generator(JSONObject data) {
 
         //处理组件
-        generatorComponentHtml(data);
+//        generatorComponentHtml(data);
 
 
 

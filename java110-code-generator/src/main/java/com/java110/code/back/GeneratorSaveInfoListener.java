@@ -1,6 +1,7 @@
 package com.java110.code.back;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.code.util.FileUtilBase;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
      *
      * @param data
      */
-    public void generator(Data data) {
+    public void generator(Data data) throws Exception {
         StringBuffer sb = readFile(this.getClass().getResource("/template/SaveListener.txt").getFile());
         String fileContext = sb.toString();
         if (StringUtils.isEmpty(data.getShareParam())) {
@@ -24,6 +25,8 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
             data.setShareColumn(data.getParams().get(data.getShareColumn()).toString());
         }
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
+                .replace("@@templateCode@@",data.getName())
+                .replace("@@shareName@@",data.getShareName())
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc())
                 .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd())
@@ -36,7 +39,8 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
-
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,toUpperCaseFirstOne(data.getShareName()).toString()+"Service\\src\\main\\java\\com\\java110\\community\\listener\\"+ data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
         //生成协议
 
         /**
@@ -67,5 +71,8 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
                 + "out/back/docs/" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md";
         writeFile(writePathDoc,
                 fileContextDoc);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"docs\\document\\services\\"+ data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md");
+        //生成协议
     }
 }

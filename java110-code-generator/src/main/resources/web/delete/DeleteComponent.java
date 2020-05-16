@@ -1,10 +1,10 @@
 package com.java110.front.components.@@templateCode@@;
 
 import com.java110.core.context.IPageData;
-import com.java110.web.smo.@@templateCode@@.IDelete@@TemplateCode@@SMO;
+import com.java110.front.smo.@@templateCode@@.IDelete@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 /**
  * 添加@@templateName@@组件

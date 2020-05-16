@@ -1,0 +1,104 @@
+{
+  "id": "companyId",
+  "name": "companyMain",
+  "desc": "公司列表",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_COMPANYMAIN",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_COMPANYMAIN",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_COMPANYMAIN",
+  "newBusinessTypeCdValue": "550100030002",
+  "updateBusinessTypeCdValue":"550100040002",
+  "deleteBusinessTypeCdValue" :"550100050002",
+  "tableName": "company_main",
+  "businessTableName": "business_company_main",
+
+  "param": {
+    "companyId": "company_id",
+    "communityId": "community_id",
+    "companyNo": "company_no",
+    "companyName": "company_name",
+    "companyProvince": "company_province",
+    "companyCity": "company_city",
+    "companyTown": "company_town",
+    "companyStreet": "company_street",
+    "companyAddress": "company_address",
+    "companyContactPhone": "company_contact_phone",
+    "companyIncorporation": "company_incorporation",
+    "companyScale":"company_scale",
+    "companyCreditNo": "company_credit_no",
+    "companyLicenseAttached": "company_license_attached",
+    "memberId": "member_id",
+    "updatedBy": "updated_by",
+    "companyContact": "company_contact",
+    "updatedTime": "updated_time",
+    "statusCd": "status_cd",
+    "operate": "operate",
+    "bId": "b_id"
+  },
+  "required": [
+    {
+      "code": "complaintId",
+      "msg": "xxx"
+    },{
+      "code": "communityId",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyNo",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyName",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyProvince",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyCity",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyTown",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyStreet",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyAddress",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyContact",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyIncorporation",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyScale",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyCreditNo",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyLicenseAttached",
+      "msg": "投诉不能为空"
+    },{
+      "code": "memberId",
+      "msg": "投诉不能为空"
+    },{
+      "code": "updatedBy",
+      "msg": "投诉不能为空"
+    },{
+      "code": "updatedTime",
+      "msg": "投诉不能为空"
+    }
+    ,{
+      "code": "statusCd",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyScale",
+      "msg": "投诉不能为空"
+    },{
+      "code": "companyContactPhone",
+      "msg": "xxxxx"
+    }
+  ]
+}

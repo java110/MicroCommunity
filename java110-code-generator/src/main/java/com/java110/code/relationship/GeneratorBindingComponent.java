@@ -15,13 +15,13 @@ public class GeneratorBindingComponent extends BaseGenerator {
         generatorComponentHtml(data);
         generatorComponentJs(data);
         generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
+//        genneratorIListSmo(data);
+//        genneratorListSmoImpl(data);
 
 
-        genneratorListListener(data);
+//        genneratorListListener(data);
 
-        genneratorServiceCodeConstant(data);
+//        genneratorServiceCodeConstant(data);
 
 
     }
@@ -202,7 +202,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
             JSONObject flow = flows.getJSONObject(flowIndex);
             String showAffirmPage = data.getBoolean("needAffirm") ? " || " + data.getString("templateCode") + "Info.index == " + flows.size() : "";
             allStep.append("<div v-if=\"" + data.getString("templateCode") + "Info.index == " + flowIndex + showAffirmPage + "\">\n" +
-                    "        <vc:create name=\"" + flow.getString("vcName") + "\"\n" +
+                    "        <vc:create path=\"" + flow.getString("vcName") + "\"\n" +
                     "                   callBackListener=\"" + data.getString("templateCode") + "\"\n" +
                     "                   callBackFunction=\"notify\"\n" +
                     "        ></vc:create>\n" +
@@ -450,7 +450,7 @@ public class GeneratorBindingComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/api/listener/" + data.getString("templateCode") + "/Binding" + toUpperCaseFirstOne(data.getString("templateCode")) + "Listener.java";
+                + "out/api/listener/" + data.getString("templateCode") + "/" + toUpperCaseFirstOne(data.getString("templateCode")) + "Binding"+"Listener.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

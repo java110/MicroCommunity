@@ -1,4 +1,4 @@
-package com.java110.web.smo.@@templateCode@@;
+package com.java110.front.smo.@@templateCode@@;
 
 import com.java110.core.context.IPageData;
 import org.springframework.http.ResponseEntity;

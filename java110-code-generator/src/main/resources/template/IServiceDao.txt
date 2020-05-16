@@ -1,4 +1,4 @@
-package com.java110.store.dao;
+package com.java110.@@shareName@@.dao;
 
 
 import com.java110.utils.exception.DAOException;

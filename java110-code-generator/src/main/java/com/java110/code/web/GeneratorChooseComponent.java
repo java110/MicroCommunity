@@ -3,6 +3,7 @@ package com.java110.code.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.code.back.BaseGenerator;
+import com.java110.code.util.FileUtilBase;
 
 /**
  * @ClassName GeneratorChooseComponent
@@ -13,12 +14,12 @@ import com.java110.code.back.BaseGenerator;
  * add by wuxw 2019/7/27
  **/
 public class GeneratorChooseComponent extends BaseGenerator {
-    public void generator(JSONObject data) {
+    public void generator(JSONObject data) throws Exception {
 
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-//        generatorComponentJava(data);
+        generatorComponentJava(data);
 
     }
 
@@ -92,7 +93,7 @@ public class GeneratorChooseComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void generatorComponentJava(JSONObject data) {
+    private void generatorComponentJava(JSONObject data) throws Exception {
 
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/choose/ChooseComponent.java").getFile());
         String fileContext = sb.toString();
@@ -104,6 +105,8 @@ public class GeneratorChooseComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\components\\" +data.getString("templateCode")+"/Choose"+toUpperCaseFirstOne(data.getString("templateCode"))+"Component.java");
 
 
     }

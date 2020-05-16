@@ -1,12 +1,13 @@
 package com.java110.api.listener.@@templateCode@@;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.core.smo.@@templateCode@@.I@@TemplateCode@@InnerServiceSMO;
+import com.java110.utils.constant.ServiceCode@@TemplateCode@@Constant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.@@templateCode@@.I@@TemplateCode@@InnerServiceSMO;
-import com.java110.dto.@@templateCode@@.@@TemplateCode@@Dto;
+import com.java110.dto.companyMain.CompanyMainDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.@@templateCode@@.Api@@TemplateCode@@DataVo;
 import com.java110.vo.api.@@templateCode@@.Api@@TemplateCode@@Vo;
@@ -14,13 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.java110.common.constant.CommonConstant;
-import com.java110.common.constant.BusinessTypeConstant;
-import com.java110.common.constant.ServiceCode@@TemplateCode@@Constant;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * 查询小区侦听类

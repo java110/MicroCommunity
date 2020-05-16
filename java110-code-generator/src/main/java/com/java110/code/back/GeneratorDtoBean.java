@@ -1,5 +1,7 @@
 package com.java110.code.back;
 
+import com.java110.code.util.FileUtilBase;
+
 import java.util.Map;
 
 /**
@@ -51,10 +53,11 @@ public class GeneratorDtoBean extends BaseGenerator {
      *
      * @param data 数据
      */
-    public void generator(Data data) {
+    public void generator(Data data) throws Exception {
         StringBuffer sb = readFile(this.getClass().getResource("/template/dto.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
+                .replace("@@templateCode@@",data.getName())
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc());
 
@@ -64,5 +67,7 @@ public class GeneratorDtoBean extends BaseGenerator {
 
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"java110-bean\\src\\main\\java\\com\\java110\\dto\\" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "Dto.java");
     }
 }

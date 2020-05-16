@@ -4,21 +4,21 @@ package com.java110.code.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.code.back.BaseGenerator;
+import com.java110.code.util.FileUtilBase;
 
 public class GeneratorManagerComponent extends BaseGenerator {
 
-    public void generator(JSONObject data) {
+    public void generator(JSONObject data) throws Exception {
 
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        //generatorComponentJava(data);
-        //genneratorIListSmo(data);
-        //genneratorListSmoImpl(data);
-        //genneratorListListener(data);
-        //genneratorVo(data);
+        generatorComponentJava(data);
+        genneratorIListSmo(data);
+        genneratorListSmoImpl(data);
+//        genneratorVo(data);
 
-        //genneratorDataVo(data);
+//        genneratorDataVo(data);
 
 
     }
@@ -73,7 +73,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
                         "                            </div>\n");
 
                 if (tmpCond.containsKey("componentName")) {
-                    vcCreate.append("<vc:create name=\"" + tmpCond.getString("componentName") + "\"\n" +
+                    vcCreate.append("<vc:create path=\"" + tmpCond.getString("componentName") + "\"\n" +
                             "               emit" + toUpperCaseFirstOne(tmpCond.getString("componentName")) + "=\"" + data.getString("templateCode") + "Manage\"\n" +
                             "               emitLoadData=\"" + data.getString("templateCode") + "Manage\"\n" +
                             "    ></vc:create>\n");
@@ -234,7 +234,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void generatorComponentJava(JSONObject data) {
+    private void generatorComponentJava(JSONObject data) throws Exception {
 
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ManageComponent.java").getFile());
         String fileContext = sb.toString();
@@ -246,6 +246,8 @@ public class GeneratorManagerComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\components\\" +data.getString("templateCode") + "/" + toUpperCaseFirstOne(data.getString("templateCode")) + "ManageComponent.java");
 
 
     }
@@ -255,7 +257,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void genneratorIListSmo(JSONObject data) {
+    private void genneratorIListSmo(JSONObject data) throws Exception {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/IListSMO.java").getFile());
         String fileContext = sb.toString();
 
@@ -266,6 +268,9 @@ public class GeneratorManagerComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/IList" + toUpperCaseFirstOne(data.getString("templateCode")) + "sSMO.java");
+
     }
 
     /**
@@ -273,7 +278,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
      *
      * @param data
      */
-    private void genneratorListSmoImpl(JSONObject data) {
+    private void genneratorListSmoImpl(JSONObject data) throws Exception {
         StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/manage/ListSMOImpl.java").getFile());
         String fileContext = sb.toString();
 
@@ -284,6 +289,9 @@ public class GeneratorManagerComponent extends BaseGenerator {
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/impl/List" + toUpperCaseFirstOne(data.getString("templateCode")) + "sSMOImpl.java");
+
     }
 
     /**

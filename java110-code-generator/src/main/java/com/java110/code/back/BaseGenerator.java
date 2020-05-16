@@ -1,12 +1,15 @@
 package com.java110.code.back;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.code.util.FileUtilBase;
 
 import java.io.*;
 
 public class BaseGenerator {
 
-
+//    protected FileUtilBase fileUtilBase(){
+//        return new FileUtilBase();
+//    }
     //首字母转小写
     public static String toLowerCaseFirstOne(String s){
         if(Character.isLowerCase(s.charAt(0)))
@@ -69,7 +72,9 @@ public class BaseGenerator {
     }
 
     protected String replaceBindingTemplateContext(String srcStr, JSONObject data){
-        return srcStr.replace("@@templateName@@", data.getString("templateName"))
+        return srcStr.replace("TableCode@@",toUpperCaseFirstOne(data.getString("tableName")))
+                .replace("@@tableCode@@",data.getString("tableName"))
+                .replace("@@templateName@@", data.getString("templateName"))
                 .replace("@@templateCode@@", data.getString("templateCode"))
                 .replace("@@TemplateCode@@", toUpperCaseFirstOne(data.getString("templateCode")))
                 .replace("@@templateKey@@", data.getString("templateKey"))

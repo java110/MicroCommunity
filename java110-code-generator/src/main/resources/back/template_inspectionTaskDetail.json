@@ -4,6 +4,7 @@
   "desc": "巡检任务明细",
   "shareParam": "communityId",
   "shareColumn": "community_id",
+  "shareName": "community",
   "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL",
   "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL",
   "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL",

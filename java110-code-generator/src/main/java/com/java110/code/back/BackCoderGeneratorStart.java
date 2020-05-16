@@ -3,17 +3,6 @@ package com.java110.code.back;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.code.back.Data;
-import com.java110.code.back.GeneratorAbstractBussiness;
-import com.java110.code.back.GeneratorDeleteInfoListener;
-import com.java110.code.back.GeneratorDtoBean;
-import com.java110.code.back.GeneratorIInnerServiceSMO;
-import com.java110.code.back.GeneratorIServiceDaoListener;
-import com.java110.code.back.GeneratorInnerServiceSMOImpl;
-import com.java110.code.back.GeneratorSaveInfoListener;
-import com.java110.code.back.GeneratorServiceDaoImplListener;
-import com.java110.code.back.GeneratorServiceDaoImplMapperListener;
-import com.java110.code.back.GeneratorUpdateInfoListener;
 import com.java110.code.web.GeneratorStart;
 
 import java.util.*;
@@ -21,7 +10,8 @@ import java.util.*;
 /**
  * Hello world!
  */
-public class BackCoderGeneratorStart extends BaseGenerator {
+public class    BackCoderGeneratorStart extends BaseGenerator {
+
 
     protected BackCoderGeneratorStart() {
         // prevents calls from subclass
@@ -35,10 +25,10 @@ public class BackCoderGeneratorStart extends BaseGenerator {
      *
      * @param args 参数
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/back/template_1.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/back/template_company.json").getFile());
 
         JSONObject dataJson = JSONObject.parseObject(sb.toString());
 
@@ -49,6 +39,7 @@ public class BackCoderGeneratorStart extends BaseGenerator {
         data.setDesc(dataJson.getString("desc"));
         data.setShareParam(dataJson.getString("shareParam"));
         data.setShareColumn(dataJson.getString("shareColumn"));
+        data.setShareName(dataJson.getString("shareName"));
         data.setNewBusinessTypeCd(dataJson.getString("newBusinessTypeCd"));
         data.setUpdateBusinessTypeCd(dataJson.getString("updateBusinessTypeCd"));
         data.setDeleteBusinessTypeCd(dataJson.getString("deleteBusinessTypeCd"));
@@ -73,6 +64,7 @@ public class BackCoderGeneratorStart extends BaseGenerator {
 
         GeneratorAbstractBussiness generatorAbstractBussiness = new GeneratorAbstractBussiness();
         generatorAbstractBussiness.generator(data);
+
 
         GeneratorIServiceDaoListener generatorIServiceDaoListener = new GeneratorIServiceDaoListener();
         generatorIServiceDaoListener.generator(data);

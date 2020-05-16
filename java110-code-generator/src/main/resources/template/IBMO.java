@@ -1,4 +1,4 @@
-package com.java110.api.bmo.activities;
+package com.java110.api.bmo.@@templateCode@@;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;

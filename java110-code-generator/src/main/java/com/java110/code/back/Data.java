@@ -39,6 +39,12 @@ public class Data {
     private String shareColumn;
     //分片传入参数 如communityId
     private String shareParam;
+    //分片传入参数 如community
+    private String shareName;
+
+    public String getShareName() { return shareName; }
+
+    public void setShareName(String shareName) { this.shareName = shareName; }
 
     private Map params;
 

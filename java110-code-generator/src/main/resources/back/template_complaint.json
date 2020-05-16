@@ -1,0 +1,60 @@
+{
+  "id": "complaintId",
+  "name": "complaint",
+  "desc": "投诉建议",
+  "shareParam": "storeId",
+  "shareColumn": "store_id",
+  "shareName": "store",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_COMPLAINTT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_COMPLAINTT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_COMPLAINTT",
+  "newBusinessTypeCdValue": "190200030002",
+  "updateBusinessTypeCdValue":"190200040002",
+  "deleteBusinessTypeCdValue" :"190200050002",
+  "businessTableName": "complaint",
+  "tableName": "complaint",
+
+  "param": {
+    "complaintId": "complaint_id",
+    "storeId": "store_id",
+    "typeCd": "type_cd",
+    "roomId": "room_id",
+    "complaintName": "complaint_name",
+    "tel": "tel",
+    "context": "context",
+    "state": "state",
+    "statusCd": "status_cd",
+    "operate": "operate",
+    "bId": "b_id"
+  },
+  "required": [
+    {
+      "code": "complaintId",
+      "msg": "投诉不能为空"
+    },{
+      "code": "storeId",
+      "msg": "投诉不能为空"
+    },{
+      "code": "typeCd",
+      "msg": "投诉不能为空"
+    },{
+      "code": "roomId",
+      "msg": "投诉不能为空"
+    },{
+      "code": "complaintName",
+      "msg": "投诉不能为空"
+    },{
+      "code": "tel",
+      "msg": "投诉不能为空"
+    },{
+      "code": "context",
+      "msg": "投诉不能为空"
+    },{
+      "code": "statusCd",
+      "msg": "投诉不能为空"
+    },{
+      "code": "state",
+      "msg": "投诉不能为空"
+    }
+  ]
+}

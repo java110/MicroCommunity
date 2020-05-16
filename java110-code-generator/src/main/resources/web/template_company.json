@@ -1,0 +1,91 @@
+{
+  "templateName":"公司列表",
+  "templateCode":"companyMain",
+  "templateKey":"companyId",
+  "templateKeyName":"公司ID",
+  "searchCode": "companyName",
+  "searchName": "公司名称",
+  "conditions": [
+    {
+      "name": "公司ID",
+      "inputType": "input",
+      "code": "companyId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "公司编号",
+      "inputType": "input",
+      "code": "companyNo",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "公司名称",
+      "inputType": "input",
+      "code": "companyName",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"communityId",
+      "cnCode":"社区ID",
+      "desc":"必填，请填写商户ID",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"社区ID必须为数字",
+      "show": false
+    },
+    {
+      "code": "companyName",
+      "cnCode":"公司名称",
+      "desc":"必填，请选择投诉类型",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"公司名称类型格式错误",
+      "show": true
+    },
+    {
+      "code":"membeId",
+      "cnCode":"管理员编号",
+      "desc":"必填，请选择法人编号",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"法人编号格式错误",
+      "show": true
+    },
+    {
+      "code":"companyContact",
+      "cnCode":"公司电话电话",
+      "desc":"必填，请填写公司电话",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"phone",
+      "limitParam":"",
+      "limitErrInfo":"投诉电话格式错误",
+      "show": true
+    },
+    {
+      "code":"companyAddress",
+      "cnCode":"公司地址",
+      "desc":"必填，请填写公司地址",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType":"input",
+      "limit":"maxLength",
+      "limitParam":"200",
+      "limitErrInfo":"公司地址不能大于200位",
+      "show": true
+    }
+
+  ]
+}

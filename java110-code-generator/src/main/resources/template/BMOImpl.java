@@ -1,14 +1,11 @@
-package com.java110.api.bmo.activities.impl;
+package com.java110.api.bmo.@@templateCode@@.impl;
 
 import com.alibaba.fastjson.JSONObject;
-
-@@TemplateCode@@BMO;
+import com.java110.api.bmo.ApiBaseBMO;
+import com.java110.api.bmo.@@templateCode@@.I@@TemplateCode@@BMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.I@@TemplateCode@@InnerServiceSMO;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
-import com.java110.core.smo.file.IFileRelInnerServiceSMO;
-import com.java110.dto.activities.@@TemplateCode@@Dto;
-import com.java110.dto.file.FileRelDto;
+import com.java110.core.smo.@@templateCode@@.I@@TemplateCode@@InnerServiceSMO;
+import com.java110.dto.@@templateCode@@.@@TemplateCode@@Dto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -57,8 +54,8 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
     public JSONObject update@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         @@TemplateCode@@Dto @@templateCode@@Dto = new @@TemplateCode@@Dto();
-        @@templateCode@@Dto.set@@TemplateCode@@Id(paramInJson.getString("@@templateCode@@Id"));
-        @@templateCode@@Dto.setCommunityId(paramInJson.getString("communityId"));
+        @@templateCode@@Dto.set@@TemplateKey@@(paramInJson.getString("@@templateKey@@"));
+        @@templateCode@@Dto.set@@ShareName@@Id(paramInJson.getString("@@shareName@@Id"));
         List<@@TemplateCode@@Dto> @@templateCode@@Dtos = @@templateCode@@InnerServiceSMOImpl.query@@TemplateCode@@s(@@templateCode@@Dto);
 
         Assert.listOnlyOne(@@templateCode@@Dtos, "未找到需要修改的活动 或多条数据");

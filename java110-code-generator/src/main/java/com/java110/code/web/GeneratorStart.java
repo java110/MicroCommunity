@@ -5,15 +5,15 @@ import com.java110.code.back.BaseGenerator;
 
 public class GeneratorStart extends BaseGenerator {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_1.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/web/template_company.json").getFile());
 
         JSONObject data = JSONObject.parseObject(sb.toString());
 
 
-//        GeneratorFlow flow = new GeneratorFlow();
-//        flow.generator(data);
+        GeneratorFlow flow = new GeneratorFlow();
+//        flow.generator(data);     //生成flow页面
 
 
         GeneratorManagerComponent managerComponent = new GeneratorManagerComponent();

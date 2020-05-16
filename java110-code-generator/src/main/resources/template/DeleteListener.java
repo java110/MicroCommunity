@@ -1,19 +1,21 @@
 package com.java110.api.listener.@@templateCode@@;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.@@templateCode@@.I@@TemplateCode@@BMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.utils.constant.ServiceCode@@TemplateCode@@Constant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.constant.BusinessTypeConstant;
-
 import com.java110.core.annotation.Java110Listener;
-import com.java110.utils.constant.ServiceCode
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
-@@TemplateCode@@Constant;
 
 /**
  * 保存小区侦听

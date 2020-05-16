@@ -1,7 +1,7 @@
-package com.java110.front.smo.community;
+package com.java110.front.smo.@@templateCode@@;
 
 import com.java110.core.context.IPageData;
-
+import org.springframework.http.ResponseEntity;
 /**
  * 添加@@templateName@@接口
  *

@@ -1,11 +1,11 @@
 package com.java110.front.components.@@templateCode@@;
 
 import com.java110.core.context.IPageData;
-import com.java110.web.smo.@@templateCode@@.I@@TemplateCode@@BindingSMO;
+import com.java110.front.smo.complaint.IAdd@@TemplateCode@@SMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
+@@tableCode@@
 /**
  * 添加@@templateName@@组件
  */

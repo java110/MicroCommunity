@@ -1,14 +1,14 @@
-package com.java110.commstorey.smo.impl;
+package com.java110.@@shareName@@.smo.impl;
 
 
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.commstorey.dao.IStoreServiceDao;
-import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.@@shareName@@.dao.IStoreServiceDao;
 import com.java110.core.smo.store.IStoreInnerServiceSMO;
+import com.java110.dto.store.StoreDto;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.user.UserDto;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.StoreDto;
-import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,7 +68,7 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
      */
     private void refreshStore(StoreDto store, List<UserDto> users) {
         for (UserDto user : users) {
-            if (store.getUserId().equals(user.getUserId())) {
+            if (store.get@@Id@@().equals(user.getUserId())) {
                 BeanConvertUtil.covertBean(user, store);
             }
         }
@@ -80,10 +80,10 @@ public class StoreInnerServiceSMOImpl extends BaseServiceSMO implements IStoreIn
      * @param stores 小区楼信息
      * @return 批量userIds 信息
      */
-    private String[] getUserIds(List<StoreDto> stores) {
+     private String[] getUserIds(List<StoreDto> stores) {
         List<String> userIds = new ArrayList<String>();
         for (StoreDto store : stores) {
-            userIds.add(store.getUserId());
+            userIds.add(store.get@@Id@@());
         }
 
         return userIds.toArray(new String[userIds.size()]);

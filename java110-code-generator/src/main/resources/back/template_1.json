@@ -1,56 +1,55 @@
 {
-  "id": "returnFeeId",
-  "name": "returnPayFee",
-  "desc": "退费表",
+  "id": "ipStaffId",
+  "name": "inspectionPlanStaff",
+  "desc": "执行计划人",
   "shareParam": "communityId",
   "shareColumn": "community_id",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_RETURN_PAY_FEE",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_RETURN_PAY_FEE",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_RETURN_PAY_FEE",
-  "newBusinessTypeCdValue": "621100030001",
-  "updateBusinessTypeCdValue": "621100040001",
-  "deleteBusinessTypeCdValue": "621100050001",
-  "businessTableName": "business_return_pay_fee",
-  "tableName": "return_pay_fee",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_PLAN_STAFF",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_PLAN_STAFF",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_PLAN_STAFF",
+  "newBusinessTypeCdValue": "520300030001",
+  "updateBusinessTypeCdValue": "520300040001",
+  "deleteBusinessTypeCdValue": "520300050001",
+  "businessTableName": "business_inspection_plan_staff",
+  "tableName": "inspection_plan_staff",
   "param": {
-    "returnFeeId": "return_fee_id",
+    "ipStaffId": "ip_staff_id",
     "bId": "bId",
-    "configId": "config_id",
+    "inspectionPlanId": "inspection_plan_id",
     "communityId": "community_id",
-    "feeId": "fee_id",
-    "feeTypeCd": "fee_type_cd",
-    "detailId": "detail_id",
-    "cycles": "cycles",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "primeRate": "prime_rate",
-    "remark": "remark",
-    "state": "state",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "createTime": "create_time",
     "statusCd": "status_cd",
-    "payTime": "pay_time",
-    "operate": "operate",
-    "reason": "reason"
+    "operate": "operate"
   },
   "required": [
     {
-      "code": "configId",
-      "msg": "费用项ID不能为空"
+      "code": "staffId",
+      "msg": "巡检执行人不能为空"
     },
     {
-      "code": "feeId",
-      "msg": "feeId不能为空"
+      "code": "staffName",
+      "msg": "巡检执行人名称不能为空"
     },
     {
       "code": "communityId",
       "msg": "小区不能为空"
     },
     {
-      "code": "detailId",
-      "msg": "缴费id不能为空"
+      "code": "startTime",
+      "msg": "开始时间不能为空"
     },
     {
-      "code": "reason",
-      "msg": "退费原因不能为空"
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "inspectionPlanId",
+      "msg": "巡检计划不能为空"
     }
   ]
 }

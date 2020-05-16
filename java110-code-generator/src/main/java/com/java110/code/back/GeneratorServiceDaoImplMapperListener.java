@@ -1,5 +1,7 @@
 package com.java110.code.back;
 
+import com.java110.code.util.FileUtilBase;
+
 import java.util.Map;
 
 public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
@@ -309,7 +311,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
      *
      * @param data
      */
-    public void generator(Data data) {
+    public void generator(Data data) throws Exception {
         StringBuffer sb = readFile(this.getClass().getResource("/template/ServiceDaoImplMapper.txt").getFile());
         String fileContext = sb.toString();
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
@@ -326,5 +328,7 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
 
         writeFile(writePath,
                 fileContext);
+        //复制生成的文件到对应分区目录下
+        FileUtilBase.copyfile(writePath,"java110-db\\src\\main\\resources\\mapper\\"+data.getShareName().toString()+"\\" + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml");
     }
 }
