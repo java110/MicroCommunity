@@ -126,7 +126,7 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_fastuserId = "68";
     public static final String CODE_PREFIX_junkRequirementId = "69";
     public static final String CODE_PREFIX_returnFeeId = "70";
-
+    public static final String CODE_PREFIX_weChatId = "71";
 
 
     /**

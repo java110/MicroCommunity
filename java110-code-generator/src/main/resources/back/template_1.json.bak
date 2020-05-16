@@ -1,0 +1,96 @@
+{
+<<<<<<< HEAD
+  "id": "ipStaffId",
+  "name": "inspectionPlanStaff",
+  "desc": "执行计划人",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_PLAN_STAFF",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_PLAN_STAFF",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_PLAN_STAFF",
+  "newBusinessTypeCdValue": "520300030001",
+  "updateBusinessTypeCdValue": "520300040001",
+  "deleteBusinessTypeCdValue": "520300050001",
+  "businessTableName": "business_inspection_plan_staff",
+  "tableName": "inspection_plan_staff",
+  "param": {
+    "ipStaffId": "ip_staff_id",
+    "bId": "bId",
+    "inspectionPlanId": "inspection_plan_id",
+    "communityId": "community_id",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
+    "startTime": "start_time",
+    "endTime": "end_time",
+    "createTime": "create_time",
+    "statusCd": "status_cd",
+=======
+  "id": "weChatId",
+  "name": "smallWeChat",
+  "desc": "小程序管理",
+  "shareParam": "store_Id",
+  "shareColumn": "storeId",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_SMALL_WE_CHAT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_SMALL_WE_CHAT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_SMALL_WE_CHAT",
+  "newBusinessTypeCdValue": "210200060001",
+  "updateBusinessTypeCdValue": "210200070001",
+  "deleteBusinessTypeCdValue": "210200080001",
+  "businessTableName": "buiness_small_wechat",
+  "tableName": "small_wechat",
+  "param": {
+    "weChatId": "weChat_id",
+    "bId": "bId",
+    "storeId": "store_Id",
+    "name": "name",
+    "appId": "appId",
+    "appSecret": "appSecret",
+    "payPassword": "pay_password",
+    "remarks": "remarks",
+    "statusCd": "status_cd",
+    "createTime": "create_time",
+>>>>>>> 42adfdfb1866101eab568d85d96fcee6f89e70ef
+    "operate": "operate"
+  },
+  "required": [
+    {
+<<<<<<< HEAD
+      "code": "staffId",
+      "msg": "巡检执行人不能为空"
+    },
+    {
+      "code": "staffName",
+      "msg": "巡检执行人名称不能为空"
+=======
+      "code": "name",
+      "msg": "小程序名称不能为空"
+    },
+    {
+      "code": "appId",
+      "msg": "小程序appId不能为空"
+>>>>>>> 42adfdfb1866101eab568d85d96fcee6f89e70ef
+    },
+    {
+      "code": "appSecret",
+      "msg": "小程序appSecret不能为空"
+    },
+    {
+<<<<<<< HEAD
+      "code": "startTime",
+      "msg": "开始时间不能为空"
+    },
+    {
+      "code": "endTime",
+      "msg": "结束时间不能为空"
+    },
+    {
+      "code": "inspectionPlanId",
+      "msg": "巡检计划不能为空"
+=======
+      "code": "payPassword",
+      "msg": "支付密码不能为空"
+>>>>>>> 42adfdfb1866101eab568d85d96fcee6f89e70ef
+    }
+  ]
+}
