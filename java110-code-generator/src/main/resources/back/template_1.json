@@ -1,56 +1,46 @@
 {
-  "id": "returnFeeId",
-  "name": "returnPayFee",
-  "desc": "退费表",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_RETURN_PAY_FEE",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_RETURN_PAY_FEE",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_RETURN_PAY_FEE",
-  "newBusinessTypeCdValue": "621100030001",
-  "updateBusinessTypeCdValue": "621100040001",
-  "deleteBusinessTypeCdValue": "621100050001",
-  "businessTableName": "business_return_pay_fee",
-  "tableName": "return_pay_fee",
+  "id": "weChatId",
+  "name": "smallWeChat",
+  "desc": "小程序管理",
+  "shareParam": "store_Id",
+  "shareColumn": "storeId",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_SMALL_WE_CHAT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_SMALL_WE_CHAT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_SMALL_WE_CHAT",
+  "newBusinessTypeCdValue": "210200060001",
+  "updateBusinessTypeCdValue": "210200070001",
+  "deleteBusinessTypeCdValue": "210200080001",
+  "businessTableName": "buiness_small_wechat",
+  "tableName": "small_wechat",
   "param": {
-    "returnFeeId": "return_fee_id",
+    "weChatId": "weChat_id",
     "bId": "bId",
-    "configId": "config_id",
-    "communityId": "community_id",
-    "feeId": "fee_id",
-    "feeTypeCd": "fee_type_cd",
-    "detailId": "detail_id",
-    "cycles": "cycles",
-    "receivableAmount": "receivable_amount",
-    "receivedAmount": "received_amount",
-    "primeRate": "prime_rate",
-    "remark": "remark",
-    "state": "state",
+    "storeId": "store_Id",
+    "name": "name",
+    "appId": "appId",
+    "appSecret": "appSecret",
+    "payPassword": "pay_password",
+    "remarks": "remarks",
     "statusCd": "status_cd",
-    "payTime": "pay_time",
-    "operate": "operate",
-    "reason": "reason"
+    "createTime": "create_time",
+    "operate": "operate"
   },
   "required": [
     {
-      "code": "configId",
-      "msg": "费用项ID不能为空"
+      "code": "name",
+      "msg": "小程序名称不能为空"
     },
     {
-      "code": "feeId",
-      "msg": "feeId不能为空"
+      "code": "appId",
+      "msg": "小程序appId不能为空"
     },
     {
-      "code": "communityId",
-      "msg": "小区不能为空"
+      "code": "appSecret",
+      "msg": "小程序appSecret不能为空"
     },
     {
-      "code": "detailId",
-      "msg": "缴费id不能为空"
-    },
-    {
-      "code": "reason",
-      "msg": "退费原因不能为空"
+      "code": "payPassword",
+      "msg": "支付密码不能为空"
     }
   ]
 }
