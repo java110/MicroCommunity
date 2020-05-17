@@ -2,7 +2,7 @@ package com.java110.dto.file;
 
 import java.io.Serializable;
 
-public class FileDto  implements Serializable {
+public class FileDto implements Serializable {
     private String fileId;
 
     private String fileName;
@@ -10,6 +10,7 @@ public class FileDto  implements Serializable {
     private String communityId;
 
     private String context;
+
 
     private String statusCd;
 
@@ -72,4 +73,5 @@ public class FileDto  implements Serializable {
     public void setFileSaveName(String fileSaveName) {
         this.fileSaveName = fileSaveName;
     }
+
 }

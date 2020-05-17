@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Encoder;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInnerServiceSMO {
@@ -61,7 +65,12 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         byte[] fileImg = ftpUploadTemplate.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword());
-
+        try {
+            OutputStream out = new FileOutputStream(new File("/home/hc/img/"+ UUID.randomUUID().toString()+".jpg"));
+            out.write(fileImg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
        //String context = new BASE64Encoder().encode(fileImg);
         String context = Base64Convert.byteToBase64(fileImg);
 
