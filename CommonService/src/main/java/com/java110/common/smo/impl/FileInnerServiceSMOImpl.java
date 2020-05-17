@@ -66,7 +66,11 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword());
         try {
-            OutputStream out = new FileOutputStream(new File("/home/hc/img/"+ UUID.randomUUID().toString()+".jpg"));
+            File file = new File("/home/hc/img/"+ UUID.randomUUID().toString()+".jpg");
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            OutputStream out = new FileOutputStream(file);
             out.write(fileImg);
         }catch (Exception e){
             e.printStackTrace();
