@@ -67,6 +67,10 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
                 java110Properties.getFtpUserPassword());
         try {
             File file = new File("/home/hc/img/"+ UUID.randomUUID().toString()+".jpg");
+            File fileParent = file.getParentFile();
+            if (!fileParent.exists()) {
+                fileParent.mkdirs();// 能创建多级目录
+            }
             if(!file.exists()){
                 file.createNewFile();
             }
