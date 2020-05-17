@@ -243,6 +243,7 @@
         and t.state = td1.status_cd
         and td1.table_name = 'owner_app_user'
         and td1.table_columns = 'state'
+        and t.status_cd = '0'
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
         </if>
