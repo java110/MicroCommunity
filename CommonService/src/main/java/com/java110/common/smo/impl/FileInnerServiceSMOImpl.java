@@ -62,27 +62,15 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             ftpPath += fileName.substring(0, fileName.lastIndexOf("/")+1);
             fileName = fileName.substring(fileName.lastIndexOf("/")+1, fileName.length());
         }
-        byte[] fileImg = ftpUploadTemplate.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
+//        byte[] fileImg = ftpUploadTemplate.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
+//                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
+//                java110Properties.getFtpUserPassword());
+//
+//       //String context = new BASE64Encoder().encode(fileImg);
+//        String context = Base64Convert.byteToBase64(fileImg);
+        String context = ftpUploadTemplate.download(ftpPath, fileName, java110Properties.getFtpServer(),
                 java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
                 java110Properties.getFtpUserPassword());
-        try {
-            File file = new File("/home/hc/img/"+ UUID.randomUUID().toString()+".jpg");
-            File fileParent = file.getParentFile();
-            if (!fileParent.exists()) {
-                fileParent.mkdirs();// 能创建多级目录
-            }
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            OutputStream out = new FileOutputStream(file);
-            out.write(fileImg);
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-       //String context = new BASE64Encoder().encode(fileImg);
-        String context = Base64Convert.byteToBase64(fileImg);
 
         fileDto.setContext(context);
         fileDtos.add(fileDto);

@@ -203,6 +203,64 @@ public class FtpUploadTemplate {
         return return_arraybyte;
     }
 
+    public String download(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
+        InputStream is = null;
+        ByteArrayOutputStream bos = null;
+        FTPClient ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(server, port);
+            ftpClient.login(userName, userPassword);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+            }
+            String f = new String(
+                    (remotePath + fileName).getBytes("GBK"),
+                    FTP.DEFAULT_CONTROL_ENCODING);
+            is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
+            if (null == is) {
+                throw new FileNotFoundException(fileName);
+            }
+            bos = new ByteArrayOutputStream();
+            int length;
+            byte[] buf = new byte[2048];
+            while (-1 != (length = is.read(buf, 0, buf.length))) {
+                bos.write(buf, 0, length);
+            }
+            ByteArrayInputStream fis = new ByteArrayInputStream(
+                    bos.toByteArray());
+            bos.flush();
+            is.close();
+            bos.close();
+            byte[] buffer = new byte[fis.available()];
+            int offset = 0;
+            int numRead = 0;
+            while (offset < buffer.length && (numRead = fis.read(buffer, offset, buffer.length - offset)) >= 0) {
+                offset += numRead;
+            }
+            if (offset != buffer.length) {
+                throw new IOException("Could not completely read file ");
+            }
+            fis.close();
+            return Base64Convert.byteToBase64(buffer);
+        } catch (Exception e) {
+            logger.error("ftp通过文件名称获取远程文件流", e);
+        } finally {
+            try {
+                if(bos != null){
+                    bos.close();
+                }
+                if(is !=null) {
+                    is.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public void closeConnect(FTPClient ftpClient) {
         try {
             ftpClient.disconnect();
