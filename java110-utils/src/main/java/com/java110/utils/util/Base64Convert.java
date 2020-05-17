@@ -35,6 +35,20 @@ public class Base64Convert {
         return strBase64;
     }
 
+    /**
+     * 流转换为字符串
+     *
+     * @param bytes
+     * @return
+     * @throws IOException
+     */
+    public static String byteToBase64(byte[] bytes)  {
+        String strBase64 = null;
+            // in.available()返回文件的字节长度
+            strBase64 = new BASE64Encoder().encode(bytes);      //将字节流数组转换为字符串
+        return strBase64;
+    }
+
 
    
 

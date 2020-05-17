@@ -67,10 +67,10 @@ public class FtpUploadTemplate {
             } else if (imageBase64.contains("data:image/webp;base64,")) {
                 imageBase64 = imageBase64.replace("data:image/webp;base64,", "");
                 fileName += ".jpg";
-            } else if(imageBase64.contains("data:application/octet-stream;base64,")){
+            } else if (imageBase64.contains("data:application/octet-stream;base64,")) {
                 imageBase64 = imageBase64.replace("data:application/octet-stream;base64,", "");
                 fileName += ".jpg";
-            }else {
+            } else {
                 fileName += ".jpg";
             }
             FTPFile[] fs = ftpClient.listFiles(fileName);
@@ -175,11 +175,24 @@ public class FtpUploadTemplate {
                 while (ins != null && (bufsize = ins.read(buf, 0, buf.length)) != -1) {
                     byteOut.write(buf, 0, bufsize);
                 }
-                return_arraybyte = byteOut.toByteArray();
+                //return_arraybyte = byteOut.toByteArray();
+                ByteArrayInputStream fis = new ByteArrayInputStream(byteOut.toByteArray());
+                byteOut.flush();
                 byteOut.close();
+                byte[] buffer = new byte[fis.available()];
+                int offset = 0;
+                int numRead = 0;
+                while (offset < buffer.length && (numRead = fis.read(buffer, offset, buffer.length - offset)) >= 0) {
+                    offset += numRead;
+                }
+                if (offset != buffer.length) {
+                    throw new IOException("Could not completely read file ");
+                }
+                fis.close();
                 if (ins != null) {
                     ins.close();
                 }
+                return_arraybyte = buffer;
             }
         } catch (Exception e) {
             e.printStackTrace();
