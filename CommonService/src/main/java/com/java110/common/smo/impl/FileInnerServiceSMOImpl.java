@@ -76,6 +76,8 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
             }
             OutputStream out = new FileOutputStream(file);
             out.write(fileImg);
+            out.flush();
+            out.close();
         }catch (Exception e){
             e.printStackTrace();
         }
