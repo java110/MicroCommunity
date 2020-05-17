@@ -16,6 +16,10 @@ public class ApiSmallWeChatDataVo implements Serializable {
     private String storeId;
     private String payPassword;
     private String remarks;
+    private String objId;
+    private String objType;
+    private String mchId;
+    private String objTypeName;
 
     public String getOperate() {
         return operate;
@@ -105,5 +109,43 @@ public class ApiSmallWeChatDataVo implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getbId() {
+        return bId;
+    }
 
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
+    }
+
+    public String getObjTypeName() {
+        return objTypeName;
+    }
+
+    public void setObjTypeName(String objTypeName) {
+        this.objTypeName = objTypeName;
+    }
 }

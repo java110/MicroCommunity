@@ -8,9 +8,9 @@
     <insert id="saveBusinessSmallWeChatInfo" parameterType="Map">
         insert into
             buiness_small_wechat
-            (operate,appId,name,appSecret,weChat_id,b_id,store_Id,pay_password,remarks)
+            (operate,appId,name,appSecret,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id)
         values
-            (#{operate},#{appId},#{name},#{appSecret},#{weChatId},#{bId},#{storeId},#{payPassword},#{remarks})
+            (#{operate},#{appId},#{name},#{appSecret},#{weChatId},#{bId},#{storeId},#{payPassword},#{remarks},#{objId},#{objType},#{mchId})
        </insert>
 
 
@@ -26,7 +26,10 @@
             t.b_id,t.b_id bId,
             t.store_Id,t.store_Id storeId,
             t.pay_password,t.pay_password payPassword,
-            t.remarks
+            t.remarks,
+            t.obj_id,t.obj_id objId,
+            t.obj_type,t.obj_type objType,
+            t.mch_id,t.mch_id mchId
         from
             buiness_small_wechat t
         where 1 =1
@@ -68,10 +71,10 @@
     <insert id="saveSmallWeChatInfoInstance" parameterType="Map">
         insert into
             small_wechat
-                (create_time,appId,name,appSecret,status_cd,weChat_id,b_id,store_Id,pay_password,remarks)
+                (create_time,appId,name,appSecret,status_cd,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id)
                 select
                     t.create_time,t.appId,t.name,t.appSecret,'0',
-                    t.weChat_id,t.b_id,t.store_Id,t.pay_password,t.remarks
+                    t.weChat_id,t.b_id,t.store_Id,t.pay_password,t.remarks,t.obj_id,t.obj_type,t.mch_id
                 from buiness_small_wechat t where 1=1 and t.operate= 'ADD'
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
@@ -116,8 +119,12 @@
             t.b_id,t.b_id bId,
             t.store_Id,t.store_Id storeId,
             t.pay_password,t.pay_password payPassword,
-            t.remarks
-        from small_wechat t
+            t.remarks,
+            t.obj_id,t.obj_id objId,
+            t.obj_type,t.obj_type objType,
+            t.mch_id,t.mch_id mchId,
+            d.name objTypeName
+        from small_wechat t left join t_dict d on t.obj_type = d.status_cd and d.table_name = 'small_wechat' and d.table_columns = 'obj_type'
         where 1 =1
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
@@ -183,6 +190,15 @@
         </if>
         <if test="remarks !=null and remarks != ''">
             , t.remarks= #{remarks}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="mchId !=null and mchId != ''">
+            , t.mch_id= #{mchId}
         </if>
         where 1=1
         <if test="weChatId !=null and weChatId != ''">

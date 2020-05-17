@@ -46,6 +46,9 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
         businessSmallWeChatInfo.put("storeId", businessSmallWeChatInfo.get("store_Id"));
         businessSmallWeChatInfo.put("payPassword", businessSmallWeChatInfo.get("pay_password"));
         businessSmallWeChatInfo.put("remarks", businessSmallWeChatInfo.get("remarks"));
+        businessSmallWeChatInfo.put("objId", businessSmallWeChatInfo.get("obj_id"));
+        businessSmallWeChatInfo.put("objType", businessSmallWeChatInfo.get("obj_type"));
+        businessSmallWeChatInfo.put("mchId", businessSmallWeChatInfo.get("mch_id"));
         businessSmallWeChatInfo.remove("bId");
         businessSmallWeChatInfo.put("statusCd", statusCd);
     }
@@ -75,6 +78,9 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
         currentSmallWeChatInfo.put("storeId", currentSmallWeChatInfo.get("store_Id"));
         currentSmallWeChatInfo.put("payPassword", currentSmallWeChatInfo.get("pay_password"));
         currentSmallWeChatInfo.put("remarks", currentSmallWeChatInfo.get("remarks"));
+        currentSmallWeChatInfo.put("objType", currentSmallWeChatInfo.get("obj_type"));
+        currentSmallWeChatInfo.put("objId", currentSmallWeChatInfo.get("obj_id"));
+        currentSmallWeChatInfo.put("mchId", currentSmallWeChatInfo.get("mch_id"));
         currentSmallWeChatInfo.put("operate", StatusConstant.OPERATE_DEL);
         getSmallWeChatServiceDaoImpl().saveBusinessSmallWeChatInfo(currentSmallWeChatInfo);
     }
