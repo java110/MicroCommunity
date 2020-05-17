@@ -170,7 +170,7 @@ public class FtpUploadTemplate {
                         FTP.DEFAULT_CONTROL_ENCODING);//防止乱码
                 InputStream ins = ftpClient.retrieveFileStream(f);//需使用file.getName获值，若用f会乱码
                 ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                byte[] buf = new byte[204800];
+                byte[] buf = new byte[2048];
                 int bufsize = 0;
                 while (ins != null && (bufsize = ins.read(buf, 0, buf.length)) != -1) {
                     byteOut.write(buf, 0, bufsize);
