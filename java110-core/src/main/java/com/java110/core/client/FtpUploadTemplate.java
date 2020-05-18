@@ -228,7 +228,7 @@ public class FtpUploadTemplate {
                     FTP.DEFAULT_CONTROL_ENCODING);
             is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
             if (null == is) {
-                throw new FileNotFoundException(fileName);
+                throw new FileNotFoundException(f);
             }
             bos = new ByteArrayOutputStream();
             int length;
