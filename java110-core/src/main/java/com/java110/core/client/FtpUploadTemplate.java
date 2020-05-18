@@ -45,7 +45,9 @@ public class FtpUploadTemplate {
         try {
             ftpClient = new FTPClient();
             // request.setCharacterEncoding("utf-8");
-            ftpClient.connect(server, port);
+            if(!ftpClient.isConnected()){
+                ftpClient.connect(server, port);
+            }
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -114,7 +116,9 @@ public class FtpUploadTemplate {
         try {
             // request.setCharacterEncoding("utf-8");
             ftpClient = new FTPClient();
-            ftpClient.connect(server, port);
+            if(!ftpClient.isConnected()){
+                ftpClient.connect(server, port);
+            }
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -161,7 +165,9 @@ public class FtpUploadTemplate {
         FTPClient ftpClient = null;
         try {
             ftpClient = new FTPClient();
-            ftpClient.connect(server, port);
+            if(!ftpClient.isConnected()){
+                ftpClient.connect(server, port);
+            }
             ftpClient.login(userName, userPassword);
             ftpClient.enterLocalPassiveMode();
             if (ftpClient != null) {
@@ -208,7 +214,9 @@ public class FtpUploadTemplate {
         ByteArrayOutputStream bos = null;
         FTPClient ftpClient = new FTPClient();
         try {
-            ftpClient.connect(server, port);
+            if(!ftpClient.isConnected()){
+                ftpClient.connect(server, port);
+            }
             ftpClient.login(userName, userPassword);
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             int reply = ftpClient.getReplyCode();
@@ -254,6 +262,7 @@ public class FtpUploadTemplate {
                 if(is !=null) {
                     is.close();
                 }
+                closeConnect(ftpClient);
             } catch (Exception e) {
                 e.printStackTrace();
             }
