@@ -65,9 +65,12 @@ public class GetFileListener extends AbstractServiceApiListener {
         fileRelDto.setFileRealName(reqJson.getString("fileId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
 
-        Assert.listOnlyOne(fileRelDtos, "查询到多条文件数据");
         FileDto fileDto = new FileDto();
-        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
+        if(fileRelDtos == null || fileRelDtos.size() < 1) {
+            fileDto.setFileSaveName(reqJson.getString("fileId"));
+        }else {
+            fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
+        }
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
 
         Assert.listOnlyOne(fileDtos, "存在多个文件，数据错误" + reqJson.toJSONString());
