@@ -2,19 +2,16 @@ package com.java110.core.client;
 
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
-
 import com.jcraft.jsch.*;
-import com.jcraft.jsch.ChannelSftp.LsEntry;
-
-import org.apache.commons.net.ftp.FTP;
-import org.omg.CORBA.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.Map;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;

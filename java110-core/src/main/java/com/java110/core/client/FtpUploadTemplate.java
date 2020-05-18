@@ -2,6 +2,7 @@ package com.java110.core.client;
 
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
+import com.tencentcloudapi.tci.v20190318.models.FaceExpressionResult;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -209,6 +210,14 @@ public class FtpUploadTemplate {
         return return_arraybyte;
     }
 
+    public static void main(String[] args) {
+        FtpUploadTemplate ftpUploadTemplate = new FtpUploadTemplate();
+        String img = ftpUploadTemplate.download("/hc/img/20200518/","ed05abae-2eca-40ff-81a8-b586ff2e6a36.jpg",
+                "118.89.243.11",617,"hcdemo","45j74jpWTf7bNhnC");
+
+        System.out.printf("img="+img);
+    }
+
     public String download(String remotePath, String fileName, String server, int port, String userName, String userPassword) {
         InputStream is = null;
         ByteArrayOutputStream bos = null;
@@ -219,6 +228,7 @@ public class FtpUploadTemplate {
             }
             ftpClient.login(userName, userPassword);
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.enterLocalPassiveMode();
             int reply = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftpClient.disconnect();
@@ -226,8 +236,7 @@ public class FtpUploadTemplate {
             String f = new String(
                     (remotePath + fileName).getBytes("GBK"),
                     FTP.DEFAULT_CONTROL_ENCODING);
-            ftpClient.changeWorkingDirectory(remotePath);
-            is = ftpClient.retrieveFileStream(fileName);// 获取远程ftp上指定文件的InputStream
+            is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
             if (null == is) {
                 throw new FileNotFoundException(remotePath);
             }
