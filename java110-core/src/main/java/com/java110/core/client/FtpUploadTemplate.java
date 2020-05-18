@@ -226,9 +226,10 @@ public class FtpUploadTemplate {
             String f = new String(
                     (remotePath + fileName).getBytes("GBK"),
                     FTP.DEFAULT_CONTROL_ENCODING);
-            is = ftpClient.retrieveFileStream(f);// 获取远程ftp上指定文件的InputStream
+            ftpClient.changeWorkingDirectory(remotePath);
+            is = ftpClient.retrieveFileStream(fileName);// 获取远程ftp上指定文件的InputStream
             if (null == is) {
-                throw new FileNotFoundException(f);
+                throw new FileNotFoundException(remotePath);
             }
             bos = new ByteArrayOutputStream();
             int length;
