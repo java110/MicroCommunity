@@ -24,6 +24,10 @@ public class SmallWeChatDto extends PageDto implements Serializable {
     private String payPassword;
     private String remarks;
     private String statusCd = "0";
+    private String objId;
+    private String objType;
+    private String mchId;
+    private String objTypeName;
 
 
     public Date getCreateTime() {
@@ -96,5 +100,37 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
+    }
+
+    public String getObjTypeName() {
+        return objTypeName;
+    }
+
+    public void setObjTypeName(String objTypeName) {
+        this.objTypeName = objTypeName;
     }
 }
