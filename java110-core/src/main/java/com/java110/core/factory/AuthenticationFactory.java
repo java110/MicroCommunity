@@ -90,9 +90,14 @@ public class AuthenticationFactory {
             throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "MD5签名过程中出现错误");
         }
         String reqInfo = dataFlow.getTransactionId() + dataFlow.getRequestTime() + dataFlow.getAppId();
+        String url = dataFlow.getRequestHeaders().get("REQUEST_URL");
+        String param = "";
+        if(url.indexOf("?") > 0){
+            param = url.substring(url.indexOf("?"));
+        }
         //,DELETE
         reqInfo += "GET".equals(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_METHOD)) ?
-                dataFlow.getRequestHeaders().get("REQUEST_URL") : dataFlow.getReqData();
+                param : dataFlow.getReqData();
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
         return md5(reqInfo);
     }
