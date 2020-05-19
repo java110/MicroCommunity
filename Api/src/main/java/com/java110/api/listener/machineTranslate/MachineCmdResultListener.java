@@ -15,6 +15,7 @@ import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -71,7 +72,8 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
         Map<String, String> reqHeader = context.getRequestHeaders();
 
         HttpHeaders headers = new HttpHeaders();
-        if (reqHeader == null || !reqHeader.containsKey("communityId") || StringUtils.isEmpty(reqHeader.get("communityId"))) {
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
+        if (StringUtil.isEmpty(communityId)) {
             outParam.put("code", -1);
             outParam.put("message", "请求地址中未包含小区信息");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
@@ -92,7 +94,7 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
             headers.add(key, reqHeader.get(key));
         }
 
-        String communityId = reqHeader.get("communityId");
+        //String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
 
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();

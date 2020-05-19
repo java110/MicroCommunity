@@ -10,6 +10,7 @@ import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public abstract class BaseMachineListener extends AbstractServiceApiListener {
         DataFlowContext context = event.getDataFlowContext();
         Map<String, String> reqHeader = context.getRequestHeaders();
         Assert.hasKeyAndValue(reqHeader, "machinecode", "请求报文中未包含设备编码");
-        Assert.hasKeyAndValue(reqHeader, "communityId", "请求报文中未包含小区信息");
+//        Assert.hasKeyAndValue(reqHeader, "communityId", "请求报文中未包含小区信息");
     }
 
     /**
@@ -53,7 +54,8 @@ public abstract class BaseMachineListener extends AbstractServiceApiListener {
         JSONArray data = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
         HttpHeaders headers = new HttpHeaders();
-        if (reqHeader == null || !reqHeader.containsKey("communityId") || StringUtils.isEmpty(reqHeader.get("communityId"))) {
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
+        if (StringUtil.isEmpty(communityId)) {
             outParam.put("code", -1);
             outParam.put("message", "请求地址中未包含小区信息");
             responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
@@ -67,7 +69,7 @@ public abstract class BaseMachineListener extends AbstractServiceApiListener {
             headers.add(key, reqHeader.get(key));
         }
 
-        String communityId = reqHeader.get("communityId");
+       // String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
 
         if (!reqHeader.containsKey("machinecode") || StringUtils.isEmpty(reqHeader.get("machinecode"))) {
             outParam.put("code", -1);

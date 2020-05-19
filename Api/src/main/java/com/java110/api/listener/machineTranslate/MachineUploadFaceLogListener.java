@@ -101,7 +101,7 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
             outParam.put("code", 0);
             outParam.put("message", "success");
             JSONArray data = null;
-            reqJson.put("communityId", reqHeader.get("communityId"));
+            reqJson.put("communityId", reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId"));
             HttpHeaders httpHeaders = super.getHeader(context);
 
             HttpHeaders header = new HttpHeaders();

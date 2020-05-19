@@ -145,7 +145,7 @@ public class MachineHeartbeatListener extends BaseMachineListener {
         outParam.put("code", 0);
         outParam.put("message", "success");
         JSONArray data = null;
-        String communityId = reqHeader.get("communityId");
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         outParam.put("data", data);
 
         responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);

@@ -106,7 +106,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         //JSONObject outParam = null;
         ResponseEntity<String> responseEntity = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
-        String communityId = reqHeader.get("communityId");
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         String machineCode = reqHeader.get("machinecode");
         HttpHeaders headers = new HttpHeaders();
         for (String key : reqHeader.keySet()) {

@@ -98,7 +98,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
         outParam.put("code", 0);
         outParam.put("message", "success");
         JSONArray data = null;
-        String communityId = reqHeader.get("communityId");
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         HttpHeaders httpHeaders = super.getHeader(context);
         //检查是否存在该用户
         OwnerDto ownerDto = new OwnerDto();

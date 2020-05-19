@@ -75,7 +75,7 @@ public class MachineGetTaskInfoListener extends BaseMachineListener {
         outParam.put("code", 0);
         outParam.put("message", "success");
         JSONArray data = null;
-        String communityId = reqHeader.get("communityId");
+        String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         HttpHeaders httpHeaders = super.getHeader(context);
         //查询删除的业主信息
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
