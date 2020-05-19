@@ -35,6 +35,18 @@ public class CommonPostSMOImpl extends AbstractComponentSMO implements ICommonPo
 
     }
 
+    /**
+     * {
+     *     "a":123,
+     *     userId:xxx
+     *     storeId:xxx
+     *
+     * }
+     * @param pd      页面数据封装
+     * @param paramIn 前台数据对象
+     * @return
+     * @throws Exception
+     */
     @Override
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
         ResponseEntity<String> responseEntity = null;
