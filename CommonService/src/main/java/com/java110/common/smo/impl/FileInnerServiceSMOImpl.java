@@ -58,9 +58,10 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
         List<FileDto> fileDtos = new ArrayList<>();
         String fileName = fileDto.getFileSaveName();
         String ftpPath = java110Properties.getFtpPath();
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (fileName.contains("/")) {
-            ftpPath += fileName.substring(0, fileName.lastIndexOf("/")+1);
-            fileName = fileName.substring(fileName.lastIndexOf("/")+1, fileName.length());
+            ftpPath += fileName.substring(0, fileName.lastIndexOf("/") + 1);
+            fileName = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length());
         }
 //        byte[] fileImg = ftpUploadTemplate.downFileByte(ftpPath, fileName, java110Properties.getFtpServer(),
 //                java110Properties.getFtpPort(), java110Properties.getFtpUserName(),
@@ -73,6 +74,7 @@ public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInne
                 java110Properties.getFtpUserPassword());
 
         fileDto.setContext(context);
+        fileDto.setSuffix(suffix);
         fileDtos.add(fileDto);
         return fileDtos;
     }

@@ -247,10 +247,8 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
         dataObj.put("groupid", communityId);
         dataObj.put("group", communityDtos.get(0).getName());
         dataObj.put("name", ownerDto.getName());
-        dataObj.put("faceBase64", "data:image/jpeg;base64," + fileDtos.get(0).getContext()
-                .replace("data:image/webp;base64,", "")
-                .replace("data:image/png;base64,", "")
-                .replace("data:image/jpeg;base64,", ""));
+        String tmpImg = fileDtos.get(0).getContext();
+        dataObj.put("faceBase64", "data:image/jpeg;base64," + tmpImg.substring(tmpImg.indexOf("base64,") + 7));
         dataObj.put("idNumber", ownerDto.getIdCard());
         dataObj.put("startTime", ownerDto.getCreateTime().getTime());
         try {
