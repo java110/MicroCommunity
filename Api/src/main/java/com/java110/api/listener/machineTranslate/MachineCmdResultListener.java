@@ -109,7 +109,7 @@ public class MachineCmdResultListener extends AbstractServiceApiListener {
             return;
         }
 
-        outParam.put("data", outParam);
+        //outParam.put("data", outParam);
 
         responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
         context.setResponseEntity(responseEntity);
