@@ -165,4 +165,12 @@ public class ActivitiesDto extends PageDto implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+    public String getTypeCdName() {
+        return typeCdName;
+    }
+
+    public void setTypeCdName(String typeCdName) {
+        this.typeCdName = typeCdName;
+    }
 }
