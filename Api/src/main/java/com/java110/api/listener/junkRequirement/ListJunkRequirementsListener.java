@@ -6,9 +6,11 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.junkRequirement.IJunkRequirementInnerServiceSMO;
+import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
 import com.java110.dto.advert.AdvertItemDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.junkRequirement.JunkRequirementDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeJunkRequirementConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -34,6 +36,9 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
     private IJunkRequirementInnerServiceSMO junkRequirementInnerServiceSMOImpl;
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -77,7 +82,7 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             junkRequirements = BeanConvertUtil.covertBeanList(junkRequirementInnerServiceSMOImpl.queryJunkRequirements(junkRequirementDto), ApiJunkRequirementDataVo.class);
-            refreshPhotos(junkRequirements);
+            refreshPhotoAndOwners(junkRequirements);
         } else {
             junkRequirements = new ArrayList<>();
         }
@@ -94,9 +99,15 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
     }
 
-    private void refreshPhotos(List<ApiJunkRequirementDataVo> junkRequirements) {
+    private void refreshPhotoAndOwners(List<ApiJunkRequirementDataVo> junkRequirements) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
+
+        if (junkRequirements == null || junkRequirements.size() < 1) {
+            return;
+        }
+
+        List<String> userIds = new ArrayList<>();
         for (ApiJunkRequirementDataVo junkRequirementDataVo : junkRequirements) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(junkRequirementDataVo.getJunkRequirementId());
@@ -109,7 +120,24 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
             }
 
             junkRequirementDataVo.setPhotos(photoVos);
+            userIds.add(junkRequirementDataVo.getPublishUserId());
 
+        }
+
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setAppUserId(junkRequirements.get(0).getCommunityId());
+
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+            return;
+        }
+
+        for (OwnerAppUserDto tmpOwnerAppUserdto : ownerAppUserDtos) {
+            for (ApiJunkRequirementDataVo apiJunkRequirementDataVo : junkRequirements) {
+                if (tmpOwnerAppUserdto.getAppUserId().equals(apiJunkRequirementDataVo.getPublishUserId())) {
+                    apiJunkRequirementDataVo.setMemberId(tmpOwnerAppUserdto.getMemberId());
+                }
+            }
         }
     }
 }

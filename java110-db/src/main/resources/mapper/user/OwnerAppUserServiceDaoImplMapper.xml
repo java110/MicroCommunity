@@ -179,6 +179,13 @@
         <if test="userId !=null and userId != ''">
             and t.user_id = #{userId}
         </if>
+        <if test="userIds !=null">
+            and t.user_id in
+            <foreach collection="userIds" open="(" close=")"
+                     separator=","  item="item">
+                #{item}
+            </foreach>
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -285,6 +292,13 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="userIds !=null">
+            and t.user_id in
+            <foreach collection="userIds" open="(" close=")"
+                     separator=","  item="item">
+                #{item}
+            </foreach>
         </if>
 
 

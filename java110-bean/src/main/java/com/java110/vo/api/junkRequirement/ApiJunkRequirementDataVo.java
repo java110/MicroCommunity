@@ -19,6 +19,7 @@ public class ApiJunkRequirementDataVo implements Serializable {
     private String stateName;
     private String communityId;
     private String bId;
+    private String memberId;//业主ID
     private List<PhotoVo> photos;
 
     private String createTime;
@@ -150,5 +151,13 @@ public class ApiJunkRequirementDataVo implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 }
