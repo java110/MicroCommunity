@@ -23,6 +23,7 @@ public class ActivitiesDto extends PageDto implements Serializable {
     private String userId;
     private String activitiesId;
     private String typeCd;
+    private String typeCdName;
     private String context;
     private String startTime;
     private String endTime;

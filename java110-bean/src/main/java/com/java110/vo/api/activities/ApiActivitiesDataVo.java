@@ -8,6 +8,7 @@ public class ApiActivitiesDataVo implements Serializable {
     private String activitiesId;
     private String title;
     private String typeCd;
+    private String typeCdName;
     private String headerImg;
     private String context;
     private String startTime;

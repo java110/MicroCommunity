@@ -138,9 +138,12 @@
         statusCd,t.title,t.read_count,t.read_count readCount,t.user_name,t.user_name userName,t.user_id,t.user_id
         userId,t.activities_id,t.activities_id activitiesId,t.type_cd,t.type_cd
         typeCd,t.context,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state
-        from activities t
+        communityId,t.b_id,t.b_id bId,t.header_img,t.header_img headerImg,t.state,td1.name typeCdName
+        from activities t,t_dict td1
         where 1 =1
+        and t.type_cd = td1.status_cd
+        and td1.table_name = 'activities'
+        and td1.table_columns = 'type_cd'
         <if test="collectCount !=null and collectCount != ''">
             and t.collect_count= #{collectCount}
         </if>
