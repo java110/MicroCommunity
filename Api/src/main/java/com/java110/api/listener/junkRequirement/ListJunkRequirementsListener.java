@@ -125,7 +125,8 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
         }
 
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setAppUserId(junkRequirements.get(0).getCommunityId());
+        ownerAppUserDto.setCommunityId(junkRequirements.get(0).getCommunityId());
+        ownerAppUserDto.setUserIds(userIds.toArray(new String[userIds.size()]));
 
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
