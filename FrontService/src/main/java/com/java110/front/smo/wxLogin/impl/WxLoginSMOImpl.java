@@ -88,12 +88,12 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
 
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
         int total = userResult.getIntValue("total");
-
+        JSONObject paramOut = new JSONObject();
         JSONObject userInfo = paramIn.getJSONObject("userInfo");
 
         if (total == 0) {
             //保存用户信息
-            JSONObject registerInfo = new JSONObject();
+            /*JSONObject registerInfo = new JSONObject();
 
             //设置默认密码
             String userDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
@@ -127,7 +127,12 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
             }
-            userResult = JSONObject.parseObject(responseEntity.getBody());
+            userResult = JSONObject.parseObject(responseEntity.getBody());*/
+            paramOut.put("result", 401);
+            paramOut.put("msg", "还没有注册请先注册");
+            responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.UNAUTHORIZED);
+
+            return responseEntity;
         }
 
         JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
@@ -139,7 +144,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
             userMap.put(CommonConstant.LOGIN_USER_ID, userInfo.getString("userId"));
             userMap.put(CommonConstant.LOGIN_USER_NAME, userInfo.getString("name"));
             String token = AuthenticationFactory.createAndSaveToken(userMap);
-            JSONObject paramOut = new JSONObject();
+
             paramOut.put("result", 0);
             paramOut.put("userInfo", userInfo);
             paramOut.put("token", token);
