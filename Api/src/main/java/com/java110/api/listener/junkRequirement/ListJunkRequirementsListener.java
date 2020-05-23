@@ -135,7 +135,7 @@ public class ListJunkRequirementsListener extends AbstractServiceApiListener {
 
         for (OwnerAppUserDto tmpOwnerAppUserdto : ownerAppUserDtos) {
             for (ApiJunkRequirementDataVo apiJunkRequirementDataVo : junkRequirements) {
-                if (tmpOwnerAppUserdto.getAppUserId().equals(apiJunkRequirementDataVo.getPublishUserId())) {
+                if (tmpOwnerAppUserdto.getUserId().equals(apiJunkRequirementDataVo.getPublishUserId())) {
                     apiJunkRequirementDataVo.setMemberId(tmpOwnerAppUserdto.getMemberId());
                 }
             }
