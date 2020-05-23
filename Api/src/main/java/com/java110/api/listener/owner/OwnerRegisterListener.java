@@ -8,6 +8,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
@@ -105,7 +106,7 @@ public class OwnerRegisterListener extends AbstractServiceApiListener {
         smsDto.setCode(reqJson.getString("msgCode"));
         smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
 
-        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
             throw new IllegalArgumentException(smsDto.getMsg());
         }
     }

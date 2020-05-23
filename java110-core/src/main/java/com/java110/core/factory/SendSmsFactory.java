@@ -20,6 +20,11 @@ public class SendSmsFactory {
     private static final String SMS_COMPANY_TENCENT = "TENCENT";
     public static final String VALIDATE_CODE = "_validateTel";
 
+    /**
+     * 短信开关
+     */
+    public static final String SMS_SEND_SWITCH = "SMS_SEND_SWITCH";
+
     public static void sendSms(String tel, String code) {
 
         String smsCompany = MappingCache.getValue(SMS_DOMAIN, SMS_COMPANY);

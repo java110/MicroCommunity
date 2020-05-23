@@ -1,6 +1,8 @@
 package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.SendSmsFactory;
+import com.java110.core.factory.TencentSendMessageFactory;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceConstant;
@@ -119,9 +121,11 @@ public class RegisterServiceSMOImpl extends BaseComponentSMO implements IRegiste
         ResponseEntity<String> sendMessageResult = null;
         String verifyStr = "演示环境验证码:" + verifyCode;
         try {
-            if ("ON".equals(MappingCache.getValue("SMS_SEND_SWITCH"))) {
+            if ("ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
                 //开始发送验证码
-                AliSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
+                //AliSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
+
+                TencentSendMessageFactory.sendMessage(telInfo.getString("tel"), verifyCode);
 
                 verifyStr = "验证码已下发至您的手机!";
             }

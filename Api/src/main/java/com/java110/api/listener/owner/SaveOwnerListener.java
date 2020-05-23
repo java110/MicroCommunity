@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
@@ -187,7 +188,7 @@ public class SaveOwnerListener extends AbstractServiceApiDataFlowListener {
             smsDto.setCode(paramObj.getString("msgCode"));
             smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
 
-            if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+            if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
                 throw new IllegalArgumentException(smsDto.getMsg());
             }
         }

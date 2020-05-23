@@ -226,12 +226,14 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         String applicationKeyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId);
         paramInJson.put("applicationKeyId",applicationKeyId);
         //根据位置id 和 位置对象查询相应 设备ID
-        MachineDto machineDto = new MachineDto();
-        machineDto.setLocationObjId(paramInJson.getString("locationObjId"));
-        machineDto.setLocationTypeCd(paramInJson.getString("locationTypeCd"));
-        List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
-
-        Assert.listOnlyOne(machineDtos, "该位置还没有相应的门禁设备");
+        if(!paramInJson.containsKey("machineId")) {
+            MachineDto machineDto = new MachineDto();
+            machineDto.setLocationObjId(paramInJson.getString("locationObjId"));
+            machineDto.setLocationTypeCd(paramInJson.getString("locationTypeCd"));
+            List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
+            Assert.listOnlyOne(machineDtos, "该位置还没有相应的门禁设备");
+            paramInJson.put("machineId",machineDtos.get(0).getMachineId());
+        }
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
@@ -239,7 +241,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessApplicationKey = new JSONObject();
         businessApplicationKey.putAll(paramInJson);
-        businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
+        //businessApplicationKey.put("machineId", machineId);
         businessApplicationKey.put("applicationKeyId", applicationKeyId);
         businessApplicationKey.put("state", "10002");
         businessApplicationKey.put("pwd",this.getRandom());

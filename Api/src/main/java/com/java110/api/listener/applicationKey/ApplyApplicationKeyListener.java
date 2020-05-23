@@ -7,14 +7,18 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.SendSmsFactory;
+import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.msg.SmsDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -44,6 +48,9 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
     private IApplicationKeyBMO applicationKeyBMOImpl;
 
     @Autowired
+    private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
+
+    @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
@@ -66,6 +73,15 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "photos", "必填，未包含身份证信息");
         Assert.hasKeyAndValue(reqJson, "typeFlag", "必填，未包含密码类型");
 
+        SmsDto smsDto = new SmsDto();
+        smsDto.setTel(reqJson.getString("tel"));
+        smsDto.setCode(reqJson.getString("msgCode"));
+        smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
+
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
+            throw new IllegalArgumentException(smsDto.getMsg());
+        }
+
     }
 
     @Override
@@ -83,7 +99,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
         for (int machineIndex = 0; machineIndex < machineIds.size(); machineIndex++) {
             //添加单元信息
             reqJson.put("machineId", machineIds.getJSONObject(machineIndex).getString("machineId"));
-            reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
+            //reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
             businesses.add(applicationKeyBMOImpl.addApplicationKey(reqJson, context));
             if (reqJson.containsKey("photos")) {
                 JSONArray photos = reqJson.getJSONArray("photos");

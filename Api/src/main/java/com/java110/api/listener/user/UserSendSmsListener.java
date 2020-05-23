@@ -97,7 +97,7 @@ public class UserSendSmsListener extends AbstractServiceApiListener {
         SmsDto smsDto = new SmsDto();
         smsDto.setTel(tel);
         smsDto.setCode(msgCode);
-        if ("ON".equals(MappingCache.getValue("APP_USER_BINDING_OWNER_SMS"))) {
+        if ("ON".equals(MappingCache.getValue(SendSmsFactory.SMS_SEND_SWITCH))) {
             smsDto = smsInnerServiceSMOImpl.send(smsDto);
         } else {
             smsDto.setSuccess(true);
