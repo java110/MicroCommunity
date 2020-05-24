@@ -156,7 +156,11 @@ public class OwnerRegisterListener extends AbstractServiceApiListener {
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         paramObj.put("userId", GenerateCodeFactory.getUserId());
-        paramObj.put("openId", "-1");
+        if(reqJson.containsKey("openId")){
+            paramObj.put("openId", reqJson.getString("openId"));
+        }else {
+            paramObj.put("openId", "-1");
+        }
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();

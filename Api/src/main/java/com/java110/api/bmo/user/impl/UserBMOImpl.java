@@ -140,6 +140,16 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
         userPassword = AuthenticationFactory.passwdMd5(userPassword);
         paramObj.put("password", userPassword);
 
+        if(paramObj.containsKey("openId") && !"-1".equals(paramObj.getString("openId"))){
+            JSONArray userAttr = new JSONArray();
+            JSONObject userAttrObj = new JSONObject();
+            userAttrObj.put("attrId", "-1");
+            userAttrObj.put("specCd", "100201911001");
+            userAttrObj.put("value", paramObj.getString("openId"));
+            userAttr.add(userAttrObj);
+            paramObj.put("businessUserAttr", userAttr);
+        }
+
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", paramObj);
 
         return business;

@@ -128,7 +128,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
                 throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
             }
             userResult = JSONObject.parseObject(responseEntity.getBody());*/
-            paramOut.put("result", 401);
+            paramOut.put("openId", openId);
             paramOut.put("msg", "还没有注册请先注册");
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.UNAUTHORIZED);
 
