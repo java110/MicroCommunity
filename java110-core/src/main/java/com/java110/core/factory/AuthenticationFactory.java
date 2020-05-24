@@ -405,15 +405,17 @@ public class AuthenticationFactory {
 
     /***********************************JWT end***************************************/
     public static void main(String[] args) throws Exception {
-        KeyPair keyPair = genKeyPair(1024);
+//        KeyPair keyPair = genKeyPair(1024);
+//
+//        //获取公钥，并以base64格式打印出来
+//        PublicKey publicKey = keyPair.getPublic();
+//        System.out.println("公钥：" + new String(Base64.getEncoder().encode(publicKey.getEncoded())));
+//
+//        //获取私钥，并以base64格式打印出来
+//        PrivateKey privateKey = keyPair.getPrivate();
+//        System.out.println("私钥：" + new String(Base64.getEncoder().encode(privateKey.getEncoded())));
 
-        //获取公钥，并以base64格式打印出来
-        PublicKey publicKey = keyPair.getPublic();
-        System.out.println("公钥：" + new String(Base64.getEncoder().encode(publicKey.getEncoded())));
-
-        //获取私钥，并以base64格式打印出来
-        PrivateKey privateKey = keyPair.getPrivate();
-        System.out.println("私钥：" + new String(Base64.getEncoder().encode(privateKey.getEncoded())));
+        System.out.printf("passwdMd5 " + passwdMd5("wuxw2015"));
 
     }
 }
