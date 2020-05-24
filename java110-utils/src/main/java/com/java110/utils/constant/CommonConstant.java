@@ -148,6 +148,7 @@ public class CommonConstant {
     public final static String HTTP_ORDER_TYPE_CD = "order_type_cd";
     public final static String HTTP_USER_ID = "user_id";
     public final static String ORDER_PROCESS = "order_process";
+    public final static String O_ID = "o_id";
 
 
     public final static String HTTP_METHOD_POST = "POST";
