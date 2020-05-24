@@ -204,7 +204,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
             }
 
             if(CommonConstant.O_ID.equals(key)){
-                orders.put("olId", headers.get(CommonConstant.O_ID));
+                orders.put("oId", headers.get(CommonConstant.O_ID));
             }
         }
 
