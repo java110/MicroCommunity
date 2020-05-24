@@ -85,7 +85,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 reqJson = decrypt(reqJson, headers);
             }
 
-            //1.0 创建数据流
+            //1.0 创建数据流 appId serviceCode
             dataFlow = DataFlowFactory.newInstance(ApiDataFlow.class).builder(reqJson, headers);
 
             //2.0 加载配置信息

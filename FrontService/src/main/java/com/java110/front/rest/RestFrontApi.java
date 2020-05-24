@@ -37,6 +37,10 @@ public class RestFrontApi extends BaseController {
     /**
      * 资源请求 post方式
      *
+     * /app/user.listUser
+     *
+     * /api/user.listUser
+     *
      * @param service  请求接口方式
      * @param postInfo post内容
      * @param request  请求对象 查询头信息 url等信息
