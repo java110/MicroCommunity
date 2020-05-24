@@ -63,7 +63,7 @@ public class PayFeeConfirmListener extends AbstractServiceApiDataFlowListener {
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONArray businesses = new JSONArray();
-        dataFlowContext.getRequestCurrentHeaders().put("oId", paramObj.getString("oId"));
+        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.O_ID, paramObj.getString("oId"));
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.ORDER_PROCESS,Orders.ORDER_PROCESS_ORDER_CONFIRM_SUBMIT);
         ResponseEntity<String> responseEntity = feeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
 
