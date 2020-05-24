@@ -98,7 +98,6 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         if (!StringUtil.isEmpty(openId)) {//这里微信小程序
             ownerAppUserDto.setOpenId(openId);
         } else { //这种是业主注册的
-
             ownerAppUserDto.setUserId(userId);
         }
 
