@@ -203,7 +203,7 @@ public class ApiBaseBMO implements IApiBaseBMO{
                 orders.put("orderProcess", headers.get(CommonConstant.ORDER_PROCESS));
             }
 
-            if(CommonConstant.ORDER_PROCESS.equals("olId")){
+            if("olId".equals(key)){
                 orders.put("olId", headers.get("olId"));
             }
         }
