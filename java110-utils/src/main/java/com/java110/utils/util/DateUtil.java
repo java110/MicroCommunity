@@ -79,7 +79,7 @@ public class DateUtil {
     }
 
     public static Date getLastDate() throws ParseException {
-        return getDateFromString("3000-01-01", DATE_FORMATE_STRING_B);
+        return getDateFromString("2037-12-01", DATE_FORMATE_STRING_B);
     }
 
     /**
