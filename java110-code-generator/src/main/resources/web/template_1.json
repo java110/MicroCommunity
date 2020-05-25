@@ -1,5 +1,6 @@
 {
   "templateName":"小程序管理",
+  "directories": "property",
   "templateCode":"smallWeChat",
   "templateKey":"weChatId",
   "templateKeyName":"编码",

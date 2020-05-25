@@ -92,6 +92,7 @@ public class BaseGenerator {
                 .replace("@@templateKeyName@@", data.getString("templateKeyName"))
                 .replace("@@TEMPLATECODE@@", data.getString("templateCode").toUpperCase())
                 .replace("@@searchCode@@", data.getString("searchCode"))
+                .replace("@@directories@@", data.getString("directories"))
                 .replace("@@searchName@@", data.getString("searchName"));
     }
 
@@ -104,6 +105,7 @@ public class BaseGenerator {
                 .replace("@@templateKeyName@@", data.getId())
                 .replace("@@TEMPLATECODE@@", data.getName().toUpperCase())
                 .replace("@@searchCode@@", data.getId())
+
                 .replace("@@searchName@@", data.getId());
     }
 }

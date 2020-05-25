@@ -52,7 +52,7 @@
                         </tfoot>
                     </table>
                     <!-- 分页 -->
-                    <vc:create path="pagination"></vc:create>
+                    <vc:create path="frame/pagination"></vc:create>
                 </div>
             </div>
         </div>
@@ -60,11 +60,11 @@
 
     @@vcCreate@@
 
-    <vc:create path="add@@TemplateCode@@"
+    <vc:create path="@@directories@@/add@@TemplateCode@@"
                callBackListener=""
                callBackFunction=""
     ></vc:create>
-    <vc:create path="edit@@TemplateCode@@"></vc:create>
-    <vc:create path="delete@@TemplateCode@@"></vc:create>
+    <vc:create path="@@directories@@/edit@@TemplateCode@@"></vc:create>
+    <vc:create path="@@directories@@/delete@@TemplateCode@@"></vc:create>
 
 </div>

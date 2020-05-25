@@ -13,11 +13,10 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
+        // generatorComponentJava(data);
+        // genneratorIListSmo(data);
+        // genneratorListSmoImpl(data);
 //        genneratorListListener(data);
-
 
 
     }
@@ -35,9 +34,8 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
 
-
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/components/" + data.getString("directories") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -62,7 +60,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/components/" + data.getString("directories") + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "/delete" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -88,8 +86,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\components\\" +data.getString("templateCode") + "/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java");
-
+        FileUtilBase.copyfile(writePath, "FrontService\\src\\main\\java\\com\\java110\\front\\components\\" + data.getString("templateCode") + "/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java");
 
 
     }
@@ -111,7 +108,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/IDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMO.java");
+        FileUtilBase.copyfile(writePath, "FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" + data.getString("templateCode") + "/IDelete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMO.java");
 
     }
 
@@ -129,7 +126,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         //替换校验部分代码 @@validateTemplateColumns@@
         JSONArray columns = data.getJSONArray("columns");
         StringBuffer validateStr = new StringBuffer();
-        validateStr.append("Assert.hasKeyAndValue(paramIn, \""+data.getString("templateKey")+"\", \""+data.getString("templateKeyName")+"不能为空\");\n");
+        validateStr.append("Assert.hasKeyAndValue(paramIn, \"" + data.getString("templateKey") + "\", \"" + data.getString("templateKeyName") + "不能为空\");\n");
 
 
         fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
@@ -141,7 +138,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" +data.getString("templateCode") + "/impl/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMOImpl.java");
+        FileUtilBase.copyfile(writePath, "FrontService\\src\\main\\java\\com\\java110\\front\\smo\\" + data.getString("templateCode") + "/impl/Delete" + toUpperCaseFirstOne(data.getString("templateCode")) + "SMOImpl.java");
 
     }
 
@@ -159,7 +156,7 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         //替换校验部分代码 @@validateTemplateColumns@@
         JSONArray columns = data.getJSONArray("columns");
         StringBuffer validateStr = new StringBuffer();
-        validateStr.append("Assert.hasKeyAndValue(reqJson, \""+data.getString("templateKey")+"\", \""+data.getString("templateKeyName")+"不能为空\");\n");
+        validateStr.append("Assert.hasKeyAndValue(reqJson, \"" + data.getString("templateKey") + "\", \"" + data.getString("templateKeyName") + "不能为空\");\n");
 
         fileContext = fileContext.replace("@@validateTemplateColumns@@", validateStr.toString());
 
@@ -170,7 +167,6 @@ public class GeneratorDeleteComponent extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
     }
-
 
 
 }

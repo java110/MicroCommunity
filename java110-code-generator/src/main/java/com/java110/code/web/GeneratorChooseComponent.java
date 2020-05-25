@@ -19,7 +19,7 @@ public class GeneratorChooseComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
+        //generatorComponentJava(data);
 
     }
 
@@ -57,9 +57,8 @@ public class GeneratorChooseComponent extends BaseGenerator {
                 .replace("@@columnsName@@", tdSb.toString());
 
 
-
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"Package/choose"+toUpperCaseFirstOne(data.getString("templateCode"))+"/choose"+toUpperCaseFirstOne(data.getString("templateCode"))+".html";
+                + "out/web/components/" + data.getString("directories") + "/choose" + toUpperCaseFirstOne(data.getString("templateCode")) + "/choose" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -80,7 +79,7 @@ public class GeneratorChooseComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/"+data.getString("templateCode")+"Package/choose"+toUpperCaseFirstOne(data.getString("templateCode"))+"/choose"+toUpperCaseFirstOne(data.getString("templateCode"))+".js";
+                + "out/web/components/" + data.getString("directories") + "/choose" + toUpperCaseFirstOne(data.getString("templateCode")) + "/choose" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -101,12 +100,12 @@ public class GeneratorChooseComponent extends BaseGenerator {
         fileContext = super.replaceTemplateContext(fileContext, data);
 
         String writePath = this.getClass().getResource("/").getPath()
-                +"out/web/component/java/"+data.getString("templateCode")+"/Choose"+toUpperCaseFirstOne(data.getString("templateCode"))+"Component.java";
+                + "out/web/component/java/" + data.getString("templateCode") + "/Choose" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"FrontService\\src\\main\\java\\com\\java110\\front\\components\\" +data.getString("templateCode")+"/Choose"+toUpperCaseFirstOne(data.getString("templateCode"))+"Component.java");
+        FileUtilBase.copyfile(writePath, "FrontService\\src\\main\\java\\com\\java110\\front\\components\\" + data.getString("templateCode") + "/Choose" + toUpperCaseFirstOne(data.getString("templateCode")) + "Component.java");
 
 
     }

@@ -13,9 +13,9 @@ public class GeneratorManagerComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
+      //  generatorComponentJava(data);
+      //  genneratorIListSmo(data);
+      //  genneratorListSmoImpl(data);
 //        genneratorVo(data);
 
 //        genneratorDataVo(data);
@@ -165,7 +165,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.html";
+                + "out/web/pages/" + data.getString("directories") + "/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -221,7 +221,7 @@ public class GeneratorManagerComponent extends BaseGenerator {
         fileContext = fileContext.replace("@@extendEvent@@", conditionEvent.toString());
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.js";
+                + "out/web/pages/" + data.getString("directories") + "/" + data.getString("templateCode") + "Manage/" + data.getString("templateCode") + "Manage.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

@@ -14,9 +14,9 @@ public class GeneratorAddComponent extends BaseGenerator {
         //处理组件
         generatorComponentHtml(data);
         generatorComponentJs(data);
-        generatorComponentJava(data);
-        genneratorIListSmo(data);
-        genneratorListSmoImpl(data);
+        //generatorComponentJava(data);
+        //genneratorIListSmo(data);
+        //genneratorListSmoImpl(data);
 //        genneratorListListener(data);
 
 //        genneratorServiceCodeConstant(data);
@@ -107,7 +107,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
+                + "out/web/components/" + data.getString("directories") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -166,7 +166,7 @@ public class GeneratorAddComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/" + data.getString("templateCode") + "Package/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
+                + "out/web/components/" + data.getString("directories") + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + "/add" + toUpperCaseFirstOne(data.getString("templateCode")) + ".js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);

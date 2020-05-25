@@ -41,18 +41,18 @@ public class GeneratorViewComponent extends BaseGenerator {
         cols.addAll(columns);
         for (int columnIndex = 0; columnIndex < cols.size(); columnIndex++) {
             JSONObject column = cols.getJSONObject(columnIndex);
-            if(columnIndex % 3 == 0){
+            if (columnIndex % 3 == 0) {
                 thSb.append("<div class=\"row\">\n");
             }
 
             thSb.append("<div class=\"col-sm-4\">\n" +
                     "                        <div class=\"form-group\">\n" +
-                    "                            <label class=\"col-form-label\" >"+column.getString("cnCode")+"：</label>\n" +
-                    "                            <label class=\"\">{{view"+toUpperCaseFirstOne(data.getString("templateCode"))+"Info."+column.getString("code")+"}}</label>\n" +
+                    "                            <label class=\"col-form-label\" >" + column.getString("cnCode") + "：</label>\n" +
+                    "                            <label class=\"\">{{view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info." + column.getString("code") + "}}</label>\n" +
                     "                        </div>\n" +
                     "</div>\n");
 
-            if(columnIndex % 3 == 2 || columnIndex == columns.size() -1){
+            if (columnIndex % 3 == 2 || columnIndex == columns.size() - 1) {
                 thSb.append("</div>\n");
             }
 
@@ -62,7 +62,7 @@ public class GeneratorViewComponent extends BaseGenerator {
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.html";
+                + "out/web/components/" + data.getString("directories") + "/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.html";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
@@ -93,13 +93,13 @@ public class GeneratorViewComponent extends BaseGenerator {
             variable.append(column.getString("code") + ":'',\n");
 
         }
-        fileContext =  fileContext.replace("@@templateCodeColumns@@", variable.toString());
+        fileContext = fileContext.replace("@@templateCodeColumns@@", variable.toString());
 
         // 替换 数据校验部分代码
 
 
         String writePath = this.getClass().getResource("/").getPath()
-                + "out/web/component/"+data.getString("templateCode")+"Package/view"
+                + "out/web/components/" + data.getString("directories") + "/view"
                 + toUpperCaseFirstOne(data.getString("templateCode")) + "Info/view" + toUpperCaseFirstOne(data.getString("templateCode")) + "Info.js";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
