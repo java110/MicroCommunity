@@ -124,7 +124,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
      * @return
      */
     public JSONObject restToCenterProtocol(JSONArray businesses, Map<String, String> headers) {
-
+        headers.put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
         JSONObject centerProtocol = JSONObject.parseObject("{\"orders\":{},\"business\":[]}");
         freshOrderProtocol(centerProtocol.getJSONObject("orders"), headers);
         centerProtocol.put("business", businesses);
@@ -207,7 +207,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessObj = new JSONObject();
-        businessObj = BeanConvertUtil.covertBean(param, businessObj);
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
@@ -226,7 +226,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessObj = new JSONObject();
-        businessObj = BeanConvertUtil.covertBean(param, businessObj);
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
@@ -245,7 +245,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessObj = new JSONObject();
-        businessObj = BeanConvertUtil.covertBean(param, businessObj);
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
