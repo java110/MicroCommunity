@@ -49,19 +49,34 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
 
         validate(event, reqJson);
 
-
         doSoService(event, dataFlowContext, reqJson);
+
+        //服务合并处理
+//        JSONObject paramIn = mergeService(dataFlowContext);
+//
+//        ResponseEntity<String> responseEntity = this.callOrderService(dataFlowContext, paramIn);
+//
+//        dataFlowContext.setResponseEntity(responseEntity);
+
+        //提交事务
+        commit(dataFlowContext);
+
+        logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
+
+    }
+
+    /**
+     * 提前提交事务
+     * @param dataFlowContext
+     */
+    public void commit(DataFlowContext dataFlowContext) {
 
         //服务合并处理
         JSONObject paramIn = mergeService(dataFlowContext);
 
-
         ResponseEntity<String> responseEntity = this.callOrderService(dataFlowContext, paramIn);
 
         dataFlowContext.setResponseEntity(responseEntity);
-
-        logger.debug("API服务 --- 返回报文信息：{}", dataFlowContext.getResponseEntity());
-
     }
 
     /**
