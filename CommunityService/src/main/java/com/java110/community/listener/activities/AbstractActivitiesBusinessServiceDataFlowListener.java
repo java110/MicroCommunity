@@ -95,6 +95,12 @@ public abstract class AbstractActivitiesBusinessServiceDataFlowListener extends 
 
         currentActivitiesInfo.put("operate", StatusConstant.OPERATE_DEL);
         getActivitiesServiceDaoImpl().saveBusinessActivitiesInfo(currentActivitiesInfo);
+        for(Object key : currentActivitiesInfo.keySet()) {
+            if(businessActivities.get(key) == null) {
+                businessActivities.put(key.toString(), currentActivitiesInfo.get(key));
+            }
+        }
+
     }
 
 
