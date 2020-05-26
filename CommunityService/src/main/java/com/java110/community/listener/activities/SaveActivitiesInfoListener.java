@@ -53,8 +53,8 @@ public class SaveActivitiesInfoListener extends AbstractActivitiesBusinessServic
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessActivities 节点
-        if(data.containsKey("businessActivities")){
-            Object bObj = data.get("businessActivities");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACTIVITIES)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACTIVITIES);
             JSONArray businessActivitiess = null;
             if(bObj instanceof JSONObject){
                 businessActivitiess = new JSONArray();

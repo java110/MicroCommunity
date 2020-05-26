@@ -13,7 +13,7 @@ import java.util.*;
  * 数据流上下文
  * Created by wuxw on 2018/5/18.
  */
-public abstract class AbstractDataFlowContext extends AbstractTransactionLog implements DataFlowContext, IOrders,TransactionLog{
+public abstract class AbstractDataFlowContext extends AbstractTransactionLog implements DataFlowContext, IOrders, TransactionLog {
 
     private String dataFlowId;
 
@@ -30,6 +30,8 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     private String responseTime;
 
     private JSONArray resBusiness;
+
+    private JSONArray serviceBusiness;
 
 
     private String code;
@@ -52,10 +54,10 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     private List<DataFlowLog> logDatas = new ArrayList<DataFlowLog>();
 
-    protected Map<String,String> requestHeaders = new HashMap<String,String>();
-    protected Map<String,String> requestCurrentHeaders = new HashMap<String,String>();
-    protected Map<String,String> responseHeaders = new HashMap<String,String>();
-    protected Map<String,String> responseCurrentHeaders = new HashMap<String,String>();
+    protected Map<String, String> requestHeaders = new HashMap<String, String>();
+    protected Map<String, String> requestCurrentHeaders = new HashMap<String, String>();
+    protected Map<String, String> responseHeaders = new HashMap<String, String>();
+    protected Map<String, String> responseCurrentHeaders = new HashMap<String, String>();
 
     //请求开始时间
     private Date startDate;
@@ -65,16 +67,17 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     /**
      * 构建 对象信息
+     *
      * @param reqInfo
      * @param headerAll
      * @return
      * @throws Exception
      */
-    public  <T> T builder(String reqInfo, Map<String,String> headerAll) throws Exception{
+    public <T> T builder(String reqInfo, Map<String, String> headerAll) throws Exception {
         //预处理
         preBuilder(reqInfo, headerAll);
         //调用builder
-        T dataFlowContext = (T)doBuilder(reqInfo, headerAll);
+        T dataFlowContext = (T) doBuilder(reqInfo, headerAll);
         //后处理
         afterBuilder((DataFlowContext) dataFlowContext);
         return dataFlowContext;
@@ -83,23 +86,25 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     /**
      * 预处理
+     *
      * @param reqInfo
      * @param headerAll
      */
-    protected void preBuilder(String reqInfo, Map<String,String> headerAll) {
-        super.preBuilder(reqInfo,headerAll);
+    protected void preBuilder(String reqInfo, Map<String, String> headerAll) {
+        super.preBuilder(reqInfo, headerAll);
     }
 
     /**
      * 构建对象
+     *
      * @param reqInfo
      * @param headerAll
      * @return
      * @throws Exception
      */
-    public abstract DataFlowContext doBuilder(String reqInfo, Map<String,String> headerAll) throws Exception;
+    public abstract DataFlowContext doBuilder(String reqInfo, Map<String, String> headerAll) throws Exception;
 
-    protected void afterBuilder(DataFlowContext dataFlowContext){
+    protected void afterBuilder(DataFlowContext dataFlowContext) {
 
     }
 
@@ -225,7 +230,7 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     }
 
 
-    public List<DataFlowLog> getLogDatas(){
+    public List<DataFlowLog> getLogDatas() {
         return logDatas;
     }
 
@@ -247,24 +252,32 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     /**
      * 添加各个环节的日志
+     *
      * @param dataFlowLog
      */
-    public void addLogDatas(DataFlowLog dataFlowLog){
+    public void addLogDatas(DataFlowLog dataFlowLog) {
         this.logDatas.add(dataFlowLog);
     }
 
     /**
      * 添加各个环节的耗时
+     *
      * @param dataFlowLinksCost
      */
-    public void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost){
+    public void addLinksCostDates(DataFlowLinksCost dataFlowLinksCost) {
         this.linksCostDates.add(dataFlowLinksCost);
     }
 
 
-    public String getAppId(){return null;}
+    public String getAppId() {
+        return null;
+    }
 
-    public String getUserId(){return null;};
+    public String getUserId() {
+        return null;
+    }
+
+    ;
 
     @Override
     public void setAppId(String appId) {
@@ -276,11 +289,23 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     }
 
-    public String getRemark(){return null;};
+    public String getRemark() {
+        return null;
+    }
 
-    public String getReqSign(){return null;};
+    ;
 
-    public JSONArray getAttrs(){return null;};
+    public String getReqSign() {
+        return null;
+    }
+
+    ;
+
+    public JSONArray getAttrs() {
+        return null;
+    }
+
+    ;
 
     public String getBusinessType() {
         return businessType;
@@ -318,11 +343,11 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         this.port = port;
     }
 
-    public String getbId(){
+    public String getbId() {
         return null;
     }
 
-    public String getLogId(){
+    public String getLogId() {
         return getbId();
     }
 
@@ -330,10 +355,11 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     /**
      * 业务编码 当前需要处理的业务编码，可以写将要请求服务提供方的方法名
      * 主要用于 日志端展示
+     *
      * @return 当前服务编码
      */
-    public String getServiceCode(){
-        if(this.currentBusiness != null){
+    public String getServiceCode() {
+        if (this.currentBusiness != null) {
             return currentBusiness.getServiceCode();
         }
         return "";
@@ -342,10 +368,11 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     /**
      * 业务名称 当前需要处理的业务名称，可以当前调用的业务名称 如 商品购买 等
      * 主要用于 日志端展示
+     *
      * @return 当前服务名称
      */
-    public String getServiceName(){
-        if(this.currentBusiness != null){
+    public String getServiceName() {
+        if (this.currentBusiness != null) {
             return currentBusiness.getServiceName();
         }
         return "";
@@ -354,18 +381,28 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     public abstract IOrders getOrder();
 
-    protected AbstractDataFlowContext(Date startDate, String code){
+    protected AbstractDataFlowContext(Date startDate, String code) {
         this.setStartDate(startDate);
         this.setCode(code);
     }
 
 
-    public void setResponseEntity(ResponseEntity responseEntity){
+    public void setResponseEntity(ResponseEntity responseEntity) {
 
     }
 
-    public ResponseEntity getResponseEntity(){
+    public ResponseEntity getResponseEntity() {
         return null;
     }
 
+    public JSONArray getServiceBusiness() {
+        return serviceBusiness;
+    }
+
+    public void addServiceBusiness(JSONObject serviceBusiness) {
+        if (this.serviceBusiness == null) {
+            this.serviceBusiness = new JSONArray();
+        }
+        this.serviceBusiness.add(serviceBusiness);
+    }
 }

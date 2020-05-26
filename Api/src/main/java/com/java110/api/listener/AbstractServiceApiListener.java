@@ -53,4 +53,9 @@ public abstract class AbstractServiceApiListener extends AbstractServiceApiDataF
     protected abstract void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson);
 
 
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+
 }

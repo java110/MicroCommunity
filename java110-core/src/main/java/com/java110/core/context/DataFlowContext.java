@@ -1,5 +1,6 @@
 package com.java110.core.context;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
 import com.java110.entity.center.DataFlowLinksCost;
@@ -105,4 +106,16 @@ public interface DataFlowContext {
     public void setResponseEntity(ResponseEntity responseEntity);
 
     public ResponseEntity getResponseEntity();
+
+    /**
+     * 获取调用订单服务业务
+     * @return
+     */
+    public JSONArray getServiceBusiness();
+
+    /**
+     * 设置订单服务业务
+     * @param serviceBusiness
+     */
+    public void addServiceBusiness(JSONObject serviceBusiness);
 }

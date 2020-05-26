@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.activities.IActivitiesBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
+import com.java110.po.activities.ActivitiesPo;
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -16,6 +19,7 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 
 
 import com.java110.core.annotation.Java110Listener;
+import com.java110.utils.util.BeanConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +31,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveActivitiesListener")
-public class SaveActivitiesListener extends AbstractServiceApiListener {
+public class SaveActivitiesListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
@@ -53,11 +57,7 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
 
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        reqJson.put("activitiesId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_activitiesId));
+        reqJson.put("activitiesId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_activitiesId));
 
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
             FileDto fileDto = new FileDto();
@@ -71,17 +71,26 @@ public class SaveActivitiesListener extends AbstractServiceApiListener {
             reqJson.put("headerImg", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(activitiesBMOImpl.addHeaderImg(reqJson, context));
+            FileRelPo fileRelPo = new FileRelPo();
+            fileRelPo.setFileRelId("-1");
+            fileRelPo.setFileRealName(reqJson.getString("headerImg"));
+            fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
+            fileRelPo.setObjId(reqJson.getString("activitiesId"));
+            fileRelPo.setSaveWay("table");
+            fileRelPo.setRelTypeCd("70000");
+            super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
 
         }
+
+        ActivitiesPo activitiesPo = BeanConvertUtil.covertBean(reqJson, ActivitiesPo.class);
+        activitiesPo.setReadCount("0");
+        activitiesPo.setLikeCount("0");
+        activitiesPo.setCollectCount("0");
+        activitiesPo.setState("11000");
         //添加单元信息
-        businesses.add(activitiesBMOImpl.addActivities(reqJson, context));
+        super.insert(context, activitiesPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACTIVITIES);
 
-        ResponseEntity<String> responseEntity = activitiesBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
-
 
 
     @Override
