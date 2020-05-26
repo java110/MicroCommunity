@@ -100,7 +100,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
             //添加单元信息
             reqJson.put("machineId", machineIds.getJSONObject(machineIndex).getString("machineId"));
             //reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
-            businesses.add(applicationKeyBMOImpl.addApplicationKey(reqJson, context));
+            applicationKeyBMOImpl.addApplicationKey(reqJson, context);
             if (reqJson.containsKey("photos")) {
                 JSONArray photos = reqJson.getJSONArray("photos");
                 for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
@@ -121,7 +121,7 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
             }
         }
 
-        businesses.add(applicationKeyBMOImpl.addMsg(reqJson, context));
+        applicationKeyBMOImpl.addMsg(reqJson, context);
 
 
 

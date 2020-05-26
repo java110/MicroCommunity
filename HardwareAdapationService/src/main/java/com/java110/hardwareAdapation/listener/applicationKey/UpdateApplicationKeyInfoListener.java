@@ -62,27 +62,26 @@ public class UpdateApplicationKeyInfoListener extends AbstractApplicationKeyBusi
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessApplicationKey 节点
-        if (data.containsKey("businessApplicationKey")) {
-            //处理 businessApplicationKey 节点
-            if (data.containsKey("businessApplicationKey")) {
-                Object _obj = data.get("businessApplicationKey");
-                JSONArray businessApplicationKeys = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
+            JSONArray businessApplicationKeys = null;
+            if (_obj instanceof JSONObject) {
+                businessApplicationKeys = new JSONArray();
+                businessApplicationKeys.add(_obj);
+            } else {
+                businessApplicationKeys = (JSONArray) _obj;
+            }
+            //JSONObject businessApplicationKey = data.getJSONObject("businessApplicationKey");
+            for (int _applicationKeyIndex = 0; _applicationKeyIndex < businessApplicationKeys.size(); _applicationKeyIndex++) {
+                JSONObject businessApplicationKey = businessApplicationKeys.getJSONObject(_applicationKeyIndex);
+                doBusinessApplicationKey(business, businessApplicationKey);
                 if (_obj instanceof JSONObject) {
-                    businessApplicationKeys = new JSONArray();
-                    businessApplicationKeys.add(_obj);
-                } else {
-                    businessApplicationKeys = (JSONArray) _obj;
-                }
-                //JSONObject businessApplicationKey = data.getJSONObject("businessApplicationKey");
-                for (int _applicationKeyIndex = 0; _applicationKeyIndex < businessApplicationKeys.size(); _applicationKeyIndex++) {
-                    JSONObject businessApplicationKey = businessApplicationKeys.getJSONObject(_applicationKeyIndex);
-                    doBusinessApplicationKey(business, businessApplicationKey);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("applicationKeyId", businessApplicationKey.getString("applicationKeyId"));
-                    }
+                    dataFlowContext.addParamOut("applicationKeyId", businessApplicationKey.getString("applicationKeyId"));
                 }
             }
+
         }
     }
 

@@ -62,27 +62,26 @@ public class UpdateMsgInfoListener extends AbstractMsgBusinessServiceDataFlowLis
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessMsg 节点
-        if (data.containsKey("businessMsg")) {
-            //处理 businessMsg 节点
-            if (data.containsKey("businessMsg")) {
-                Object _obj = data.get("businessMsg");
-                JSONArray businessMsgs = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MSG)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MSG);
+            JSONArray businessMsgs = null;
+            if (_obj instanceof JSONObject) {
+                businessMsgs = new JSONArray();
+                businessMsgs.add(_obj);
+            } else {
+                businessMsgs = (JSONArray) _obj;
+            }
+            //JSONObject businessMsg = data.getJSONObject("businessMsg");
+            for (int _msgIndex = 0; _msgIndex < businessMsgs.size(); _msgIndex++) {
+                JSONObject businessMsg = businessMsgs.getJSONObject(_msgIndex);
+                doBusinessMsg(business, businessMsg);
                 if (_obj instanceof JSONObject) {
-                    businessMsgs = new JSONArray();
-                    businessMsgs.add(_obj);
-                } else {
-                    businessMsgs = (JSONArray) _obj;
-                }
-                //JSONObject businessMsg = data.getJSONObject("businessMsg");
-                for (int _msgIndex = 0; _msgIndex < businessMsgs.size(); _msgIndex++) {
-                    JSONObject businessMsg = businessMsgs.getJSONObject(_msgIndex);
-                    doBusinessMsg(business, businessMsg);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("msgId", businessMsg.getString("msgId"));
-                    }
+                    dataFlowContext.addParamOut("msgId", businessMsg.getString("msgId"));
                 }
             }
+
         }
     }
 

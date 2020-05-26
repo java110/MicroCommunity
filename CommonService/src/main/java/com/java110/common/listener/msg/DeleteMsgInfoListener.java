@@ -62,10 +62,10 @@ public class DeleteMsgInfoListener extends AbstractMsgBusinessServiceDataFlowLis
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMsg 节点
-        if (data.containsKey("businessMsg")) {
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG)) {
             //处理 businessMsg 节点
-            if (data.containsKey("businessMsg")) {
-                Object _obj = data.get("businessMsg");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG);
                 JSONArray businessMsgs = null;
                 if (_obj instanceof JSONObject) {
                     businessMsgs = new JSONArray();

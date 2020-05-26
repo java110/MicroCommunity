@@ -79,6 +79,11 @@ public abstract class AbstractMsgBusinessServiceDataFlowListener extends Abstrac
 
         currentMsgInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMsgServiceDaoImpl().saveBusinessMsgInfo(currentMsgInfo);
+        for (Object key : currentMsgInfo.keySet()) {
+            if (businessMsg.get(key) == null) {
+                businessMsg.put(key.toString(), currentMsgInfo.get(key));
+            }
+        }
     }
 
 

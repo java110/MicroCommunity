@@ -63,10 +63,10 @@ public class UpdateActivitiesInfoListener extends AbstractActivitiesBusinessServ
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessActivities 节点
-        if (data.containsKey("businessActivities")) {
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ACTIVITIES)) {
             //处理 businessActivities 节点
-            if (data.containsKey("businessActivities")) {
-                Object _obj = data.get("businessActivities");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ACTIVITIES)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ACTIVITIES);
                 JSONArray businessActivitiess = null;
                 if (_obj instanceof JSONObject) {
                     businessActivitiess = new JSONArray();

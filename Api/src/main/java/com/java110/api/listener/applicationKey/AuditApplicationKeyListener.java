@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
@@ -12,6 +13,7 @@ import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.applicationKey.ApplicationKeyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
@@ -29,7 +31,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("auditApplicationKeyListener")
-public class AuditApplicationKeyListener extends AbstractServiceApiListener {
+public class AuditApplicationKeyListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IApplicationKeyBMO applicationKeyBMOImpl;
@@ -52,20 +54,9 @@ public class AuditApplicationKeyListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
         //添加单元信息
-        businesses.add(updateApplicationKey(reqJson, context));
+        updateApplicationKey(reqJson, context);
 
-
-
-        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override
@@ -91,7 +82,7 @@ public class AuditApplicationKeyListener extends AbstractServiceApiListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject updateApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private void updateApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         //根据位置id 和 位置对象查询相应 设备ID
 
         ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
@@ -100,16 +91,10 @@ public class AuditApplicationKeyListener extends AbstractServiceApiListener {
         List<ApplicationKeyDto> applicationKeyDtos = applicationKeyInnerServiceSMOImpl.queryApplicationKeys(applicationKeyDto);
         Assert.listOnlyOne(applicationKeyDtos, "未找到申请记录或找到多条记录");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(BeanConvertUtil.beanCovertMap(applicationKeyDtos.get(0)));
-        businessApplicationKey.put("state", "1100".equals(paramInJson.getString("state")) ? "10001" : "10003");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(applicationKeyDtos.get(0), ApplicationKeyPo.class);
+        applicationKeyPo.setState("1100".equals(paramInJson.getString("state")) ? "10001" : "10003");
+        super.update(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
+
     }
 
     public IMachineInnerServiceSMO getMachineInnerServiceSMOImpl() {

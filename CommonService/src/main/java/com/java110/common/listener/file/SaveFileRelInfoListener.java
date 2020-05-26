@@ -54,8 +54,8 @@ public class SaveFileRelInfoListener extends AbstractFileRelBusinessServiceDataF
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFileRel 节点
-        if (data.containsKey("businessFileRel")) {
-            Object bObj = data.get("businessFileRel");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             JSONArray businessFileRels = null;
             if (bObj instanceof JSONObject) {
                 businessFileRels = new JSONArray();

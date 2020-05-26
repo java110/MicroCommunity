@@ -1,34 +1,19 @@
 package com.java110.api.listener.applicationKey;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
-import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.dto.file.FileDto;
-import com.java110.dto.hardwareAdapation.MachineDto;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-
-
-import com.java110.core.annotation.Java110Listener;
-import com.java110.utils.util.DateUtil;
+import com.java110.utils.constant.ServiceCodeApplicationKeyConstant;
+import com.java110.utils.util.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 /**
  * 保存小区侦听
@@ -66,16 +51,11 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(applicationKeyBMOImpl.addApplicationKey(reqJson, context));
+        applicationKeyBMOImpl.addApplicationKey(reqJson, context);
 
-        businesses.add(applicationKeyBMOImpl.addMsg(reqJson, context));
+        applicationKeyBMOImpl.addMsg(reqJson, context);
 
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
             FileDto fileDto = new FileDto();
@@ -84,19 +64,14 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
             fileDto.setContext(reqJson.getString("photo"));
             fileDto.setSuffix("jpeg");
             fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName =  fileInnerServiceSMOImpl.saveFile(fileDto);
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
 
             reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(applicationKeyBMOImpl.addOwnerPhoto(reqJson, context));
+            applicationKeyBMOImpl.addOwnerPhoto(reqJson, context);
 
         }
-
-
-        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
 
@@ -114,11 +89,6 @@ public class SaveApplicationKeyListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
-
-
-
 
 
     public IFileInnerServiceSMO getFileInnerServiceSMOImpl() {

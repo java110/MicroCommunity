@@ -9,6 +9,7 @@ import com.java110.entity.order.Orders;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -237,5 +238,62 @@ public class ApiBaseBMO implements IApiBaseBMO{
 
         }
 
+    }
+
+    /**
+     * 新增数据方法
+     *
+     * @param context 上下文对象
+     * @param param   po对象
+     */
+    public void insert(DataFlowContext context, Object param, String businessType) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, businessType);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessObj = new JSONObject();
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
+        JSONArray businessArr = new JSONArray();
+        businessArr.add(businessObj);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        context.addServiceBusiness(business);
+    }
+
+    /**
+     * 新增数据方法
+     *
+     * @param context 上下文对象
+     * @param param   po对象
+     */
+    public void update(DataFlowContext context, Object param, String businessType) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, businessType);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessObj = new JSONObject();
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
+        JSONArray businessArr = new JSONArray();
+        businessArr.add(businessObj);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        context.addServiceBusiness(business);
+    }
+
+    /**
+     * 新增数据方法
+     *
+     * @param context 上下文对象
+     * @param param   po对象
+     */
+    public void delete(DataFlowContext context, Object param, String businessType) {
+        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, businessType);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        JSONObject businessObj = new JSONObject();
+        businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
+        JSONArray businessArr = new JSONArray();
+        businessArr.add(businessObj);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        context.addServiceBusiness(business);
     }
 }

@@ -54,8 +54,8 @@ public class SaveApplicationKeyInfoListener extends AbstractApplicationKeyBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessApplicationKey 节点
-        if (data.containsKey("businessApplicationKey")) {
-            Object bObj = data.get("businessApplicationKey");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
             JSONArray businessApplicationKeys = null;
             if (bObj instanceof JSONObject) {
                 businessApplicationKeys = new JSONArray();

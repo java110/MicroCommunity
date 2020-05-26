@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.activities.IActivitiesBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -15,6 +16,8 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.activities.ActivitiesPo;
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -35,7 +38,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateActivitiesListener")
-public class UpdateActivitiesListener extends AbstractServiceApiListener {
+public class UpdateActivitiesListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IActivitiesInnerServiceSMO activitiesInnerServiceSMOImpl;
@@ -66,8 +69,6 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        JSONArray businesses = new JSONArray();
-        AppService service = event.getAppService();
 
         if (reqJson.containsKey("headerImg") && !StringUtils.isEmpty(reqJson.getString("headerImg"))) {
             FileDto fileDto = new FileDto();
@@ -81,15 +82,35 @@ public class UpdateActivitiesListener extends AbstractServiceApiListener {
             reqJson.put("headerImg", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(activitiesBMOImpl.editHeaderImg(reqJson, context));
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setRelTypeCd("70000");
+            fileRelDto.setObjId(reqJson.getString("activitiesId"));
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+            if (fileRelDtos == null || fileRelDtos.size() == 0) {
+                FileRelPo fileRelPo = new FileRelPo();
+                fileRelPo.setFileRelId("-1");
+                fileRelPo.setFileRealName(reqJson.getString("headerImg"));
+                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
+                fileRelPo.setObjId(reqJson.getString("activitiesId"));
+                fileRelPo.setSaveWay("table");
+                fileRelPo.setRelTypeCd("70000");
+                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            } else {
+                FileRelPo fileRelPo = new FileRelPo();
+                fileRelPo.setFileRelId(fileRelPo.getFileRelId());
+                fileRelPo.setFileRealName(reqJson.getString("headerImg"));
+                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
+                fileRelPo.setObjId(reqJson.getString("activitiesId"));
+                super.update(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
+            }
 
         }
-        //添加单元信息
-        businesses.add(activitiesBMOImpl.updateActivities(reqJson, context));
 
-        ResponseEntity<String> responseEntity = activitiesBMOImpl.callService(context, service.getServiceCode(), businesses);
+        ActivitiesPo activitiesPo = BeanConvertUtil.covertBean(reqJson, ActivitiesPo.class);
 
-        context.setResponseEntity(responseEntity);
+        super.update(context, activitiesPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ACTIVITIES);
+
     }
 
 

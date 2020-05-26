@@ -67,6 +67,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
 
     /**
      * 提前提交事务
+     *
      * @param dataFlowContext
      */
     public void commit(DataFlowContext dataFlowContext) {
@@ -77,6 +78,8 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         ResponseEntity<String> responseEntity = this.callOrderService(dataFlowContext, paramIn);
 
         dataFlowContext.setResponseEntity(responseEntity);
+
+        dataFlowContext.setServiceBusiness(new JSONArray());
     }
 
     /**

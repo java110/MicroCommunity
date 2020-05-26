@@ -79,6 +79,11 @@ public abstract class AbstractFileRelBusinessServiceDataFlowListener extends Abs
 
         currentFileRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getFileRelServiceDaoImpl().saveBusinessFileRelInfo(currentFileRelInfo);
+        for(Object key : currentFileRelInfo.keySet()) {
+            if(businessFileRel.get(key) == null) {
+                businessFileRel.put(key.toString(), currentFileRelInfo.get(key));
+            }
+        }
     }
 
 

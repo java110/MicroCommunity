@@ -63,10 +63,10 @@ public class UpdateFileRelInfoListener extends AbstractFileRelBusinessServiceDat
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFileRel 节点
-        if (data.containsKey("businessFileRel")) {
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL)) {
             //处理 businessFileRel 节点
-            if (data.containsKey("businessFileRel")) {
-                Object _obj = data.get("businessFileRel");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
                 JSONArray businessFileRels = null;
                 if (_obj instanceof JSONObject) {
                     businessFileRels = new JSONArray();

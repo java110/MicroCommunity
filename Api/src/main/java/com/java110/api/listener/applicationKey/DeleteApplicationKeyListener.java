@@ -41,19 +41,11 @@ public class DeleteApplicationKeyListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(applicationKeyBMOImpl.deleteApplicationKey(reqJson, context));
 
 
-        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
+        //删除钥匙
+       applicationKeyBMOImpl.deleteApplicationKey(reqJson, context);
 
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

@@ -93,7 +93,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
             reqJson.put("endTime", endTime);
             reqJson.put("applicationKeyId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId));
             reqJson.put("pwd", pwd);
-            businesses.add(applicationKeyBMOImpl.addApplicationVisitKey(reqJson, context));
+            applicationKeyBMOImpl.addApplicationVisitKey(reqJson, context);
         }
 
         responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.advert.IAdvertBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -17,12 +18,16 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.advert.AdvertItemPo;
+import com.java110.po.advert.AdvertPo;
+import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +41,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateAdvertListener")
-public class UpdateAdvertListener extends AbstractServiceApiListener {
+public class UpdateAdvertListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IAdvertBMO advertBMOImpl;
@@ -89,13 +94,17 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
 
-        AppService service = event.getAppService();
-        //添加单元信息
-        businesses.add(advertBMOImpl.updateAdvert(reqJson, context));
+        AdvertDto advertDto = new AdvertDto();
+        advertDto.setAdvertId(reqJson.getString("advertId"));
+        advertDto.setCommunityId(reqJson.getString("communityId"));
+        List<AdvertDto> advertDtos = advertInnerServiceSMOImpl.queryAdverts(advertDto);
+
+        Assert.listOnlyOne(advertDtos, "不存在该条广告 或存在多条数据");
+
+        AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
+        advertPo.setState(advertDtos.get(0).getState());
+        super.update(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT);
 
         AdvertItemDto advertItemDto = new AdvertItemDto();
         advertItemDto.setAdvertId(reqJson.getString("advertId"));
@@ -104,35 +113,108 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
 
         //删除照片或视频
         for (AdvertItemDto tmpAdvertItemDto : advertItemDtos) {
-            businesses.add(advertBMOImpl.delAdvertItemPhotoOrVideo(tmpAdvertItemDto, context));
+            AdvertItemPo advertItemPo = BeanConvertUtil.covertBean(tmpAdvertItemDto, AdvertItemPo.class);
+            super.delete(context, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ADVERT_ITEM);
         }
 
         //删除文件和 广告的关系
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(reqJson.getString("advertId"));
-        fileRelDto.setRelTypeCds(new String[]{"40000","50000"});
+        fileRelDto.setRelTypeCds(new String[]{"40000", "50000"});
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         for (FileRelDto tmpFileRelDto : fileRelDtos) {
-            businesses.add(advertBMOImpl.delAdvertFileRel(tmpFileRelDto, context));
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(tmpFileRelDto, FileRelPo.class);
+            super.delete(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FILE_REL);
         }
 
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
             JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                businesses.add(advertBMOImpl.addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex)));
-                businesses.add(advertBMOImpl.addAdvertFileRel(reqJson, context, "40000"));
+                addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex));
+                addAdvertFileRel(reqJson, context, "40000");
             }
 
         } else {
-            businesses.add(advertBMOImpl.addAdvertItemVedio(reqJson, context));
-            businesses.add(advertBMOImpl.addAdvertFileRel(reqJson, context, "50000"));
+            addAdvertItemVedio(reqJson, context);
+            addAdvertFileRel(reqJson, context, "50000");
         }
 
-        ResponseEntity<String> responseEntity = advertBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
+    public void addAdvertItemPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext, String photo) {
+
+        String itemTypeCd = "";
+        String url = "";
+
+        FileDto fileDto = new FileDto();
+        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+        fileDto.setFileName(fileDto.getFileId());
+        fileDto.setContext(photo);
+        fileDto.setSuffix("jpeg");
+        fileDto.setCommunityId(paramInJson.getString("communityId"));
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+        paramInJson.put("fileSaveName", fileName);
+        paramInJson.put("advertPhotoId", fileDto.getFileId());
+        itemTypeCd = "8888";
+        url = fileDto.getFileId();
+
+        AdvertItemPo advertItemPo = new AdvertItemPo();
+        advertItemPo.setAdvertId(paramInJson.getString("advertId"));
+        advertItemPo.setAdvertItemId("-1");
+        advertItemPo.setCommunityId(paramInJson.getString("communityId"));
+        advertItemPo.setItemTypeCd(itemTypeCd);
+        advertItemPo.setUrl(url);
+        advertItemPo.setSeq("1");
+        super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
+    }
+
+
+    /**
+     * 添加物业费用
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void addAdvertFileRel(JSONObject paramInJson, DataFlowContext dataFlowContext, String relTypeCd) {
+
+        FileRelPo fileRelPo = new FileRelPo();
+        fileRelPo.setRelTypeCd(relTypeCd);
+        fileRelPo.setSaveWay("40000".equals(relTypeCd) ? "table" : "ftp");
+        fileRelPo.setFileRelId("-1");
+        fileRelPo.setObjId(paramInJson.getString("advertId"));
+        fileRelPo.setFileSaveName(paramInJson.getString("advertPhotoId"));
+        fileRelPo.setFileSaveName(paramInJson.getString("fileSaveName"));
+        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+    }
+
+
+    /**
+     * 添加小区信息
+     *
+     * @param paramInJson     接口调用放传入入参
+     * @param dataFlowContext 数据上下文
+     * @return 订单服务能够接受的报文
+     */
+    public void addAdvertItemVedio(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        String itemTypeCd = "";
+        String url = "";
+
+        itemTypeCd = "9999";
+        url = paramInJson.getString("vedioName");
+        paramInJson.put("advertPhotoId", url);
+
+        AdvertItemPo advertItemPo = new AdvertItemPo();
+        advertItemPo.setAdvertId(paramInJson.getString("advertId"));
+        advertItemPo.setAdvertItemId("-1");
+        advertItemPo.setCommunityId(paramInJson.getString("communityId"));
+        advertItemPo.setItemTypeCd(itemTypeCd);
+        advertItemPo.setUrl(url);
+        advertItemPo.setSeq("1");
+        super.insert(dataFlowContext, advertItemPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
+
+    }
 
 
     @Override
@@ -149,8 +231,6 @@ public class UpdateAdvertListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
-
 
 
     public IAdvertInnerServiceSMO getAdvertInnerServiceSMOImpl() {

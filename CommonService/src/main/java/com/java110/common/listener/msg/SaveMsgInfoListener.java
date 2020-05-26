@@ -54,8 +54,8 @@ public class SaveMsgInfoListener extends AbstractMsgBusinessServiceDataFlowListe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMsg 节点
-        if (data.containsKey("businessMsg")) {
-            Object bObj = data.get("businessMsg");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG);
             JSONArray businessMsgs = null;
             if (bObj instanceof JSONObject) {
                 businessMsgs = new JSONArray();

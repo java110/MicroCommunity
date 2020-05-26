@@ -54,8 +54,8 @@ public class SaveAdvertInfoListener extends AbstractAdvertBusinessServiceDataFlo
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessAdvert 节点
-        if (data.containsKey("businessAdvert")) {
-            Object bObj = data.get("businessAdvert");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT);
             JSONArray businessAdverts = null;
             if (bObj instanceof JSONObject) {
                 businessAdverts = new JSONArray();

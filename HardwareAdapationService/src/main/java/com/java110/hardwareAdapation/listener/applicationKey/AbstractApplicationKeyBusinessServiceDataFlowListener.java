@@ -97,6 +97,12 @@ public abstract class AbstractApplicationKeyBusinessServiceDataFlowListener exte
 
         currentApplicationKeyInfo.put("operate", StatusConstant.OPERATE_DEL);
         getApplicationKeyServiceDaoImpl().saveBusinessApplicationKeyInfo(currentApplicationKeyInfo);
+
+        for(Object key : currentApplicationKeyInfo.keySet()) {
+            if(businessApplicationKey.get(key) == null) {
+                businessApplicationKey.put(key.toString(), currentApplicationKeyInfo.get(key));
+            }
+        }
     }
 
 

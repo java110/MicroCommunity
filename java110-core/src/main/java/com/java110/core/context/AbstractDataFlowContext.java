@@ -405,4 +405,8 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         }
         this.serviceBusiness.add(serviceBusiness);
     }
+
+    public void setServiceBusiness(JSONArray serviceBusinesses) {
+        this.serviceBusiness = serviceBusinesses;
+    }
 }

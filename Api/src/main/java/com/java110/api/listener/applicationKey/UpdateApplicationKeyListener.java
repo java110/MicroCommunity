@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
@@ -37,7 +38,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateApplicationKeyListener")
-public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
+public class UpdateApplicationKeyListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IApplicationKeyBMO applicationKeyBMOImpl;
@@ -72,15 +73,8 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(applicationKeyBMOImpl.updateApplicationKey(reqJson, context));
+        //添加钥匙信息
+        applicationKeyBMOImpl.updateApplicationKey(reqJson, context);
 
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
             FileDto fileDto = new FileDto();
@@ -93,14 +87,9 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
             reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(applicationKeyBMOImpl.editApplicationKeyPhoto(reqJson, context));
+            applicationKeyBMOImpl.editApplicationKeyPhoto(reqJson, context);
 
         }
-
-
-        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override
@@ -117,7 +106,6 @@ public class UpdateApplicationKeyListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
 
     public IApplicationKeyInnerServiceSMO getApplicationKeyInnerServiceSMOImpl() {

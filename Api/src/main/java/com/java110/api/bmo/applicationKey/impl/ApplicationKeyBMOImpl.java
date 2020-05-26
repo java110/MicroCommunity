@@ -16,6 +16,9 @@ import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.po.applicationKey.ApplicationKeyPo;
+import com.java110.po.file.FileRelPo;
+import com.java110.po.message.MsgPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -54,6 +57,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
     private IApplicationKeyInnerServiceSMO applicationKeyInnerServiceSMOImpl;
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -61,18 +65,11 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(paramInJson, ApplicationKeyPo.class);
+        super.delete(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_APPLICATION_KEY);
     }
 
     /**
@@ -82,23 +79,15 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.put("fileRelId", "-1");
-        businessUnit.put("relTypeCd", "30000");
-        businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
-        businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
+    public void addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        FileRelPo fileRelPo = new FileRelPo();
+        fileRelPo.setFileRelId("-1");
+        fileRelPo.setRelTypeCd("30000");
+        fileRelPo.setSaveWay("table");
+        fileRelPo.setObjId(paramInJson.getString("applicationKeyId"));
+        fileRelPo.setFileRealName(paramInJson.getString("applicationKeyPhotoId"));
+        fileRelPo.setFileSaveName(paramInJson.getString("fileSaveName"));
+        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
 
     /**
@@ -115,23 +104,15 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @return
      */
 
-    public Object addMsg(JSONObject paramInJson, DataFlowContext context) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMsg = new JSONObject();
-        //businessApplicationKey.putAll(paramInJson);
-        businessMsg.put("msgId", "-1");
-        businessMsg.put("msgType", "10002");
-        businessMsg.put("title", "您有一条钥匙审核单");
-        businessMsg.put("url", "/flow/auditApplicationKeyFlow");
-        businessMsg.put("viewTypeCd", "30000");
-        businessMsg.put("viewObjId", paramInJson.getString("storeId"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMsg", businessMsg);
-        return business;
+    public void addMsg(JSONObject paramInJson, DataFlowContext context) {
+        MsgPo msgPo = new MsgPo();
+        msgPo.setMsgId("-1");
+        msgPo.setMsgType("10002");
+        msgPo.setTitle("您有一条钥匙审核单");
+        msgPo.setUrl("/admin.html#/pages/property/auditApplicationKey");
+        msgPo.setViewObjId(paramInJson.getString("storeId"));
+        msgPo.setViewTypeCd("30000");
+        super.insert(context, msgPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG);
     }
 
     /**
@@ -141,37 +122,28 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editApplicationKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void editApplicationKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setRelTypeCd("30000");
         fileRelDto.setObjId(paramInJson.getString("applicationKeyId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() == 0) {
-            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-            JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", "-1");
-            businessUnit.put("relTypeCd", "30000");
-            businessUnit.put("saveWay", "table");
-            businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
-            businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
-            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-            return business;
+            FileRelPo fileRelPo = new FileRelPo();
+            fileRelPo.setFileRelId("-1");
+            fileRelPo.setRelTypeCd("3000");
+            fileRelPo.setSaveWay("table");
+            fileRelPo.setObjId(paramInJson.getString("applicationKeyId"));
+            fileRelPo.setFileSaveName(paramInJson.getString("fileSaveName"));
+            fileRelPo.setFileRealName(paramInJson.getString("applicationKeyPhotoId"));
+            super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            return;
         }
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-        businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
-        businessUnit.put("fileSaveName", paramInJson.getString("applicationKeyPhotoId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-        return business;
+
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(fileRelDtos.get(0), FileRelPo.class);
+        fileRelPo.setFileRealName(paramInJson.getString("applicationKeyPhotoId"));
+        fileRelPo.setFileSaveName(paramInJson.getString("applicationKeyPhotoId"));
+        super.update(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
     }
 
     /**
@@ -181,7 +153,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         //根据位置id 和 位置对象查询相应 设备ID
         MachineDto machineDto = new MachineDto();
         machineDto.setLocationObjId(paramInJson.getString("locationObjId"));
@@ -194,24 +166,18 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         List<ApplicationKeyDto> applicationKeyDtos = applicationKeyInnerServiceSMOImpl.queryApplicationKeys(applicationKeyDto);
         Assert.listOnlyOne(applicationKeyDtos, "未找到申请记录或找到多条记录");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        businessApplicationKey.put("machineId", machineDtos.get(0).getMachineId());
-        businessApplicationKey.put("state", applicationKeyDtos.get(0).getState());
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(paramInJson, ApplicationKeyPo.class);
+        applicationKeyPo.setMachineId(machineDtos.get(0).getMachineId());
+        applicationKeyPo.setState(applicationKeyDtos.get(0).getState());
         if (!paramInJson.containsKey("pwd") || StringUtil.isEmpty(paramInJson.getString("pwd"))) {
-            businessApplicationKey.put("pwd", applicationKeyDtos.get(0).getPwd());
+            applicationKeyPo.setPwd(applicationKeyDtos.get(0).getPwd());
         }
         if ("1100103".equals(paramInJson.getString("typeFlag"))) { // 临时访问密码,只设置成24小时
-            businessApplicationKey.put("endTime", applicationKeyDtos.get(0).getEndTime());
+            applicationKeyPo.setEndTime(applicationKeyDtos.get(0).getEndTime());
         }
-        businessApplicationKey.put("typeFlag", applicationKeyDtos.get(0).getTypeCd());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
+        applicationKeyPo.setTypeFlag(applicationKeyDtos.get(0).getTypeCd());
+
+        super.update(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
     }
 
     /**
@@ -221,38 +187,30 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addApplicationKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         String applicationKeyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applicationKeyId);
-        paramInJson.put("applicationKeyId",applicationKeyId);
+        paramInJson.put("applicationKeyId", applicationKeyId);
         //根据位置id 和 位置对象查询相应 设备ID
-        if(!paramInJson.containsKey("machineId")) {
+        if (!paramInJson.containsKey("machineId")) {
             MachineDto machineDto = new MachineDto();
             machineDto.setLocationObjId(paramInJson.getString("locationObjId"));
             machineDto.setLocationTypeCd(paramInJson.getString("locationTypeCd"));
             List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
             Assert.listOnlyOne(machineDtos, "该位置还没有相应的门禁设备");
-            paramInJson.put("machineId",machineDtos.get(0).getMachineId());
+            paramInJson.put("machineId", machineDtos.get(0).getMachineId());
         }
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        //businessApplicationKey.put("machineId", machineId);
-        businessApplicationKey.put("applicationKeyId", applicationKeyId);
-        businessApplicationKey.put("state", "10002");
-        businessApplicationKey.put("pwd",this.getRandom());
-        if("1100103".equals(paramInJson.getString("typeFlag"))){ // 临时访问密码,只设置成24小时
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(paramInJson, ApplicationKeyPo.class);
+        applicationKeyPo.setApplicationKeyId(applicationKeyId);
+        applicationKeyPo.setState("10002");
+        applicationKeyPo.setPwd(this.getRandom());
+        if ("1100103".equals(paramInJson.getString("typeFlag"))) { // 临时访问密码,只设置成24小时
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.HOUR, 24);
-            businessApplicationKey.put("endTime", DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+            applicationKeyPo.setEndTime(DateUtil.getFormatTimeString(calendar.getTime(), DateUtil.DATE_FORMATE_STRING_A));
         }
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
+        super.insert(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
     }
 
 
@@ -263,25 +221,16 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addApplicationVisitKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addApplicationVisitKey(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        //查询 是否住户密码已经审核完成
+        //查询 是否住户密码已经审核完
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessApplicationKey = new JSONObject();
-        businessApplicationKey.putAll(paramInJson);
-        businessApplicationKey.put("applicationKeyId", paramInJson.getString("applicationKeyId"));
-        businessApplicationKey.put("state", "10001");
-        businessApplicationKey.put("typeFlag", "1100103");
-        businessApplicationKey.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessApplicationKey", businessApplicationKey);
-        return business;
+        ApplicationKeyPo applicationKeyPo = BeanConvertUtil.covertBean(paramInJson, ApplicationKeyPo.class);
+        applicationKeyPo.setApplicationKeyId(paramInJson.getString("applicationKeyId"));
+        applicationKeyPo.setState("10001");
+        applicationKeyPo.setTypeFlag("1100103");
+        applicationKeyPo.setStartTime(DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+        super.insert(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
     }
 
     /**
@@ -289,7 +238,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      *
      * @return
      */
-    private  String getRandom() {
+    private String getRandom() {
         Random random = new Random();
         String result = "";
         for (int i = 0; i < 6; i++) {
@@ -350,6 +299,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
         return business;
     }
+
     /**
      * 添加小区楼信息
      * <p>

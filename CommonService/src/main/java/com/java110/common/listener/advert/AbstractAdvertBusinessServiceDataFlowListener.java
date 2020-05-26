@@ -89,6 +89,11 @@ public abstract class AbstractAdvertBusinessServiceDataFlowListener extends Abst
 
         currentAdvertInfo.put("operate", StatusConstant.OPERATE_DEL);
         getAdvertServiceDaoImpl().saveBusinessAdvertInfo(currentAdvertInfo);
+        for(Object key : currentAdvertInfo.keySet()) {
+            if(businessAdvert.get(key) == null) {
+                businessAdvert.put(key.toString(), currentAdvertInfo.get(key));
+            }
+        }
     }
 
 

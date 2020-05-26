@@ -118,4 +118,9 @@ public interface DataFlowContext {
      * @param serviceBusiness
      */
     public void addServiceBusiness(JSONObject serviceBusiness);
+    /**
+     * 设置订单服务业务
+     * @param serviceBusinesses
+     */
+    public void setServiceBusiness(JSONArray serviceBusinesses);
 }
