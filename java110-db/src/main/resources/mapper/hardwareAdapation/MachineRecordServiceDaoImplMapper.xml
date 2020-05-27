@@ -6,13 +6,13 @@
 
     <!-- 保存设备上报信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineRecordInfo" parameterType="Map">
-           insert into business_machine_record(
-file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,operate,`name`,tel,community_id,b_id,file_id,record_type_cd
-) values (
-#{fileTime},#{machineCode},#{openTypeCd},#{idCard},#{machineRecordId},#{machineId},#{operate},#{name},#{tel},#{communityId},#{bId},#{fileId}
-,#{recordTypeCd}
-)
-       </insert>
+        insert into business_machine_record(
+        file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,operate,`name`,tel,community_id,b_id,file_id,record_type_cd
+        ) values (
+        #{fileTime},#{machineCode},#{openTypeCd},#{idCard},#{machineRecordId},#{machineId},#{operate},#{name},#{tel},#{communityId},#{bId},#{fileId}
+        ,#{recordTypeCd}
+        )
+    </insert>
 
 
     <!-- 查询设备上报信息（Business） add by wuxw 2018-07-03 -->
@@ -119,7 +119,8 @@ file_time,machine_code,open_type_cd,id_card,machine_record_id,machine_id,operate
         select t.file_time,t.file_time fileTime,t.machine_code,t.machine_code machineCode,t.open_type_cd,t.open_type_cd
         openTypeCd,t.id_card,t.id_card idCard,t.status_cd,t.status_cd statusCd,t.machine_record_id,t.machine_record_id
         machineRecordId,t.machine_id,t.machine_id machineId,t.name,t.tel,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd,td1.name openTypeName
+        communityId,t.b_id,t.b_id bId,t.file_id,t.file_id fileId,t.record_type_cd,t.record_type_cd recordTypeCd,td1.name
+        openTypeName
         from machine_record t,t_dict td1
         where 1 =1
         and t.open_type_cd = td1.status_cd

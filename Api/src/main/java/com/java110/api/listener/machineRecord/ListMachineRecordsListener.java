@@ -8,6 +8,7 @@ import com.java110.core.smo.hardwareAdapation.IMachineRecordInnerServiceSMO;
 import com.java110.dto.hardwareAdapation.MachineRecordDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineRecordConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.machineRecord.ApiMachineRecordDataVo;
 import com.java110.vo.api.machineRecord.ApiMachineRecordVo;
@@ -57,6 +58,8 @@ public class ListMachineRecordsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+
     }
 
     @Override

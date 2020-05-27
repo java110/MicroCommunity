@@ -229,7 +229,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", reqJson.getString("relTypeCd"));
         businessUnit.put("saveWay", "table");
-        businessUnit.put("objId", reqJson.getString("userId"));
+        businessUnit.put("objId", reqJson.getString("machineRecordId"));
         businessUnit.put("fileRealName", reqJson.getString("fileId"));
         businessUnit.put("fileSaveName", fileName);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
@@ -255,6 +255,8 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
             paramInJson.put("openTypeCd", "8888");
         }
         paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+
+        paramInJson.put("machineRecordId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
 
         String objId = paramInJson.getString("userId");
         //这里objId 可能是 业主ID 也可能是钥匙ID
@@ -292,7 +294,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessMachineRecord = new JSONObject();
         businessMachineRecord.putAll(paramInJson);
-        businessMachineRecord.put("machineRecordId", "-1");
+        //businessMachineRecord.put("machineRecordId", "-1");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
         return business;
