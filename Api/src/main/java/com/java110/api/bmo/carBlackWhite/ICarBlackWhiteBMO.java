@@ -24,7 +24,7 @@ public interface ICarBlackWhiteBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void deleteCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -33,7 +33,7 @@ public interface ICarBlackWhiteBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
     /**
@@ -43,5 +43,5 @@ public interface ICarBlackWhiteBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

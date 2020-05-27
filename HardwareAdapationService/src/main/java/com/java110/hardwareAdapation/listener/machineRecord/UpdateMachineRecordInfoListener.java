@@ -63,27 +63,25 @@ public class UpdateMachineRecordInfoListener extends AbstractMachineRecordBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineRecord 节点
-        if (data.containsKey("businessMachineRecord")) {
-            //处理 businessMachineRecord 节点
-            if (data.containsKey("businessMachineRecord")) {
-                Object _obj = data.get("businessMachineRecord");
-                JSONArray businessMachineRecords = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_RECORD)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_RECORD);
+            JSONArray businessMachineRecords = null;
+            if (_obj instanceof JSONObject) {
+                businessMachineRecords = new JSONArray();
+                businessMachineRecords.add(_obj);
+            } else {
+                businessMachineRecords = (JSONArray) _obj;
+            }
+            //JSONObject businessMachineRecord = data.getJSONObject("businessMachineRecord");
+            for (int _machineRecordIndex = 0; _machineRecordIndex < businessMachineRecords.size(); _machineRecordIndex++) {
+                JSONObject businessMachineRecord = businessMachineRecords.getJSONObject(_machineRecordIndex);
+                doBusinessMachineRecord(business, businessMachineRecord);
                 if (_obj instanceof JSONObject) {
-                    businessMachineRecords = new JSONArray();
-                    businessMachineRecords.add(_obj);
-                } else {
-                    businessMachineRecords = (JSONArray) _obj;
-                }
-                //JSONObject businessMachineRecord = data.getJSONObject("businessMachineRecord");
-                for (int _machineRecordIndex = 0; _machineRecordIndex < businessMachineRecords.size(); _machineRecordIndex++) {
-                    JSONObject businessMachineRecord = businessMachineRecords.getJSONObject(_machineRecordIndex);
-                    doBusinessMachineRecord(business, businessMachineRecord);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("machineRecordId", businessMachineRecord.getString("machineRecordId"));
-                    }
+                    dataFlowContext.addParamOut("machineRecordId", businessMachineRecord.getString("machineRecordId"));
                 }
             }
         }
+
     }
 
 

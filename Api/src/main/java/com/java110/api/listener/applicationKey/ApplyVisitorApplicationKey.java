@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -32,7 +33,7 @@ import java.util.Random;
  * 生成访客密码
  */
 @Java110Listener("applyVisitorApplicationKey")
-public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
+public class ApplyVisitorApplicationKey extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IApplicationKeyBMO applicationKeyBMOImpl;
@@ -47,11 +48,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
 
-        AppService service = event.getAppService();
         ResponseEntity<String> responseEntity = null;
         ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
         applicationKeyDto.setIdCard(reqJson.getString("idCard"));
@@ -96,7 +93,7 @@ public class ApplyVisitorApplicationKey extends AbstractServiceApiListener {
             applicationKeyBMOImpl.addApplicationVisitKey(reqJson, context);
         }
 
-        responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
+        super.commit(context);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(responseEntity);

@@ -21,7 +21,7 @@ public interface ICarInoutBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    JSONObject addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加车辆进场信息
@@ -30,5 +30,5 @@ public interface ICarInoutBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    JSONObject updateCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

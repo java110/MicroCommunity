@@ -23,7 +23,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
     /**
@@ -33,7 +33,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区成员

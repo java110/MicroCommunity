@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.carBlackWhite.ICarBlackWhiteBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.car.CarBlackWhitePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,19 +29,12 @@ public class CarBlackBMOImpl extends ApiBaseBMO implements ICarBlackWhiteBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarBlackWhite = new JSONObject();
-        businessCarBlackWhite.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarBlackWhite", businessCarBlackWhite);
-        return business;
+        CarBlackWhitePo carBlackWhitePo = BeanConvertUtil.covertBean(paramInJson, CarBlackWhitePo.class);
+        super.delete(dataFlowContext, carBlackWhitePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE);
     }
+
     /**
      * 添加小区信息
      *
@@ -47,19 +42,14 @@ public class CarBlackBMOImpl extends ApiBaseBMO implements ICarBlackWhiteBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarBlackWhite = new JSONObject();
-        businessCarBlackWhite.putAll(paramInJson);
-        businessCarBlackWhite.put("bwId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarBlackWhite", businessCarBlackWhite);
-        return business;
+        paramInJson.put("bwId", "-1");
+
+        CarBlackWhitePo carBlackWhitePo = BeanConvertUtil.covertBean(paramInJson, CarBlackWhitePo.class);
+
+        super.insert(dataFlowContext, carBlackWhitePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE);
     }
 
 
@@ -70,18 +60,10 @@ public class CarBlackBMOImpl extends ApiBaseBMO implements ICarBlackWhiteBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateCarBlackWhite(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        CarBlackWhitePo carBlackWhitePo = BeanConvertUtil.covertBean(paramInJson,CarBlackWhitePo.class);
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarBlackWhite = new JSONObject();
-        businessCarBlackWhite.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarBlackWhite", businessCarBlackWhite);
-        return business;
+        super.update(dataFlowContext,carBlackWhitePo,BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE);
     }
 
 

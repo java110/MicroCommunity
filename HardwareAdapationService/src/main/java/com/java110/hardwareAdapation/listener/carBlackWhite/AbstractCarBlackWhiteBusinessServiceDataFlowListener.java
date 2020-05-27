@@ -79,6 +79,12 @@ public abstract class AbstractCarBlackWhiteBusinessServiceDataFlowListener exten
 
         currentCarBlackWhiteInfo.put("operate", StatusConstant.OPERATE_DEL);
         getCarBlackWhiteServiceDaoImpl().saveBusinessCarBlackWhiteInfo(currentCarBlackWhiteInfo);
+
+        for(Object key : currentCarBlackWhiteInfo.keySet()) {
+            if(businessCarBlackWhite.get(key) == null) {
+                businessCarBlackWhite.put(key.toString(), currentCarBlackWhiteInfo.get(key));
+            }
+        }
     }
 
 

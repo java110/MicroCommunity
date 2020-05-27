@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -40,7 +41,7 @@ import java.util.List;
  * 钥匙认证接口
  */
 @Java110Listener("authApplicationKeyListener")
-public class AuthApplicationKeyListener extends AbstractServiceApiListener {
+public class AuthApplicationKeyListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(AuthApplicationKeyListener.class);
 
     @Autowired
@@ -132,24 +133,14 @@ public class AuthApplicationKeyListener extends AbstractServiceApiListener {
         }
         context.setResponseEntity(responseEntity);
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(applicationKeyBMOImpl.addMachineRecord(reqParam, context));
 
 
-        responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
+        applicationKeyBMOImpl.addMachineRecord(reqParam, context);
 
-        logger.debug("同步开门记录或访客留影" + responseEntity);
 
         //context.setResponseEntity(responseEntity);
 
     }
-
 
 
     private void refreshMachines(List<ApplicationKeyDto> applicationKeyDtos) {

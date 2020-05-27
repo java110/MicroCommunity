@@ -58,8 +58,8 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        if (data.containsKey("businessCommunityMember")) {
-            JSONObject businessCommunityMember = data.getJSONObject("businessCommunityMember");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY)) {
+            JSONObject businessCommunityMember = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
             doBusinessCommunityMember(business, businessCommunityMember);
         }
     }

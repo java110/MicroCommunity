@@ -46,6 +46,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         JSONObject reqJson = dataFlowContext.getReqJson();
 
         logger.debug("API服务 --- 请求参数为：{}", reqJson.toJSONString());
+        dataFlowContext.setResponseEntity(null);
 
         validate(event, reqJson);
 
@@ -72,14 +73,23 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
      */
     public void commit(DataFlowContext dataFlowContext) {
 
+        JSONArray businesses = dataFlowContext.getServiceBusiness();
+
+        if (businesses == null || businesses.size() < 1) {
+            return;
+        }
+
         //服务合并处理
         JSONObject paramIn = mergeService(dataFlowContext);
 
         ResponseEntity<String> responseEntity = this.callOrderService(dataFlowContext, paramIn);
 
-        dataFlowContext.setResponseEntity(responseEntity);
+        if (dataFlowContext.getResponseEntity() == null) {
+            dataFlowContext.setResponseEntity(responseEntity);
+        }
 
         dataFlowContext.setServiceBusiness(new JSONArray());
+
     }
 
     /**

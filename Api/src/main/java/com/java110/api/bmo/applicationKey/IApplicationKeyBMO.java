@@ -76,7 +76,7 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加物业费用
@@ -85,7 +85,7 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      * <p>

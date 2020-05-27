@@ -54,8 +54,8 @@ public class SaveCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCarBlackWhite 节点
-        if (data.containsKey("businessCarBlackWhite")) {
-            Object bObj = data.get("businessCarBlackWhite");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE);
             JSONArray businessCarBlackWhites = null;
             if (bObj instanceof JSONObject) {
                 businessCarBlackWhites = new JSONArray();

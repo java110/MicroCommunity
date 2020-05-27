@@ -21,7 +21,7 @@ public interface IAuditUserBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteAuditUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void deleteAuditUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -30,5 +30,5 @@ public interface IAuditUserBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject addAuditUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addAuditUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

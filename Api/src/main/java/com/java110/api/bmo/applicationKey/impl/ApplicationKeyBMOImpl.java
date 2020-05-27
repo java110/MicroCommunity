@@ -18,6 +18,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.po.applicationKey.ApplicationKeyPo;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.po.message.MsgPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -254,13 +255,9 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "60000");
@@ -268,9 +265,10 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         businessUnit.put("objId", paramInJson.getString("applicationKeyId"));
         businessUnit.put("fileRealName", paramInJson.getString("applicationKeyPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
 
-        return business;
+        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+
     }
 
 
@@ -281,23 +279,16 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         //paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("name", "匿名");
         paramInJson.put("tel", "");
         paramInJson.put("idCard", "");
         paramInJson.put("openTypeCd", "2000");
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineRecord = new JSONObject();
-        businessMachineRecord.putAll(paramInJson);
-        businessMachineRecord.put("machineRecordId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
+        paramInJson.put("machineRecordId", "-1");
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(paramInJson, MachineRecordPo.class);
+        super.insert(dataFlowContext, machineRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
     }
 
     /**

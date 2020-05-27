@@ -9,6 +9,8 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.po.community.CommunityMemberPo;
+import com.java110.po.community.CommunityPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -34,9 +36,9 @@ import java.util.Map;
 public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
-
     @Autowired
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -44,7 +46,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(paramInJson.getString("communityId"));
@@ -53,19 +55,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         communityDto = communityDtos.get(0);
 
         Map oldCommunityInfo = BeanConvertUtil.beanCovertMap(communityDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(oldCommunityInfo);
-        businessCommunity.put("state", paramInJson.getString("state"));
+        oldCommunityInfo.put("state", paramInJson.getString("state"));
+        CommunityPo communityPo = BeanConvertUtil.covertBean(oldCommunityInfo, CommunityPo.class);
 
-        //审核未通过原因未记录，后期存储在工作流框架中
+        super.update(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
 
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
     }
 
 
@@ -76,7 +70,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityMemberId(paramInJson.getString("communityMemberId"));
@@ -85,19 +79,10 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         communityMemberDto = communityMemberDtos.get(0);
 
         Map oldCommunityInfo = BeanConvertUtil.beanCovertMap(communityMemberDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(oldCommunityInfo);
-        businessCommunity.put("auditStatusCd", paramInJson.getString("state"));
+        oldCommunityInfo.put("auditStatusCd", paramInJson.getString("state"));
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(oldCommunityInfo, CommunityMemberPo.class);
+        super.update(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
 
-        //审核未通过原因未记录，后期存储在工作流框架中
-
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunity);
-        return business;
     }
 
     /**
@@ -127,18 +112,19 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
     /**
      * 添加小区成员
+     *
      * @param paramInJson
      * @return
      */
-    public JSONObject deleteCommunityMember(JSONObject paramInJson){
+    public JSONObject deleteCommunityMember(JSONObject paramInJson) {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ,2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
+        business.put(CommonConstant.HTTP_SEQ, 2);
+        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
-        businessCommunityMember.put("communityMemberId",paramInJson.getString("communityMemberId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember",businessCommunityMember);
+        businessCommunityMember.put("communityMemberId", paramInJson.getString("communityMemberId"));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
 
         return business;
     }

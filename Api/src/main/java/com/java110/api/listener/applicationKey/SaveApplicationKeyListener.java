@@ -3,6 +3,7 @@ package com.java110.api.listener.applicationKey;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.applicationKey.IApplicationKeyBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -20,7 +21,7 @@ import org.springframework.http.HttpMethod;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveApplicationKeyListener")
-public class SaveApplicationKeyListener extends AbstractServiceApiListener {
+public class SaveApplicationKeyListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IApplicationKeyBMO applicationKeyBMOImpl;

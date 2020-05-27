@@ -54,8 +54,8 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点
-        if (data.containsKey("businessCommunity")) {
-            JSONObject businessCommunity = data.getJSONObject("businessCommunity");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO)) {
+            JSONObject businessCommunity = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
             doBusinessCommunity(business, businessCommunity);
             dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
         }

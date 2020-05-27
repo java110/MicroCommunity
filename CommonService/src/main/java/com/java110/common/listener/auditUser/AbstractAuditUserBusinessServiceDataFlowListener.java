@@ -79,6 +79,12 @@ public abstract class AbstractAuditUserBusinessServiceDataFlowListener extends A
 
         currentAuditUserInfo.put("operate", StatusConstant.OPERATE_DEL);
         getAuditUserServiceDaoImpl().saveBusinessAuditUserInfo(currentAuditUserInfo);
+
+        for(Object key : currentAuditUserInfo.keySet()) {
+            if(businessAuditUser.get(key) == null) {
+                businessAuditUser.put(key.toString(), currentAuditUserInfo.get(key));
+            }
+        }
     }
 
 

@@ -87,12 +87,6 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
 
         JSONArray machineIds = reqJson.getJSONArray("machineIds");
         reqJson.put("pwd", getRandom());
@@ -116,18 +110,13 @@ public class ApplyApplicationKeyListener extends AbstractServiceApiListener {
                     reqJson.put("applicationKeyPhotoId", fileDto.getFileId());
                     reqJson.put("fileSaveName", fileName);
 
-                    businesses.add(applicationKeyBMOImpl.addPhoto(reqJson, context));
+                    applicationKeyBMOImpl.addPhoto(reqJson, context);
                 }
             }
         }
 
         applicationKeyBMOImpl.addMsg(reqJson, context);
 
-
-
-        ResponseEntity<String> responseEntity = applicationKeyBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
 

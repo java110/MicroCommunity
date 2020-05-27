@@ -61,27 +61,26 @@ public class DeleteCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessCarBlackWhite 节点
-        if (data.containsKey("businessCarBlackWhite")) {
-            //处理 businessCarBlackWhite 节点
-            if (data.containsKey("businessCarBlackWhite")) {
-                Object _obj = data.get("businessCarBlackWhite");
-                JSONArray businessCarBlackWhites = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_BLACK_WHITE);
+            JSONArray businessCarBlackWhites = null;
+            if (_obj instanceof JSONObject) {
+                businessCarBlackWhites = new JSONArray();
+                businessCarBlackWhites.add(_obj);
+            } else {
+                businessCarBlackWhites = (JSONArray) _obj;
+            }
+            //JSONObject businessCarBlackWhite = data.getJSONObject("businessCarBlackWhite");
+            for (int _carBlackWhiteIndex = 0; _carBlackWhiteIndex < businessCarBlackWhites.size(); _carBlackWhiteIndex++) {
+                JSONObject businessCarBlackWhite = businessCarBlackWhites.getJSONObject(_carBlackWhiteIndex);
+                doBusinessCarBlackWhite(business, businessCarBlackWhite);
                 if (_obj instanceof JSONObject) {
-                    businessCarBlackWhites = new JSONArray();
-                    businessCarBlackWhites.add(_obj);
-                } else {
-                    businessCarBlackWhites = (JSONArray) _obj;
-                }
-                //JSONObject businessCarBlackWhite = data.getJSONObject("businessCarBlackWhite");
-                for (int _carBlackWhiteIndex = 0; _carBlackWhiteIndex < businessCarBlackWhites.size(); _carBlackWhiteIndex++) {
-                    JSONObject businessCarBlackWhite = businessCarBlackWhites.getJSONObject(_carBlackWhiteIndex);
-                    doBusinessCarBlackWhite(business, businessCarBlackWhite);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("bwId", businessCarBlackWhite.getString("bwId"));
-                    }
+                    dataFlowContext.addParamOut("bwId", businessCarBlackWhite.getString("bwId"));
                 }
             }
+
         }
 
 

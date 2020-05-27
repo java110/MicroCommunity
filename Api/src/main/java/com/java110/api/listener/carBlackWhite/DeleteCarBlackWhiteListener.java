@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.carBlackWhite.ICarBlackWhiteBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -24,7 +25,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("deleteCarBlackWhiteListener")
-public class DeleteCarBlackWhiteListener extends AbstractServiceApiListener {
+public class DeleteCarBlackWhiteListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ICarBlackWhiteBMO carBlackWhiteBMOImpl;
@@ -41,19 +42,8 @@ public class DeleteCarBlackWhiteListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        carBlackWhiteBMOImpl.deleteCarBlackWhite(reqJson, context);
 
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(carBlackWhiteBMOImpl.deleteCarBlackWhite(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = carBlackWhiteBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.auditUser.IAuditUserBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -25,9 +26,10 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveAuditUserListener")
-public class SaveAuditUserListener extends AbstractServiceApiListener {
+public class SaveAuditUserListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IAuditUserBMO auditUserBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -43,19 +45,10 @@ public class SaveAuditUserListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
 
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(auditUserBMOImpl.addAuditUser(reqJson, context));
+        auditUserBMOImpl.addAuditUser(reqJson, context);
 
 
-        ResponseEntity<String> responseEntity = auditUserBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override
@@ -72,7 +65,6 @@ public class SaveAuditUserListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
 
 }

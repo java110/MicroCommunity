@@ -63,10 +63,10 @@ public class UpdateCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCarBlackWhite 节点
-        if (data.containsKey("businessCarBlackWhite")) {
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE)) {
             //处理 businessCarBlackWhite 节点
-            if (data.containsKey("businessCarBlackWhite")) {
-                Object _obj = data.get("businessCarBlackWhite");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_BLACK_WHITE);
                 JSONArray businessCarBlackWhites = null;
                 if (_obj instanceof JSONObject) {
                     businessCarBlackWhites = new JSONArray();

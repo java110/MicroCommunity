@@ -58,8 +58,8 @@ public class AuditCommunityMemberStateListener extends AbstractCommunityBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点 按理这里不应该处理，程序上支持，以防真有这种业务
-        if (data.containsKey("businessCommunityMember")) {
-            JSONObject memberCommunity = data.getJSONObject("businessCommunityMember");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE)) {
+            JSONObject memberCommunity = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
             doBusinessCommunityMember(business, memberCommunity);
             dataFlowContext.addParamOut("communityMemberId", memberCommunity.getString("communityMemberId"));
         }

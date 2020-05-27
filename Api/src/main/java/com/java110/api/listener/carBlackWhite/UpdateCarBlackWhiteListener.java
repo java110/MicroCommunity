@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.carBlackWhite.ICarBlackWhiteBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -23,10 +24,11 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateCarBlackWhiteListener")
-public class UpdateCarBlackWhiteListener extends AbstractServiceApiListener {
+public class UpdateCarBlackWhiteListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ICarBlackWhiteBMO carBlackWhiteBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -43,19 +45,7 @@ public class UpdateCarBlackWhiteListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(carBlackWhiteBMOImpl.updateCarBlackWhite(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = carBlackWhiteBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+       carBlackWhiteBMOImpl.updateCarBlackWhite(reqJson, context);
     }
 
     @Override
@@ -72,7 +62,6 @@ public class UpdateCarBlackWhiteListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
 
 }

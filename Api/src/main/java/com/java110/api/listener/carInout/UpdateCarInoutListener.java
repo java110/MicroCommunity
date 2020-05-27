@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.carInout.ICarInoutBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -22,10 +23,11 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateCarInoutListener")
-public class UpdateCarInoutListener extends AbstractServiceApiListener {
+public class UpdateCarInoutListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ICarInoutBMO carInoutBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -41,19 +43,7 @@ public class UpdateCarInoutListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(carInoutBMOImpl.updateCarInout(reqJson, context));
-
-        ResponseEntity<String> responseEntity = carInoutBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        carInoutBMOImpl.updateCarInout(reqJson, context);
     }
 
     @Override
@@ -70,7 +60,6 @@ public class UpdateCarInoutListener extends AbstractServiceApiListener {
     public int getOrder() {
         return DEFAULT_ORDER;
     }
-
 
 
 }

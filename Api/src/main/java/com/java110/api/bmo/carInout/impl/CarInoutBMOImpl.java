@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.carInout.ICarInoutBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.car.CarInoutPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,19 +27,13 @@ public class CarInoutBMOImpl extends ApiBaseBMO implements ICarInoutBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        paramInJson.put("inoutId", "-1");
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(paramInJson, CarInoutPo.class);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarInout = new JSONObject();
-        businessCarInout.putAll(paramInJson);
-        businessCarInout.put("inoutId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
+        super.insert(dataFlowContext, carInoutPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
+
     }
 
     /**
@@ -47,18 +43,12 @@ public class CarInoutBMOImpl extends ApiBaseBMO implements ICarInoutBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCarInout = new JSONObject();
-        businessCarInout.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(paramInJson, CarInoutPo.class);
+
+        super.update(dataFlowContext, carInoutPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
     }
 
 }

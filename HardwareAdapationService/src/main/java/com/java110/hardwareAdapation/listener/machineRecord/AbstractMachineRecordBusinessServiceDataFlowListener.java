@@ -89,6 +89,12 @@ public abstract class AbstractMachineRecordBusinessServiceDataFlowListener exten
 
         currentMachineRecordInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMachineRecordServiceDaoImpl().saveBusinessMachineRecordInfo(currentMachineRecordInfo);
+
+        for(Object key : currentMachineRecordInfo.keySet()) {
+            if(businessMachineRecord.get(key) == null) {
+                businessMachineRecord.put(key.toString(), currentMachineRecordInfo.get(key));
+            }
+        }
     }
 
 
