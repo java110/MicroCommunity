@@ -61,25 +61,23 @@ public class DeleteComplaintInfoListener extends AbstractComplaintBusinessServic
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessComplaint 节点
-        if (data.containsKey("businessComplaint")) {
-            //处理 businessComplaint 节点
-            if (data.containsKey("businessComplaint")) {
-                Object _obj = data.get("businessComplaint");
-                JSONArray businessComplaints = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMPLAINT)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMPLAINT);
+            JSONArray businessComplaints = null;
+            if (_obj instanceof JSONObject) {
+                businessComplaints = new JSONArray();
+                businessComplaints.add(_obj);
+            } else {
+                businessComplaints = (JSONArray) _obj;
+            }
+            //JSONObject businessComplaint = data.getJSONObject("businessComplaint");
+            for (int _complaintIndex = 0; _complaintIndex < businessComplaints.size(); _complaintIndex++) {
+                JSONObject businessComplaint = businessComplaints.getJSONObject(_complaintIndex);
+                doBusinessComplaint(business, businessComplaint);
                 if (_obj instanceof JSONObject) {
-                    businessComplaints = new JSONArray();
-                    businessComplaints.add(_obj);
-                } else {
-                    businessComplaints = (JSONArray) _obj;
-                }
-                //JSONObject businessComplaint = data.getJSONObject("businessComplaint");
-                for (int _complaintIndex = 0; _complaintIndex < businessComplaints.size(); _complaintIndex++) {
-                    JSONObject businessComplaint = businessComplaints.getJSONObject(_complaintIndex);
-                    doBusinessComplaint(business, businessComplaint);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("complaintId", businessComplaint.getString("complaintId"));
-                    }
+                    dataFlowContext.addParamOut("complaintId", businessComplaint.getString("complaintId"));
                 }
             }
         }

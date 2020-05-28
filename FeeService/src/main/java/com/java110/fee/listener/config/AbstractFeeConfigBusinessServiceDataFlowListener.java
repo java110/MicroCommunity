@@ -89,6 +89,11 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
 
         currentFeeConfigInfo.put("operate", StatusConstant.OPERATE_DEL);
         getFeeConfigServiceDaoImpl().saveBusinessFeeConfigInfo(currentFeeConfigInfo);
+        for(Object key : currentFeeConfigInfo.keySet()) {
+            if(businessFeeConfig.get(key) == null) {
+                businessFeeConfig.put(key.toString(), currentFeeConfigInfo.get(key));
+            }
+        }
     }
 
 

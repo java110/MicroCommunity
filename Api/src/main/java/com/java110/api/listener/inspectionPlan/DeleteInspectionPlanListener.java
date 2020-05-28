@@ -28,6 +28,7 @@ public class DeleteInspectionPlanListener extends AbstractServiceApiListener {
 
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -39,19 +40,8 @@ public class DeleteInspectionPlanListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        inspectionBMOImpl.deleteInspectionPlan(reqJson, context);
 
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(inspectionBMOImpl.deleteInspectionPlan(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

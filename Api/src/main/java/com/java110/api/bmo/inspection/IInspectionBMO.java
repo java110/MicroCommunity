@@ -21,7 +21,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -30,7 +30,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加巡检计划信息
@@ -39,7 +39,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加设备信息
@@ -48,7 +48,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPlanState(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateInspectionPlanState(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息

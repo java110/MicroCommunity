@@ -72,27 +72,26 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessFee 节点
-        if (data.containsKey("businessFee")) {
-            //处理 businessFee 节点
-            if (data.containsKey("businessFee")) {
-                Object _obj = data.get("businessFee");
-                JSONArray businessFees = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+            JSONArray businessFees = null;
+            if (_obj instanceof JSONObject) {
+                businessFees = new JSONArray();
+                businessFees.add(_obj);
+            } else {
+                businessFees = (JSONArray) _obj;
+            }
+            //JSONObject businessFee = data.getJSONObject("businessFee");
+            for (int _feeIndex = 0; _feeIndex < businessFees.size(); _feeIndex++) {
+                JSONObject businessFee = businessFees.getJSONObject(_feeIndex);
+                doBusinessFee(business, businessFee);
                 if (_obj instanceof JSONObject) {
-                    businessFees = new JSONArray();
-                    businessFees.add(_obj);
-                } else {
-                    businessFees = (JSONArray) _obj;
-                }
-                //JSONObject businessFee = data.getJSONObject("businessFee");
-                for (int _feeIndex = 0; _feeIndex < businessFees.size(); _feeIndex++) {
-                    JSONObject businessFee = businessFees.getJSONObject(_feeIndex);
-                    doBusinessFee(business, businessFee);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("feeId", businessFee.getString("feeId"));
-                    }
+                    dataFlowContext.addParamOut("feeId", businessFee.getString("feeId"));
                 }
             }
+
         }
     }
 
@@ -148,12 +147,12 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     Assert.listOnlyOne(feeInfo, "查询到多条数据或未查询到数据" + feeMap);
                     //根据当前的结束时间 修改
                     Date endTime = (Date) feeInfo.get(0).get("end_time");
-                    if(cycles > 0) {
+                    if (cycles > 0) {
                         Calendar endCalender = Calendar.getInstance();
                         endCalender.setTime(endTime);
-                        if(StringUtil.isNumber(cyclesStr)) {
+                        if (StringUtil.isNumber(cyclesStr)) {
                             endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-                        }else{
+                        } else {
                             int hours = new Double(cycles * DateUtil.getCurrentMonthDay() * 24).intValue();
                             endCalender.add(Calendar.HOUR, hours);
                         }
@@ -161,14 +160,14 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
                     }
 
                     // 一次性收费类型，缴费后，则设置费用状态为收费结束、设置结束日期为费用项终止日期
-                    if(FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))){
+                    if (FeeFlagTypeConstant.ONETIME.equals(feeInfo.get(0).get("feeFlag"))) {
                         businessFeeInfo.put("state", FeeStateConstant.END);
                         businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
                     }
 
                     // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
-                    if(FeeFlagTypeConstant.CYCLE.equals(feeInfo.get(0).get("feeFlag"))){
-                        if(((Date)businessFeeInfo.get("endTime")).after((Date)feeInfo.get(0).get("configEndTime"))) {
+                    if (FeeFlagTypeConstant.CYCLE.equals(feeInfo.get(0).get("feeFlag"))) {
+                        if (((Date) businessFeeInfo.get("endTime")).after((Date) feeInfo.get(0).get("configEndTime"))) {
                             businessFeeInfo.put("state", FeeStateConstant.END);
                             businessFeeInfo.put("end_time", feeInfo.get(0).get("configEndTime"));
                         }

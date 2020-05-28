@@ -37,7 +37,7 @@ public class RoomCreateFeeSMOImpl extends AbstractComponentSMO implements IRoomC
         Assert.hasKeyAndValue(paramIn, "locationTypeCd", "未包含收费范围");
         Assert.hasKeyAndValue(paramIn, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(paramIn, "configId", "未包含收费项目");
-        Assert.hasKeyAndValue(paramIn, "billType", "未包含出账类型");
+//        Assert.hasKeyAndValue(paramIn, "billType", "未包含出账类型");
     }
 
     @Override

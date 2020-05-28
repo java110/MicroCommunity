@@ -37,6 +37,7 @@ public class EditFeeConfigSMOImpl extends AbstractComponentSMO implements IEditF
         Assert.hasKeyAndValue(paramIn, "squarePrice", "必填，请填写计费单价");
         Assert.hasKeyAndValue(paramIn, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(paramIn, "billType", "必填，请填写出账类型");
 
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST__FEECONFIG);

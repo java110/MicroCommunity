@@ -53,8 +53,8 @@ public class SaveFloorInfoListener extends AbstractFloorBusinessServiceDataFlowL
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFloor 节点
-        if(data.containsKey("businessFloor")){
-            Object _obj = data.get("businessFloor");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO)){
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
             JSONArray businessFloors = null;
             if(_obj instanceof JSONObject){
                 businessFloors = new JSONArray();

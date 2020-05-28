@@ -18,6 +18,10 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String feeFlagName;
     private String isDefault;
 
+    private String billType;
+
+    private String billTypeName;
+
     public String getConfigId() {
         return configId;
     }
@@ -112,5 +116,21 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getBillType() {
+        return billType;
+    }
+
+    public void setBillType(String billType) {
+        this.billType = billType;
+    }
+
+    public String getBillTypeName() {
+        return billTypeName;
+    }
+
+    public void setBillTypeName(String billTypeName) {
+        this.billTypeName = billTypeName;
     }
 }

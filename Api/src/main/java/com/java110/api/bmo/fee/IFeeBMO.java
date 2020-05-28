@@ -23,7 +23,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加物业费用
      *
@@ -31,7 +31,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     public JSONObject updateFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
@@ -95,7 +95,7 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加物业费用
@@ -122,5 +122,5 @@ public interface IFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateFeeConfig(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

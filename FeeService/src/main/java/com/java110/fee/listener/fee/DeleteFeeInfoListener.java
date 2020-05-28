@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 删除费用信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessFee:{} 费用基本信息节点
  * 2、businessFeeAttr:[{}] 费用属性信息节点
@@ -51,36 +51,36 @@ public class DeleteFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
     /**
      * 根据删除信息 查出Instance表中数据 保存至business表 （状态写DEL） 方便撤单时直接更新回去
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
+
 
         //处理 businessFee 节点
-        if(data.containsKey("businessFee")){
-            //处理 businessFee 节点
-            if(data.containsKey("businessFee")){
-                Object _obj = data.get("businessFee");
-                JSONArray businessFees = null;
-                if(_obj instanceof JSONObject){
-                    businessFees = new JSONArray();
-                    businessFees.add(_obj);
-                }else {
-                    businessFees = (JSONArray)_obj;
-                }
-                //JSONObject businessFee = data.getJSONObject("businessFee");
-                for (int _feeIndex = 0; _feeIndex < businessFees.size();_feeIndex++) {
-                    JSONObject businessFee = businessFees.getJSONObject(_feeIndex);
-                    doBusinessFee(business, businessFee);
-                    if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("feeId", businessFee.getString("feeId"));
-                    }
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
+            JSONArray businessFees = null;
+            if (_obj instanceof JSONObject) {
+                businessFees = new JSONArray();
+                businessFees.add(_obj);
+            } else {
+                businessFees = (JSONArray) _obj;
+            }
+            //JSONObject businessFee = data.getJSONObject("businessFee");
+            for (int _feeIndex = 0; _feeIndex < businessFees.size(); _feeIndex++) {
+                JSONObject businessFee = businessFees.getJSONObject(_feeIndex);
+                doBusinessFee(business, businessFee);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("feeId", businessFee.getString("feeId"));
                 }
             }
+
         }
 
 
@@ -88,8 +88,9 @@ public class DeleteFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
     /**
      * 删除 instance数据
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -98,17 +99,17 @@ public class DeleteFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
         //费用信息
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_DEL);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_DEL);
 
         //费用信息
         List<Map> businessFeeInfos = feeServiceDaoImpl.getBusinessFeeInfo(info);
-        if( businessFeeInfos != null && businessFeeInfos.size() >0) {
-            for (int _feeIndex = 0; _feeIndex < businessFeeInfos.size();_feeIndex++) {
+        if (businessFeeInfos != null && businessFeeInfos.size() > 0) {
+            for (int _feeIndex = 0; _feeIndex < businessFeeInfos.size(); _feeIndex++) {
                 Map businessFeeInfo = businessFeeInfos.get(_feeIndex);
-                flushBusinessFeeInfo(businessFeeInfo,StatusConstant.STATUS_CD_INVALID);
+                flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_INVALID);
                 feeServiceDaoImpl.updateFeeInfoInstance(businessFeeInfo);
-                dataFlowContext.addParamOut("feeId",businessFeeInfo.get("fee_id"));
+                dataFlowContext.addParamOut("feeId", businessFeeInfo.get("fee_id"));
             }
         }
 
@@ -117,54 +118,55 @@ public class DeleteFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
     /**
      * 撤单
      * 从business表中查询到DEL的数据 将instance中的数据更新回来
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_INVALID);
 
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //费用信息
         List<Map> feeInfo = feeServiceDaoImpl.getFeeInfo(info);
-        if(feeInfo != null && feeInfo.size() > 0){
+        if (feeInfo != null && feeInfo.size() > 0) {
 
             //费用信息
             List<Map> businessFeeInfos = feeServiceDaoImpl.getBusinessFeeInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessFeeInfos == null ||  businessFeeInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（fee），程序内部异常,请检查！ "+delInfo);
+            if (businessFeeInfos == null || businessFeeInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（fee），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _feeIndex = 0; _feeIndex < businessFeeInfos.size();_feeIndex++) {
+            for (int _feeIndex = 0; _feeIndex < businessFeeInfos.size(); _feeIndex++) {
                 Map businessFeeInfo = businessFeeInfos.get(_feeIndex);
-                flushBusinessFeeInfo(businessFeeInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessFeeInfo(businessFeeInfo, StatusConstant.STATUS_CD_VALID);
                 feeServiceDaoImpl.updateFeeInfoInstance(businessFeeInfo);
             }
         }
     }
 
 
-
     /**
      * 处理 businessFee 节点
-     * @param business 总的数据节点
+     *
+     * @param business    总的数据节点
      * @param businessFee 费用节点
      */
-    private void doBusinessFee(Business business,JSONObject businessFee){
+    private void doBusinessFee(Business business, JSONObject businessFee) {
 
-        Assert.jsonObjectHaveKey(businessFee,"feeId","businessFee 节点下没有包含 feeId 节点");
+        Assert.jsonObjectHaveKey(businessFee, "feeId", "businessFee 节点下没有包含 feeId 节点");
 
-        if(businessFee.getString("feeId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"feeId 错误，不能自动生成（必须已经存在的feeId）"+businessFee);
+        if (businessFee.getString("feeId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "feeId 错误，不能自动生成（必须已经存在的feeId）" + businessFee);
         }
         //自动插入DEL
-        autoSaveDelBusinessFee(business,businessFee);
+        autoSaveDelBusinessFee(business, businessFee);
     }
 
     public IFeeServiceDao getFeeServiceDaoImpl() {

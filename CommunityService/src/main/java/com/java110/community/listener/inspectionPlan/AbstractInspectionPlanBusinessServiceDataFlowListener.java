@@ -91,6 +91,12 @@ public abstract class AbstractInspectionPlanBusinessServiceDataFlowListener exte
         currentInspectionPlanInfo.put("communityId", businessInspectionPlan.get("communityId"));
         currentInspectionPlanInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionPlanServiceDaoImpl().saveBusinessInspectionPlanInfo(currentInspectionPlanInfo);
+
+        for (Object key : currentInspectionPlanInfo.keySet()) {
+            if (businessInspectionPlan.get(key) == null) {
+                businessInspectionPlan.put(key.toString(), currentInspectionPlanInfo.get(key));
+            }
+        }
     }
 
 

@@ -3,6 +3,7 @@ package com.java110.api.listener.community;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
@@ -28,7 +29,7 @@ import java.util.List;
  * 查询需要入驻审核单子
  */
 @Java110Listener("listAuditEnterCommunitysListener")
-public class ListAuditEnterCommunitysListener extends AbstractServiceApiListener {
+public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusListener {
 
 
     @Autowired

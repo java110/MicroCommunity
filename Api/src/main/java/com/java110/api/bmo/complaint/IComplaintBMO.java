@@ -21,7 +21,7 @@ public interface IComplaintBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -30,7 +30,7 @@ public interface IComplaintBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -39,7 +39,7 @@ public interface IComplaintBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加投诉建议信息
@@ -48,5 +48,5 @@ public interface IComplaintBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject upComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void upComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

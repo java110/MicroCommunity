@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.complaintUser.IComplaintUserInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
@@ -29,7 +30,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveComplaintListener")
-public class SaveComplaintListener extends AbstractServiceApiListener {
+public class SaveComplaintListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IComplaintBMO complaintBMOImpl;
@@ -55,25 +56,15 @@ public class SaveComplaintListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        complaintBMOImpl.addComplaint(reqJson, context);
 
-        AppService service = event.getAppService();
+        commit(context);
 
-        //添加单元信息
-        businesses.add(complaintBMOImpl.addComplaint(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        if(HttpStatus.OK == responseEntity.getStatusCode()){
+        if (HttpStatus.OK == context.getResponseEntity().getStatusCode()) {
             ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
             complaintDto.setCurrentUserId(reqJson.getString("userId"));
             complaintUserInnerServiceSMOImpl.startProcess(complaintDto);
         }
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

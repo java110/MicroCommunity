@@ -44,19 +44,7 @@ public class SaveInspectionPlanListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(inspectionBMOImpl.addInspectionPlan(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        inspectionBMOImpl.addInspectionPlan(reqJson, context);
     }
 
     @Override

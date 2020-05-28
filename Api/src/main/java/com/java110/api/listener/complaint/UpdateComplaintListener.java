@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -27,7 +28,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateComplaintListener")
-public class UpdateComplaintListener extends AbstractServiceApiListener {
+public class UpdateComplaintListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IComplaintBMO complaintBMOImpl;
@@ -52,18 +53,8 @@ public class UpdateComplaintListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        complaintBMOImpl.upComplaint(reqJson, context);
 
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(complaintBMOImpl.upComplaint(reqJson, context));
-
-        ResponseEntity<String> responseEntity = complaintBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

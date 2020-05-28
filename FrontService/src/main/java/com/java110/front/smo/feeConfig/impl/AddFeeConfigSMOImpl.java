@@ -39,6 +39,7 @@ public class AddFeeConfigSMOImpl extends AbstractComponentSMO implements IAddFee
         Assert.hasKeyAndValue(paramIn, "squarePrice", "必填，请填写计费单价");
         Assert.hasKeyAndValue(paramIn, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(paramIn, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(paramIn, "billType", "未包含出账类型");
 
         //super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_FEECONFIG);
 

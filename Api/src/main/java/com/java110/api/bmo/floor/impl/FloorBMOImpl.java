@@ -3,10 +3,14 @@ package com.java110.api.bmo.floor.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.floor.IFloorBMO;
+import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
+import com.java110.po.community.CommunityMemberPo;
+import com.java110.po.floor.FloorPo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,25 +30,17 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
     private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
+
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteFloor(JSONObject paramInJson) {
+    public void deleteFloor(JSONObject paramInJson, DataFlowContext context) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
-
-        return business;
+        FloorPo floorPo = BeanConvertUtil.covertBean(paramInJson, FloorPo.class);
+        super.delete(context, floorPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO);
     }
 
     /**
@@ -53,12 +49,8 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
      * @param paramInJson 接口传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitCommunityMember(JSONObject paramInJson) {
+    public void exitCommunityMember(JSONObject paramInJson, DataFlowContext context) {
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberId(paramInJson.getString("floorId"));
@@ -70,36 +62,10 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
         if (communityMemberDtoList == null || communityMemberDtoList.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "小区楼和小区存在关系存在异常，请检查");
         }
-
-
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.delete(context, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
 
-        return business;
-    }
-    /**
-     * 添加小区楼信息
-     *
-     * @param paramInJson 接口调用放传入入参
-     * @return 订单服务能够接受的报文
-     */
-    public JSONObject editFloor(JSONObject paramInJson) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessFloor = new JSONObject();
-        businessFloor.put("floorId", paramInJson.getString("floorId"));
-        businessFloor.put("name", paramInJson.getString("name"));
-        businessFloor.put("remark", paramInJson.getString("remark"));
-        businessFloor.put("userId", paramInJson.getString("userId"));
-        businessFloor.put("floorNum", paramInJson.getString("floorNum"));
-        businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
-
-        return business;
     }
 
     /**
@@ -108,13 +74,8 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFloor(JSONObject paramInJson) {
+    public void editFloor(JSONObject paramInJson, DataFlowContext context) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFloor = new JSONObject();
         businessFloor.put("floorId", paramInJson.getString("floorId"));
         businessFloor.put("name", paramInJson.getString("name"));
@@ -122,9 +83,28 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
         businessFloor.put("userId", paramInJson.getString("userId"));
         businessFloor.put("floorNum", paramInJson.getString("floorNum"));
         businessFloor.put("communityId", paramInJson.getString("communityId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFloor", businessFloor);
 
-        return business;
+        FloorPo floorPo = BeanConvertUtil.covertBean(businessFloor, FloorPo.class);
+        super.update(context, floorPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FLOOR_INFO);
+    }
+
+    /**
+     * 添加小区楼信息
+     *
+     * @param paramInJson 接口调用放传入入参
+     * @return 订单服务能够接受的报文
+     */
+    public void addFloor(JSONObject paramInJson, DataFlowContext context) {
+
+        JSONObject businessFloor = new JSONObject();
+        businessFloor.put("floorId", paramInJson.getString("floorId"));
+        businessFloor.put("name", paramInJson.getString("name"));
+        businessFloor.put("remark", paramInJson.getString("remark"));
+        businessFloor.put("userId", paramInJson.getString("userId"));
+        businessFloor.put("floorNum", paramInJson.getString("floorNum"));
+        businessFloor.put("communityId", paramInJson.getString("communityId"));
+        FloorPo floorPo = BeanConvertUtil.covertBean(businessFloor, FloorPo.class);
+        super.insert(context, floorPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FLOOR_INFO);
     }
 
 
@@ -134,21 +114,15 @@ public class FloorBMOImpl extends ApiBaseBMO implements IFloorBMO {
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONObject addCommunityMember(JSONObject paramInJson) {
+    public void addCommunityMember(JSONObject paramInJson, DataFlowContext context) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ_COMMUNITY_MEMBER);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("floorId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.FLOOR);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.insert(context, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
     }
 }

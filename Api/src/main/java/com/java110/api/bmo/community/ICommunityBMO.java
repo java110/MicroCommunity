@@ -57,7 +57,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 退出小区成员
@@ -74,7 +74,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigProperty(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigProperty(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -83,7 +83,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -92,7 +92,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceDownSell(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigParkingSpaceDownSell(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -101,7 +101,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceUpHire(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigParkingSpaceUpHire(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -110,7 +110,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceDownHire(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigParkingSpaceDownHire(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -119,7 +119,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceTemp(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeConfigParkingSpaceTemp(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区成员 开发者 代理商 运维 商户
@@ -127,7 +127,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONArray addCommunityMembers(JSONObject paramInJson);
+    public void addCommunityMembers(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -136,7 +136,7 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -145,6 +145,6 @@ public interface ICommunityBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 }

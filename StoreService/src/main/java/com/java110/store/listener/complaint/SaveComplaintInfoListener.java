@@ -54,8 +54,8 @@ public class SaveComplaintInfoListener extends AbstractComplaintBusinessServiceD
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessComplaint 节点
-        if (data.containsKey("businessComplaint")) {
-            Object bObj = data.get("businessComplaint");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMPLAINT)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMPLAINT);
             JSONArray businessComplaints = null;
             if (bObj instanceof JSONObject) {
                 businessComplaints = new JSONArray();

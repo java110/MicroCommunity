@@ -83,6 +83,11 @@ public abstract class AbstractComplaintBusinessServiceDataFlowListener extends A
 
         currentComplaintInfo.put("operate", StatusConstant.OPERATE_DEL);
         getComplaintServiceDaoImpl().saveBusinessComplaintInfo(currentComplaintInfo);
+        for(Object key : currentComplaintInfo.keySet()) {
+            if(businessComplaint.get(key) == null) {
+                businessComplaint.put(key.toString(), currentComplaintInfo.get(key));
+            }
+        }
     }
 
 

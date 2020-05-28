@@ -26,6 +26,7 @@ public class SaveFeeConfigListener extends AbstractServiceApiListener {
 
     @Autowired
     private IFeeBMO feeBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -39,6 +40,8 @@ public class SaveFeeConfigListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "squarePrice", "必填，请填写计费单价");
         Assert.hasKeyAndValue(reqJson, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
+
 
 
     }
@@ -46,18 +49,7 @@ public class SaveFeeConfigListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(feeBMOImpl.addFeeConfig(reqJson, context));
-
-        ResponseEntity<String> responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        feeBMOImpl.addFeeConfig(reqJson, context);
     }
 
     @Override
@@ -70,9 +62,5 @@ public class SaveFeeConfigListener extends AbstractServiceApiListener {
         return HttpMethod.POST;
     }
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
 
 }

@@ -69,7 +69,7 @@ public class SaveRoomCreateFeeListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "未包含收费范围");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
-        Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
+//        Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
     }
 

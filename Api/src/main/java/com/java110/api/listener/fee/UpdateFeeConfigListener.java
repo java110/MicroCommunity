@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
@@ -26,7 +27,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateFeeConfigListener")
-public class UpdateFeeConfigListener extends AbstractServiceApiListener {
+public class UpdateFeeConfigListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
@@ -46,25 +47,15 @@ public class UpdateFeeConfigListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "squarePrice", "必填，请填写计费单价");
         Assert.hasKeyAndValue(reqJson, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+        Assert.hasKeyAndValue(reqJson, "billType", "必填，请填写出账类型");
+
 
     }
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(feeBMOImpl.updateFeeConfig(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        feeBMOImpl.updateFeeConfig(reqJson, context);
     }
 
     @Override

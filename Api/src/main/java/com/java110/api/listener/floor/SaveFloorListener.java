@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -31,14 +32,13 @@ import org.springframework.http.ResponseEntity;
  **/
 
 @Java110Listener("saveFloorListener")
-public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
+public class SaveFloorListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IFloorBMO floorBMOImpl;
 
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
-
 
 
     private static Logger logger = LoggerFactory.getLogger(SaveFloorListener.class);
@@ -54,38 +54,35 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
     }
 
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
+        Assert.jsonObjectHaveKey(reqJson, "userId", "请求报文中未包含userId");
+        Assert.jsonObjectHaveKey(reqJson, "floorNum", "请求报文中未包含floorNum");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
 
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
+        FloorDto floorDto = new FloorDto();
+        floorDto.setFloorNum(reqJson.getString("floorNum"));
+        floorDto.setCommunityId(reqJson.getString("communityId"));
 
-        String paramIn = dataFlowContext.getReqData();
 
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
+        int floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
 
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        if (floorCount > 0) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
+        }
+    }
 
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         //生成floorId
-        generateFloorId(paramObj);
+        generateFloorId(reqJson);
 
         //添加小区楼
-        businesses.add(floorBMOImpl.addFloor(paramObj));
+        floorBMOImpl.addFloor(reqJson, context);
 
         //小区楼添加到小区中
-        businesses.add(floorBMOImpl.addCommunityMember(paramObj));
-
-
-        ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-
+        floorBMOImpl.addCommunityMember(reqJson, context);
     }
 
     /**
@@ -106,23 +103,7 @@ public class SaveFloorListener extends AbstractServiceApiDataFlowListener {
      *                "memberTypeCd": "390001200001"
      */
     private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "floorNum", "请求报文中未包含floorNum");
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
 
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        FloorDto floorDto = new FloorDto();
-        floorDto.setFloorNum(paramObj.getString("floorNum"));
-        floorDto.setCommunityId(paramObj.getString("communityId"));
-
-
-        int floorCount = floorInnerServiceSMOImpl.queryFloorsCount(floorDto);
-
-        if (floorCount > 0) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "楼栋编号已经存在");
-        }
     }
 
 

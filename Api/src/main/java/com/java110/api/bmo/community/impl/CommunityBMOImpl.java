@@ -11,6 +11,7 @@ import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.community.CommunityPo;
+import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -214,18 +215,10 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
+        CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
+        super.delete(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO);
     }
 
 
@@ -236,14 +229,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigProperty(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
+    public void addFeeConfigProperty(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_PROPERTY);
@@ -256,10 +244,10 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "002");//按月出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -269,12 +257,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigParkingSpaceUpSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE);
@@ -287,10 +271,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -300,12 +285,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceDownSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigParkingSpaceDownSell(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE);
@@ -318,10 +299,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -331,12 +313,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceUpHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigParkingSpaceUpHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 4);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_UP_PARKING_SPACE);
@@ -349,10 +327,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -362,12 +341,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceDownHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigParkingSpaceDownHire(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 5);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_HIRE_DOWN_PARKING_SPACE);
@@ -380,10 +355,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -393,12 +369,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeConfigParkingSpaceTemp(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addFeeConfigParkingSpaceTemp(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         paramInJson.put("configId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 6);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessFeeConfig = new JSONObject();
         businessFeeConfig.putAll(paramInJson);
         businessFeeConfig.put("feeTypeCd", FeeTypeConstant.FEE_TYPE_TEMP_DOWN_PARKING_SPACE);
@@ -411,10 +383,11 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
         businessFeeConfig.put("isDefault", "T");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
-        return business;
+        PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+
+        super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
     }
 
     /**
@@ -423,53 +396,37 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONArray addCommunityMembers(JSONObject paramInJson) {
+    public void addCommunityMembers(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        JSONArray businesses = new JSONArray();
-
-        //添加代理商户
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_ORDER + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("storeId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.AGENT);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-        businesses.add(business);
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
 
         //添加运维商户
         //添加开发商户
-        business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_ORDER + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", "400000000000000001");
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OPT);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-        businesses.add(business);
+        communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
 
-        business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_ORDER + 3);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", "400000000000000002");
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.DEV);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-        businesses.add(business);
+        communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
 
-        return businesses;
     }
 
     /**
@@ -479,19 +436,13 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         paramInJson.put("communityId", GenerateCodeFactory.getCommunityId());
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(paramInJson);
-        businessCommunity.put("state", "1000");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
+        paramInJson.put("state", "1000");
+        CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
+        super.insert(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_COMMUNITY_INFO);
+
     }
 
     /**
@@ -501,17 +452,12 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateCommunityOne(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessCommunity = new JSONObject();
-        businessCommunity.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunity", businessCommunity);
-        return business;
+        CommunityPo communityPo = BeanConvertUtil.covertBean(paramInJson, CommunityPo.class);
+
+        super.update(dataFlowContext, communityPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
+
     }
 }

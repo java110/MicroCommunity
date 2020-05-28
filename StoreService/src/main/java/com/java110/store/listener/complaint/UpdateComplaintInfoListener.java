@@ -63,10 +63,10 @@ public class UpdateComplaintInfoListener extends AbstractComplaintBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessComplaint 节点
-        if (data.containsKey("businessComplaint")) {
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMPLAINT)) {
             //处理 businessComplaint 节点
-            if (data.containsKey("businessComplaint")) {
-                Object _obj = data.get("businessComplaint");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMPLAINT)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMPLAINT);
                 JSONArray businessComplaints = null;
                 if (_obj instanceof JSONObject) {
                     businessComplaints = new JSONArray();

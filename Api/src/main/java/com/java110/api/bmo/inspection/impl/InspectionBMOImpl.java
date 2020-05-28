@@ -8,6 +8,7 @@ import com.java110.core.smo.inspectionPlan.IInspectionPlanInnerServiceSMO;
 import com.java110.core.smo.inspectionRoute.IInspectionRoutePointRelInnerServiceSMO;
 import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionRoute.InspectionRoutePointRelDto;
+import com.java110.po.inspection.InspectionPlanPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -42,19 +43,14 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(paramInJson, InspectionPlanPo.class);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_PLAN);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPlan = new JSONObject();
-        businessInspectionPlan.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlan", businessInspectionPlan);
-        return business;
+        super.delete(dataFlowContext, inspectionPlanPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_PLAN);
+
     }
+
     /**
      * 添加小区信息
      *
@@ -62,19 +58,14 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_PLAN);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionPlan = new JSONObject();
         businessInspectionPlan.putAll(paramInJson);
         businessInspectionPlan.put("inspectionPlanId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlan", businessInspectionPlan);
-        return business;
+        InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(businessInspectionPlan, InspectionPlanPo.class);
+
+        super.insert(dataFlowContext, inspectionPlanPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_PLAN);
     }
 
     /**
@@ -84,18 +75,9 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPlan = new JSONObject();
-        businessInspectionPlan.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlan", businessInspectionPlan);
-        return business;
+    public void updateInspectionPlan(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(paramInJson, InspectionPlanPo.class);
+        super.update(dataFlowContext, inspectionPlanPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
     }
 
     /**
@@ -105,7 +87,7 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPlanState(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateInspectionPlanState(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         InspectionPlanDto inspectionPlanDto = new InspectionPlanDto();
         inspectionPlanDto.setCommunityId(paramInJson.getString("communityId"));
@@ -113,16 +95,11 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
         List<InspectionPlanDto> inspectionPlanDtos = inspectionPlanInnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto);
 
         Assert.listOnlyOne(inspectionPlanDtos, "根据计划ID查询到多条记录，请检查数据");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionPlan = new JSONObject();
         businessInspectionPlan.putAll(BeanConvertUtil.beanCovertMap(inspectionPlanDtos.get(0)));
         businessInspectionPlan.put("state", paramInJson.getString("state"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlan", businessInspectionPlan);
-        return business;
+        InspectionPlanPo inspectionPlanPo = BeanConvertUtil.covertBean(businessInspectionPlan, InspectionPlanPo.class);
+        super.update(dataFlowContext, inspectionPlanPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
     }
 
     /**
@@ -187,6 +164,7 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPoint", businessInspectionPoint);
         return business;
     }
+
     /**
      * 添加小区信息
      *

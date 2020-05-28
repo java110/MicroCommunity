@@ -271,7 +271,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
             paramInJson.put("name", ownerDtos.get(0).getName());
             paramInJson.put("tel", ownerDtos.get(0).getLink());
             paramInJson.put("idCard", ownerDtos.get(0).getIdCard());
-            paramInJson.put("relTypeCd", "10000");
+            paramInJson.put("relTypeCd", "60000");
         } else { //钥匙申请ID
             ApplicationKeyDto applicationKeyDto = new ApplicationKeyDto();
             applicationKeyDto.setCommunityId(paramInJson.getString("communityId"));
@@ -283,7 +283,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
             paramInJson.put("name", applicationKeyDtos.get(0).getName());
             paramInJson.put("tel", applicationKeyDtos.get(0).getTel());
             paramInJson.put("idCard", applicationKeyDtos.get(0).getIdCard());
-            paramInJson.put("relTypeCd", "30000");
+            paramInJson.put("relTypeCd", "60000");
 
         }
 

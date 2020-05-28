@@ -53,8 +53,8 @@ public class SaveFeeInfoListener extends AbstractFeeBusinessServiceDataFlowListe
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFee 节点
-        if(data.containsKey("businessFee")){
-            Object bObj = data.get("businessFee");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
             JSONArray businessFees = null;
             if(bObj instanceof JSONObject){
                 businessFees = new JSONArray();

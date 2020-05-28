@@ -79,6 +79,12 @@ public abstract class AbstractFloorBusinessServiceDataFlowListener extends Abstr
 
         currentFloorInfo.put("operate", StatusConstant.OPERATE_DEL);
         getFloorServiceDaoImpl().saveBusinessFloorInfo(currentFloorInfo);
+
+        for(Object key : currentFloorInfo.keySet()) {
+            if(businessFloor.get(key) == null) {
+                businessFloor.put(key.toString(), currentFloorInfo.get(key));
+            }
+        }
     }
 
 

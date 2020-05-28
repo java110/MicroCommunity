@@ -2,6 +2,7 @@ package com.java110.api.bmo.floor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
+import com.java110.core.context.DataFlowContext;
 
 /**
  * @ClassName IFloorBMO
@@ -19,14 +20,15 @@ public interface IFloorBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteFloor(JSONObject paramInJson);
+    public void deleteFloor(JSONObject paramInJson, DataFlowContext context);
+
     /**
      * 退出小区成员
      *
      * @param paramInJson 接口传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitCommunityMember(JSONObject paramInJson);
+    public void exitCommunityMember(JSONObject paramInJson, DataFlowContext context);
 
     /**
      * 添加小区楼信息
@@ -34,7 +36,7 @@ public interface IFloorBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editFloor(JSONObject paramInJson);
+    public void editFloor(JSONObject paramInJson, DataFlowContext context);
 
     /**
      * 添加小区楼信息
@@ -42,12 +44,13 @@ public interface IFloorBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFloor(JSONObject paramInJson);
+    public void addFloor(JSONObject paramInJson, DataFlowContext context);
+
     /**
      * 添加小区成员
      *
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONObject addCommunityMember(JSONObject paramInJson);
+    public void addCommunityMember(JSONObject paramInJson, DataFlowContext context);
 }

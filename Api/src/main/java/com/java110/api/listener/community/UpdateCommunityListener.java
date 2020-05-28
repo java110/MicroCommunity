@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.community.ICommunityBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -22,10 +23,11 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateCommunityListener")
-public class UpdateCommunityListener extends AbstractServiceApiListener {
+public class UpdateCommunityListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ICommunityBMO communityBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
@@ -39,18 +41,7 @@ public class UpdateCommunityListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(communityBMOImpl.updateCommunityOne(reqJson, context));
-
-        ResponseEntity<String> responseEntity = communityBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        communityBMOImpl.updateCommunityOne(reqJson, context);
     }
 
     @Override

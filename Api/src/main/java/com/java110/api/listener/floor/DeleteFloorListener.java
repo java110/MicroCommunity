@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -26,7 +28,7 @@ import java.util.List;
  * 删除小区楼信息
  */
 @Java110Listener("deleteFloorListener")
-public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
+public class DeleteFloorListener extends AbstractServiceApiPlusListener {
 
     private static Logger logger = LoggerFactory.getLogger(DeleteFloorListener.class);
 
@@ -46,48 +48,20 @@ public class DeleteFloorListener extends AbstractServiceApiDataFlowListener {
         return HttpMethod.POST;
     }
 
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
-        logger.debug("ServiceDataFlowEvent : {}", event);
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求报文中未包含floorId");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+    }
 
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        HttpHeaders header = new HttpHeaders();
-        //dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         //添加小区楼
-        businesses.add(floorBMOImpl.deleteFloor(paramObj));
-        businesses.add(floorBMOImpl.exitCommunityMember(paramObj));
-
-        ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
+        floorBMOImpl.deleteFloor(reqJson, context);
+        floorBMOImpl.exitCommunityMember(reqJson, context);
     }
 
-
-    /**
-     * 校验数据
-     *
-     * @param paramIn 接口请求数据
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "floorId", "请求报文中未包含floorId");
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
 
     public ICommunityInnerServiceSMO getCommunityInnerServiceSMOImpl() {
         return communityInnerServiceSMOImpl;

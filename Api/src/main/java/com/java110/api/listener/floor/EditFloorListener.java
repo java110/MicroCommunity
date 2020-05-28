@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
@@ -28,7 +29,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019/4/28
  **/
 @Java110Listener("editFloorListener")
-public class EditFloorListener extends AbstractServiceApiDataFlowListener {
+public class EditFloorListener extends AbstractServiceApiPlusListener {
 
     private static Logger logger = LoggerFactory.getLogger(EditFloorListener.class);
 
@@ -46,52 +47,18 @@ public class EditFloorListener extends AbstractServiceApiDataFlowListener {
     }
 
     @Override
-    public void soService(ServiceDataFlowEvent event) {
-
-        logger.debug("ServiceDataFlowEvent : {}", event);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        HttpHeaders header = new HttpHeaders();
-        //dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-
-        //添加小区楼
-        businesses.add(floorBMOImpl.editFloor(paramObj));
-        
-
-        ResponseEntity<String> responseEntity = floorBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-    }
-
-
-    /**
-     * 数据校验
-     *
-     * @param paramIn "communityId": "7020181217000001",
-     *                "memberId": "3456789",
-     *                "memberTypeCd": "390001200001"
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "floorId", "请求报文中未包含floorId");
-        Assert.jsonObjectHaveKey(paramIn, "name", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(paramIn, "userId", "请求报文中未包含userId");
-        Assert.jsonObjectHaveKey(paramIn, "floorNum", "请求报文中未包含floorNum");
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId");
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求报文中未包含floorId");
+        Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
+        Assert.jsonObjectHaveKey(reqJson, "userId", "请求报文中未包含userId");
+        Assert.jsonObjectHaveKey(reqJson, "floorNum", "请求报文中未包含floorNum");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
     }
 
     @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        floorBMOImpl.editFloor(reqJson,context);
     }
+
+
 }

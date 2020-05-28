@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
@@ -33,7 +34,7 @@ import java.util.List;
  * add by wuxw 2020/1/31
  **/
 @Java110Listener("deleteFeeListener")
-public class DeleteFeeListener extends AbstractServiceApiListener {
+public class DeleteFeeListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(DeleteFeeListener.class);
     @Autowired
     private IFeeBMO feeBMOImpl;
@@ -79,22 +80,11 @@ public class DeleteFeeListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(feeBMOImpl.deleteFee(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = feeBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        feeBMOImpl.deleteFee(reqJson, context);
 
 
     }
+
     @Override
     public int getOrder() {
         return DEFAULT_ORDER;
