@@ -6,6 +6,7 @@ import com.java110.api.bmo.inspectionPlanStaff.IInspectionPlanStaffBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.inspectionPlanStaff.IInspectionPlanStaffInnerServiceSMO;
 import com.java110.dto.inspectionPlanStaff.InspectionPlanStaffDto;
+import com.java110.po.inspection.InspectionPlanStaffPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -29,19 +30,14 @@ public class InspectionPlanStaffBMOImpl extends ApiBaseBMO implements IInspectio
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        paramInJson.put("ipStaffId", "-1");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PLAN_STAFF);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPlanStaff = new JSONObject();
-        businessInspectionPlanStaff.putAll(paramInJson);
-        businessInspectionPlanStaff.put("ipStaffId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlanStaff", businessInspectionPlanStaff);
-        return business;
+        InspectionPlanStaffPo inspectionPlanStaffPo = BeanConvertUtil.covertBean(paramInJson, InspectionPlanStaffPo.class);
+
+        super.insert(dataFlowContext, inspectionPlanStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PLAN_STAFF);
+
     }
 
 
@@ -52,7 +48,7 @@ public class InspectionPlanStaffBMOImpl extends ApiBaseBMO implements IInspectio
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         InspectionPlanStaffDto inspectionPlanStaffDto = new InspectionPlanStaffDto();
         inspectionPlanStaffDto.setIpStaffId(paramInJson.getString("ipStaffId"));
@@ -61,17 +57,12 @@ public class InspectionPlanStaffBMOImpl extends ApiBaseBMO implements IInspectio
 
         Assert.listOnlyOne(inspectionPlanStaffDtos, "未找到需要修改的活动 或多条数据");
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PLAN_STAFF);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionPlanStaff = new JSONObject();
         businessInspectionPlanStaff.putAll(BeanConvertUtil.beanCovertMap(inspectionPlanStaffDtos.get(0)));
         businessInspectionPlanStaff.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlanStaff", businessInspectionPlanStaff);
-        return business;
+        InspectionPlanStaffPo inspectionPlanStaffPo = BeanConvertUtil.covertBean(businessInspectionPlanStaff, InspectionPlanStaffPo.class);
+
+        super.update(dataFlowContext, inspectionPlanStaffPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PLAN_STAFF);
     }
 
 
@@ -82,18 +73,11 @@ public class InspectionPlanStaffBMOImpl extends ApiBaseBMO implements IInspectio
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        InspectionPlanStaffPo inspectionPlanStaffPo = BeanConvertUtil.covertBean(paramInJson, InspectionPlanStaffPo.class);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PLAN_STAFF);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPlanStaff = new JSONObject();
-        businessInspectionPlanStaff.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPlanStaff", businessInspectionPlanStaff);
-        return business;
+        super.delete(dataFlowContext, inspectionPlanStaffPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PLAN_STAFF);
     }
 
 }

@@ -63,26 +63,24 @@ public class UpdateInspectionPlanStaffInfoListener extends AbstractInspectionPla
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionPlanStaff 节点
-        if (data.containsKey("businessInspectionPlanStaff")) {
-            //处理 businessInspectionPlanStaff 节点
-            if (data.containsKey("businessInspectionPlanStaff")) {
-                Object _obj = data.get("businessInspectionPlanStaff");
-                JSONArray businessInspectionPlanStaffs = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PLAN_STAFF)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PLAN_STAFF);
+            JSONArray businessInspectionPlanStaffs = null;
+            if (_obj instanceof JSONObject) {
+                businessInspectionPlanStaffs = new JSONArray();
+                businessInspectionPlanStaffs.add(_obj);
+            } else {
+                businessInspectionPlanStaffs = (JSONArray) _obj;
+            }
+            //JSONObject businessInspectionPlanStaff = data.getJSONObject("businessInspectionPlanStaff");
+            for (int _inspectionPlanStaffIndex = 0; _inspectionPlanStaffIndex < businessInspectionPlanStaffs.size(); _inspectionPlanStaffIndex++) {
+                JSONObject businessInspectionPlanStaff = businessInspectionPlanStaffs.getJSONObject(_inspectionPlanStaffIndex);
+                doBusinessInspectionPlanStaff(business, businessInspectionPlanStaff);
                 if (_obj instanceof JSONObject) {
-                    businessInspectionPlanStaffs = new JSONArray();
-                    businessInspectionPlanStaffs.add(_obj);
-                } else {
-                    businessInspectionPlanStaffs = (JSONArray) _obj;
-                }
-                //JSONObject businessInspectionPlanStaff = data.getJSONObject("businessInspectionPlanStaff");
-                for (int _inspectionPlanStaffIndex = 0; _inspectionPlanStaffIndex < businessInspectionPlanStaffs.size(); _inspectionPlanStaffIndex++) {
-                    JSONObject businessInspectionPlanStaff = businessInspectionPlanStaffs.getJSONObject(_inspectionPlanStaffIndex);
-                    doBusinessInspectionPlanStaff(business, businessInspectionPlanStaff);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("ipStaffId", businessInspectionPlanStaff.getString("ipStaffId"));
-                    }
+                    dataFlowContext.addParamOut("ipStaffId", businessInspectionPlanStaff.getString("ipStaffId"));
                 }
             }
+
         }
     }
 

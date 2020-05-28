@@ -45,4 +45,15 @@ public class ServiceCodeFeeConfigConstant {
     public static final String LIST_FEE = "fee.listFee";
 
 
+    /**
+     * 查询 账单信息
+     */
+    public static final String LIST_BILL = "fee.listBill";
+
+    /**
+     * 查询 账单信息
+     */
+    public static final String LIST_BILL_OWE_FEE = "fee.listBillOweFee";
+
+
 }

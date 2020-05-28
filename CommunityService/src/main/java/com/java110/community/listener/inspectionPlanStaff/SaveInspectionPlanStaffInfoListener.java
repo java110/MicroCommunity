@@ -54,8 +54,8 @@ public class SaveInspectionPlanStaffInfoListener extends AbstractInspectionPlanS
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionPlanStaff 节点
-        if (data.containsKey("businessInspectionPlanStaff")) {
-            Object bObj = data.get("businessInspectionPlanStaff");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PLAN_STAFF)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PLAN_STAFF);
             JSONArray businessInspectionPlanStaffs = null;
             if (bObj instanceof JSONObject) {
                 businessInspectionPlanStaffs = new JSONArray();

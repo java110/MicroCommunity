@@ -1,6 +1,8 @@
 package com.java110.fee.smo.impl;
 
 
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -34,7 +36,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Override
-    public List<FeeDto> queryFees(@RequestBody  FeeDto feeDto) {
+    public List<FeeDto> queryFees(@RequestBody FeeDto feeDto) {
 
         //校验是否传了 分页信息
 
@@ -63,7 +65,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
     /**
      * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
      *
-     * @param fee 小区费用信息
+     * @param fee   小区费用信息
      * @param users 用户列表
      */
     private void refreshFee(FeeDto fee, List<UserDto> users) {
@@ -91,7 +93,66 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
     @Override
     public int queryFeesCount(@RequestBody FeeDto feeDto) {
-        return feeServiceDaoImpl.queryFeesCount(BeanConvertUtil.beanCovertMap(feeDto));    }
+        return feeServiceDaoImpl.queryFeesCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+
+    @Override
+    public int queryBillCount(@RequestBody BillDto billDto) {
+        return feeServiceDaoImpl.queryBillCount(BeanConvertUtil.beanCovertMap(billDto));
+    }
+
+    /**
+     * 查询账期
+     *
+     * @param billDto
+     * @return
+     */
+    @Override
+    public List<BillDto> queryBills(@RequestBody BillDto billDto) {
+
+        //校验是否传了 分页信息
+
+        int page = billDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            billDto.setPage((page - 1) * billDto.getRow());
+        }
+
+        List<BillDto> billDtos = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.queryBills(BeanConvertUtil.beanCovertMap(billDto)), BillDto.class);
+
+        return billDtos;
+
+    }
+
+
+    @Override
+    public int queryBillOweFeeCount(@RequestBody BillOweFeeDto billDto) {
+        return feeServiceDaoImpl.queryBillOweFeeCount(BeanConvertUtil.beanCovertMap(billDto));
+    }
+
+    /**
+     * 查询账期
+     *
+     * @param billDto
+     * @return
+     */
+    @Override
+    public List<BillOweFeeDto> queryBillOweFees(@RequestBody BillOweFeeDto billDto) {
+
+        //校验是否传了 分页信息
+
+        int page = billDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            billDto.setPage((page - 1) * billDto.getRow());
+        }
+
+        List<BillOweFeeDto> billOweFeeDtos = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.queryBillOweFees(BeanConvertUtil.beanCovertMap(billDto)), BillOweFeeDto.class);
+
+        return billOweFeeDtos;
+
+    }
 
     public IFeeServiceDao getFeeServiceDaoImpl() {
         return feeServiceDaoImpl;

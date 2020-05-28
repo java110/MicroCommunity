@@ -83,6 +83,11 @@ public abstract class AbstractInspectionPlanStaffBusinessServiceDataFlowListener
 
         currentInspectionPlanStaffInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionPlanStaffServiceDaoImpl().saveBusinessInspectionPlanStaffInfo(currentInspectionPlanStaffInfo);
+        for (Object key : currentInspectionPlanStaffInfo.keySet()) {
+            if (businessInspectionPlanStaff.get(key) == null) {
+                businessInspectionPlanStaff.put(key.toString(), currentInspectionPlanStaffInfo.get(key));
+            }
+        }
     }
 
 

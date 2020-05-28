@@ -13,7 +13,7 @@ public interface IInspectionPlanStaffBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     JSONObject addInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加执行计划人信息
@@ -22,7 +22,7 @@ public interface IInspectionPlanStaffBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void updateInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除执行计划人
@@ -31,7 +31,7 @@ public interface IInspectionPlanStaffBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void deleteInspectionPlanStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 

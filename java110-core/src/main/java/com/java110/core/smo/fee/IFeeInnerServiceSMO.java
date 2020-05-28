@@ -1,7 +1,10 @@
 package com.java110.core.smo.fee;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.fee.BillDto;
+import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,6 @@ public interface IFeeInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param feeDto 数据对象分享
      * @return FeeDto 对象数据
      */
@@ -39,4 +41,41 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeesCount", method = RequestMethod.POST)
     int queryFeesCount(@RequestBody FeeDto feeDto);
+
+
+    /**
+     * 查询 账期信息 总数
+     *
+     * @param billDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryBillCount", method = RequestMethod.POST)
+    public int queryBillCount(@RequestBody BillDto billDto);
+
+    /**
+     * 查询 账期信息
+     *
+     * @param billDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryBills", method = RequestMethod.POST)
+    public List<BillDto> queryBills(@RequestBody BillDto billDto);
+
+    /**
+     * 查询 欠费数量
+     *
+     * @param billDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryBillOweFeeCount", method = RequestMethod.POST)
+    public int queryBillOweFeeCount(@RequestBody BillOweFeeDto billDto);
+
+    /**
+     * 查询 欠费信息
+     *
+     * @param billDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryBillOweFees", method = RequestMethod.POST)
+    public List<BillOweFeeDto> queryBillOweFees(@RequestBody BillOweFeeDto billDto);
 }

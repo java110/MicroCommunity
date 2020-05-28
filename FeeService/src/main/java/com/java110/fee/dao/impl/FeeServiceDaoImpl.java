@@ -125,5 +125,73 @@ public class FeeServiceDaoImpl extends BaseServiceDao implements IFeeServiceDao 
         return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询费用账期
+     * @param info 费用信息
+     * @return 费用数量
+     */
+    @Override
+    public int queryBillCount(Map info) {
+        logger.debug("查询费用数据 入参 info : {}",info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryBillCount", info);
+        if (businessFeeInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
+    }
+
+
+    /**
+     * 查询账期
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryBills(Map info) throws DAOException {
+        logger.debug("查询费用信息 入参 info : {}",info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryBills",info);
+
+        return businessFeeInfos;
+    }
+
+
+    /**
+     * 查询账单欠费总数
+     * @param info 费用信息
+     * @return 费用数量
+     */
+    @Override
+    public int queryBillOweFeeCount(Map info) {
+        logger.debug("查询费用数据 入参 info : {}",info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryBillOweFeeCount", info);
+        if (businessFeeInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessFeeInfos.get(0).get("count").toString());
+    }
+
+
+    /**
+     * 查询账单欠费
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryBillOweFees(Map info) throws DAOException {
+        logger.debug("查询费用信息 入参 info : {}",info);
+
+        List<Map> businessFeeInfos = sqlSessionTemplate.selectList("feeServiceDaoImpl.queryBillOweFees",info);
+
+        return businessFeeInfos;
+    }
+
+
 
 }
