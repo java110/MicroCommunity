@@ -21,7 +21,7 @@ public interface IMachineBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -29,7 +29,7 @@ public interface IMachineBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加设备信息
@@ -38,7 +38,7 @@ public interface IMachineBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateMachine(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加设备信息
      *
@@ -46,7 +46,7 @@ public interface IMachineBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateMachineState(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateMachineState(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 }
 

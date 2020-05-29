@@ -54,8 +54,8 @@ public class SaveCarInoutDetailInfoListener extends AbstractCarInoutDetailBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCarInoutDetail 节点
-        if (data.containsKey("businessCarInoutDetail")) {
-            Object bObj = data.get("businessCarInoutDetail");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL);
             JSONArray businessCarInoutDetails = null;
             if (bObj instanceof JSONObject) {
                 businessCarInoutDetails = new JSONArray();

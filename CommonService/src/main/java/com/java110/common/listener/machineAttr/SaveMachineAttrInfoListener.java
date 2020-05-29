@@ -54,8 +54,8 @@ public class SaveMachineAttrInfoListener extends AbstractMachineAttrBusinessServ
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineAttr 节点
-        if (data.containsKey("businessMachineAttr")) {
-            Object bObj = data.get("businessMachineAttr");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE);
             JSONArray businessMachineAttrs = null;
             if (bObj instanceof JSONObject) {
                 businessMachineAttrs = new JSONArray();

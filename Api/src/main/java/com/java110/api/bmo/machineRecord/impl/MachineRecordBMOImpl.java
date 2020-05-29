@@ -5,8 +5,9 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.machineRecord.IMachineRecordBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,18 +28,9 @@ public class MachineRecordBMOImpl extends ApiBaseBMO implements IMachineRecordBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineRecord = new JSONObject();
-        businessMachineRecord.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
+    public void deleteMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(paramInJson, MachineRecordPo.class);
+        super.delete(dataFlowContext, machineRecordPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE_RECORD);
     }
 
     /**
@@ -48,20 +40,16 @@ public class MachineRecordBMOImpl extends ApiBaseBMO implements IMachineRecordBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         String machineRecordId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId);
         paramInJson.put("machineRecordId", machineRecordId);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessMachineRecord = new JSONObject();
         businessMachineRecord.putAll(paramInJson);
         businessMachineRecord.put("machineRecordId", machineRecordId);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(businessMachineRecord, MachineRecordPo.class);
+        super.insert(dataFlowContext, machineRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
+
     }
 
     /**
@@ -71,13 +59,8 @@ public class MachineRecordBMOImpl extends ApiBaseBMO implements IMachineRecordBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "60000");
@@ -85,8 +68,8 @@ public class MachineRecordBMOImpl extends ApiBaseBMO implements IMachineRecordBM
         businessUnit.put("objId", paramInJson.getString("machineRecordId"));
         businessUnit.put("fileRealName", paramInJson.getString("photoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(businessUnit, MachineRecordPo.class);
+        super.insert(dataFlowContext, machineRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
 
-        return business;
     }
 }

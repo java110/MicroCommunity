@@ -20,7 +20,7 @@ public interface IOrgBMO extends IApiBaseBMO  {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteOrgCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteOrgCommunity(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -29,7 +29,7 @@ public interface IOrgBMO extends IApiBaseBMO  {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -38,7 +38,7 @@ public interface IOrgBMO extends IApiBaseBMO  {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOrgCommunity(JSONObject paramInJson, JSONObject communityObj, int seq, DataFlowContext dataFlowContext);
+    public void addOrgCommunity(JSONObject paramInJson, JSONObject communityObj, int seq, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -46,7 +46,7 @@ public interface IOrgBMO extends IApiBaseBMO  {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加组织管理信息
      *
@@ -54,5 +54,5 @@ public interface IOrgBMO extends IApiBaseBMO  {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

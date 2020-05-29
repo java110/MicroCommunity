@@ -6,7 +6,6 @@ import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
@@ -16,7 +15,19 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.utils.constant.*;
+import com.java110.po.community.CommunityMemberPo;
+import com.java110.po.fee.PayFeePo;
+import com.java110.po.file.FileRelPo;
+import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StateConstant;
+import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,19 +63,15 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
+
     /**
      * 添加业主应用用户关系
      *
      * @param paramInJson
      * @return
      */
-    public JSONObject addOwnerAppUser(JSONObject paramInJson, CommunityDto communityDto, OwnerDto ownerDto) {
+    public void addOwnerAppUser(JSONObject paramInJson, CommunityDto communityDto, OwnerDto ownerDto, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwnerAppUser = new JSONObject();
         businessOwnerAppUser.putAll(paramInJson);
         //状态类型，10000 审核中，12000 审核成功，13000 审核失败
@@ -78,8 +85,8 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessOwnerAppUser.put("idCard", ownerDto.getIdCard());
         businessOwnerAppUser.put("link", ownerDto.getLink());
         businessOwnerAppUser.put("userId", paramInJson.getString("userId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
+        OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(businessOwnerAppUser, OwnerAppUserPo.class);
+        super.insert(dataFlowContext, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
     }
 
     /**
@@ -89,39 +96,26 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessOwnerAppUser = new JSONObject();
-        businessOwnerAppUser.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
+        OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
+        super.delete(dataFlowContext, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER);
     }
+
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteOwner(JSONObject paramInJson) {
+    public void deleteOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.put("memberId", paramInJson.getString("memberId"));
         businessOwner.put("communityId", paramInJson.getString("communityId"));
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
-
-        return business;
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        super.delete(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
     }
 
 
@@ -131,12 +125,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param paramInJson 接口传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitCommunityMember(JSONObject paramInJson) {
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+    public void exitCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         JSONObject businessCommunityMember = new JSONObject();
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setMemberId(paramInJson.getString("ownerId"));
@@ -149,11 +138,9 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "业主和小区存在关系存在异常，请检查");
         }
 
-
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.delete(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
     }
 
     /**
@@ -162,7 +149,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwner(JSONObject paramInJson) {
+    public void editOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(paramInJson.getString("memberId"));
@@ -170,17 +157,12 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
 
         Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
         businessOwner.putAll(paramInJson);
         businessOwner.put("state", ownerDtos.get(0).getState());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
-
-        return business;
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        super.delete(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
     }
 
     /**
@@ -190,17 +172,13 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void editOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setRelTypeCd("10000");
         fileRelDto.setObjId(paramInJson.getString("memberId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         if (fileRelDtos == null || fileRelDtos.size() == 0) {
-            JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-            business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-            business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-            business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("fileRelId", "-1");
             businessUnit.put("relTypeCd", "10000");
@@ -208,19 +186,17 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
             businessUnit.put("objId", paramInJson.getString("memberId"));
             businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
             businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
-            business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-            return business;
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            return;
         }
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-        return business;
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+        super.update(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
 
 
     }
@@ -237,19 +213,13 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwner(JSONObject paramInJson) {
+    public void addOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(paramInJson);
         businessOwner.put("state", "2000");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
-
-        return business;
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        super.insert(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
     }
 
 
@@ -259,22 +229,17 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONObject addCommunityMember(JSONObject paramInJson) {
+    public void addCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ_COMMUNITY_MEMBER);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", "-1");
         businessCommunityMember.put("communityId", paramInJson.getString("communityId"));
         businessCommunityMember.put("memberId", paramInJson.getString("ownerId"));
         businessCommunityMember.put("memberTypeCd", CommunityMemberTypeConstant.OWNER);
         businessCommunityMember.put("auditStatusCd", StateConstant.AGREE_AUDIT);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
-
-        return business;
+        CommunityMemberPo communityMemberPo = BeanConvertUtil.covertBean(businessCommunityMember, CommunityMemberPo.class);
+        super.insert(dataFlowContext, communityMemberPo, BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
     }
 
 
@@ -285,20 +250,13 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+    public void sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(paramInJson);
         businessUnit.put("relId", "-1");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerRoomRel", businessUnit);
-
-        return business;
+        OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
+        super.insert(dataFlowContext, ownerRoomRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
     }
 
     /**
@@ -308,7 +266,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_PROPERTY);
@@ -320,10 +278,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         }
 
         feeConfigDto = feeConfigDtos.get(0);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", "-1");
         businessUnit.put("configId", feeConfigDto.getConfigId());
@@ -336,9 +291,8 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessUnit.put("payerObjId", paramInJson.getString("roomId"));
         businessUnit.put("payerObjType", "3333");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
-
-        return business;
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
+        super.insert(dataFlowContext, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
     }
 
     /**
@@ -348,13 +302,8 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "10000");
@@ -362,9 +311,8 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
         businessUnit.put("objId", paramInJson.getString("memberId"));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
 
     /**
@@ -374,7 +322,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setAppUserId(paramInJson.getString("appUserId"));
@@ -382,17 +330,12 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
 
         Assert.listOnlyOne(ownerAppUserDtos, "存在多条审核单或未找到审核单");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwnerAppUser = new JSONObject();
         businessOwnerAppUser.putAll(BeanConvertUtil.beanCovertMap(ownerAppUserDtos.get(0)));
         businessOwnerAppUser.put("state", paramInJson.getString("state"));
         businessOwnerAppUser.put("appUserId", paramInJson.getString("appUserId"));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwnerAppUser", businessOwnerAppUser);
-        return business;
+        OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(businessOwnerAppUser, OwnerAppUserPo.class);
+        super.update(dataFlowContext, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
     }
 
     /**
@@ -401,7 +344,7 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwnerPhoto(JSONObject paramInJson) {
+    public void editOwnerPhotoPass(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(paramInJson.getString("memberId"));
@@ -409,16 +352,13 @@ public class OwnerBMOImpl extends ApiBaseBMO implements IOwnerBMO {
 
         Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         Map ownerDtoMap = BeanConvertUtil.beanCovertMap(ownerDtos.get(0));
         businessOwner.putAll(ownerDtoMap);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
-        return business;
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        super.update(dataFlowContext, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_INFO);
+
     }
 
 }

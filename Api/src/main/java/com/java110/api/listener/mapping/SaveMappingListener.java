@@ -2,21 +2,21 @@ package com.java110.api.listener.mapping;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
+import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.mapping.IMappingInnerServiceSMO;
 import com.java110.dto.mapping.MappingDto;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeMappingConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
-import com.java110.core.annotation.Java110Listener;
 /**
  * 保存小区侦听
  * add by wuxw 2019-06-30
@@ -27,14 +27,15 @@ public class SaveMappingListener extends AbstractServiceApiListener {
 
     @Autowired
     private IMappingInnerServiceSMO mappingInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
 
         Assert.hasKeyAndValue(reqJson, "domain", "必填，请填写域");
-Assert.hasKeyAndValue(reqJson, "name", "必填，请填写名称");
-Assert.hasKeyAndValue(reqJson, "key", "必填，请填写键");
-Assert.hasKeyAndValue(reqJson, "value", "必填，请填写值");
+        Assert.hasKeyAndValue(reqJson, "name", "必填，请填写名称");
+        Assert.hasKeyAndValue(reqJson, "key", "必填，请填写键");
+        Assert.hasKeyAndValue(reqJson, "value", "必填，请填写值");
 
     }
 
@@ -44,7 +45,6 @@ Assert.hasKeyAndValue(reqJson, "value", "必填，请填写值");
         MappingDto mappingDto = BeanConvertUtil.covertBean(reqJson, MappingDto.class);
 
         int count = mappingInnerServiceSMOImpl.saveMapping(mappingDto);
-
 
 
         if (count < 1) {

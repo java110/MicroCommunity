@@ -54,8 +54,8 @@ public class SaveMachineTranslateInfoListener extends AbstractMachineTranslateBu
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineTranslate 节点
-        if (data.containsKey("businessMachineTranslate")) {
-            Object bObj = data.get("businessMachineTranslate");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE);
             JSONArray businessMachineTranslates = null;
             if (bObj instanceof JSONObject) {
                 businessMachineTranslates = new JSONArray();

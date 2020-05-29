@@ -20,14 +20,16 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteParkingSpace(JSONObject paramInJson);
+    public void deleteParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editParkingSpace(JSONObject paramInJson);
+    public void editParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 售卖房屋信息
      *
@@ -35,14 +37,16 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void exitParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 修改停车位状态信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject modifyParkingSpaceState(JSONObject paramInJson);
+    public void modifyParkingSpaceState(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 删除物业费用信息
      *
@@ -50,7 +54,8 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void exitParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      * <p>
@@ -63,14 +68,16 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addParkingSpace(JSONObject paramInJson);
+    public void addParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 修改停车位状态信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject modifySellParkingSpaceState(JSONObject paramInJson);
+    public void modifySellParkingSpaceState(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加物业费用
      *
@@ -78,7 +85,8 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addParkingSpaceFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加费用明细信息
      *
@@ -86,13 +94,15 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 计算费用信息
      *
      * @param paramInJson 传入数据字段
      */
-    public void computeFeeInfo(JSONObject paramInJson);
+    public void computeFeeInfo(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
     /**
      * 添加小区楼信息
      * <p>
@@ -105,5 +115,5 @@ public interface IParkingSpaceBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject sellParkingSpace(JSONObject paramInJson);
+    public void sellParkingSpace(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

@@ -54,8 +54,8 @@ public class SaveMsgReadInfoListener extends AbstractMsgReadBusinessServiceDataF
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMsgRead 节点
-        if (data.containsKey("businessMsgRead")) {
-            Object bObj = data.get("businessMsgRead");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG_READ)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MSG_READ);
             JSONArray businessMsgReads = null;
             if (bObj instanceof JSONObject) {
                 businessMsgReads = new JSONArray();

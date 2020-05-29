@@ -63,27 +63,27 @@ public class UpdateMachineTranslateInfoListener extends AbstractMachineTranslate
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineTranslate 节点
-        if (data.containsKey("businessMachineTranslate")) {
-            //处理 businessMachineTranslate 节点
-            if (data.containsKey("businessMachineTranslate")) {
-                Object _obj = data.get("businessMachineTranslate");
-                JSONArray businessMachineTranslates = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_TRANSLATE)) {
+
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_TRANSLATE);
+            JSONArray businessMachineTranslates = null;
+            if (_obj instanceof JSONObject) {
+                businessMachineTranslates = new JSONArray();
+                businessMachineTranslates.add(_obj);
+            } else {
+                businessMachineTranslates = (JSONArray) _obj;
+            }
+            //JSONObject businessMachineTranslate = data.getJSONObject("businessMachineTranslate");
+            for (int _machineTranslateIndex = 0; _machineTranslateIndex < businessMachineTranslates.size(); _machineTranslateIndex++) {
+                JSONObject businessMachineTranslate = businessMachineTranslates.getJSONObject(_machineTranslateIndex);
+                doBusinessMachineTranslate(business, businessMachineTranslate);
                 if (_obj instanceof JSONObject) {
-                    businessMachineTranslates = new JSONArray();
-                    businessMachineTranslates.add(_obj);
-                } else {
-                    businessMachineTranslates = (JSONArray) _obj;
-                }
-                //JSONObject businessMachineTranslate = data.getJSONObject("businessMachineTranslate");
-                for (int _machineTranslateIndex = 0; _machineTranslateIndex < businessMachineTranslates.size(); _machineTranslateIndex++) {
-                    JSONObject businessMachineTranslate = businessMachineTranslates.getJSONObject(_machineTranslateIndex);
-                    doBusinessMachineTranslate(business, businessMachineTranslate);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("machineTranslateId", businessMachineTranslate.getString("machineTranslateId"));
-                    }
+                    dataFlowContext.addParamOut("machineTranslateId", businessMachineTranslate.getString("machineTranslateId"));
                 }
             }
+
         }
+
     }
 
 

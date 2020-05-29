@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingArea.IParkingAreaBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.parking.ParkingAreaPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,18 +27,10 @@ public class ParkingAreaBMOImpl extends ApiBaseBMO implements IParkingAreaBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessParkingArea = new JSONObject();
-        businessParkingArea.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingArea", businessParkingArea);
-        return business;
+        ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(paramInJson, ParkingAreaPo.class);
+        super.delete(dataFlowContext, parkingAreaPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA);
     }
 
     /**
@@ -47,19 +40,13 @@ public class ParkingAreaBMOImpl extends ApiBaseBMO implements IParkingAreaBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_AREA);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessParkingArea = new JSONObject();
         businessParkingArea.putAll(paramInJson);
         businessParkingArea.put("paId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingArea", businessParkingArea);
-        return business;
+        ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(businessParkingArea, ParkingAreaPo.class);
+        super.insert(dataFlowContext, parkingAreaPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_AREA);
     }
 
     /**
@@ -69,17 +56,11 @@ public class ParkingAreaBMOImpl extends ApiBaseBMO implements IParkingAreaBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_AREA);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessParkingArea = new JSONObject();
         businessParkingArea.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessParkingArea", businessParkingArea);
-        return business;
+        ParkingAreaPo parkingAreaPo = BeanConvertUtil.covertBean(businessParkingArea, ParkingAreaPo.class);
+        super.update(dataFlowContext, parkingAreaPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_AREA);
     }
 }

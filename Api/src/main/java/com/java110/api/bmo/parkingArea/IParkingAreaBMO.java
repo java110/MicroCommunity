@@ -20,7 +20,7 @@ public interface IParkingAreaBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -28,7 +28,7 @@ public interface IParkingAreaBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加停车场信息
      *
@@ -36,5 +36,5 @@ public interface IParkingAreaBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateParkingArea(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

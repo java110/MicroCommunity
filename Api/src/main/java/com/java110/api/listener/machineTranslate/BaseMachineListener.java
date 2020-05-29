@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
@@ -21,7 +22,7 @@ import java.util.Map;
 /**
  * 设备侦听 父类
  */
-public abstract class BaseMachineListener extends AbstractServiceApiListener {
+public abstract class BaseMachineListener extends AbstractServiceApiPlusListener {
 
     /**
      * 校验头部信息

@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 public class SaveOrgCommunityListener extends AbstractServiceApiListener {
     @Autowired
     private IOrgBMO orgBMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -40,21 +41,12 @@ public class SaveOrgCommunityListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
 
         //添加单元信息
         JSONArray communitys = reqJson.getJSONArray("communitys");
         for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
-            businesses.add(orgBMOImpl.addOrgCommunity(reqJson, communitys.getJSONObject(communityIndex), communityIndex, context));
+            orgBMOImpl.addOrgCommunity(reqJson, communitys.getJSONObject(communityIndex), communityIndex, context);
         }
-
-        ResponseEntity<String> responseEntity = orgBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

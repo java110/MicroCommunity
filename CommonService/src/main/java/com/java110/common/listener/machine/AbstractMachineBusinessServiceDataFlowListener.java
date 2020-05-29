@@ -92,6 +92,12 @@ public abstract class AbstractMachineBusinessServiceDataFlowListener extends Abs
 
         currentMachineInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMachineServiceDaoImpl().saveBusinessMachineInfo(currentMachineInfo);
+
+        for (Object key : currentMachineInfo.keySet()) {
+            if (businessMachine.get(key) == null) {
+                businessMachine.put(key.toString(), currentMachineInfo.get(key));
+            }
+        }
     }
 
 

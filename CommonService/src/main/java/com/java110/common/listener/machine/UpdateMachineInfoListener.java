@@ -62,28 +62,27 @@ public class UpdateMachineInfoListener extends AbstractMachineBusinessServiceDat
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessMachine 节点
-        if (data.containsKey("businessMachine")) {
-            //处理 businessMachine 节点
-            if (data.containsKey("businessMachine")) {
-                Object _obj = data.get("businessMachine");
-                JSONArray businessMachines = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE);
+            JSONArray businessMachines = null;
+            if (_obj instanceof JSONObject) {
+                businessMachines = new JSONArray();
+                businessMachines.add(_obj);
+            } else {
+                businessMachines = (JSONArray) _obj;
+            }
+            //JSONObject businessMachine = data.getJSONObject("businessMachine");
+            for (int _machineIndex = 0; _machineIndex < businessMachines.size(); _machineIndex++) {
+                JSONObject businessMachine = businessMachines.getJSONObject(_machineIndex);
+                doBusinessMachine(business, businessMachine);
                 if (_obj instanceof JSONObject) {
-                    businessMachines = new JSONArray();
-                    businessMachines.add(_obj);
-                } else {
-                    businessMachines = (JSONArray) _obj;
-                }
-                //JSONObject businessMachine = data.getJSONObject("businessMachine");
-                for (int _machineIndex = 0; _machineIndex < businessMachines.size(); _machineIndex++) {
-                    JSONObject businessMachine = businessMachines.getJSONObject(_machineIndex);
-                    doBusinessMachine(business, businessMachine);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("machineId", businessMachine.getString("machineId"));
-                    }
+                    dataFlowContext.addParamOut("machineId", businessMachine.getString("machineId"));
                 }
             }
         }
+
     }
 
 

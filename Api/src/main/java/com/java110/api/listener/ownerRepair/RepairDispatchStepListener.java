@@ -3,6 +3,7 @@ package com.java110.api.listener.ownerRepair;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ownerRepair.IOwnerRepairBMO;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.smo.repair.IRepairInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.utils.constant.StateConstant;
@@ -32,7 +33,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("repairDispatchStepListener")
-public class RepairDispatchStepListener extends AbstractServiceApiListener {
+public class RepairDispatchStepListener extends AbstractServiceApiPlusListener {
 
     private static Logger logger = LoggerFactory.getLogger(RepairDispatchStepListener.class);
 
@@ -55,22 +56,9 @@ public class RepairDispatchStepListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+        ownerRepairBMOImpl.addBusinessRepairUser(reqJson, context);
 
-        AppService service = event.getAppService();
-
-        //添加派单员工关联关系
-        businesses.add(ownerRepairBMOImpl.addBusinessRepairUser(reqJson, context));
-
-        //修改报修单状态
-        businesses.add(ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = ownerRepairBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        ownerRepairBMOImpl.modifyBusinessRepairDispatch(reqJson, context);
     }
 
     @Override

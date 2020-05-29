@@ -83,6 +83,12 @@ public abstract class AbstractMachineTranslateBusinessServiceDataFlowListener ex
 
         currentMachineTranslateInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMachineTranslateServiceDaoImpl().saveBusinessMachineTranslateInfo(currentMachineTranslateInfo);
+
+        for (Object key : currentMachineTranslateInfo.keySet()) {
+            if (businessMachineTranslate.get(key) == null) {
+                businessMachineTranslate.put(key.toString(), currentMachineTranslateInfo.get(key));
+            }
+        }
     }
 
 

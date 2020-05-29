@@ -61,27 +61,26 @@ public class DeleteCarInoutInfoListener extends AbstractCarInoutBusinessServiceD
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessCarInout 节点
-        if (data.containsKey("businessCarInout")) {
-            //处理 businessCarInout 节点
-            if (data.containsKey("businessCarInout")) {
-                Object _obj = data.get("businessCarInout");
-                JSONArray businessCarInouts = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_INOUT)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_INOUT);
+            JSONArray businessCarInouts = null;
+            if (_obj instanceof JSONObject) {
+                businessCarInouts = new JSONArray();
+                businessCarInouts.add(_obj);
+            } else {
+                businessCarInouts = (JSONArray) _obj;
+            }
+            //JSONObject businessCarInout = data.getJSONObject("businessCarInout");
+            for (int _carInoutIndex = 0; _carInoutIndex < businessCarInouts.size(); _carInoutIndex++) {
+                JSONObject businessCarInout = businessCarInouts.getJSONObject(_carInoutIndex);
+                doBusinessCarInout(business, businessCarInout);
                 if (_obj instanceof JSONObject) {
-                    businessCarInouts = new JSONArray();
-                    businessCarInouts.add(_obj);
-                } else {
-                    businessCarInouts = (JSONArray) _obj;
-                }
-                //JSONObject businessCarInout = data.getJSONObject("businessCarInout");
-                for (int _carInoutIndex = 0; _carInoutIndex < businessCarInouts.size(); _carInoutIndex++) {
-                    JSONObject businessCarInout = businessCarInouts.getJSONObject(_carInoutIndex);
-                    doBusinessCarInout(business, businessCarInout);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("inoutId", businessCarInout.getString("inoutId"));
-                    }
+                    dataFlowContext.addParamOut("inoutId", businessCarInout.getString("inoutId"));
                 }
             }
+
         }
 
 

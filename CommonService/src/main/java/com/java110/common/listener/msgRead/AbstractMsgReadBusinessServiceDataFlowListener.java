@@ -75,6 +75,11 @@ public abstract class AbstractMsgReadBusinessServiceDataFlowListener extends Abs
 
         currentMsgReadInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMsgReadServiceDaoImpl().saveBusinessMsgReadInfo(currentMsgReadInfo);
+        for (Object key : currentMsgReadInfo.keySet()) {
+            if (businessMsgRead.get(key) == null) {
+                businessMsgRead.put(key.toString(), currentMsgReadInfo.get(key));
+            }
+        }
     }
 
 

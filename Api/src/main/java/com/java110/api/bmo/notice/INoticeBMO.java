@@ -15,21 +15,21 @@ import com.java110.core.context.DataFlowContext;
 public interface INoticeBMO extends IApiBaseBMO {
 
     /**
-     * 添加小区信息
+     * 添加通知信息
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
-     * 添加小区信息
+     * 添加通知信息
      *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加公告信息
      *
@@ -37,5 +37,5 @@ public interface INoticeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateNotice(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

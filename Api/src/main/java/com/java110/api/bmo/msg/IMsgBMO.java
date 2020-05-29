@@ -13,5 +13,5 @@ import com.java110.core.context.DataFlowContext;
  * add by wuxw 2020/3/9
  **/
 public interface IMsgBMO extends IApiBaseBMO {
-    public Object addReadMsg(JSONObject paramInJson, DataFlowContext context);
+    public void addReadMsg(JSONObject paramInJson, DataFlowContext context);
 }

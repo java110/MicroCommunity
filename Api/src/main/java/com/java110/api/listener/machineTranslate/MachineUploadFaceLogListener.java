@@ -13,26 +13,19 @@ import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
-import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.file.FileDto;
-import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,22 +97,14 @@ public class MachineUploadFaceLogListener extends BaseMachineListener {
             reqJson.put("communityId", reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId"));
             HttpHeaders httpHeaders = super.getHeader(context);
 
-            HttpHeaders header = new HttpHeaders();
-            context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-            JSONArray businesses = new JSONArray();
-
-            AppService service = event.getAppService();
             reqJson.put("fileId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
 
             //添加单元信息
-            businesses.add(machineTranslateBMOImpl.addMachineRecord(reqJson, context));
+            machineTranslateBMOImpl.addMachineRecord(reqJson, context);
             //保存文件信息
-            businesses.add(machineTranslateBMOImpl.savePhoto(reqJson, context));
-
-
-
-            responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
-
+            machineTranslateBMOImpl.savePhoto(reqJson, context);
+            commit(context);
+            responseEntity = context.getResponseEntity();
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "上报记录失败" + responseEntity);
             }

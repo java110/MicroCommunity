@@ -1,10 +1,9 @@
 package com.java110.api.listener.owner;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.bmo.user.IUserBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -19,20 +18,15 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.user.UserDto;
-import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -47,7 +41,7 @@ import java.util.Map;
  **/
 
 @Java110Listener("ownerRegisterListener")
-public class OwnerRegisterListener extends AbstractServiceApiListener {
+public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
 
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
@@ -97,9 +91,6 @@ public class OwnerRegisterListener extends AbstractServiceApiListener {
         Assert.hasKeyAndValue(reqJson, "link", "未包含联系电话");
         Assert.hasKeyAndValue(reqJson, "msgCode", "未包含联系电话验证码");
         Assert.hasKeyAndValue(reqJson, "password", "未包含密码");
-
-        //判断是否有用户ID
-        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
 
         SmsDto smsDto = new SmsDto();
         smsDto.setTel(reqJson.getString("link"));
@@ -152,29 +143,20 @@ public class OwnerRegisterListener extends AbstractServiceApiListener {
         OwnerDto tmpOwnerDto = ownerDtos.get(0);
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
+
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         paramObj.put("userId", GenerateCodeFactory.getUserId());
-        if(reqJson.containsKey("openId")){
+        if (reqJson.containsKey("openId")) {
             paramObj.put("openId", reqJson.getString("openId"));
-        }else {
+        } else {
             paramObj.put("openId", "-1");
         }
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
         //添加小区楼
-        businesses.add(ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto));
-        paramObj.put("name",paramObj.getString("appUserName"));
-        paramObj.put("tel",paramObj.getString("link"));
-        businesses.add(userBMOImpl.registerUser(paramObj, dataFlowContext));
-
-
-
-        ResponseEntity<String> responseEntity = ownerBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
+        ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto, dataFlowContext);
+        paramObj.put("name", paramObj.getString("appUserName"));
+        paramObj.put("tel", paramObj.getString("link"));
+        userBMOImpl.registerUser(paramObj, dataFlowContext);
 
     }
 

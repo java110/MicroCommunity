@@ -23,7 +23,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -32,7 +32,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, MachineDto machineDto);
+    public void addCarInoutDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, MachineDto machineDto);
 
     /**
      * 添加小区信息
@@ -41,7 +41,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId);
+    public void addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId);
     /**
      * 添加物业费用
      *
@@ -49,7 +49,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId);
+    public void addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId);
     /**
      * 添加物业费用
      *
@@ -57,17 +57,17 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, String startTime);
+    public void addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, String startTime);
 
-    public JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto);
-    public JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto, String state, String endTime);
+    public void modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto);
+    public void modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto, String state, String endTime);
     /**
      * 保存照片
      *
      * @param reqJson
      * @param context
      */
-    public JSONObject savePhoto(JSONObject reqJson, DataFlowContext context);
+    public void savePhoto(JSONObject reqJson, DataFlowContext context);
     /**
      * 添加小区信息
      *
@@ -75,7 +75,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -83,7 +83,7 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加设备同步信息
      *
@@ -91,5 +91,5 @@ public interface IMachineTranslateBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

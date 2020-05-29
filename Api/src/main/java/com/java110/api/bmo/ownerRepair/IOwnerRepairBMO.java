@@ -14,9 +14,9 @@ import com.java110.core.context.DataFlowContext;
  **/
 public interface IOwnerRepairBMO extends IApiBaseBMO {
 
-    public JSONObject modifyBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void modifyBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
-    public JSONObject modifyBusinessRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void modifyBusinessRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -25,9 +25,9 @@ public interface IOwnerRepairBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
-    public JSONObject addBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
-    public JSONObject modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addBusinessRepairUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void modifyBusinessRepairDispatch(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -35,7 +35,7 @@ public interface IOwnerRepairBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加业主报修信息
      *
@@ -43,5 +43,5 @@ public interface IOwnerRepairBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateOwnerRepair(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

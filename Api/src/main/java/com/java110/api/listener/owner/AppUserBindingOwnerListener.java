@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.owner.IOwnerBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.SendSmsFactory;
@@ -44,7 +45,7 @@ import java.util.Map;
  **/
 
 @Java110Listener("appUserBindingOwnerListener")
-public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
+public class AppUserBindingOwnerListener extends AbstractServiceApiPlusListener {
 
 
     private static final int DEFAULT_SEQ_COMMUNITY_MEMBER = 2;
@@ -156,22 +157,15 @@ public class AppUserBindingOwnerListener extends AbstractServiceApiListener {
         OwnerDto tmpOwnerDto = ownerDtos.get(0);
 
         DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         paramObj.put("openId", openId);
         paramObj.put("userId", userId);
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+
         //添加小区楼
-        businesses.add(ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto));
+        ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto,context);
 
 
-
-        ResponseEntity<String> responseEntity = ownerBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
 
     }
 

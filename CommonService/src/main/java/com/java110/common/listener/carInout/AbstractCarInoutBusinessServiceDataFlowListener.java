@@ -79,6 +79,12 @@ public abstract class AbstractCarInoutBusinessServiceDataFlowListener extends Ab
 
         currentCarInoutInfo.put("operate", StatusConstant.OPERATE_DEL);
         getCarInoutServiceDaoImpl().saveBusinessCarInoutInfo(currentCarInoutInfo);
+
+        for (Object key : currentCarInoutInfo.keySet()) {
+            if (businessCarInout.get(key) == null) {
+                businessCarInout.put(key.toString(), currentCarInoutInfo.get(key));
+            }
+        }
     }
 
 

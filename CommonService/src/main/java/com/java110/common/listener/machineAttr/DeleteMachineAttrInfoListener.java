@@ -62,26 +62,24 @@ public class DeleteMachineAttrInfoListener extends AbstractMachineAttrBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineAttr 节点
-        if (data.containsKey("businessMachineAttr")) {
-            //处理 businessMachineAttr 节点
-            if (data.containsKey("businessMachineAttr")) {
-                Object _obj = data.get("businessMachineAttr");
-                JSONArray businessMachineAttrs = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE);
+            JSONArray businessMachineAttrs = null;
+            if (_obj instanceof JSONObject) {
+                businessMachineAttrs = new JSONArray();
+                businessMachineAttrs.add(_obj);
+            } else {
+                businessMachineAttrs = (JSONArray) _obj;
+            }
+            //JSONObject businessMachineAttr = data.getJSONObject("businessMachineAttr");
+            for (int _machineAttrIndex = 0; _machineAttrIndex < businessMachineAttrs.size(); _machineAttrIndex++) {
+                JSONObject businessMachineAttr = businessMachineAttrs.getJSONObject(_machineAttrIndex);
+                doBusinessMachineAttr(business, businessMachineAttr);
                 if (_obj instanceof JSONObject) {
-                    businessMachineAttrs = new JSONArray();
-                    businessMachineAttrs.add(_obj);
-                } else {
-                    businessMachineAttrs = (JSONArray) _obj;
-                }
-                //JSONObject businessMachineAttr = data.getJSONObject("businessMachineAttr");
-                for (int _machineAttrIndex = 0; _machineAttrIndex < businessMachineAttrs.size(); _machineAttrIndex++) {
-                    JSONObject businessMachineAttr = businessMachineAttrs.getJSONObject(_machineAttrIndex);
-                    doBusinessMachineAttr(business, businessMachineAttr);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("attrId", businessMachineAttr.getString("attrId"));
-                    }
+                    dataFlowContext.addParamOut("attrId", businessMachineAttr.getString("attrId"));
                 }
             }
+
         }
 
 

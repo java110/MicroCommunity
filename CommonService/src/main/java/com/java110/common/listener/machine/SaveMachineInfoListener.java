@@ -54,8 +54,8 @@ public class SaveMachineInfoListener extends AbstractMachineBusinessServiceDataF
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachine 节点
-        if (data.containsKey("businessMachine")) {
-            Object bObj = data.get("businessMachine");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE);
             JSONArray businessMachines = null;
             if (bObj instanceof JSONObject) {
                 businessMachines = new JSONArray();

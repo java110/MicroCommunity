@@ -39,19 +39,8 @@ public class DeleteParkingAreaListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
+     parkingAreaBMOImpl.deleteParkingArea(reqJson, context);
 
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(parkingAreaBMOImpl.deleteParkingArea(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = parkingAreaBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

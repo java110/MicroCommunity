@@ -45,18 +45,12 @@ public class SaveMachineTranslateListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
 
-        AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(machineTranslateBMOImpl.addMachineTranslate(reqJson, context));
+        machineTranslateBMOImpl.addMachineTranslate(reqJson, context);
 
-        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
 
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

@@ -98,7 +98,7 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMember(JSONObject paramInJson);
+    public void addMember(JSONObject paramInJson,DataFlowContext context);
     /**
      * 添加物业费用
      *
@@ -106,6 +106,6 @@ public interface IApplicationKeyBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 }

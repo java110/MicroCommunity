@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
@@ -22,13 +21,12 @@ import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.CommunityMemberTypeConstant;
 import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -235,8 +233,8 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         JSONArray businesses = new JSONArray();
         AppService service = event.getAppService();
         //添加单元信息
-        businesses.add(machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", null));
-        businesses.add(machineTranslateBMOImpl.addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A)));
+        machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto, "100600", null);
+        machineTranslateBMOImpl.addCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
 
         ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
@@ -354,23 +352,16 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
     }
 
     private void modifyCarInoutInfo(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson, CarInoutDto tmpCarInoutDto, MachineDto machineDto, String from) {
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-        AppService service = event.getAppService();
+
         //添加单元信息
-        businesses.add(machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto));
+        machineTranslateBMOImpl.modifyCarInout(reqJson, context, tmpCarInoutDto);
         reqJson.put("inoutId", tmpCarInoutDto.getInoutId());
-        businesses.add(machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto));
+        machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
         if (HIRE_SELL_OUT.equals(from)) {
-            JSONObject tmpModifyCarInoutFee = modifyCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
-            if (tmpModifyCarInoutFee != null) {
-                businesses.add(tmpModifyCarInoutFee);
-            }
+            modifyCarInoutFee(reqJson, context, tmpCarInoutDto.getCommunityId(), machineDto);
+
         }
 
-        ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
     }
 
     /**
@@ -400,9 +391,9 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         AppService service = event.getAppService();
 
         //添加单元信息
-        businesses.add(machineTranslateBMOImpl.addCarInout(reqJson, context, communityId));
-        businesses.add(machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, communityId, machineDto));
-        businesses.add(machineTranslateBMOImpl.addCarInoutFee(reqJson, context, communityId));
+        machineTranslateBMOImpl.addCarInout(reqJson, context, communityId);
+        machineTranslateBMOImpl.addCarInoutDetail(reqJson, context, communityId, machineDto);
+        machineTranslateBMOImpl.addCarInoutFee(reqJson, context, communityId);
 
 
         ResponseEntity<String> responseEntity = machineTranslateBMOImpl.callService(context, service.getServiceCode(), businesses);
@@ -423,7 +414,7 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
      * @param machineDto
      * @return
      */
-    private JSONObject modifyCarInoutFee(JSONObject reqJson, DataFlowContext context, String communityId, MachineDto machineDto) {
+    private void modifyCarInoutFee(JSONObject reqJson, DataFlowContext context, String communityId, MachineDto machineDto) {
 
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(communityId);
@@ -444,25 +435,20 @@ public class MachineRoadGateOpenListener extends BaseMachineListener {
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
-            return null;
+            return;
         }
 
         FeeDto tmpFeeDto = feeDtos.get(0);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(tmpFeeDto));
         businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("state", "2009001"); // 收费中
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
 
-        return business;
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
+        super.update(context, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+
     }
-
-
 
 
     @Override

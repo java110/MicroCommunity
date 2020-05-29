@@ -62,27 +62,26 @@ public class UpdateMsgReadInfoListener extends AbstractMsgReadBusinessServiceDat
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessMsgRead 节点
-        if (data.containsKey("businessMsgRead")) {
-            //处理 businessMsgRead 节点
-            if (data.containsKey("businessMsgRead")) {
-                Object _obj = data.get("businessMsgRead");
-                JSONArray businessMsgReads = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MSG_READ)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MSG_READ);
+            JSONArray businessMsgReads = null;
+            if (_obj instanceof JSONObject) {
+                businessMsgReads = new JSONArray();
+                businessMsgReads.add(_obj);
+            } else {
+                businessMsgReads = (JSONArray) _obj;
+            }
+            //JSONObject businessMsgRead = data.getJSONObject("businessMsgRead");
+            for (int _msgReadIndex = 0; _msgReadIndex < businessMsgReads.size(); _msgReadIndex++) {
+                JSONObject businessMsgRead = businessMsgReads.getJSONObject(_msgReadIndex);
+                doBusinessMsgRead(business, businessMsgRead);
                 if (_obj instanceof JSONObject) {
-                    businessMsgReads = new JSONArray();
-                    businessMsgReads.add(_obj);
-                } else {
-                    businessMsgReads = (JSONArray) _obj;
-                }
-                //JSONObject businessMsgRead = data.getJSONObject("businessMsgRead");
-                for (int _msgReadIndex = 0; _msgReadIndex < businessMsgReads.size(); _msgReadIndex++) {
-                    JSONObject businessMsgRead = businessMsgReads.getJSONObject(_msgReadIndex);
-                    doBusinessMsgRead(business, businessMsgRead);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("msgReadId", businessMsgRead.getString("msgReadId"));
-                    }
+                    dataFlowContext.addParamOut("msgReadId", businessMsgRead.getString("msgReadId"));
                 }
             }
+
         }
     }
 

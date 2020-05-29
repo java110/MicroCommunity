@@ -77,6 +77,11 @@ public abstract class AbstractMachineAttrBusinessServiceDataFlowListener extends
 
         currentMachineAttrInfo.put("operate", StatusConstant.OPERATE_DEL);
         getMachineAttrServiceDaoImpl().saveBusinessMachineAttrInfo(currentMachineAttrInfo);
+        for (Object key : currentMachineAttrInfo.keySet()) {
+            if (businessMachineAttr.get(key) == null) {
+                businessMachineAttr.put(key.toString(), currentMachineAttrInfo.get(key));
+            }
+        }
     }
 
 

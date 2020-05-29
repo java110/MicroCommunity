@@ -17,7 +17,16 @@ import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.CarInoutDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.utils.constant.*;
+import com.java110.po.car.CarInoutDetailPo;
+import com.java110.po.car.CarInoutPo;
+import com.java110.po.fee.PayFeePo;
+import com.java110.po.file.FileRelPo;
+import com.java110.po.machine.MachineRecordPo;
+import com.java110.po.machine.MachineTranslatePo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommunityMemberTypeConstant;
+import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,6 +60,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
     /**
      * 添加小区信息
      *
@@ -58,19 +68,13 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        MachineTranslatePo machineTranslatePo = BeanConvertUtil.covertBean(paramInJson, MachineTranslatePo.class);
+        super.delete(dataFlowContext, machineTranslatePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE_TRANSLATE);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE_TRANSLATE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineTranslate = new JSONObject();
-        businessMachineTranslate.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineTranslate", businessMachineTranslate);
-        return business;
     }
+
     /**
      * 添加小区信息
      *
@@ -78,13 +82,8 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, MachineDto machineDto) {
+    public void addCarInoutDetail(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, MachineDto machineDto) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCarInoutDetail = new JSONObject();
         businessCarInoutDetail.put("carNum", paramInJson.getString("carNum"));
         businessCarInoutDetail.put("inoutId", paramInJson.getString("inoutId"));
@@ -93,9 +92,9 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         businessCarInoutDetail.put("machineCode", machineDto.getMachineCode());
         businessCarInoutDetail.put("carInout", machineDto.getDirection());
         businessCarInoutDetail.put("detailId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInoutDetail", businessCarInoutDetail);
-        return business;
+        CarInoutDetailPo carInoutDetailPo = BeanConvertUtil.covertBean(businessCarInoutDetail, CarInoutDetailPo.class);
+        super.insert(dataFlowContext, carInoutDetailPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
+
     }
 
 
@@ -106,22 +105,17 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
+    public void addCarInout(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
 
         paramInJson.put("inoutId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_inoutId));
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCarInout = new JSONObject();
         businessCarInout.put("carNum", paramInJson.getString("carNum"));
         businessCarInout.put("inoutId", paramInJson.getString("inoutId"));
         businessCarInout.put("communityId", communityId);
         businessCarInout.put("state", "100300");
         businessCarInout.put("inTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(businessCarInout, CarInoutPo.class);
+        super.insert(dataFlowContext, carInoutPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_INOUT);
     }
 
     /**
@@ -131,8 +125,8 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
-        return addCarInoutFee(paramInJson, dataFlowContext, communityId, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+    public void addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId) {
+        addCarInoutFee(paramInJson, dataFlowContext, communityId, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
     }
 
 
@@ -143,7 +137,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, String startTime) {
+    public void addCarInoutFee(JSONObject paramInJson, DataFlowContext dataFlowContext, String communityId, String startTime) {
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(communityId);
         communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.PROPERTY);
@@ -164,10 +158,6 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
 
         feeConfigDto = feeConfigDtos.get(0);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", "-1");
         businessUnit.put("configId", feeConfigDto.getConfigId());
@@ -182,27 +172,22 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         businessUnit.put("feeFlag", "2006012"); // 一次性费用
         businessUnit.put("state", "2008001"); // 收费中
         businessUnit.put("userId", "-1");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", businessUnit);
-
-        return business;
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
+        super.insert(dataFlowContext, payFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
     }
 
-    public JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto) {
-        return modifyCarInout(reqJson, context, carInoutDto, "100500", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
+    public void modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto) {
+        modifyCarInout(reqJson, context, carInoutDto, "100500", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
     }
 
-    public JSONObject modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto, String state, String endTime) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+    public void modifyCarInout(JSONObject reqJson, DataFlowContext context, CarInoutDto carInoutDto, String state, String endTime) {
+
         JSONObject businessCarInout = new JSONObject();
         businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
         businessCarInout.put("state", state);
         businessCarInout.put("outTime", endTime);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCarInout", businessCarInout);
-        return business;
+        CarInoutPo carInoutPo = BeanConvertUtil.covertBean(businessCarInout, CarInoutPo.class);
+        super.update(context, carInoutPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT);
     }
 
     /**
@@ -211,9 +196,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param reqJson
      * @param context
      */
-    public JSONObject savePhoto(JSONObject reqJson, DataFlowContext context) {
-
-
+    public void savePhoto(JSONObject reqJson, DataFlowContext context) {
         FileDto fileDto = new FileDto();
         fileDto.setCommunityId(reqJson.getString("communityId"));
         fileDto.setFileId(reqJson.getString("fileId"));
@@ -221,10 +204,6 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         fileDto.setContext(reqJson.getString("photo"));
         fileDto.setSuffix("jpeg");
         String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", reqJson.getString("relTypeCd"));
@@ -232,9 +211,8 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         businessUnit.put("objId", reqJson.getString("machineRecordId"));
         businessUnit.put("fileRealName", reqJson.getString("fileId"));
         businessUnit.put("fileSaveName", fileName);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+        super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
 
 
@@ -245,7 +223,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addMachineRecord(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         if (!paramInJson.containsKey("openTypeCd")) {
             paramInJson.put("openTypeCd", "1000");
@@ -256,7 +234,7 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
         }
         paramInJson.put("fileTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_A));
 
-        paramInJson.put("machineRecordId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
+        paramInJson.put("machineRecordId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineRecordId));
 
         String objId = paramInJson.getString("userId");
         //这里objId 可能是 业主ID 也可能是钥匙ID
@@ -287,18 +265,11 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
 
         }
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineRecord = new JSONObject();
-        businessMachineRecord.putAll(paramInJson);
-        //businessMachineRecord.put("machineRecordId", "-1");
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineRecord", businessMachineRecord);
-        return business;
+        MachineRecordPo machineRecordPo = BeanConvertUtil.covertBean(paramInJson, MachineRecordPo.class);
+        super.insert(dataFlowContext, machineRecordPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_RECORD);
     }
+
     /**
      * 添加小区信息
      *
@@ -306,19 +277,18 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessMachineTranslate = new JSONObject();
         businessMachineTranslate.putAll(paramInJson);
         businessMachineTranslate.put("machineTranslateId", "-1");
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineTranslate", businessMachineTranslate);
-        return business;
+
+        MachineTranslatePo machineTranslatePo = BeanConvertUtil.covertBean(businessMachineTranslate, MachineTranslatePo.class);
+        super.insert(dataFlowContext, machineTranslatePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE);
+
     }
+
     /**
      * 添加设备同步信息
      *
@@ -326,17 +296,9 @@ public class MachineTranslateBMOImpl extends ApiBaseBMO implements IMachineTrans
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateMachineTranslate(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_TRANSLATE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessMachineTranslate = new JSONObject();
-        businessMachineTranslate.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessMachineTranslate", businessMachineTranslate);
-        return business;
+        MachineTranslatePo machineTranslatePo = BeanConvertUtil.covertBean(paramInJson, MachineTranslatePo.class);
+        super.update(dataFlowContext, machineTranslatePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_TRANSLATE);
     }
 }

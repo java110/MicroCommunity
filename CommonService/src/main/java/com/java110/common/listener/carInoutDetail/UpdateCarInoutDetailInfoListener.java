@@ -63,26 +63,24 @@ public class UpdateCarInoutDetailInfoListener extends AbstractCarInoutDetailBusi
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCarInoutDetail 节点
-        if (data.containsKey("businessCarInoutDetail")) {
-            //处理 businessCarInoutDetail 节点
-            if (data.containsKey("businessCarInoutDetail")) {
-                Object _obj = data.get("businessCarInoutDetail");
-                JSONArray businessCarInoutDetails = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT_DETAIL)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT_DETAIL);
+            JSONArray businessCarInoutDetails = null;
+            if (_obj instanceof JSONObject) {
+                businessCarInoutDetails = new JSONArray();
+                businessCarInoutDetails.add(_obj);
+            } else {
+                businessCarInoutDetails = (JSONArray) _obj;
+            }
+            //JSONObject businessCarInoutDetail = data.getJSONObject("businessCarInoutDetail");
+            for (int _carInoutDetailIndex = 0; _carInoutDetailIndex < businessCarInoutDetails.size(); _carInoutDetailIndex++) {
+                JSONObject businessCarInoutDetail = businessCarInoutDetails.getJSONObject(_carInoutDetailIndex);
+                doBusinessCarInoutDetail(business, businessCarInoutDetail);
                 if (_obj instanceof JSONObject) {
-                    businessCarInoutDetails = new JSONArray();
-                    businessCarInoutDetails.add(_obj);
-                } else {
-                    businessCarInoutDetails = (JSONArray) _obj;
-                }
-                //JSONObject businessCarInoutDetail = data.getJSONObject("businessCarInoutDetail");
-                for (int _carInoutDetailIndex = 0; _carInoutDetailIndex < businessCarInoutDetails.size(); _carInoutDetailIndex++) {
-                    JSONObject businessCarInoutDetail = businessCarInoutDetails.getJSONObject(_carInoutDetailIndex);
-                    doBusinessCarInoutDetail(business, businessCarInoutDetail);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("detailId", businessCarInoutDetail.getString("detailId"));
-                    }
+                    dataFlowContext.addParamOut("detailId", businessCarInoutDetail.getString("detailId"));
                 }
             }
+
         }
     }
 

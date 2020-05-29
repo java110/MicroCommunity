@@ -1,31 +1,25 @@
 package com.java110.api.listener.parkingSpace;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
-import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.entity.center.AppService;
 import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -39,7 +33,7 @@ import java.util.List;
  * add by wuxw 2019/5/3
  **/
 @Java110Listener("exitParkingSpaceListener")
-public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener {
+public class ExitParkingSpaceListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(ExitParkingSpaceListener.class);
     @Autowired
     private IParkingSpaceBMO parkingSpaceBMOImpl;
@@ -67,41 +61,35 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
         return HttpMethod.POST;
     }
 
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求报文中未包含ownerId节点");
+        Assert.jsonObjectHaveKey(reqJson, "psId", "请求报文中未包含psId节点");
+        Assert.jsonObjectHaveKey(reqJson, "storeId", "请求报文中未包含storeId节点");
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
 
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
+        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
+        Assert.hasLength(reqJson.getString("ownerId"), "ownerId不能为空");
+        Assert.hasLength(reqJson.getString("psId"), "psId不能为空");
+        Assert.hasLength(reqJson.getString("storeId"), "storeId不能为空");
+        //
 
-        String paramIn = dataFlowContext.getReqData();
+        super.communityHasOwner(reqJson, communityInnerServiceSMOImpl);
+    }
 
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        validateHasSellParkingSpace(paramObj);
-
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         //退出 业主和停车位之间关系
-        businesses.add(parkingSpaceBMOImpl.exitParkingSpace(paramObj, dataFlowContext));
+        parkingSpaceBMOImpl.exitParkingSpace(reqJson, context);
 
         //将车位状态改为空闲状态
-        businesses.add(parkingSpaceBMOImpl.modifyParkingSpaceState(paramObj));
+        parkingSpaceBMOImpl.modifyParkingSpaceState(reqJson, context);
 
 
         //删除费用信息
-        businesses.add(parkingSpaceBMOImpl.exitParkingSpaceFee(paramObj, dataFlowContext));
-
-
-        ResponseEntity<String> responseEntity = parkingSpaceBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-
+        parkingSpaceBMOImpl.exitParkingSpaceFee(reqJson, context);
     }
 
 
@@ -113,19 +101,6 @@ public class ExitParkingSpaceListener extends AbstractServiceApiDataFlowListener
      *                "memberTypeCd": "390001200001"
      */
     private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(paramIn, "ownerId", "请求报文中未包含ownerId节点");
-        Assert.jsonObjectHaveKey(paramIn, "psId", "请求报文中未包含psId节点");
-        Assert.jsonObjectHaveKey(paramIn, "storeId", "请求报文中未包含storeId节点");
-
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-        Assert.hasLength(paramObj.getString("communityId"), "小区ID不能为空");
-        Assert.hasLength(paramObj.getString("ownerId"), "ownerId不能为空");
-        Assert.hasLength(paramObj.getString("psId"), "psId不能为空");
-        Assert.hasLength(paramObj.getString("storeId"), "storeId不能为空");
-        //
-
-        super.communityHasOwner(paramObj, communityInnerServiceSMOImpl);
 
 
     }

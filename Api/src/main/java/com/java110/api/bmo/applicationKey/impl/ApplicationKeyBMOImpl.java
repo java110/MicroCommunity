@@ -10,18 +10,16 @@ import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
-import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.po.applicationKey.ApplicationKeyPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.po.message.MsgPo;
+import com.java110.po.owner.OwnerPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -303,7 +301,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addMember(JSONObject paramInJson) {
+    public void addMember(JSONObject paramInJson, DataFlowContext context) {
 
         //根据房屋ID查询业主ID，自动生成成员ID
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
@@ -317,18 +315,15 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
         paramInJson.put("memberId", memberId);
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(paramInJson);
         businessOwner.put("ownerTypeCd", "1004");//临时人员
         businessOwner.put("state", "1000");//待审核
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOwner", businessOwner);
 
-        return business;
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+
+        super.insert(context, ownerPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
+
     }
 
 
@@ -339,13 +334,9 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addOwnerKeyPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "10000");
@@ -353,9 +344,11 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         businessUnit.put("objId", paramInJson.getString("memberId"));
         businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
 
-        return business;
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+
+        super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+
     }
 
 }

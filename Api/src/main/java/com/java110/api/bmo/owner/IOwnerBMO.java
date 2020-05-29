@@ -21,7 +21,7 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject addOwnerAppUser(JSONObject paramInJson, CommunityDto communityDto, OwnerDto ownerDto);
+    public void addOwnerAppUser(JSONObject paramInJson, CommunityDto communityDto, OwnerDto ownerDto, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -29,14 +29,14 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteOwner(JSONObject paramInJson);
+    public void deleteOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
     /**
@@ -45,14 +45,14 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param paramInJson 接口传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject exitCommunityMember(JSONObject paramInJson);
+    public void exitCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwner(JSONObject paramInJson);
+    public void editOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加物业费用
      *
@@ -60,7 +60,7 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void editOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加物业费用
      *
@@ -68,7 +68,7 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addOwnerPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加物业费用
      *
@@ -76,7 +76,7 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addPropertyFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 售卖房屋信息
      *
@@ -84,14 +84,14 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void sellRoom(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区成员
      *
      * @param paramInJson 组装 楼小区关系
      * @return 小区成员信息
      */
-    public JSONObject addCommunityMember(JSONObject paramInJson);
+    public void addCommunityMember(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      * <p>
@@ -104,7 +104,7 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addOwner(JSONObject paramInJson);
+    public void addOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加审核业主绑定信息
      *
@@ -112,13 +112,13 @@ public interface IOwnerBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateAuditAppUserBindingOwner(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      *
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editOwnerPhoto(JSONObject paramInJson);
+    public void editOwnerPhotoPass(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 }
