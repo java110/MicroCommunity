@@ -54,8 +54,8 @@ public class SaveOrgStaffRelInfoListener extends AbstractOrgStaffRelBusinessServ
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOrgStaffRel 节点
-        if (data.containsKey("businessOrgStaffRel")) {
-            Object bObj = data.get("businessOrgStaffRel");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL);
             JSONArray businessOrgStaffRels = null;
             if (bObj instanceof JSONObject) {
                 businessOrgStaffRels = new JSONArray();

@@ -15,7 +15,7 @@ public interface IJunkRequirementBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     JSONObject addJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加旧货市场信息
@@ -24,7 +24,7 @@ public interface IJunkRequirementBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void updateJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除旧货市场
@@ -33,7 +33,7 @@ public interface IJunkRequirementBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void deleteJunkRequirement(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加图片
@@ -42,7 +42,7 @@ public interface IJunkRequirementBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void  addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 

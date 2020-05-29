@@ -61,26 +61,25 @@ public class DeleteOrgInfoListener extends AbstractOrgBusinessServiceDataFlowLis
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessOrg 节点
-        if (data.containsKey("businessOrg")) {
-            //处理 businessOrg 节点
-            if (data.containsKey("businessOrg")) {
-                Object _obj = data.get("businessOrg");
-                JSONArray businessOrgs = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ORG)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ORG);
+            JSONArray businessOrgs = null;
+            if (_obj instanceof JSONObject) {
+                businessOrgs = new JSONArray();
+                businessOrgs.add(_obj);
+            } else {
+                businessOrgs = (JSONArray) _obj;
+            }
+            //JSONObject businessOrg = data.getJSONObject("businessOrg");
+            for (int _orgIndex = 0; _orgIndex < businessOrgs.size(); _orgIndex++) {
+                JSONObject businessOrg = businessOrgs.getJSONObject(_orgIndex);
+                doBusinessOrg(business, businessOrg);
                 if (_obj instanceof JSONObject) {
-                    businessOrgs = new JSONArray();
-                    businessOrgs.add(_obj);
-                } else {
-                    businessOrgs = (JSONArray) _obj;
+                    dataFlowContext.addParamOut("orgId", businessOrg.getString("orgId"));
                 }
-                //JSONObject businessOrg = data.getJSONObject("businessOrg");
-                for (int _orgIndex = 0; _orgIndex < businessOrgs.size(); _orgIndex++) {
-                    JSONObject businessOrg = businessOrgs.getJSONObject(_orgIndex);
-                    doBusinessOrg(business, businessOrg);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("orgId", businessOrg.getString("orgId"));
-                    }
-                }
+
             }
         }
 

@@ -54,8 +54,8 @@ public class SaveOwnerAppUserInfoListener extends AbstractOwnerAppUserBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerAppUser 节点
-        if (data.containsKey("businessOwnerAppUser")) {
-            Object bObj = data.get("businessOwnerAppUser");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
             JSONArray businessOwnerAppUsers = null;
             if (bObj instanceof JSONObject) {
                 businessOwnerAppUsers = new JSONArray();

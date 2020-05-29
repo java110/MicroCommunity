@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.inspection.IInspectionBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -22,7 +23,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveInspectionRoutePointListener")
-public class SaveInspectionRoutePointListener extends AbstractServiceApiListener {
+public class SaveInspectionRoutePointListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
 
@@ -49,20 +50,16 @@ public class SaveInspectionRoutePointListener extends AbstractServiceApiListener
 
         if (reqJson.containsKey("inspectionId")) {
             //添加单元信息
-            businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, 1));
+           inspectionBMOImpl.addInspectionRoute(reqJson, context, 1);
         } else { //批量的情况
             JSONArray points = reqJson.getJSONArray("points");
             for (int pointIndex = 0; pointIndex < points.size(); pointIndex++) {
                 reqJson.put("inspectionId", points.getJSONObject(pointIndex).getString("inspectionId"));
                 reqJson.put("inspectionName", points.getJSONObject(pointIndex).getString("inspectionName"));
-                businesses.add(inspectionBMOImpl.addInspectionRoute(reqJson, context, pointIndex + 1));
+                inspectionBMOImpl.addInspectionRoute(reqJson, context, pointIndex + 1);
             }
         }
 
-
-        ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

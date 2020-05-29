@@ -77,6 +77,12 @@ public abstract class AbstractOrgStaffRelBusinessServiceDataFlowListener extends
 
         currentOrgStaffRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOrgStaffRelServiceDaoImpl().saveBusinessOrgStaffRelInfo(currentOrgStaffRelInfo);
+
+        for (Object key : currentOrgStaffRelInfo.keySet()) {
+            if (businessOrgStaffRel.get(key) == null) {
+                businessOrgStaffRel.put(key.toString(), currentOrgStaffRelInfo.get(key));
+            }
+        }
     }
 
 

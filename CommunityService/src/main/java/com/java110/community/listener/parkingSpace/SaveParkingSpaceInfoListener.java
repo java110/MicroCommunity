@@ -55,8 +55,8 @@ public class SaveParkingSpaceInfoListener extends AbstractParkingSpaceBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessParkingSpace 节点
-        if (data.containsKey("businessParkingSpace")) {
-            Object bObj = data.get("businessParkingSpace");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PARKING_SPACE);
             JSONArray businessParkingSpaces = null;
             if (bObj instanceof JSONObject) {
                 businessParkingSpaces = new JSONArray();

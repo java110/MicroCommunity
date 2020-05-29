@@ -55,8 +55,8 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwner 节点
-        if (data.containsKey("businessOwner")) {
-            Object bObj = data.get("businessOwner");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
             JSONArray businessOwners = null;
             if (bObj instanceof JSONObject) {
                 businessOwners = new JSONArray();

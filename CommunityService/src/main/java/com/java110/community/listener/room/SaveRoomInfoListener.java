@@ -54,8 +54,8 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRoom 节点
-        if (data.containsKey("businessRoom")) {
-            Object _obj = data.get("businessRoom");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
             JSONArray businessRooms = null;
             if (_obj instanceof JSONObject) {
                 businessRooms = new JSONArray();

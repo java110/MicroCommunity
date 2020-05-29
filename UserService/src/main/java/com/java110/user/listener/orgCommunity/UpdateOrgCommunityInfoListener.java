@@ -62,27 +62,26 @@ public class UpdateOrgCommunityInfoListener extends AbstractOrgCommunityBusiness
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessOrgCommunity 节点
-        if (data.containsKey("businessOrgCommunity")) {
-            //处理 businessOrgCommunity 节点
-            if (data.containsKey("businessOrgCommunity")) {
-                Object _obj = data.get("businessOrgCommunity");
-                JSONArray businessOrgCommunitys = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_COMMUNITY)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_COMMUNITY);
+            JSONArray businessOrgCommunitys = null;
+            if (_obj instanceof JSONObject) {
+                businessOrgCommunitys = new JSONArray();
+                businessOrgCommunitys.add(_obj);
+            } else {
+                businessOrgCommunitys = (JSONArray) _obj;
+            }
+            //JSONObject businessOrgCommunity = data.getJSONObject("businessOrgCommunity");
+            for (int _orgCommunityIndex = 0; _orgCommunityIndex < businessOrgCommunitys.size(); _orgCommunityIndex++) {
+                JSONObject businessOrgCommunity = businessOrgCommunitys.getJSONObject(_orgCommunityIndex);
+                doBusinessOrgCommunity(business, businessOrgCommunity);
                 if (_obj instanceof JSONObject) {
-                    businessOrgCommunitys = new JSONArray();
-                    businessOrgCommunitys.add(_obj);
-                } else {
-                    businessOrgCommunitys = (JSONArray) _obj;
-                }
-                //JSONObject businessOrgCommunity = data.getJSONObject("businessOrgCommunity");
-                for (int _orgCommunityIndex = 0; _orgCommunityIndex < businessOrgCommunitys.size(); _orgCommunityIndex++) {
-                    JSONObject businessOrgCommunity = businessOrgCommunitys.getJSONObject(_orgCommunityIndex);
-                    doBusinessOrgCommunity(business, businessOrgCommunity);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("orgCommunityId", businessOrgCommunity.getString("orgCommunityId"));
-                    }
+                    dataFlowContext.addParamOut("orgCommunityId", businessOrgCommunity.getString("orgCommunityId"));
                 }
             }
+
         }
     }
 

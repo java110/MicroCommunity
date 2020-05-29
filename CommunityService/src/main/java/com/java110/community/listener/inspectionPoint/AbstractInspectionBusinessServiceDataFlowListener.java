@@ -72,6 +72,12 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
         currentInspectionInfo.put("communityId", currentInspectionInfo.get("community_id"));
         currentInspectionInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionServiceDaoImpl().saveBusinessInspectionInfo(currentInspectionInfo);
+
+        for (Object key : currentInspectionInfo.keySet()) {
+            if (businessInspection.get(key) == null) {
+                businessInspection.put(key.toString(), currentInspectionInfo.get(key));
+            }
+        }
     }
 
 

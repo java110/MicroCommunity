@@ -91,6 +91,12 @@ public abstract class AbstractOwnerAppUserBusinessServiceDataFlowListener extend
 
         currentOwnerAppUserInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerAppUserServiceDaoImpl().saveBusinessOwnerAppUserInfo(currentOwnerAppUserInfo);
+
+        for (Object key : currentOwnerAppUserInfo.keySet()) {
+            if (businessOwnerAppUser.get(key) == null) {
+                businessOwnerAppUser.put(key.toString(), currentOwnerAppUserInfo.get(key));
+            }
+        }
     }
 
 

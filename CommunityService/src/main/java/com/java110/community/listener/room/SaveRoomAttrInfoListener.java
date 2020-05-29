@@ -55,8 +55,8 @@ public class SaveRoomAttrInfoListener extends AbstractRoomAttrBusinessServiceDat
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRoomAttr 节点
-        if (data.containsKey("businessRoomAttr")) {
-            Object _obj = data.get("businessRoomAttr");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
             JSONArray businessRoomAttrs = null;
             if (_obj instanceof JSONObject) {
                 businessRoomAttrs = new JSONArray();

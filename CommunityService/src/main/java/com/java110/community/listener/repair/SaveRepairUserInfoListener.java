@@ -53,8 +53,8 @@ public class SaveRepairUserInfoListener extends AbstractRepairUserBusinessServic
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRepairUser 节点
-        if(data.containsKey("businessRepairUser")){
-            Object bObj = data.get("businessRepairUser");
+        if(data.containsKey( BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER)){
+            Object bObj = data.get( BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR_USER);
             JSONArray businessRepairUsers = null;
             if(bObj instanceof JSONObject){
                 businessRepairUsers = new JSONArray();

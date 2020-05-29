@@ -1,12 +1,12 @@
 package com.java110.community.listener.parkingSpace;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.community.dao.IParkingSpaceServiceDao;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.exception.ListenerExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +85,12 @@ public abstract class AbstractParkingSpaceBusinessServiceDataFlowListener extend
 
         currentParkingSpaceInfo.put("operate", StatusConstant.OPERATE_DEL);
         getParkingSpaceServiceDaoImpl().saveBusinessParkingSpaceInfo(currentParkingSpaceInfo);
+
+        for (Object key : currentParkingSpaceInfo.keySet()) {
+            if (businessParkingSpace.get(key) == null) {
+                businessParkingSpace.put(key.toString(), currentParkingSpaceInfo.get(key));
+            }
+        }
     }
 
 

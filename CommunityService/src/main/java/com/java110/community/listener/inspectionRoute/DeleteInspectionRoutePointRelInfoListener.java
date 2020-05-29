@@ -62,26 +62,24 @@ public class DeleteInspectionRoutePointRelInfoListener extends AbstractInspectio
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionRoutePointRel 节点
-        if (data.containsKey("businessInspectionRoutePointRel")) {
-            //处理 businessInspectionRoutePointRel 节点
-            if (data.containsKey("businessInspectionRoutePointRel")) {
-                Object _obj = data.get("businessInspectionRoutePointRel");
-                JSONArray businessInspectionRoutePointRels = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL);
+            JSONArray businessInspectionRoutePointRels = null;
+            if (_obj instanceof JSONObject) {
+                businessInspectionRoutePointRels = new JSONArray();
+                businessInspectionRoutePointRels.add(_obj);
+            } else {
+                businessInspectionRoutePointRels = (JSONArray) _obj;
+            }
+            //JSONObject businessInspectionRoutePointRel = data.getJSONObject("businessInspectionRoutePointRel");
+            for (int _inspectionRoutePointRelIndex = 0; _inspectionRoutePointRelIndex < businessInspectionRoutePointRels.size(); _inspectionRoutePointRelIndex++) {
+                JSONObject businessInspectionRoutePointRel = businessInspectionRoutePointRels.getJSONObject(_inspectionRoutePointRelIndex);
+                doBusinessInspectionRoutePointRel(business, businessInspectionRoutePointRel);
                 if (_obj instanceof JSONObject) {
-                    businessInspectionRoutePointRels = new JSONArray();
-                    businessInspectionRoutePointRels.add(_obj);
-                } else {
-                    businessInspectionRoutePointRels = (JSONArray) _obj;
-                }
-                //JSONObject businessInspectionRoutePointRel = data.getJSONObject("businessInspectionRoutePointRel");
-                for (int _inspectionRoutePointRelIndex = 0; _inspectionRoutePointRelIndex < businessInspectionRoutePointRels.size(); _inspectionRoutePointRelIndex++) {
-                    JSONObject businessInspectionRoutePointRel = businessInspectionRoutePointRels.getJSONObject(_inspectionRoutePointRelIndex);
-                    doBusinessInspectionRoutePointRel(business, businessInspectionRoutePointRel);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));
-                    }
+                    dataFlowContext.addParamOut("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));
                 }
             }
+
         }
 
 

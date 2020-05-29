@@ -53,8 +53,8 @@ public class SaveVisitInfoListener extends AbstractVisitBusinessServiceDataFlowL
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessVisit 节点
-        if(data.containsKey("businessVisit")){
-            Object bObj = data.get("businessVisit");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT);
             JSONArray businessVisits = null;
             if(bObj instanceof JSONObject){
                 businessVisits = new JSONArray();

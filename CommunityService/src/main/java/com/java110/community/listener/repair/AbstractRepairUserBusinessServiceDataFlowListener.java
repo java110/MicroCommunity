@@ -79,6 +79,12 @@ public abstract class AbstractRepairUserBusinessServiceDataFlowListener extends 
 
         currentRepairUserInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRepairUserServiceDaoImpl().saveBusinessRepairUserInfo(currentRepairUserInfo);
+
+        for (Object key : currentRepairUserInfo.keySet()) {
+            if (businessRepairUser.get(key) == null) {
+                businessRepairUser.put(key.toString(), currentRepairUserInfo.get(key));
+            }
+        }
     }
 
 

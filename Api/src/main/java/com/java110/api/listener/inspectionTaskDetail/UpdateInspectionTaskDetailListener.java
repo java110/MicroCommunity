@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.inspectionTask.IInspectionTaskBMO;
 import com.java110.api.bmo.inspectionTaskDetail.IInspectionTaskDetailBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -20,7 +20,6 @@ import com.java110.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeInspectionTaskDetailConstant;
 import com.java110.utils.util.Assert;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,7 +34,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateInspectionTaskDetailListener")
-public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListener {
+public class UpdateInspectionTaskDetailListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IInspectionTaskDetailBMO inspectionTaskDetailBMOImpl;
@@ -77,12 +76,12 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         AppService service = event.getAppService();
 
         if (reqJson.containsKey("photos")) {
-            dealPhotos(businesses,reqJson,context);
+            dealPhotos(businesses, reqJson, context);
         }
 
         //添加单元信息
         reqJson.put("state", "20200407");//巡检点完成
-        businesses.add(inspectionTaskDetailBMOImpl.updateInspectionTaskDetail(reqJson, context));
+        inspectionTaskDetailBMOImpl.updateInspectionTaskDetail(reqJson, context);
 
         InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
         inspectionTaskDto.setTaskId(reqJson.getString("taskId"));
@@ -92,7 +91,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
 
         if (inspectionTaskDtos != null && inspectionTaskDtos.size() > 0) {
             reqJson.put("state", "20200406");
-            businesses.add(inspectionTaskBMOImpl.updateInspectionTask(reqJson, context));
+            inspectionTaskBMOImpl.updateInspectionTask(reqJson, context);
         }
         ResponseEntity<String> responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
@@ -112,18 +111,18 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
         inspectionTaskDetailDto.setState("20200407");
         int count = inspectionTaskDetailInnerServiceSMOImpl.queryInspectionTaskDetailsCount(inspectionTaskDetailDto);
 
-        if(count > 0){//说明还没有巡检完
-            return ;
+        if (count > 0) {//说明还没有巡检完
+            return;
         }
         businesses = new JSONArray();
         reqJson.put("state", "20200407");//巡检完成
-        businesses.add(inspectionTaskBMOImpl.updateInspectionTask(reqJson, context));
+        inspectionTaskBMOImpl.updateInspectionTask(reqJson, context);
         responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
         context.setResponseEntity(responseEntity);
     }
 
 
-    private void dealPhotos(JSONArray businesses, JSONObject reqJson,DataFlowContext context) {
+    private void dealPhotos(JSONArray businesses, JSONObject reqJson, DataFlowContext context) {
         JSONArray photos = reqJson.getJSONArray("photos");
         JSONObject photo = null;
         for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
@@ -138,7 +137,7 @@ public class UpdateInspectionTaskDetailListener extends AbstractServiceApiListen
             reqJson.put("photoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(inspectionTaskBMOImpl.addPhoto(reqJson, context));
+            inspectionTaskBMOImpl.addPhoto(reqJson, context);
         }
     }
 

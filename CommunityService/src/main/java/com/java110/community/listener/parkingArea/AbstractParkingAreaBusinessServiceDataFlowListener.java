@@ -77,6 +77,12 @@ public abstract class AbstractParkingAreaBusinessServiceDataFlowListener extends
 
         currentParkingAreaInfo.put("operate", StatusConstant.OPERATE_DEL);
         getParkingAreaServiceDaoImpl().saveBusinessParkingAreaInfo(currentParkingAreaInfo);
+
+        for (Object key : currentParkingAreaInfo.keySet()) {
+            if (businessParkingArea.get(key) == null) {
+                businessParkingArea.put(key.toString(), currentParkingAreaInfo.get(key));
+            }
+        }
     }
 
 

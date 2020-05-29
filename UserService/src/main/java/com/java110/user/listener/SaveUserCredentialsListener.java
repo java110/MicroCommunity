@@ -54,9 +54,9 @@ public class SaveUserCredentialsListener extends AbstractBusinessServiceDataFlow
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data,"businessUserCredentials","datas 节点下没有包含 businessUser 节点");
+        Assert.jsonObjectHaveKey(data,BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_CREDENTIALS,"datas 节点下没有包含 businessUser 节点");
 
-        JSONObject businessUser = data.getJSONObject("businessUserCredentials");
+        JSONObject businessUser = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_CREDENTIALS);
 
         Assert.jsonObjectHaveKey(businessUser,"userId","businessUser 节点下没有包含 userId 节点");
 

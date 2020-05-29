@@ -85,6 +85,11 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
 
         currentOwnerCarInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerCarServiceDaoImpl().saveBusinessOwnerCarInfo(currentOwnerCarInfo);
+        for (Object key : currentOwnerCarInfo.keySet()) {
+            if (businessOwnerCar.get(key) == null) {
+                businessOwnerCar.put(key.toString(), currentOwnerCarInfo.get(key));
+            }
+        }
     }
 
 

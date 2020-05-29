@@ -61,11 +61,9 @@ public class DeleteInspectionRouteInfoListener extends AbstractInspectionRouteBu
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessInspectionRoute 节点
-        if (data.containsKey("businessInspectionRoute")) {
             //处理 businessInspectionRoute 节点
-            if (data.containsKey("businessInspectionRoute")) {
-                Object _obj = data.get("businessInspectionRoute");
+            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE)) {
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE);
                 JSONArray businessInspectionRoutes = null;
                 if (_obj instanceof JSONObject) {
                     businessInspectionRoutes = new JSONArray();
@@ -81,7 +79,7 @@ public class DeleteInspectionRouteInfoListener extends AbstractInspectionRouteBu
                         dataFlowContext.addParamOut("inspectionRouteId", businessInspectionRoute.getString("inspectionRouteId"));
                     }
                 }
-            }
+
         }
 
 

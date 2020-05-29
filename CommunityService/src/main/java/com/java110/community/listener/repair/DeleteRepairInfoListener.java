@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 删除报修信息信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessRepair:{} 报修信息基本信息节点
  * 2、businessRepairAttr:[{}] 报修信息属性信息节点
@@ -51,36 +51,35 @@ public class DeleteRepairInfoListener extends AbstractRepairBusinessServiceDataF
 
     /**
      * 根据删除信息 查出Instance表中数据 保存至business表 （状态写DEL） 方便撤单时直接更新回去
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRepair 节点
-        if(data.containsKey("businessRepair")){
-            //处理 businessRepair 节点
-            if(data.containsKey("businessRepair")){
-                Object _obj = data.get("businessRepair");
-                JSONArray businessRepairs = null;
-                if(_obj instanceof JSONObject){
-                    businessRepairs = new JSONArray();
-                    businessRepairs.add(_obj);
-                }else {
-                    businessRepairs = (JSONArray)_obj;
-                }
-                //JSONObject businessRepair = data.getJSONObject("businessRepair");
-                for (int _repairIndex = 0; _repairIndex < businessRepairs.size();_repairIndex++) {
-                    JSONObject businessRepair = businessRepairs.getJSONObject(_repairIndex);
-                    doBusinessRepair(business, businessRepair);
-                    if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("repairId", businessRepair.getString("repairId"));
-                    }
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_REPAIR)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_REPAIR);
+            JSONArray businessRepairs = null;
+            if (_obj instanceof JSONObject) {
+                businessRepairs = new JSONArray();
+                businessRepairs.add(_obj);
+            } else {
+                businessRepairs = (JSONArray) _obj;
+            }
+            //JSONObject businessRepair = data.getJSONObject("businessRepair");
+            for (int _repairIndex = 0; _repairIndex < businessRepairs.size(); _repairIndex++) {
+                JSONObject businessRepair = businessRepairs.getJSONObject(_repairIndex);
+                doBusinessRepair(business, businessRepair);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("repairId", businessRepair.getString("repairId"));
                 }
             }
+
         }
 
 
@@ -88,8 +87,9 @@ public class DeleteRepairInfoListener extends AbstractRepairBusinessServiceDataF
 
     /**
      * 删除 instance数据
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -98,17 +98,17 @@ public class DeleteRepairInfoListener extends AbstractRepairBusinessServiceDataF
 
         //报修信息信息
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_DEL);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_DEL);
 
         //报修信息信息
         List<Map> businessRepairInfos = repairServiceDaoImpl.getBusinessRepairInfo(info);
-        if( businessRepairInfos != null && businessRepairInfos.size() >0) {
-            for (int _repairIndex = 0; _repairIndex < businessRepairInfos.size();_repairIndex++) {
+        if (businessRepairInfos != null && businessRepairInfos.size() > 0) {
+            for (int _repairIndex = 0; _repairIndex < businessRepairInfos.size(); _repairIndex++) {
                 Map businessRepairInfo = businessRepairInfos.get(_repairIndex);
-                flushBusinessRepairInfo(businessRepairInfo,StatusConstant.STATUS_CD_INVALID);
+                flushBusinessRepairInfo(businessRepairInfo, StatusConstant.STATUS_CD_INVALID);
                 repairServiceDaoImpl.updateRepairInfoInstance(businessRepairInfo);
-                dataFlowContext.addParamOut("repairId",businessRepairInfo.get("repair_id"));
+                dataFlowContext.addParamOut("repairId", businessRepairInfo.get("repair_id"));
             }
         }
 
@@ -117,54 +117,55 @@ public class DeleteRepairInfoListener extends AbstractRepairBusinessServiceDataF
     /**
      * 撤单
      * 从business表中查询到DEL的数据 将instance中的数据更新回来
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_INVALID);
 
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //报修信息信息
         List<Map> repairInfo = repairServiceDaoImpl.getRepairInfo(info);
-        if(repairInfo != null && repairInfo.size() > 0){
+        if (repairInfo != null && repairInfo.size() > 0) {
 
             //报修信息信息
             List<Map> businessRepairInfos = repairServiceDaoImpl.getBusinessRepairInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessRepairInfos == null ||  businessRepairInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（repair），程序内部异常,请检查！ "+delInfo);
+            if (businessRepairInfos == null || businessRepairInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（repair），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _repairIndex = 0; _repairIndex < businessRepairInfos.size();_repairIndex++) {
+            for (int _repairIndex = 0; _repairIndex < businessRepairInfos.size(); _repairIndex++) {
                 Map businessRepairInfo = businessRepairInfos.get(_repairIndex);
-                flushBusinessRepairInfo(businessRepairInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessRepairInfo(businessRepairInfo, StatusConstant.STATUS_CD_VALID);
                 repairServiceDaoImpl.updateRepairInfoInstance(businessRepairInfo);
             }
         }
     }
 
 
-
     /**
      * 处理 businessRepair 节点
-     * @param business 总的数据节点
+     *
+     * @param business       总的数据节点
      * @param businessRepair 报修信息节点
      */
-    private void doBusinessRepair(Business business,JSONObject businessRepair){
+    private void doBusinessRepair(Business business, JSONObject businessRepair) {
 
-        Assert.jsonObjectHaveKey(businessRepair,"repairId","businessRepair 节点下没有包含 repairId 节点");
+        Assert.jsonObjectHaveKey(businessRepair, "repairId", "businessRepair 节点下没有包含 repairId 节点");
 
-        if(businessRepair.getString("repairId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"repairId 错误，不能自动生成（必须已经存在的repairId）"+businessRepair);
+        if (businessRepair.getString("repairId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "repairId 错误，不能自动生成（必须已经存在的repairId）" + businessRepair);
         }
         //自动插入DEL
-        autoSaveDelBusinessRepair(business,businessRepair);
+        autoSaveDelBusinessRepair(business, businessRepair);
     }
 
     public IRepairServiceDao getRepairServiceDaoImpl() {

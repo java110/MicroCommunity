@@ -61,27 +61,26 @@ public class DeleteJunkRequirementInfoListener extends AbstractJunkRequirementBu
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessJunkRequirement 节点
-        if (data.containsKey("businessJunkRequirement")) {
-            //处理 businessJunkRequirement 节点
-            if (data.containsKey("businessJunkRequirement")) {
-                Object _obj = data.get("businessJunkRequirement");
-                JSONArray businessJunkRequirements = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT);
+            JSONArray businessJunkRequirements = null;
+            if (_obj instanceof JSONObject) {
+                businessJunkRequirements = new JSONArray();
+                businessJunkRequirements.add(_obj);
+            } else {
+                businessJunkRequirements = (JSONArray) _obj;
+            }
+            //JSONObject businessJunkRequirement = data.getJSONObject("businessJunkRequirement");
+            for (int _junkRequirementIndex = 0; _junkRequirementIndex < businessJunkRequirements.size(); _junkRequirementIndex++) {
+                JSONObject businessJunkRequirement = businessJunkRequirements.getJSONObject(_junkRequirementIndex);
+                doBusinessJunkRequirement(business, businessJunkRequirement);
                 if (_obj instanceof JSONObject) {
-                    businessJunkRequirements = new JSONArray();
-                    businessJunkRequirements.add(_obj);
-                } else {
-                    businessJunkRequirements = (JSONArray) _obj;
-                }
-                //JSONObject businessJunkRequirement = data.getJSONObject("businessJunkRequirement");
-                for (int _junkRequirementIndex = 0; _junkRequirementIndex < businessJunkRequirements.size(); _junkRequirementIndex++) {
-                    JSONObject businessJunkRequirement = businessJunkRequirements.getJSONObject(_junkRequirementIndex);
-                    doBusinessJunkRequirement(business, businessJunkRequirement);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("junkRequirementId", businessJunkRequirement.getString("junkRequirementId"));
-                    }
+                    dataFlowContext.addParamOut("junkRequirementId", businessJunkRequirement.getString("junkRequirementId"));
                 }
             }
+
         }
 
 

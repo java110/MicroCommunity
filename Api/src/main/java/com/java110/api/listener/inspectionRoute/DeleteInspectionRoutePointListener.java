@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.inspection.IInspectionBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.inspectionRoute.IInspectionRoutePointRelInnerServiceSMO;
@@ -27,7 +28,7 @@ import java.util.List;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("deleteInspectionRoutePointListener")
-public class DeleteInspectionRoutePointListener extends AbstractServiceApiListener {
+public class DeleteInspectionRoutePointListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IInspectionBMO inspectionBMOImpl;
 
@@ -47,19 +48,7 @@ public class DeleteInspectionRoutePointListener extends AbstractServiceApiListen
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(inspectionBMOImpl.deleteInspectionRoute(reqJson, context));
-
-
-        ResponseEntity<String> responseEntity = inspectionBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+       inspectionBMOImpl.deleteInspectionRoute(reqJson, context);
     }
 
     @Override

@@ -2,15 +2,15 @@ package com.java110.community.listener.room;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IRoomServiceDao;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.community.dao.IRoomServiceDao;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import java.util.Map;
 @Transactional
 public class UpdateRoomInfoListener extends AbstractRoomBusinessServiceDataFlowListener {
 
-    private  static Logger logger = LoggerFactory.getLogger(UpdateRoomInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(UpdateRoomInfoListener.class);
     @Autowired
     IRoomServiceDao roomServiceDaoImpl;
 
@@ -63,27 +63,26 @@ public class UpdateRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessRoom 节点
-        if (data.containsKey("businessRoom")) {
-            //处理 businessRoom 节点
-            if (data.containsKey("businessRoom")) {
-                Object _obj = data.get("businessRoom");
-                JSONArray businessRooms = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ROOM_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ROOM_INFO);
+            JSONArray businessRooms = null;
+            if (_obj instanceof JSONObject) {
+                businessRooms = new JSONArray();
+                businessRooms.add(_obj);
+            } else {
+                businessRooms = (JSONArray) _obj;
+            }
+            //JSONObject businessRoom = data.getJSONObject("businessRoom");
+            for (int _roomIndex = 0; _roomIndex < businessRooms.size(); _roomIndex++) {
+                JSONObject businessRoom = businessRooms.getJSONObject(_roomIndex);
+                doBusinessRoom(business, businessRoom);
                 if (_obj instanceof JSONObject) {
-                    businessRooms = new JSONArray();
-                    businessRooms.add(_obj);
-                } else {
-                    businessRooms = (JSONArray) _obj;
-                }
-                //JSONObject businessRoom = data.getJSONObject("businessRoom");
-                for (int _roomIndex = 0; _roomIndex < businessRooms.size(); _roomIndex++) {
-                    JSONObject businessRoom = businessRooms.getJSONObject(_roomIndex);
-                    doBusinessRoom(business, businessRoom);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("roomId", businessRoom.getString("roomId"));
-                    }
+                    dataFlowContext.addParamOut("roomId", businessRoom.getString("roomId"));
                 }
             }
+
         }
     }
 
@@ -169,11 +168,11 @@ public class UpdateRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "roomId 错误，不能自动生成（必须已经存在的roomId）" + businessRoom);
         }
         //自动保存DEL
-        Map<String,String> currentRoomInfo = autoSaveDelBusinessRoom(business, businessRoom);
+        Map<String, String> currentRoomInfo = autoSaveDelBusinessRoom(business, businessRoom);
 
         businessRoom.put("bId", business.getbId());
         businessRoom.put("operate", StatusConstant.OPERATE_ADD);
-        Map<String,String> needInsert = new HashMap<>();
+        Map<String, String> needInsert = new HashMap<>();
         //将不需要改变的数据写到businessRoom中
         for (Map.Entry<String, String> currentRoomInfoEntry : currentRoomInfo.entrySet()) {
             Iterator iter = businessRoom.entrySet().iterator();
@@ -181,18 +180,18 @@ public class UpdateRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
             while (iter.hasNext()) {
                 Map.Entry entry = (Map.Entry) iter.next();
                 //key值比对
-                if (currentRoomInfoEntry.getKey().equals(entry.getKey().toString())){
+                if (currentRoomInfoEntry.getKey().equals(entry.getKey().toString())) {
                     writeFlag = false;
                     break;
                 }
             }
-            if (writeFlag){
-                needInsert.put(currentRoomInfoEntry.getKey(),currentRoomInfoEntry.getValue());
+            if (writeFlag) {
+                needInsert.put(currentRoomInfoEntry.getKey(), currentRoomInfoEntry.getValue());
             }
         }
         //写入businessRoom
         for (Map.Entry<String, String> needInsertMap : needInsert.entrySet()) {
-            businessRoom.put(needInsertMap.getKey(),needInsertMap.getValue());
+            businessRoom.put(needInsertMap.getKey(), needInsertMap.getValue());
         }
 
         //保存小区房屋信息

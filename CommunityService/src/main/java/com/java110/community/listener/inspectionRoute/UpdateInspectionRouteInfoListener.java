@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 修改巡检路线信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessInspectionRoute:{} 巡检路线基本信息节点
  * 2、businessInspectionRouteAttr:[{}] 巡检路线属性信息节点
@@ -51,45 +51,45 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
 
     /**
      * business过程
+     *
      * @param dataFlowContext 上下文对象
-     * @param business 业务对象
+     * @param business        业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
 
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionRoute 节点
-        if(data.containsKey("businessInspectionRoute")){
-            //处理 businessInspectionRoute 节点
-            if(data.containsKey("businessInspectionRoute")){
-                Object _obj = data.get("businessInspectionRoute");
-                JSONArray businessInspectionRoutes = null;
-                if(_obj instanceof JSONObject){
-                    businessInspectionRoutes = new JSONArray();
-                    businessInspectionRoutes.add(_obj);
-                }else {
-                    businessInspectionRoutes = (JSONArray)_obj;
-                }
-                //JSONObject businessInspectionRoute = data.getJSONObject("businessInspectionRoute");
-                for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRoutes.size();_inspectionRouteIndex++) {
-                    JSONObject businessInspectionRoute = businessInspectionRoutes.getJSONObject(_inspectionRouteIndex);
-                    doBusinessInspectionRoute(business, businessInspectionRoute);
-                    if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("inspectionRouteId", businessInspectionRoute.getString("inspectionRouteId"));
-                    }
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE);
+            JSONArray businessInspectionRoutes = null;
+            if (_obj instanceof JSONObject) {
+                businessInspectionRoutes = new JSONArray();
+                businessInspectionRoutes.add(_obj);
+            } else {
+                businessInspectionRoutes = (JSONArray) _obj;
+            }
+            //JSONObject businessInspectionRoute = data.getJSONObject("businessInspectionRoute");
+            for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRoutes.size(); _inspectionRouteIndex++) {
+                JSONObject businessInspectionRoute = businessInspectionRoutes.getJSONObject(_inspectionRouteIndex);
+                doBusinessInspectionRoute(business, businessInspectionRoute);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("inspectionRouteId", businessInspectionRoute.getString("inspectionRouteId"));
                 }
             }
+
         }
     }
 
 
     /**
      * business to instance 过程
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -97,17 +97,17 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_ADD);
 
         //巡检路线信息
         List<Map> businessInspectionRouteInfos = inspectionRouteServiceDaoImpl.getBusinessInspectionRouteInfo(info);
-        if( businessInspectionRouteInfos != null && businessInspectionRouteInfos.size() >0) {
-            for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRouteInfos.size();_inspectionRouteIndex++) {
+        if (businessInspectionRouteInfos != null && businessInspectionRouteInfos.size() > 0) {
+            for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRouteInfos.size(); _inspectionRouteIndex++) {
                 Map businessInspectionRouteInfo = businessInspectionRouteInfos.get(_inspectionRouteIndex);
-                flushBusinessInspectionRouteInfo(businessInspectionRouteInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessInspectionRouteInfo(businessInspectionRouteInfo, StatusConstant.STATUS_CD_VALID);
                 inspectionRouteServiceDaoImpl.updateInspectionRouteInfoInstance(businessInspectionRouteInfo);
-                if(businessInspectionRouteInfo.size() == 1) {
+                if (businessInspectionRouteInfo.size() == 1) {
                     dataFlowContext.addParamOut("inspectionRouteId", businessInspectionRouteInfo.get("inspection_routeId"));
                 }
             }
@@ -117,8 +117,9 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
 
     /**
      * 撤单
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
@@ -126,24 +127,24 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //巡检路线信息
         List<Map> inspectionRouteInfo = inspectionRouteServiceDaoImpl.getInspectionRouteInfo(info);
-        if(inspectionRouteInfo != null && inspectionRouteInfo.size() > 0){
+        if (inspectionRouteInfo != null && inspectionRouteInfo.size() > 0) {
 
             //巡检路线信息
             List<Map> businessInspectionRouteInfos = inspectionRouteServiceDaoImpl.getBusinessInspectionRouteInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessInspectionRouteInfos == null || businessInspectionRouteInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（inspectionRoute），程序内部异常,请检查！ "+delInfo);
+            if (businessInspectionRouteInfos == null || businessInspectionRouteInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（inspectionRoute），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRouteInfos.size();_inspectionRouteIndex++) {
+            for (int _inspectionRouteIndex = 0; _inspectionRouteIndex < businessInspectionRouteInfos.size(); _inspectionRouteIndex++) {
                 Map businessInspectionRouteInfo = businessInspectionRouteInfos.get(_inspectionRouteIndex);
-                flushBusinessInspectionRouteInfo(businessInspectionRouteInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessInspectionRouteInfo(businessInspectionRouteInfo, StatusConstant.STATUS_CD_VALID);
                 inspectionRouteServiceDaoImpl.updateInspectionRouteInfoInstance(businessInspectionRouteInfo);
             }
         }
@@ -151,30 +152,28 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
     }
 
 
-
     /**
      * 处理 businessInspectionRoute 节点
-     * @param business 总的数据节点
+     *
+     * @param business                总的数据节点
      * @param businessInspectionRoute 巡检路线节点
      */
-    private void doBusinessInspectionRoute(Business business,JSONObject businessInspectionRoute){
+    private void doBusinessInspectionRoute(Business business, JSONObject businessInspectionRoute) {
 
-        Assert.jsonObjectHaveKey(businessInspectionRoute,"inspectionRouteId","businessInspectionRoute 节点下没有包含 inspectionRouteId 节点");
+        Assert.jsonObjectHaveKey(businessInspectionRoute, "inspectionRouteId", "businessInspectionRoute 节点下没有包含 inspectionRouteId 节点");
 
-        if(businessInspectionRoute.getString("inspectionRouteId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"inspectionRouteId 错误，不能自动生成（必须已经存在的inspectionRouteId）"+businessInspectionRoute);
+        if (businessInspectionRoute.getString("inspectionRouteId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "inspectionRouteId 错误，不能自动生成（必须已经存在的inspectionRouteId）" + businessInspectionRoute);
         }
         //自动保存DEL
-        autoSaveDelBusinessInspectionRoute(business,businessInspectionRoute);
+        autoSaveDelBusinessInspectionRoute(business, businessInspectionRoute);
 
-        businessInspectionRoute.put("bId",business.getbId());
+        businessInspectionRoute.put("bId", business.getbId());
         businessInspectionRoute.put("operate", StatusConstant.OPERATE_ADD);
         //保存巡检路线信息
         inspectionRouteServiceDaoImpl.saveBusinessInspectionRouteInfo(businessInspectionRoute);
 
     }
-
-
 
 
     public IInspectionRouteServiceDao getInspectionRouteServiceDaoImpl() {
@@ -184,7 +183,6 @@ public class UpdateInspectionRouteInfoListener extends AbstractInspectionRouteBu
     public void setInspectionRouteServiceDaoImpl(IInspectionRouteServiceDao inspectionRouteServiceDaoImpl) {
         this.inspectionRouteServiceDaoImpl = inspectionRouteServiceDaoImpl;
     }
-
 
 
 }

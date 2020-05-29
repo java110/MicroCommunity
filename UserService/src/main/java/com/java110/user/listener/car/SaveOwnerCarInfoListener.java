@@ -54,8 +54,8 @@ public class SaveOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceDat
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerCar 节点
-        if (data.containsKey("businessOwnerCar")) {
-            Object bObj = data.get("businessOwnerCar");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
             JSONArray businessOwnerCars = null;
             if (bObj instanceof JSONObject) {
                 businessOwnerCars = new JSONArray();

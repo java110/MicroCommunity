@@ -87,6 +87,11 @@ public abstract class AbstractJunkRequirementBusinessServiceDataFlowListener ext
 
         currentJunkRequirementInfo.put("operate", StatusConstant.OPERATE_DEL);
         getJunkRequirementServiceDaoImpl().saveBusinessJunkRequirementInfo(currentJunkRequirementInfo);
+        for (Object key : currentJunkRequirementInfo.keySet()) {
+            if (businessJunkRequirement.get(key) == null) {
+                businessJunkRequirement.put(key.toString(), currentJunkRequirementInfo.get(key));
+            }
+        }
     }
 
 

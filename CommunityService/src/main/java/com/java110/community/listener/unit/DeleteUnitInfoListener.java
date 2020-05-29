@@ -2,15 +2,15 @@ package com.java110.community.listener.unit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IUnitServiceDao;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.community.dao.IUnitServiceDao;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,27 +61,26 @@ public class DeleteUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessUnit 节点
-        if (data.containsKey("businessUnit")) {
-            //处理 businessUnit 节点
-            if (data.containsKey("businessUnit")) {
-                Object _obj = data.get("businessUnit");
-                JSONArray businessUnits = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_UNIT_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_UNIT_INFO);
+            JSONArray businessUnits = null;
+            if (_obj instanceof JSONObject) {
+                businessUnits = new JSONArray();
+                businessUnits.add(_obj);
+            } else {
+                businessUnits = (JSONArray) _obj;
+            }
+            //JSONObject businessUnit = data.getJSONObject("businessUnit");
+            for (int _unitIndex = 0; _unitIndex < businessUnits.size(); _unitIndex++) {
+                JSONObject businessUnit = businessUnits.getJSONObject(_unitIndex);
+                doBusinessUnit(business, businessUnit);
                 if (_obj instanceof JSONObject) {
-                    businessUnits = new JSONArray();
-                    businessUnits.add(_obj);
-                } else {
-                    businessUnits = (JSONArray) _obj;
-                }
-                //JSONObject businessUnit = data.getJSONObject("businessUnit");
-                for (int _unitIndex = 0; _unitIndex < businessUnits.size(); _unitIndex++) {
-                    JSONObject businessUnit = businessUnits.getJSONObject(_unitIndex);
-                    doBusinessUnit(business, businessUnit);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("unitId", businessUnit.getString("unitId"));
-                    }
+                    dataFlowContext.addParamOut("unitId", businessUnit.getString("unitId"));
                 }
             }
+
         }
 
 

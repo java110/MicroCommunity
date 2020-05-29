@@ -53,8 +53,8 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessNotice 节点
-        if(data.containsKey("businessNotice")){
-            Object bObj = data.get("businessNotice");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_NOTICE)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_NOTICE);
             JSONArray businessNotices = null;
             if(bObj instanceof JSONObject){
                 businessNotices = new JSONArray();

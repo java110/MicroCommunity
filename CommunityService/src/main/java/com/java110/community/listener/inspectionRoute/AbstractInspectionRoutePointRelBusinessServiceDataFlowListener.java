@@ -77,6 +77,11 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
 
         currentInspectionRoutePointRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionRoutePointRelServiceDaoImpl().saveBusinessInspectionRoutePointRelInfo(currentInspectionRoutePointRelInfo);
+        for (Object key : currentInspectionRoutePointRelInfo.keySet()) {
+            if (businessInspectionRoutePointRel.get(key) == null) {
+                businessInspectionRoutePointRel.put(key.toString(), currentInspectionRoutePointRelInfo.get(key));
+            }
+        }
     }
 
 

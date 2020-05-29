@@ -54,6 +54,11 @@ public abstract class AbstractUserBusinessServiceDataFlowListener extends Abstra
         currentUserInfo.put("levelCd",currentUserInfo.get("level_cd"));
         currentUserInfo.put("operate",StatusConstant.OPERATE_DEL);
         getUserServiceDaoImpl().saveBusinessUserInfo(currentUserInfo);
+        for (Object key : currentUserInfo.keySet()) {
+            if (businessUser.get(key) == null) {
+                businessUser.put(key.toString(), currentUserInfo.get(key));
+            }
+        }
     }
 
 

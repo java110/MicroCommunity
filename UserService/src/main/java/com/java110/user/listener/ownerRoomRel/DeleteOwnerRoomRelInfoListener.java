@@ -2,15 +2,15 @@ package com.java110.user.listener.ownerRoomRel;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
+import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,26 +62,24 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerRoomRel 节点
-        if (data.containsKey("businessOwnerRoomRel")) {
-            //处理 businessOwnerRoomRel 节点
-            if (data.containsKey("businessOwnerRoomRel")) {
-                Object _obj = data.get("businessOwnerRoomRel");
-                JSONArray businessOwnerRoomRels = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
+            JSONArray businessOwnerRoomRels = null;
+            if (_obj instanceof JSONObject) {
+                businessOwnerRoomRels = new JSONArray();
+                businessOwnerRoomRels.add(_obj);
+            } else {
+                businessOwnerRoomRels = (JSONArray) _obj;
+            }
+            //JSONObject businessOwnerRoomRel = data.getJSONObject("businessOwnerRoomRel");
+            for (int _ownerRoomRelIndex = 0; _ownerRoomRelIndex < businessOwnerRoomRels.size(); _ownerRoomRelIndex++) {
+                JSONObject businessOwnerRoomRel = businessOwnerRoomRels.getJSONObject(_ownerRoomRelIndex);
+                doBusinessOwnerRoomRel(business, businessOwnerRoomRel);
                 if (_obj instanceof JSONObject) {
-                    businessOwnerRoomRels = new JSONArray();
-                    businessOwnerRoomRels.add(_obj);
-                } else {
-                    businessOwnerRoomRels = (JSONArray) _obj;
-                }
-                //JSONObject businessOwnerRoomRel = data.getJSONObject("businessOwnerRoomRel");
-                for (int _ownerRoomRelIndex = 0; _ownerRoomRelIndex < businessOwnerRoomRels.size(); _ownerRoomRelIndex++) {
-                    JSONObject businessOwnerRoomRel = businessOwnerRoomRels.getJSONObject(_ownerRoomRelIndex);
-                    doBusinessOwnerRoomRel(business, businessOwnerRoomRel);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("relId", businessOwnerRoomRel.getString("rel_id"));
-                    }
+                    dataFlowContext.addParamOut("relId", businessOwnerRoomRel.getString("rel_id"));
                 }
             }
+
         }
 
 

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.inspectionTaskDetail.IInspectionTaskDetailBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -22,7 +23,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveInspectionTaskDetailListener")
-public class SaveInspectionTaskDetailListener extends AbstractServiceApiListener {
+public class SaveInspectionTaskDetailListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IInspectionTaskDetailBMO inspectionTaskDetailBMOImpl;
@@ -43,18 +44,7 @@ public class SaveInspectionTaskDetailListener extends AbstractServiceApiListener
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(inspectionTaskDetailBMOImpl.addInspectionTaskDetail(reqJson, context));
-
-        ResponseEntity<String> responseEntity = inspectionTaskDetailBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        inspectionTaskDetailBMOImpl.addInspectionTaskDetail(reqJson, context);
     }
 
     @Override

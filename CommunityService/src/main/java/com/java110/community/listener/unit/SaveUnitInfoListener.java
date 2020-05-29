@@ -54,8 +54,8 @@ public class SaveUnitInfoListener extends AbstractUnitBusinessServiceDataFlowLis
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessUnit 节点
-        if (data.containsKey("businessUnit")) {
-            Object _obj = data.get("businessUnit");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
             JSONArray businessUnits = null;
             if (_obj instanceof JSONObject) {
                 businessUnits = new JSONArray();

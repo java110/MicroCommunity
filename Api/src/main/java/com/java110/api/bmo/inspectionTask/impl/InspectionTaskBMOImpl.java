@@ -6,6 +6,8 @@ import com.java110.api.bmo.inspectionTask.IInspectionTaskBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.inspectionTask.IInspectionTaskInnerServiceSMO;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
+import com.java110.po.file.FileRelPo;
+import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -13,6 +15,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 @Service("inspectionTaskBMOImpl")
@@ -28,19 +31,12 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        paramInJson.put("taskId", "-1");
+        InspectionTaskPo inspectionTaskPo = BeanConvertUtil.covertBean(paramInJson, InspectionTaskPo.class);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionTask = new JSONObject();
-        businessInspectionTask.putAll(paramInJson);
-        businessInspectionTask.put("taskId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionTask", businessInspectionTask);
-        return business;
+        super.insert(dataFlowContext, inspectionTaskPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK);
     }
 
 
@@ -51,7 +47,7 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
         inspectionTaskDto.setTaskId(paramInJson.getString("taskId"));
@@ -60,17 +56,12 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
 
         Assert.listOnlyOne(inspectionTaskDtos, "未找到需要修改的巡检任务 或多条数据");
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionTask = new JSONObject();
         businessInspectionTask.putAll(BeanConvertUtil.beanCovertMap(inspectionTaskDtos.get(0)));
-        businessInspectionTask.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionTask", businessInspectionTask);
-        return business;
+
+        InspectionTaskPo inspectionTaskPo = BeanConvertUtil.covertBean(businessInspectionTask, InspectionTaskPo.class);
+
+        super.update(dataFlowContext, inspectionTaskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK);
     }
 
 
@@ -81,18 +72,12 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_TASK);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionTask = new JSONObject();
-        businessInspectionTask.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionTask", businessInspectionTask);
-        return business;
+        InspectionTaskPo inspectionTaskPo = BeanConvertUtil.covertBean(paramInJson, InspectionTaskPo.class);
+
+        super.update(dataFlowContext, inspectionTaskPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_TASK);
     }
 
     /**
@@ -102,13 +87,8 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 2);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("fileRelId", "-1");
         businessUnit.put("relTypeCd", "90000");
@@ -116,8 +96,7 @@ public class InspectionTaskBMOImpl extends ApiBaseBMO implements IInspectionTask
         businessUnit.put("objId", paramInJson.getString("taskDetailId"));
         businessUnit.put("fileRealName", paramInJson.getString("photoId"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFileRel", businessUnit);
-
-        return business;
+        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+        super.insert(dataFlowContext,fileRelPo,BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
 }

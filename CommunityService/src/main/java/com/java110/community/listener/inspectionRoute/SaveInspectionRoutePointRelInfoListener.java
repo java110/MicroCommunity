@@ -54,8 +54,8 @@ public class SaveInspectionRoutePointRelInfoListener extends AbstractInspectionR
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionRoutePointRel 节点
-        if (data.containsKey("businessInspectionRoutePointRel")) {
-            Object bObj = data.get("businessInspectionRoutePointRel");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL);
             JSONArray businessInspectionRoutePointRels = null;
             if (bObj instanceof JSONObject) {
                 businessInspectionRoutePointRels = new JSONArray();

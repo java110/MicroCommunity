@@ -2,15 +2,15 @@ package com.java110.user.listener.car;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
+import com.java110.user.dao.IOwnerCarServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.user.dao.IOwnerCarServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import java.util.Map;
 @Transactional
 public class DeleteOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceDataFlowListener {
 
-    private  static Logger logger = LoggerFactory.getLogger(DeleteOwnerCarInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteOwnerCarInfoListener.class);
     @Autowired
     IOwnerCarServiceDao ownerCarServiceDaoImpl;
 
@@ -61,27 +61,26 @@ public class DeleteOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceD
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessOwnerCar 节点
-        if (data.containsKey("businessOwnerCar")) {
-            //处理 businessOwnerCar 节点
-            if (data.containsKey("businessOwnerCar")) {
-                Object _obj = data.get("businessOwnerCar");
-                JSONArray businessOwnerCars = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_CAR);
+            JSONArray businessOwnerCars = null;
+            if (_obj instanceof JSONObject) {
+                businessOwnerCars = new JSONArray();
+                businessOwnerCars.add(_obj);
+            } else {
+                businessOwnerCars = (JSONArray) _obj;
+            }
+            //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
+            for (int _ownerCarIndex = 0; _ownerCarIndex < businessOwnerCars.size(); _ownerCarIndex++) {
+                JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(_ownerCarIndex);
+                doBusinessOwnerCar(business, businessOwnerCar);
                 if (_obj instanceof JSONObject) {
-                    businessOwnerCars = new JSONArray();
-                    businessOwnerCars.add(_obj);
-                } else {
-                    businessOwnerCars = (JSONArray) _obj;
-                }
-                //JSONObject businessOwnerCar = data.getJSONObject("businessOwnerCar");
-                for (int _ownerCarIndex = 0; _ownerCarIndex < businessOwnerCars.size(); _ownerCarIndex++) {
-                    JSONObject businessOwnerCar = businessOwnerCars.getJSONObject(_ownerCarIndex);
-                    doBusinessOwnerCar(business, businessOwnerCar);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("carId", businessOwnerCar.getString("carId"));
-                    }
+                    dataFlowContext.addParamOut("carId", businessOwnerCar.getString("carId"));
                 }
             }
+
         }
 
 

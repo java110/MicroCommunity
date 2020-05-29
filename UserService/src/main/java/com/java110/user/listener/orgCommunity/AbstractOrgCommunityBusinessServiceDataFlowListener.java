@@ -79,6 +79,12 @@ public abstract class AbstractOrgCommunityBusinessServiceDataFlowListener extend
 
         currentOrgCommunityInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOrgCommunityServiceDaoImpl().saveBusinessOrgCommunityInfo(currentOrgCommunityInfo);
+
+        for (Object key : currentOrgCommunityInfo.keySet()) {
+            if (businessOrgCommunity.get(key) == null) {
+                businessOrgCommunity.put(key.toString(), currentOrgCommunityInfo.get(key));
+            }
+        }
     }
 
 

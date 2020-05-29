@@ -78,6 +78,11 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
 
         currentInspectionRouteInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionRouteServiceDaoImpl().saveBusinessInspectionRouteInfo(currentInspectionRouteInfo);
+        for (Object key : currentInspectionRouteInfo.keySet()) {
+            if (businessInspectionRoute.get(key) == null) {
+                businessInspectionRoute.put(key.toString(), currentInspectionRouteInfo.get(key));
+            }
+        }
     }
 
 

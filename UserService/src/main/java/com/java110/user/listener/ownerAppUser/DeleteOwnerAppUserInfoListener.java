@@ -61,27 +61,26 @@ public class DeleteOwnerAppUserInfoListener extends AbstractOwnerAppUserBusiness
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessOwnerAppUser 节点
-        if (data.containsKey("businessOwnerAppUser")) {
-            //处理 businessOwnerAppUser 节点
-            if (data.containsKey("businessOwnerAppUser")) {
-                Object _obj = data.get("businessOwnerAppUser");
-                JSONArray businessOwnerAppUsers = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_APP_USER);
+            JSONArray businessOwnerAppUsers = null;
+            if (_obj instanceof JSONObject) {
+                businessOwnerAppUsers = new JSONArray();
+                businessOwnerAppUsers.add(_obj);
+            } else {
+                businessOwnerAppUsers = (JSONArray) _obj;
+            }
+            //JSONObject businessOwnerAppUser = data.getJSONObject("businessOwnerAppUser");
+            for (int _ownerAppUserIndex = 0; _ownerAppUserIndex < businessOwnerAppUsers.size(); _ownerAppUserIndex++) {
+                JSONObject businessOwnerAppUser = businessOwnerAppUsers.getJSONObject(_ownerAppUserIndex);
+                doBusinessOwnerAppUser(business, businessOwnerAppUser);
                 if (_obj instanceof JSONObject) {
-                    businessOwnerAppUsers = new JSONArray();
-                    businessOwnerAppUsers.add(_obj);
-                } else {
-                    businessOwnerAppUsers = (JSONArray) _obj;
-                }
-                //JSONObject businessOwnerAppUser = data.getJSONObject("businessOwnerAppUser");
-                for (int _ownerAppUserIndex = 0; _ownerAppUserIndex < businessOwnerAppUsers.size(); _ownerAppUserIndex++) {
-                    JSONObject businessOwnerAppUser = businessOwnerAppUsers.getJSONObject(_ownerAppUserIndex);
-                    doBusinessOwnerAppUser(business, businessOwnerAppUser);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("appUserId", businessOwnerAppUser.getString("appUserId"));
-                    }
+                    dataFlowContext.addParamOut("appUserId", businessOwnerAppUser.getString("appUserId"));
                 }
             }
+
         }
 
 

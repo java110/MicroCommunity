@@ -53,8 +53,8 @@ public class SaveInspectionTaskDetailInfoListener extends AbstractInspectionTask
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionTaskDetail 节点
-        if(data.containsKey("businessInspectionTaskDetail")){
-            Object bObj = data.get("businessInspectionTaskDetail");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK_DETAIL);
             JSONArray businessInspectionTaskDetails = null;
             if(bObj instanceof JSONObject){
                 businessInspectionTaskDetails = new JSONArray();

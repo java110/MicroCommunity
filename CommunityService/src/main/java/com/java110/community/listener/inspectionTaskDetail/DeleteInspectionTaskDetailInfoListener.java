@@ -62,26 +62,24 @@ public class DeleteInspectionTaskDetailInfoListener extends AbstractInspectionTa
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionTaskDetail 节点
-        if (data.containsKey("businessInspectionTaskDetail")) {
-            //处理 businessInspectionTaskDetail 节点
-            if (data.containsKey("businessInspectionTaskDetail")) {
-                Object _obj = data.get("businessInspectionTaskDetail");
-                JSONArray businessInspectionTaskDetails = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_TASK_DETAIL);
+            JSONArray businessInspectionTaskDetails = null;
+            if (_obj instanceof JSONObject) {
+                businessInspectionTaskDetails = new JSONArray();
+                businessInspectionTaskDetails.add(_obj);
+            } else {
+                businessInspectionTaskDetails = (JSONArray) _obj;
+            }
+            //JSONObject businessInspectionTaskDetail = data.getJSONObject("businessInspectionTaskDetail");
+            for (int _inspectionTaskDetailIndex = 0; _inspectionTaskDetailIndex < businessInspectionTaskDetails.size(); _inspectionTaskDetailIndex++) {
+                JSONObject businessInspectionTaskDetail = businessInspectionTaskDetails.getJSONObject(_inspectionTaskDetailIndex);
+                doBusinessInspectionTaskDetail(business, businessInspectionTaskDetail);
                 if (_obj instanceof JSONObject) {
-                    businessInspectionTaskDetails = new JSONArray();
-                    businessInspectionTaskDetails.add(_obj);
-                } else {
-                    businessInspectionTaskDetails = (JSONArray) _obj;
-                }
-                //JSONObject businessInspectionTaskDetail = data.getJSONObject("businessInspectionTaskDetail");
-                for (int _inspectionTaskDetailIndex = 0; _inspectionTaskDetailIndex < businessInspectionTaskDetails.size(); _inspectionTaskDetailIndex++) {
-                    JSONObject businessInspectionTaskDetail = businessInspectionTaskDetails.getJSONObject(_inspectionTaskDetailIndex);
-                    doBusinessInspectionTaskDetail(business, businessInspectionTaskDetail);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("taskDetailId", businessInspectionTaskDetail.getString("taskDetailId"));
-                    }
+                    dataFlowContext.addParamOut("taskDetailId", businessInspectionTaskDetail.getString("taskDetailId"));
                 }
             }
+
         }
 
 

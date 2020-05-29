@@ -76,6 +76,12 @@ public abstract class AbstractRoomAttrBusinessServiceDataFlowListener extends Ab
 
         currentRoomAttrInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRoomAttrServiceDaoImpl().saveBusinessRoomAttrInfo(currentRoomAttrInfo);
+
+        for (Object key : currentRoomAttrInfo.keySet()) {
+            if (businessRoomAttr.get(key) == null) {
+                businessRoomAttr.put(key.toString(), currentRoomAttrInfo.get(key));
+            }
+        }
     }
 
 

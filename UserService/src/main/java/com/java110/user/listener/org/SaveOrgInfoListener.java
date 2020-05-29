@@ -54,8 +54,8 @@ public class SaveOrgInfoListener extends AbstractOrgBusinessServiceDataFlowListe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOrg 节点
-        if (data.containsKey("businessOrg")) {
-            Object bObj = data.get("businessOrg");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG);
             JSONArray businessOrgs = null;
             if (bObj instanceof JSONObject) {
                 businessOrgs = new JSONArray();

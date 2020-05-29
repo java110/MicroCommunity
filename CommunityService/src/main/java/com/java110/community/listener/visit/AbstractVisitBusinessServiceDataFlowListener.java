@@ -87,6 +87,12 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
 
         currentVisitInfo.put("operate", StatusConstant.OPERATE_DEL);
         getVisitServiceDaoImpl().saveBusinessVisitInfo(currentVisitInfo);
+
+        for (Object key : currentVisitInfo.keySet()) {
+            if (businessVisit.get(key) == null) {
+                businessVisit.put(key.toString(), currentVisitInfo.get(key));
+            }
+        }
     }
 
 

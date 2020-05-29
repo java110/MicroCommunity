@@ -61,27 +61,26 @@ public class DeleteParkingAreaInfoListener extends AbstractParkingAreaBusinessSe
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessParkingArea 节点
-        if (data.containsKey("businessParkingArea")) {
-            //处理 businessParkingArea 节点
-            if (data.containsKey("businessParkingArea")) {
-                Object _obj = data.get("businessParkingArea");
-                JSONArray businessParkingAreas = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA);
+            JSONArray businessParkingAreas = null;
+            if (_obj instanceof JSONObject) {
+                businessParkingAreas = new JSONArray();
+                businessParkingAreas.add(_obj);
+            } else {
+                businessParkingAreas = (JSONArray) _obj;
+            }
+            //JSONObject businessParkingArea = data.getJSONObject("businessParkingArea");
+            for (int _parkingAreaIndex = 0; _parkingAreaIndex < businessParkingAreas.size(); _parkingAreaIndex++) {
+                JSONObject businessParkingArea = businessParkingAreas.getJSONObject(_parkingAreaIndex);
+                doBusinessParkingArea(business, businessParkingArea);
                 if (_obj instanceof JSONObject) {
-                    businessParkingAreas = new JSONArray();
-                    businessParkingAreas.add(_obj);
-                } else {
-                    businessParkingAreas = (JSONArray) _obj;
-                }
-                //JSONObject businessParkingArea = data.getJSONObject("businessParkingArea");
-                for (int _parkingAreaIndex = 0; _parkingAreaIndex < businessParkingAreas.size(); _parkingAreaIndex++) {
-                    JSONObject businessParkingArea = businessParkingAreas.getJSONObject(_parkingAreaIndex);
-                    doBusinessParkingArea(business, businessParkingArea);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("paId", businessParkingArea.getString("paId"));
-                    }
+                    dataFlowContext.addParamOut("paId", businessParkingArea.getString("paId"));
                 }
             }
+
         }
 
 

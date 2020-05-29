@@ -91,6 +91,12 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
         currentRoomInfo.put("operate", StatusConstant.OPERATE_DEL);
         getRoomServiceDaoImpl().saveBusinessRoomInfo(currentRoomInfo);
 
+        for (Object key : currentRoomInfo.keySet()) {
+            if (businessRoom.get(key) == null) {
+                businessRoom.put(key.toString(), currentRoomInfo.get(key));
+            }
+        }
+
         //便于更新数据
         return currentRoomInfo;
     }

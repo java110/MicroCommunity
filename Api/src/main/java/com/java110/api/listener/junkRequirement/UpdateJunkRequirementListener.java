@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.junkRequirement.IJunkRequirementBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
@@ -22,7 +23,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateJunkRequirementListener")
-public class UpdateJunkRequirementListener extends AbstractServiceApiListener {
+public class UpdateJunkRequirementListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IJunkRequirementBMO junkRequirementBMOImpl;
@@ -45,23 +46,14 @@ public class UpdateJunkRequirementListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
 
         JSONObject paramObj = new JSONObject();
         paramObj.put("junkRequirementId",reqJson.getString("junkRequirementId"));
         paramObj.put("communityId",reqJson.getString("communityId"));
         paramObj.put("state",reqJson.getString("state"));
 
-        //添加单元信息
-        businesses.add(junkRequirementBMOImpl.updateJunkRequirement(paramObj, context));
+        junkRequirementBMOImpl.updateJunkRequirement(paramObj, context);
 
-        ResponseEntity<String> responseEntity = junkRequirementBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
     }
 
     @Override

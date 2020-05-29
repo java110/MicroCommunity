@@ -2,15 +2,15 @@ package com.java110.user.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
+import com.java110.user.dao.IOwnerServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.user.dao.IOwnerServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,27 +61,26 @@ public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessOwner 节点
-        if (data.containsKey("businessOwner")) {
-            //处理 businessOwner 节点
-            if (data.containsKey("businessOwner")) {
-                Object _obj = data.get("businessOwner");
-                JSONArray businessOwners = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
+            JSONArray businessOwners = null;
+            if (_obj instanceof JSONObject) {
+                businessOwners = new JSONArray();
+                businessOwners.add(_obj);
+            } else {
+                businessOwners = (JSONArray) _obj;
+            }
+            //JSONObject businessOwner = data.getJSONObject("businessOwner");
+            for (int _ownerIndex = 0; _ownerIndex < businessOwners.size(); _ownerIndex++) {
+                JSONObject businessOwner = businessOwners.getJSONObject(_ownerIndex);
+                doBusinessOwner(business, businessOwner);
                 if (_obj instanceof JSONObject) {
-                    businessOwners = new JSONArray();
-                    businessOwners.add(_obj);
-                } else {
-                    businessOwners = (JSONArray) _obj;
-                }
-                //JSONObject businessOwner = data.getJSONObject("businessOwner");
-                for (int _ownerIndex = 0; _ownerIndex < businessOwners.size(); _ownerIndex++) {
-                    JSONObject businessOwner = businessOwners.getJSONObject(_ownerIndex);
-                    doBusinessOwner(business, businessOwner);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("memberId", businessOwner.getString("member_id"));
-                    }
+                    dataFlowContext.addParamOut("memberId", businessOwner.getString("member_id"));
                 }
             }
+
         }
 
 

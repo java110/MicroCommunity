@@ -1,12 +1,12 @@
 package com.java110.community.listener.notice;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.community.dao.INoticeServiceDao;
 import com.java110.entity.center.Business;
 import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.exception.ListenerExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +83,12 @@ public abstract class AbstractNoticeBusinessServiceDataFlowListener extends Abst
 
         currentNoticeInfo.put("operate", StatusConstant.OPERATE_DEL);
         getNoticeServiceDaoImpl().saveBusinessNoticeInfo(currentNoticeInfo);
+
+        for (Object key : currentNoticeInfo.keySet()) {
+            if (businessNotice.get(key) == null) {
+                businessNotice.put(key.toString(), currentNoticeInfo.get(key));
+            }
+        }
     }
 
 

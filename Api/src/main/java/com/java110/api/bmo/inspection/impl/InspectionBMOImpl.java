@@ -9,6 +9,9 @@ import com.java110.core.smo.inspectionRoute.IInspectionRoutePointRelInnerService
 import com.java110.dto.inspectionPlan.InspectionPlanDto;
 import com.java110.dto.inspectionRoute.InspectionRoutePointRelDto;
 import com.java110.po.inspection.InspectionPlanPo;
+import com.java110.po.inspection.InspectionPointPo;
+import com.java110.po.inspection.InspectionRoutePo;
+import com.java110.po.inspection.InspectionRoutePointRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -109,19 +112,12 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
+        InspectionPointPo inspectionPointPo = BeanConvertUtil.covertBean(paramInJson, InspectionPointPo.class);
 
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPoint = new JSONObject();
-        businessInspectionPoint.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPoint", businessInspectionPoint);
-        return business;
+        super.delete(dataFlowContext, inspectionPointPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION);
     }
 
     /**
@@ -131,17 +127,12 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPoint = new JSONObject();
-        businessInspectionPoint.putAll(paramInJson);
-        businessInspectionPoint.put("inspectionId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPoint", businessInspectionPoint);
-        return business;
+    public void addInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        paramInJson.put("inspectionId", "-1");
+        InspectionPointPo inspectionPointPo = BeanConvertUtil.covertBean(paramInJson, InspectionPointPo.class);
+
+        super.insert(dataFlowContext, inspectionPointPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION);
     }
 
     /**
@@ -151,18 +142,10 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionPoint = new JSONObject();
-        businessInspectionPoint.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionPoint", businessInspectionPoint);
-        return business;
+        InspectionPointPo inspectionPointPo = BeanConvertUtil.covertBean(paramInJson, InspectionPointPo.class);
+        super.update(dataFlowContext, inspectionPointPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION);
     }
 
     /**
@@ -172,18 +155,10 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        InspectionRoutePo inspectionRoutePo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePo.class);
+        super.delete(dataFlowContext, inspectionRoutePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE);
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoute", businessInspectionRoute);
-        return business;
     }
 
     /**
@@ -220,19 +195,13 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        businessInspectionRoute.put("inspectionRouteId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoute", businessInspectionRoute);
-        return business;
+        paramInJson.put("inspectionRouteId", "-1");
+        InspectionRoutePo inspectionRoutePo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePo.class);
+        super.insert(dataFlowContext, inspectionRoutePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE);
+
     }
 
     /**
@@ -242,19 +211,11 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext, int index) {
+    public void addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext, int index) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        businessInspectionRoute.put("irpRelId", "-" + index);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoutePointRel", businessInspectionRoute);
-        return business;
+        paramInJson.put("irpRelId", "-" + index);
+        InspectionRoutePointRelPo inspectionRoutePointRelPo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePointRelPo.class);
+        super.insert(dataFlowContext, inspectionRoutePointRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE_POINT_REL);
     }
 
     /**
@@ -264,18 +225,9 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessInspectionRoute = new JSONObject();
-        businessInspectionRoute.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoute", businessInspectionRoute);
-        return business;
+    public void updateInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+        InspectionRoutePo inspectionRoutePo = BeanConvertUtil.covertBean(paramInJson, InspectionRoutePo.class);
+        super.insert(dataFlowContext, inspectionRoutePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_ROUTE);
     }
 
 }

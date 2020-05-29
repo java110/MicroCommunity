@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.junkRequirement.IJunkRequirementBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -24,7 +25,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("saveJunkRequirementListener")
-public class SaveJunkRequirementListener extends AbstractServiceApiListener {
+public class SaveJunkRequirementListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IJunkRequirementBMO junkRequirementBMOImpl;
@@ -50,30 +51,20 @@ public class SaveJunkRequirementListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
 
         //reqJson.put("state", "12001");
         reqJson.put("state", "13001");
         String junkRequirementId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_junkRequirementId);
-        reqJson.put("junkRequirementId",junkRequirementId);
+        reqJson.put("junkRequirementId", junkRequirementId);
 
         if (reqJson.containsKey("photos")) {
-            dealPhotos(businesses,reqJson,context);
+            dealPhotos(reqJson, context);
         }
 
-        //添加单元信息
-        businesses.add(junkRequirementBMOImpl.addJunkRequirement(reqJson, context));
-
-        ResponseEntity<String> responseEntity = junkRequirementBMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        junkRequirementBMOImpl.addJunkRequirement(reqJson, context);
     }
 
-    private void dealPhotos(JSONArray businesses, JSONObject reqJson,DataFlowContext context) {
+    private void dealPhotos(JSONObject reqJson, DataFlowContext context) {
         JSONArray photos = reqJson.getJSONArray("photos");
         JSONObject photo = null;
         for (int photoIndex = 0; photoIndex < photos.size(); photoIndex++) {
@@ -88,7 +79,7 @@ public class SaveJunkRequirementListener extends AbstractServiceApiListener {
             reqJson.put("photoId", fileDto.getFileId());
             reqJson.put("fileSaveName", fileName);
 
-            businesses.add(junkRequirementBMOImpl.addPhoto(reqJson, context));
+            junkRequirementBMOImpl.addPhoto(reqJson, context);
         }
     }
 

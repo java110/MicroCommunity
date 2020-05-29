@@ -87,6 +87,12 @@ public abstract class AbstractInspectionTaskBusinessServiceDataFlowListener exte
 
         currentInspectionTaskInfo.put("operate", StatusConstant.OPERATE_DEL);
         getInspectionTaskServiceDaoImpl().saveBusinessInspectionTaskInfo(currentInspectionTaskInfo);
+
+        for (Object key : currentInspectionTaskInfo.keySet()) {
+            if (businessInspectionTask.get(key) == null) {
+                businessInspectionTask.put(key.toString(), currentInspectionTaskInfo.get(key));
+            }
+        }
     }
 
 

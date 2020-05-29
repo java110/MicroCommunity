@@ -13,7 +13,7 @@ public interface IInspectionTaskBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     JSONObject addInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加活动信息
@@ -22,7 +22,7 @@ public interface IInspectionTaskBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void updateInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除活动
@@ -31,7 +31,7 @@ public interface IInspectionTaskBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void deleteInspectionTask(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
     /**
@@ -41,7 +41,7 @@ public interface IInspectionTaskBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addPhoto(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 

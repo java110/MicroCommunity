@@ -13,7 +13,7 @@ public interface IInspectionTaskDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     JSONObject addInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加巡检任务明细信息
@@ -22,7 +22,7 @@ public interface IInspectionTaskDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateInspectionTaskDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 

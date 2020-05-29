@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 修改巡检点信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessInspection:{} 巡检点基本信息节点
  * 2、businessInspectionAttr:[{}] 巡检点属性信息节点
@@ -51,45 +51,46 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
 
     /**
      * business过程
+     *
      * @param dataFlowContext 上下文对象
-     * @param business 业务对象
+     * @param business        业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
 
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
+
 
         //处理 businessInspection 节点
-        if(data.containsKey("businessInspectionPoint")){
-            //处理 businessInspection 节点
-            if(data.containsKey("businessInspectionPoint")){
-                Object _obj = data.get("businessInspectionPoint");
-                JSONArray businessInspections = null;
-                if(_obj instanceof JSONObject){
-                    businessInspections = new JSONArray();
-                    businessInspections.add(_obj);
-                }else {
-                    businessInspections = (JSONArray)_obj;
-                }
-                //JSONObject businessInspection = data.getJSONObject("businessInspection");
-                for (int _inspectionIndex = 0; _inspectionIndex < businessInspections.size();_inspectionIndex++) {
-                    JSONObject businessInspection = businessInspections.getJSONObject(_inspectionIndex);
-                    doBusinessInspection(business, businessInspection);
-                    if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("inspectionId", businessInspection.getString("inspectionId"));
-                    }
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION);
+            JSONArray businessInspections = null;
+            if (_obj instanceof JSONObject) {
+                businessInspections = new JSONArray();
+                businessInspections.add(_obj);
+            } else {
+                businessInspections = (JSONArray) _obj;
+            }
+            //JSONObject businessInspection = data.getJSONObject("businessInspection");
+            for (int _inspectionIndex = 0; _inspectionIndex < businessInspections.size(); _inspectionIndex++) {
+                JSONObject businessInspection = businessInspections.getJSONObject(_inspectionIndex);
+                doBusinessInspection(business, businessInspection);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("inspectionId", businessInspection.getString("inspectionId"));
                 }
             }
+
         }
     }
 
 
     /**
      * business to instance 过程
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -97,17 +98,17 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_ADD);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_ADD);
 
         //巡检点信息
         List<Map> businessInspectionInfos = inspectionServiceDaoImpl.getBusinessInspectionInfo(info);
-        if( businessInspectionInfos != null && businessInspectionInfos.size() >0) {
-            for (int _inspectionIndex = 0; _inspectionIndex < businessInspectionInfos.size();_inspectionIndex++) {
+        if (businessInspectionInfos != null && businessInspectionInfos.size() > 0) {
+            for (int _inspectionIndex = 0; _inspectionIndex < businessInspectionInfos.size(); _inspectionIndex++) {
                 Map businessInspectionInfo = businessInspectionInfos.get(_inspectionIndex);
-                flushBusinessInspectionInfo(businessInspectionInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessInspectionInfo(businessInspectionInfo, StatusConstant.STATUS_CD_VALID);
                 inspectionServiceDaoImpl.updateInspectionInfoInstance(businessInspectionInfo);
-                if(businessInspectionInfo.size() == 1) {
+                if (businessInspectionInfo.size() == 1) {
                     dataFlowContext.addParamOut("inspectionId", businessInspectionInfo.get("inspection_id"));
                 }
             }
@@ -117,8 +118,9 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
 
     /**
      * 撤单
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
@@ -126,24 +128,24 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_VALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //巡检点信息
         List<Map> inspectionInfo = inspectionServiceDaoImpl.getInspectionInfo(info);
-        if(inspectionInfo != null && inspectionInfo.size() > 0){
+        if (inspectionInfo != null && inspectionInfo.size() > 0) {
 
             //巡检点信息
             List<Map> businessInspectionInfos = inspectionServiceDaoImpl.getBusinessInspectionInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessInspectionInfos == null || businessInspectionInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（inspection），程序内部异常,请检查！ "+delInfo);
+            if (businessInspectionInfos == null || businessInspectionInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（inspection），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _inspectionIndex = 0; _inspectionIndex < businessInspectionInfos.size();_inspectionIndex++) {
+            for (int _inspectionIndex = 0; _inspectionIndex < businessInspectionInfos.size(); _inspectionIndex++) {
                 Map businessInspectionInfo = businessInspectionInfos.get(_inspectionIndex);
-                flushBusinessInspectionInfo(businessInspectionInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessInspectionInfo(businessInspectionInfo, StatusConstant.STATUS_CD_VALID);
                 inspectionServiceDaoImpl.updateInspectionInfoInstance(businessInspectionInfo);
             }
         }
@@ -151,30 +153,28 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
     }
 
 
-
     /**
      * 处理 businessInspection 节点
-     * @param business 总的数据节点
+     *
+     * @param business           总的数据节点
      * @param businessInspection 巡检点节点
      */
-    private void doBusinessInspection(Business business,JSONObject businessInspection){
+    private void doBusinessInspection(Business business, JSONObject businessInspection) {
 
-        Assert.jsonObjectHaveKey(businessInspection,"inspectionId","businessInspection 节点下没有包含 inspectionId 节点");
+        Assert.jsonObjectHaveKey(businessInspection, "inspectionId", "businessInspection 节点下没有包含 inspectionId 节点");
 
-        if(businessInspection.getString("inspectionId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"inspectionId 错误，不能自动生成（必须已经存在的inspectionId）"+businessInspection);
+        if (businessInspection.getString("inspectionId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "inspectionId 错误，不能自动生成（必须已经存在的inspectionId）" + businessInspection);
         }
         //自动保存DEL
-        autoSaveDelBusinessInspection(business,businessInspection);
+        autoSaveDelBusinessInspection(business, businessInspection);
 
-        businessInspection.put("bId",business.getbId());
+        businessInspection.put("bId", business.getbId());
         businessInspection.put("operate", StatusConstant.OPERATE_ADD);
         //保存巡检点信息
         inspectionServiceDaoImpl.saveBusinessInspectionInfo(businessInspection);
 
     }
-
-
 
 
     public IInspectionServiceDao getInspectionServiceDaoImpl() {
@@ -184,7 +184,6 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
     public void setInspectionServiceDaoImpl(IInspectionServiceDao inspectionServiceDaoImpl) {
         this.inspectionServiceDaoImpl = inspectionServiceDaoImpl;
     }
-
 
 
 }

@@ -54,8 +54,8 @@ public class SaveOrgCommunityInfoListener extends AbstractOrgCommunityBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOrgCommunity 节点
-        if (data.containsKey("businessOrgCommunity")) {
-            Object bObj = data.get("businessOrgCommunity");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_COMMUNITY)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_COMMUNITY);
             JSONArray businessOrgCommunitys = null;
             if (bObj instanceof JSONObject) {
                 businessOrgCommunitys = new JSONArray();

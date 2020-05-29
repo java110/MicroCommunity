@@ -2,15 +2,15 @@ package com.java110.community.listener.parkingSpace;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IParkingSpaceServiceDao;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.community.dao.IParkingSpaceServiceDao;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,27 +62,26 @@ public class UpdateParkingSpaceInfoListener extends AbstractParkingSpaceBusiness
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessParkingSpace 节点
-        if (data.containsKey("businessParkingSpace")) {
-            //处理 businessParkingSpace 节点
-            if (data.containsKey("businessParkingSpace")) {
-                Object _obj = data.get("businessParkingSpace");
-                JSONArray businessParkingSpaces = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PARKING_SPACE);
+            JSONArray businessParkingSpaces = null;
+            if (_obj instanceof JSONObject) {
+                businessParkingSpaces = new JSONArray();
+                businessParkingSpaces.add(_obj);
+            } else {
+                businessParkingSpaces = (JSONArray) _obj;
+            }
+            //JSONObject businessParkingSpace = data.getJSONObject("businessParkingSpace");
+            for (int _parkingSpaceIndex = 0; _parkingSpaceIndex < businessParkingSpaces.size(); _parkingSpaceIndex++) {
+                JSONObject businessParkingSpace = businessParkingSpaces.getJSONObject(_parkingSpaceIndex);
+                doBusinessParkingSpace(business, businessParkingSpace);
                 if (_obj instanceof JSONObject) {
-                    businessParkingSpaces = new JSONArray();
-                    businessParkingSpaces.add(_obj);
-                } else {
-                    businessParkingSpaces = (JSONArray) _obj;
-                }
-                //JSONObject businessParkingSpace = data.getJSONObject("businessParkingSpace");
-                for (int _parkingSpaceIndex = 0; _parkingSpaceIndex < businessParkingSpaces.size(); _parkingSpaceIndex++) {
-                    JSONObject businessParkingSpace = businessParkingSpaces.getJSONObject(_parkingSpaceIndex);
-                    doBusinessParkingSpace(business, businessParkingSpace);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("psId", businessParkingSpace.getString("psId"));
-                    }
+                    dataFlowContext.addParamOut("psId", businessParkingSpace.getString("psId"));
                 }
             }
+
         }
     }
 

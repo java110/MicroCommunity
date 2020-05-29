@@ -2,15 +2,15 @@ package com.java110.community.listener.room;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.IRoomServiceDao;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.community.dao.IRoomServiceDao;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,27 +61,26 @@ public class DeleteRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessRoom 节点
-        if (data.containsKey("businessRoom")) {
-            //处理 businessRoom 节点
-            if (data.containsKey("businessRoom")) {
-                Object _obj = data.get("businessRoom");
-                JSONArray businessRooms = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ROOM_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ROOM_INFO);
+            JSONArray businessRooms = null;
+            if (_obj instanceof JSONObject) {
+                businessRooms = new JSONArray();
+                businessRooms.add(_obj);
+            } else {
+                businessRooms = (JSONArray) _obj;
+            }
+            //JSONObject businessRoom = data.getJSONObject("businessRoom");
+            for (int _roomIndex = 0; _roomIndex < businessRooms.size(); _roomIndex++) {
+                JSONObject businessRoom = businessRooms.getJSONObject(_roomIndex);
+                doBusinessRoom(business, businessRoom);
                 if (_obj instanceof JSONObject) {
-                    businessRooms = new JSONArray();
-                    businessRooms.add(_obj);
-                } else {
-                    businessRooms = (JSONArray) _obj;
-                }
-                //JSONObject businessRoom = data.getJSONObject("businessRoom");
-                for (int _roomIndex = 0; _roomIndex < businessRooms.size(); _roomIndex++) {
-                    JSONObject businessRoom = businessRooms.getJSONObject(_roomIndex);
-                    doBusinessRoom(business, businessRoom);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("roomId", businessRoom.getString("roomId"));
-                    }
+                    dataFlowContext.addParamOut("roomId", businessRoom.getString("roomId"));
                 }
             }
+
         }
 
 

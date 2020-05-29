@@ -82,6 +82,12 @@ public abstract class AbstractOrgBusinessServiceDataFlowListener extends Abstrac
 
         currentOrgInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOrgServiceDaoImpl().saveBusinessOrgInfo(currentOrgInfo);
+
+        for (Object key : currentOrgInfo.keySet()) {
+            if (businessOrg.get(key) == null) {
+                businessOrg.put(key.toString(), currentOrgInfo.get(key));
+            }
+        }
     }
 
 

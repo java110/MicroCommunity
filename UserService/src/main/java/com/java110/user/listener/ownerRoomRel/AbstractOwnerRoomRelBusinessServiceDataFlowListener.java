@@ -76,6 +76,12 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
         currentOwnerRoomRelInfo.put("operate", StatusConstant.OPERATE_DEL);
         getOwnerRoomRelServiceDaoImpl().saveBusinessOwnerRoomRelInfo(currentOwnerRoomRelInfo);
 
+        for (Object key : currentOwnerRoomRelInfo.keySet()) {
+            if (businessOwnerRoomRel.get(key) == null) {
+                businessOwnerRoomRel.put(key.toString(), currentOwnerRoomRelInfo.get(key));
+            }
+        }
+
     }
 
 

@@ -57,7 +57,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -66,7 +66,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加巡检点信息
@@ -75,7 +75,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateInspectionPoint(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -83,7 +83,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -100,7 +100,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小区信息
@@ -109,7 +109,7 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext, int index);
+    public void addInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext, int index);
 
     /**
      * 添加巡检路线信息
@@ -118,5 +118,5 @@ public interface IInspectionBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateInspectionRoute(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }
