@@ -33,7 +33,6 @@
         <module>JobService</module>
         <module>CommonService</module>
         <module>ReportService</module>
-        <module>HardwareAdapationService</module>
         <module>FrontService</module>
     </modules>
 

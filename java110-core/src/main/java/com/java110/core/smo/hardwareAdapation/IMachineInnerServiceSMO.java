@@ -17,7 +17,7 @@ import java.util.List;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-@FeignClient(name = "hardwareAdapation-service", configuration = {FeignConfiguration.class})
+@FeignClient(name = "common-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/machineApi")
 public interface IMachineInnerServiceSMO {
 
