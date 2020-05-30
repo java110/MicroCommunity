@@ -53,8 +53,8 @@ public class SaveDemoInfoListener extends AbstractDemoBusinessServiceDataFlowLis
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessDemo 节点
-        if(data.containsKey("businessDemo")){
-            Object bObj = data.get("businessDemo");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_DEMO_INFO)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_DEMO_INFO);
             JSONArray businessDemos = null;
             if(bObj instanceof JSONObject){
                 businessDemos = new JSONArray();

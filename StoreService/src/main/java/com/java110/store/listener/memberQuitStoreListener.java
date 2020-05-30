@@ -56,8 +56,8 @@ public class memberQuitStoreListener extends AbstractStoreBusinessServiceDataFlo
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStore 节点 按理这里不应该处理，程序上支持，以防真有这种业务
-        if(data.containsKey("businessMemberStore")){
-            JSONObject memberStore = data.getJSONObject("businessMemberStore");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_STORE)){
+            JSONObject memberStore = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_STORE);
             doBusinessMemberStore(business,memberStore);
             dataFlowContext.addParamOut("memberStoreId",memberStore.getString("memberStoreId"));
         }

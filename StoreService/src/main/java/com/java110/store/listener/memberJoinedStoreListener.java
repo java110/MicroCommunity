@@ -54,7 +54,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        if(data.containsKey("businessMemberStore")){
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_STORE)){
             JSONObject businessMemberStore = data.getJSONObject("businessMemberStore");
             doBusinessMemberStore(business,businessMemberStore);
         }

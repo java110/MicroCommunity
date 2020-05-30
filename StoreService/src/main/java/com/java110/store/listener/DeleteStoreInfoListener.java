@@ -61,8 +61,8 @@ public class DeleteStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStore 节点 按理这里不应该处理，程序上支持，以防真有这种业务
-        if(data.containsKey("businessStore")){
-            JSONObject businessStore = data.getJSONObject("businessStore");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_INFO)){
+            JSONObject businessStore = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_INFO);
             doBusinessStore(business,businessStore);
             dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
         }

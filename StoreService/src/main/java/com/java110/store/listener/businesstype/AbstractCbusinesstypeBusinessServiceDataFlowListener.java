@@ -74,6 +74,12 @@ public abstract class AbstractCbusinesstypeBusinessServiceDataFlowListener exten
         currentCbusinesstypeInfo.put("operate", StatusConstant.OPERATE_DEL);
         getCbusinesstypeServiceDaoImpl().saveBusinessCbusinesstypeInfo(currentCbusinesstypeInfo);
 
+        for(Object key : currentCbusinesstypeInfo.keySet()) {
+            if(businessCbusinesstype.get(key) == null) {
+                businessCbusinesstype.put(key.toString(), currentCbusinesstypeInfo.get(key));
+            }
+        }
+
     }
 
 

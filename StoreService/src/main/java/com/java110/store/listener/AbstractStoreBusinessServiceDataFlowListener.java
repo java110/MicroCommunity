@@ -180,6 +180,11 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentStorePhoto.put("storePhotoTypeCd",currentStorePhoto.get("store_photo_type_cd"));
         currentStorePhoto.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStorePhoto(currentStorePhoto);
+        for (Object key : currentStorePhoto.keySet()) {
+            if (businessStorePhoto.get(key) == null) {
+                businessStorePhoto.put(key.toString(), currentStorePhoto.get(key));
+            }
+        }
     }
 
     /**

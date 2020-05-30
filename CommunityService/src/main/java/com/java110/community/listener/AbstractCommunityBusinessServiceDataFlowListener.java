@@ -175,6 +175,11 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         currentCommunityPhoto.put("communityPhotoTypeCd", currentCommunityPhoto.get("community_photo_type_cd"));
         currentCommunityPhoto.put("operate", StatusConstant.OPERATE_DEL);
         getCommunityServiceDaoImpl().saveBusinessCommunityPhoto(currentCommunityPhoto);
+        for(Object key : currentCommunityPhoto.keySet()) {
+            if(businessCommunityPhoto.get(key) == null) {
+                businessCommunityPhoto.put(key.toString(), currentCommunityPhoto.get(key));
+            }
+        }
     }
 
 

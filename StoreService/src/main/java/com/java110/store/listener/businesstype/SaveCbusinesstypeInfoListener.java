@@ -53,8 +53,8 @@ public class SaveCbusinesstypeInfoListener extends AbstractCbusinesstypeBusiness
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCbusinesstype 节点
-        if(data.containsKey("businessCbusinesstype")){
-            Object bObj = data.get("businessCbusinesstype");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_BUSINESSTYPE_INFO)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_BUSINESSTYPE_INFO);
             JSONArray businessCbusinesstypes = null;
             if(bObj instanceof JSONObject){
                 businessCbusinesstypes = new JSONArray();
