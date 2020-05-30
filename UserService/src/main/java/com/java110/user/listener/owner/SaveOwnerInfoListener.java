@@ -2,6 +2,7 @@ package com.java110.user.listener.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.owner.OwnerPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -55,8 +56,8 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwner 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_INFO);
+        if (data.containsKey(OwnerPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerPo.class.getSimpleName());
             JSONArray businessOwners = null;
             if (bObj instanceof JSONObject) {
                 businessOwners = new JSONArray();

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.owner.OwnerPo;
 import com.java110.user.dao.IOwnerServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -63,8 +64,8 @@ public class DeleteOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlo
 
 
         //处理 businessOwner 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO);
+        if (data.containsKey(OwnerPo.class.getSimpleName())) {
+            Object _obj = data.get(OwnerPo.class.getSimpleName());
             JSONArray businessOwners = null;
             if (_obj instanceof JSONObject) {
                 businessOwners = new JSONArray();

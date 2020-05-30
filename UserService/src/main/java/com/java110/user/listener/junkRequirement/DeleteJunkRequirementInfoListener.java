@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.junkRequirement.JunkRequirementPo;
 import com.java110.user.dao.IJunkRequirementServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -63,8 +64,8 @@ public class DeleteJunkRequirementInfoListener extends AbstractJunkRequirementBu
 
 
         //处理 businessJunkRequirement 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT);
+        if (data.containsKey(JunkRequirementPo.class.getSimpleName())) {
+            Object _obj = data.get(JunkRequirementPo.class.getSimpleName());
             JSONArray businessJunkRequirements = null;
             if (_obj instanceof JSONObject) {
                 businessJunkRequirements = new JSONArray();

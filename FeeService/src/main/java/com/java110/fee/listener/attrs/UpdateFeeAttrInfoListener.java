@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
 import com.java110.fee.dao.IFeeAttrServiceDao;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -64,8 +65,8 @@ public class UpdateFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
 
 
         //处理 businessFeeAttr 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        if (data.containsKey(FeeAttrPo.class.getSimpleName())) {
+            Object _obj = data.get(FeeAttrPo.class.getSimpleName());
             JSONArray businessFeeAttrs = null;
             if (_obj instanceof JSONObject) {
                 businessFeeAttrs = new JSONArray();

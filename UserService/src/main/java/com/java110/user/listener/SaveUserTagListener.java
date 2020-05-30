@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.po.user.UserTagPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -54,9 +55,9 @@ public class SaveUserTagListener extends AbstractBusinessServiceDataFlowListener
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_TAG, "datas 节点下没有包含 businessUser 节点");
+        Assert.jsonObjectHaveKey(data, UserTagPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点");
 
-        JSONObject businessUser = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_TAG);
+        JSONObject businessUser = data.getJSONObject(UserTagPo.class.getSimpleName());
 
         Assert.jsonObjectHaveKey(businessUser, "userId", "businessUser 节点下没有包含 userId 节点");
 

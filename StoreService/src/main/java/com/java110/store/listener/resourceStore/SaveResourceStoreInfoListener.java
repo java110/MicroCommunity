@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,8 +55,8 @@ public class SaveResourceStoreInfoListener extends AbstractResourceStoreBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessResourceStore 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
+        if (data.containsKey(ResourceStorePo.class.getSimpleName())) {
+            Object bObj = data.get(ResourceStorePo.class.getSimpleName());
             JSONArray businessResourceStores = null;
             if (bObj instanceof JSONObject) {
                 businessResourceStores = new JSONArray();

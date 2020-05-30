@@ -2,6 +2,7 @@ package com.java110.fee.listener.fee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -53,8 +54,8 @@ public class SaveFeeInfoListener extends AbstractFeeBusinessServiceDataFlowListe
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFee 节点
-        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO)){
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO);
+        if(data.containsKey(PayFeePo.class.getSimpleName())){
+            Object bObj = data.get(PayFeePo.class.getSimpleName());
             JSONArray businessFees = null;
             if(bObj instanceof JSONObject){
                 businessFees = new JSONArray();

@@ -2,6 +2,7 @@ package com.java110.store.listener.smallWeChat;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.store.SmallWechatPo;
 import com.java110.store.dao.ISmallWeChatServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -52,8 +53,8 @@ public class SaveSmallWeChatInfoListener extends AbstractSmallWeChatBusinessServ
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WE_CHAT)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WE_CHAT);
+        if (data.containsKey(SmallWechatPo.class.getSimpleName())) {
+            Object bObj = data.get(SmallWechatPo.class.getSimpleName());
             JSONArray businessSmallWeChats = null;
             if (bObj instanceof JSONObject) {
                 businessSmallWeChats = new JSONArray();

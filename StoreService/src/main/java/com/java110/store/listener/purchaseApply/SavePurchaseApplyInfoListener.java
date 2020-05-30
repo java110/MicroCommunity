@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -56,8 +57,8 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessPurchaseApply 节点
-        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY)){
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY);
+        if(data.containsKey(PurchaseApplyPo.class.getSimpleName())){
+            Object bObj = data.get(PurchaseApplyPo.class.getSimpleName());
             JSONArray businessPurchaseApplys = null;
             if(bObj instanceof JSONObject){
                 businessPurchaseApplys = new JSONArray();

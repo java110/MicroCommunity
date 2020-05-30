@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -62,8 +64,8 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerRoomRel 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_ROOM_REL);
+        if (data.containsKey(OwnerRoomRelPo.class.getSimpleName())) {
+            Object _obj = data.get(OwnerRoomRelPo.class.getSimpleName());
             JSONArray businessOwnerRoomRels = null;
             if (_obj instanceof JSONObject) {
                 businessOwnerRoomRels = new JSONArray();

@@ -2,6 +2,7 @@ package com.java110.user.listener.car;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceDat
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerCar 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_CAR);
+        if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerCarPo.class.getSimpleName());
             JSONArray businessOwnerCars = null;
             if (bObj instanceof JSONObject) {
                 businessOwnerCars = new JSONArray();

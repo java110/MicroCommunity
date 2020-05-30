@@ -2,6 +2,7 @@ package com.java110.fee.listener.detail;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteFeeDetailInfoListener extends AbstractFeeDetailBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessFeeDetail 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_DETAIL)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_DETAIL);
+        if (data.containsKey(PayFeeDetailPo.class.getSimpleName())) {
+            Object _obj = data.get(PayFeeDetailPo.class.getSimpleName());
             JSONArray businessFeeDetails = null;
             if (_obj instanceof JSONObject) {
                 businessFeeDetails = new JSONArray();

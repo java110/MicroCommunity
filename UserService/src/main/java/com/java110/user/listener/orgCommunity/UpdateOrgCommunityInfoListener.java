@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.community.OrgCommunityPo;
 import com.java110.user.dao.IOrgCommunityServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -64,8 +65,8 @@ public class UpdateOrgCommunityInfoListener extends AbstractOrgCommunityBusiness
 
 
         //处理 businessOrgCommunity 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_COMMUNITY)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ORG_COMMUNITY);
+        if (data.containsKey(OrgCommunityPo.class.getSimpleName())) {
+            Object _obj = data.get(OrgCommunityPo.class.getSimpleName());
             JSONArray businessOrgCommunitys = null;
             if (_obj instanceof JSONObject) {
                 businessOrgCommunitys = new JSONArray();

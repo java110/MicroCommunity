@@ -3,6 +3,7 @@ package com.java110.user.listener.ownerRoomRel;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -55,8 +56,8 @@ public class SaveOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOwnerRoomRel 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_ROOM_REL);
+        if (data.containsKey(OwnerRoomRelPo.class.getSimpleName())) {
+            Object bObj = data.get(OwnerRoomRelPo.class.getSimpleName());
             JSONArray businessOwnerRoomRels = null;
             if (bObj instanceof JSONObject) {
                 businessOwnerRoomRels = new JSONArray();

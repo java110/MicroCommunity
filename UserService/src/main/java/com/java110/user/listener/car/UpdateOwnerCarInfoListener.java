@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.car.OwnerCarPo;
 import com.java110.user.dao.IOwnerCarServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -64,8 +65,8 @@ public class UpdateOwnerCarInfoListener extends AbstractOwnerCarBusinessServiceD
 
 
         //处理 businessOwnerCar 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_CAR);
+        if (data.containsKey(OwnerCarPo.class.getSimpleName())) {
+            Object _obj = data.get(OwnerCarPo.class.getSimpleName());
             JSONArray businessOwnerCars = null;
             if (_obj instanceof JSONObject) {
                 businessOwnerCars = new JSONArray();

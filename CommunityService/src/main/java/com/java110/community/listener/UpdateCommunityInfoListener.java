@@ -2,15 +2,18 @@ package com.java110.community.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.ICommunityServiceDao;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
+import com.java110.po.community.CommunityAttrPo;
+import com.java110.po.community.CommunityPhotoPo;
+import com.java110.po.community.CommunityPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.community.dao.ICommunityServiceDao;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,19 +66,19 @@ public class UpdateCommunityInfoListener extends AbstractCommunityBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO)) {
-            JSONObject businessCommunity = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_COMMUNITY_INFO);
+        if (data.containsKey(CommunityPo.class.getSimpleName())) {
+            JSONObject businessCommunity = data.getJSONObject(CommunityPo.class.getSimpleName());
             doBusinessCommunity(business, businessCommunity);
             dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
         }
 
-        if (data.containsKey("businessCommunityAttr")) {
-            JSONArray businessCommunityAttrs = data.getJSONArray("businessCommunityAttr");
+        if (data.containsKey(CommunityAttrPo.class.getSimpleName())) {
+            JSONArray businessCommunityAttrs = data.getJSONArray(CommunityAttrPo.class.getSimpleName());
             doSaveBusinessCommunityAttrs(business, businessCommunityAttrs);
         }
 
-        if (data.containsKey("businessCommunityPhoto")) {
-            JSONArray businessCommunityPhotos = data.getJSONArray("businessCommunityPhoto");
+        if (data.containsKey(CommunityPhotoPo.class.getSimpleName())) {
+            JSONArray businessCommunityPhotos = data.getJSONArray(CommunityPhotoPo.class.getSimpleName());
             doBusinessCommunityPhoto(business, businessCommunityPhotos);
         }
 

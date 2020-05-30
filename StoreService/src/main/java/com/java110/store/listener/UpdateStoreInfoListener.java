@@ -5,6 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.store.StoreAttrPo;
+import com.java110.po.store.StoreCerdentialPo;
+import com.java110.po.store.StorePhotoPo;
+import com.java110.po.store.StorePo;
 import com.java110.store.dao.IStoreServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -63,24 +67,24 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStore 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_STORE_INFO)) {
-            JSONObject businessStore = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_STORE_INFO);
+        if (data.containsKey(StorePo.class.getSimpleName())) {
+            JSONObject businessStore = data.getJSONObject(StorePo.class.getSimpleName());
             doBusinessStore(business, businessStore);
             dataFlowContext.addParamOut("storeId", businessStore.getString("storeId"));
         }
 
-        if (data.containsKey("businessStoreAttr")) {
-            JSONArray businessStoreAttrs = data.getJSONArray("businessStoreAttr");
+        if (data.containsKey(StoreAttrPo.class.getSimpleName())) {
+            JSONArray businessStoreAttrs = data.getJSONArray(StoreAttrPo.class.getSimpleName());
             doSaveBusinessStoreAttrs(business, businessStoreAttrs);
         }
 
-        if (data.containsKey("businessStorePhoto")) {
-            JSONArray businessStorePhotos = data.getJSONArray("businessStorePhoto");
+        if (data.containsKey(StorePhotoPo.class.getSimpleName())) {
+            JSONArray businessStorePhotos = data.getJSONArray(StorePhotoPo.class.getSimpleName());
             doBusinessStorePhoto(business, businessStorePhotos);
         }
 
-        if (data.containsKey("businessStoreCerdentials")) {
-            JSONArray businessStoreCerdentialses = data.getJSONArray("businessStoreCerdentials");
+        if (data.containsKey(StoreCerdentialPo.class.getSimpleName())) {
+            JSONArray businessStoreCerdentialses = data.getJSONArray(StoreCerdentialPo.class.getSimpleName());
             doBusinessStoreCerdentials(business, businessStoreCerdentialses);
         }
     }

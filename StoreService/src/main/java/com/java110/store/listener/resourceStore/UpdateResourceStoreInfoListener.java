@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -64,8 +65,8 @@ public class UpdateResourceStoreInfoListener extends AbstractResourceStoreBusine
 
 
         //处理 businessResourceStore 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
+        if (data.containsKey(ResourceStorePo.class.getSimpleName())) {
+            Object _obj = data.get(ResourceStorePo.class.getSimpleName());
             JSONArray businessResourceStores = null;
             if (_obj instanceof JSONObject) {
                 businessResourceStores = new JSONArray();

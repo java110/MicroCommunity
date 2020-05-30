@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.dto.order.BusinessDto;
 import com.java110.fee.dao.IFeeDetailServiceDao;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
@@ -74,8 +75,8 @@ public class UpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlowLis
 
 
         //处理 businessFee 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
+        if (data.containsKey(PayFeePo.class.getSimpleName())) {
+            Object _obj = data.get(PayFeePo.class.getSimpleName());
             JSONArray businessFees = null;
             if (_obj instanceof JSONObject) {
                 businessFees = new JSONArray();

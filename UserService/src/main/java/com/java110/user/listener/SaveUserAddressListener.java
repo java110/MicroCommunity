@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.po.user.UserAddressPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -54,9 +55,9 @@ public class SaveUserAddressListener extends AbstractBusinessServiceDataFlowList
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        Assert.jsonObjectHaveKey(data, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ADDRESS, "datas 节点下没有包含 businessUser 节点");
+        Assert.jsonObjectHaveKey(data, UserAddressPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点");
 
-        JSONObject businessUser = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_ADDRESS);
+        JSONObject businessUser = data.getJSONObject(UserAddressPo.class.getSimpleName());
 
         Assert.jsonObjectHaveKey(businessUser, "userId", "businessUser 节点下没有包含 userId 节点");
 

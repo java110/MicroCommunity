@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.org.OrgPo;
 import com.java110.user.dao.IOrgServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,8 +55,8 @@ public class SaveOrgInfoListener extends AbstractOrgBusinessServiceDataFlowListe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessOrg 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG);
+        if (data.containsKey(OrgPo.class.getSimpleName())) {
+            Object bObj = data.get(OrgPo.class.getSimpleName());
             JSONArray businessOrgs = null;
             if (bObj instanceof JSONObject) {
                 businessOrgs = new JSONArray();

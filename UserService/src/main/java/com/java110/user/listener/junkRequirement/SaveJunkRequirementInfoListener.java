@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.junkRequirement.JunkRequirementPo;
 import com.java110.user.dao.IJunkRequirementServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,8 +55,8 @@ public class SaveJunkRequirementInfoListener extends AbstractJunkRequirementBusi
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessJunkRequirement 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT);
+        if (data.containsKey(JunkRequirementPo.class.getSimpleName())) {
+            Object bObj = data.get(JunkRequirementPo.class.getSimpleName());
             JSONArray businessJunkRequirements = null;
             if (bObj instanceof JSONObject) {
                 businessJunkRequirements = new JSONArray();

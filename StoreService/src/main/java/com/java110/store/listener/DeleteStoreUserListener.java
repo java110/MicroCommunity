@@ -2,6 +2,7 @@ package com.java110.store.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.store.StoreUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,11 +63,11 @@ public class DeleteStoreUserListener extends AbstractStoreBusinessServiceDataFlo
 
 
         //处理 businessStore 节点
-        if(!data.containsKey("businessStoreUser")){
+        if(!data.containsKey(StoreUserPo.class.getSimpleName())){
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"没有businessStoreUser节点");
         }
 
-        JSONArray businessStoreUsers = data.getJSONArray("businessStoreUser");
+        JSONArray businessStoreUsers = data.getJSONArray(StoreUserPo.class.getSimpleName());
         for(int bIndex = 0 ; bIndex < businessStoreUsers.size();bIndex++) {
             doBusinessStoreUser(business, businessStoreUsers.getJSONObject(bIndex));
         }

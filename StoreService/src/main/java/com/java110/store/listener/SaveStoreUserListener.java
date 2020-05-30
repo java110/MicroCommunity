@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.store.StoreUserPo;
 import com.java110.store.dao.IStoreServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -55,12 +56,12 @@ public class SaveStoreUserListener extends AbstractStoreBusinessServiceDataFlowL
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStore 节点
-        if (!data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER)) {
+        if (!data.containsKey(StoreUserPo.class.getSimpleName())) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "没有" + BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER + "节点");
         }
 
 
-        JSONArray businessStoreUsers = data.getJSONArray(BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
+        JSONArray businessStoreUsers = data.getJSONArray(StoreUserPo.class.getSimpleName());
         doBusinessStoreUser(business, businessStoreUsers);
     }
 
