@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * 删除采购申请信息 侦听
- *
+ * <p>
  * 处理节点
  * 1、businessPurchaseApply:{} 采购申请基本信息节点
  * 2、businessPurchaseApplyAttr:[{}] 采购申请属性信息节点
@@ -51,34 +51,32 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
 
     /**
      * 根据删除信息 查出Instance表中数据 保存至business表 （状态写DEL） 方便撤单时直接更新回去
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
 
-        Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
+        Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessPurchaseApply 节点
-        if(data.containsKey("businessPurchaseApply")){
-            //处理 businessPurchaseApply 节点
-            if(data.containsKey("businessPurchaseApply")){
-                Object _obj = data.get("businessPurchaseApply");
-                JSONArray businessPurchaseApplys = null;
-                if(_obj instanceof JSONObject){
-                    businessPurchaseApplys = new JSONArray();
-                    businessPurchaseApplys.add(_obj);
-                }else {
-                    businessPurchaseApplys = (JSONArray)_obj;
-                }
-                //JSONObject businessPurchaseApply = data.getJSONObject("businessPurchaseApply");
-                for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplys.size();_purchaseApplyIndex++) {
-                    JSONObject businessPurchaseApply = businessPurchaseApplys.getJSONObject(_purchaseApplyIndex);
-                    doBusinessPurchaseApply(business, businessPurchaseApply);
-                    if(_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("applyOrderId", businessPurchaseApply.getString("applyOrderId"));
-                    }
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
+            JSONArray businessPurchaseApplys = null;
+            if (_obj instanceof JSONObject) {
+                businessPurchaseApplys = new JSONArray();
+                businessPurchaseApplys.add(_obj);
+            } else {
+                businessPurchaseApplys = (JSONArray) _obj;
+            }
+            //JSONObject businessPurchaseApply = data.getJSONObject("businessPurchaseApply");
+            for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplys.size(); _purchaseApplyIndex++) {
+                JSONObject businessPurchaseApply = businessPurchaseApplys.getJSONObject(_purchaseApplyIndex);
+                doBusinessPurchaseApply(business, businessPurchaseApply);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("applyOrderId", businessPurchaseApply.getString("applyOrderId"));
                 }
             }
         }
@@ -88,8 +86,9 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
 
     /**
      * 删除 instance数据
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
@@ -98,17 +97,17 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
 
         //采购申请信息
         Map info = new HashMap();
-        info.put("bId",business.getbId());
-        info.put("operate",StatusConstant.OPERATE_DEL);
+        info.put("bId", business.getbId());
+        info.put("operate", StatusConstant.OPERATE_DEL);
 
 
         List<Map> businessPurchaseApplyInfos = purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyInfo(info);
-        if( businessPurchaseApplyInfos != null && businessPurchaseApplyInfos.size() >0) {
-            for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplyInfos.size();_purchaseApplyIndex++) {
+        if (businessPurchaseApplyInfos != null && businessPurchaseApplyInfos.size() > 0) {
+            for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplyInfos.size(); _purchaseApplyIndex++) {
                 Map businessPurchaseApplyInfo = businessPurchaseApplyInfos.get(_purchaseApplyIndex);
-                flushBusinessPurchaseApplyInfo(businessPurchaseApplyInfo,StatusConstant.STATUS_CD_INVALID);
+                flushBusinessPurchaseApplyInfo(businessPurchaseApplyInfo, StatusConstant.STATUS_CD_INVALID);
                 purchaseApplyServiceDaoImpl.updatePurchaseApplyInfoInstance(businessPurchaseApplyInfo);
-                dataFlowContext.addParamOut("applyOrderId",businessPurchaseApplyInfo.get("apply_order_id"));
+                dataFlowContext.addParamOut("applyOrderId", businessPurchaseApplyInfo.get("apply_order_id"));
             }
         }
 
@@ -117,54 +116,55 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
     /**
      * 撤单
      * 从business表中查询到DEL的数据 将instance中的数据更新回来
+     *
      * @param dataFlowContext 数据对象
-     * @param business 当前业务对象
+     * @param business        当前业务对象
      */
     @Override
     protected void doRecover(DataFlowContext dataFlowContext, Business business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
-        info.put("bId",bId);
-        info.put("statusCd",StatusConstant.STATUS_CD_INVALID);
+        info.put("bId", bId);
+        info.put("statusCd", StatusConstant.STATUS_CD_INVALID);
 
         Map delInfo = new HashMap();
-        delInfo.put("bId",business.getbId());
-        delInfo.put("operate",StatusConstant.OPERATE_DEL);
+        delInfo.put("bId", business.getbId());
+        delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //采购申请信息
         List<Map> purchaseApplyInfo = purchaseApplyServiceDaoImpl.getPurchaseApplyInfo(info);
-        if(purchaseApplyInfo != null && purchaseApplyInfo.size() > 0){
+        if (purchaseApplyInfo != null && purchaseApplyInfo.size() > 0) {
 
             //采购申请信息
             List<Map> businessPurchaseApplyInfos = purchaseApplyServiceDaoImpl.getBusinessPurchaseApplyInfo(delInfo);
             //除非程序出错了，这里不会为空
-            if(businessPurchaseApplyInfos == null ||  businessPurchaseApplyInfos.size() == 0){
-                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR,"撤单失败（purchaseApply），程序内部异常,请检查！ "+delInfo);
+            if (businessPurchaseApplyInfos == null || businessPurchaseApplyInfos.size() == 0) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（purchaseApply），程序内部异常,请检查！ " + delInfo);
             }
-            for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplyInfos.size();_purchaseApplyIndex++) {
+            for (int _purchaseApplyIndex = 0; _purchaseApplyIndex < businessPurchaseApplyInfos.size(); _purchaseApplyIndex++) {
                 Map businessPurchaseApplyInfo = businessPurchaseApplyInfos.get(_purchaseApplyIndex);
-                flushBusinessPurchaseApplyInfo(businessPurchaseApplyInfo,StatusConstant.STATUS_CD_VALID);
+                flushBusinessPurchaseApplyInfo(businessPurchaseApplyInfo, StatusConstant.STATUS_CD_VALID);
                 purchaseApplyServiceDaoImpl.updatePurchaseApplyInfoInstance(businessPurchaseApplyInfo);
             }
         }
     }
 
 
-
     /**
      * 处理 businessPurchaseApply 节点
-     * @param business 总的数据节点
+     *
+     * @param business              总的数据节点
      * @param businessPurchaseApply 采购申请节点
      */
-    private void doBusinessPurchaseApply(Business business,JSONObject businessPurchaseApply){
+    private void doBusinessPurchaseApply(Business business, JSONObject businessPurchaseApply) {
 
-        Assert.jsonObjectHaveKey(businessPurchaseApply,"applyOrderId","businessPurchaseApply 节点下没有包含 applyOrderId 节点");
+        Assert.jsonObjectHaveKey(businessPurchaseApply, "applyOrderId", "businessPurchaseApply 节点下没有包含 applyOrderId 节点");
 
-        if(businessPurchaseApply.getString("applyOrderId").startsWith("-")){
-            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR,"applyOrderId 错误，不能自动生成（必须已经存在的applyOrderId）"+businessPurchaseApply);
+        if (businessPurchaseApply.getString("applyOrderId").startsWith("-")) {
+            throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "applyOrderId 错误，不能自动生成（必须已经存在的applyOrderId）" + businessPurchaseApply);
         }
         //自动插入DEL
-        autoSaveDelBusinessPurchaseApply(business,businessPurchaseApply);
+        autoSaveDelBusinessPurchaseApply(business, businessPurchaseApply);
     }
 
     public IPurchaseApplyServiceDao getPurchaseApplyServiceDaoImpl() {

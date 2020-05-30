@@ -20,7 +20,7 @@ public interface IVisitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void deleteVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -28,7 +28,7 @@ public interface IVisitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加访客登记信息
      *
@@ -36,5 +36,5 @@ public interface IVisitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void updateVisit(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

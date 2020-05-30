@@ -7,7 +7,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",refreshParamIn(paramIn));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO,refreshParamIn(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");

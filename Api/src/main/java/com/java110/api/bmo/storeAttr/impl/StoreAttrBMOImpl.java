@@ -1,14 +1,10 @@
 package com.java110.api.bmo.storeAttr.impl;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.storeAttr.IStoreAttrBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
-import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.storeAttr.IStoreAttrInnerServiceSMO;
-import com.java110.dto.file.FileRelDto;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -32,7 +28,7 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
@@ -42,9 +38,7 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
         JSONObject businessStoreAttr = new JSONObject();
         businessStoreAttr.putAll(paramInJson);
         businessStoreAttr.put("attrId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreAttr", businessStoreAttr);
-        return business;
+
     }
 
 
@@ -55,7 +49,7 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         StoreAttrDto storeAttrDto = new StoreAttrDto();
         storeAttrDto.setAttrId(paramInJson.getString("attrId"));
@@ -71,11 +65,8 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
         JSONObject businessStoreAttr = new JSONObject();
         businessStoreAttr.putAll(BeanConvertUtil.beanCovertMap(storeAttrDtos.get(0)));
         businessStoreAttr.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreAttr", businessStoreAttr);
-        return business;
-    }
 
+    }
 
 
     /**
@@ -85,7 +76,7 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
@@ -94,9 +85,7 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessStoreAttr = new JSONObject();
         businessStoreAttr.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreAttr", businessStoreAttr);
-        return business;
+
     }
 
 }

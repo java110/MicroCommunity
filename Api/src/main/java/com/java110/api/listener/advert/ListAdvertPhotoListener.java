@@ -9,7 +9,7 @@ import com.java110.core.smo.advert.IAdvertInnerServiceSMO;
 import com.java110.core.smo.advert.IAdvertItemInnerServiceSMO;
 import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.advert.AdvertItemDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

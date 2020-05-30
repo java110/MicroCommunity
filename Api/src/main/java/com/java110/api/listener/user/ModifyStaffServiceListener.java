@@ -1,28 +1,35 @@
 package com.java110.api.listener.user;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.user.IUserBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.*;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.user.UserPo;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 修改员工 2018年12月6日
  * Created by wuxw on 2018/5/18.
  */
 @Java110Listener("modifyStaffServiceListener")
-public class ModifyStaffServiceListener extends AbstractServiceApiDataFlowListener{
+public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     private final static Logger logger = LoggerFactory.getLogger(ModifyStaffServiceListener.class);
 
@@ -46,63 +53,28 @@ public class ModifyStaffServiceListener extends AbstractServiceApiDataFlowListen
     }
 
 
-    /**
-     * 添加员工信息
-     *
-     *
-     *
-     * @param event
-     */
     @Override
-    public void soService(ServiceDataFlowEvent event) {
-        //获取数据上下文对象
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-        String paramIn = dataFlowContext.getReqData();
-        Assert.isJsonObject(paramIn,"添加员工时请求参数有误，不是有效的json格式 "+paramIn);
-        JSONObject paramInJson = JSONObject.parseObject(paramIn);
-        Assert.jsonObjectHaveKey(paramInJson,"userId","请求参数中未包含userId 节点，请确认");
-        JSONArray businesses = new JSONArray();
-        //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
-        JSONObject staffBusiness = modifyStaff(paramInJson,dataFlowContext);
-        businesses.add(staffBusiness);
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "userId", "请求参数中未包含userId 节点，请确认");
+        //校验json 格式中是否包含 name,email,levelCd,tel
+        Assert.jsonObjectHaveKey(reqJson, "name", "请求参数中未包含name 节点，请确认");
+        Assert.jsonObjectHaveKey(reqJson, "tel", "请求参数中未包含tel 节点，请确认");
+    }
 
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,paramInJson.getString("userId"));
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
-
-        String paramInObj = userBMOImpl.restToCenterProtocol(businesses,dataFlowContext.getRequestCurrentHeaders()).toJSONString();
-
-        //将 rest header 信息传递到下层服务中去
-        userBMOImpl.freshHttpHeader(header,dataFlowContext.getRequestCurrentHeaders());
-
-        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
-        //http://user-service/test/sayHello
-        super.doRequest(dataFlowContext, service, httpEntity);
-
-        super.doResponse(dataFlowContext);
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        modifyStaff(reqJson, context);
     }
 
 
-
-    private JSONObject modifyStaff(JSONObject paramObj,DataFlowContext dataFlowContext){
-        //校验json 格式中是否包含 name,email,levelCd,tel
-        Assert.jsonObjectHaveKey(paramObj,"name","请求参数中未包含name 节点，请确认");
-        Assert.jsonObjectHaveKey(paramObj,"tel","请求参数中未包含tel 节点，请确认");
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ,1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
-
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser",builderStaffInfo(paramObj,dataFlowContext));
-
-        return business;
+    private void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
+        UserPo userPo = BeanConvertUtil.covertBean(builderStaffInfo(paramObj, dataFlowContext), UserPo.class);
+        super.update(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
     }
 
     /**
-     *  构建员工信息
+     * 构建员工信息
+     *
      * @param paramObj
      * @param dataFlowContext
      * @return
@@ -110,21 +82,21 @@ public class ModifyStaffServiceListener extends AbstractServiceApiDataFlowListen
     private JSONObject builderStaffInfo(JSONObject paramObj, DataFlowContext dataFlowContext) {
 
         //首先根据员工ID查询员工信息，根据员工信息修改相应的数据
-        ResponseEntity responseEntity= null;
+        ResponseEntity responseEntity = null;
         AppService appService = DataFlowFactory.getService(dataFlowContext.getAppId(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
-        if(appService == null){
-            throw new ListenerExecuteException(1999,"当前没有权限访问"+ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+        if (appService == null) {
+            throw new ListenerExecuteException(1999, "当前没有权限访问" + ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
 
         }
-        String requestUrl = appService.getUrl() + "?userId="+paramObj.getString("userId");
+        String requestUrl = appService.getUrl() + "?userId=" + paramObj.getString("userId");
         HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(),ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
-        dataFlowContext.getRequestHeaders().put("REQUEST_URL",requestUrl);
+        header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_QUERY_USER_USERINFO);
+        dataFlowContext.getRequestHeaders().put("REQUEST_URL", requestUrl);
         HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
-        doRequest(dataFlowContext,appService,httpEntity);
+        doRequest(dataFlowContext, appService, httpEntity);
         responseEntity = dataFlowContext.getResponseEntity();
 
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             dataFlowContext.setResponseEntity(responseEntity);
         }
 

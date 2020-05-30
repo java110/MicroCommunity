@@ -20,7 +20,7 @@ public interface IUnitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void editUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区楼信息
      *
@@ -28,7 +28,7 @@ public interface IUnitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 修改小区楼信息
      *
@@ -36,5 +36,5 @@ public interface IUnitBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editUpdateUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void editUpdateUnit(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

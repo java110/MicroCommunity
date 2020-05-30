@@ -8,7 +8,7 @@ import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

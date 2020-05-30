@@ -2,7 +2,7 @@ package com.java110.store.listener.smallWeChat;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.ISmallWeChatServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -83,6 +83,11 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
         currentSmallWeChatInfo.put("mchId", currentSmallWeChatInfo.get("mch_id"));
         currentSmallWeChatInfo.put("operate", StatusConstant.OPERATE_DEL);
         getSmallWeChatServiceDaoImpl().saveBusinessSmallWeChatInfo(currentSmallWeChatInfo);
+        for (Object key : currentSmallWeChatInfo.keySet()) {
+            if (businessSmallWeChat.get(key) == null) {
+                businessSmallWeChat.put(key.toString(), currentSmallWeChatInfo.get(key));
+            }
+        }
     }
 
 

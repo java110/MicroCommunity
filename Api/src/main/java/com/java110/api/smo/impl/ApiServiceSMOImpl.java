@@ -29,7 +29,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.AppRoute;
 import com.java110.entity.center.AppService;
 import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.event.service.api.ServiceDataFlowEventPublishing;
+import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

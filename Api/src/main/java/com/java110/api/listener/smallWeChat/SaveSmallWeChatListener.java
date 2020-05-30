@@ -1,25 +1,21 @@
 package com.java110.api.listener.smallWeChat;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.smallWeChat.ISmallWeChatBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 保存小程序配置
  */
 @Java110Listener("saveSmallWeChatListener")
-public class SaveSmallWeChatListener extends AbstractServiceApiListener {
+public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private ISmallWeChatBMO smallWeChatBMOImpl;
@@ -34,12 +30,7 @@ public class SaveSmallWeChatListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-        AppService service = event.getAppService();
-        businesses.add(smallWeChatBMOImpl.addSmallWeChat(reqJson, context));
-        ResponseEntity<String> responseEntity = smallWeChatBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
+        smallWeChatBMOImpl.addSmallWeChat(reqJson, context);
     }
 
     @Override
@@ -52,9 +43,5 @@ public class SaveSmallWeChatListener extends AbstractServiceApiListener {
         return HttpMethod.POST;
     }
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
 
 }

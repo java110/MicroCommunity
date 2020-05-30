@@ -21,10 +21,7 @@
         <module>CodeService</module>
         <module>StoreService</module>
         <module>RuleService</module>
-        <module>java110-event</module>
         <module>OrderService</module>
-        <module>java110-cacheAgent</module>
-        <module>java110-logAgent</module>
         <module>CommentService</module>
         <module>Api</module>
         <module>CommunityService</module>
@@ -213,11 +210,11 @@
                 <version>${logback.vaersion}</version>
             </dependency>
 
-<!--            <dependency>-->
-<!--                <groupId>log4j</groupId>-->
-<!--                <artifactId>log4j</artifactId>-->
-<!--                <version>1.2.17</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>log4j</groupId>-->
+            <!--                <artifactId>log4j</artifactId>-->
+            <!--                <version>1.2.17</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -578,8 +575,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-
 
 
     </dependencies>

@@ -11,7 +11,7 @@ import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;

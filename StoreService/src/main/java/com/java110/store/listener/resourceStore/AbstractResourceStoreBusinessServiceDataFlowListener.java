@@ -2,7 +2,7 @@ package com.java110.store.listener.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -81,6 +81,12 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
 
         currentResourceStoreInfo.put("operate", StatusConstant.OPERATE_DEL);
         getResourceStoreServiceDaoImpl().saveBusinessResourceStoreInfo(currentResourceStoreInfo);
+
+        for (Object key : currentResourceStoreInfo.keySet()) {
+            if (businessResourceStore.get(key) == null) {
+                businessResourceStore.put(key.toString(), currentResourceStoreInfo.get(key));
+            }
+        }
     }
 
 

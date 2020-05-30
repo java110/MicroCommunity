@@ -1,25 +1,19 @@
 package com.java110.api.listener.unit;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.unit.IUnitBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.floor.IFloorInnerServiceSMO;
 import com.java110.dto.FloorDto;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 /**
  * @ClassName SaveUnitListener
@@ -30,7 +24,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019/5/3
  **/
 @Java110Listener("saveUnitListener")
-public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
+public class SaveUnitListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(SaveUnitListener.class);
     @Autowired
     private IUnitBMO unitBMOImpl;
@@ -48,50 +42,15 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         return HttpMethod.POST;
     }
 
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(reqJson, "floorId", "请求报文中未包含floorId节点");
+        Assert.jsonObjectHaveKey(reqJson, "unitNum", "请求报文中未包含unitNum节点");
+        Assert.jsonObjectHaveKey(reqJson, "layerCount", "请求报文中未包含layerCount节点");
+        Assert.jsonObjectHaveKey(reqJson, "lift", "请求报文中未包含lift节点");
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        HttpHeaders header = new HttpHeaders();
-        //dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        //添加单元信息
-        businesses.add(unitBMOImpl.addUnit(paramObj, dataFlowContext));
-
-
-
-        ResponseEntity<String> responseEntity = unitBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-
-    }
-
-    /**
-     * 数据校验
-     *
-     * @param paramIn "communityId": "7020181217000001",
-     *                "memberId": "3456789",
-     *                "memberTypeCd": "390001200001"
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(paramIn, "floorId", "请求报文中未包含floorId节点");
-        Assert.jsonObjectHaveKey(paramIn, "unitNum", "请求报文中未包含unitNum节点");
-        Assert.jsonObjectHaveKey(paramIn, "layerCount", "请求报文中未包含layerCount节点");
-        Assert.jsonObjectHaveKey(paramIn, "lift", "请求报文中未包含lift节点");
-        JSONObject reqJson = JSONObject.parseObject(paramIn);
         Assert.isInteger(reqJson.getString("layerCount"), "单元总层数据不是有效数字");
 
         if (!"1010".equals(reqJson.getString("lift")) && !"2020".equals(reqJson.getString("lift"))) {
@@ -107,8 +66,13 @@ public class SaveUnitListener extends AbstractServiceApiDataFlowListener {
         if (total < 1) {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
         }
-
     }
+
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        unitBMOImpl.addUnit(reqJson, context);
+    }
+
 
     @Override
     public int getOrder() {

@@ -8,7 +8,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.menu.IMenuInnerServiceSMO;
 import com.java110.dto.menu.MenuDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.menu.ApiMenuDataVo;
 import com.java110.vo.api.menu.ApiMenuVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.comment.listener;
 
 import com.java110.comment.dao.ICommentServiceDao;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -32,7 +32,6 @@ import java.nio.charset.Charset;
         "com.java110.front",
         "com.java110.core",
         "com.java110.config.properties.code",
-        "com.java110.cache",
         "com.java110.report"
 })
 

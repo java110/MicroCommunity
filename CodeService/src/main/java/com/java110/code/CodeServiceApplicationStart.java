@@ -35,7 +35,7 @@ import java.util.List;
  * @date 2016年8月6日
  * @tag
  */
-@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.code", "com.java110.core", "com.java110.cache",
+@SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.code", "com.java110.core",
         "com.java110.config.properties.code", "com.java110.db"})
 //@SpringBootApplication(scanBasePackages = {"com.java110.service","com.java110.code","com.java110.config.properties.code"})
 @EnableDiscoveryClient

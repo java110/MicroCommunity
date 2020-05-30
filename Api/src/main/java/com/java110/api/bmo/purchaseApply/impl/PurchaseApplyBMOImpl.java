@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,18 +27,11 @@ public class PurchaseApplyBMOImpl extends ApiBaseBMO implements IPurchaseApplyBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApply = new JSONObject();
-        businessPurchaseApply.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
-        return business;
+        PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
+        super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
     }
 
     /**
@@ -47,19 +41,12 @@ public class PurchaseApplyBMOImpl extends ApiBaseBMO implements IPurchaseApplyBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApply = new JSONObject();
-        businessPurchaseApply.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
-        return business;
+        PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
+        super.update(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
     }
+
     /**
      * 添加小区信息
      *
@@ -67,18 +54,10 @@ public class PurchaseApplyBMOImpl extends ApiBaseBMO implements IPurchaseApplyBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApply = new JSONObject();
-        businessPurchaseApply.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
-        return business;
+        PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
+        super.insert(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY);
     }
 
 }

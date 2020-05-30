@@ -2,14 +2,14 @@ package com.java110.fee.listener.returnPayFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.fee.dao.IReturnPayFeeServiceDao;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.fee.dao.IReturnPayFeeServiceDao;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class SaveReturnPayFeeInfoListener extends AbstractReturnPayFeeBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessReturnPayFee 节点
-        if (data.containsKey("businessReturnPayFee")) {
-            Object bObj = data.get("businessReturnPayFee");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_RETURN_PAY_FEE)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_RETURN_PAY_FEE);
             JSONArray businessReturnPayFees = null;
             if (bObj instanceof JSONObject) {
                 businessReturnPayFees = new JSONArray();
@@ -165,10 +165,10 @@ public class SaveReturnPayFeeInfoListener extends AbstractReturnPayFeeBusinessSe
         businessReturnPayFee.put("bId", business.getbId());
         businessReturnPayFee.put("operate", StatusConstant.OPERATE_ADD);
         //保存退费表信息
-        businessReturnPayFee.put("cycles","-"+businessReturnPayFee.get("cycles"));
-        businessReturnPayFee.put("receivableAmount","-"+businessReturnPayFee.get("receivableAmount"));
-        businessReturnPayFee.put("receivedAmount","-"+businessReturnPayFee.get("receivedAmount"));
-        businessReturnPayFee.put("state","1000");
+        businessReturnPayFee.put("cycles", "-" + businessReturnPayFee.get("cycles"));
+        businessReturnPayFee.put("receivableAmount", "-" + businessReturnPayFee.get("receivableAmount"));
+        businessReturnPayFee.put("receivedAmount", "-" + businessReturnPayFee.get("receivedAmount"));
+        businessReturnPayFee.put("state", "1000");
         returnPayFeeServiceDaoImpl.saveBusinessReturnPayFeeInfo(businessReturnPayFee);
 
     }

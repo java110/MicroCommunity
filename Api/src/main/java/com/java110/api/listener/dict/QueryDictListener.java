@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.dict.DictInnerServiceSMO;
 import com.java110.dto.Dict.DictDto;
 import com.java110.dto.Dict.DictQueryDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

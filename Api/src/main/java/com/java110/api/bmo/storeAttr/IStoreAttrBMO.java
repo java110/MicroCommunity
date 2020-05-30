@@ -9,11 +9,12 @@ public interface IStoreAttrBMO extends IApiBaseBMO {
 
     /**
      * 添加商户属性
+     *
      * @param paramInJson
      * @param dataFlowContext
      * @return
      */
-     JSONObject addStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void addStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加商户属性信息
@@ -22,7 +23,7 @@ public interface IStoreAttrBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除商户属性
@@ -31,8 +32,7 @@ public interface IStoreAttrBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
-
+    void deleteStoreAttr(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 }

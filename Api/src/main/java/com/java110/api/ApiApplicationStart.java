@@ -3,7 +3,7 @@ package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
-import com.java110.event.service.api.ServiceDataFlowEventPublishing;
+import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -45,9 +45,8 @@ import java.nio.charset.Charset;
         "com.java110.service.init",
         "com.java110.api",
         "com.java110.core",
-        "com.java110.event.service.api",
         "com.java110.config.properties.code",
-        "com.java110.cache"})
+        })
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = ServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.api.listener"})

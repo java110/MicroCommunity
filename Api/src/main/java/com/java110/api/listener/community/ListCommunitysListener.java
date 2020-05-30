@@ -10,7 +10,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.community.ApiCommunityVo;
 import org.springframework.beans.factory.annotation.Autowired;

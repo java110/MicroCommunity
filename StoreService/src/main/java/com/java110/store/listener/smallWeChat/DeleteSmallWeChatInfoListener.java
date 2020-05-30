@@ -59,8 +59,8 @@ public class DeleteSmallWeChatInfoListener extends AbstractSmallWeChatBusinessSe
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
-        if (data.containsKey("businessSmallWeChat")) {
-            Object _obj = data.get("businessSmallWeChat");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_SMALL_WE_CHAT)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_SMALL_WE_CHAT);
             JSONArray businessSmallWeChats = null;
             if (_obj instanceof JSONObject) {
                 businessSmallWeChats = new JSONArray();

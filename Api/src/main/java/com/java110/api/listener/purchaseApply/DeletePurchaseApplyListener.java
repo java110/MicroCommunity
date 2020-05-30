@@ -1,15 +1,15 @@
 package com.java110.api.listener.purchaseApply;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.purchaseApply.IPurchaseApplyBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
@@ -18,7 +18,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ import java.util.List;
  * add by zcc 2020/04/01
  */
 @Java110Listener("deletePurchaseApplyListener")
-public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
+public class DeletePurchaseApplyListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IPurchaseApplyBMO purchaseApplyBMOImpl;
@@ -48,12 +47,10 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         HttpHeaders header = new HttpHeaders();
         context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-        AppService service = event.getAppService();
-        businesses.add(deletePurchaseApply(reqJson, context));
-        businesses.add(deletePurchaseApplyDetail(reqJson, context));
-        ResponseEntity<String> responseEntity = purchaseApplyBMOImpl.callService(context, service.getServiceCode(), businesses);
-        context.setResponseEntity(responseEntity);
+
+        deletePurchaseApply(reqJson, context);
+        deletePurchaseApplyDetail(reqJson, context);
+
     }
 
     @Override
@@ -78,28 +75,17 @@ public class DeletePurchaseApplyListener extends AbstractServiceApiListener {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApply = new JSONObject();
-        businessPurchaseApply.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessPurchaseApply);
-        return business;
+    private void deletePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyPo.class);
+        super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY);
     }
 
     //删除订单明细
-    private JSONObject deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApply = new JSONObject();
-        businessPurchaseApply.putAll(paramInJson);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApplyDetail", businessPurchaseApply);
-        return business;
+    private void deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
+        PurchaseApplyDetailPo purchaseApplyPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyDetailPo.class);
+        super.delete(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
     }
 
 }

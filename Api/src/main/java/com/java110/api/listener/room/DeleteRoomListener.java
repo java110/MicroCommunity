@@ -1,25 +1,19 @@
 package com.java110.api.listener.room;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.room.IRoomBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.UnitDto;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -32,7 +26,7 @@ import java.util.List;
  * add by wuxw 2019/5/3
  **/
 @Java110Listener("deleteRoomListener")
-public class DeleteRoomListener extends AbstractServiceApiDataFlowListener {
+public class DeleteRoomListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(DeleteRoomListener.class);
 
 
@@ -53,48 +47,13 @@ public class DeleteRoomListener extends AbstractServiceApiDataFlowListener {
         return HttpMethod.POST;
     }
 
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "roomId", "请求报文中未包含roomId节点");
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        //添加单元信息
-        businesses.add(roomBMOImpl.deleteRoom(paramObj, dataFlowContext));
-
-
-
-        ResponseEntity<String> responseEntity = roomBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-
-    }
-
-    /**
-     * 数据校验
-     *
-     * @param paramIn "communityId": "7020181217000001",
-     *                "memberId": "3456789",
-     *                "memberTypeCd": "390001200001"
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "roomId", "请求报文中未包含roomId节点");
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(paramIn, "unitId", "请求报文中未包含unitId节点");
-
-        JSONObject reqJson = JSONObject.parseObject(paramIn);
 
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
@@ -105,8 +64,13 @@ public class DeleteRoomListener extends AbstractServiceApiDataFlowListener {
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
-
     }
+
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        roomBMOImpl.deleteRoom(reqJson, context);
+    }
+
 
     @Override
     public int getOrder() {

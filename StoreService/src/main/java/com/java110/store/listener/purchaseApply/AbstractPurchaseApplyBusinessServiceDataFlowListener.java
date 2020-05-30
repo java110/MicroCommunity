@@ -1,12 +1,12 @@
 package com.java110.store.listener.purchaseApply;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.entity.center.Business;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +85,12 @@ public abstract class AbstractPurchaseApplyBusinessServiceDataFlowListener exten
         currentPurchaseApplyInfo.put("createTime", currentPurchaseApplyInfo.get("createTime"));
         currentPurchaseApplyInfo.put("operate", StatusConstant.OPERATE_DEL);
         getPurchaseApplyServiceDaoImpl().saveBusinessPurchaseApplyInfo(currentPurchaseApplyInfo);
+
+        for (Object key : currentPurchaseApplyInfo.keySet()) {
+            if (businessPurchaseApply.get(key) == null) {
+                businessPurchaseApply.put(key.toString(), currentPurchaseApplyInfo.get(key));
+            }
+        }
     }
 
 

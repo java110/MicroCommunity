@@ -13,7 +13,7 @@ public interface IPurchaseApplyDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-     JSONObject addPurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+     void addPurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加订单明细信息
@@ -22,7 +22,7 @@ public interface IPurchaseApplyDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updatePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updatePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除订单明细
@@ -31,7 +31,7 @@ public interface IPurchaseApplyDetailBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 

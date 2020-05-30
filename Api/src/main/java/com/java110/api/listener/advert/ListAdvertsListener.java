@@ -14,7 +14,7 @@ import com.java110.dto.RoomDto;
 import com.java110.dto.advert.AdvertDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeAdvertConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -61,27 +61,26 @@ public class DeleteActivitiesInfoListener extends AbstractActivitiesBusinessServ
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessActivities 节点
         if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES)) {
-            //处理 businessActivities 节点
-            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES)) {
-                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES);
-                JSONArray businessActivitiess = null;
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES);
+            JSONArray businessActivitiess = null;
+            if (_obj instanceof JSONObject) {
+                businessActivitiess = new JSONArray();
+                businessActivitiess.add(_obj);
+            } else {
+                businessActivitiess = (JSONArray) _obj;
+            }
+            //JSONObject businessActivities = data.getJSONObject("businessActivities");
+            for (int _activitiesIndex = 0; _activitiesIndex < businessActivitiess.size(); _activitiesIndex++) {
+                JSONObject businessActivities = businessActivitiess.getJSONObject(_activitiesIndex);
+                doBusinessActivities(business, businessActivities);
                 if (_obj instanceof JSONObject) {
-                    businessActivitiess = new JSONArray();
-                    businessActivitiess.add(_obj);
-                } else {
-                    businessActivitiess = (JSONArray) _obj;
-                }
-                //JSONObject businessActivities = data.getJSONObject("businessActivities");
-                for (int _activitiesIndex = 0; _activitiesIndex < businessActivitiess.size(); _activitiesIndex++) {
-                    JSONObject businessActivities = businessActivitiess.getJSONObject(_activitiesIndex);
-                    doBusinessActivities(business, businessActivities);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("activitiesId", businessActivities.getString("activitiesId"));
-                    }
+                    dataFlowContext.addParamOut("activitiesId", businessActivities.getString("activitiesId"));
                 }
             }
+
         }
 
 

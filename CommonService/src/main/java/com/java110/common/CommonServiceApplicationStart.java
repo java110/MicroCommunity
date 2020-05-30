@@ -1,8 +1,7 @@
 package com.java110.common;
 
-import com.java110.common.activity.DeploymentActivity;
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ import java.nio.charset.Charset;
         "com.java110.service",
         "com.java110.common",
         "com.java110.core",
-        "com.java110.cache",
         "com.java110.config.properties.code",
         "com.java110.db"},
         exclude = {LiquibaseAutoConfiguration.class,

@@ -54,8 +54,8 @@ public class SaveFastuserInfoListener extends AbstractFastuserBusinessServiceDat
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessActivities 节点
-        if(data.containsKey("businessFastuser")){
-            Object bObj = data.get("businessFastuser");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FASTUSER)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FASTUSER);
             JSONArray businessFastusers = null;
             if(bObj instanceof JSONObject){
                 businessFastusers = new JSONArray();

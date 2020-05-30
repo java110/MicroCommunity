@@ -5,7 +5,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IStoreServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +123,12 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentStoreInfo.put("mapY",currentStoreInfo.get("map_y"));
         currentStoreInfo.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStoreInfo(currentStoreInfo);
+
+        for (Object key : currentStoreInfo.keySet()) {
+            if (businessStore.get(key) == null) {
+                businessStore.put(key.toString(), currentStoreInfo.get(key));
+            }
+        }
     }
 
     /**
@@ -146,6 +152,11 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
         currentStoreAttr.put("specCd",currentStoreAttr.get("spec_cd"));
         currentStoreAttr.put("operate",StatusConstant.OPERATE_DEL);
         getStoreServiceDaoImpl().saveBusinessStoreAttr(currentStoreAttr);
+        for (Object key : currentStoreAttr.keySet()) {
+            if (storeAttr.get(key) == null) {
+                storeAttr.put(key.toString(), currentStoreAttr.get(key));
+            }
+        }
     }
 
     /**

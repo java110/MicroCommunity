@@ -3,7 +3,7 @@ package com.java110.api.listener.electric;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.po.ElectricPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;

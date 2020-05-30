@@ -6,9 +6,10 @@ import com.java110.api.bmo.purchaseApplyDetail.IPurchaseApplyDetailBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.purchaseApplyDetail.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +28,13 @@ public class PurchaseApplyDetailBMOImpl extends ApiBaseBMO implements IPurchaseA
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addPurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addPurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessPurchaseApplyDetail = new JSONObject();
         businessPurchaseApplyDetail.putAll(paramInJson);
         businessPurchaseApplyDetail.put("id", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApplyDetail", businessPurchaseApplyDetail);
-        return business;
+        PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(businessPurchaseApplyDetail, PurchaseApplyDetailPo.class);
+        super.insert(dataFlowContext, purchaseApplyDetailPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY_DETAIL);
     }
 
 
@@ -50,7 +45,7 @@ public class PurchaseApplyDetailBMOImpl extends ApiBaseBMO implements IPurchaseA
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updatePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updatePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
         //purchaseApplyDetailDto.getApplyOrderId(paramInJson.getString("purchaseApplyDetailId"));
@@ -60,17 +55,9 @@ public class PurchaseApplyDetailBMOImpl extends ApiBaseBMO implements IPurchaseA
         Assert.listOnlyOne(purchaseApplyDetailDtos, "未找到需要修改的活动 或多条数据");
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApplyDetail = new JSONObject();
-        businessPurchaseApplyDetail.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApplyDetail", businessPurchaseApplyDetail);
-        return business;
+        PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyDetailPo.class);
+        super.update(dataFlowContext, purchaseApplyDetailPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY_DETAIL);
     }
-
 
 
     /**
@@ -80,18 +67,10 @@ public class PurchaseApplyDetailBMOImpl extends ApiBaseBMO implements IPurchaseA
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deletePurchaseApplyDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessPurchaseApplyDetail = new JSONObject();
-        businessPurchaseApplyDetail.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApplyDetail", businessPurchaseApplyDetail);
-        return business;
+        PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(paramInJson, PurchaseApplyDetailPo.class);
+        super.delete(dataFlowContext, purchaseApplyDetailPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_PURCHASE_APPLY_DETAIL);
     }
 
 }

@@ -9,11 +9,12 @@ public interface ISmallWeChatBMO extends IApiBaseBMO {
 
     /**
      * 添加小程序管理
+     *
      * @param paramInJson
      * @param dataFlowContext
      * @return
      */
-     JSONObject addSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void addSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加小程序管理信息
@@ -22,7 +23,7 @@ public interface ISmallWeChatBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject updateSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除小程序管理
@@ -31,8 +32,7 @@ public interface ISmallWeChatBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-     JSONObject deleteSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
-
+    void deleteSmallWeChat(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 }

@@ -1,28 +1,22 @@
 package com.java110.api.listener.machineTranslate;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 保存设备同步侦听
  * add by wuxw 2019-06-30
  */
 @Java110Listener("updateMachineTranslateListener")
-public class UpdateMachineTranslateListener extends AbstractServiceApiListener {
+public class UpdateMachineTranslateListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IMachineTranslateBMO machineTranslateBMOImpl;

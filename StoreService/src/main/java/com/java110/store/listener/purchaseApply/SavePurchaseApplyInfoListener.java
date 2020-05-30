@@ -56,8 +56,8 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessPurchaseApply 节点
-        if(data.containsKey("businessPurchaseApply")){
-            Object bObj = data.get("businessPurchaseApply");
+        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY)){
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_PURCHASE_APPLY);
             JSONArray businessPurchaseApplys = null;
             if(bObj instanceof JSONObject){
                 businessPurchaseApplys = new JSONArray();

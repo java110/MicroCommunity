@@ -10,7 +10,7 @@ import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.dto.file.FileDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.apache.commons.lang3.StringUtils;

@@ -1,10 +1,9 @@
 package com.java110.community.listener.fastuser;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.community.dao.IActivitiesServiceDao;
 import com.java110.community.dao.IFastuserServiceDao;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -96,6 +95,12 @@ public abstract class AbstractFastuserBusinessServiceDataFlowListener extends Ab
 
         currentActivitiesInfo.put("operate", StatusConstant.OPERATE_DEL);
         getFastuserServiceDaoImpl().saveBusinessFastuserInfo(currentActivitiesInfo);
+
+        for(Object key : currentActivitiesInfo.keySet()) {
+            if(businessActivities.get(key) == null) {
+                businessActivities.put(key.toString(), currentActivitiesInfo.get(key));
+            }
+        }
     }
 
 

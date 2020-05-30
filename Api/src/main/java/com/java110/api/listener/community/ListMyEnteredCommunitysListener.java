@@ -12,7 +12,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgCommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.util.Assert;

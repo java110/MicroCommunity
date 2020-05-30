@@ -1,7 +1,7 @@
 package com.java110.report;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.report",
-        "com.java110.core", "com.java110.cache", "com.java110.config.properties.code", "com.java110.db"},
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"},
         exclude = {LiquibaseAutoConfiguration.class,
                 org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableDiscoveryClient

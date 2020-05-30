@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.visit.IVisitBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.owner.VisitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,18 +28,11 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
+        VisitPo visitPo = BeanConvertUtil.covertBean(paramInJson, VisitPo.class);
+        super.delete(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_VISIT);
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_VISIT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessVisit = new JSONObject();
-        businessVisit.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessVisit", businessVisit);
-        return business;
     }
 
     /**
@@ -47,20 +42,15 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessVisit = new JSONObject();
         businessVisit.putAll(paramInJson);
         businessVisit.put("vId", "-1");
-        //计算 应收金额businessVisit
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessVisit", businessVisit);
-        return business;
+        VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
+        super.insert(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT);
     }
+
     /**
      * 添加访客登记信息
      *
@@ -68,17 +58,10 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateVisit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_VISIT);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessVisit = new JSONObject();
-        businessVisit.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessVisit", businessVisit);
-        return business;
+        VisitPo visitPo = BeanConvertUtil.covertBean(paramInJson, VisitPo.class);
+        super.update(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_VISIT);
     }
 }

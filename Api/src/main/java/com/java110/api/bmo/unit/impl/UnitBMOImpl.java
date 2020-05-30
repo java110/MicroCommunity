@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.unit.IUnitBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,19 +27,15 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void editUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("unitId", paramInJson.getString("unitId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
+        UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 
-        return business;
+        super.delete(dataFlowContext, unitPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_UNIT_INFO);
     }
+
     /**
      * 添加小区楼信息
      *
@@ -45,13 +43,8 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("floorId", paramInJson.getString("floorId"));
         businessUnit.put("layerCount", paramInJson.getString("layerCount"));
@@ -60,10 +53,11 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
+        UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 
-        return business;
+        super.insert(dataFlowContext, unitPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
     }
+
     /**
      * 修改小区楼信息
      *
@@ -71,13 +65,8 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject editUpdateUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void editUpdateUnit(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_UNIT_INFO);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("floorId", paramInJson.getString("floorId"));
         businessUnit.put("layerCount", paramInJson.getString("layerCount"));
@@ -86,8 +75,8 @@ public class UnitBMOImpl extends ApiBaseBMO implements IUnitBMO {
         businessUnit.put("lift", paramInJson.getString("lift"));
         businessUnit.put("remark", paramInJson.getString("remark"));
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUnit", businessUnit);
+        UnitPo unitPo = BeanConvertUtil.covertBean(businessUnit, UnitPo.class);
 
-        return business;
+        super.update(dataFlowContext, unitPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_UNIT_INFO);
     }
 }

@@ -6,9 +6,10 @@ import com.java110.api.bmo.resourceStore.IResourceStoreBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.resourceStore.IResourceStoreInnerServiceSMO;
 import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,18 +36,11 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessResourceStore = new JSONObject();
-        businessResourceStore.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
-        return business;
+        ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(paramInJson, ResourceStorePo.class);
+        super.delete(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE);
     }
 
     /**
@@ -56,20 +50,14 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(paramInJson);
         businessResourceStore.put("resId", "-1");
         businessResourceStore.put("stock", "0");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
-        return business;
+        ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
+        super.insert(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
     }
 
     /**
@@ -79,7 +67,7 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
         resourceStoreDto.setResId(paramInJson.getString("resId"));
@@ -89,16 +77,10 @@ public class ResourceStoreBMOImpl extends ApiBaseBMO implements IResourceStoreBM
 
         Assert.isOne(resourceStoreDtos, "查询到多条物品 或未查到物品，resId=" + resourceStoreDto.getResId());
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RESOURCE_STORE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(paramInJson);
         businessResourceStore.put("stock", resourceStoreDtos.get(0).getStock());
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessResourceStore", businessResourceStore);
-        return business;
+        ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
+        super.update(dataFlowContext, resourceStorePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RESOURCE_STORE);
     }
 }

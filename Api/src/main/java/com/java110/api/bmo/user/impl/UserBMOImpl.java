@@ -8,12 +8,16 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserDto;
+import com.java110.po.org.OrgStaffRelPo;
+import com.java110.po.store.StoreUserRelPo;
+import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,23 +38,16 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-    public JSONObject addStaffOrg(JSONObject paramInJson) {
+    public void addStaffOrg(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessOrgStaffRels = new JSONArray();
         JSONObject businessOrgStaffRel = new JSONObject();
         businessOrgStaffRel.put("relId", "-1");
         businessOrgStaffRel.put("storeId", paramInJson.getString("storeId"));
         businessOrgStaffRel.put("staffId", paramInJson.getString("userId"));
         businessOrgStaffRel.put("orgId", paramInJson.getString("orgId"));
         businessOrgStaffRel.put("relCd", paramInJson.getString("relCd"));
-        businessOrgStaffRels.add(businessOrgStaffRel);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrgStaffRel", businessOrgStaffRels);
-
-        return business;
+        OrgStaffRelPo orgStaffRelPo = BeanConvertUtil.covertBean(businessOrgStaffRel, OrgStaffRelPo.class);
+        super.insert(dataFlowContext, orgStaffRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL);
     }
 
     /**
@@ -59,22 +56,16 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject addStaff(JSONObject paramInJson) {
+    public void addStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessStoreUsers = new JSONArray();
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("storeId", paramInJson.getString("storeId"));
         businessStoreUser.put("storeUserId", "-1");
         businessStoreUser.put("userId", paramInJson.getString("userId"));
         businessStoreUser.put("relCd", paramInJson.getString("relCd"));
-        businessStoreUsers.add(businessStoreUser);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser", businessStoreUsers);
 
-        return business;
+        StoreUserRelPo storeUserRelPo = BeanConvertUtil.covertBean(businessStoreUser, StoreUserRelPo.class);
+        super.insert(dataFlowContext, storeUserRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
     }
 
     /**
@@ -82,7 +73,7 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
      *
      * @param paramObj
      */
-    public JSONObject addUser(JSONObject paramObj, DataFlowContext dataFlowContext) {
+    public void addUser(JSONObject paramObj, DataFlowContext dataFlowContext) {
 
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(paramObj, "name", "请求参数中未包含name 节点，请确认");
@@ -98,15 +89,8 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
             Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", refreshParamIn(paramObj));
-
-        return business;
+        UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
+        super.insert(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
     }
 
     /**
@@ -114,7 +98,7 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
      *
      * @param paramObj
      */
-    public JSONObject registerUser(JSONObject paramObj, DataFlowContext dataFlowContext) {
+    public void registerUser(JSONObject paramObj, DataFlowContext dataFlowContext) {
 
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(paramObj, "name", "请求参数中未包含name 节点，请确认");
@@ -140,7 +124,7 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
         userPassword = AuthenticationFactory.passwdMd5(userPassword);
         paramObj.put("password", userPassword);
 
-        if(paramObj.containsKey("openId") && !"-1".equals(paramObj.getString("openId"))){
+        if (paramObj.containsKey("openId") && !"-1".equals(paramObj.getString("openId"))) {
             JSONArray userAttr = new JSONArray();
             JSONObject userAttrObj = new JSONObject();
             userAttrObj.put("attrId", "-1");
@@ -150,9 +134,8 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
             paramObj.put("businessUserAttr", userAttr);
         }
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", paramObj);
-
-        return business;
+        UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
+        super.insert(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
     }
 
 
@@ -173,17 +156,10 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
         return paramObj;
     }
 
-    public JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
+    public void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
         //校验json 格式中是否包含 name,email,levelCd,tel
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", builderStaffInfo(paramObj, dataFlowContext));
-
-        return business;
+        UserPo userPo = BeanConvertUtil.covertBean(builderStaffInfo(paramObj, dataFlowContext), UserPo.class);
+        super.update(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
     }
 
     /**
@@ -219,19 +195,15 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject deleteStaff(JSONObject paramInJson) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_USER);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONArray businessStoreUsers = new JSONArray();
+    public void deleteStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("storeId", paramInJson.getString("storeId"));
         businessStoreUser.put("userId", paramInJson.getString("userId"));
-        businessStoreUsers.add(businessStoreUser);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser", businessStoreUsers);
 
-        return business;
+
+        UserPo userPo = BeanConvertUtil.covertBean(businessStoreUser, UserPo.class);
+        super.delete(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_USER);
 
     }
 
@@ -241,19 +213,13 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject deleteUser(JSONObject paramInJson) {
+    public void deleteUser(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         //校验json 格式中是否包含 name,email,levelCd,tel
-
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("userId", paramInJson.getString("userId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", businessStoreUser);
 
-        return business;
+        UserPo userPo = BeanConvertUtil.covertBean(businessStoreUser, UserPo.class);
+        super.delete(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_REMOVE_USER_INFO);
 
     }
 

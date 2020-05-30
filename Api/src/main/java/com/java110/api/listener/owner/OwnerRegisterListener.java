@@ -18,7 +18,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;

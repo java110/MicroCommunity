@@ -8,7 +8,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.notice.INoticeInnerServiceSMO;
 import com.java110.dto.notice.NoticeDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.notice.ApiNoticeDataVo;
 import com.java110.vo.api.notice.ApiNoticeVo;
 import org.springframework.beans.factory.annotation.Autowired;

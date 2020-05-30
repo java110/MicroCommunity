@@ -7,7 +7,7 @@ import com.java110.utils.exception.BusinessException;
 import com.java110.utils.util.Assert;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.base.controller.BaseController;
-import com.java110.event.center.DataFlowEventPublishing;
+import com.java110.core.event.center.DataFlowEventPublishing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

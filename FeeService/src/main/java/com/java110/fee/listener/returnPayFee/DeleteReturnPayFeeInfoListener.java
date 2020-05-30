@@ -2,15 +2,15 @@ package com.java110.fee.listener.returnPayFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.fee.dao.IReturnPayFeeServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,25 +62,23 @@ public class DeleteReturnPayFeeInfoListener extends AbstractReturnPayFeeBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessReturnPayFee 节点
-        if (data.containsKey("businessReturnPayFee")) {
-            //处理 businessReturnPayFee 节点
-            if (data.containsKey("businessReturnPayFee")) {
-                Object _obj = data.get("businessReturnPayFee");
-                JSONArray businessReturnPayFees = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_RETURN_PAY_FEE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_RETURN_PAY_FEE);
+            JSONArray businessReturnPayFees = null;
+            if (_obj instanceof JSONObject) {
+                businessReturnPayFees = new JSONArray();
+                businessReturnPayFees.add(_obj);
+            } else {
+                businessReturnPayFees = (JSONArray) _obj;
+            }
+            //JSONObject businessReturnPayFee = data.getJSONObject("businessReturnPayFee");
+            for (int _returnPayFeeIndex = 0; _returnPayFeeIndex < businessReturnPayFees.size(); _returnPayFeeIndex++) {
+                JSONObject businessReturnPayFee = businessReturnPayFees.getJSONObject(_returnPayFeeIndex);
+                doBusinessReturnPayFee(business, businessReturnPayFee);
                 if (_obj instanceof JSONObject) {
-                    businessReturnPayFees = new JSONArray();
-                    businessReturnPayFees.add(_obj);
-                } else {
-                    businessReturnPayFees = (JSONArray) _obj;
+                    dataFlowContext.addParamOut("returnFeeId", businessReturnPayFee.getString("returnFeeId"));
                 }
-                //JSONObject businessReturnPayFee = data.getJSONObject("businessReturnPayFee");
-                for (int _returnPayFeeIndex = 0; _returnPayFeeIndex < businessReturnPayFees.size(); _returnPayFeeIndex++) {
-                    JSONObject businessReturnPayFee = businessReturnPayFees.getJSONObject(_returnPayFeeIndex);
-                    doBusinessReturnPayFee(business, businessReturnPayFee);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("returnFeeId", businessReturnPayFee.getString("returnFeeId"));
-                    }
-                }
+            
             }
         }
 

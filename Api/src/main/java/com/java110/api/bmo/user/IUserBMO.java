@@ -13,7 +13,7 @@ import com.java110.core.context.DataFlowContext;
  * add by wuxw 2020/3/9
  **/
 public interface IUserBMO extends IApiBaseBMO {
-    public JSONObject addStaffOrg(JSONObject paramInJson);
+     void addStaffOrg(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加员工
@@ -21,24 +21,16 @@ public interface IUserBMO extends IApiBaseBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject addStaff(JSONObject paramInJson);
+     void addStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加用户
      *
      * @param paramObj
      */
-    public JSONObject addUser(JSONObject paramObj, DataFlowContext dataFlowContext);
+    void addUser(JSONObject paramObj, DataFlowContext dataFlowContext);
 
-    public JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext);
-
-    /**
-     * 删除商户
-     *
-     * @param paramInJson
-     * @return
-     */
-    public JSONObject deleteStaff(JSONObject paramInJson);
+    void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext);
 
     /**
      * 删除商户
@@ -46,7 +38,15 @@ public interface IUserBMO extends IApiBaseBMO {
      * @param paramInJson
      * @return
      */
-    public JSONObject deleteUser(JSONObject paramInJson);
+    void deleteStaff(JSONObject paramInJson, DataFlowContext dataFlowContext);
+
+    /**
+     * 删除商户
+     *
+     * @param paramInJson
+     * @return
+     */
+    void deleteUser(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
     /**
@@ -54,5 +54,5 @@ public interface IUserBMO extends IApiBaseBMO {
      *
      * @param paramObj
      */
-    public JSONObject registerUser(JSONObject paramObj, DataFlowContext dataFlowContext);
+    void registerUser(JSONObject paramObj, DataFlowContext dataFlowContext);
 }

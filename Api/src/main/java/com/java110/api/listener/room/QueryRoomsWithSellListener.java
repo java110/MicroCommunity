@@ -13,7 +13,7 @@ import com.java110.core.smo.floor.IFloorInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.FloorDto;
 import com.java110.dto.RoomDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;

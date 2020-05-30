@@ -5,7 +5,7 @@ import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.RestTemplate;
-import com.java110.event.center.DataFlowEventPublishing;
+import com.java110.core.event.center.DataFlowEventPublishing;
 import com.java110.order.smo.ICenterServiceCacheSMO;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.order",
-        "com.java110.core", "com.java110.event.order", "com.java110.cache", "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.core", "com.java110.core.event.order", "com.java110.config.properties.code","com.java110.db"})
 @EnableDiscoveryClient
 //@EnableConfigurationProperties(EventProperties.class)
 @Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,

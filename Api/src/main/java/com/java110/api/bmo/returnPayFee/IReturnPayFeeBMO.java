@@ -14,7 +14,7 @@ public interface IReturnPayFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext
      * @return
      */
-    JSONObject addReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void addReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 添加退费表信息
@@ -23,10 +23,10 @@ public interface IReturnPayFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    JSONObject updateReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
-    JSONObject updateFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void updateFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
-    JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
     /**
      * 删除退费表
@@ -35,7 +35,7 @@ public interface IReturnPayFeeBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    JSONObject deleteReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    void deleteReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext);
 
 
 }

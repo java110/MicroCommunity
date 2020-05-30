@@ -8,7 +8,7 @@ import com.java110.core.smo.complaint.IComplaintInnerServiceSMO;
 import com.java110.core.smo.complaintUser.IComplaintUserInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -83,7 +83,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
 
         logger.debug("查询用户信息返回报文：" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId);
+            throw new IllegalArgumentException("根绝openId 查询用户信息异常" + openId + ", " + responseEntity.getBody());
         }
 
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());

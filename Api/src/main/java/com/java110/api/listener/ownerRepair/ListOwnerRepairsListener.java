@@ -8,7 +8,7 @@ import com.java110.core.smo.repair.IRepairInnerServiceSMO;
 import com.java110.core.smo.repair.IRepairUserInnerServiceSMO;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeOwnerRepairConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;

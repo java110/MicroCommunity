@@ -1,25 +1,21 @@
 package com.java110.api.listener.purchaseApply;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.auditApplyOrder.IApplyOrderBMO;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.purchaseApply.IPurchaseApplyInnerServiceSMO;
 import com.java110.core.smo.purchaseApplyUser.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.constant.ServiceCodePurchaseApplyConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +27,7 @@ import java.util.List;
  * 订单审核
  */
 @Java110Listener("auditApplyOrderListener")
-public class AuditApplyOrderListener extends AbstractServiceApiListener {
+public class AuditApplyOrderListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IApplyOrderBMO iApplyOrderBMOImpl;
@@ -81,25 +77,18 @@ public class AuditApplyOrderListener extends AbstractServiceApiListener {
         boolean isLastTask = purchaseApplyUserInnerServiceSMOImpl.completeTask(purchaseApplyDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
         if (isLastTask) {
-            context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-            JSONArray businesses = new JSONArray();
-            AppService service = event.getAppService();
-            businesses.add(updatePurchaseApply(reqJson, context));
-            responseEntity = iApplyOrderBMOImpl.callService(context, service.getServiceCode(), businesses);
+            updatePurchaseApply(reqJson, context);
         }
-        context.setResponseEntity(responseEntity);
 
     }
 
 
     /**
-     *
-     *
      * @param paramInJson     接口调用放传入入参
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    private JSONObject updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    private void updatePurchaseApply(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setStoreId(paramInJson.getString("storeId"));
@@ -110,16 +99,12 @@ public class AuditApplyOrderListener extends AbstractServiceApiListener {
 
         Assert.listOnlyOne(purchaseApplyDtos, "存在多条记录，或不存在数据" + complaintDto.getComplaintId());
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessComplaint = new JSONObject();
         businessComplaint.putAll(BeanConvertUtil.beanCovertMap(purchaseApplyDtos.get(0)));
         businessComplaint.put("state", "10002");
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessPurchaseApply", businessComplaint);
-        return business;
+        PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(businessComplaint, PurchaseApplyPo.class);
+
+        super.update(dataFlowContext, purchaseApplyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_PURCHASE_APPLY);
     }
 
 

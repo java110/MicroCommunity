@@ -52,8 +52,8 @@ public class SaveSmallWeChatInfoListener extends AbstractSmallWeChatBusinessServ
     protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
-        if (data.containsKey("businessSmallWeChat")) {
-            Object bObj = data.get("businessSmallWeChat");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WE_CHAT)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_SMALL_WE_CHAT);
             JSONArray businessSmallWeChats = null;
             if (bObj instanceof JSONObject) {
                 businessSmallWeChats = new JSONArray();

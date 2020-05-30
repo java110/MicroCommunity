@@ -2,23 +2,22 @@ package com.java110.community.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.entity.center.Business;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.community.dao.ICommunityServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,26 +62,24 @@ public class DeleteCommunityInfoListener extends AbstractCommunityBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点
-        if (data.containsKey("businessCommunity")) {
-            //处理 businessCommunity 节点
-            if (data.containsKey("businessCommunity")) {
-                Object _obj = data.get("businessCommunity");
-                JSONArray businessCommunitys = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO);
+            JSONArray businessCommunitys = null;
+            if (_obj instanceof JSONObject) {
+                businessCommunitys = new JSONArray();
+                businessCommunitys.add(_obj);
+            } else {
+                businessCommunitys = (JSONArray) _obj;
+            }
+            //JSONObject businessCommunity = data.getJSONObject("businessCommunity");
+            for (int _communityIndex = 0; _communityIndex < businessCommunitys.size(); _communityIndex++) {
+                JSONObject businessCommunity = businessCommunitys.getJSONObject(_communityIndex);
+                doBusinessCommunity(business, businessCommunity);
                 if (_obj instanceof JSONObject) {
-                    businessCommunitys = new JSONArray();
-                    businessCommunitys.add(_obj);
-                } else {
-                    businessCommunitys = (JSONArray) _obj;
-                }
-                //JSONObject businessCommunity = data.getJSONObject("businessCommunity");
-                for (int _communityIndex = 0; _communityIndex < businessCommunitys.size(); _communityIndex++) {
-                    JSONObject businessCommunity = businessCommunitys.getJSONObject(_communityIndex);
-                    doBusinessCommunity(business, businessCommunity);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
-                    }
+                    dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
                 }
             }
+
         }
 
 

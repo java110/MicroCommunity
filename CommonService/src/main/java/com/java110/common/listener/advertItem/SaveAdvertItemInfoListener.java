@@ -54,8 +54,8 @@ public class SaveAdvertItemInfoListener extends AbstractAdvertItemBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessAdvertItem 节点
-        if (data.containsKey("businessAdvertItem")) {
-            Object bObj = data.get("businessAdvertItem");
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM)) {
+            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ADVERT_ITEM);
             JSONArray businessAdvertItems = null;
             if (bObj instanceof JSONObject) {
                 businessAdvertItems = new JSONArray();

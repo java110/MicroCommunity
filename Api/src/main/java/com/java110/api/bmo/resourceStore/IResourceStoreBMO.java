@@ -21,7 +21,7 @@ public interface IResourceStoreBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void deleteResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加小区信息
      *
@@ -29,7 +29,7 @@ public interface IResourceStoreBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void addResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
     /**
      * 添加物品管理信息
      *
@@ -37,5 +37,5 @@ public interface IResourceStoreBMO extends IApiBaseBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
+    public void updateResourceStore(JSONObject paramInJson, DataFlowContext dataFlowContext);
 }

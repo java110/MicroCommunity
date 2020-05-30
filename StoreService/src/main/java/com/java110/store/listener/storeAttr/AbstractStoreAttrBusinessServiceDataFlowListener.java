@@ -2,7 +2,7 @@ package com.java110.store.listener.storeAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -77,6 +77,12 @@ public abstract class AbstractStoreAttrBusinessServiceDataFlowListener extends A
         currentStoreAttrInfo.put("month", DateUtil.getCurrentMonth());
         currentStoreAttrInfo.put("operate", StatusConstant.OPERATE_DEL);
         getStoreAttrServiceDaoImpl().saveBusinessStoreAttrInfo(currentStoreAttrInfo);
+
+        for (Object key : currentStoreAttrInfo.keySet()) {
+            if (businessStoreAttr.get(key) == null) {
+                businessStoreAttr.put(key.toString(), currentStoreAttrInfo.get(key));
+            }
+        }
     }
 
 

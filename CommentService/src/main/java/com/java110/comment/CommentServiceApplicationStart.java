@@ -1,7 +1,7 @@
 package com.java110.comment;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
-import com.java110.event.service.BusinessServiceDataFlowEventPublishing;
+import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.comment",
-        "com.java110.core", "com.java110.cache","com.java110.config.properties.code", "com.java110.db"})
+        "com.java110.core", "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.comment.listener"})

@@ -60,11 +60,9 @@ public class DeleteFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessFeeAttr 节点
-        if(data.containsKey("businessFeeAttr")){
             //处理 businessFeeAttr 节点
-            if(data.containsKey("businessFeeAttr")){
-                Object _obj = data.get("businessFeeAttr");
+            if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO)){
+                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FEE_INFO);
                 JSONArray businessFeeAttrs = null;
                 if(_obj instanceof JSONObject){
                     businessFeeAttrs = new JSONArray();
@@ -81,7 +79,7 @@ public class DeleteFeeAttrInfoListener extends AbstractFeeAttrBusinessServiceDat
                     }
                 }
             }
-        }
+
 
 
     }

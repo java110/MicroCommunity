@@ -14,7 +14,7 @@ import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

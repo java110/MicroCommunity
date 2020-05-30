@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.smallWeChat.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;

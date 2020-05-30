@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.storeAttr.IStoreAttrInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeStoreAttrConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.storeAttr.ApiStoreAttrDataVo;

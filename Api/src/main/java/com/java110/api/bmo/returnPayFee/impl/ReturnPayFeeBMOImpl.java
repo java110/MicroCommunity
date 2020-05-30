@@ -1,19 +1,16 @@
 package com.java110.api.bmo.returnPayFee.impl;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeDetailInnerServiceSMO;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
-import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.returnPayFee.IReturnPayFeeInnerServiceSMO;
 import com.java110.dto.fee.FeeDetailDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.po.fee.PayFeeDetailPo;
+import com.java110.po.fee.ReturnPayFeePo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,19 +33,10 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject addReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void addReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RETURN_PAY_FEE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessReturnPayFee = new JSONObject();
-        businessReturnPayFee.putAll(paramInJson);
-        businessReturnPayFee.put("returnFeeId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessReturnPayFee", businessReturnPayFee);
-        return business;
+        ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(paramInJson, ReturnPayFeePo.class);
+        super.insert(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RETURN_PAY_FEE);
     }
 
 
@@ -59,7 +47,7 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject updateReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         ReturnPayFeeDto returnPayFeeDto = new ReturnPayFeeDto();
         returnPayFeeDto.setReturnFeeId(paramInJson.getString("returnFeeId"));
@@ -68,49 +56,35 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
         Assert.listOnlyOne(returnPayFeeDtos, "未找到需要修改的活动 或多条数据");
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RETURN_PAY_FEE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(returnPayFeeDtos.get(0)));
         businessReturnPayFee.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessReturnPayFee", businessReturnPayFee);
-        return business;
+        ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, ReturnPayFeePo.class);
+        super.update(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_RETURN_PAY_FEE);
     }
 
-    public JSONObject updateFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void updateFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         FeeDetailDto feeDetailDto = new FeeDetailDto();
         feeDetailDto.setDetailId(paramInJson.getString("detailId"));
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
         Assert.listOnlyOne(feeDetailDtos, "未找到需要修改的活动 或多条数据");
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(feeDetailDtos.get(0)));
         businessReturnPayFee.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessReturnPayFee);
-        return business;
+        PayFeeDetailPo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, PayFeeDetailPo.class);
+        super.update(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_DETAIL);
     }
 
 
+    public void addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-    public JSONObject addFeeDetail(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(paramInJson);
         businessReturnPayFee.put("detailId", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeDetail", businessReturnPayFee);
-        return business;
+        PayFeeDetailPo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, PayFeeDetailPo.class);
+        super.insert(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL);
     }
 
 
@@ -121,18 +95,10 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RETURN_PAY_FEE);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject businessReturnPayFee = new JSONObject();
-        businessReturnPayFee.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessReturnPayFee", businessReturnPayFee);
-        return business;
+        ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(paramInJson, ReturnPayFeePo.class);
+        super.insert(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_RETURN_PAY_FEE);
     }
 
 }

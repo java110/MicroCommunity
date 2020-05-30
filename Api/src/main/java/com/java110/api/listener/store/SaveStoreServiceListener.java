@@ -3,28 +3,32 @@ package com.java110.api.listener.store;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.store.IStoreBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.*;
-import com.java110.utils.util.Assert;
+import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 保存商户信息
  * Created by Administrator on 2019/3/29.
  */
 @Java110Listener("saveStoreServiceListener")
-public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener {
+public class SaveStoreServiceListener extends AbstractServiceApiListener {
 
     @Autowired
     private IStoreBMO storeBMOImpl;
+
     @Override
     public int getOrder() {
         return 0;
@@ -40,51 +44,14 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         return HttpMethod.POST;
     }
 
-    /**
-     * 协议：
-     * {
-     * <p>
-     * "businessStore": {
-     * "storeId": "-1",
-     * "userId": "用户ID",
-     * "name": "齐天超时（王府井店）",
-     * "address": "青海省西宁市城中区129号",
-     * "password": "ERCBHDUYFJDNDHDJDNDJDHDUDHDJDDKDK",
-     * "tel": "15897089471",
-     * "storeTypeCd": "M",
-     * "nearbyLandmarks": "王府井内",
-     * "mapX": "101.801909",
-     * "mapY": "36.597263"
-     * },
-     * "businessStoreAttr": [{
-     * "storeId": "-1",
-     * "attrId":"-1",
-     * "specCd":"1001",
-     * "value":"01"
-     * }],
-     * "businessStorePhoto":[{
-     * "storePhotoId":"-1",
-     * "storeId":"-1",
-     * "storePhotoTypeCd":"T",
-     * "photo":"12345678.jpg"
-     * }],
-     * "businessStoreCerdentials":[{
-     * "storeCerdentialsId":"-1",
-     * "storeId":"-1",
-     * "credentialsCd":"1",
-     * "value":"632126XXXXXXXX2011",
-     * "validityPeriod":"有效期，长期有效请写3000/01/01",
-     * "positivePhoto":"正面照片地址，1234567.jpg",
-     * "negativePhoto":"反面照片地址，没有不填写"
-     * }]
-     * }
-     *
-     * @param event
-     */
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
+    }
 
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         //获取数据上下文对象
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
@@ -111,23 +78,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
         businesses.add(storeBMOImpl.addStaffOrg(paramObj));
 
 
-//        String paramInObj = super.restToCenterProtocol(businesses, dataFlowContext.getRequestCurrentHeaders()).toJSONString();
-//
-//        //将 rest header 信息传递到下层服务中去
-//        super.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
-//
-//        HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj, header);
-//        //http://user-service/test/sayHello
-//        super.doRequest(dataFlowContext, service, httpEntity);
-
         //super.doResponse(dataFlowContext);
         ResponseEntity<String> responseEntity = storeBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-//        if (dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK) {
-//            return;
-//        }
-//        String resData = dataFlowContext.getResponseEntity().getBody().toString();
-//       responseEntity = new ResponseEntity<String>(JSONArray.parseArray(resData).get(0).toString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);
         //如果不成功直接返回
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -136,8 +88,6 @@ public class SaveStoreServiceListener extends AbstractServiceApiDataFlowListener
 
         //赋权
         privilegeUserDefault(dataFlowContext, paramObj);
-
-
     }
 
 

@@ -2,7 +2,7 @@ package com.java110.store.listener.purchaseApplyDetail;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.entity.center.Business;
-import com.java110.event.service.AbstractBusinessServiceDataFlowListener;
+import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IPurchaseApplyDetailServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -69,6 +69,11 @@ public abstract class AbstractPurchaseApplyDetailBusinessServiceDataFlowListener
         currentPurchaseApplyDetailInfo.put("quantity", currentPurchaseApplyDetailInfo.get("quantity"));
         currentPurchaseApplyDetailInfo.put("operate", StatusConstant.OPERATE_DEL);
         getPurchaseApplyDetailServiceDaoImpl().saveBusinessPurchaseApplyDetailInfo(currentPurchaseApplyDetailInfo);
+        for (Object key : currentPurchaseApplyDetailInfo.keySet()) {
+            if (businessPurchaseApplyDetail.get(key) == null) {
+                businessPurchaseApplyDetail.put(key.toString(), currentPurchaseApplyDetailInfo.get(key));
+            }
+        }
     }
 
 

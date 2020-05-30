@@ -61,27 +61,26 @@ public class DeleteResourceStoreInfoListener extends AbstractResourceStoreBusine
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessResourceStore 节点
-        if (data.containsKey("businessResourceStore")) {
-            //处理 businessResourceStore 节点
-            if (data.containsKey("businessResourceStore")) {
-                Object _obj = data.get("businessResourceStore");
-                JSONArray businessResourceStores = null;
+        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE)) {
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_RESOURCE_STORE);
+            JSONArray businessResourceStores = null;
+            if (_obj instanceof JSONObject) {
+                businessResourceStores = new JSONArray();
+                businessResourceStores.add(_obj);
+            } else {
+                businessResourceStores = (JSONArray) _obj;
+            }
+            //JSONObject businessResourceStore = data.getJSONObject("businessResourceStore");
+            for (int _resourceResourceStoreIndex = 0; _resourceResourceStoreIndex < businessResourceStores.size(); _resourceResourceStoreIndex++) {
+                JSONObject businessResourceStore = businessResourceStores.getJSONObject(_resourceResourceStoreIndex);
+                doBusinessResourceStore(business, businessResourceStore);
                 if (_obj instanceof JSONObject) {
-                    businessResourceStores = new JSONArray();
-                    businessResourceStores.add(_obj);
-                } else {
-                    businessResourceStores = (JSONArray) _obj;
-                }
-                //JSONObject businessResourceStore = data.getJSONObject("businessResourceStore");
-                for (int _resourceResourceStoreIndex = 0; _resourceResourceStoreIndex < businessResourceStores.size(); _resourceResourceStoreIndex++) {
-                    JSONObject businessResourceStore = businessResourceStores.getJSONObject(_resourceResourceStoreIndex);
-                    doBusinessResourceStore(business, businessResourceStore);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("resId", businessResourceStore.getString("resId"));
-                    }
+                    dataFlowContext.addParamOut("resId", businessResourceStore.getString("resId"));
                 }
             }
+
         }
 
 

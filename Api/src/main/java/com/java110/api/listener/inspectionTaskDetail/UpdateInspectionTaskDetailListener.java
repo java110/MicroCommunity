@@ -16,7 +16,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.inspectionTask.InspectionTaskDto;
 import com.java110.dto.inspectionTaskDetail.InspectionTaskDetailDto;
 import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeInspectionTaskDetailConstant;
 import com.java110.utils.util.Assert;

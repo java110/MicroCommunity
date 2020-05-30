@@ -7,7 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.repair.IRepairInnerServiceSMO;
 import com.java110.core.smo.repair.IRepairUserInnerServiceSMO;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;

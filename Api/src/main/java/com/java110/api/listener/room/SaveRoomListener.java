@@ -1,25 +1,19 @@
 package com.java110.api.listener.room;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.room.IRoomBMO;
-import com.java110.api.listener.AbstractServiceApiDataFlowListener;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.UnitDto;
-import com.java110.entity.center.AppService;
-import com.java110.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.utils.constant.ServiceCodeConstant;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -32,7 +26,7 @@ import java.util.List;
  * add by wuxw 2019/5/3
  **/
 @Java110Listener("saveRoomListener")
-public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
+public class SaveRoomListener extends AbstractServiceApiPlusListener {
     private static Logger logger = LoggerFactory.getLogger(SaveRoomListener.class);
 
 
@@ -51,51 +45,19 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         return HttpMethod.POST;
     }
 
+
     @Override
-    public void soService(ServiceDataFlowEvent event) {
+    protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
+        Assert.jsonObjectHaveKey(reqJson, "unitId", "请求报文中未包含unitId节点");
+        Assert.jsonObjectHaveKey(reqJson, "roomNum", "请求报文中未包含roomNum节点");
+        Assert.jsonObjectHaveKey(reqJson, "layer", "请求报文中未包含layer节点");
+        Assert.jsonObjectHaveKey(reqJson, "section", "请求报文中未包含section节点");
+        Assert.jsonObjectHaveKey(reqJson, "apartment", "请求报文中未包含apartment节点");
+        Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
+        Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
+        Assert.jsonObjectHaveKey(reqJson, "unitPrice", "请求报文中未包含unitPrice节点");
 
-        logger.debug("ServiceDataFlowEvent : {}", event);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-
-        String paramIn = dataFlowContext.getReqData();
-
-        //校验数据
-        validate(paramIn);
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-
-        HttpHeaders header = new HttpHeaders();
-        dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        //添加单元信息
-        businesses.add(roomBMOImpl.addRoom(paramObj, dataFlowContext));
-
-
-        ResponseEntity<String> responseEntity = roomBMOImpl.callService(dataFlowContext, service.getServiceCode(), businesses);
-
-        dataFlowContext.setResponseEntity(responseEntity);
-
-    }
-    /**
-     * 数据校验
-     *
-     * @param paramIn "communityId": "7020181217000001",
-     *                "memberId": "3456789",
-     *                "memberTypeCd": "390001200001"
-     */
-    private void validate(String paramIn) {
-        Assert.jsonObjectHaveKey(paramIn, "communityId", "请求报文中未包含communityId节点");
-        Assert.jsonObjectHaveKey(paramIn, "unitId", "请求报文中未包含unitId节点");
-        Assert.jsonObjectHaveKey(paramIn, "roomNum", "请求报文中未包含roomNum节点");
-        Assert.jsonObjectHaveKey(paramIn, "layer", "请求报文中未包含layer节点");
-        Assert.jsonObjectHaveKey(paramIn, "section", "请求报文中未包含section节点");
-        Assert.jsonObjectHaveKey(paramIn, "apartment", "请求报文中未包含apartment节点");
-        Assert.jsonObjectHaveKey(paramIn, "state", "请求报文中未包含state节点");
-        Assert.jsonObjectHaveKey(paramIn, "builtUpArea", "请求报文中未包含builtUpArea节点");
-        Assert.jsonObjectHaveKey(paramIn, "unitPrice", "请求报文中未包含unitPrice节点");
-        JSONObject reqJson = JSONObject.parseObject(paramIn);
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("unitPrice"), "房屋单价数据格式错误");
@@ -120,8 +82,13 @@ public class SaveRoomListener extends AbstractServiceApiDataFlowListener {
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
-
     }
+
+    @Override
+    protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        roomBMOImpl.addRoom(reqJson, context);
+    }
+
 
     @Override
     public int getOrder() {
