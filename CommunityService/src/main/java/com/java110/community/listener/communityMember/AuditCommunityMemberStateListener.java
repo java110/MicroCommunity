@@ -1,22 +1,24 @@
 package com.java110.community.listener.communityMember;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,11 +59,25 @@ public class AuditCommunityMemberStateListener extends AbstractCommunityBusiness
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessCommunity 节点 按理这里不应该处理，程序上支持，以防真有这种业务
         if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE)) {
-            JSONObject memberCommunity = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
-            doBusinessCommunityMember(business, memberCommunity);
-            dataFlowContext.addParamOut("communityMemberId", memberCommunity.getString("communityMemberId"));
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_AUDIT_COMMUNITY_MEMBER_STATE);
+            JSONArray businessMemberCommunitys = null;
+            if (_obj instanceof JSONObject) {
+                businessMemberCommunitys = new JSONArray();
+                businessMemberCommunitys.add(_obj);
+            } else {
+                businessMemberCommunitys = (JSONArray) _obj;
+            }
+            //JSONObject businessFloor = data.getJSONObject("businessFloor");
+            for (int _memberIndex = 0; _memberIndex < businessMemberCommunitys.size(); _memberIndex++) {
+                JSONObject memberCommunity = businessMemberCommunitys.getJSONObject(_memberIndex);
+                doBusinessCommunityMember(business, memberCommunity);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("communityMemberId", memberCommunity.getString("communityMemberId"));
+                }
+            }
         }
 
     }
@@ -83,12 +99,15 @@ public class AuditCommunityMemberStateListener extends AbstractCommunityBusiness
         info.put("operate", StatusConstant.OPERATE_ADD);
 
 
-        //小区信息
-        Map businessCommunityMember = communityServiceDaoImpl.getBusinessCommunityMember(info);
-        if (businessCommunityMember != null && !businessCommunityMember.isEmpty()) {
-            flushBusinessCommunityMember(businessCommunityMember, StatusConstant.STATUS_CD_VALID);
-            communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
-            dataFlowContext.addParamOut("communityMemberId", businessCommunityMember.get("member_community_id"));
+        //小区楼信息
+        List<Map> businessCommunityMembers = communityServiceDaoImpl.getBusinessCommunityMember(info);
+        if (businessCommunityMembers != null && businessCommunityMembers.size() > 0) {
+            for (int _memberIndex = 0; _memberIndex < businessCommunityMembers.size(); _memberIndex++) {
+                Map businessCommunityMemberInfo = businessCommunityMembers.get(_memberIndex);
+                flushBusinessCommunityMember(businessCommunityMemberInfo, StatusConstant.STATUS_CD_VALID);
+                communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMemberInfo);
+                dataFlowContext.addParamOut("communityMemberId", businessCommunityMemberInfo.get("member_community_id"));
+            }
         }
     }
 
@@ -111,19 +130,21 @@ public class AuditCommunityMemberStateListener extends AbstractCommunityBusiness
         delInfo.put("bId", business.getbId());
         delInfo.put("operate", StatusConstant.OPERATE_DEL);
         //小区信息
-        Map memberCommunity = communityServiceDaoImpl.getCommunityMember(info);
-        if (memberCommunity != null && !memberCommunity.isEmpty()) {
+        List<Map> memberCommunitys = communityServiceDaoImpl.getCommunityMember(info);
+        if (memberCommunitys != null && !memberCommunitys.isEmpty()) {
 
-            //小区信息
-            Map businessCommunityMember = communityServiceDaoImpl.getBusinessCommunityMember(delInfo);
+
+            //小区楼信息
+            List<Map> businessCommunityMembers = communityServiceDaoImpl.getBusinessCommunityMember(delInfo);
             //除非程序出错了，这里不会为空
-            if (businessCommunityMember == null || businessCommunityMember.isEmpty()) {
+            if (businessCommunityMembers == null || businessCommunityMembers.size() == 0) {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_INNER_ERROR, "撤单失败（member community），程序内部异常,请检查！ " + delInfo);
             }
-
-            flushBusinessCommunityMember(businessCommunityMember, StatusConstant.STATUS_CD_VALID);
-            communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
-            dataFlowContext.addParamOut("communityMemberId", memberCommunity.get("member_community_id"));
+            for (int _memberIndex = 0; _memberIndex < businessCommunityMembers.size(); _memberIndex++) {
+                Map businessCommunityMember = businessCommunityMembers.get(_memberIndex);
+                flushBusinessCommunityMember(businessCommunityMember, StatusConstant.STATUS_CD_VALID);
+                communityServiceDaoImpl.updateCommunityMemberInstance(businessCommunityMember);
+            }
         }
     }
 
@@ -141,7 +162,7 @@ public class AuditCommunityMemberStateListener extends AbstractCommunityBusiness
         //自动插入DEL
         autoSaveDelBusinessCommunityMember(business, businessCommunity);
 
-        businessCommunity.put("bId",business.getbId());
+        businessCommunity.put("bId", business.getbId());
         businessCommunity.put("operate", StatusConstant.OPERATE_ADD);
         //保存小区信息
         communityServiceDaoImpl.saveBusinessCommunityMember(businessCommunity);

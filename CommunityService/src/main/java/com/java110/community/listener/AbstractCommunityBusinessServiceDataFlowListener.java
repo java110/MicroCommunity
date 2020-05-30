@@ -193,10 +193,16 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
         Map info = new HashMap();
         info.put("communityMemberId", businessCommunityMember.getString("communityMemberId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
-        Map currentCommunityMember = getCommunityServiceDaoImpl().getCommunityMember(info);
-        if (currentCommunityMember == null || currentCommunityMember.isEmpty()) {
+
+
+        List<Map> currentCommunityMembers = getCommunityServiceDaoImpl().getCommunityMember(info);
+
+        if (currentCommunityMembers == null || currentCommunityMembers.size() != 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "未找到需要修改数据信息，入参错误或数据有问题，请检查" + info);
         }
+
+        Map currentCommunityMember = currentCommunityMembers.get(0);
+
         currentCommunityMember.put("bId", business.getbId());
         currentCommunityMember.put("communityId", currentCommunityMember.get("community_id"));
         currentCommunityMember.put("communityMemberId", currentCommunityMember.get("community_member_id"));

@@ -1,23 +1,25 @@
 package com.java110.community.listener.communityMember;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
 import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.exception.ListenerExecuteException;
+import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,9 +60,25 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
+        //处理 businessCommunity 节点 按理这里不应该处理，程序上支持，以防真有这种业务
         if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY)) {
-            JSONObject businessCommunityMember = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
-            doBusinessCommunityMember(business, businessCommunityMember);
+            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_JOINED_COMMUNITY);
+            JSONArray businessMemberCommunitys = null;
+            if (_obj instanceof JSONObject) {
+                businessMemberCommunitys = new JSONArray();
+                businessMemberCommunitys.add(_obj);
+            } else {
+                businessMemberCommunitys = (JSONArray) _obj;
+            }
+            //JSONObject businessFloor = data.getJSONObject("businessFloor");
+            for (int _memberIndex = 0; _memberIndex < businessMemberCommunitys.size(); _memberIndex++) {
+                JSONObject memberCommunity = businessMemberCommunitys.getJSONObject(_memberIndex);
+                doBusinessCommunityMember(business, memberCommunity);
+                if (_obj instanceof JSONObject) {
+                    dataFlowContext.addParamOut("communityMemberId", memberCommunity.getString("communityMemberId"));
+                }
+            }
         }
     }
 
@@ -78,12 +96,16 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         info.put("bId", business.getbId());
         info.put("operate", StatusConstant.OPERATE_ADD);
 
-        //小区信息
-        Map businessCommunityMember = communityServiceDaoImpl.getBusinessCommunityMember(info);
-        if (businessCommunityMember != null && !businessCommunityMember.isEmpty()) {
-            communityServiceDaoImpl.saveCommunityMemberInstance(info);
-            dataFlowContext.addParamOut("communityId", businessCommunityMember.get("community_id"));
-            dataFlowContext.addParamOut("memberId", businessCommunityMember.get("member_id"));
+
+        //小区楼信息
+        List<Map> businessCommunityMembers = communityServiceDaoImpl.getBusinessCommunityMember(info);
+        if (businessCommunityMembers != null && businessCommunityMembers.size() > 0) {
+            for (int _memberIndex = 0; _memberIndex < businessCommunityMembers.size(); _memberIndex++) {
+                Map businessCommunityMemberInfo = businessCommunityMembers.get(_memberIndex);
+                communityServiceDaoImpl.saveCommunityMemberInstance(info);
+                dataFlowContext.addParamOut("communityId", businessCommunityMemberInfo.get("community_id"));
+                dataFlowContext.addParamOut("memberId", businessCommunityMemberInfo.get("member_id"));
+            }
         }
     }
 
@@ -103,12 +125,18 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         Map paramIn = new HashMap();
         paramIn.put("bId", bId);
         paramIn.put("statusCd", StatusConstant.STATUS_CD_INVALID);
+
+
         //小区信息
-        Map communityMember = communityServiceDaoImpl.getCommunityMember(info);
-        if (communityMember != null && !communityMember.isEmpty()) {
-            paramIn.put("communityMemberId", communityMember.get("member_community_id").toString());
-            communityServiceDaoImpl.updateCommunityMemberInstance(paramIn);
-            dataFlowContext.addParamOut("communityMemberId", communityMember.get("member_community_id"));
+        List<Map> communityMembers = communityServiceDaoImpl.getCommunityMember(info);
+        if (communityMembers != null && !communityMembers.isEmpty()) {
+
+            for (int _memberIndex = 0; _memberIndex < communityMembers.size(); _memberIndex++) {
+                Map businessCommunityMemberInfo = communityMembers.get(_memberIndex);
+                paramIn.put("communityMemberId", businessCommunityMemberInfo.get("member_community_id").toString());
+                communityServiceDaoImpl.updateCommunityMemberInstance(paramIn);
+                dataFlowContext.addParamOut("communityMemberId", businessCommunityMemberInfo.get("member_community_id"));
+            }
         }
     }
 

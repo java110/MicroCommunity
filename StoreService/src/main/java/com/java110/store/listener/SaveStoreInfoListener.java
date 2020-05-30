@@ -60,7 +60,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
 
         //处理 businessStore 节点
         if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO)){
-            JSONObject businessStore = data.getJSONObject("businessStore");
+            JSONObject businessStore = data.getJSONObject(BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_INFO);
             doBusinessStore(business,businessStore);
             dataFlowContext.addParamOut("storeId",businessStore.getString("storeId"));
         }
