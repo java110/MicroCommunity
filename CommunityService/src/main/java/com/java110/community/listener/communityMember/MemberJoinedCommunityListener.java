@@ -159,7 +159,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
 
         if (businessCommunityMember.getString("communityMemberId").startsWith("-")) {
             //刷新缓存
-            flushCommunityMemberId(business.getDatas());
+            flushCommunityMemberId(businessCommunityMember);
         }
 
         businessCommunityMember.put("bId", business.getbId());
@@ -173,12 +173,11 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
     /**
      * 刷新 小区ID
      *
-     * @param data
+     * @param businessCommunityMember
      */
-    private void flushCommunityMemberId(JSONObject data) {
+    private void flushCommunityMemberId(JSONObject businessCommunityMember) {
 
         String communityMemberId = GenerateCodeFactory.getCommunityMemberId();
-        JSONObject businessCommunityMember = data.getJSONObject("businessCommunityMember");
         businessCommunityMember.put("communityMemberId", communityMemberId);
 
     }
