@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -49,7 +50,7 @@ public class FrontServiceApplicationStart {
      * @return restTemplate
      */
     @Bean
-    //@LoadBalanced
+    @LoadBalanced
     public RestTemplate restTemplate() {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
@@ -62,8 +63,8 @@ public class FrontServiceApplicationStart {
             ApplicationContext context = SpringApplication.run(FrontServiceApplicationStart.class, args);
             ServiceStartInit.initSystemConfig(context);
             //VueComponentTemplate.initComponent(VueComponentTemplate.DEFAULT_COMPONENT_PACKAGE_PATH);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 }
