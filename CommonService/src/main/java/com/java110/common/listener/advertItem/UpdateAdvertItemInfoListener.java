@@ -6,6 +6,7 @@ import com.java110.common.dao.IAdvertItemServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.advert.AdvertItemPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -64,8 +65,8 @@ public class UpdateAdvertItemInfoListener extends AbstractAdvertItemBusinessServ
 
 
         //处理 businessAdvertItem 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT_ITEM)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_ADVERT_ITEM);
+        if (data.containsKey(AdvertItemPo.class.getSimpleName())) {
+            Object _obj = data.get(AdvertItemPo.class.getSimpleName());
             JSONArray businessAdvertItems = null;
             if (_obj instanceof JSONObject) {
                 businessAdvertItems = new JSONArray();

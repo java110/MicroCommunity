@@ -6,6 +6,7 @@ import com.java110.community.dao.IRoomServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteRoomInfoListener extends AbstractRoomBusinessServiceDataFlowL
 
 
         //处理 businessRoom 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ROOM_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ROOM_INFO);
+        if (data.containsKey(RoomPo.class.getSimpleName())) {
+            Object _obj = data.get(RoomPo.class.getSimpleName());
             JSONArray businessRooms = null;
             if (_obj instanceof JSONObject) {
                 businessRooms = new JSONArray();

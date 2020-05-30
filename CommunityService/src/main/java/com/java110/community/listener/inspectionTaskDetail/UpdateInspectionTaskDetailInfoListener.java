@@ -6,6 +6,7 @@ import com.java110.community.dao.IInspectionTaskDetailServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.inspection.InspectionTaskDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -64,8 +65,8 @@ public class UpdateInspectionTaskDetailInfoListener extends AbstractInspectionTa
 
 
         //处理 businessInspectionTaskDetail 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_TASK_DETAIL);
+        if (data.containsKey(InspectionTaskDetailPo.class.getSimpleName())) {
+            Object _obj = data.get(InspectionTaskDetailPo.class.getSimpleName());
             JSONArray businessInspectionTaskDetails = null;
             if (_obj instanceof JSONObject) {
                 businessInspectionTaskDetails = new JSONArray();

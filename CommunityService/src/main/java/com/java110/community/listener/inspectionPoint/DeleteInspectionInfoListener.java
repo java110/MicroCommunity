@@ -3,6 +3,7 @@ package com.java110.community.listener.inspectionPoint;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionServiceDao;
+import com.java110.po.inspection.InspectionPointPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteInspectionInfoListener extends AbstractInspectionBusinessServ
 
 
         //处理 businessInspection 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION);
+        if (data.containsKey(InspectionPointPo.class.getSimpleName())) {
+            Object _obj = data.get(InspectionPointPo.class.getSimpleName());
             JSONArray businessInspections = null;
             if (_obj instanceof JSONObject) {
                 businessInspections = new JSONArray();

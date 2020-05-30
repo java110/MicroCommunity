@@ -2,6 +2,7 @@ package com.java110.community.listener.activities;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.activities.ActivitiesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -53,8 +54,8 @@ public class SaveActivitiesInfoListener extends AbstractActivitiesBusinessServic
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessActivities 节点
-        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACTIVITIES)){
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ACTIVITIES);
+        if(data.containsKey(ActivitiesPo.class.getSimpleName())){
+            Object bObj = data.get(ActivitiesPo.class.getSimpleName());
             JSONArray businessActivitiess = null;
             if(bObj instanceof JSONObject){
                 businessActivitiess = new JSONArray();

@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.audit.AuditUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveAuditUserInfoListener extends AbstractAuditUserBusinessServiceD
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessAuditUser 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_AUDIT_USER)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_AUDIT_USER);
+        if (data.containsKey(AuditUserPo.class.getSimpleName())) {
+            Object bObj = data.get(AuditUserPo.class.getSimpleName());
             JSONArray businessAuditUsers = null;
             if (bObj instanceof JSONObject) {
                 businessAuditUsers = new JSONArray();

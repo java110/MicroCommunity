@@ -7,6 +7,7 @@ import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowLi
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.community.CommunityPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteCommunityInfoListener extends AbstractCommunityBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY_INFO);
+        if (data.containsKey(CommunityPo.class.getSimpleName())) {
+            Object _obj = data.get(CommunityPo.class.getSimpleName());
             JSONArray businessCommunitys = null;
             if (_obj instanceof JSONObject) {
                 businessCommunitys = new JSONArray();

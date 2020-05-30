@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.machine.MachineAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveMachineAttrInfoListener extends AbstractMachineAttrBusinessServ
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineAttr 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE);
+        if (data.containsKey(MachineAttrPo.class.getSimpleName())) {
+            Object bObj = data.get(MachineAttrPo.class.getSimpleName());
             JSONArray businessMachineAttrs = null;
             if (bObj instanceof JSONObject) {
                 businessMachineAttrs = new JSONArray();

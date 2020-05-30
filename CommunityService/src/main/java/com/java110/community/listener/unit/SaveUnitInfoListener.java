@@ -2,6 +2,7 @@ package com.java110.community.listener.unit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveUnitInfoListener extends AbstractUnitBusinessServiceDataFlowLis
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessUnit 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_UNIT_INFO);
+        if (data.containsKey(UnitPo.class.getSimpleName())) {
+            Object _obj = data.get(UnitPo.class.getSimpleName());
             JSONArray businessUnits = null;
             if (_obj instanceof JSONObject) {
                 businessUnits = new JSONArray();

@@ -7,6 +7,7 @@ import com.java110.community.listener.AbstractCommunityBusinessServiceDataFlowLi
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.community.CommunityMemberPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -60,8 +61,8 @@ public class MemberQuitCommunityListener extends AbstractCommunityBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCommunity 节点 按理这里不应该处理，程序上支持，以防真有这种业务
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_MEMBER_QUIT_COMMUNITY);
+        if (data.containsKey(CommunityMemberPo.class.getSimpleName())) {
+            Object _obj = data.get(CommunityMemberPo.class.getSimpleName());
             JSONArray businessMemberCommunitys = null;
             if (_obj instanceof JSONObject) {
                 businessMemberCommunitys = new JSONArray();

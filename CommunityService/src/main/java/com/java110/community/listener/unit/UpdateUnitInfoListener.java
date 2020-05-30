@@ -6,6 +6,7 @@ import com.java110.community.dao.IUnitServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -64,8 +65,8 @@ public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
 
 
         //处理 businessUnit 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_UNIT_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_UNIT_INFO);
+        if (data.containsKey(UnitPo.class.getSimpleName())) {
+            Object _obj = data.get(UnitPo.class.getSimpleName());
             JSONArray businessUnits = null;
             if (_obj instanceof JSONObject) {
                 businessUnits = new JSONArray();

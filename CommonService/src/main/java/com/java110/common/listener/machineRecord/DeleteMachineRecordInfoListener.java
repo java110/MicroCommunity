@@ -6,6 +6,7 @@ import com.java110.common.dao.IMachineRecordServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.machine.MachineRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteMachineRecordInfoListener extends AbstractMachineRecordBusine
 
 
         //处理 businessMachineRecord 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_RECORD)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_MACHINE_RECORD);
+        if (data.containsKey(MachineRecordPo.class.getSimpleName())) {
+            Object _obj = data.get(MachineRecordPo.class.getSimpleName());
             JSONArray businessMachineRecords = null;
             if (_obj instanceof JSONObject) {
                 businessMachineRecords = new JSONArray();

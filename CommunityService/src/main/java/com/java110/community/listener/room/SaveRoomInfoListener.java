@@ -2,6 +2,7 @@ package com.java110.community.listener.room;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRoom 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_ROOM_INFO);
+        if (data.containsKey(RoomPo.class.getSimpleName())) {
+            Object _obj = data.get(RoomPo.class.getSimpleName());
             JSONArray businessRooms = null;
             if (_obj instanceof JSONObject) {
                 businessRooms = new JSONArray();

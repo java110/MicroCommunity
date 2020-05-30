@@ -6,6 +6,7 @@ import com.java110.community.dao.IParkingAreaServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.parking.ParkingAreaPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteParkingAreaInfoListener extends AbstractParkingAreaBusinessSe
 
 
         //处理 businessParkingArea 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_AREA);
+        if (data.containsKey(ParkingAreaPo.class.getSimpleName())) {
+            Object _obj = data.get(ParkingAreaPo.class.getSimpleName());
             JSONArray businessParkingAreas = null;
             if (_obj instanceof JSONObject) {
                 businessParkingAreas = new JSONArray();

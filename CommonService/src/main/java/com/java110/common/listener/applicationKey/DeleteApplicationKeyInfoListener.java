@@ -6,6 +6,7 @@ import com.java110.common.dao.IApplicationKeyServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.applicationKey.ApplicationKeyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteApplicationKeyInfoListener extends AbstractApplicationKeyBusi
 
 
         //处理 businessApplicationKey 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
+        if (data.containsKey(ApplicationKeyPo.class.getSimpleName())) {
+            Object _obj = data.get(ApplicationKeyPo.class.getSimpleName());
             JSONArray businessApplicationKeys = null;
             if (_obj instanceof JSONObject) {
                 businessApplicationKeys = new JSONArray();

@@ -6,6 +6,7 @@ import com.java110.community.dao.IActivitiesServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.activities.ActivitiesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteActivitiesInfoListener extends AbstractActivitiesBusinessServ
 
 
         //处理 businessActivities 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES);
+        if (data.containsKey(ActivitiesPo.class.getSimpleName())) {
+            Object _obj = data.get(ActivitiesPo.class.getSimpleName());
             JSONArray businessActivitiess = null;
             if (_obj instanceof JSONObject) {
                 businessActivitiess = new JSONArray();

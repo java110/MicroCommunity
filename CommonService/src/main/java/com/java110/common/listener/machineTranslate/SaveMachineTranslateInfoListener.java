@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.machine.MachineTranslatePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveMachineTranslateInfoListener extends AbstractMachineTranslateBu
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineTranslate 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_MACHINE_TRANSLATE);
+        if (data.containsKey(MachineTranslatePo.class.getSimpleName())) {
+            Object bObj = data.get(MachineTranslatePo.class.getSimpleName());
             JSONArray businessMachineTranslates = null;
             if (bObj instanceof JSONObject) {
                 businessMachineTranslates = new JSONArray();

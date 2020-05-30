@@ -6,6 +6,7 @@ import com.java110.community.dao.IRepairServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteRepairInfoListener extends AbstractRepairBusinessServiceDataF
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRepair 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_REPAIR)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_REPAIR);
+        if (data.containsKey(RepairPoolPo.class.getSimpleName())) {
+            Object _obj = data.get(RepairPoolPo.class.getSimpleName());
             JSONArray businessRepairs = null;
             if (_obj instanceof JSONObject) {
                 businessRepairs = new JSONArray();

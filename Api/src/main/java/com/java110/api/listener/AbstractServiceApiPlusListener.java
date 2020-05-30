@@ -236,7 +236,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(param.getClass().getSimpleName(), businessArr);
         context.addServiceBusiness(business);
     }
 
@@ -255,7 +255,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(param.getClass().getSimpleName(), businessArr);
         context.addServiceBusiness(business);
     }
 
@@ -274,7 +274,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
         businessObj = JSONObject.parseObject(JSONObject.toJSONString(BeanConvertUtil.beanCovertMap(param)));
         JSONArray businessArr = new JSONArray();
         businessArr.add(businessObj);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(businessType, businessArr);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(param.getClass().getSimpleName(), businessArr);
         context.addServiceBusiness(business);
     }
 

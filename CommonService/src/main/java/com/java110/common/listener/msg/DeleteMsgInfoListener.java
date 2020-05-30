@@ -6,6 +6,7 @@ import com.java110.common.dao.IMsgServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.message.MsgPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -61,11 +62,9 @@ public class DeleteMsgInfoListener extends AbstractMsgBusinessServiceDataFlowLis
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessMsg 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG)) {
             //处理 businessMsg 节点
-            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG)) {
-                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG);
+            if (data.containsKey(MsgPo.class.getSimpleName())) {
+                Object _obj = data.get(MsgPo.class.getSimpleName());
                 JSONArray businessMsgs = null;
                 if (_obj instanceof JSONObject) {
                     businessMsgs = new JSONArray();
@@ -81,7 +80,7 @@ public class DeleteMsgInfoListener extends AbstractMsgBusinessServiceDataFlowLis
                         dataFlowContext.addParamOut("msgId", businessMsg.getString("msgId"));
                     }
                 }
-            }
+
         }
 
 

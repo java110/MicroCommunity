@@ -6,6 +6,8 @@ import com.java110.community.dao.IInspectionRoutePointRelServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.inspection.InspectionRoutePo;
+import com.java110.po.inspection.InspectionRoutePointRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +64,8 @@ public class DeleteInspectionRoutePointRelInfoListener extends AbstractInspectio
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionRoutePointRel 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL);
+        if (data.containsKey(InspectionRoutePointRelPo.class.getSimpleName())) {
+            Object _obj = data.get(InspectionRoutePointRelPo.class.getSimpleName());
             JSONArray businessInspectionRoutePointRels = null;
             if (_obj instanceof JSONObject) {
                 businessInspectionRoutePointRels = new JSONArray();

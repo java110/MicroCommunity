@@ -6,6 +6,7 @@ import com.java110.common.dao.ICarInoutServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.car.CarInoutPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteCarInoutInfoListener extends AbstractCarInoutBusinessServiceD
 
 
         //处理 businessCarInout 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_INOUT)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_CAR_INOUT);
+        if (data.containsKey(CarInoutPo.class.getSimpleName())) {
+            Object _obj = data.get(CarInoutPo.class.getSimpleName());
             JSONArray businessCarInouts = null;
             if (_obj instanceof JSONObject) {
                 businessCarInouts = new JSONArray();

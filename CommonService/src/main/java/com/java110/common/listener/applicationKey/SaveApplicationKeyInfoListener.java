@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.applicationKey.ApplicationKeyPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveApplicationKeyInfoListener extends AbstractApplicationKeyBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessApplicationKey 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_APPLICATION_KEY);
+        if (data.containsKey(ApplicationKeyPo.class.getSimpleName())) {
+            Object bObj = data.get(ApplicationKeyPo.class.getSimpleName());
             JSONArray businessApplicationKeys = null;
             if (bObj instanceof JSONObject) {
                 businessApplicationKeys = new JSONArray();

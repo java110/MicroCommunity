@@ -6,6 +6,7 @@ import com.java110.common.dao.IAuditUserServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.audit.AuditUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -61,27 +62,26 @@ public class DeleteAuditUserInfoListener extends AbstractAuditUserBusinessServic
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
+
         //处理 businessAuditUser 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_AUDIT_USER)) {
-            //处理 businessAuditUser 节点
-            if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_AUDIT_USER)) {
-                Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_AUDIT_USER);
-                JSONArray businessAuditUsers = null;
+        if (data.containsKey(AuditUserPo.class.getSimpleName())) {
+            Object _obj = data.get(AuditUserPo.class.getSimpleName());
+            JSONArray businessAuditUsers = null;
+            if (_obj instanceof JSONObject) {
+                businessAuditUsers = new JSONArray();
+                businessAuditUsers.add(_obj);
+            } else {
+                businessAuditUsers = (JSONArray) _obj;
+            }
+            //JSONObject businessAuditUser = data.getJSONObject("businessAuditUser");
+            for (int _auditUserIndex = 0; _auditUserIndex < businessAuditUsers.size(); _auditUserIndex++) {
+                JSONObject businessAuditUser = businessAuditUsers.getJSONObject(_auditUserIndex);
+                doBusinessAuditUser(business, businessAuditUser);
                 if (_obj instanceof JSONObject) {
-                    businessAuditUsers = new JSONArray();
-                    businessAuditUsers.add(_obj);
-                } else {
-                    businessAuditUsers = (JSONArray) _obj;
-                }
-                //JSONObject businessAuditUser = data.getJSONObject("businessAuditUser");
-                for (int _auditUserIndex = 0; _auditUserIndex < businessAuditUsers.size(); _auditUserIndex++) {
-                    JSONObject businessAuditUser = businessAuditUsers.getJSONObject(_auditUserIndex);
-                    doBusinessAuditUser(business, businessAuditUser);
-                    if (_obj instanceof JSONObject) {
-                        dataFlowContext.addParamOut("auditUserId", businessAuditUser.getString("auditUserId"));
-                    }
+                    dataFlowContext.addParamOut("auditUserId", businessAuditUser.getString("auditUserId"));
                 }
             }
+
         }
 
 

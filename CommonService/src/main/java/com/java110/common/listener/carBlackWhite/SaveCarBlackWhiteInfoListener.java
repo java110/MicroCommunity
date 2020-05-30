@@ -7,6 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
+import com.java110.po.car.CarBlackWhitePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessCarBlackWhite 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_CAR_BLACK_WHITE);
+        if (data.containsKey(CarBlackWhitePo.class.getSimpleName())) {
+            Object bObj = data.get(CarBlackWhitePo.class.getSimpleName());
             JSONArray businessCarBlackWhites = null;
             if (bObj instanceof JSONObject) {
                 businessCarBlackWhites = new JSONArray();

@@ -2,6 +2,7 @@ package com.java110.community.listener.visit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.owner.VisitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -53,8 +54,8 @@ public class SaveVisitInfoListener extends AbstractVisitBusinessServiceDataFlowL
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessVisit 节点
-        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT)){
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT);
+        if(data.containsKey(VisitPo.class.getSimpleName())){
+            Object bObj = data.get(VisitPo.class.getSimpleName());
             JSONArray businessVisits = null;
             if(bObj instanceof JSONObject){
                 businessVisits = new JSONArray();

@@ -3,6 +3,7 @@ package com.java110.community.listener.inspectionPlan;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionPlanServiceDao;
+import com.java110.po.inspection.InspectionPlanPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -64,8 +65,8 @@ public class UpdateInspectionPlanInfoListener extends AbstractInspectionPlanBusi
 
 
         //处理 businessInspectionPlan 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_INSPECTION_PLAN);
+        if (data.containsKey(InspectionPlanPo.class.getSimpleName())) {
+            Object _obj = data.get(InspectionPlanPo.class.getSimpleName());
             JSONArray businessInspectionPlans = null;
             if (_obj instanceof JSONObject) {
                 businessInspectionPlans = new JSONArray();

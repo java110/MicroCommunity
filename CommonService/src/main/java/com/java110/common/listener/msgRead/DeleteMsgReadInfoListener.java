@@ -6,6 +6,7 @@ import com.java110.common.dao.IMsgReadServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.message.MsgReadPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteMsgReadInfoListener extends AbstractMsgReadBusinessServiceDat
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMsgRead 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG_READ)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MSG_READ);
+        if (data.containsKey(MsgReadPo.class.getSimpleName())) {
+            Object _obj = data.get(MsgReadPo.class.getSimpleName());
             JSONArray businessMsgReads = null;
             if (_obj instanceof JSONObject) {
                 businessMsgReads = new JSONArray();

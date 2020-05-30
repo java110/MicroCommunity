@@ -2,6 +2,7 @@ package com.java110.community.listener.inspectionRoute;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.inspection.InspectionRoutePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveInspectionRouteInfoListener extends AbstractInspectionRouteBusi
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionRoute 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_ROUTE);
+        if (data.containsKey(InspectionRoutePo.class.getSimpleName())) {
+            Object bObj = data.get(InspectionRoutePo.class.getSimpleName());
             JSONArray businessInspectionRoutes = null;
             if (bObj instanceof JSONObject) {
                 businessInspectionRoutes = new JSONArray();

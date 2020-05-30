@@ -6,6 +6,7 @@ import com.java110.common.dao.IMachineAttrServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.machine.MachineAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteMachineAttrInfoListener extends AbstractMachineAttrBusinessSe
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessMachineAttr 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_MACHINE);
+        if (data.containsKey(MachineAttrPo.class.getSimpleName())) {
+            Object _obj = data.get(MachineAttrPo.class.getSimpleName());
             JSONArray businessMachineAttrs = null;
             if (_obj instanceof JSONObject) {
                 businessMachineAttrs = new JSONArray();

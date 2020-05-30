@@ -2,6 +2,7 @@ package com.java110.community.listener.repair;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -53,8 +54,8 @@ public class SaveRepairInfoListener extends AbstractRepairBusinessServiceDataFlo
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessRepair 节点
-        if(data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR)){
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_REPAIR);
+        if(data.containsKey(RepairPoolPo.class.getSimpleName())){
+            Object bObj = data.get(RepairPoolPo.class.getSimpleName());
             JSONArray businessRepairs = null;
             if(bObj instanceof JSONObject){
                 businessRepairs = new JSONArray();

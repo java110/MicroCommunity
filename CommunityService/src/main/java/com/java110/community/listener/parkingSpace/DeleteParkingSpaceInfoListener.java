@@ -6,6 +6,7 @@ import com.java110.community.dao.IParkingSpaceServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -62,8 +63,8 @@ public class DeleteParkingSpaceInfoListener extends AbstractParkingSpaceBusiness
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessParkingSpace 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_SPACE)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_PARKING_SPACE);
+        if (data.containsKey(ParkingSpacePo.class.getSimpleName())) {
+            Object _obj = data.get(ParkingSpacePo.class.getSimpleName());
             JSONArray businessParkingSpaces = null;
             if (_obj instanceof JSONObject) {
                 businessParkingSpaces = new JSONArray();

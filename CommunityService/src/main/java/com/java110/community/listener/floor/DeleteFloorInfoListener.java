@@ -2,6 +2,7 @@ package com.java110.community.listener.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.floor.FloorPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -63,8 +64,8 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
 
 
         //处理 businessFloor 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_FLOOR_INFO);
+        if (data.containsKey(FloorPo.class.getSimpleName())) {
+            Object _obj = data.get(FloorPo.class.getSimpleName());
             JSONArray businessFloors = null;
             if (_obj instanceof JSONObject) {
                 businessFloors = new JSONArray();

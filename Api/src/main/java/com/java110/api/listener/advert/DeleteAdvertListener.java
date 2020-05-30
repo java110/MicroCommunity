@@ -36,6 +36,7 @@ public class DeleteAdvertListener extends AbstractServiceApiPlusListener {
         super.delete(context, advertPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ADVERT);
     }
 
+
     @Override
     public String getServiceCode() {
         return ServiceCodeAdvertConstant.DELETE_ADVERT;

@@ -2,6 +2,7 @@ package com.java110.community.listener.inspectionTask;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.inspection.InspectionTaskPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -54,8 +55,8 @@ public class SaveInspectionTaskInfoListener extends AbstractInspectionTaskBusine
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessInspectionTask 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK)) {
-            Object bObj = data.get(BusinessTypeConstant.BUSINESS_TYPE_SAVE_INSPECTION_TASK);
+        if (data.containsKey(InspectionTaskPo.class.getSimpleName())) {
+            Object bObj = data.get(InspectionTaskPo.class.getSimpleName());
             JSONArray businessInspectionTasks = null;
             if (bObj instanceof JSONObject) {
                 businessInspectionTasks = new JSONArray();
