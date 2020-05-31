@@ -66,6 +66,13 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
+
+        String advertId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_advertId);
+        reqJson.put("advertId", advertId);
+        reqJson.put("advertId", advertId);
+        reqJson.put("state", "1000");
+
+
         AdvertPo advertPo = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
 
         //保存广告信息
