@@ -5,13 +5,13 @@ import com.java110.api.bmo.activities.IActivitiesBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
 import com.java110.core.smo.file.IFileInnerServiceSMO;
 import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -89,7 +89,7 @@ public class UpdateActivitiesListener extends AbstractServiceApiPlusListener {
                 super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
             } else {
                 FileRelPo fileRelPo = new FileRelPo();
-                fileRelPo.setFileRelId(fileRelPo.getFileRelId());
+                fileRelPo.setFileRelId(fileRelDtos.get(0).getFileRelId());
                 fileRelPo.setFileRealName(reqJson.getString("headerImg"));
                 fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
                 fileRelPo.setObjId(reqJson.getString("activitiesId"));
