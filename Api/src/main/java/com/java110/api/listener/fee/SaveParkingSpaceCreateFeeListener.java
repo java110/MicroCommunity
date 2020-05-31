@@ -6,12 +6,12 @@ import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -66,7 +66,6 @@ public class SaveParkingSpaceCreateFeeListener extends AbstractServiceApiListene
         Assert.hasKeyAndValue(reqJson, "locationTypeCd", "未包含收费类型");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
-        Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
     }
 
