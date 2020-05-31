@@ -24,6 +24,8 @@ public class PurchaseApplyPo implements Serializable {
     private String endUserName;
     private String endUserTel;
 
+    private ResourceStorePo[] resourceStores;
+
     public String getApplyOrderId() {
         return applyOrderId;
     }
@@ -94,5 +96,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setEndUserTel(String endUserTel) {
         this.endUserTel = endUserTel;
+    }
+
+    public ResourceStorePo[] getResourceStores() {
+        return resourceStores;
+    }
+
+    public void setResourceStores(ResourceStorePo[] resourceStores) {
+        this.resourceStores = resourceStores;
     }
 }
