@@ -15,9 +15,13 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.hardwareAdapation.CarInoutDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
-import com.java110.utils.constant.*;
+import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -90,7 +94,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO);
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFee", paramInJson);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), paramInJson);
         return business;
     }
 
@@ -188,7 +192,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
         }
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL, businessFeeDetail);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
 
         return business;
     }
@@ -228,7 +232,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("configEndTime", feeInfo.getConfigEndTime());
 
         businessFee.putAll(feeMap);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO, businessFee);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
         return business;
     }
@@ -319,7 +323,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
         businessFeeDetail.put("receivableAmount", tmpReceivableAmount);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL, businessFeeDetail);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("receivableAmount", tmpReceivableAmount);
         return business;
     }
@@ -350,7 +354,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
         feeMap.put("endTime", DateUtil.getFormatTimeString(feeInfo.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
         businessFee.putAll(feeMap);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FEE_INFO, businessFee);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
         return business;
     }
@@ -374,7 +378,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessCarInout.putAll(BeanConvertUtil.beanCovertMap(carInoutDto));
         businessCarInout.put("state", "100400");
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_UPDATE_CAR_INOUT, businessCarInout);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CarInoutPo.class.getSimpleName(), businessCarInout);
         return business;
     }
 
@@ -444,7 +448,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         double receivableAmount = money;
 
         businessFeeDetail.put("receivableAmount", receivableAmount);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL, businessFeeDetail);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeeDetailPo.class.getSimpleName(), businessFeeDetail);
         paramInJson.put("receivableAmount", receivableAmount);
         return business;
     }
@@ -472,7 +476,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeMap.put("amount", paramInJson.getString("receivableAmount"));
         feeMap.put("state", "2009001");
         businessFee.putAll(feeMap);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_DETAIL, businessFee);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessFee);
 
         return business;
     }
@@ -521,7 +525,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO, businessUnit);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
 
         return business;
     }
@@ -554,7 +558,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeFlag", paramInJson.getString("feeFlag"));
         businessUnit.put("state", "2008001");
         businessUnit.put("userId", dataFlowContext.getRequestCurrentHeaders().get(CommonConstant.HTTP_USER_ID));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_INFO, businessUnit);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(PayFeePo.class.getSimpleName(), businessUnit);
 
         return business;
     }
