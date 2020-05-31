@@ -198,8 +198,8 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
         businessStoreUser.put("userId", paramInJson.getString("userId"));
 
 
-        UserPo userPo = BeanConvertUtil.covertBean(businessStoreUser, UserPo.class);
-        super.delete(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_USER);
+        StoreUserPo storeUserPo = BeanConvertUtil.covertBean(businessStoreUser, StoreUserPo.class);
+        super.delete(dataFlowContext, storeUserPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_USER);
 
     }
 
