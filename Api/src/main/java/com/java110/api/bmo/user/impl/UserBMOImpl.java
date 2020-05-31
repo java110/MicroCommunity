@@ -9,6 +9,7 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.po.org.OrgStaffRelPo;
+import com.java110.po.store.StoreUserPo;
 import com.java110.po.store.StoreUserRelPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
@@ -64,8 +65,8 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
         businessStoreUser.put("userId", paramInJson.getString("userId"));
         businessStoreUser.put("relCd", paramInJson.getString("relCd"));
 
-        StoreUserRelPo storeUserRelPo = BeanConvertUtil.covertBean(businessStoreUser, StoreUserRelPo.class);
-        super.insert(dataFlowContext, storeUserRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
+        StoreUserPo storeUserPo = BeanConvertUtil.covertBean(businessStoreUser, StoreUserPo.class);
+        super.insert(dataFlowContext, storeUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_USER);
     }
 
     /**
