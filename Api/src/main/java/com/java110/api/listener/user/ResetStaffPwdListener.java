@@ -10,10 +10,12 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.user.UserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,17 +77,13 @@ public class ResetStaffPwdListener extends AbstractServiceApiPlusListener {
     }
 
 
-    private JSONObject modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
+    private void modifyStaff(JSONObject paramObj, DataFlowContext dataFlowContext) {
         //校验json 格式中是否包含 name,email,levelCd,tel
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
+        UserPo userPo = BeanConvertUtil.covertBean(builderStaffInfo(paramObj, dataFlowContext),UserPo.class);
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessUser", builderStaffInfo(paramObj, dataFlowContext));
+        super.update(dataFlowContext,userPo,BusinessTypeConstant.BUSINESS_TYPE_MODIFY_USER_INFO);
 
-        return business;
     }
 
     /**
