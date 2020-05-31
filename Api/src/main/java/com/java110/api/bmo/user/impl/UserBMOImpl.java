@@ -112,12 +112,6 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
             Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
-        business.put(CommonConstant.HTTP_SEQ, 1);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-
         //paramObj.put("userId","-1");
         paramObj.put("levelCd", UserLevelConstant.USER_LEVEL_ORDINARY);
         //设置默认密码

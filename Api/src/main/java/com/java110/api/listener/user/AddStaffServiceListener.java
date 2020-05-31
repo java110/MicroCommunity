@@ -61,48 +61,45 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 //获取数据上下文对象
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-        AppService service = event.getAppService();
-        String paramIn = dataFlowContext.getReqData();
-        Assert.isJsonObject(paramIn, "添加员工时请求参数有误，不是有效的json格式 " + paramIn);
-        JSONObject paramInJson = JSONObject.parseObject(paramIn);
-        Assert.jsonObjectHaveKey(paramInJson, "storeId", "请求参数中未包含storeId 节点，请确认");
-        Assert.jsonObjectHaveKey(paramInJson, "storeTypeCd", "请求参数中未包含storeTypeCd 节点，请确认");
-        JSONArray businesses = new JSONArray();
+
+
+
+        Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
+        Assert.jsonObjectHaveKey(reqJson, "storeTypeCd", "请求参数中未包含storeTypeCd 节点，请确认");
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
         String userId = "";
         String oldUserId = "";
 
-        String relCd = paramInJson.getString("relCd");//员工 组织 岗位
+        String relCd = reqJson.getString("relCd");//员工 组织 岗位
 
-        if (!paramInJson.containsKey("userId") || "-1".equals(paramInJson.getString("userId"))) {
+        if (!reqJson.containsKey("userId") || "-1".equals(reqJson.getString("userId"))) {
             //将userId 强制写成-1
             oldUserId = "-1";
             userId = GenerateCodeFactory.getUserId();
-            paramInJson.put("userId", userId);
+            reqJson.put("userId", userId);
             //添加用户
-            userBMOImpl.addUser(paramInJson, dataFlowContext);
+            userBMOImpl.addUser(reqJson, context);
 
         }
 
-        paramInJson.put("userId", userId);
-        paramInJson.put("relCd", "-1".equals(oldUserId) ? StoreUserRelConstant.REL_COMMON : StoreUserRelConstant.REL_ADMIN);
+        reqJson.put("userId", userId);
+        reqJson.put("relCd", "-1".equals(oldUserId) ? StoreUserRelConstant.REL_COMMON : StoreUserRelConstant.REL_ADMIN);
 
-        userBMOImpl.addStaff(paramInJson, dataFlowContext);
+        userBMOImpl.addStaff(reqJson, context);
 
         //重写 员工岗位
-        paramInJson.put("relCd", relCd);
-        userBMOImpl.addStaffOrg(paramInJson, dataFlowContext);
+        reqJson.put("relCd", relCd);
+        userBMOImpl.addStaffOrg(reqJson, context);
 
-        commit(dataFlowContext);
+        commit(context);
 
         //如果不成功直接返回
-        if (dataFlowContext.getResponseEntity().getStatusCode() != HttpStatus.OK) {
+        if (context.getResponseEntity().getStatusCode() != HttpStatus.OK) {
             return;
         }
 
         //赋权
-        privilegeUserDefault(dataFlowContext, paramInJson);
+        privilegeUserDefault(context, reqJson);
     }
 
     /**

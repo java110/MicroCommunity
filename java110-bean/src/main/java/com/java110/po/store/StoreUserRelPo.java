@@ -17,6 +17,10 @@ public class StoreUserRelPo implements Serializable {
     private String name;
     private String description;
 
+    private String storeUserId;
+    private String storeId;
+    private String userId;
+
     public String getId() {
         return id;
     }
@@ -47,5 +51,29 @@ public class StoreUserRelPo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStoreUserId() {
+        return storeUserId;
+    }
+
+    public void setStoreUserId(String storeUserId) {
+        this.storeUserId = storeUserId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
