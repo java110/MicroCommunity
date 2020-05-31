@@ -87,7 +87,7 @@ public class DeleteStoreUserListener extends AbstractStoreBusinessServiceDataFlo
 
         Map info = new HashMap();
         info.put("bId",business.getbId());
-        info.put("operate", StatusConstant.OPERATE_ADD);
+        info.put("operate", StatusConstant.OPERATE_DEL);
 
         //物业用户
         List<Map> businessStoreUsers = storeServiceDaoImpl.getBusinessStoreUser(info);
