@@ -62,7 +62,9 @@ public class ModifyUserInfoListener extends AbstractUserBusinessServiceDataFlowL
 
         Assert.jsonObjectHaveKey(data, UserPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点");
 
-        JSONObject businessUser = data.getJSONObject(UserPo.class.getSimpleName());
+        //JSONObject businessUser = data.getJSONObject(UserPo.class.getSimpleName());
+        JSONObject businessUser = data.getJSONArray(UserPo.class.getSimpleName()).getJSONObject(0);
+
 
         Assert.jsonObjectHaveKey(businessUser, "userId", "businessUser 节点下没有包含 userId 节点");
 

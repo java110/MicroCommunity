@@ -59,7 +59,8 @@ public class SaveUserInfoListener extends AbstractBusinessServiceDataFlowListene
 
         Assert.jsonObjectHaveKey(data, UserPo.class.getSimpleName(), "datas 节点下没有包含 businessUser 节点");
 
-        JSONObject businessUser = data.getJSONObject(UserPo.class.getSimpleName());
+        //这里先支持 jsonObject 后期再改造
+        JSONObject businessUser = data.getJSONArray(UserPo.class.getSimpleName()).getJSONObject(0);
 
         Assert.jsonObjectHaveKey(businessUser, "userId", "businessUser 节点下没有包含 userId 节点");
 
