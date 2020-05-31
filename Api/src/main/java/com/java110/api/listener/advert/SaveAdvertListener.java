@@ -134,7 +134,7 @@ public class SaveAdvertListener extends AbstractServiceApiPlusListener {
         fileRelPo.setSaveWay("40000".equals(relTypeCd) ? "table" : "ftp");
         fileRelPo.setFileRelId("-1");
         fileRelPo.setObjId(paramInJson.getString("advertId"));
-        fileRelPo.setFileSaveName(paramInJson.getString("advertPhotoId"));
+        fileRelPo.setFileRealName(paramInJson.getString("advertPhotoId"));
         fileRelPo.setFileSaveName(paramInJson.getString("fileSaveName"));
         super.insert(dataFlowContext, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
     }
