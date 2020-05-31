@@ -8,6 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.entity.center.Business;
 import com.java110.po.purchase.PurchaseApplyPo;
+import com.java110.po.purchase.ResourceStorePo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -167,7 +168,7 @@ public class SavePurchaseApplyInfoListener extends AbstractPurchaseApplyBusiness
         //businessPurchaseApply.put("state","1000");
         businessPurchaseApply.put("bId",business.getbId());
         businessPurchaseApply.put("operate", StatusConstant.OPERATE_ADD);
-        Object jsonArray = businessPurchaseApply.get("resourceStores");
+        Object jsonArray = businessPurchaseApply.get(ResourceStorePo.class.getSimpleName());
         List<PurchaseApplyDetailVo> list = JSONObject.parseArray(jsonArray.toString(),PurchaseApplyDetailVo.class);
         for( PurchaseApplyDetailVo purchaseApplyDetailVo : list){
             purchaseApplyDetailVo.setApplyOrderId(businessPurchaseApply.get("applyOrderId").toString());
