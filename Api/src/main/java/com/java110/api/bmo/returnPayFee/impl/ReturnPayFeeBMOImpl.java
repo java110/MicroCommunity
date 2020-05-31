@@ -34,7 +34,7 @@ public class ReturnPayFeeBMOImpl extends ApiBaseBMO implements IReturnPayFeeBMO 
      * @return 订单服务能够接受的报文
      */
     public void addReturnPayFee(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
+        paramInJson.put("returnFeeId", "-1");
         ReturnPayFeePo returnPayFeePo = BeanConvertUtil.covertBean(paramInJson, ReturnPayFeePo.class);
         super.insert(dataFlowContext, returnPayFeePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_RETURN_PAY_FEE);
     }
