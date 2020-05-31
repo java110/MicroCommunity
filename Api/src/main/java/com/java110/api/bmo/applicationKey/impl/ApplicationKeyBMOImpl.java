@@ -174,7 +174,7 @@ public class ApplicationKeyBMOImpl extends ApiBaseBMO implements IApplicationKey
         if ("1100103".equals(paramInJson.getString("typeFlag"))) { // 临时访问密码,只设置成24小时
             applicationKeyPo.setEndTime(applicationKeyDtos.get(0).getEndTime());
         }
-        applicationKeyPo.setTypeFlag(applicationKeyDtos.get(0).getTypeCd());
+        applicationKeyPo.setTypeFlag(applicationKeyDtos.get(0).getTypeFlag());
 
         super.update(dataFlowContext, applicationKeyPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_APPLICATION_KEY);
     }
