@@ -89,7 +89,8 @@ public class UserBMOImpl extends ApiBaseBMO implements IUserBMO {
             Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
 
-        UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
+
+        UserPo userPo = BeanConvertUtil.covertBean(refreshParamIn(paramObj), UserPo.class);
         super.insert(dataFlowContext, userPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO);
     }
 

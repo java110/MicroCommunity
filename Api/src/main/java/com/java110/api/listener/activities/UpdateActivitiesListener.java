@@ -82,7 +82,7 @@ public class UpdateActivitiesListener extends AbstractServiceApiPlusListener {
                 FileRelPo fileRelPo = new FileRelPo();
                 fileRelPo.setFileRelId("-1");
                 fileRelPo.setFileRealName(reqJson.getString("headerImg"));
-                fileRelPo.setFileSaveName(reqJson.getString("headerImg"));
+                fileRelPo.setFileSaveName(reqJson.getString("fileSaveName"));
                 fileRelPo.setObjId(reqJson.getString("activitiesId"));
                 fileRelPo.setSaveWay("table");
                 fileRelPo.setRelTypeCd("70000");
