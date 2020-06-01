@@ -123,7 +123,7 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
                 //已经存在这个 节点
                 if (data.containsKey(businessName)) {
                     JSONArray tmpDataBusinesses = data.getJSONArray(businessName);
-                    tmpDataBusinesses.add(tmpData.getJSONArray(businessName));
+                    tmpDataBusinesses.addAll(tmpData.getJSONArray(businessName));
                 } else {
                     data.put(businessName, tmpData.getJSONArray(businessName));
                 }

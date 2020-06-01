@@ -139,11 +139,6 @@
                 <version>${microcommunity.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>java110-event</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.java110</groupId>
@@ -162,16 +157,7 @@
                 <version>${microcommunity.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>java110-cacheAgent</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>java110-logAgent</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.java110</groupId>
                 <artifactId>java110-db</artifactId>

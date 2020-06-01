@@ -57,7 +57,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    public void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 

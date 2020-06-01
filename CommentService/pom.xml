@@ -24,10 +24,7 @@
             <groupId>com.java110</groupId>
             <artifactId>java110-service</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.java110</groupId>
-            <artifactId>java110-event</artifactId>
-        </dependency>
+
     </dependencies>
 
     <build>
