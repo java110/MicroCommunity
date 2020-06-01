@@ -362,9 +362,9 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
         if (businessCommunityMembers == null || businessCommunityMembers.size() == 0) {
             return null;
         }
-        if (businessCommunityMembers.size() > 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "根据条件查询有多条数据,数据异常，请检查：businessCommunityMember，" + JSONObject.toJSONString(info));
-        }
+//        if (businessCommunityMembers.size() > 1) {
+//            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "根据条件查询有多条数据,数据异常，请检查：businessCommunityMember，" + JSONObject.toJSONString(info));
+//        }
 
         return businessCommunityMembers;
     }
