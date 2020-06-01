@@ -8,6 +8,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.store.IStoreInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.po.store.StorePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -64,7 +65,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessStore.putAll(BeanConvertUtil.beanCovertMap(storeDtos.get(0)));
         businessStore.putAll(paramInJson);
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStore", businessStore);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(StorePo.class.getSimpleName(), businessStore);
         return business;
     }
 
