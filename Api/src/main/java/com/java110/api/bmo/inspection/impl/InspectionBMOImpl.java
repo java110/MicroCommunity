@@ -168,7 +168,7 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject deleteInspectionRoutePoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void deleteInspectionRoutePoint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         InspectionRoutePointRelDto inspectionRoutePointRelDto = new InspectionRoutePointRelDto();
         inspectionRoutePointRelDto.setCommunityId(paramInJson.getString("communityId"));
         inspectionRoutePointRelDto.setInspectionId(paramInJson.getString("inspectionId"));
@@ -176,16 +176,11 @@ public class InspectionBMOImpl extends ApiBaseBMO implements IInspectionBMO {
         List<InspectionRoutePointRelDto> inspectionRoutePointRelDtos = inspectionRoutePointRelInnerServiceSMOImpl.queryInspectionRoutePointRels(inspectionRoutePointRelDto);
 
         Assert.listOnlyOne(inspectionRoutePointRelDtos, "未查询到（或多条）要删除的 巡检路线下的巡检点");
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessInspectionRoute = new JSONObject();
         businessInspectionRoute.putAll(BeanConvertUtil.beanCovertMap(inspectionRoutePointRelDtos.get(0)));
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessInspectionRoutePointRel", businessInspectionRoute);
-        return business;
+
+        InspectionRoutePointRelPo inspectionRoutePointRelPo = BeanConvertUtil.covertBean(businessInspectionRoute, InspectionRoutePointRelPo.class);
+        super.delete(dataFlowContext, inspectionRoutePointRelPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_INSPECTION_ROUTE_POINT_REL);
     }
 
     /**
