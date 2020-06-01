@@ -122,15 +122,10 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
             for (String businessName : tmpData.keySet()) {
                 //已经存在这个 节点
                 if (data.containsKey(businessName)) {
-                    if (data.get(businessName) instanceof JSONObject) {
-                        throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "data 节点下不是 数组模式，调用错误" + data.toJSONString());
-                    }
                     JSONArray tmpDataBusinesses = data.getJSONArray(businessName);
-                    tmpDataBusinesses.add(tmpData.getJSONObject(businessName));
+                    tmpDataBusinesses.add(tmpData.getJSONArray(businessName));
                 } else {
-                    JSONArray tmpDataBusinesses = new JSONArray();
-                    tmpDataBusinesses.add(tmpData.getJSONObject(businessName));
-                    data.put(businessName, tmpDataBusinesses);
+                    data.put(businessName, tmpData.getJSONArray(businessName));
                 }
             }
         }
