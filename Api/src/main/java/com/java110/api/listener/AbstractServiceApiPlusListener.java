@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ResponseConstant;
+import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +122,9 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
             for (String businessName : tmpData.keySet()) {
                 //已经存在这个 节点
                 if (data.containsKey(businessName)) {
+                    if (data.get(businessName) instanceof JSONObject) {
+                        throw new ListenerExecuteException(ResponseConstant.RESULT_PARAM_ERROR, "data 节点下不是 数组模式，调用错误" + data.toJSONString());
+                    }
                     JSONArray tmpDataBusinesses = data.getJSONArray(businessName);
                     tmpDataBusinesses.add(tmpData.getJSONObject(businessName));
                 } else {
