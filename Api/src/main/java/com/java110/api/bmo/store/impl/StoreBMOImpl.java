@@ -8,7 +8,13 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.store.IStoreInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.po.org.OrgPo;
+import com.java110.po.org.OrgStaffRelPo;
+import com.java110.po.store.StoreAttrPo;
+import com.java110.po.store.StoreCerdentialPo;
+import com.java110.po.store.StorePhotoPo;
 import com.java110.po.store.StorePo;
+import com.java110.po.store.StoreUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -89,7 +95,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessStoreUser.put("userId", paramInJson.getJSONObject("businessStore").getString("userId"));
         businessStoreUser.put("relCd", StoreUserRelConstant.REL_ADMIN);
         businessStoreUsers.add(businessStoreUser);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessStoreUser", businessStoreUsers);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(StoreUserPo.class.getSimpleName(), businessStoreUsers);
 
         return business;
     }
@@ -103,8 +109,8 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
 
         String storeId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_storeId);
         paramObj.put("storeId", storeId);
-        if (paramObj.containsKey("businessStore")) {
-            JSONObject businessStoreObj = paramObj.getJSONObject("businessStore");
+        if (paramObj.containsKey(StorePo.class.getSimpleName())) {
+            JSONObject businessStoreObj = paramObj.getJSONObject(StorePo.class.getSimpleName());
             businessStoreObj.put("storeId", storeId);
             if (!businessStoreObj.containsKey("password")) {
                 String staffDefaultPassword = MappingCache.getValue(MappingConstant.KEY_STAFF_DEFAULT_PASSWORD);
@@ -121,8 +127,8 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
             }
         }
 
-        if (paramObj.containsKey("businessStoreAttr")) {
-            JSONArray attrs = paramObj.getJSONArray("businessStoreAttr");
+        if (paramObj.containsKey(StoreAttrPo.class.getSimpleName())) {
+            JSONArray attrs = paramObj.getJSONArray(StoreAttrPo.class.getSimpleName());
 
             for (int businessStoreAttrIndex = 0; businessStoreAttrIndex < attrs.size(); businessStoreAttrIndex++) {
                 JSONObject attr = attrs.getJSONObject(businessStoreAttrIndex);
@@ -131,8 +137,8 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
             }
         }
 
-        if (paramObj.containsKey("businessStorePhoto")) {
-            JSONArray photos = paramObj.getJSONArray("businessStorePhoto");
+        if (paramObj.containsKey(StorePhotoPo.class.getSimpleName())) {
+            JSONArray photos = paramObj.getJSONArray(StorePhotoPo.class.getSimpleName());
 
             for (int businessStorePhotoIndex = 0; businessStorePhotoIndex < photos.size(); businessStorePhotoIndex++) {
                 JSONObject attr = photos.getJSONObject(businessStorePhotoIndex);
@@ -141,8 +147,8 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
             }
         }
 
-        if (paramObj.containsKey("businessStoreCerdentials")) {
-            JSONArray cerdentials = paramObj.getJSONArray("businessStoreCerdentials");
+        if (paramObj.containsKey(StoreCerdentialPo.class.getSimpleName())) {
+            JSONArray cerdentials = paramObj.getJSONArray(StoreCerdentialPo.class.getSimpleName());
 
             for (int businessStoreCerdentialsIndex = 0; businessStoreCerdentialsIndex < cerdentials.size(); businessStoreCerdentialsIndex++) {
                 JSONObject attr = cerdentials.getJSONObject(businessStoreCerdentialsIndex);
@@ -177,7 +183,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessOrg.put("allowOperation", "F");
         businessOrg.put("storeId", paramInJson.getString("storeId"));
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OrgPo.class.getSimpleName(), businessOrg);
         return business;
     }
 
@@ -204,7 +210,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessOrg.put("allowOperation", "F");
         businessOrg.put("storeId", paramInJson.getString("storeId"));
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OrgPo.class.getSimpleName(), businessOrg);
         return business;
     }
 
@@ -231,7 +237,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessOrg.put("storeId", paramInJson.getString("storeId"));
         businessOrg.put("allowOperation", "F");
         //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrg", businessOrg);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OrgPo.class.getSimpleName(), businessOrg);
         return business;
     }
 
@@ -250,7 +256,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         businessOrgStaffRel.put("orgId", paramInJson.getString("levelThreeOrgId"));
         businessOrgStaffRel.put("relCd", StoreUserRelConstant.REL_ADMIN);
         businessOrgStaffRels.add(businessOrgStaffRel);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessOrgStaffRel", businessOrgStaffRels);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(OrgStaffRelPo.class.getSimpleName(), businessOrgStaffRels);
 
         return business;
     }

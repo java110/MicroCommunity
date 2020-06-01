@@ -2,13 +2,16 @@ package com.java110.front.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.component.BaseComponentSMO;
+import com.java110.core.context.IPageData;
+import com.java110.front.smo.ICompanyServiceSMO;
+import com.java110.po.store.StoreAttrPo;
+import com.java110.po.store.StoreCerdentialPo;
+import com.java110.po.store.StorePo;
 import com.java110.utils.constant.AttrCdConstant;
 import com.java110.utils.constant.CredentialsConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.context.IPageData;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.front.smo.ICompanyServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -99,7 +102,7 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         attr.put("specCd", AttrCdConstant.SPEC_CD_STORE_SCOPE);
         attr.put("value", paramJson.getString("scope"));
         businessStoreAttr.add(attr);
-        reqJson.put("businessStoreAttr", businessStoreAttr);
+        reqJson.put(StoreAttrPo.class.getSimpleName(), businessStoreAttr);
 
         JSONArray businessStoreCerdentials = new JSONArray();
         JSONObject cerdentials = new JSONObject();
@@ -111,7 +114,9 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         cerdentials.put("negativePhoto", "");
         businessStoreCerdentials.add(cerdentials);
 
-        reqJson.put("businessStoreCerdentials", businessStoreCerdentials);
+        reqJson.put(StoreCerdentialPo.class.getSimpleName(), businessStoreCerdentials);
+
+        reqJson.put(StorePo.class.getSimpleName(), businessStore);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/save.store.info", HttpMethod.POST);
