@@ -101,12 +101,12 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         //小区楼信息
         List<Map> businessCommunityMembers = communityServiceDaoImpl.getBusinessCommunityMember(info);
         if (businessCommunityMembers != null && businessCommunityMembers.size() > 0) {
-            for (int _memberIndex = 0; _memberIndex < businessCommunityMembers.size(); _memberIndex++) {
-                Map businessCommunityMemberInfo = businessCommunityMembers.get(_memberIndex);
+            //for (int _memberIndex = 0; _memberIndex < businessCommunityMembers.size(); _memberIndex++) {
+                Map businessCommunityMemberInfo = businessCommunityMembers.get(0);
                 communityServiceDaoImpl.saveCommunityMemberInstance(info);
                 dataFlowContext.addParamOut("communityId", businessCommunityMemberInfo.get("community_id"));
                 dataFlowContext.addParamOut("memberId", businessCommunityMemberInfo.get("member_id"));
-            }
+            //}
         }
     }
 
@@ -132,12 +132,12 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
         List<Map> communityMembers = communityServiceDaoImpl.getCommunityMember(info);
         if (communityMembers != null && !communityMembers.isEmpty()) {
 
-            for (int _memberIndex = 0; _memberIndex < communityMembers.size(); _memberIndex++) {
-                Map businessCommunityMemberInfo = communityMembers.get(_memberIndex);
+            //for (int _memberIndex = 0; _memberIndex < communityMembers.size(); _memberIndex++) {
+                Map businessCommunityMemberInfo = communityMembers.get(0);
                 paramIn.put("communityMemberId", businessCommunityMemberInfo.get("member_community_id").toString());
                 communityServiceDaoImpl.updateCommunityMemberInstance(paramIn);
                 dataFlowContext.addParamOut("communityMemberId", businessCommunityMemberInfo.get("member_community_id"));
-            }
+            //}
         }
     }
 
