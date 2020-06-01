@@ -112,10 +112,22 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
                 continue;
             }
             JSONObject data = existsService.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS);
-            //获取到business
-            JSONArray businesses = data.getJSONArray(service.getString(CommonConstant.HTTP_BUSINESS_TYPE_CD));
+//            //获取到business
+//            JSONArray businesses = data.getJSONArray(service.getString(CommonConstant.HTTP_BUSINESS_TYPE_CD));
             JSONObject tmpData = service.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS);
-            businesses.addAll(tmpData.getJSONArray(service.getString(CommonConstant.HTTP_BUSINESS_TYPE_CD)));
+//            businesses.addAll(tmpData.getJSONArray(service.getString(CommonConstant.HTTP_BUSINESS_TYPE_CD)));
+            //循环当前data 中的节点
+            for (String businessName : tmpData.keySet()) {
+                //已经存在这个 节点
+                if (data.containsKey(businessName)) {
+                    JSONArray tmpDataBusinesses = data.getJSONArray(businessName);
+                    tmpDataBusinesses.add(tmpData.getJSONObject(businessName));
+                } else {
+                    JSONArray tmpDataBusinesses = new JSONArray();
+                    tmpDataBusinesses.add(tmpData.getJSONObject(businessName));
+                    data.put(businessName, tmpDataBusinesses);
+                }
+            }
         }
 
         return restToCenterProtocol(tmpServices, dataFlowContext.getRequestCurrentHeaders());
