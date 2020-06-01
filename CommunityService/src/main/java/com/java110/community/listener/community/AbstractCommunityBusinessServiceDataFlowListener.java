@@ -1,4 +1,4 @@
-package com.java110.community.listener;
+package com.java110.community.listener.community;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;

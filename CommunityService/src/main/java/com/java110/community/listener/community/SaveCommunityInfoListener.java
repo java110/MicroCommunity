@@ -1,4 +1,4 @@
-package com.java110.community.listener;
+package com.java110.community.listener.community;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -58,7 +58,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
 
         //处理 businessCommunity 节点
         if (data.containsKey(CommunityPo.class.getSimpleName())) {
-            JSONObject businessCommunity = data.getJSONObject(CommunityPo.class.getSimpleName());
+            JSONObject businessCommunity = data.getJSONArray(CommunityPo.class.getSimpleName()).getJSONObject(0);
             doBusinessCommunity(business, businessCommunity);
             dataFlowContext.addParamOut("communityId", businessCommunity.getString("communityId"));
         }
