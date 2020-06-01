@@ -2,6 +2,7 @@ package com.java110.api.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.user.IUserBMO;
+import com.java110.po.user.UserPo;
 import com.java110.utils.constant.*;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
@@ -76,7 +77,7 @@ public class UserRegisterServiceListener extends AbstractServiceApiDataFlowListe
         business.put(CommonConstant.HTTP_SEQ,1);
         business.put(CommonConstant.HTTP_INVOKE_MODEL,CommonConstant.HTTP_INVOKE_MODEL_S);
 
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(BusinessTypeConstant.BUSINESS_TYPE_SAVE_USER_INFO,refreshParamIn(paramIn));
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(UserPo.class.getSimpleName(),refreshParamIn(paramIn));
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID,"-1");
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD,"D");
