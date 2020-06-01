@@ -146,9 +146,14 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_UPDATE_STORE_INFO = "200100040001";
 
+    //保存商户属性
+    public static final String BUSINESS_TYPE_SAVE_STORE_ATTR = "200100030003";
 
     //修改商户属性
     public static final String BUSINESS_TYPE_UPDATE_STORE_ATTR = "200100040003";
+
+    //删除商户属性
+    public static final String BUSINESS_TYPE_DELETE_STORE_ATTR = "200100050003";
 
     /**
      * 商户成员退出信息

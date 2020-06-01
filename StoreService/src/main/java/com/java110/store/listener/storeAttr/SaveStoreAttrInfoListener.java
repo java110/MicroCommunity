@@ -2,6 +2,7 @@ package com.java110.store.listener.storeAttr;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -39,7 +40,7 @@ public class SaveStoreAttrInfoListener extends AbstractStoreAttrBusinessServiceD
 
     @Override
     public String getBusinessTypeCd() {
-        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_JUNK_REQUIREMENT;
+        return BusinessTypeConstant.BUSINESS_TYPE_SAVE_STORE_ATTR;
     }
 
     /**
@@ -53,8 +54,8 @@ public class SaveStoreAttrInfoListener extends AbstractStoreAttrBusinessServiceD
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStoreAttr 节点
-        if(data.containsKey("businessStoreAttr")){
-            Object bObj = data.get("businessStoreAttr");
+        if(data.containsKey(StoreAttrPo.class.getSimpleName())){
+            Object bObj = data.get(StoreAttrPo.class.getSimpleName());
             JSONArray businessStoreAttrs = null;
             if(bObj instanceof JSONObject){
                 businessStoreAttrs = new JSONArray();

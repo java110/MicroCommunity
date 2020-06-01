@@ -6,6 +6,7 @@ import com.java110.api.bmo.storeAttr.IStoreAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.storeAttr.IStoreAttrInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -65,6 +66,10 @@ public class StoreAttrBMOImpl extends ApiBaseBMO implements IStoreAttrBMO {
         JSONObject businessStoreAttr = new JSONObject();
         businessStoreAttr.putAll(BeanConvertUtil.beanCovertMap(storeAttrDtos.get(0)));
         businessStoreAttr.putAll(paramInJson);
+
+        StoreAttrPo storeAttrPo = BeanConvertUtil.covertBean(businessStoreAttr, StoreAttrPo.class);
+
+        super.update(dataFlowContext, storeAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_STORE_ATTR);
 
     }
 

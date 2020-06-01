@@ -2,6 +2,7 @@ package com.java110.store.listener.storeAttr;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -64,8 +65,8 @@ public class UpdateStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
 
 
         //处理 businessStoreAttr 节点
-        if (data.containsKey("businessStoreAttr")) {
-            Object _obj = data.get("businessStoreAttr");
+        if (data.containsKey(StoreAttrPo.class.getSimpleName())) {
+            Object _obj = data.get(StoreAttrPo.class.getSimpleName());
             JSONArray businessStoreAttrs = null;
             if (_obj instanceof JSONObject) {
                 businessStoreAttrs = new JSONArray();

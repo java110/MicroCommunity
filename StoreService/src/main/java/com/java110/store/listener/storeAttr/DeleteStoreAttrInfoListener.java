@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.entity.center.Business;
+import com.java110.po.store.StoreAttrPo;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -46,7 +47,7 @@ public class DeleteStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
 
     @Override
     public String getBusinessTypeCd() {
-        return BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY;
+        return BusinessTypeConstant.BUSINESS_TYPE_DELETE_STORE_ATTR;
     }
 
     /**
@@ -62,8 +63,8 @@ public class DeleteStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStoreAttr 节点
-        if (data.containsKey(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY)) {
-            Object _obj = data.get(BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMMUNITY);
+        if (data.containsKey(StoreAttrPo.class.getSimpleName())) {
+            Object _obj = data.get(StoreAttrPo.class.getSimpleName());
             JSONArray businessStoreAttrs = null;
             if (_obj instanceof JSONObject) {
                 businessStoreAttrs = new JSONArray();
