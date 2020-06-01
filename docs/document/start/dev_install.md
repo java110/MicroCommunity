@@ -110,7 +110,7 @@ v0.01|初稿|2019-06-17|wuxw
 
 #### 启动相应服务
 
-需要启动的服务有 eureka、 Api、OrderService、CommunityService、StoreService、UserService、WebService、FeeService
+需要启动的服务有 eureka、 Api、OrderService、CommunityService、StoreService、UserService、CommonService、FeeService、FrontService
 
 找到服务下 src目录下 main/java/com/java110/您的服务名/XXApplicationStart.java 类打开 点击运行main方法就可以启动
 
