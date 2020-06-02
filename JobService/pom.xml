@@ -80,7 +80,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.job.Java110JobserviceApplication</mainClass>
+                    <mainClass>com.java110.job.JobServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -20,7 +20,7 @@ import java.util.Date;
  * 师延俊
  */
 @Controller
-@RequestMapping(path = "/HcFtpToFileSystemConfigList")
+@RequestMapping(path = "/job")
 public class JobController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);

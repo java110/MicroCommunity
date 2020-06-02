@@ -411,6 +411,9 @@
         <if test="receivable !=null and receivable != ''">
             and t.receivable= #{receivable}
         </if>
+        <if test="curReceivable !=null and curReceivable != ''">
+            and t.cur_receivable= #{curReceivable}
+        </if>
         <if test="receipts !=null">
             and t.receipts= #{receipts}
         </if>

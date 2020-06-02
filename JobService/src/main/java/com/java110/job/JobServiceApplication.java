@@ -28,8 +28,8 @@ import java.nio.charset.Charset;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.java110.core.smo.community"})
 @EnableScheduling
-public class Java110JobserviceApplication {
-    private static Logger logger = LoggerFactory.getLogger(Java110JobserviceApplication.class);
+public class JobServiceApplication {
+    private static Logger logger = LoggerFactory.getLogger(JobServiceApplication.class);
 
     private static final String LISTENER_PATH = "java110.job.listeners";
 
@@ -47,7 +47,7 @@ public class Java110JobserviceApplication {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = SpringApplication.run(Java110JobserviceApplication.class, args);
+        ApplicationContext context = SpringApplication.run(JobServiceApplication.class, args);
         ServiceStartInit.initSystemConfig(context);
         //加载业务侦听
         // SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
