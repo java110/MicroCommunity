@@ -72,7 +72,7 @@ public class UpdateUnitListener extends AbstractServiceApiDataFlowListener {
         JSONArray businesses = new JSONArray();
 
         //添加单元信息
-        businesses.add(unitBMOImpl.editUnit(paramObj, dataFlowContext));
+        businesses.add(unitBMOImpl.editUpdateUnit(paramObj, dataFlowContext));
 
 
 
