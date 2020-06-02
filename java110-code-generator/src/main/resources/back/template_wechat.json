@@ -1,0 +1,49 @@
+{
+
+  "id": "weChatId",
+  "name": "smallWeChat",
+  "desc": "小程序管理",
+  "shareParam": "store_Id",
+  "shareColumn": "storeId",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_SMALL_WE_CHAT",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_SMALL_WE_CHAT",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_SMALL_WE_CHAT",
+  "newBusinessTypeCdValue": "210200060001",
+  "updateBusinessTypeCdValue": "210200070001",
+  "deleteBusinessTypeCdValue": "210200080001",
+  "businessTableName": "buiness_small_wechat",
+  "tableName": "small_wechat",
+  "param": {
+    "weChatId": "weChat_id",
+    "bId": "bId",
+    "storeId": "store_Id",
+    "name": "name",
+    "appId": "appId",
+    "appSecret": "appSecret",
+    "payPassword": "pay_password",
+    "remarks": "remarks",
+    "statusCd": "status_cd",
+    "createTime": "create_time",
+    "operate": "operate"
+  },
+  "required": [
+    {
+
+      "code": "name",
+      "msg": "小程序名称不能为空"
+    },
+    {
+      "code": "appId",
+      "msg": "小程序appId不能为空"
+    },
+    {
+      "code": "appSecret",
+      "msg": "小程序appSecret不能为空"
+    },
+    {
+
+      "code": "payPassword",
+      "msg": "支付密码不能为空"
+    }
+  ]
+}

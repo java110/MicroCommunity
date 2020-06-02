@@ -31,8 +31,10 @@ public class GeneratorDeleteInfoListener extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,toUpperCaseFirstOne(data.getShareName()).toString()+"Service\\src\\main\\java\\com\\java110\\community\\listener\\"+ data.getName() +"/Delete"+toUpperCaseFirstOne(data.getName())+"InfoListener.java");
-        //生成协议
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, toUpperCaseFirstOne(data.getShareName()).toString() + "Service\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\listener\\" + data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
+
+        }//生成协议
 
         /**
          * |businessstoreMember|memberTypeCd|1|String|30|成员类型|成员类型|
@@ -59,8 +61,10 @@ public class GeneratorDeleteInfoListener extends BaseGenerator {
         writeFile(writePathDoc,
                 fileContextDoc);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"docs\\document\\services\\"+ data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "Info.md");
-        //生成协议
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, "docs\\document\\services\\" + data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "Info.md");
+            //生成协议
+        }
 
     }
 }

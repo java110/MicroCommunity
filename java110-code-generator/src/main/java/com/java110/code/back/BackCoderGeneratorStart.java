@@ -28,12 +28,14 @@ public class    BackCoderGeneratorStart extends BaseGenerator {
     public static void main(String[] args) throws Exception {
 
         //加载配置
-        StringBuffer sb = readFile(GeneratorStart.class.getResource("/back/template_company.json").getFile());
+        StringBuffer sb = readFile(GeneratorStart.class.getResource("/back/template_1.json").getFile());
 
         JSONObject dataJson = JSONObject.parseObject(sb.toString());
 
         Data data = new Data();
-
+        if(dataJson.containsKey("autoMove")){
+            data.setAutoMove(dataJson.getBoolean("autoMove"));
+        }
         data.setId(dataJson.getString("id"));
         data.setName(dataJson.getString("name"));
         data.setDesc(dataJson.getString("desc"));

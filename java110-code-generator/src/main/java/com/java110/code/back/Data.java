@@ -12,6 +12,7 @@ import java.util.Map;
  **/
 public class Data {
 
+    private boolean autoMove;
     private String packagePath;
 
     private String id;
@@ -177,5 +178,13 @@ public class Data {
 
     public void setRequiredParam(String[] requiredParam) {
         this.requiredParam = requiredParam;
+    }
+
+    public boolean isAutoMove() {
+        return autoMove;
+    }
+
+    public void setAutoMove(boolean autoMove) {
+        this.autoMove = autoMove;
     }
 }

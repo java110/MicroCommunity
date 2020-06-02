@@ -25,7 +25,7 @@ public class GeneratorDtoBean extends BaseGenerator {
         String variableGetSet = "";
 
         for (String key : params.keySet()) {
-            if ("operate".equals(key) || "bId".equals(key) || "statusCd".equals(key)) {
+            if ("operate".equals(key) || "bId".equals(key) || "statusCd".equals(key)|| "createTime".equals(key)) {
                 continue;
             }
             variable += "private String " + key + ";\n";
@@ -68,6 +68,8 @@ public class GeneratorDtoBean extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"java110-bean\\src\\main\\java\\com\\java110\\dto\\" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "Dto.java");
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, "java110-bean\\src\\main\\java\\com\\java110\\dto\\" + data.getName() + "/" + toUpperCaseFirstOne(data.getName()) + "Dto.java");
+        }
     }
 }

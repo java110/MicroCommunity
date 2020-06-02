@@ -61,11 +61,10 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
-        //处理 businessStore 节点
-        if(data.containsKey("businessStore")){
+
             //处理 businessStore 节点
-            if(data.containsKey("businessStore")){
-                Object _obj = data.get("businessStore");
+            if(data.containsKey(StorePo.class.getSimpleName())){
+                Object _obj = data.get(StorePo.class.getSimpleName());
                 JSONArray businessStores = null;
                 if(_obj instanceof JSONObject){
                     businessStores = new JSONArray();
@@ -73,7 +72,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
                 }else {
                     businessStores = (JSONArray)_obj;
                 }
-                //JSONObject businessStore = data.getJSONObject("businessStore");
+                //JSONObject businessStore = data.getJSONObject(StorePo.class.getSimpleName());
                 for (int _storeIndex = 0; _storeIndex < businessStores.size();_storeIndex++) {
                     JSONObject businessStore = businessStores.getJSONObject(_storeIndex);
                     doBusinessStore(business, businessStore);
@@ -82,7 +81,6 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
                     }
                 }
             }
-        }
     }
 
 

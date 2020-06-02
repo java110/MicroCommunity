@@ -28,19 +28,11 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject add@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void add@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_@@TEMPLATECODE@@);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject business@@TemplateCode@@ = new JSONObject();
-        business@@TemplateCode@@.putAll(paramInJson);
-        business@@TemplateCode@@.put("@@templateKey@@", "-1");
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("business@@TemplateCode@@", business@@TemplateCode@@);
-        return business;
+        paramInJson.put("@@templateKey@@", "-1");
+        @@TemplateCode@@Po @@templateCode@@Po = BeanConvertUtil.covertBean(paramInJson, @@TemplateCode@@Po.class);
+        super.insert(dataFlowContext, @@templateCode@@Po, BusinessTypeConstant.BUSINESS_TYPE_SAVE_@@TEMPLATECODE@@);
     }
 
 
@@ -51,7 +43,7 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject update@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void update@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         @@TemplateCode@@Dto @@templateCode@@Dto = new @@TemplateCode@@Dto();
         @@templateCode@@Dto.set@@TemplateKey@@(paramInJson.getString("@@templateKey@@"));
@@ -61,16 +53,9 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
         Assert.listOnlyOne(@@templateCode@@Dtos, "未找到需要修改的活动 或多条数据");
 
 
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_@@TEMPLATECODE@@);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject business@@TemplateCode@@ = new JSONObject();
-        business@@TemplateCode@@.putAll(BeanConvertUtil.beanCovertMap(@@templateCode@@Dtos.get(0)));
-        business@@TemplateCode@@.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("business@@TemplateCode@@", business@@TemplateCode@@);
-        return business;
+        paramInJson.putAll(BeanConvertUtil.beanCovertMap(@@templateCode@@Dtos.get(0)));
+        @@TemplateCode@@Po @@templateCode@@Po = BeanConvertUtil.covertBean(paramInJson, @@TemplateCode@@Po.class);
+        super.update(dataFlowContext, @@templateCode@@Po, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_@@TEMPLATECODE@@);
     }
 
 
@@ -82,18 +67,10 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
      * @param dataFlowContext 数据上下文
      * @return 订单服务能够接受的报文
      */
-    public JSONObject delete@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
+    public void delete@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-
-        JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
-        business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_DELETE_@@TEMPLATECODE@@);
-        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ);
-        business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
-        JSONObject business@@TemplateCode@@ = new JSONObject();
-        business@@TemplateCode@@.putAll(paramInJson);
-        //计算 应收金额
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("business@@TemplateCode@@", business@@TemplateCode@@);
-        return business;
+        @@TemplateCode@@Po @@templateCode@@Po = BeanConvertUtil.covertBean(paramInJson, @@TemplateCode@@Po.class);
+        super.update(dataFlowContext, @@templateCode@@Po, BusinessTypeConstant.BUSINESS_TYPE_DELETE_@@TEMPLATECODE@@);
     }
 
 }

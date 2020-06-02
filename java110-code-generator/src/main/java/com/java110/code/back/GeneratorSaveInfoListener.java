@@ -1,6 +1,5 @@
 package com.java110.code.back;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.code.util.FileUtilBase;
 import org.springframework.util.StringUtils;
 
@@ -25,22 +24,24 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
             data.setShareColumn(data.getParams().get(data.getShareColumn()).toString());
         }
         fileContext = fileContext.replace("store", toLowerCaseFirstOne(data.getName()))
-                .replace("@@templateCode@@",data.getName())
-                .replace("@@shareName@@",data.getShareName())
+                .replace("@@templateCode@@", data.getName())
+                .replace("@@shareName@@", data.getShareName())
                 .replace("Store", toUpperCaseFirstOne(data.getName()))
                 .replace("商户", data.getDesc())
                 .replace("BUSINESS_TYPE_SAVE_STORE_INFO", data.getNewBusinessTypeCd())
                 .replace("stare_id", data.getShareColumn())
                 .replace("shareId", data.getShareParam())
-                .replace(data.getName()+"Id", data.getId())
-                .replace(data.getName()+"_id", data.getParams().get(data.getId()).toString());
+                .replace(data.getName() + "Id", data.getId())
+                .replace(data.getName() + "_id", data.getParams().get(data.getId()).toString());
         String writePath = this.getClass().getResource("/").getPath()
                 + "out/back/listener/" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java";
         System.out.printf("writePath: " + writePath);
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,toUpperCaseFirstOne(data.getShareName()).toString()+"Service\\src\\main\\java\\com\\java110\\community\\listener\\"+ data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, toUpperCaseFirstOne(data.getShareName()).toString() + "Service\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\listener\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
+        }
         //生成协议
 
         /**
@@ -72,7 +73,9 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
         writeFile(writePathDoc,
                 fileContextDoc);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"docs\\document\\services\\"+ data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md");
-        //生成协议
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, "docs\\document\\services\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Info.md");
+
+        }//生成协议
     }
 }

@@ -24,7 +24,8 @@ public class GeneratorIInnerServiceSMO extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"java110-core\\src\\main\\java\\com\\java110\\core\\smo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java");
-
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, "java110-core\\src\\main\\java\\com\\java110\\core\\smo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "InnerServiceSMO.java");
+        }
     }
 }

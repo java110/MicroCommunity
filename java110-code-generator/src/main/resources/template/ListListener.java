@@ -64,21 +64,17 @@ public class List@@TemplateCode@@sListener extends AbstractServiceApiListener {
 
         int count = @@templateCode@@InnerServiceSMOImpl.query@@TemplateCode@@sCount(@@templateCode@@Dto);
 
-        List<Api@@TemplateCode@@DataVo> @@templateCode@@s = null;
+        List<@@TemplateCode@@Dto> @@templateCode@@Dtos = null;
 
         if (count > 0) {
-            @@templateCode@@s = BeanConvertUtil.covertBeanList(@@templateCode@@InnerServiceSMOImpl.query@@TemplateCode@@s(@@templateCode@@Dto), Api@@TemplateCode@@DataVo.class);
+            @@templateCode@@Dtos = @@templateCode@@InnerServiceSMOImpl.query@@TemplateCode@@s(@@templateCode@@Dto);
         } else {
-            @@templateCode@@s = new ArrayList<>();
+            @@templateCode@@Dtos = new ArrayList<>();
         }
 
-        Api@@TemplateCode@@Vo api@@TemplateCode@@Vo = new Api@@TemplateCode@@Vo();
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, @@templateCode@@Dtos);
 
-        api@@TemplateCode@@Vo.setTotal(count);
-        api@@TemplateCode@@Vo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        api@@TemplateCode@@Vo.set@@TemplateCode@@s(@@templateCode@@s);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(api@@TemplateCode@@Vo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
 

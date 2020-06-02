@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
  * add by wuxw 2019-06-30
  */
 @Java110Listener("delete@@TemplateCode@@Listener")
-public class Delete@@TemplateCode@@Listener extends AbstractServiceApiListener {
+public class Delete@@TemplateCode@@Listener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private I@@TemplateCode@@BMO @@templateCode@@BMOImpl;
@@ -37,18 +37,7 @@ public class Delete@@TemplateCode@@Listener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(@@templateCode@@BMOImpl.delete@@TemplateCode@@(reqJson, context));
-
-        ResponseEntity<String> responseEntity = @@templateCode@@BMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        @@templateCode@@BMOImpl.delete@@TemplateCode@@(reqJson, context);
     }
 
     @Override
@@ -59,11 +48,6 @@ public class Delete@@TemplateCode@@Listener extends AbstractServiceApiListener {
     @Override
     public HttpMethod getHttpMethod() {
         return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
     }
 
 }

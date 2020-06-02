@@ -275,7 +275,8 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
 
     /**
      * 拼装 查询数量
-     * @param data 数据
+     *
+     * @param data        数据
      * @param fileContext 文件内容
      * @return
      */
@@ -329,6 +330,8 @@ public class GeneratorServiceDaoImplMapperListener extends BaseGenerator {
         writeFile(writePath,
                 fileContext);
         //复制生成的文件到对应分区目录下
-        FileUtilBase.copyfile(writePath,"java110-db\\src\\main\\resources\\mapper\\"+data.getShareName().toString()+"\\" + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml");
+        if (data.isAutoMove()) {
+            FileUtilBase.copyfile(writePath, "java110-db\\src\\main\\resources\\mapper\\" + data.getShareName().toString() + "\\" + "/" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImplMapper.xml");
+        }
     }
 }

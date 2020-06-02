@@ -16,11 +16,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import com.java110.core.annotation.Java110Listener;
 /**
- * 保存小区侦听
+ * 保存商户侦听
  * add by wuxw 2019-06-30
  */
 @Java110Listener("save@@TemplateCode@@Listener")
-public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
+public class Save@@TemplateCode@@Listener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private I@@TemplateCode@@BMO @@templateCode@@BMOImpl;
@@ -34,19 +34,7 @@ public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-        HttpHeaders header = new HttpHeaders();
-        context.getRequestCurrentHeaders().put(CommonConstant.HTTP_ORDER_TYPE_CD, "D");
-        JSONArray businesses = new JSONArray();
-
-        AppService service = event.getAppService();
-
-        //添加单元信息
-        businesses.add(@@templateCode@@BMOImpl.add@@TemplateCode@@(reqJson, context));
-
-        ResponseEntity<String> responseEntity = @@templateCode@@BMOImpl.callService(context, service.getServiceCode(), businesses);
-
-        context.setResponseEntity(responseEntity);
+        @@templateCode@@BMOImpl.add@@TemplateCode@@(reqJson, context);
     }
 
     @Override
@@ -57,11 +45,6 @@ public class Save@@TemplateCode@@Listener extends AbstractServiceApiListener {
     @Override
     public HttpMethod getHttpMethod() {
         return HttpMethod.POST;
-    }
-
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
     }
 
 }

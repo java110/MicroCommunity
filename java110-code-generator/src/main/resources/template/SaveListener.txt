@@ -53,8 +53,8 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
         //处理 businessStore 节点
-        if(data.containsKey("businessStore")){
-            Object bObj = data.get("businessStore");
+        if(data.containsKey(StorePo.class.getSimpleName())){
+            Object bObj = data.get(StorePo.class.getSimpleName());
             JSONArray businessStores = null;
             if(bObj instanceof JSONObject){
                 businessStores = new JSONArray();
@@ -62,7 +62,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
             }else {
                 businessStores = (JSONArray)bObj;
             }
-            //JSONObject businessStore = data.getJSONObject("businessStore");
+            //JSONObject businessStore = data.getJSONObject(StorePo.class.getSimpleName());
             for (int bStoreIndex = 0; bStoreIndex < businessStores.size();bStoreIndex++) {
                 JSONObject businessStore = businessStores.getJSONObject(bStoreIndex);
                 doBusinessStore(business, businessStore);
