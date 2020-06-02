@@ -1016,22 +1016,40 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_JUNK_REQUIREMENT="550200050001";
 
     /**
-     *  保存旧货市场
+     *  保存任务
      *  3保存
      */
     public static final String BUSINESS_TYPE_SAVE_TASK="560200030001";
 
 
     /**
-     *  修改旧货市场
+     *  修改任务
      *  3保存
      */
     public static final String BUSINESS_TYPE_UPDATE_TASK="560200040001";
 
     /**
-     * 删除旧货市场
+     * 删除任务
      */
     public static final String BUSINESS_TYPE_DELETE_TASK="560200050001";
+
+    /**
+     *  保存任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_TASK_ATTR="560300030001";
+
+
+    /**
+     *  修改任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_TASK_ATTR="560300040001";
+
+    /**
+     * 删除任务
+     */
+    public static final String BUSINESS_TYPE_DELETE_TASK_ATTR="560300050001";
 
 
 }

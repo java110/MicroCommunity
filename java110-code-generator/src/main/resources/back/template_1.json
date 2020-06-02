@@ -1,26 +1,25 @@
 {
   "autoMove": true,
-  "id": "taskId",
-  "name": "task",
-  "desc": "定时任务",
+  "id": "attrId",
+  "name": "taskAttr",
+  "desc": "定时任务属性",
   "shareParam": "task_id",
   "shareColumn": "taskId",
   "shareName": "job",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TASK",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TASK",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TASK",
-  "newBusinessTypeCdValue": "560200030001",
-  "updateBusinessTypeCdValue": "560200040001",
-  "deleteBusinessTypeCdValue": "560200050001",
-  "businessTableName": "business_task",
-  "tableName": "task",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TASK_ATTR",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TASK_ATTR",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TASK_ATTR",
+  "newBusinessTypeCdValue": "560300030001",
+  "updateBusinessTypeCdValue": "560300040001",
+  "deleteBusinessTypeCdValue": "560300050001",
+  "businessTableName": "business_task_attr",
+  "tableName": "task_attr",
   "param": {
-    "taskId": "task_id",
+    "attrId": "attr_id",
     "bId": "b_id",
-    "taskName": "task_name",
-    "templateId": "template_id",
-    "taskCron": "task_cron",
-    "state": "state",
+    "taskId": "task_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd",
     "createTime": "create_time",
     "operate": "operate"
@@ -28,16 +27,16 @@
   "required": [
     {
 
-      "code": "taskName",
-      "msg": "任务名称不能为空"
+      "code": "taskId",
+      "msg": "任务不能为空"
     },
     {
-      "code": "templateId",
-      "msg": "模板不能为空"
+      "code": "specCd",
+      "msg": "任务属性不能为空"
     },
     {
-      "code": "taskCron",
-      "msg": "定时时间不能为空"
+      "code": "value",
+      "msg": "任务属性值不能为空"
     }
   ]
 }

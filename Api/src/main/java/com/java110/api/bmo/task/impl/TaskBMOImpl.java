@@ -8,7 +8,6 @@ import com.java110.core.smo.task.ITaskInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
 import com.java110.po.task.TaskPo;
 import com.java110.utils.constant.BusinessTypeConstant;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +30,9 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
      */
     public void addTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        paramInJson.put("taskId", "-1");
+        // paramInJson.put("taskId", "-1");
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
+        taskPo.setTaskId("-1");
         super.insert(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK);
     }
 
@@ -58,7 +58,6 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
         super.update(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_TASK);
     }
-
 
 
     /**

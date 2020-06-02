@@ -1,8 +1,8 @@
-package com.java110.api.bmo.storeAttr.impl;
+package com.java110.api.bmo.store.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
-import com.java110.api.bmo.storeAttr.IStoreAttrBMO;
+import com.java110.api.bmo.store.IStoreAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.storeAttr.IStoreAttrInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;

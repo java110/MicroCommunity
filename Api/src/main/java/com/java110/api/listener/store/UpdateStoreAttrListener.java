@@ -1,7 +1,7 @@
-package com.java110.api.listener.storeAttr;
+package com.java110.api.listener.store;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.bmo.storeAttr.IStoreAttrBMO;
+import com.java110.api.bmo.store.IStoreAttrBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
