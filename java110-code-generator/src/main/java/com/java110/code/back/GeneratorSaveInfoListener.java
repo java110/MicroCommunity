@@ -40,7 +40,7 @@ public class GeneratorSaveInfoListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, toUpperCaseFirstOne(data.getShareName()).toString() + "Service\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\listener\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
+            FileUtilBase.copyfile(writePath, "service-" + data.getShareName() + "\\src\\main\\java\\com\\java110\\" + data.getShareName() + "\\listener\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "InfoListener.java");
         }
         //生成协议
 

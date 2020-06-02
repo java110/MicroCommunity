@@ -12,25 +12,25 @@
         <module>java110-bean</module>
         <module>java110-config</module>
         <module>java110-utils</module>
-        <module>UserService</module>
-        <module>LogService</module>
-        <module>FeeService</module>
-        <module>eureka</module>
         <module>java110-core</module>
         <module>java110-service</module>
-        <module>CodeService</module>
-        <module>StoreService</module>
-        <module>RuleService</module>
-        <module>OrderService</module>
-        <module>CommentService</module>
-        <module>Api</module>
-        <module>CommunityService</module>
-        <module>java110-code-generator</module>
         <module>java110-db</module>
-        <module>JobService</module>
-        <module>CommonService</module>
-        <module>ReportService</module>
-        <module>FrontService</module>
+        <module>java110-code-generator</module>
+        <module>service-user</module>
+        <module>service-log</module>
+        <module>service-fee</module>
+        <module>service-eureka</module>
+        <module>service-sequence</module>
+        <module>service-store</module>
+        <module>service-rule</module>
+        <module>service-order</module>
+        <module>service-comment</module>
+        <module>service-api</module>
+        <module>service-community</module>
+        <module>service-job</module>
+        <module>service-common</module>
+        <module>service-report</module>
+        <module>service-front</module>
     </modules>
 
     <parent>
@@ -168,11 +168,6 @@
                 <artifactId>java110-front</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>ReportComponent</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
             <!-- logback 日志组件支持  -->
 
             <dependency>
@@ -195,12 +190,6 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.vaersion}</version>
             </dependency>
-
-            <!--            <dependency>-->
-            <!--                <groupId>log4j</groupId>-->
-            <!--                <artifactId>log4j</artifactId>-->
-            <!--                <version>1.2.17</version>-->
-            <!--            </dependency>-->
 
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>

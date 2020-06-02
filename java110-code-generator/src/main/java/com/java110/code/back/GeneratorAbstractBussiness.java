@@ -43,7 +43,7 @@ public class GeneratorAbstractBussiness extends BaseGenerator {
                 fileContext);
 //        System.out.println("看这里"+toUpperCaseFirstOne(data.getShareName()).toString());
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, toUpperCaseFirstOne(data.getShareName()).toString() + "Service\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\listener\\" + data.getName() + "/Abstract" + toUpperCaseFirstOne(data.getName()) + "BusinessServiceDataFlowListener.java");
+            FileUtilBase.copyfile(writePath, "service-" + data.getShareName() + "\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\listener\\" + data.getName() + "/Abstract" + toUpperCaseFirstOne(data.getName()) + "BusinessServiceDataFlowListener.java");
         }
     }
 }

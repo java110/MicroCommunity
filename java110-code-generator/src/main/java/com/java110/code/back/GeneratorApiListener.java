@@ -44,7 +44,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/List" + toUpperCaseFirstOne(data.getName()) + "sListener.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/List" + toUpperCaseFirstOne(data.getName()) + "sListener.java");
         }
     }
 
@@ -165,7 +165,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\bmo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "BMO.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\bmo\\" + data.getName() + "/I" + toUpperCaseFirstOne(data.getName()) + "BMO.java");
         }
     }
 
@@ -189,7 +189,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\bmo\\" + data.getName() + "/impl/" + toUpperCaseFirstOne(data.getName()) + "BMOImpl.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\bmo\\" + data.getName() + "/impl/" + toUpperCaseFirstOne(data.getName()) + "BMOImpl.java");
         }
     }
 
@@ -224,7 +224,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Save" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
         }
     }
 
@@ -258,7 +258,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Update" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Update" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
         }
     }
 
@@ -287,7 +287,7 @@ public class GeneratorApiListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, "Api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
+            FileUtilBase.copyfile(writePath, "service-api\\src\\main\\java\\com\\java110\\api\\listener\\" + data.getName() + "/Delete" + toUpperCaseFirstOne(data.getName()) + "Listener.java");
         }
     }
 

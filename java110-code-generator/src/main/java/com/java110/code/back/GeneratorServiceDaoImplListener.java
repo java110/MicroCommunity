@@ -23,7 +23,7 @@ public class GeneratorServiceDaoImplListener extends BaseGenerator {
                 fileContext);
         //复制生成的文件到对应分区目录下
         if (data.isAutoMove()) {
-            FileUtilBase.copyfile(writePath, toUpperCaseFirstOne(data.getShareName().toString()) + "Service\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\dao\\impl\\" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java");
+            FileUtilBase.copyfile(writePath, "service-" + data.getShareName() + "\\src\\main\\java\\com\\java110\\"+data.getShareName()+"\\dao\\impl\\" + toUpperCaseFirstOne(data.getName()) + "ServiceDaoImpl.java");
         }
     }
 }
