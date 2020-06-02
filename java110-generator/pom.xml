@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java110-code-generator</artifactId>
+    <artifactId>java110-generator</artifactId>
 
-    <name>java110-code-generator</name>
+    <name>java110-generator</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
