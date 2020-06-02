@@ -24,7 +24,6 @@
 
 * Api开放接口
 
-
   * [用户类接口](api/user/index.md)
   * [用户注册](api/user/register.md)
   * [用户登录](api/user/login.md)
@@ -180,9 +179,7 @@
   * [车位出售](api/parkingSpace/sellParkingSpace.md)
   * [停车位退款-待补充](api/parkingSpace/exitParkingSpace.md)
   * [查询业主车位- 待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
-  
 
-  
 * 商业授权
 
   * [授权](license.md)
