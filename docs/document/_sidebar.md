@@ -181,60 +181,7 @@
   * [停车位退款-待补充](api/parkingSpace/exitParkingSpace.md)
   * [查询业主车位- 待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
   
-  
 
-* 服务端接口协议
-
-  * [字典规格说明](dictionary)
-  * [中心服务接口协议](services/order/order.md)
-  * [中心服务配置文档](services/order/order_config.md)
-  * [用户服务接口协议](services/user/user.md)
-  * [用户服务接口测试文档](services/user/user_test.md)
-  * [商品服务接口协议](services/shop/shop.md)
-  * [商品服务接口测试文档](services/shop/shop_test.md)
-  * [商户服务接口协议](services/store/store.md)
-  * [商户服务接口测试文档](services/store/store_test.md)
-  * [评论服务接口协议](services/comment/comment.md)
-  * [评论服务接口测试文档](services/comment/comment_test.md)
-  * [编码生成服务接口协议](services/code/code)
-  * [编码生成服务接口测试文档](services/code/code_test)
-  * [小区成员入驻](services/community/communityMemberJoined.md)
-  * [小区成员退出](services/community/communityMemberQuit.md)
-  * [保存小区楼](services/floor/SaveFloorInfo.md)
-  * [修改小区楼](services/floor/UpdateFloorInfo.md)
-  * [删除小区楼](services/floor/DeleteFloorInfo.md)
-  * [保存小区单元](services/unit/SaveUnitInfo.md)
-  * [修改小区单元](services/unit/UpdateUnitInfo.md)
-  * [删除小区单元](services/unit/DeleteUnitInfo.md)
-  * [保存房屋](services/room/SaveRoomInfo.md)
-  * [修改房屋](services/room/UpdateRoomInfo.md)
-  * [删除房屋](services/room/DeleteRoomInfo.md)
-  * [保存业主](services/owner/SaveOwnerInfo.md)
-  * [修改业主](services/owner/UpdateOwnerInfo.md)
-  * [删除业主](services/owner/DeleteOwnerInfo.md)
-  * [房屋售卖](services/owner/SaveOwnerRoomRelInfo.md)
-  * [修改业主](services/owner/UpdateOwnerRoomRelInfo.md)
-  * [删除业主](services/owner/DeleteOwnerRoomRelInfo.md)
-  * [保存费用](services/fee/SaveFeeInfo.md)
-  * [修改费用](services/fee/UpdateFeeInfo.md)
-  * [删除费用](services/fee/DeleteFeeInfo.md)
-  * [保存费用属性](services/fee/SaveFeeAttrInfo.md)
-  * [修改费用属性](services/fee/UpdateFeeAttrInfo.md)
-  * [删除费用属性](services/fee/DeleteFeeAttrInfo.md)
-  * [保存费用明细](services/fee/SaveFeeDetailInfo.md)
-  * [修改费用明细](services/fee/UpdateFeeDetailInfo.md)
-  * [删除费用明细](services/fee/DeleteFeeDetailInfo.md)
-  * [保存费用配置](services/fee/SaveFeeConfigInfo.md)
-  * [修改费用配置](services/fee/UpdateFeeConfigInfo.md)
-  * [删除费用配置](services/fee/DeleteFeeConfigInfo.md)
-  * [保存停车位](services/parkingSpace/SaveParkingSpaceInfo.md)
-  * [修改停车位](services/parkingSpace/UpdateParkingSpaceInfo.md)
-  * [删除停车位](services/parkingSpace/DeleteParkingSpaceInfo.md)
-
-
-* 工具类接口
-
-  * [刷新缓存](api/utils/clearCache)
   
 * 商业授权
 
