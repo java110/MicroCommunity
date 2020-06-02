@@ -16,22 +16,16 @@
 
   * [功能列表](func/funcation.md)
 
-* 二次开发
+* 开发
 
   * [前段开发](develop/front.md)
   * [接口开发](develop/api.md)
-  * [服务端开发](develop/service.md)
-  * [添加服务](develop/addService)
-  * [用户权限校验](develop/checkPrivilege.md)
   * [硬件对接](develop/machine.md)
 
-* 字典数据
+* Api开放接口
 
-  * [业务类型](dict/businessType.md)
-  * [组件](dict/app.md)
 
-* api接口
-
+  * [用户类接口](api/user/index.md)
   * [用户注册](api/user/register.md)
   * [用户登录](api/user/login.md)
   * [游客登记](api/user/saveVisit.md)
