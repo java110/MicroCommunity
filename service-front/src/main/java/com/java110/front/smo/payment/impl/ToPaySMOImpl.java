@@ -28,6 +28,10 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
     private RestTemplate restTemplate;
 
     @Autowired
+    private RestTemplate outRestTemplate;
+
+
+    @Autowired
     private WechatAuthProperties wechatAuthProperties;
 
     @Override
@@ -81,7 +85,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         String openId = realUserInfo.getString("openId");
 
         //微信下单PayUtil
-        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"), orderId, money, openId);
+        Map result = super.java110Payment(outRestTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"), orderId, money, openId);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;

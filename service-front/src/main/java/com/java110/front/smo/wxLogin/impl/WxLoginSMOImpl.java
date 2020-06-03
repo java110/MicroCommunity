@@ -32,6 +32,9 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
     private final static Logger logger = LoggerFactory.getLogger(WxLoginSMOImpl.class);
 
     @Autowired
+    private RestTemplate outRestTemplate;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -58,7 +61,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         ResponseEntity<String> responseEntity;
         String code = paramIn.getString("code");
         String urlString = "?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
-        String response = restTemplate.getForObject(
+        String response = outRestTemplate.getForObject(
                 wechatAuthProperties.getSessionHost() + urlString, String.class,
                 wechatAuthProperties.getAppId(),
                 wechatAuthProperties.getSecret(),
