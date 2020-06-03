@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 查询任务模板
  */
-@Java110Listener("listTasksListener")
+@Java110Listener("listTaskTemplateListener")
 public class ListTaskTemplateListener extends AbstractServiceApiListener {
 
     @Autowired
