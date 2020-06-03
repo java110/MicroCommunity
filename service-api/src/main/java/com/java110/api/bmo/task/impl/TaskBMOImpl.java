@@ -35,6 +35,7 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
         // paramInJson.put("taskId", "-1");
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
         taskPo.setTaskId("-1");
+        taskPo.setState("001");
         super.insert(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK);
 
         if (!paramInJson.containsKey("templateSpecs")) {
