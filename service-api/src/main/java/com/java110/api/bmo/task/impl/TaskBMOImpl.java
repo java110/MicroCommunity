@@ -1,5 +1,6 @@
 package com.java110.api.bmo.task.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.task.ITaskBMO;
@@ -7,6 +8,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.task.ITaskInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
 import com.java110.po.task.TaskPo;
+import com.java110.po.taskAttr.TaskAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -34,6 +36,23 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
         taskPo.setTaskId("-1");
         super.insert(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK);
+
+        if (!paramInJson.containsKey("templateSpecs")) {
+            return;
+        }
+
+        JSONArray templateSpecs = paramInJson.getJSONArray("templateSpecs");
+        TaskAttrPo taskAttrPo = null;
+        JSONObject tmpSpecObj = null;
+        for (int specIndex = 0; specIndex < templateSpecs.size(); specIndex++) {
+            taskAttrPo = new TaskAttrPo();
+            tmpSpecObj = templateSpecs.getJSONObject(specIndex);
+            taskAttrPo.setAttrId("-" + (specIndex + 1));
+            taskAttrPo.setSpecCd(tmpSpecObj.getString("specCd"));
+            taskAttrPo.setTaskId(taskPo.getTaskId());
+            taskAttrPo.setValue(tmpSpecObj.getString("value"));
+            super.insert(dataFlowContext, taskAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK_ATTR);
+        }
     }
 
 
