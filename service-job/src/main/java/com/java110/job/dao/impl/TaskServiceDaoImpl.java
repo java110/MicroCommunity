@@ -167,7 +167,7 @@ public class TaskServiceDaoImpl extends BaseServiceDao implements ITaskServiceDa
     public int queryTaskTemplateSpecCount(Map info) {
         logger.debug("查询定时任务模板数据 入参 info : {}",info);
 
-        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.queryTaskTemplateCount", info);
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.queryTaskTemplateSpecCount", info);
         if (businessTaskInfos.size() < 1) {
             return 0;
         }
@@ -185,7 +185,7 @@ public class TaskServiceDaoImpl extends BaseServiceDao implements ITaskServiceDa
     public List<Map> getTaskTemplateSpecInfo(Map info) throws DAOException {
         logger.debug("查询定时任务信息 入参 info : {}",info);
 
-        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.getTaskTemplateInfo",info);
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.getTaskTemplateSpecInfo",info);
 
         return businessTaskInfos;
     }
