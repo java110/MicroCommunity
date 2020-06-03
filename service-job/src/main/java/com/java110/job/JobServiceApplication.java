@@ -1,5 +1,7 @@
 package com.java110.job;
 
+import com.java110.core.annotation.Java110ListenerDiscovery;
+import com.java110.core.event.center.DataFlowEventPublishing;
 import com.java110.service.init.ServiceStartInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ import java.nio.charset.Charset;
         excludeName = {"com.java110.core.smo.jobservice"}
 )
 @EnableDiscoveryClient
+@Java110ListenerDiscovery(listenerPublishClass = DataFlowEventPublishing.class,
+        basePackages = {"com.java110.job.listener"})
 @EnableFeignClients(basePackages = {"com.java110.core.smo.community",
         "com.java110.core.smo.fee",
         "com.java110.core.smo.floor",
