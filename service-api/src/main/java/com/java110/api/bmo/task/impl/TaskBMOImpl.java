@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.task.ITaskBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.task.ITaskInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
 import com.java110.po.task.TaskPo;
@@ -34,7 +35,7 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
 
         // paramInJson.put("taskId", "-1");
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
-        taskPo.setTaskId("-1");
+        taskPo.setTaskId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_taskId));
         taskPo.setState("001");
         super.insert(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK);
 

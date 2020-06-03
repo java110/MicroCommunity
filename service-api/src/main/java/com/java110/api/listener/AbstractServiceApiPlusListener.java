@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.result.ResultVo;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -84,7 +84,22 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
 
         ResponseEntity<String> responseEntity = this.callOrderService(dataFlowContext, paramIn);
 
+        //组装符合要求报文
+        ResultVo resultVo = null;
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            resultVo = new ResultVo(ResultVo.ORDER_ERROR, responseEntity.getBody());
+        } else {
+            String orderResult = responseEntity.getBody();
+            if (orderResult.startsWith("{")) {
+                resultVo = new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK, JSONObject.parse(orderResult));
+            } else {
+                resultVo = new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK, JSONArray.parse(orderResult));
+            }
+        }
+
         if (dataFlowContext.getResponseEntity() == null) {
+            responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
             dataFlowContext.setResponseEntity(responseEntity);
         }
 

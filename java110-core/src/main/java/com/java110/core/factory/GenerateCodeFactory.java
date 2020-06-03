@@ -129,6 +129,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_weChatId = "71";
 
 
+
+
     /**
      * 只有在不调用服务生成ID时有用
      */
