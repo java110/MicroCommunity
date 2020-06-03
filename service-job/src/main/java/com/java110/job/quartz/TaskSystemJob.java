@@ -1,4 +1,4 @@
-package com.java110.job.task;
+package com.java110.job.quartz;
 
 import com.java110.dto.task.TaskDto;
 import com.java110.utils.factory.ApplicationContextFactory;

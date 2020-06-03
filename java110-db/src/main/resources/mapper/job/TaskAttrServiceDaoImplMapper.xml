@@ -26,7 +26,7 @@
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
-        <if test="createTime !=null and createTime != ''">
+        <if test="createTime !=null">
             and t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">
@@ -54,7 +54,7 @@
             and t.attr_id= #{attrId}
         </if>
         and t.operate= 'ADD'
-        <if test="createTime !=null and createTime != ''">
+        <if test="createTime !=null ">
             and t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">
@@ -82,7 +82,7 @@
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
         </if>
-        <if test="createTime !=null and createTime != ''">
+        <if test="createTime !=null">
             and t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">
@@ -114,9 +114,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="createTime !=null and createTime != ''">
-            , t.create_time= #{createTime}
-        </if>
         <if test="specCd !=null and specCd != ''">
             , t.spec_cd= #{specCd}
         </if>
@@ -144,7 +141,7 @@
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}
         </if>
-        <if test="createTime !=null and createTime != ''">
+        <if test="createTime !=null">
             and t.create_time= #{createTime}
         </if>
         <if test="specCd !=null and specCd != ''">

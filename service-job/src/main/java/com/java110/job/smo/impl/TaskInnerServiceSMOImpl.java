@@ -12,7 +12,7 @@ import com.java110.dto.taskAttr.TaskAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.job.dao.ITaskAttrServiceDao;
 import com.java110.job.dao.ITaskServiceDao;
-import com.java110.job.task.TaskSystemJob;
+import com.java110.job.quartz.TaskSystemJob;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.quartz.CronScheduleBuilder;
@@ -179,8 +179,8 @@ public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInne
      * @return
      */
     public int startTask(@RequestBody TaskDto taskDto) {
-//        List<TaskAttrDto> attrDtos = BeanConvertUtil.covertBeanList(taskAttrServiceDaoImpl.getTaskAttrInfo(BeanConvertUtil.beanCovertMap(taskDto)),
-//                TaskAttrDto.class);
+        List<TaskAttrDto> attrDtos = BeanConvertUtil.covertBeanList(taskAttrServiceDaoImpl.getTaskAttrInfo(BeanConvertUtil.beanCovertMap(taskDto)),
+                TaskAttrDto.class);
         Map info = new HashMap();
         info.put("templateId", taskDto.getTemplateId());
         List<TaskTemplateDto> taskTemplateDtos = BeanConvertUtil.covertBeanList(taskServiceDaoImpl.getTaskTemplateInfo(info), TaskTemplateDto.class);
@@ -188,6 +188,7 @@ public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInne
         Assert.listOnlyOne(taskTemplateDtos, "模板不存在或存在多个");
 
         taskDto.setTaskTemplateDto(taskTemplateDtos.get(0));
+        taskDto.setTaskAttr(attrDtos);
 
         try {
             String cronExpression = taskDto.getTaskCron();// 如果没有配置则，每一分运行一次
