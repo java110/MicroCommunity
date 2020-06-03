@@ -64,10 +64,22 @@ public interface ITaskInnerServiceSMO {
     int queryTaskTemplateCount(@RequestBody TaskTemplateDto taskTemplateDto);
 
 
-
+    /**
+     * 查询<p>任务模板</p>总记录数
+     *
+     * @param taskTemplateSpecDto 模板对象
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryTaskTemplateSpecCount", method = RequestMethod.POST)
      int queryTaskTemplateSpecCount(@RequestBody TaskTemplateSpecDto taskTemplateSpecDto);
 
 
-
+    /**
+     * 查询<p>任务模板</p>总记录数
+     *
+     * @param taskTemplateSpecDto 模板对象
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/queryTaskTemplateSpec", method = RequestMethod.POST)
      List<TaskTemplateSpecDto> queryTaskTemplateSpec(@RequestBody TaskTemplateSpecDto taskTemplateSpecDto);
 }
