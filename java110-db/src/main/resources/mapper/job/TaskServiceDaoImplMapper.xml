@@ -7,9 +7,9 @@
     <!-- 保存定时任务信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessTaskInfo" parameterType="Map">
         insert into business_task(
-        operate,task_cron,create_time,task_name,state,b_id,template_id,task_id
+        operate,task_cron,task_name,state,b_id,template_id,task_id
         ) values (
-        #{operate},#{taskCron},#{createTime},#{taskName},#{state},#{bId},#{templateId},#{taskId}
+        #{operate},#{taskCron},#{taskName},#{state},#{bId},#{templateId},#{taskId}
         )
     </insert>
 
