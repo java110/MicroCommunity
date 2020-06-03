@@ -1,8 +1,14 @@
 package com.java110.job.quartz;
 
 import com.java110.dto.task.TaskDto;
+import com.java110.job.dao.ITaskServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author
@@ -10,6 +16,9 @@ import org.slf4j.LoggerFactory;
 public abstract class TaskSystemQuartz {
 
     protected static final Logger logger = LoggerFactory.getLogger(TaskSystemQuartz.class);
+
+    @Autowired
+    private ITaskServiceDao taskServiceDaoImpl;
 
 
     public void initTask() {
@@ -23,8 +32,15 @@ public abstract class TaskSystemQuartz {
      */
     public void startTask(TaskDto taskDto) throws Exception {
 
+        Map info = new HashMap();
+        info.put("taskId", taskDto.getTaskId());
+        List<Map> taskInfos = taskServiceDaoImpl.getTaskInfo(info);
+        if (taskInfos == null || taskInfos.size() < 1) {
+            return;
+        }
+
         // 这么做是为了，单线程调用，防止多线程导致数据重复处理
-        if (!"002".equals(taskDto.getState())) {
+        if (!"002".equals(taskInfos.get(0).get("state"))) {
             return;
         }
 

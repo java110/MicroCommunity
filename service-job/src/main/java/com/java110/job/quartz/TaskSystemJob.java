@@ -24,7 +24,7 @@ public class TaskSystemJob implements Job {
     public static String JOB_GROUP_NAME = "taskSystemJobGroup"; // 任务的 分组名称
 
 
-    private TaskSystemQuartz hcFtpToFileSystemQuartz;
+    private TaskSystemQuartz taskSystemQuartz;
 
     protected void executeInternal(JobExecutionContext context) {
         try {
@@ -32,8 +32,8 @@ public class TaskSystemJob implements Job {
                     .get(JOB_DATA_TASK));
 
 
-            hcFtpToFileSystemQuartz = (TaskSystemQuartz) ApplicationContextFactory.getBean(taskDto.getTaskTemplateDto().getClassBean());
-            hcFtpToFileSystemQuartz.startTask(taskDto);
+            taskSystemQuartz = (TaskSystemQuartz) ApplicationContextFactory.getBean(taskDto.getTaskTemplateDto().getClassBean());
+            taskSystemQuartz.startTask(taskDto);
 
         } catch (Throwable ex) {
             logger.error("执行任务失败：", ex);
