@@ -27,6 +27,8 @@ public class TaskDto extends PageDto implements Serializable {
 
     private List<TaskAttrDto> taskAttr;
 
+    private TaskTemplateDto taskTemplateDto;
+
 
     private Date createTime;
 
@@ -113,5 +115,13 @@ public class TaskDto extends PageDto implements Serializable {
 
     public void setTaskAttr(List<TaskAttrDto> taskAttr) {
         this.taskAttr = taskAttr;
+    }
+
+    public TaskTemplateDto getTaskTemplateDto() {
+        return taskTemplateDto;
+    }
+
+    public void setTaskTemplateDto(TaskTemplateDto taskTemplateDto) {
+        this.taskTemplateDto = taskTemplateDto;
     }
 }

@@ -1,5 +1,6 @@
 package com.java110.job.smo;
 
+import com.java110.job.task.TaskSystemQuartz;
 import com.java110.job.util.FTPClientTemplate;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

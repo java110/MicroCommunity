@@ -8,15 +8,31 @@ import com.java110.dto.PageDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.task.TaskTemplateDto;
 import com.java110.dto.task.TaskTemplateSpecDto;
+import com.java110.dto.taskAttr.TaskAttrDto;
 import com.java110.dto.user.UserDto;
+import com.java110.job.dao.ITaskAttrServiceDao;
 import com.java110.job.dao.ITaskServiceDao;
+import com.java110.job.task.TaskSystemJob;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FloorInnerServiceSMOImpl
@@ -29,8 +45,22 @@ import java.util.List;
 @RestController
 public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInnerServiceSMO {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskInnerServiceSMOImpl.class);
+
+    private static final String defaultCronExpression = "0 * * * * ?";// 每分钟执行一次
+
+    private static final String prefixJobName = "task_"; // job
+    private static final String triggerNames = "taskToData_"; // job
+
+    @Autowired
+    private Scheduler scheduler;
+
+
     @Autowired
     private ITaskServiceDao taskServiceDaoImpl;
+
+    @Autowired
+    private ITaskAttrServiceDao taskAttrServiceDaoImpl;
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
@@ -103,7 +133,6 @@ public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInne
     }
 
 
-
     @Override
     public List<TaskTemplateDto> queryTaskTemplate(@RequestBody TaskTemplateDto taskTemplateDto) {
 
@@ -121,12 +150,10 @@ public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInne
     }
 
 
-
     @Override
     public int queryTaskTemplateSpecCount(@RequestBody TaskTemplateSpecDto taskTemplateSpecDto) {
         return taskServiceDaoImpl.queryTaskTemplateSpecCount(BeanConvertUtil.beanCovertMap(taskTemplateSpecDto));
     }
-
 
 
     @Override
@@ -145,8 +172,104 @@ public class TaskInnerServiceSMOImpl extends BaseServiceSMO implements ITaskInne
         return taskTemplates;
     }
 
+    /**
+     * 启动任务
+     *
+     * @param taskDto
+     * @return
+     */
+    public int startTask(@RequestBody TaskDto taskDto) {
+//        List<TaskAttrDto> attrDtos = BeanConvertUtil.covertBeanList(taskAttrServiceDaoImpl.getTaskAttrInfo(BeanConvertUtil.beanCovertMap(taskDto)),
+//                TaskAttrDto.class);
+        Map info = new HashMap();
+        info.put("templateId", taskDto.getTemplateId());
+        List<TaskTemplateDto> taskTemplateDtos = BeanConvertUtil.covertBeanList(taskServiceDaoImpl.getTaskTemplateInfo(info), TaskTemplateDto.class);
 
+        Assert.listOnlyOne(taskTemplateDtos, "模板不存在或存在多个");
 
+        taskDto.setTaskTemplateDto(taskTemplateDtos.get(0));
+
+        try {
+            String cronExpression = taskDto.getTaskCron();// 如果没有配置则，每一分运行一次
+
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+
+            String jobName = prefixJobName + taskDto.getTaskId();
+
+            String triggerName = triggerNames + taskDto.getTaskId();
+
+            //设置任务名称
+            JobKey jobKey = new JobKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+
+            if (jobDetail != null) {
+                return 0;
+            }
+
+            String taskCfgName = taskDto.getTaskName();
+            JobDetail warnJob = JobBuilder.newJob(TaskSystemJob.class).withIdentity(jobName, TaskSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
+
+            warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
+
+            warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_TASK_ID, taskDto.getTaskId());
+            warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_TASK, taskDto);
+            warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_TASK_ATTR, taskDto);
+
+            // 触发时间点
+            CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName + "_group").withSchedule(cronScheduleBuilder).build();
+
+            // 错过执行后，立即执行
+            //warnTrigger(CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW);
+            //交由Scheduler安排触发
+            scheduler.scheduleJob(warnJob, warnTrigger);
+            Map paramIn = new HashMap();
+            paramIn.put("taskId", taskDto.getTaskId());
+            paramIn.put("state", "002");
+            paramIn.put("statusCd", "0");
+            taskServiceDaoImpl.updateTaskInfoInstance(paramIn);
+
+        } catch (Exception e) {
+            logger.error("启动侦听失败", e);
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * 停止任务
+     *
+     * @param taskDto
+     * @return
+     */
+    public int stopTask(@RequestBody TaskDto taskDto) {
+
+        try {
+            String jobName = prefixJobName + taskDto.getTaskId();
+
+            String triggerName = prefixJobName + taskDto.getTaskId();
+
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
+            // 停止触发器
+            scheduler.pauseTrigger(triggerKey);
+            // 移除触发器
+            scheduler.unscheduleJob(triggerKey);
+
+            JobKey jobKey = new JobKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
+            // 删除任务
+            scheduler.deleteJob(jobKey);
+
+            Map paramIn = new HashMap();
+            paramIn.put("taskId", taskDto.getTaskId());
+            paramIn.put("state", "001");
+            paramIn.put("statusCd", "0");
+            taskServiceDaoImpl.updateTaskInfoInstance(paramIn);
+
+        } catch (Exception e) {
+            logger.error("启动侦听失败", e);
+            return 0;
+        }
+        return 1;
+    }
 
 
     public ITaskServiceDao getTaskServiceDaoImpl() {

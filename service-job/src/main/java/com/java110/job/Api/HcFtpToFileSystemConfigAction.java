@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.job.dao.IHcFtpFileDAO;
-import com.java110.job.smo.DownloadFileFromFtpToTable;
-import com.java110.job.task.HcFtpToFileSystemJob;
+import com.java110.job.task.TaskSystemJob;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.util.ValidatorUtils;
 import org.quartz.*;
@@ -502,18 +501,18 @@ public class HcFtpToFileSystemConfigAction {
 				String triggerName = triggerNames + taskId;
 
 				//设置任务名称
-				JobKey jobKey = new JobKey(jobName,HcFtpToFileSystemJob.JOB_GROUP_NAME);
+				JobKey jobKey = new JobKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
 				JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 
 				if (jobDetail == null) {
 					// 任务名称
 					String taskCfgName = (String) doFtpItem.get("TASKNAME");
 					//构建job信息
-					JobDetail warnJob = JobBuilder.newJob(HcFtpToFileSystemJob.class).withIdentity(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
+					JobDetail warnJob = JobBuilder.newJob(TaskSystemJob.class).withIdentity(jobName, TaskSystemJob.JOB_GROUP_NAME).withDescription("任务启动").build();
 
-					warnJob.getJobDataMap().put(HcFtpToFileSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
+					warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_CONFIG_NAME, taskCfgName);
 
-					warnJob.getJobDataMap().put(HcFtpToFileSystemJob.JOB_DATA_TASK_ID, taskId);
+					warnJob.getJobDataMap().put(TaskSystemJob.JOB_DATA_TASK_ID, taskId);
 
 					// 触发时间点
 					CronTrigger warnTrigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerName+"_group").withSchedule(cronScheduleBuilder).build();
@@ -627,13 +626,13 @@ public class HcFtpToFileSystemConfigAction {
 
 				String triggerName = prefixJobName + taskId;
 
-				TriggerKey triggerKey = TriggerKey.triggerKey(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME);
+				TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
 				// 停止触发器
 				scheduler.pauseTrigger(triggerKey);
 				// 移除触发器
 				scheduler.unscheduleJob(triggerKey);
 
-				JobKey jobKey = new JobKey(jobName, HcFtpToFileSystemJob.JOB_GROUP_NAME);
+				JobKey jobKey = new JobKey(jobName, TaskSystemJob.JOB_GROUP_NAME);
 				// 删除任务
 				scheduler.deleteJob(jobKey);
 				// 修改数据状态，将任务数据状态改为运行状态

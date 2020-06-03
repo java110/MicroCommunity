@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -82,4 +83,20 @@ public interface ITaskInnerServiceSMO {
      */
     @RequestMapping(value = "/queryTaskTemplateSpec", method = RequestMethod.POST)
      List<TaskTemplateSpecDto> queryTaskTemplateSpec(@RequestBody TaskTemplateSpecDto taskTemplateSpecDto);
+
+    /**
+     * 启动任务
+     * @param taskDto
+     * @return
+     */
+    @RequestMapping(value = "/startTask", method = RequestMethod.POST)
+    int startTask(@RequestBody TaskDto taskDto);
+
+    /**
+     * 停止任务
+     * @param taskDto
+     * @return
+     */
+    @RequestMapping(value = "/stopTask", method = RequestMethod.POST)
+    int stopTask(@RequestBody TaskDto taskDto);
 }
