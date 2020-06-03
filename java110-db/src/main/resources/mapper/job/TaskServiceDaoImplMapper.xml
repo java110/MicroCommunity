@@ -206,7 +206,7 @@
 
 
     <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
-    <select id="getTaskInfo" parameterType="Map" resultType="Map">
+    <select id="getTaskTemplateInfo" parameterType="Map" resultType="Map">
         select t.template_id templateId,t.template_name templateName,t.template_desc templateDesc,t.create_time createTime,t.class_bean classBean
         from task_template t
         where 1 =1
