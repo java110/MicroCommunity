@@ -67,14 +67,13 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
      */
     public void updateTask(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
-        TaskDto taskDto = new TaskDto();
-        taskDto.setTaskId(paramInJson.getString("taskId"));
-        //taskDto.setJobId(paramInJson.getString("jobId"));
-        List<TaskDto> taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
-
-        Assert.listOnlyOne(taskDtos, "未找到需要修改的活动 或多条数据");
-
-        paramInJson.putAll(BeanConvertUtil.beanCovertMap(taskDtos.get(0)));
+//        TaskDto taskDto = new TaskDto();
+//        taskDto.setTaskId(paramInJson.getString("taskId"));
+//        //taskDto.setJobId(paramInJson.getString("jobId"));
+//        List<TaskDto> taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
+//
+//        Assert.listOnlyOne(taskDtos, "未找到需要修改的活动 或多条数据");
+//        paramInJson.putAll(BeanConvertUtil.beanCovertMap(taskDtos.get(0)));
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
         super.update(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_TASK);
 

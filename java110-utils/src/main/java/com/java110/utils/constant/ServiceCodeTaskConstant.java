@@ -36,4 +36,15 @@ public class ServiceCodeTaskConstant {
      */
     public static final String LIST_TASK_TEMPLATE_SPEC = "task.listTaskTemplateSpec";
 
+
+    /**
+     * 启动定时任务
+     */
+    public static final String START_TASK = "task.startTask";
+
+    /**
+     * 停止定时任务
+     */
+    public static final String STOP_TASK = "task.stopTask";
+
 }
