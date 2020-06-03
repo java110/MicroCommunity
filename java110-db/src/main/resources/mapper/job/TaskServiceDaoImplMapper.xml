@@ -88,7 +88,6 @@
         from task t,task_template tt
         where 1 =1
         and t.template_id = tt.template_Id
-        and
         <if test="taskCron !=null and taskCron != ''">
             and t.task_cron= #{taskCron}
         </if>
@@ -155,8 +154,9 @@
     <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
     <select id="queryTasksCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from task t
+        from task t,task_template tt
         where 1 =1
+        and t.template_id = tt.template_Id
         <if test="taskCron !=null and taskCron != ''">
             and t.task_cron= #{taskCron}
         </if>
