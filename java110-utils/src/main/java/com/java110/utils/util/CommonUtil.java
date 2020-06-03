@@ -4,6 +4,9 @@ import com.java110.utils.log.LoggerEngine;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -94,5 +97,31 @@ public class CommonUtil extends LoggerEngine {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 根据身份证号获取年龄
+     * @param certId
+     * @return
+     */
+    public static String getAgeByCertId(String certId) {
+        String birthday = "";
+        if (certId.length() == 18) {
+            birthday = certId.substring(6, 10) + "/"
+                    + certId.substring(10, 12) + "/"
+                    + certId.substring(12, 14);
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Date now = new Date();
+        Date birth = new Date();
+        try {
+            birth = sdf.parse(birthday);
+        } catch (ParseException e) {
+        }
+        long intervalMilli = now.getTime() - birth.getTime();
+        int age = (int) (intervalMilli/(24 * 60 * 60 * 1000))/365;
+        System.out.println(age);
+        return age +"";
     }
 }

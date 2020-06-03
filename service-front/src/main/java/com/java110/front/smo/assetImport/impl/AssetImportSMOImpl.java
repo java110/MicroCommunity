@@ -2,18 +2,19 @@ package com.java110.front.smo.assetImport.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.FeeTypeConstant;
-import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.util.ImportExcelUtils;
-import com.java110.utils.util.StringUtil;
+import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.entity.assetImport.ImportFloor;
 import com.java110.entity.assetImport.ImportOwner;
 import com.java110.entity.assetImport.ImportParkingSpace;
 import com.java110.entity.assetImport.ImportRoom;
 import com.java110.entity.component.ComponentValidateResult;
-import com.java110.core.component.BaseComponentSMO;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
+import com.java110.utils.constant.FeeTypeConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.CommonUtil;
+import com.java110.utils.util.ImportExcelUtils;
+import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -137,7 +138,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (savedParkingAreaInfo == null) {
                 apiUrl = ServiceConstant.SERVICE_API_URL + "/api/parkingArea.saveParkingArea";
                 paramIn.put("communityId", result.getCommunityId());
-                paramIn.put("typeCd",parkingSpace.getTypeCd());
+                paramIn.put("typeCd", parkingSpace.getTypeCd());
                 paramIn.put("num", parkingSpace.getPaNum());
                 responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
                 savedParkingAreaInfo = getExistsParkingArea(pd, result, parkingSpace);
@@ -188,13 +189,13 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("storeId", result.getStoreId());
             paramIn.put("sellOrHire", parkingSpace.getSellOrHire());
 
-            if("H".equals(parkingSpace.getSellOrHire())){
+            if ("H".equals(parkingSpace.getSellOrHire())) {
                 paramIn.put("cycles", "0");
             }
 
             String feeTypeCd = "1001".equals(parkingSpace.getTypeCd())
                     ? FeeTypeConstant.FEE_TYPE_SELL_UP_PARKING_SPACE : FeeTypeConstant.FEE_TYPE_SELL_DOWN_PARKING_SPACE;
-            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd+"&isDefault=T";
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId() + "&feeTypeCd=" + feeTypeCd + "&isDefault=T";
             responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -377,7 +378,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("link", owner.getTel());
             paramIn.put("sex", owner.getSex());
             paramIn.put("ownerTypeCd", "1001");
-            paramIn.put("idCard",owner.getIdCard());
+            paramIn.put("idCard", owner.getIdCard());
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 savedOwnerInfo = getExistsOwner(pd, result, owner);
@@ -417,7 +418,6 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (responseEntity != null && responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
                 continue;
             }
-
 
 
             if (savedFloorInfo == null) {
@@ -693,13 +693,16 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+            String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
+            String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
+            String age = StringUtil.isNullOrNone(os[2]) ? CommonUtil.getAgeByCertId(idCard) : os[2].toString();
             importOwner = new ImportOwner();
             importOwner.setOwnerNum(os[0].toString());
             importOwner.setOwnerName(os[1].toString());
             importOwner.setSex("男".equals(os[2].toString()) ? "0" : "1");
-            importOwner.setAge(Integer.parseInt(os[3].toString()));
-            importOwner.setTel(os[4].toString());
-            importOwner.setIdCard(os[5].toString());
+            importOwner.setAge(Integer.parseInt(age));
+            importOwner.setTel(tel);
+            importOwner.setIdCard(idCard);
             owners.add(importOwner);
         }
     }
@@ -732,6 +735,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             floors.add(importFloor);
         }
     }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;
