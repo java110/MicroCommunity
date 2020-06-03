@@ -74,10 +74,36 @@ public class TaskBMOImpl extends ApiBaseBMO implements ITaskBMO {
 
         Assert.listOnlyOne(taskDtos, "未找到需要修改的活动 或多条数据");
 
-
         paramInJson.putAll(BeanConvertUtil.beanCovertMap(taskDtos.get(0)));
         TaskPo taskPo = BeanConvertUtil.covertBean(paramInJson, TaskPo.class);
         super.update(dataFlowContext, taskPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_TASK);
+
+        if (!paramInJson.containsKey("templateSpecs")) {
+            return;
+        }
+
+        JSONArray templateSpecs = paramInJson.getJSONArray("templateSpecs");
+        JSONObject specObj = null;
+        TaskAttrPo taskAttrPo = null;
+        for (int specIndex = 0; specIndex < templateSpecs.size(); specIndex++) {
+            specObj = templateSpecs.getJSONObject(specIndex);
+            if (specObj.containsKey("attrId") && !"-1".equals(specObj.getString("attrId"))) {
+                taskAttrPo = new TaskAttrPo();
+                taskAttrPo.setAttrId(specObj.getString("attrId"));
+                taskAttrPo.setTaskId(taskPo.getTaskId());
+                taskAttrPo.setValue(specObj.getString("value"));
+                taskAttrPo.setSpecCd(specObj.getString("specCd"));
+                super.update(dataFlowContext, taskAttrPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_TASK_ATTR);
+
+                continue;
+            }
+            taskAttrPo = new TaskAttrPo();
+            taskAttrPo.setAttrId("-" + (specIndex + 1));
+            taskAttrPo.setTaskId(taskPo.getTaskId());
+            taskAttrPo.setValue(specObj.getString("value"));
+            taskAttrPo.setSpecCd(specObj.getString("specCd"));
+            super.insert(dataFlowContext, taskAttrPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_TASK_ATTR);
+        }
     }
 
 
