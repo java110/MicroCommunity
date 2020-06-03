@@ -1,9 +1,11 @@
 package com.java110.dto.task;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.taskAttr.TaskAttrDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -22,6 +24,8 @@ public class TaskDto extends PageDto implements Serializable {
     private String templateId;
     private String templateName;
     private String taskId;
+
+    private List<TaskAttrDto> taskAttr;
 
 
     private Date createTime;
@@ -101,5 +105,13 @@ public class TaskDto extends PageDto implements Serializable {
 
     public void setTemplateName(String templateName) {
         this.templateName = templateName;
+    }
+
+    public List<TaskAttrDto> getTaskAttr() {
+        return taskAttr;
+    }
+
+    public void setTaskAttr(List<TaskAttrDto> taskAttr) {
+        this.taskAttr = taskAttr;
     }
 }

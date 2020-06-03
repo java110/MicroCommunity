@@ -6,7 +6,9 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.task.ITaskInnerServiceSMO;
+import com.java110.core.smo.taskAttr.ITaskAttrInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
+import com.java110.dto.taskAttr.TaskAttrDto;
 import com.java110.result.ResultVo;
 import com.java110.utils.constant.ServiceCodeTaskConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -26,6 +28,9 @@ public class ListTasksListener extends AbstractServiceApiListener {
 
     @Autowired
     private ITaskInnerServiceSMO taskInnerServiceSMOImpl;
+
+    @Autowired
+    private ITaskAttrInnerServiceSMO taskAttrInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -68,6 +73,7 @@ public class ListTasksListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             taskDtos = taskInnerServiceSMOImpl.queryTasks(taskDto);
+            freshTaskAttr(taskDtos);
         } else {
             taskDtos = new ArrayList<>();
         }
@@ -77,6 +83,23 @@ public class ListTasksListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+
+    }
+
+    /**
+     * 查询属性
+     *
+     * @param taskDtos
+     */
+    private void freshTaskAttr(List<TaskDto> taskDtos) {
+
+        for (TaskDto taskDto : taskDtos) {
+            TaskAttrDto taskAttrDto = new TaskAttrDto();
+            taskAttrDto.setTaskId(taskDto.getTaskId());
+            List<TaskAttrDto> taskAttrDtos = taskAttrInnerServiceSMOImpl.queryTaskAttrs(taskAttrDto);
+            taskDto.setTaskAttr(taskAttrDtos);
+        }
+
 
     }
 }
