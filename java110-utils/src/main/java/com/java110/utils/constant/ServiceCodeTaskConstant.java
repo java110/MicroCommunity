@@ -26,6 +26,14 @@ public class ServiceCodeTaskConstant {
      * 查询 定时任务
      */
     public static final String LIST_TASKS = "task.listTasks";
+    /**
+     * 查询 定时任务模板
+     */
+    public static final String LIST_TASK_TEMPLATE = "task.listTaskTemplate";
 
+    /**
+     * 查询 定时任务模板规格
+     */
+    public static final String LIST_TASK_TEMPLATE_SPEC = "task.listTaskTemplateSpec";
 
 }

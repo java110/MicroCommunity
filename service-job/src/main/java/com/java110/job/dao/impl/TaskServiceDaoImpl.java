@@ -126,5 +126,70 @@ public class TaskServiceDaoImpl extends BaseServiceDao implements ITaskServiceDa
         return Integer.parseInt(businessTaskInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询定时任务数量
+     * @param info 定时任务信息
+     * @return 定时任务数量
+     */
+    @Override
+    public int queryTaskTemplateCount(Map info) {
+        logger.debug("查询定时任务模板数据 入参 info : {}",info);
+
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.queryTaskTemplateCount", info);
+        if (businessTaskInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessTaskInfos.get(0).get("count").toString());
+    }
+
+    /**
+     * 查询定时任务信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getTaskTemplateInfo(Map info) throws DAOException {
+        logger.debug("查询定时任务信息 入参 info : {}",info);
+
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.getTaskTemplateInfo",info);
+
+        return businessTaskInfos;
+    }
+
+    /**
+     * 查询定时任务数量
+     * @param info 定时任务信息
+     * @return 定时任务数量
+     */
+    @Override
+    public int queryTaskTemplateSpecCount(Map info) {
+        logger.debug("查询定时任务模板数据 入参 info : {}",info);
+
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.queryTaskTemplateCount", info);
+        if (businessTaskInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessTaskInfos.get(0).get("count").toString());
+    }
+
+    /**
+     * 查询定时任务信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> getTaskTemplateSpecInfo(Map info) throws DAOException {
+        logger.debug("查询定时任务信息 入参 info : {}",info);
+
+        List<Map> businessTaskInfos = sqlSessionTemplate.selectList("taskServiceDaoImpl.getTaskTemplateInfo",info);
+
+        return businessTaskInfos;
+    }
+
+
 
 }

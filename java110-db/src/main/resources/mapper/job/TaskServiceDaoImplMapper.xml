@@ -5,183 +5,278 @@
 <mapper namespace="taskServiceDaoImpl">
 
     <!-- 保存定时任务信息 add by wuxw 2018-07-03 -->
-       <insert id="saveBusinessTaskInfo" parameterType="Map">
-           insert into business_task(
-operate,task_cron,create_time,task_name,state,b_id,template_id,task_id
-) values (
-#{operate},#{taskCron},#{createTime},#{taskName},#{state},#{bId},#{templateId},#{taskId}
-)
-       </insert>
+    <insert id="saveBusinessTaskInfo" parameterType="Map">
+        insert into business_task(
+        operate,task_cron,create_time,task_name,state,b_id,template_id,task_id
+        ) values (
+        #{operate},#{taskCron},#{createTime},#{taskName},#{state},#{bId},#{templateId},#{taskId}
+        )
+    </insert>
 
 
-       <!-- 查询定时任务信息（Business） add by wuxw 2018-07-03 -->
-       <select id="getBusinessTaskInfo" parameterType="Map" resultType="Map">
-           select  t.operate,t.task_cron,t.task_cron taskCron,t.create_time,t.create_time createTime,t.task_name,t.task_name taskName,t.state,t.b_id,t.b_id bId,t.template_id,t.template_id templateId,t.task_id,t.task_id taskId 
-from business_task t 
-where 1 =1 
-<if test="operate !=null and operate != ''">
-   and t.operate= #{operate}
-</if> 
-<if test="taskCron !=null and taskCron != ''">
-   and t.task_cron= #{taskCron}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="taskName !=null and taskName != ''">
-   and t.task_name= #{taskName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="templateId !=null and templateId != ''">
-   and t.template_id= #{templateId}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
+    <!-- 查询定时任务信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessTaskInfo" parameterType="Map" resultType="Map">
+        select t.operate,t.task_cron,t.task_cron taskCron,t.create_time,t.create_time createTime,t.task_name,t.task_name
+        taskName,t.state,t.b_id,t.b_id bId,t.template_id,t.template_id templateId,t.task_id,t.task_id taskId
+        from business_task t
+        where 1 =1
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="taskCron !=null and taskCron != ''">
+            and t.task_cron= #{taskCron}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="taskName !=null and taskName != ''">
+            and t.task_name= #{taskName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
 
-       </select>
-
-
-
+    </select>
 
 
     <!-- 保存定时任务信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveTaskInfoInstance" parameterType="Map">
         insert into task(
-task_cron,create_time,task_name,status_cd,state,b_id,template_id,task_id
-) select t.task_cron,t.create_time,t.task_name,'0',t.state,t.b_id,t.template_id,t.task_id from business_task t where 1=1
-   and t.operate= 'ADD'
-<if test="taskCron !=null and taskCron != ''">
-   and t.task_cron= #{taskCron}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="taskName !=null and taskName != ''">
-   and t.task_name= #{taskName}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="templateId !=null and templateId != ''">
-   and t.template_id= #{templateId}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
+        task_cron,create_time,task_name,status_cd,state,b_id,template_id,task_id
+        ) select t.task_cron,t.create_time,t.task_name,'0',t.state,t.b_id,t.template_id,t.task_id from business_task t
+        where 1=1
+        and t.operate= 'ADD'
+        <if test="taskCron !=null and taskCron != ''">
+            and t.task_cron= #{taskCron}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="taskName !=null and taskName != ''">
+            and t.task_name= #{taskName}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
 
     </insert>
 
 
-
     <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
     <select id="getTaskInfo" parameterType="Map" resultType="Map">
-        select  t.task_cron,t.task_cron taskCron,t.create_time,t.create_time createTime,t.task_name,t.task_name taskName,t.status_cd,t.status_cd statusCd,t.state,t.b_id,t.b_id bId,t.template_id,t.template_id templateId,t.task_id,t.task_id taskId 
-from task t 
-where 1 =1 
-<if test="taskCron !=null and taskCron != ''">
-   and t.task_cron= #{taskCron}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="taskName !=null and taskName != ''">
-   and t.task_name= #{taskName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="templateId !=null and templateId != ''">
-   and t.template_id= #{templateId}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.task_cron,t.task_cron taskCron,t.create_time,t.create_time createTime,t.task_name,t.task_name
+        taskName,t.status_cd,t.status_cd statusCd,t.state,t.b_id,t.b_id bId,t.template_id,t.template_id
+        templateId,t.task_id,t.task_id taskId
+        from task t
+        where 1 =1
+        <if test="taskCron !=null and taskCron != ''">
+            and t.task_cron= #{taskCron}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="taskName !=null and taskName != ''">
+            and t.task_name= #{taskName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改定时任务信息 add by wuxw 2018-07-03 -->
     <update id="updateTaskInfoInstance" parameterType="Map">
-        update  task t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="taskCron !=null and taskCron != ''">
-, t.task_cron= #{taskCron}
-</if> 
-<if test="createTime !=null and createTime != ''">
-, t.create_time= #{createTime}
-</if> 
-<if test="taskName !=null and taskName != ''">
-, t.task_name= #{taskName}
-</if> 
-<if test="state !=null and state != ''">
-, t.state= #{state}
-</if> 
-<if test="templateId !=null and templateId != ''">
-, t.template_id= #{templateId}
-</if> 
- where 1=1 <if test="bId !=null and bId != ''">
-and t.b_id= #{bId}
-</if> 
-<if test="taskId !=null and taskId != ''">
-and t.task_id= #{taskId}
-</if> 
+        update task t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="taskCron !=null and taskCron != ''">
+            , t.task_cron= #{taskCron}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            , t.create_time= #{createTime}
+        </if>
+        <if test="taskName !=null and taskName != ''">
+            , t.task_name= #{taskName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            , t.template_id= #{templateId}
+        </if>
+        where 1=1
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
 
     </update>
 
     <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
-     <select id="queryTasksCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from task t 
-where 1 =1 
-<if test="taskCron !=null and taskCron != ''">
-   and t.task_cron= #{taskCron}
-</if> 
-<if test="createTime !=null and createTime != ''">
-   and t.create_time= #{createTime}
-</if> 
-<if test="taskName !=null and taskName != ''">
-   and t.task_name= #{taskName}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="state !=null and state != ''">
-   and t.state= #{state}
-</if> 
-<if test="bId !=null and bId != ''">
-   and t.b_id= #{bId}
-</if> 
-<if test="templateId !=null and templateId != ''">
-   and t.template_id= #{templateId}
-</if> 
-<if test="taskId !=null and taskId != ''">
-   and t.task_id= #{taskId}
-</if> 
+    <select id="queryTasksCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from task t
+        where 1 =1
+        <if test="taskCron !=null and taskCron != ''">
+            and t.task_cron= #{taskCron}
+        </if>
+        <if test="createTime !=null and createTime != ''">
+            and t.create_time= #{createTime}
+        </if>
+        <if test="taskName !=null and taskName != ''">
+            and t.task_name= #{taskName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
 
 
-     </select>
+    </select>
+
+
+    <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
+    <select id="queryTaskTemplateCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from task_template t
+        where 1 =1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="templateName !=null and templateName != ''">
+            and t.template_name= #{templateName}
+        </if>
+        <if test="className !=null and className != ''">
+            and t.class_bean= #{className}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+    </select>
+
+
+    <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
+    <select id="getTaskInfo" parameterType="Map" resultType="Map">
+        select t.template_id templateId,t.template_name templateName,t.template_desc templateDesc,t.create_time createTime,t.class_bean classBean
+        from task_template t
+        where 1 =1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="templateName !=null and templateName != ''">
+            and t.template_name= #{templateName}
+        </if>
+        <if test="className !=null and className != ''">
+            and t.class_bean= #{className}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 查询定时任务数量 add by wuxw 2018-07-03 -->
+    <select id="queryTaskTemplateSpecCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from task_template_spec t
+        where 1 =1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        <if test="specDesc !=null and specDesc != ''">
+            and t.spec_desc= #{specDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+    </select>
+
+
+    <!-- 查询定时任务信息 add by wuxw 2018-07-03 -->
+    <select id="getTaskTemplateSpecInfo" parameterType="Map" resultType="Map">
+        select t.template_id templateId,t.spec_id specId,t.spec_cd specCd,t.create_time createTime,t.spec_name specName,
+        t.spec_desc specDesc,t.is_show isShow
+        from task_template_spec t
+        where 1 =1
+        <if test="templateId !=null and templateId != ''">
+            and t.template_id= #{templateId}
+        </if>
+        <if test="specCd !=null and specCd != ''">
+            and t.spec_cd= #{specCd}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        <if test="specDesc !=null and specDesc != ''">
+            and t.spec_desc= #{specDesc}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+
+    </select>
+
 
 </mapper>

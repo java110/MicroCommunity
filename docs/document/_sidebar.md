@@ -25,14 +25,10 @@
 * Api开放接口
 
   * [用户类接口](api/user/index.md)
-  * [用户注册](api/user/register.md)
-  * [用户登录](api/user/login.md)
   * [游客登记](api/user/saveVisit.md)
   * [访客登记变更](api/user/updateVisit.md)
   * [访客记录查询](api/user/listVisits.md)
   * [上传业主照片](api/user/uploadOwnerPhoto.md)
-  * [用户校验登录](api/user/checkLogin.md)
-  * [用户退出登录](api/user/logout.md)
   * [保存商户](api/store/saveStore.md)
   * [删除用户权限](api/privilege/deleteStaffPrivilege.md)
   * [查询已入驻的小区](api/community/queryMyCommunity.md)
