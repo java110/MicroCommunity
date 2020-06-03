@@ -129,9 +129,6 @@
         <if test="taskCron !=null and taskCron != ''">
             , t.task_cron= #{taskCron}
         </if>
-        <if test="createTime !=null and createTime != ''">
-            , t.create_time= #{createTime}
-        </if>
         <if test="taskName !=null and taskName != ''">
             , t.task_name= #{taskName}
         </if>
