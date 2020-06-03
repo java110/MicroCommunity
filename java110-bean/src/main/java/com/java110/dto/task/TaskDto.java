@@ -18,7 +18,9 @@ public class TaskDto extends PageDto implements Serializable {
     private String taskCron;
     private String taskName;
     private String state;
+    private String stateName;
     private String templateId;
+    private String templateName;
     private String taskId;
 
 
@@ -83,5 +85,21 @@ public class TaskDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 }

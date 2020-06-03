@@ -84,9 +84,11 @@
     <select id="getTaskInfo" parameterType="Map" resultType="Map">
         select t.task_cron,t.task_cron taskCron,t.create_time,t.create_time createTime,t.task_name,t.task_name
         taskName,t.status_cd,t.status_cd statusCd,t.state,t.b_id,t.b_id bId,t.template_id,t.template_id
-        templateId,t.task_id,t.task_id taskId
-        from task t
+        templateId,t.task_id,t.task_id taskId,tt.template_name templateName
+        from task t,task_template tt
         where 1 =1
+        and t.template_id = tt.template_Id
+        and
         <if test="taskCron !=null and taskCron != ''">
             and t.task_cron= #{taskCron}
         </if>
