@@ -46,7 +46,7 @@ public class VisitBMOImpl extends ApiBaseBMO implements IVisitBMO {
 
         JSONObject businessVisit = new JSONObject();
         businessVisit.putAll(paramInJson);
-        businessVisit.put("vId", "-1");
+
         VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
         super.insert(dataFlowContext, visitPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_VISIT);
     }
