@@ -1,6 +1,9 @@
 package com.java110.job.quartz;
 
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.dto.taskAttr.TaskAttrDto;
 import com.java110.job.dao.ITaskServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,9 @@ public abstract class TaskSystemQuartz {
 
     @Autowired
     private ITaskServiceDao taskServiceDaoImpl;
+
+    @Autowired
+    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
 
 
     public void initTask() {
@@ -92,5 +98,34 @@ public abstract class TaskSystemQuartz {
      */
     protected void after(TaskDto taskDto) {
 
+    }
+
+    /**
+     * 查询小区信息
+     *
+     * @return
+     */
+    protected List<CommunityDto> getAllCommunity() {
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setState("1100"); //审核过的小区
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        return communityDtos;
+    }
+
+    /**
+     * 获取当前属性
+     * @param taskDto
+     * @param specCd
+     * @return
+     */
+    protected TaskAttrDto getCurTaskAttr(TaskDto taskDto, String specCd) {
+        List<TaskAttrDto> taskAttrDtos = taskDto.getTaskAttr();
+        for (TaskAttrDto taskAttrDto : taskAttrDtos) {
+            if (specCd.equals(taskAttrDto.getSpecCd())) {
+                return taskAttrDto;
+            }
+        }
+
+        return null;
     }
 }

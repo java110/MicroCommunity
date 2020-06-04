@@ -29,10 +29,10 @@
         <if test="computingFormula !=null and computingFormula != ''">
             and t.computing_formula= #{computingFormula}
         </if>
-        <if test="additionalAmount !=null and additionalAmount != ''">
+        <if test="additionalAmount !=null and additionalAmount != '' or additionalAmount == 0">
             and t.additional_amount= #{additionalAmount}
         </if>
-        <if test="squarePrice !=null and squarePrice != ''">
+        <if test="squarePrice !=null and squarePrice != '' or squarePrice == 0">
             and t.square_price= #{squarePrice}
         </if>
         <if test="isDefault !=null and isDefault != ''">
