@@ -11,6 +11,8 @@ public class OrderDto extends PageDto implements Serializable {
 
     private String businessTypeCd;
 
+    private String[] businessTypeCds;
+
 
     public String getoId() {
         return oId;
@@ -34,5 +36,13 @@ public class OrderDto extends PageDto implements Serializable {
 
     public void setBusinessTypeCd(String businessTypeCd) {
         this.businessTypeCd = businessTypeCd;
+    }
+
+    public String[] getBusinessTypeCds() {
+        return businessTypeCds;
+    }
+
+    public void setBusinessTypeCds(String[] businessTypeCds) {
+        this.businessTypeCds = businessTypeCds;
     }
 }

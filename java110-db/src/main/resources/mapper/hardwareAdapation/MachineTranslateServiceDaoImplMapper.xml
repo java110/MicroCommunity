@@ -264,7 +264,16 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
     </select>
 
     <update id="updateMachineTranslateState" parameterType="Map">
-        update machine_translate t set t.state = #{state}
+        update machine_translate t set
+        <if test="statusCd !=null and statusCd != ''">
+            t.status_cd= #{statusCd},
+        </if>
+        <if test="state !=null and state != ''">
+            t.state= #{state},
+        </if>
+        <if test="updateTime !=null ">
+            t.update_time= #{updateTime}
+        </if>
         where
         t.machine_code= #{machineCode}
         <if test="communityId !=null and communityId != ''">

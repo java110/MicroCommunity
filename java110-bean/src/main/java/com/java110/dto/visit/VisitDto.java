@@ -25,6 +25,7 @@ public class VisitDto extends PageDto implements Serializable {
     private String phoneNumber;
     private String visitCase;
     private String communityId;
+    private String bId;
 
 
     public String getvName() {
@@ -108,5 +109,11 @@ public class VisitDto extends PageDto implements Serializable {
         this.visitTime = visitTime;
     }
 
+    public String getbId() {
+        return bId;
+    }
 
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
 }

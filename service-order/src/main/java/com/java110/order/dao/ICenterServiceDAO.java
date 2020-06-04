@@ -170,6 +170,13 @@ public interface ICenterServiceDAO {
     public List<Map> queryOwenrOrders(Map info);
 
     /**
+     * 根据业务类型查询 订单
+     * @param info
+     * @return
+     */
+    public List<Map> queryOrderByBusinessType(Map info);
+
+    /**
      * 查询业主 添加 修改 删除订单
      *
      * @param info
