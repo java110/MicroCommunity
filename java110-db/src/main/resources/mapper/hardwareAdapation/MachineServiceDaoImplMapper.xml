@@ -146,7 +146,7 @@
         machineTypeCd,t.machine_ip,t.machine_ip machineIp,td.name machineTypeCdName,
         t.state,t.location_type_cd locationTypeCd,t.location_obj_id locationObjId,
         t.location_type_cd,t.location_obj_id,
-        td1.name stateName,td2.name locationTypeName,t.create_time createTime,t.direction,td3.name directionName
+        td1.name stateName,t.create_time createTime,t.direction,td3.name directionName
         from machine t,t_dict td,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.machine_type_cd=td.status_cd
@@ -155,9 +155,6 @@
         and t.state = td1.status_cd
         and td1.table_name='machine'
         and td1.table_columns='state'
-        and t.location_type_cd = td2.status_cd
-        and td2.table_name='machine'
-        and td2.table_columns='location_type_cd'
         and t.direction = td3.status_cd
         and td3.table_name='machine'
         and td3.table_columns='direction'
