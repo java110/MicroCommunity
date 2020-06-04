@@ -167,7 +167,7 @@ public class GenerateRoomBillTemplate extends TaskSystemQuartz {
         billOweFeeDto.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
         billOweFeeDto.setFeeId(feeDto.getFeeId());
         billOweFeeDto.setBillId("-1");
-        billOweFeeDto.setAmountOwed();
+        //billOweFeeDto.setAmountOwed();
 
     }
 
