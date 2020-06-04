@@ -4,16 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.smo.community.ICommunityLocationInnerServiceSMO;
 import com.java110.core.smo.floor.IFloorInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.communityLocation.CommunityLocationDto;
 import com.java110.dto.hardwareAdapation.MachineDto;
 import com.java110.dto.unit.FloorAndUnitDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,9 @@ public class ListMachinesListener extends AbstractServiceApiListener {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -129,6 +134,20 @@ public class ListMachinesListener extends AbstractServiceApiListener {
 
     }
 
+    private void getMachineLocation(MachineDto machineDto) {
+        CommunityLocationDto communityLocationDto = new CommunityLocationDto();
+        communityLocationDto.setCommunityId(machineDto.getCommunityId());
+        communityLocationDto.setLocationId(machineDto.getLocationTypeCd());
+        List<CommunityLocationDto> communityLocationDtos = communityLocationInnerServiceSMOImpl.queryCommunityLocations(communityLocationDto);
+
+        if (communityLocationDtos == null || communityLocationDtos.size() < 1) {
+            machineDto.setLocationType(machineDto.getLocationTypeCd());
+            return;
+        }
+
+        machineDto.setLocationType(communityLocationDtos.get(0).getLocationType());
+    }
+
     /**
      * 获取批量小区
      *
@@ -139,10 +158,10 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         List<String> communityIds = new ArrayList<String>();
         List<MachineDto> tmpMachineDtos = new ArrayList<>();
         for (MachineDto machineDto : machines) {
-
-            if (!"2000".equals(machineDto.getLocationTypeCd())
-                    && !"3000".equals(machineDto.getLocationTypeCd())
-                            && !"4000".equals(machineDto.getLocationTypeCd())
+            getMachineLocation(machineDto);
+            if (!"2000".equals(machineDto.getLocationType())
+                    && !"3000".equals(machineDto.getLocationType())
+                    && !"4000".equals(machineDto.getLocationType())
             ) {
                 communityIds.add(machineDto.getLocationObjId());
                 tmpMachineDtos.add(machineDto);
@@ -179,8 +198,8 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         List<String> unitIds = new ArrayList<String>();
         List<MachineDto> tmpMachineDtos = new ArrayList<>();
         for (MachineDto machineDto : machines) {
-
-            if ("2000".equals(machineDto.getLocationTypeCd())) {
+            getMachineLocation(machineDto);
+            if ("2000".equals(machineDto.getLocationType())) {
                 unitIds.add(machineDto.getLocationObjId());
                 tmpMachineDtos.add(machineDto);
             }
@@ -216,8 +235,8 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         List<String> roomIds = new ArrayList<String>();
         List<MachineDto> tmpMachineDtos = new ArrayList<>();
         for (MachineDto machineDto : machines) {
-
-            if ("3000".equals(machineDto.getLocationTypeCd())) {
+            getMachineLocation(machineDto);
+            if ("3000".equals(machineDto.getLocationType())) {
                 roomIds.add(machineDto.getLocationObjId());
                 tmpMachineDtos.add(machineDto);
             }
@@ -253,7 +272,7 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         for (MachineDto machineDto : machines) {
 
             if ("4000".equals(machineDto.getLocationTypeCd())) {
-               machineDto.setLocationObjName("未分配");
+                machineDto.setLocationObjName("未分配");
             }
         }
 
