@@ -107,4 +107,22 @@ public interface IFeeServiceDao {
      */
     public List<Map> queryBillOweFees(Map info) throws DAOException;
 
+    /**
+     * 查询账单欠费
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    int insertBillOweFees(Map info) throws DAOException;
+
+    /**
+     *  保存账单
+     *
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    int insertBill(Map info) throws DAOException;
+
 }

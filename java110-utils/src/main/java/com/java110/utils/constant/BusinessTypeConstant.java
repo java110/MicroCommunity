@@ -1052,4 +1052,24 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_DELETE_TASK_ATTR="560300050001";
 
 
+
+    /**
+     *  保存任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_LOCATION="570100030001";
+
+
+    /**
+     *  修改任务
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_LOCATION="570100040001";
+
+    /**
+     * 删除任务
+     */
+    public static final String BUSINESS_TYPE_DELETE_LOCATION="570100050001";
+
+
 }

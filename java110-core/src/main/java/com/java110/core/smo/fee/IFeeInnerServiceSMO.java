@@ -78,4 +78,21 @@ public interface IFeeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryBillOweFees", method = RequestMethod.POST)
     public List<BillOweFeeDto> queryBillOweFees(@RequestBody BillOweFeeDto billDto);
+
+    /**
+     * 保存欠费
+     *
+     * @param billDto
+     * @return
+     */
+    @RequestMapping(value = "/insertBillOweFees", method = RequestMethod.POST)
+    public int insertBillOweFees(@RequestBody BillOweFeeDto billDto) ;
+    /**
+     * 保存账单
+     *
+     * @param billDto
+     * @return
+     */
+    @RequestMapping(value = "/insertBill", method = RequestMethod.POST)
+    public int insertBill(@RequestBody BillDto billDto);
 }

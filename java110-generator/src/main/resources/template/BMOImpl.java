@@ -44,16 +44,6 @@ public class @@TemplateCode@@BMOImpl extends ApiBaseBMO implements I@@TemplateCo
      * @return 订单服务能够接受的报文
      */
     public void update@@TemplateCode@@(JSONObject paramInJson, DataFlowContext dataFlowContext) {
-
-        @@TemplateCode@@Dto @@templateCode@@Dto = new @@TemplateCode@@Dto();
-        @@templateCode@@Dto.set@@TemplateKey@@(paramInJson.getString("@@templateKey@@"));
-        @@templateCode@@Dto.set@@ShareName@@Id(paramInJson.getString("@@shareName@@Id"));
-        List<@@TemplateCode@@Dto> @@templateCode@@Dtos = @@templateCode@@InnerServiceSMOImpl.query@@TemplateCode@@s(@@templateCode@@Dto);
-
-        Assert.listOnlyOne(@@templateCode@@Dtos, "未找到需要修改的活动 或多条数据");
-
-
-        paramInJson.putAll(BeanConvertUtil.beanCovertMap(@@templateCode@@Dtos.get(0)));
         @@TemplateCode@@Po @@templateCode@@Po = BeanConvertUtil.covertBean(paramInJson, @@TemplateCode@@Po.class);
         super.update(dataFlowContext, @@templateCode@@Po, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_@@TEMPLATECODE@@);
     }

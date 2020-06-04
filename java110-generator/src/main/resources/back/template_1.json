@@ -1,42 +1,37 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "taskAttr",
-  "desc": "定时任务属性",
-  "shareParam": "task_id",
-  "shareColumn": "taskId",
-  "shareName": "job",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_TASK_ATTR",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_TASK_ATTR",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_TASK_ATTR",
-  "newBusinessTypeCdValue": "560300030001",
-  "updateBusinessTypeCdValue": "560300040001",
-  "deleteBusinessTypeCdValue": "560300050001",
-  "businessTableName": "business_task_attr",
-  "tableName": "task_attr",
+  "id": "locationId",
+  "name": "communityLocation",
+  "desc": "小区位置",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "community",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_LOCATION",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_LOCATION",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_LOCATION",
+  "newBusinessTypeCdValue": "570100030001",
+  "updateBusinessTypeCdValue": "570100040001",
+  "deleteBusinessTypeCdValue": "570100050001",
+  "businessTableName": "business_community_location",
+  "tableName": "community_location",
   "param": {
-    "attrId": "attr_id",
+    "locationId": "location_id",
     "bId": "b_id",
-    "taskId": "task_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "locationName": "location_name",
+    "locationType": "location_type",
+    "communityId": "community_id",
     "statusCd": "status_cd",
-    "createTime": "create_time",
     "operate": "operate"
   },
   "required": [
     {
-
-      "code": "taskId",
-      "msg": "任务不能为空"
+      "code": "locationName",
+      "msg": "位置名称不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "任务属性不能为空"
-    },
-    {
-      "code": "value",
-      "msg": "任务属性值不能为空"
+      "code": "locationType",
+      "msg": "位置类型不能为空"
     }
   ]
 }
+
