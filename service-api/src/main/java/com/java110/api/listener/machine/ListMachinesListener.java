@@ -99,7 +99,8 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         if (count > 0) {
             List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
             // 刷新 位置信息
-            refreshMachines(machineDtos);
+            //refreshMachines(machineDtos);
+            refreshMachineLocation(machineDtos);
             machines = BeanConvertUtil.covertBeanList(machineDtos, ApiMachineDataVo.class);
         } else {
             machines = new ArrayList<>();
@@ -117,6 +118,11 @@ public class ListMachinesListener extends AbstractServiceApiListener {
 
     }
 
+    private void refreshMachineLocation(List<MachineDto> machines) {
+        for (MachineDto machineDto : machines) {
+            getMachineLocation(machineDto);
+        }
+    }
 
     private void refreshMachines(List<MachineDto> machines) {
 
@@ -146,6 +152,7 @@ public class ListMachinesListener extends AbstractServiceApiListener {
         }
 
         machineDto.setLocationType(communityLocationDtos.get(0).getLocationType());
+        machineDto.setLocationObjName(communityLocationDtos.get(0).getLocationName());
     }
 
     /**
