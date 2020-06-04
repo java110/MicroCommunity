@@ -1,0 +1,73 @@
+{
+  "templateName":"小程序管理",
+  "directories": "property",
+  "templateCode":"smallWeChat",
+  "templateKey":"weChatId",
+  "templateKeyName":"编码",
+  "searchCode": "name",
+  "searchName": "小程序名称",
+  "conditions": [
+    {
+      "name": "小程序名称",
+      "inputType": "input",
+      "code": "name",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "appId",
+      "inputType": "input",
+      "code": "appId",
+      "whereCondition": "equal"
+    }
+  ],
+  "columns":[
+    {
+      "code":"name",
+      "cnCode":"小程序名称",
+      "desc":"必填，请填写小程序名称",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"max",
+      "limitParam":"1,100",
+      "limitErrInfo":"小程序名称不能超过100位",
+      "show": true
+    },
+    {
+      "code": "appId",
+      "cnCode":"appId",
+      "desc":"必填，请填写appId",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,100",
+      "limitErrInfo":"appId不能超过100位",
+      "show": true
+    },
+    {
+      "code":"appSecret",
+      "cnCode":"应用密钥",
+      "desc":"必填，请填写应用密钥",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,200",
+      "limitErrInfo":"应用密钥不能超过200个字符",
+      "show": true
+    },
+    {
+      "code": "payPassword",
+      "cnCode":"支付密码",
+      "desc":"必填，请填写支付密码",
+      "required":true,
+      "hasDefaultValue":false,
+      "inputType": "input",
+      "limit":"maxin",
+      "limitParam":"1,200",
+      "limitErrInfo":"支付密码不能超过200个字符",
+      "show": true
+    }
+  ]
+}

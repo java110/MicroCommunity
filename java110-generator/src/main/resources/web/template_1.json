@@ -1,72 +1,58 @@
 {
-  "templateName":"小程序管理",
+  "templateName":"位置管理",
   "directories": "property",
-  "templateCode":"smallWeChat",
-  "templateKey":"weChatId",
-  "templateKeyName":"编码",
-  "searchCode": "name",
-  "searchName": "小程序名称",
+  "templateCode":"location",
+  "templateKey":"locationId",
+  "templateKeyName":"位置ID",
+  "searchCode": "locationName",
+  "searchName": "位置名称",
   "conditions": [
     {
-      "name": "小程序名称",
+      "name": "位置名称",
       "inputType": "input",
-      "code": "name",
+      "code": "locationName",
       "whereCondition": "equal"
     },
     {
-      "name": "appId",
+      "name": "位置编码",
       "inputType": "input",
-      "code": "appId",
+      "code": "locationId",
+      "whereCondition": "equal"
+    },
+    {
+      "name": "位置类型",
+      "inputType": "select",
+      "selectValue":"1000,2000,3000",
+      "selectValueName":"小区,单元,房屋",
+      "code": "locationType",
       "whereCondition": "equal"
     }
   ],
   "columns":[
     {
-      "code":"name",
-      "cnCode":"小程序名称",
-      "desc":"必填，请填写小程序名称",
+      "code":"locationName",
+      "cnCode":"位置名称",
+      "desc":"必填，请填写位置名称",
       "required":true,
       "hasDefaultValue":false,
       "inputType": "input",
       "limit":"max",
       "limitParam":"1,100",
-      "limitErrInfo":"小程序名称不能超过100位",
+      "limitErrInfo":"位置名称不能超过100位",
       "show": true
     },
     {
-      "code": "appId",
-      "cnCode":"appId",
-      "desc":"必填，请填写appId",
+      "code": "locationType",
+      "cnCode":"位置类型",
+      "desc":"必填，请填写位置类型",
       "required":true,
       "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"maxin",
-      "limitParam":"1,100",
-      "limitErrInfo":"appId不能超过100位",
-      "show": true
-    },
-    {
-      "code":"appSecret",
-      "cnCode":"应用密钥",
-      "desc":"必填，请填写应用密钥",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"maxin",
-      "limitParam":"1,200",
-      "limitErrInfo":"应用密钥不能超过200个字符",
-      "show": true
-    },
-    {
-      "code": "payPassword",
-      "cnCode":"支付密码",
-      "desc":"必填，请填写支付密码",
-      "required":true,
-      "hasDefaultValue":false,
-      "inputType": "input",
-      "limit":"maxin",
-      "limitParam":"1,200",
-      "limitErrInfo":"支付密码不能超过200个字符",
+      "inputType": "select",
+      "selectValue":"1000,2000,3000",
+      "selectValueName":"小区,单元,房屋",
+      "limit":"num",
+      "limitParam":"",
+      "limitErrInfo":"位置类型 格式错误",
       "show": true
     }
   ]
