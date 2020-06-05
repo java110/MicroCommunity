@@ -9,7 +9,7 @@ import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.ICarInoutInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.hardwareAdapation.CarInoutDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceCodeCarInoutConstant;

@@ -2,7 +2,7 @@ package com.java110.common.thread;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.smo.hardwareAdapation.IApplicationKeyInnerServiceSMO;
-import com.java110.dto.hardwareAdapation.ApplicationKeyDto;
+import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.factory.ApplicationContextFactory;

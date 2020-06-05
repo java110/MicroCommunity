@@ -1,4 +1,4 @@
-package com.java110.dto.hardwareAdapation;
+package com.java110.dto.machine;
 
 import com.java110.dto.PageDto;
 

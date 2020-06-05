@@ -9,7 +9,7 @@ import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
 import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
-import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;

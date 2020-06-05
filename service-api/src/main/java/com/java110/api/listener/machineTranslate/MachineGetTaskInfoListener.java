@@ -2,6 +2,7 @@ package com.java110.api.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.bmo.machineTranslate.IOwnerMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
@@ -10,7 +11,7 @@ import com.java110.core.smo.file.IFileRelInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.hardwareAdapation.IMachineTranslateInnerServiceSMO;
 import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
-import com.java110.dto.hardwareAdapation.MachineTranslateDto;
+import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -49,6 +50,7 @@ public class MachineGetTaskInfoListener extends BaseMachineListener {
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
 
     /**
      * @param event   事件对象

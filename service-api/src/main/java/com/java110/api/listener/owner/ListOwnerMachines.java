@@ -11,7 +11,7 @@ import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.core.smo.unit.IUnitInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;

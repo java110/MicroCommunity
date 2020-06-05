@@ -3,8 +3,8 @@ package com.java110.api.bmo.machineTranslate;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.IApiBaseBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.dto.hardwareAdapation.CarInoutDto;
-import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.machine.CarInoutDto;
+import com.java110.dto.machine.MachineDto;
 
 /**
  * @ClassName IMachineTranslateBMO

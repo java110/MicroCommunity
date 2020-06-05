@@ -13,7 +13,7 @@ import com.java110.core.smo.room.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.hardwareAdapation.CarInoutDto;
+import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.PayFeeConfigPo;

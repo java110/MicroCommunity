@@ -1,7 +1,7 @@
 package com.java110.core.smo.hardwareAdapation;
 
 import com.java110.core.feign.FeignConfiguration;
-import com.java110.dto.hardwareAdapation.CarInoutDto;
+import com.java110.dto.machine.CarInoutDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

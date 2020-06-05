@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.hardwareAdapation.ICarBlackWhiteInnerServiceSMO;
-import com.java110.dto.hardwareAdapation.CarBlackWhiteDto;
+import com.java110.dto.machine.CarBlackWhiteDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeCarBlackWhiteConstant;
 import com.java110.utils.util.Assert;

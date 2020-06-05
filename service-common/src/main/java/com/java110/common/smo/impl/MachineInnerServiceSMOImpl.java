@@ -7,7 +7,7 @@ import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.demo.DemoDto;
-import com.java110.dto.hardwareAdapation.MachineDto;
+import com.java110.dto.machine.MachineDto;
 import com.java110.dto.user.UserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
