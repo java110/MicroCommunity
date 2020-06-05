@@ -2,20 +2,18 @@ package com.java110.community.smo.impl;
 
 
 import com.java110.community.dao.IInspectionServiceDao;
-import com.java110.core.smo.inspectionPoint.IInspectionInnerServiceSMO;
+import com.java110.core.smo.community.IInspectionInnerServiceSMO;
 import com.java110.dto.inspectionPoint.InspectionDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

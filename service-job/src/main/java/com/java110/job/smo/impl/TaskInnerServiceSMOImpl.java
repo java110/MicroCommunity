@@ -2,7 +2,7 @@ package com.java110.job.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.task.ITaskInnerServiceSMO;
+import com.java110.core.smo.job.ITaskInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.task.TaskDto;

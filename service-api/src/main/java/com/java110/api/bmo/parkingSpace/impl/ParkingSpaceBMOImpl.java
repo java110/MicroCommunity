@@ -6,7 +6,7 @@ import com.java110.api.bmo.parkingSpace.IParkingSpaceBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
+import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;

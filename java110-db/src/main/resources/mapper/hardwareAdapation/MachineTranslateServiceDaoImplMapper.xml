@@ -7,19 +7,20 @@
 
     <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveMachineTranslate" parameterType="Map">
-    insert into machine_translate(
-    machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id
-    ) values (
-    #{machineId},#{machineCode},'0',#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId}
-    )
- </insert>
+        insert into machine_translate(
+        machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id
+        ) values (
+        #{machineId},#{machineCode},'0',#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId},#{machineCmd},
+        #{objBId}
+        )
+    </insert>
     <update id="updateMachineTranslate" parameterType="Map">
         update machine_translate t set
         <if test="statusCd !=null and statusCd != ''">
-             t.status_cd= #{statusCd},
+            t.status_cd= #{statusCd},
         </if>
         <if test="state !=null and state != ''">
-             t.state= #{state},
+            t.state= #{state},
         </if>
         <if test="updateTime !=null ">
             t.update_time= #{updateTime}
@@ -38,12 +39,14 @@
     </update>
     <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineTranslateInfo" parameterType="Map">
-           insert into business_machine_translate(
-machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id
-) values (
-#{machineId},#{machineCode},#{operate},#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId}
-)
-       </insert>
+        insert into business_machine_translate(
+        machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id
+        ) values (
+        #{machineId},#{machineCode},#{operate},#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId},
+        #{machineCmd},
+        #{objBId}
+        )
+    </insert>
 
 
     <!-- 查询设备同步信息（Business） add by wuxw 2018-07-03 -->
@@ -51,7 +54,7 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         select t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
         machineCode,t.operate,t.type_cd,t.type_cd typeCd,t.machine_translate_id,t.machine_translate_id
         machineTranslateId,t.obj_id,t.obj_id objId,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId
+        communityId,t.b_id,t.b_id bId,t.machine_cmd,t.obj_b_id
         from business_machine_translate t
         where 1 =1
         <if test="machineId !=null and machineId != ''">
@@ -86,16 +89,17 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         </if>
 
 
-
     </select>
 
 
     <!-- 保存设备同步信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveMachineTranslateInfoInstance" parameterType="Map">
         insert into machine_translate(
-        machine_id,machine_code,type_cd,machine_translate_id,obj_id,status_cd,obj_name,state,community_id,b_id
+        machine_id,machine_code,type_cd,machine_translate_id,obj_id,status_cd,obj_name,state,community_id,b_id,
+        machine_cmd,obj_b_id
         ) select
-        t.machine_id,t.machine_code,t.type_cd,t.machine_translate_id,t.obj_id,'0',t.obj_name,t.state,t.community_id,t.b_id
+        t.machine_id,t.machine_code,t.type_cd,t.machine_translate_id,t.obj_id,'0',t.obj_name,t.state,t.community_id,t.b_id,
+        t.machine_cmd,t.obj_b_id
         from business_machine_translate t where 1=1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -134,7 +138,8 @@ machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,sta
         select t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code machineCode,t.type_cd,t.type_cd
         typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName,t.create_time createTime,t.update_time updateTime
+        communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName,t.create_time createTime,t.update_time
+        updateTime,t.machine_cmd,t.obj_b_id,t.machine_cmd machineCmd,t.obj_b_id objBId
         from machine_translate t,t_dict td,t_dict td1
         where 1 =1
         and t.type_cd=td.status_cd

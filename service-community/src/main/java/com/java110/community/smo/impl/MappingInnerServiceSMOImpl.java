@@ -5,7 +5,7 @@ import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IMappingServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.mapping.IMappingInnerServiceSMO;
+import com.java110.core.smo.community.IMappingInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.mapping.MappingDto;

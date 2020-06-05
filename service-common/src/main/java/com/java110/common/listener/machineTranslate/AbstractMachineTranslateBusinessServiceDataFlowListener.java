@@ -46,6 +46,8 @@ public abstract class AbstractMachineTranslateBusinessServiceDataFlowListener ex
         businessMachineTranslateInfo.put("objName", businessMachineTranslateInfo.get("obj_name"));
         businessMachineTranslateInfo.put("state", businessMachineTranslateInfo.get("state"));
         businessMachineTranslateInfo.put("communityId", businessMachineTranslateInfo.get("community_id"));
+        businessMachineTranslateInfo.put("machineCmd", businessMachineTranslateInfo.get("machine_cmd"));
+        businessMachineTranslateInfo.put("objBId", businessMachineTranslateInfo.get("obj_b_id"));
         businessMachineTranslateInfo.remove("bId");
         businessMachineTranslateInfo.put("statusCd", statusCd);
     }
@@ -79,6 +81,8 @@ public abstract class AbstractMachineTranslateBusinessServiceDataFlowListener ex
         currentMachineTranslateInfo.put("objName", currentMachineTranslateInfo.get("obj_name"));
         currentMachineTranslateInfo.put("state", currentMachineTranslateInfo.get("state"));
         currentMachineTranslateInfo.put("communityId", currentMachineTranslateInfo.get("community_id"));
+        currentMachineTranslateInfo.put("machineCmd", currentMachineTranslateInfo.get("machine_cmd"));
+        currentMachineTranslateInfo.put("objBId", currentMachineTranslateInfo.get("obj_b_id"));
 
 
         currentMachineTranslateInfo.put("operate", StatusConstant.OPERATE_DEL);

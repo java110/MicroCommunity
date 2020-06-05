@@ -6,7 +6,7 @@ import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.core.smo.user.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.CommunityMemberDto;
 import com.java110.dto.owner.OwnerDto;

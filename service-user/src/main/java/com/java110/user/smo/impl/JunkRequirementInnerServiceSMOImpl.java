@@ -2,7 +2,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.junkRequirement.IJunkRequirementInnerServiceSMO;
+import com.java110.core.smo.user.IJunkRequirementInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.junkRequirement.JunkRequirementDto;

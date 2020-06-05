@@ -9,7 +9,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;

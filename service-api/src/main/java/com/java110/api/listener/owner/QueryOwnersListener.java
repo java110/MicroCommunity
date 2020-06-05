@@ -8,7 +8,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.owner.IOwnerInnerServiceSMO;
+import com.java110.core.smo.user.IOwnerInnerServiceSMO;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.ApiOwnerDataVo;

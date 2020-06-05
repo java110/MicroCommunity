@@ -6,7 +6,7 @@ import com.java110.community.dao.IVisitServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 
 import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.core.smo.visit.IVisitInnerServiceSMO;
+import com.java110.core.smo.community.IVisitInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.visit.VisitDto;

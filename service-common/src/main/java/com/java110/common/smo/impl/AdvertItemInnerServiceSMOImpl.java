@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IAdvertItemServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.advert.IAdvertItemInnerServiceSMO;
+import com.java110.core.smo.common.IAdvertItemInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.advert.AdvertItemDto;

@@ -5,7 +5,7 @@ package com.java110.community.smo.impl;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IRoomAttrServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.room.IRoomAttrInnerServiceSMO;
+import com.java110.core.smo.community.IRoomAttrInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.RoomAttrDto;

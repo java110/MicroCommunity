@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.store.IStoreAttrBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.storeAttr.IStoreAttrInnerServiceSMO;
+import com.java110.core.smo.store.IStoreAttrInnerServiceSMO;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.po.store.StoreAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;

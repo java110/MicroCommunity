@@ -4,21 +4,15 @@ import com.java110.common.dao.IFileServiceDao;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.client.JSchFtpUploadTemplate;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.core.client.FtpUploadTemplate;
-import com.java110.utils.util.Base64Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class FileInnerServiceSMOImpl extends BaseServiceSMO implements IFileInnerServiceSMO {

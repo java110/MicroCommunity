@@ -5,15 +5,13 @@ import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
 import com.java110.store.dao.IPurchaseApplyDetailServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.purchaseApplyDetail.IPurchaseApplyDetailInnerServiceSMO;
+import com.java110.core.smo.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.owner.IOwnerAppUserInnerServiceSMO;
+import com.java110.core.smo.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;

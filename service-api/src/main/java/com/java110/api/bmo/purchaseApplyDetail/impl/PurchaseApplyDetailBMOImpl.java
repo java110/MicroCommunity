@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.purchaseApplyDetail.IPurchaseApplyDetailBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.purchaseApplyDetail.IPurchaseApplyDetailInnerServiceSMO;
+import com.java110.core.smo.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;

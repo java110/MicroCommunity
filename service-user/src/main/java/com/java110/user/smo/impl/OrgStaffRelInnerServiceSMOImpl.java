@@ -2,7 +2,7 @@ package com.java110.user.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.org.IOrgStaffRelInnerServiceSMO;
+import com.java110.core.smo.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.org.OrgStaffRelDto;

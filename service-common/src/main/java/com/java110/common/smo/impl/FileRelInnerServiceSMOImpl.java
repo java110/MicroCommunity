@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IFileRelServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.file.IFileRelInnerServiceSMO;
+import com.java110.core.smo.common.IFileRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.file.FileRelDto;

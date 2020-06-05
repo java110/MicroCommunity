@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.owner.IOwnerCarInnerServiceSMO;
-import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
+import com.java110.core.smo.user.IOwnerCarInnerServiceSMO;
+import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;

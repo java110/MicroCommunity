@@ -1,7 +1,6 @@
 package com.java110.common.activity.complaint;
 
-import com.java110.common.activity.resourceEnter.ResourceEnterToDepartmentListener;
-import com.java110.core.smo.audit.IAuditUserInnerServiceSMO;
+import com.java110.core.smo.common.IAuditUserInnerServiceSMO;
 import com.java110.dto.auditUser.AuditUserDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.entity.audit.AuditUser;

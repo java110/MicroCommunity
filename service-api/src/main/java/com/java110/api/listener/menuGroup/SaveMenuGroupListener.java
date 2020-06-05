@@ -6,7 +6,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.menu.IMenuInnerServiceSMO;
+import com.java110.core.smo.community.IMenuInnerServiceSMO;
 import com.java110.dto.menuGroup.MenuGroupDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.apache.commons.lang.StringUtils;

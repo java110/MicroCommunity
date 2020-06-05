@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.dto.machine.MachineDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.Assert;

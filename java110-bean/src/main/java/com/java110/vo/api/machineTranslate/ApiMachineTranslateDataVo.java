@@ -1,7 +1,6 @@
 package com.java110.vo.api.machineTranslate;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiMachineTranslateDataVo implements Serializable {
 
@@ -16,6 +15,10 @@ public class ApiMachineTranslateDataVo implements Serializable {
     private String stateName;
     private String createTime;
     private String updateTime;
+
+    private String machineCmd;
+
+    private String objBId;
 
     public String getMachineTranslateId() {
         return machineTranslateId;
@@ -103,5 +106,21 @@ public class ApiMachineTranslateDataVo implements Serializable {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getMachineCmd() {
+        return machineCmd;
+    }
+
+    public void setMachineCmd(String machineCmd) {
+        this.machineCmd = machineCmd;
+    }
+
+    public String getObjBId() {
+        return objBId;
+    }
+
+    public void setObjBId(String objBId) {
+        this.objBId = objBId;
     }
 }

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.org.IOrgBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.org.IOrgInnerServiceSMO;
+import com.java110.core.smo.user.IOrgInnerServiceSMO;
 import com.java110.dto.org.OrgDto;
 import com.java110.po.community.OrgCommunityPo;
 import com.java110.po.org.OrgPo;

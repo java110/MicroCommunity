@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.returnPayFee.IReturnPayFeeBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeDetailInnerServiceSMO;
-import com.java110.core.smo.returnPayFee.IReturnPayFeeInnerServiceSMO;
+import com.java110.core.smo.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.returnPayFee.ReturnPayFeeDto;
 import com.java110.po.fee.PayFeeDetailPo;

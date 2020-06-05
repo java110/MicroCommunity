@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMachineServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.hardwareAdapation.IMachineInnerServiceSMO;
+import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.demo.DemoDto;

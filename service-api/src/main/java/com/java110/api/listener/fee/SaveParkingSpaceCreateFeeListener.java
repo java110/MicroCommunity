@@ -8,7 +8,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.parkingSpace.IParkingSpaceInnerServiceSMO;
+import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.entity.center.AppService;

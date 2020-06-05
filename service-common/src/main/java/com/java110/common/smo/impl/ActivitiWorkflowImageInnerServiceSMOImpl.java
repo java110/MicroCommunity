@@ -1,10 +1,8 @@
 package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.purchaseApplyUser.IActivitiWorkflowImageInnerServiceSMO;
+import com.java110.core.smo.common.IActivitiWorkflowImageInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.dto.user.UserDto;
 import com.java110.utils.util.Base64Convert;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;

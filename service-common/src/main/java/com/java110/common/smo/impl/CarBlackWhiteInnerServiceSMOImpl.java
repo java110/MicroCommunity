@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.ICarBlackWhiteServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.hardwareAdapation.ICarBlackWhiteInnerServiceSMO;
+import com.java110.core.smo.common.ICarBlackWhiteInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.CarBlackWhiteDto;

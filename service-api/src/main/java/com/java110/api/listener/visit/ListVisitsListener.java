@@ -5,7 +5,7 @@ import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.visit.IVisitInnerServiceSMO;
+import com.java110.core.smo.community.IVisitInnerServiceSMO;
 import com.java110.dto.visit.VisitDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.vo.api.visit.ApiVisitDataVo;

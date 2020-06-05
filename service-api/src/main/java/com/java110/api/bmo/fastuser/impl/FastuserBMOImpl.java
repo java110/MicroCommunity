@@ -4,19 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.fastuser.IFastuserBMO;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
-import com.java110.core.smo.file.IFileInnerServiceSMO;
-import com.java110.core.smo.file.IFileRelInnerServiceSMO;
-import com.java110.dto.activities.ActivitiesDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service("fastuserBMOImpl")
 public class FastuserBMOImpl extends ApiBaseBMO implements IFastuserBMO {

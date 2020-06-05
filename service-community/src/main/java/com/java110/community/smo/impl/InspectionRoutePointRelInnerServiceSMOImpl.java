@@ -3,7 +3,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IInspectionRoutePointRelServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.inspectionRoute.IInspectionRoutePointRelInnerServiceSMO;
+import com.java110.core.smo.community.IInspectionRoutePointRelInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.inspectionRoute.InspectionRoutePointRelDto;

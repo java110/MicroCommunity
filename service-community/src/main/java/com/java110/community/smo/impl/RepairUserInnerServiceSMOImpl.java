@@ -3,7 +3,7 @@ package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IRepairUserServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.repair.IRepairUserInnerServiceSMO;
+import com.java110.core.smo.community.IRepairUserInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;

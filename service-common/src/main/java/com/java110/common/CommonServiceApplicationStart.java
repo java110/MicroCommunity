@@ -42,8 +42,7 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.common.listener"})
 @EnableFeignClients(basePackages = {
         "com.java110.core.smo.user",
-        "com.java110.core.smo.complaint",
-        "com.java110.core.smo.purchaseApply"
+        "com.java110.core.smo.store"
 })
 public class CommonServiceApplicationStart {
 

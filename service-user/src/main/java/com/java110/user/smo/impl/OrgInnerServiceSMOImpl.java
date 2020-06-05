@@ -3,7 +3,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.org.IOrgInnerServiceSMO;
+import com.java110.core.smo.user.IOrgInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityDto;

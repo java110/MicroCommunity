@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.menu.IMenuInnerServiceSMO;
+import com.java110.core.smo.community.IMenuInnerServiceSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;

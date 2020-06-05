@@ -29,6 +29,10 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     private String bId;
 
+    private String machineCmd;
+
+    private String objBId;
+
 
     private Date createTime;
 
@@ -146,5 +150,21 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getMachineCmd() {
+        return machineCmd;
+    }
+
+    public void setMachineCmd(String machineCmd) {
+        this.machineCmd = machineCmd;
+    }
+
+    public String getObjBId() {
+        return objBId;
+    }
+
+    public void setObjBId(String objBId) {
+        this.objBId = objBId;
     }
 }

@@ -7,7 +7,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.owner.IOwnerRoomRelInnerServiceSMO;
+import com.java110.core.smo.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.dto.fee.FeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.FeeTypeConstant;

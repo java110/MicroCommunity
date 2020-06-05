@@ -29,18 +29,14 @@ import java.nio.charset.Charset;
  * @tag
  */
 @SpringBootApplication(scanBasePackages = {"com.java110.service", "com.java110.store", "com.java110.core",
-         "com.java110.config.properties.code","com.java110.db"})
+        "com.java110.config.properties.code", "com.java110.db"})
 @EnableDiscoveryClient
 @Java110ListenerDiscovery(listenerPublishClass = BusinessServiceDataFlowEventPublishing.class,
         basePackages = {"com.java110.store.listener"})
-@EnableFeignClients(basePackages = {"com.java110.core.smo.community",
+@EnableFeignClients(basePackages = {
+        "com.java110.core.smo.community",
         "com.java110.core.smo.fee",
-        "com.java110.core.smo.floor",
-        "com.java110.core.smo.owner",
-        "com.java110.core.smo.parkingSpace",
-        "com.java110.core.smo.room",
-        "com.java110.core.smo.unit",
-        "com.java110.core.smo.user",
+        "com.java110.core.smo.user"
 })
 public class StoreServiceApplicationStart {
 
@@ -68,8 +64,8 @@ public class StoreServiceApplicationStart {
             ServiceStartInit.initSystemConfig(context);
             //加载业务侦听
             //SystemStartLoadBusinessConfigure.initSystemConfig(LISTENER_PATH);
-        }catch (Throwable e){
-            logger.error("系统启动失败",e);
+        } catch (Throwable e) {
+            logger.error("系统启动失败", e);
         }
     }
 }

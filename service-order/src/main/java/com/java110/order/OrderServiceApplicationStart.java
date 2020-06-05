@@ -41,15 +41,9 @@ import java.nio.charset.Charset;
 @EnableFeignClients(basePackages = {
         "com.java110.core.smo.code",
         "com.java110.core.smo.user",
-        "com.java110.core.smo.app",
         "com.java110.core.smo.common",
         "com.java110.core.smo.community",
-        "com.java110.core.smo.fee",
-        "com.java110.core.smo.floor",
-        "com.java110.core.smo.menu",
-        "com.java110.core.smo.owner",
-        "com.java110.core.smo.room",
-        "com.java110.core.smo.unit",
+        "com.java110.core.smo.fee"
 })
 public class OrderServiceApplicationStart {
 

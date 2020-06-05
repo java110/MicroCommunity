@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.hardwareAdapation.ICarInoutInnerServiceSMO;
+import com.java110.core.smo.common.ICarInoutInnerServiceSMO;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.machine.CarInoutDto;

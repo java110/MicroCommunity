@@ -2,7 +2,7 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.core.smo.resourceStore.IResourceStoreInnerServiceSMO;
+import com.java110.core.smo.store.IResourceStoreInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.resourceStore.ResourceStoreDto;
