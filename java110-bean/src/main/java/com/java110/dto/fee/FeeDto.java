@@ -45,6 +45,10 @@ public class FeeDto extends PageDto implements Serializable {
     private String computingFormula;
     private String isDefault;
 
+    private String paymentCd;
+
+    private String paymentCycle;
+
 
     private Date createTime;
 
@@ -53,12 +57,11 @@ public class FeeDto extends PageDto implements Serializable {
     /**
      * 费用项开始时间
      */
-    private  Date configStartTime;
+    private Date configStartTime;
     /**
      * 费用项结束时间
      */
-    private Date  configEndTime;
-
+    private Date configEndTime;
 
 
     public String getAmount() {
@@ -301,5 +304,21 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setConfigEndTime(Date configEndTime) {
         this.configEndTime = configEndTime;
+    }
+
+    public String getPaymentCd() {
+        return paymentCd;
+    }
+
+    public void setPaymentCd(String paymentCd) {
+        this.paymentCd = paymentCd;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public void setPaymentCycle(String paymentCycle) {
+        this.paymentCycle = paymentCycle;
     }
 }

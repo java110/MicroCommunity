@@ -1,7 +1,6 @@
 package com.java110.vo.api.feeConfig;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiFeeConfigDataVo implements Serializable {
 
@@ -17,6 +16,15 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String feeTypeCdName;
     private String feeFlagName;
     private String isDefault;
+
+    private String billType;
+
+    private String billTypeName;
+
+    private String paymentCd;
+
+    private String paymentCycle;
+
 
     public String getConfigId() {
         return configId;
@@ -112,5 +120,37 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getBillType() {
+        return billType;
+    }
+
+    public void setBillType(String billType) {
+        this.billType = billType;
+    }
+
+    public String getBillTypeName() {
+        return billTypeName;
+    }
+
+    public void setBillTypeName(String billTypeName) {
+        this.billTypeName = billTypeName;
+    }
+
+    public String getPaymentCd() {
+        return paymentCd;
+    }
+
+    public void setPaymentCd(String paymentCd) {
+        this.paymentCd = paymentCd;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public void setPaymentCycle(String paymentCycle) {
+        this.paymentCycle = paymentCycle;
     }
 }

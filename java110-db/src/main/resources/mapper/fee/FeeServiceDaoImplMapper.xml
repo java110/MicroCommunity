@@ -20,7 +20,8 @@
         select t.amount,t.operate,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
         feeTypeCd,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id userId,t.payer_obj_id,t.payer_obj_id
-        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,t.payer_obj_type,t.payer_obj_type payerObjType
+        payerObjId,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id
+        configId,t.payer_obj_type,t.payer_obj_type payerObjType
         from business_pay_fee t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -135,8 +136,10 @@
         endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
         userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
         additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
-        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula computingFormula,
-        t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time configStartTime,pfc.end_time configEndTime
+        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
+        computingFormula,
+        t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
+        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
         from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd
@@ -311,7 +314,7 @@
             and t.end_time &lt; #{arrearsEndTime}
         </if>
         <if test="noArrearsEndTime != null">
-            and t.end_time &gt;  #{noArrearsEndTime}
+            and t.end_time &gt; #{noArrearsEndTime}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -348,7 +351,199 @@
             and t.payer_obj_type = #{payerObjType}
         </if>
 
-
     </select>
+
+
+    <!-- 查询账期 -->
+    <select id="queryBills" parameterType="Map" resultType="Map">
+        select
+        t.bill_id billId,
+        t.bill_name billName,
+        t.receivable,
+        t.receipts,
+        t.bill_time billTime,
+        t.community_id communityId,
+        t.config_id configId,
+        t.cur_bill curBill
+        from bill t
+        where 1 =1
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="billName !=null and billName != ''">
+            and t.bill_name= #{billName}
+        </if>
+        <if test="receivable !=null and receivable != ''">
+            and t.receivable= #{receivable}
+        </if>
+        <if test="receipts !=null">
+            and t.receipts= #{receipts}
+        </if>
+        <if test="billTime !=null">
+            and t.bill_time= #{billTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="configId != null and configId != ''">
+            and t.config_id = #{configId}
+        </if>
+        <if test="curBill != null and curBill != ''">
+            and t.cur_bill = #{curBill}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询账期 -->
+    <select id="queryBillCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from bill t
+        where 1 =1
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="billName !=null and billName != ''">
+            and t.bill_name= #{billName}
+        </if>
+        <if test="receivable !=null and receivable != ''">
+            and t.receivable= #{receivable}
+        </if>
+        <if test="curReceivable !=null and curReceivable != ''">
+            and t.cur_receivable= #{curReceivable}
+        </if>
+        <if test="receipts !=null">
+            and t.receipts= #{receipts}
+        </if>
+        <if test="billTime !=null">
+            and t.bill_time= #{billTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="configId != null and configId != ''">
+            and t.config_id = #{configId}
+        </if>
+        <if test="curBill != null and curBill != ''">
+            and t.cur_bill = #{curBill}
+        </if>
+    </select>
+
+
+    <!-- 查询账期 -->
+    <select id="queryBillOweFees" parameterType="Map" resultType="Map">
+        select
+        t.owe_id oweId,
+        t.bill_id billId,
+        t.fee_id feeId,
+        t.bill_amount_owed billAmountOwed,
+        t.amount_owed amountOwed,
+        t.fee_end_time feeEndTime,
+        t.owner_id ownerId,
+        t.owner_name ownerName,
+        t.owner_tel ownerTel,
+        t.payer_obj_name payerObjName,
+        t.payer_obj_type payerObjType,
+        t.community_id communityId,
+        t.state,
+        t.create_time createTime
+        from bill_owe_fee t
+        where 1 =1
+        <if test="oweId !=null and oweId != ''">
+            and t.owe_id= #{oweId}
+        </if>
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="billAmountOwed !=null and billAmountOwed != ''">
+            and t.bill_amount_owed= #{billAmountOwed}
+        </if>
+        <if test="amountOwed !=null and amountOwed != ''">
+            and t.amount_owed= #{amountOwed}
+        </if>
+        <if test="feeEndTime != null">
+            and t.fee_end_time = #{feeEndTime}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            and t.owner_id = #{ownerId}
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 查询账期 -->
+    <select id="queryBillOweFeeCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from bill_owe_fee t
+        where 1 =1
+        <if test="oweId !=null and oweId != ''">
+            and t.owe_id= #{oweId}
+        </if>
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="billAmountOwed !=null and billAmountOwed != ''">
+            and t.bill_amount_owed= #{billAmountOwed}
+        </if>
+        <if test="amountOwed !=null and amountOwed != ''">
+            and t.amount_owed= #{amountOwed}
+        </if>
+        <if test="feeEndTime != null">
+            and t.fee_end_time = #{feeEndTime}
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            and t.owner_id = #{ownerId}
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+    </select>
+
+
+    <insert id="insertBillOweFees" parameterType="Map">
+        INSERT INTO bill_owe_fee
+        (`owe_id`, `bill_id`, `fee_id`, `bill_amount_owed`, `amount_owed`, `fee_end_time`, `owner_id`, `owner_name`,
+        `owner_tel`, `payer_obj_name`, `payer_obj_type`, `community_id`, `state`)
+        VALUES (#{oweId}, #{billId}, #{feeId}, #{billAmountOwed}, #{amountOwed}, #{feeEndTime}, #{ownerId},
+        #{ownerName},
+        #{ownerTel}, #{payerObjName}, #{payerObjType}, #{communityId}, #{state})
+    </insert>
+
+    <insert id="insertBill" parameterType="Map">
+        INSERT INTO bill (`bill_id`, `bill_name`, `receivable`, `receipts`, `bill_time`, `community_id`, `config_id`,
+        `remark`, `cur_bill`, `cur_receivable`)
+        VALUES (#{billId}, #{billName}, #{receivable}, #{receipts}, #{billTime}, #{communityId}, #{configId},
+        #{remark}, #{curBill}, #{curReceivable})
+    </insert>
+
+    <update id="updateBill" parameterType="Map">
+        update bill set cur_bill= 'F' where config_id = #{configId}
+    </update>
+
 
 </mapper>
