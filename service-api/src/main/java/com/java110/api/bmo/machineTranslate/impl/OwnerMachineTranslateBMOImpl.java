@@ -95,6 +95,8 @@ public class OwnerMachineTranslateBMOImpl implements IOwnerMachineTranslateBMO {
         machineUserResultDto.setReserved(ownerDto.getMemberId());
         machineUserResultDto.setUserType(MachineQueryUserInfoListener.TYPE_OWNER);
 
+        //查询业主是否有欠费
+
         //将 设备 待同步 改为同步中
         MachineTranslateDto tmpMtDto = new MachineTranslateDto();
         tmpMtDto.setMachineCode(reqJson.getString("machineCode"));
