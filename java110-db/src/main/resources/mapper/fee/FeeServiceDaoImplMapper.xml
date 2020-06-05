@@ -139,7 +139,7 @@
         pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
         computingFormula,
         t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
-        configStartTime,pfc.end_time configEndTime
+        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle
         from pay_fee t,pay_fee_config pfc,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = pfc.fee_type_cd

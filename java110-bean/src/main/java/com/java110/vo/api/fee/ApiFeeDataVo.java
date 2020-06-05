@@ -33,6 +33,9 @@ public class ApiFeeDataVo implements Serializable {
     private String feePrice;
     private String isDefault;
 
+    private String paymentCd;
+
+    private String paymentCycle;
     public String getAmount() {
         return amount;
     }
@@ -175,5 +178,21 @@ public class ApiFeeDataVo implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getPaymentCd() {
+        return paymentCd;
+    }
+
+    public void setPaymentCd(String paymentCd) {
+        this.paymentCd = paymentCd;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public void setPaymentCycle(String paymentCycle) {
+        this.paymentCycle = paymentCycle;
     }
 }
