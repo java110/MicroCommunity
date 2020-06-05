@@ -7,9 +7,11 @@
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessFeeConfigInfo" parameterType="Map">
         insert into business_pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,square_price,is_default,operate,config_id,fee_flag,fee_name,start_time,end_time,community_id,b_id,bill_type
+        fee_type_cd,computing_formula,additional_amount,square_price,is_default,operate,config_id,fee_flag,fee_name,
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
         ) values (
-        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{squarePrice},#{isDefault},#{operate},#{configId},#{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType}
+        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{squarePrice},#{isDefault},#{operate},#{configId},
+        #{feeFlag},#{feeName},#{startTime},#{endTime},#{communityId},#{bId},#{billType},#{paymentCd},#{paymentCycle}
         )
     </insert>
 
@@ -20,7 +22,8 @@
         computingFormula,t.additional_amount,t.additional_amount additionalAmount,t.square_price,t.square_price
         squarePrice,t.is_default,t.is_default isDefault,t.operate,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag
         feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time startTime,t.end_time,t.end_time
-        endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType
+        endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.bill_type,t.bill_type billType,
+        t.payment_cd,t.payment_cycle
         from business_pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -72,11 +75,12 @@
     <!-- 保存费用配置信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveFeeConfigInfoInstance" parameterType="Map">
         insert into pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,start_time,end_time,community_id,b_id
-        ,bill_type
+        fee_type_cd,computing_formula,additional_amount,status_cd,square_price,is_default,config_id,fee_flag,fee_name,
+        start_time,end_time,community_id,b_id,bill_type,payment_cd,payment_cycle
         ) select
-        t.fee_type_cd,t.computing_formula,t.additional_amount,'0',t.square_price,t.is_default,t.config_id,t.fee_flag,t.fee_name,t.start_time,t.end_time,t.community_id,
-        t.b_id,t.bill_type
+        t.fee_type_cd,t.computing_formula,t.additional_amount,'0',t.square_price,t.is_default,t.config_id,t.fee_flag,t.fee_name,
+        t.start_time,t.end_time,t.community_id,
+        t.b_id,t.bill_type,t.payment_cd,t.payment_cycle
         from business_pay_fee_config t where 1=1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and t.fee_type_cd= #{feeTypeCd}
@@ -129,7 +133,8 @@
         statusCd,t.square_price,t.square_price squarePrice,t.is_default,t.is_default isDefault,t.config_id,t.config_id
         configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name feeName,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,
-        td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName
+        td1.name feeTypeCdName,td2.name feeFlagName,t.bill_type billType,t.bill_type,td3.name billTypeName,
+        t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle
         from pay_fee_config t,t_dict td1,t_dict td2,t_dict td3
         where 1 =1
         and t.fee_type_cd = td1.status_cd
@@ -180,6 +185,12 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
+        <if test="paymentCd !=null and paymentCd != ''">
+            and t.payment_cd= #{paymentCd}
+        </if>
+        <if test="paymentCycle !=null and paymentCycle != ''">
+            and t.payment_cycle= #{paymentCycle}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -205,6 +216,12 @@
         </if>
         <if test="squarePrice !=null and squarePrice != ''">
             , t.square_price= #{squarePrice}
+        </if>
+        <if test="paymentCd !=null and paymentCd != ''">
+            , t.payment_cd= #{paymentCd}
+        </if>
+        <if test="paymentCycle !=null and paymentCycle != ''">
+            , t.payment_cycle= #{paymentCycle}
         </if>
         <if test="isDefault !=null and isDefault != ''">
             , t.is_default= #{isDefault}
@@ -289,6 +306,12 @@
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
+        </if>
+        <if test="paymentCd !=null and paymentCd != ''">
+            and t.payment_cd= #{paymentCd}
+        </if>
+        <if test="paymentCycle !=null and paymentCycle != ''">
+            and t.payment_cycle= #{paymentCycle}
         </if>
 
 

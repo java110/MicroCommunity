@@ -35,6 +35,8 @@ public class SaveFeeConfigListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
+        Assert.hasKeyAndValue(reqJson, "paymentCd", "付费类型不能为空");
+        Assert.hasKeyAndValue(reqJson, "paymentCycle", "缴费周期不能为空");
 
 
 

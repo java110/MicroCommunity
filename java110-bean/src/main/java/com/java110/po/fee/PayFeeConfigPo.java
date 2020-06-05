@@ -28,6 +28,10 @@ public class PayFeeConfigPo implements Serializable {
 
     private String billType;
 
+    private String paymentCd;
+
+    private String paymentCycle;
+
     public String getConfigId() {
         return configId;
     }
@@ -122,5 +126,21 @@ public class PayFeeConfigPo implements Serializable {
 
     public void setBillType(String billType) {
         this.billType = billType;
+    }
+
+    public String getPaymentCd() {
+        return paymentCd;
+    }
+
+    public void setPaymentCd(String paymentCd) {
+        this.paymentCd = paymentCd;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public void setPaymentCycle(String paymentCycle) {
+        this.paymentCycle = paymentCycle;
     }
 }
