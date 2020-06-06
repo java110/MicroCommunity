@@ -1,19 +1,24 @@
 package com.java110.api.listener.user;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.user.IUserBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.dto.file.FileDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.file.FileRelPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.StoreUserRelConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,9 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserBMO userBMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
 
     @Override
@@ -63,7 +71,6 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
 //获取数据上下文对象
 
 
-
         Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
         Assert.jsonObjectHaveKey(reqJson, "storeTypeCd", "请求参数中未包含storeTypeCd 节点，请确认");
         //判断请求报文中包含 userId 并且 不为-1时 将已有用户添加为员工，反之，则添加用户再将用户添加为员工
@@ -90,6 +97,28 @@ public class AddStaffServiceListener extends AbstractServiceApiPlusListener {
         //重写 员工岗位
         reqJson.put("relCd", relCd);
         userBMOImpl.addStaffOrg(reqJson, context);
+
+        if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(reqJson.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(reqJson.getString("communityId"));
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+            reqJson.put("photoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
+
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("relTypeCd", "12000");
+            businessUnit.put("saveWay", "table");
+            businessUnit.put("objId", userId);
+            businessUnit.put("fileRealName", fileDto.getFileId());
+            businessUnit.put("fileSaveName", fileName);
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        }
 
         commit(context);
 

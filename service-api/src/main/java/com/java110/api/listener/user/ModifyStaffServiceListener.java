@@ -5,9 +5,15 @@ import com.java110.api.bmo.user.IUserBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.factory.DataFlowFactory;
-import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.factory.DataFlowFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
+import com.java110.core.smo.common.IFileRelInnerServiceSMO;
+import com.java110.dto.file.FileDto;
+import com.java110.dto.file.FileRelDto;
+import com.java110.entity.center.AppService;
+import com.java110.po.file.FileRelPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
@@ -15,6 +21,7 @@ import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +30,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * 修改员工 2018年12月6日
@@ -35,6 +44,12 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IUserBMO userBMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -63,6 +78,38 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(reqJson.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(reqJson.getString("communityId"));
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setRelTypeCd("12000");
+            fileRelDto.setObjId(reqJson.getString("userId"));
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            if (fileRelDtos == null || fileRelDtos.size() == 0) {
+                JSONObject businessUnit = new JSONObject();
+                businessUnit.put("fileRelId", "-1");
+                businessUnit.put("relTypeCd", "10000");
+                businessUnit.put("saveWay", "table");
+                businessUnit.put("objId", reqJson.getString("userId"));
+                businessUnit.put("fileRealName", fileDto.getFileId());
+                businessUnit.put("fileSaveName", fileName);
+                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+                super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+            } else {
+                JSONObject businessUnit = new JSONObject();
+                businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
+                businessUnit.put("fileRealName", fileDto.getFileId());
+                businessUnit.put("fileSaveName", fileName);
+                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+                super.update(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_FILE_REL);
+            }
+        }
         modifyStaff(reqJson, context);
     }
 
