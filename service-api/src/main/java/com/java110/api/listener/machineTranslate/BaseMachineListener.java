@@ -1,15 +1,15 @@
 package com.java110.api.listener.machineTranslate;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.dto.machine.MachineDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,20 +44,15 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
      */
     protected boolean validateMachineBody(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson,
                                           IMachineInnerServiceSMO machineInnerServiceSMOImpl) {
-        JSONObject outParam = null;
-        ResponseEntity<String> responseEntity = null;
 
-        outParam = new JSONObject();
-        outParam.put("code", 0);
-        outParam.put("message", "success");
-        JSONArray data = null;
+        ResponseEntity<String> responseEntity = null;
+        ResultVo resultVo = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
         HttpHeaders headers = new HttpHeaders();
         String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         if (StringUtil.isEmpty(communityId)) {
-            outParam.put("code", -1);
-            outParam.put("message", "请求地址中未包含小区信息");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "请求头中未包含小区编码");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return false;
         }
@@ -68,16 +63,12 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
             headers.add(key, reqHeader.get(key));
         }
 
-       // String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
-
         if (!reqHeader.containsKey("machinecode") || StringUtils.isEmpty(reqHeader.get("machinecode"))) {
-            outParam.put("code", -1);
-            outParam.put("message", "请求头中未包含设备编码");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "请求头中未包含设备编码");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return false;
         }
-
         //检查设备是否合法
         //检查设备是否合法
         MachineDto machineDto = new MachineDto();
@@ -85,22 +76,18 @@ public abstract class BaseMachineListener extends AbstractServiceApiPlusListener
         machineDto.setCommunityId(communityId);
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
         if (machineDtos == null || machineDtos.size() < 1) {
-            outParam.put("code", -1);
-            outParam.put("message", "该设备【" + reqHeader.get("machinecode") + "】未在该小区【" + communityId + "】注册");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "该设备【" + reqHeader.get("machinecode") + "】未在该小区【" + communityId + "】注册");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return false;
         }
 
-        if("1600".equals(machineDtos.get(0).getState())){ //设备禁用状态
-            outParam.put("code", -1);
-            outParam.put("message", "该设备【" + reqHeader.get("machinecode") + "】禁用状态");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), headers, HttpStatus.OK);
+        if ("1600".equals(machineDtos.get(0).getState())) { //设备禁用状态
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "该设备【" + reqHeader.get("machinecode") + "】禁用状态");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), headers, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return false;
         }
-
-
         reqJson.put("machineCode", machineDtos.get(0).getMachineCode());
         reqJson.put("machineId", machineDtos.get(0).getMachineId());
         reqJson.put("communityId", communityId);

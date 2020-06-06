@@ -1,28 +1,29 @@
 package com.java110.api.listener.machineTranslate;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.core.smo.common.IFileRelInnerServiceSMO;
 import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerInnerServiceSMO;
 import com.java110.dto.machine.MachineTranslateDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.constant.StatusConstant;
+import com.java110.vo.MachineTaskVo;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 调用地址
@@ -31,6 +32,13 @@ import java.util.UUID;
  */
 @Java110Listener("machineGetTaskInfoListener")
 public class MachineGetTaskInfoListener extends BaseMachineListener {
+
+    public static final String STATE_NO_TRANSLATE = "10000";//待同步
+    public static final String STATE_TRANSLATEED = "20000";//同步完成
+    public static final String STATE_TRANSLATEING = "30000";//同步中
+    public static final String STATE_CMD_SUCCESS = "40000";//命令执行成功
+    public static final String STATE_CMD_ERROR = "50000";//命令执行失败
+
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
@@ -64,74 +72,37 @@ public class MachineGetTaskInfoListener extends BaseMachineListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
-        JSONObject outParam = null;
+        ResultVo resultVo = null;
         ResponseEntity<String> responseEntity = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
         //判断是否是心跳类过来的
         if (!super.validateMachineBody(event, context, reqJson, machineInnerServiceSMOImpl)) {
             return;
         }
-
-        outParam = new JSONObject();
-        outParam.put("code", 0);
-        outParam.put("message", "success");
-        JSONArray data = null;
+        List<MachineTaskVo> machineTaskVos = null;
         String communityId = reqJson.containsKey("communityId") ? reqJson.getString("communityId") : reqHeader.get("communityId");
         HttpHeaders httpHeaders = super.getHeader(context);
         //查询删除的业主信息
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineCode(reqJson.getString("machineCode"));
         machineTranslateDto.setCommunityId(communityId);
-        machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
+        machineTranslateDto.setState(STATE_NO_TRANSLATE);
+        machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
         List<MachineTranslateDto> machineTranslateDtos = machineTranslateInnerServiceSMOImpl.queryMachineTranslates(machineTranslateDto);
-        //如果有失效数据，则告诉设备删除
         if (machineTranslateDtos != null && machineTranslateDtos.size() >= 0) {
-            data = new JSONArray();
+            machineTaskVos = new ArrayList<>();
             for (MachineTranslateDto tmpM : machineTranslateDtos) {
-                JSONObject tmpData = new JSONObject();
-                tmpData.put("taskcmd", 102);
-                tmpData.put("taskId", UUID.randomUUID().toString().replace("-", ""));
-                tmpData.put("taskinfo", tmpM.getObjId());
-                data.add(tmpData);
+                MachineTaskVo machineTaskVo = new MachineTaskVo(tmpM.getMachineCmd(), tmpM.getMachineTranslateId(), tmpM.getObjId());
+                machineTaskVos.add(machineTaskVo);
+                MachineTranslateDto tmpMtDto = new MachineTranslateDto();
+                tmpMtDto.setMachineTranslateId(tmpM.getMachineTranslateId());
+                tmpMtDto.setCommunityId(tmpM.getCommunityId());
+                tmpMtDto.setState(STATE_TRANSLATEING);
+                machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
             }
         }
-
-        //查询待同步的业主数据
-        machineTranslateDto.setStatusCd(StatusConstant.STATUS_CD_VALID);
-        machineTranslateDto.setState("10000");
-        //鉴权码先不做判断，后期判断
-        machineTranslateDtos = machineTranslateInnerServiceSMOImpl.queryMachineTranslates(machineTranslateDto);
-        if (machineTranslateDtos == null || machineTranslateDtos.size() == 0) {
-
-            outParam.put("data", data);
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), httpHeaders, HttpStatus.OK);
-            context.setResponseEntity(responseEntity);
-            return;
-        }
-
-        if (data == null) {
-            data = new JSONArray();
-        }
-        JSONObject tmpData = null;
-        for (MachineTranslateDto tmpMachineTranslate : machineTranslateDtos) {
-            tmpData = new JSONObject();
-            tmpData.put("taskcmd", 101);
-            tmpData.put("taskId", UUID.randomUUID().toString().replace("-", ""));
-            tmpData.put("taskinfo", tmpMachineTranslate.getObjId());
-            data.add(tmpData);
-            //将 设备 待同步 改为同步中
-            MachineTranslateDto tmpMtDto = new MachineTranslateDto();
-            tmpMtDto.setMachineCode(machineTranslateDto.getMachineCode());
-            tmpMtDto.setCommunityId(machineTranslateDto.getCommunityId());
-            tmpMtDto.setObjId(tmpMachineTranslate.getObjId());
-            tmpMtDto.setState("30000");
-            machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
-        }
-
-
-        outParam.put("data", data);
-
-        responseEntity = new ResponseEntity<>(outParam.toJSONString(), httpHeaders, HttpStatus.OK);
+        resultVo = new ResultVo(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, machineTaskVos);
+        responseEntity = new ResponseEntity<>(resultVo.toString(), httpHeaders, HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }
 

@@ -8,7 +8,7 @@ import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.result.ResultVo;
+import com.java110.vo.ResultVo;
 import com.java110.utils.constant.ServiceCodeFeeConfigConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

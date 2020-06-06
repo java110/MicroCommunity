@@ -9,7 +9,7 @@ import com.java110.core.smo.job.ITaskInnerServiceSMO;
 import com.java110.core.smo.job.ITaskAttrInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
 import com.java110.dto.taskAttr.TaskAttrDto;
-import com.java110.result.ResultVo;
+import com.java110.vo.ResultVo;
 import com.java110.utils.constant.ServiceCodeTaskConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -27,4 +27,14 @@ public class KafkaFactory {
     public static void sendKafkaMessage(String topic,String key,Object message) throws Exception{
         getKafkaTemplate().send(topic,key,message);
     }
+
+    /**
+     * 发送kafka消息
+     * @param topic
+     * @param message
+     * @throws Exception
+     */
+    public static void sendKafkaMessage(String topic,Object message) throws Exception{
+        getKafkaTemplate().send(topic,"",message);
+    }
 }

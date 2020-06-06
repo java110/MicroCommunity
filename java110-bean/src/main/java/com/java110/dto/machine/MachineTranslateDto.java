@@ -33,6 +33,8 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     private String objBId;
 
+    private String remark;
+
 
     private Date createTime;
 
@@ -166,5 +168,13 @@ public class MachineTranslateDto extends PageDto implements Serializable {
 
     public void setObjBId(String objBId) {
         this.objBId = objBId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -1,4 +1,4 @@
-package com.java110.result;
+package com.java110.vo;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -19,6 +19,10 @@ public class ResultVo implements Serializable {
     public static final int CODE_ERROR = 404;// 未知异常
 
     public static final int CODE_OK = 200; // 成功
+
+    public static final int CODE_MACHINE_OK = 0; // 成功
+
+    public static final int CODE_MACHINE_ERROR = -1; // 未知异常
 
     public static final int CODE_UNAUTHORIZED = 401; //认证失败
 

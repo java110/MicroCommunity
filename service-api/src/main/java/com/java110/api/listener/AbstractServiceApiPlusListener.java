@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.result.ResultVo;
+import com.java110.vo.ResultVo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;

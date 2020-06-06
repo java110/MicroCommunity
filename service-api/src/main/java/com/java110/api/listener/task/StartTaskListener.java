@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.job.ITaskInnerServiceSMO;
 import com.java110.dto.task.TaskDto;
-import com.java110.result.ResultVo;
+import com.java110.vo.ResultVo;
 import com.java110.utils.constant.ServiceCodeTaskConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

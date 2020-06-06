@@ -8,10 +8,10 @@
     <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveMachineTranslate" parameterType="Map">
         insert into machine_translate(
-        machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id
+        machine_id,machine_code,status_cd,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id,remark
         ) values (
         #{machineId},#{machineCode},'0',#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId},#{machineCmd},
-        #{objBId}
+        #{objBId},#{remark}
         )
     </insert>
     <update id="updateMachineTranslate" parameterType="Map">
@@ -23,7 +23,10 @@
             t.state= #{state},
         </if>
         <if test="updateTime !=null ">
-            t.update_time= #{updateTime}
+            t.update_time= #{updateTime},
+        </if>
+        <if test="remark !=null and remark != ''">
+            t.remark= #{remark}
         </if>
 
         where 1=1
@@ -40,11 +43,11 @@
     <!-- 保存设备同步信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessMachineTranslateInfo" parameterType="Map">
         insert into business_machine_translate(
-        machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id
+        machine_id,machine_code,operate,type_cd,machine_translate_id,obj_id,obj_name,state,community_id,b_id,machine_cmd,obj_b_id,remark
         ) values (
         #{machineId},#{machineCode},#{operate},#{typeCd},#{machineTranslateId},#{objId},#{objName},#{state},#{communityId},#{bId},
         #{machineCmd},
-        #{objBId}
+        #{objBId},#{remark}
         )
     </insert>
 
@@ -54,7 +57,7 @@
         select t.machine_id,t.machine_id machineId,t.machine_code,t.machine_code
         machineCode,t.operate,t.type_cd,t.type_cd typeCd,t.machine_translate_id,t.machine_translate_id
         machineTranslateId,t.obj_id,t.obj_id objId,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
-        communityId,t.b_id,t.b_id bId,t.machine_cmd,t.obj_b_id
+        communityId,t.b_id,t.b_id bId,t.machine_cmd,t.obj_b_id,t.remark
         from business_machine_translate t
         where 1 =1
         <if test="machineId !=null and machineId != ''">
@@ -96,10 +99,10 @@
     <insert id="saveMachineTranslateInfoInstance" parameterType="Map">
         insert into machine_translate(
         machine_id,machine_code,type_cd,machine_translate_id,obj_id,status_cd,obj_name,state,community_id,b_id,
-        machine_cmd,obj_b_id
+        machine_cmd,obj_b_id,remark
         ) select
         t.machine_id,t.machine_code,t.type_cd,t.machine_translate_id,t.obj_id,'0',t.obj_name,t.state,t.community_id,t.b_id,
-        t.machine_cmd,t.obj_b_id
+        t.machine_cmd,t.obj_b_id,t.remark
         from business_machine_translate t where 1=1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
@@ -139,7 +142,7 @@
         typeCd,t.machine_translate_id,t.machine_translate_id machineTranslateId,t.obj_id,t.obj_id
         objId,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name objName,t.state,t.community_id,t.community_id
         communityId,t.b_id,t.b_id bId,td.name typeCdName,td1.name stateName,t.create_time createTime,t.update_time
-        updateTime,t.machine_cmd,t.obj_b_id,t.machine_cmd machineCmd,t.obj_b_id objBId
+        updateTime,t.machine_cmd,t.obj_b_id,t.machine_cmd machineCmd,t.obj_b_id objBId,t.remark
         from machine_translate t,t_dict td,t_dict td1
         where 1 =1
         and t.type_cd=td.status_cd
@@ -198,6 +201,7 @@
         <if test="machineCode !=null and machineCode != ''">
             , t.machine_code= #{machineCode}
         </if>
+
         <if test="typeCd !=null and typeCd != ''">
             , t.type_cd= #{typeCd}
         </if>
@@ -212,6 +216,9 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            ,t.remark= #{remark}
         </if>
         where 1=1
         <if test="machineTranslateId !=null and machineTranslateId != ''">
@@ -277,7 +284,10 @@
             t.state= #{state},
         </if>
         <if test="updateTime !=null ">
-            t.update_time= #{updateTime}
+            t.update_time= #{updateTime},
+        </if>
+        <if test="remark !=null and remark != ''">
+            t.remark= #{remark}
         </if>
         where
         t.machine_code= #{machineCode}

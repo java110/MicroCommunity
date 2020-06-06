@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.ICommunityLocationInnerServiceSMO;
 import com.java110.dto.communityLocation.CommunityLocationDto;
-import com.java110.result.ResultVo;
+import com.java110.vo.ResultVo;
 import com.java110.utils.constant.ServiceCodeCommunityLocationConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
