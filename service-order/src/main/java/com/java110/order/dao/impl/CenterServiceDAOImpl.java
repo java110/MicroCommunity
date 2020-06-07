@@ -1,11 +1,11 @@
 package com.java110.order.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.dao.BaseServiceDao;
+import com.java110.entity.mapping.Mapping;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.entity.mapping.Mapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,23 +27,25 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 保存订单信息
+     *
      * @param order 订单信息
      * @return
      */
     @Override
-    public void saveOrder(Map order) throws DAOException{
+    public void saveOrder(Map order) throws DAOException {
 
         logger.debug("----【CenterServiceDAOImpl.saveOrder】保存数据入参 : " + JSONObject.toJSONString(order));
 
-        int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrder",order);
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"保存订单信息失败："+ JSONObject.toJSONString(order));
+        int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrder", order);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单信息失败：" + JSONObject.toJSONString(order));
         }
 
     }
 
     /**
      * 保存属性信息
+     *
      * @param orderAttrs
      * @return
      */
@@ -52,37 +54,39 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
         logger.debug("----【CenterServiceDAOImpl.saveOrderAttrs】保存数据入参 : " + JSONObject.toJSONString(orderAttrs));
 
-        for(Map orderAttr:orderAttrs){
-            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrderAttrs",orderAttr);
-            if(saveFlag < 1){
-                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"保存订单属性信息失败："+ JSONObject.toJSONString(orderAttr));
+        for (Map orderAttr : orderAttrs) {
+            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveOrderAttrs", orderAttr);
+            if (saveFlag < 1) {
+                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单属性信息失败：" + JSONObject.toJSONString(orderAttr));
             }
         }
     }
 
     /**
      * 保存订单项信息
+     *
      * @param business 订单项信息
      */
     @Override
     public void saveBusiness(Map business) throws DAOException {
 
         logger.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(business));
-            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
-            if (saveFlag < 1) {
-                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(business));
-            }
+        int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(business));
+        }
     }
 
     /**
      * 保存订单项信息
+     *
      * @param businesses 订单项信息
      */
     @Override
     public void saveBusiness(List<Map> businesses) throws DAOException {
 
         logger.debug("----【CenterServiceDAOImpl.saveBusiness】保存数据入参 : " + JSONObject.toJSONString(businesses));
-        for(Map business:businesses) {
+        for (Map business : businesses) {
             int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusiness", business);
             if (saveFlag < 1) {
                 throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项信息失败：" + JSONObject.toJSONString(business));
@@ -92,6 +96,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 保存属性信息
+     *
      * @param businessAttrs
      */
     @Override
@@ -99,16 +104,17 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
         logger.debug("----【CenterServiceDAOImpl.saveBusinessAttrs】保存数据入参 : " + JSONObject.toJSONString(businessAttrs));
 
-        for(Map businessAttr:businessAttrs){
-            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusinessAttrs",businessAttr);
-            if(saveFlag < 1){
-                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"保存订单项属性信息失败："+ JSONObject.toJSONString(businessAttr));
+        for (Map businessAttr : businessAttrs) {
+            int saveFlag = sqlSessionTemplate.insert("centerServiceDAOImpl.saveBusinessAttrs", businessAttr);
+            if (saveFlag < 1) {
+                throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "保存订单项属性信息失败：" + JSONObject.toJSONString(businessAttr));
             }
         }
     }
 
     /**
      * 更新订单信息（一般就更新订单状态）
+     *
      * @param order
      * @throws DAOException
      */
@@ -116,14 +122,15 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     public void updateOrder(Map order) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.updateOrder】保存数据入参 : " + JSONObject.toJSONString(order));
 
-        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateOrder",order);
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"更新订单信息失败："+ JSONObject.toJSONString(order));
+        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateOrder", order);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "更新订单信息失败：" + JSONObject.toJSONString(order));
         }
     }
 
     /**
      * 更新订单项信息（一般就更新订单项状态）
+     *
      * @param order
      * @throws DAOException
      */
@@ -131,74 +138,78 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     public void updateBusiness(Map order) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.updateBusiness】保存数据入参 : " + JSONObject.toJSONString(order));
 
-        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusiness",order);
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"更新订单项信息失败："+ JSONObject.toJSONString(order));
+        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusiness", order);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "更新订单项信息失败：" + JSONObject.toJSONString(order));
         }
     }
 
     /**
      * 根据bId 修改业务项信息
+     *
      * @param business
      * @throws DAOException
      */
-    public void updateBusinessByBId(Map business) throws DAOException{
+    public void updateBusinessByBId(Map business) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.updateBusinessByBId】保存数据入参 : " + JSONObject.toJSONString(business));
 
-        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessByBId",business);
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"更新订单项信息失败："+ JSONObject.toJSONString(business));
+        int saveFlag = sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessByBId", business);
+        if (saveFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "更新订单项信息失败：" + JSONObject.toJSONString(business));
         }
     }
 
     /**
      * 当所有业务动作是否都是C，将订单信息改为 C
+     *
      * @param bId
      * @return
      * @throws DAOException
      */
-    public void completeOrderByBId(String bId) throws DAOException{
+    public void completeOrderByBId(String bId) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.completeOrderByBId】数据入参 : " + bId);
 
-        int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByBId",bId);
+        int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByBId", bId);
 
-        if(updateFlag < 1){
+        if (updateFlag < 1) {
             //throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前业务还没有全完成（C）："+ bId);
-            logger.debug("当前业务还没有全完成（C）:"+bId);
+            logger.debug("当前业务还没有全完成（C）:" + bId);
         }
     }
 
     /**
      * 当所有业务动作是否都是C，将订单信息改为 C
+     *
      * @param oId
      * @return
      * @throws DAOException
      */
-    public void completeOrderByOId(String oId) throws DAOException{
+    public void completeOrderByOId(String oId) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.completeOrderByOId】数据入参 : " + oId);
 
-        int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByOId",oId);
+        int updateFlag = sqlSessionTemplate.update("centerServiceDAOImpl.completeOrderByOId", oId);
 
-        if(updateFlag < 1){
+        if (updateFlag < 1) {
             //throw new DAOException(ResponseConstant.RESULT_CODE_INNER_ERROR,"当前业务还没有全完成（C）："+ bId);
-            logger.debug("当前业务还没有全完成（C）:"+oId);
+            logger.debug("当前业务还没有全完成（C）:" + oId);
         }
     }
 
     /**
      * 判断 business 过程是否完成 1 表示完成 0表示未完成
+     *
      * @param oId
      * @return
      * @throws DAOException
      */
-    public int judgeAllBusinessCompleted(String oId,String statusCd) throws DAOException{
+    public int judgeAllBusinessCompleted(String oId, String statusCd) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.judgeAllBusinessCompleted】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
         Map paramIn = new HashMap();
-        paramIn.put("oId",oId);
-        paramIn.put("statusCd",statusCd);
+        paramIn.put("oId", oId);
+        paramIn.put("statusCd", statusCd);
 
-        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessCompleted",paramIn);
-        if(paramOuts == null || paramOuts.size() == 0){
+        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessCompleted", paramIn);
+        if (paramOuts == null || paramOuts.size() == 0) {
             return 0;
         }
         return 1;
@@ -206,18 +217,19 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 判断 business 过程是否 满足撤单条件
+     *
      * @param oId
      * @return
      * @throws DAOException
      */
-    public int judgeAllBusinessDeleteOrder(String oId,String statusCd) throws DAOException{
+    public int judgeAllBusinessDeleteOrder(String oId, String statusCd) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.judgeAllBusinessDeleteOrder】数据入参 :oId= " + oId + ",statusCd = " + statusCd);
         Map paramIn = new HashMap();
-        paramIn.put("oId",oId);
-        paramIn.put("statusCd",statusCd);
+        paramIn.put("oId", oId);
+        paramIn.put("statusCd", statusCd);
 
-        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessDeleteOrder",paramIn);
-        if(paramOuts == null || paramOuts.size() == 0){
+        List<Map> paramOuts = sqlSessionTemplate.selectList("centerServiceDAOImpl.judgeAllBusinessDeleteOrder", paramIn);
+        if (paramOuts == null || paramOuts.size() == 0) {
             return 0;
         }
         return 1;
@@ -225,26 +237,29 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 根据bId查询订单信息
+     *
      * @param bId
      * @return
      * @throws DAOException
      */
-    public Map getOrderInfoByBId(String bId)throws DAOException{
-        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderInfoByBId",bId);
-        if(orders !=null && orders.size() >0){
+    public Map getOrderInfoByBId(String bId) throws DAOException {
+        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getOrderInfoByBId", bId);
+        if (orders != null && orders.size() > 0) {
             return orders.get(0);
         }
         return null;
     }
+
     /**
      * 根据oId查询订单信息
+     *
      * @param oId
      * @return
      * @throws DAOException
      */
-    public Map getDeleteOrderBusinessByOId(String oId)throws DAOException{
-        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getDeleteOrderBusinessByOId",oId);
-        if(orders !=null && orders.size() >0){
+    public Map getDeleteOrderBusinessByOId(String oId) throws DAOException {
+        List<Map> orders = sqlSessionTemplate.selectList("centerServiceDAOImpl.getDeleteOrderBusinessByOId", oId);
+        if (orders != null && orders.size() > 0) {
             return orders.get(0);
         }
         return null;
@@ -253,13 +268,14 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 获取同个订单中已经完成的订单项
+     *
      * @param bId
      * @return
      * @throws DAOException
      */
-    public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException{
+    public List<Map> getCommonOrderCompledBusinessByBId(String bId) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.getCommonOrderCompledBusinessByBId】数据入参 : " + bId);
-        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getCommonOrderCompledBusinessByBId",bId);
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getCommonOrderCompledBusinessByBId", bId);
     }
 
     @Override
@@ -270,6 +286,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 查询映射表
+     *
      * @return
      */
     @Override
@@ -279,6 +296,7 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 查询业主订单
+     *
      * @param info
      * @return
      */
@@ -288,23 +306,24 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     }
 
 
-
     /**
      * 查询业主订单
+     *
      * @param info
      * @return
      */
     @Override
     public List<Map> queryOrderByBusinessType(Map info) {
-        return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBusinessType");
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryOrderByBusinessType", info);
     }
 
-    public int updateBusinessStatusCd(Map info){
-        return sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessStatusCd",info);
+    public int updateBusinessStatusCd(Map info) {
+        return sqlSessionTemplate.update("centerServiceDAOImpl.updateBusinessStatusCd", info);
     }
 
     /**
      * 查询业主订单
+     *
      * @param info
      * @return
      */
@@ -312,8 +331,10 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
     public List<Map> queryManchineOrders(Map info) {
         return sqlSessionTemplate.selectList("centerServiceDAOImpl.queryManchineOrders");
     }
+
     /**
      * 查询申请钥匙订单
+     *
      * @param info
      * @return
      */
@@ -324,26 +345,28 @@ public class CenterServiceDAOImpl extends BaseServiceDao implements ICenterServi
 
     /**
      * 根据oId 查询Business
+     *
      * @param info
      * @return
      * @throws DAOException
      */
-    public List<Map> getBusinessByOId(Map info) throws DAOException{
+    public List<Map> getBusinessByOId(Map info) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.getBusinessByOId】保存数据入参 : " + JSONObject.toJSONString(info));
 
-        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getBusinessByOId",info);
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.getBusinessByOId", info);
     }
 
     /**
      * 查询同订单 订单项
+     *
      * @param info
      * @return
      * @throws DAOException
      */
-    public List<Map> querySameOrderBusiness(Map info) throws DAOException{
+    public List<Map> querySameOrderBusiness(Map info) throws DAOException {
         logger.debug("----【CenterServiceDAOImpl.querySameOrderBusiness】数据入参 : " + JSONObject.toJSONString(info));
 
-        return sqlSessionTemplate.selectList("centerServiceDAOImpl.querySameOrderBusiness",info);
+        return sqlSessionTemplate.selectList("centerServiceDAOImpl.querySameOrderBusiness", info);
     }
 
 }

@@ -235,7 +235,7 @@
         where co.o_id = cb.o_id
         and cb.status_cd = 'C'
         <if test="businessTypeCds !=null">
-            and t.business_type_cd in
+            and cb.business_type_cd in
             <foreach collection="businessTypeCds" item="item" index="index" open="(" close=")" separator=",">
                 #{item}
             </foreach>

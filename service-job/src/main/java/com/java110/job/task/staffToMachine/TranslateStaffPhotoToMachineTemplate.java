@@ -70,8 +70,7 @@ public class TranslateStaffPhotoToMachineTemplate extends TaskSystemQuartz {
         logger.debug("任务在执行" + taskDto.toString());
 
         OrderDto orderDto = new OrderDto();
-        String[] businessTypeCds = new String[]{"100100030001",
-                "100100040001"};
+        String[] businessTypeCds = new String[]{"100100030001","100100040001"};
         orderDto.setBusinessTypeCds(businessTypeCds);
         List<OrderDto> orderDtos = orderInnerServiceSMOImpl.queryOrderByBusinessType(orderDto);
 
