@@ -20,6 +20,7 @@ import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machine.MachineUserResultDto;
 import com.java110.utils.constant.ServiceCodeMachineTranslateConstant;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,8 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         JSONObject outParam = null;
         ResponseEntity<String> responseEntity = null;
+
+        ResultVo resultVo = null;
         Map<String, String> reqHeader = context.getRequestHeaders();
         //判断是否是心跳类过来的
         if (!super.validateMachineBody(event, context, reqJson, machineInnerServiceSMOImpl)) {
@@ -115,9 +118,10 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
         communityDto.setCommunityId(communityId);
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
         if (communityDtos == null || communityDtos.size() != 1) {
-            outParam.put("code", -1);
-            outParam.put("message", "未找到相应小区信息");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), httpHeaders, HttpStatus.OK);
+
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "未找到相应小区信息");
+
+            responseEntity = new ResponseEntity<>(resultVo.toString(), httpHeaders, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return;
         }
@@ -130,9 +134,8 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
         List<MachineTranslateDto> machineTranslateDtos = machineTranslateInnerServiceSMOImpl.queryMachineTranslates(machineTranslateDto);
 
         if (machineTranslateDtos == null || machineTranslateDtos.size() < 1) {
-            outParam.put("code", -1);
-            outParam.put("message", "未找到相应人脸信息");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), httpHeaders, HttpStatus.OK);
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "未找到相应人脸信息");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), httpHeaders, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return;
         }
@@ -141,7 +144,7 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
 
         reqJson.put("communityId", communityId);
         reqJson.put("communityName", communityDtos.get(0).getName());
-        reqJson.put("machineCode", httpHeaders.get("machinecode"));
+        reqJson.put("machineCode", httpHeaders.get("machinecode").get(0));
 
         MachineUserResultDto machineUserResultDto = null;
         switch (tmpMachineTranslateDto.getTypeCd()) {
@@ -160,15 +163,16 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
 
         //检查是否存在该用户
         if (machineUserResultDto == null) {
-            outParam.put("code", -1);
-            outParam.put("message", "未找到相应人脸信息");
-            responseEntity = new ResponseEntity<>(outParam.toJSONString(), httpHeaders, HttpStatus.OK);
+            resultVo = new ResultVo(ResultVo.CODE_MACHINE_ERROR, "未找到相应人脸信息");
+            responseEntity = new ResponseEntity<>(resultVo.toString(), httpHeaders, HttpStatus.OK);
             context.setResponseEntity(responseEntity);
             return;
         }
 
+        resultVo = new ResultVo(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, machineUserResultDto);
 
-        responseEntity = new ResponseEntity<>(JSONObject.toJSONString(machineUserResultDto), httpHeaders, HttpStatus.OK);
+
+        responseEntity = new ResponseEntity<>(JSONObject.toJSONString(resultVo), httpHeaders, HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }
 
