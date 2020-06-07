@@ -276,19 +276,21 @@
     </select>
 
     <update id="updateMachineTranslateState" parameterType="Map">
-        update machine_translate t set
-        <if test="statusCd !=null and statusCd != ''">
-            t.status_cd= #{statusCd},
-        </if>
-        <if test="state !=null and state != ''">
-            t.state= #{state},
-        </if>
-        <if test="updateTime !=null ">
-            t.update_time= #{updateTime},
-        </if>
-        <if test="remark !=null and remark != ''">
-            t.remark= #{remark}
-        </if>
+        update machine_translate t
+        <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd= #{statusCd},
+            </if>
+            <if test="state !=null and state != ''">
+                t.state= #{state},
+            </if>
+            <if test="updateTime !=null ">
+                t.update_time= #{updateTime},
+            </if>
+            <if test="remark !=null and remark != ''">
+                t.remark= #{remark}
+            </if>
+        </set>
         where
         t.machine_code= #{machineCode}
         <if test="communityId !=null and communityId != ''">
