@@ -32,6 +32,10 @@ public class MachineUserResultDto {
 
     private String reserved;
 
+    private String departmentId;
+
+    private String departmentName;
+
     public String getUserid() {
         return userid;
     }
@@ -118,5 +122,21 @@ public class MachineUserResultDto {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }

@@ -56,7 +56,6 @@ public class StaffMachineTranslateBMOImpl implements IStaffMachineTranslateBMO {
         List<UserDto> userDtos = userInnerServiceSMOImpl.getStaffs(userDto);
 
         if (userDtos == null || userDtos.size() != 1) {
-
             return null;
         }
 
@@ -64,24 +63,26 @@ public class StaffMachineTranslateBMOImpl implements IStaffMachineTranslateBMO {
         fileRelDto.setObjId(reqJson.getString("faceid"));
         fileRelDto.setRelTypeCd("12000");
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        String tmpImg = "";
         if (fileRelDtos == null || fileRelDtos.size() != 1) {
-            return null;
-        }
-        FileDto fileDto = new FileDto();
-        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setCommunityId(communityId);
-        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
-        if (fileDtos == null || fileDtos.size() != 1) {
-            return null;
+            tmpImg = "";
+        } else {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
+            fileDto.setCommunityId(communityId);
+            List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
+            if (fileDtos == null || fileDtos.size() != 1) {
+                tmpImg = "";
+            } else {
+                tmpImg = fileDtos.get(0).getContext();
+            }
         }
         userDto = userDtos.get(0);
-
         MachineUserResultDto machineUserResultDto = new MachineUserResultDto();
         machineUserResultDto.setUserid(userDto.getUserId());
         machineUserResultDto.setGroupid(communityId);
         machineUserResultDto.setGroup(reqJson.getString("communityName"));
         machineUserResultDto.setName(userDto.getName());
-        String tmpImg = fileDtos.get(0).getContext();
         machineUserResultDto.setFaceBase64(tmpImg);
         machineUserResultDto.setIdNumber(userDto.getTel());
         try {
