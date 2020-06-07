@@ -4,16 +4,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IApplicationKeyMachineTranslateBMO;
 import com.java110.api.bmo.machineTranslate.IOwnerMachineTranslateBMO;
+import com.java110.api.bmo.machineTranslate.IStaffMachineTranslateBMO;
 import com.java110.api.bmo.machineTranslate.IVisitMachineTranslateBMO;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.smo.common.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.core.smo.common.IFileRelInnerServiceSMO;
-import com.java110.core.smo.common.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machine.MachineUserResultDto;
@@ -80,6 +81,9 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
 
     @Autowired
     private IVisitMachineTranslateBMO visitMachineTranslateBMOImpl;
+
+    @Autowired
+    private IStaffMachineTranslateBMO staffMachineTranslateBMOImpl;
 
     /**
      * @param event   事件对象
@@ -148,6 +152,8 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
                 machineUserResultDto = applicationKeyMachineTranslateBMOImpl.getPhotoInfo(reqJson);
             case TYPE_VISIT:
                 machineUserResultDto = visitMachineTranslateBMOImpl.getPhotoInfo(reqJson);
+            case TYPE_STAFF:
+                machineUserResultDto = staffMachineTranslateBMOImpl.getPhotoInfo(reqJson);
             default:
                 break;
         }
@@ -160,7 +166,6 @@ public class MachineQueryUserInfoListener extends BaseMachineListener {
             context.setResponseEntity(responseEntity);
             return;
         }
-
 
 
         responseEntity = new ResponseEntity<>(JSONObject.toJSONString(machineUserResultDto), httpHeaders, HttpStatus.OK);
