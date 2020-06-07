@@ -74,33 +74,34 @@
     </insert>
     <!-- 删除实例客户信息 cust -->
     <update id="deleteDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
-           delete * from cust_attr ct where 1=1
-           <if test="custId != null and custId != ''">
-               and ct.custId = #{custId}
-           </if>
-            <if test="attrCd != null and attrCd != ''">
-                and ct.attrCd = #{attrCd}
-            </if>
+        delete * from cust_attr ct where 1=1
+        <if test="custId != null and custId != ''">
+            and ct.custId = #{custId}
+        </if>
+        <if test="attrCd != null and attrCd != ''">
+            and ct.attrCd = #{attrCd}
+        </if>
     </update>
     <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
     <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
 
-            select c.custId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.custAdress,c.custType,c.openId,
-            ca.custId,ca.attrCd,ca.value
-             from cust c, cust_attr ca where c.custId= ca.custId
+        select c.custId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.custAdress,c.custType,c.openId,
+        ca.custId,ca.attrCd,ca.value
+        from cust c, cust_attr ca where c.custId= ca.custId
         <if test="custId != null and custId != ''">
             and c.custId = #{custId}
         </if>
         <if test="versionId != null and versionId != ''">
             and c.versionId = #{versionId}
         </if>
-            and c.status_cd = '0'
+        and c.status_cd = '0'
 
     </select>
 
     <!-- 查询客户过程数据 -->
     <select id="queryBoCust" parameterType="com.java110.entity.user.BoCust" resultType="com.java110.entity.user.BoCust">
-        select bc.boId,bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId,bc.create_dt
+        select
+        bc.boId,bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId,bc.create_dt
         from bo_cust bc where 1=1
         <if test="boId != null and boId != ''">
             and bc.boId = #{boId}
@@ -117,7 +118,8 @@
         </if>
     </select>
     <!-- 查询客户属性过程表-->
-    <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr" resultType="com.java110.entity.user.BoCustAttr">
+    <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr"
+            resultType="com.java110.entity.user.BoCustAttr">
         select bca.boId,bca.custId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_cust_attr bca where 1=1
         <if test="boId !=null and boId != ''">
             and bca.boId = #{boId}
@@ -134,7 +136,8 @@
     </select>
 
     <!-- 查询客户属性信息 -->
-    <select id="queryDataToCustAttr" parameterType="com.java110.entity.user.CustAttr" resultType="com.java110.entity.user.CustAttr">
+    <select id="queryDataToCustAttr" parameterType="com.java110.entity.user.CustAttr"
+            resultType="com.java110.entity.user.CustAttr">
         select * from cust_attr ca where 1=1
         <if test="custId != null and custId != ''">
             and ca.custId = #{custId}
@@ -162,12 +165,15 @@
     <!-- 实例数据 -->
     <insert id="saveUserInfoInstance" parameterType="map">
         insert into u_user(user_id,name,email,address,password,location_cd,age,sex,tel,level_cd,b_id,status_cd)
-        select bu.user_id,bu.name,bu.email,bu.address,bu.password,bu.location_cd,bu.age,bu.sex,bu.tel,bu.level_cd,bu.b_id,'0' from business_user bu where bu.operate = 'ADD' and bu.b_id=#{b_id}
+        select
+        bu.user_id,bu.name,bu.email,bu.address,bu.password,bu.location_cd,bu.age,bu.sex,bu.tel,bu.level_cd,bu.b_id,'0'
+        from business_user bu where bu.operate = 'ADD' and bu.b_id=#{b_id}
     </insert>
 
     <insert id="saveUserAttrInstance" parameterType="map">
         insert into u_user_attr(attr_id,user_id,spec_cd,value,b_id,status_cd)
-        select bua.attr_id,bua.user_id,bua.spec_cd,bua.value,bua.b_id,'0' from business_user_attr bua where bua.operate='ADD' and bua.b_id=#{b_id}
+        select bua.attr_id,bua.user_id,bua.spec_cd,bua.value,bua.b_id,'0' from business_user_attr bua where
+        bua.operate='ADD' and bua.b_id=#{b_id}
     </insert>
 
     <update id="updateUserInfoInstance" parameterType="map">
@@ -222,14 +228,13 @@
     </update>
 
 
-
     <!-- 查询用户信息 Business -->
     <select id="queryBusinessUserInfo" parameterType="map" resultType="map">
         select u.user_id,u.name,u.email,u.address,u.password,u.location_cd,
         u.age,u.sex,u.tel,u.level_cd,u.b_id,u.operate
         from business_user u where 1 = 1
         <if test="operate != null and operate != ''">
-           and u.operate = #{operate}
+            and u.operate = #{operate}
         </if>
         <if test="bId != null and bId !=''">
             and u.b_id = #{bId}
@@ -259,7 +264,8 @@
 
     <!-- 查询用户信息 -->
     <select id="queryUserInfo" parameterType="map" resultType="map">
-        select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
+        select u.user_id, u.user_id userId,u.name,u.name
+        userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd,u.b_id
         from u_user u where 1= 1
         <if test="bId != null and bId !=''">
@@ -273,12 +279,11 @@
         </if>
         <if test="userIds != null and userIds != null">
             and u.user_id in
-                <foreach collection="userIds" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
+            <foreach collection="userIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
     </select>
-
 
 
     <!-- 查询用户属性信息 -->
@@ -388,7 +393,6 @@
     </update>
 
 
-
     <!--保存用户证件信息 add by wuxw 2018-06-29 -->
     <insert id="saveBusinessUserCredentials" parameterType="map">
         insert into business_user_credentials(credentials_id,b_id,user_id,credentials_cd,value,operate)
@@ -437,22 +441,24 @@
     <select id="getStaffCount" parameterType="Map" resultType="Map">
         select count(1) count
         from
-             u_user a
-            ,u_org uo
-            ,u_org_staff_rel uosr
-            ,u_org puo
+        u_user a
+        ,u_org uo
+        ,u_org_staff_rel uosr
+        ,u_org puo
         where a.level_cd = '01'
-            and a.user_id = uosr.staff_id
+        and a.user_id = uosr.staff_id
+        <if test="storeId !=null and storeId != ''">
             and uosr.store_id = #{storeId}
-            and uosr.org_id = uo.org_id
-            and uo.parent_org_id = puo.org_id
+        </if>
+        and uosr.org_id = uo.org_id
+        and uo.parent_org_id = puo.org_id
         <if test="parentOrgId !=null and parentOrgId != ''">
             and uo.parent_org_id = #{parentOrgId}
         </if>
-            and a.status_cd = '0'
-            and uo.status_cd = '0'
-            and uosr.status_cd = '0'
-            and puo.status_cd = '0'
+        and a.status_cd = '0'
+        and uo.status_cd = '0'
+        and uosr.status_cd = '0'
+        and puo.status_cd = '0'
         <if test="tel !=null and tel != ''">
             and a.tel= #{tel}
         </if>
@@ -468,29 +474,36 @@
         <if test="orgId !=null and orgId != ''">
             and uo.org_id = #{orgId}
         </if>
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
     </select>
 
     <!-- 查询员工总量 -->
     <select id="getStaffs" parameterType="Map" resultType="Map">
-        select uo.org_id orgId,uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-            u.age,u.sex,u.tel,u.level_cd,u.b_id,puo.org_id parentOrgId,puo.org_name parentOrgName
+        select uo.org_id orgId,uo.org_name,uo.org_name orgName,u.user_id, u.user_id userId,u.name,u.name
+        userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
+        u.age,u.sex,u.tel,u.level_cd,u.b_id,puo.org_id parentOrgId,puo.org_name parentOrgName,puo.belong_community_id belongCommunityId,
+        uosr.store_id storeId
         from
-            u_user u
-            ,u_org uo
-            ,u_org_staff_rel uosr
-            ,u_org puo
-            where u.level_cd = '01'
-            and u.user_id = uosr.staff_id
+        u_user u
+        ,u_org uo
+        ,u_org_staff_rel uosr
+        ,u_org puo
+        where u.level_cd = '01'
+        and u.user_id = uosr.staff_id
+        <if test="storeId !=null and storeId != ''">
             and uosr.store_id = #{storeId}
-            and uosr.org_id = uo.org_id
-            and uo.parent_org_id = puo.org_id
+        </if>
+        and uosr.org_id = uo.org_id
+        and uo.parent_org_id = puo.org_id
         <if test="parentOrgId !=null and parentOrgId != ''">
             and uo.parent_org_id = #{parentOrgId}
         </if>
-            and u.status_cd = '0'
-            and uo.status_cd = '0'
-            and uosr.status_cd = '0'
-            and puo.status_cd = '0'
+        and u.status_cd = '0'
+        and uo.status_cd = '0'
+        and uosr.status_cd = '0'
+        and puo.status_cd = '0'
         <if test="tel !=null and tel != ''">
             and u.tel= #{tel}
         </if>
@@ -506,6 +519,9 @@
         <if test="orgId !=null and orgId != ''">
             and uo.org_id = #{orgId}
         </if>
+        <if test="bId != null and bId !=''">
+            and u.b_id = #{bId}
+        </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -514,7 +530,8 @@
 
     <!-- 查询用户 -->
     <select id="getUsers" parameterType="Map" resultType="Map">
-        select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
+        select u.user_id, u.user_id userId,u.name,u.name
+        userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd,u.b_id
         from u_user u
         <if test="openId != null and openId !=''">
@@ -581,7 +598,8 @@
 
     <!-- 查询用户密码 -->
     <select id="getUserHasPwd" parameterType="Map" resultType="Map">
-        select u.user_id, u.user_id userId,u.name,u.name userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
+        select u.user_id, u.user_id userId,u.name,u.name
+        userName,u.email,u.address,u.password,u.location_cd,u.location_cd locationCd,
         u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,u.password
         from u_user u
         <if test="openId != null and openId !=''">

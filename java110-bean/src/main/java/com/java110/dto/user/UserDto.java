@@ -57,6 +57,10 @@ public class UserDto extends PageDto implements Serializable {
 
     private List<UserAttrDto> userAttrs;
 
+    private String bId;
+
+    private String belongCommunityId;
+
 
 
     public String getUserId() {
@@ -225,5 +229,21 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getBelongCommunityId() {
+        return belongCommunityId;
+    }
+
+    public void setBelongCommunityId(String belongCommunityId) {
+        this.belongCommunityId = belongCommunityId;
     }
 }
