@@ -97,6 +97,7 @@ public class MachineGetTaskInfoListener extends BaseMachineListener {
                 MachineTranslateDto tmpMtDto = new MachineTranslateDto();
                 tmpMtDto.setMachineTranslateId(tmpM.getMachineTranslateId());
                 tmpMtDto.setCommunityId(tmpM.getCommunityId());
+                tmpMtDto.setMachineCode(tmpM.getMachineCode());
                 tmpMtDto.setState(STATE_TRANSLATEING);
                 machineTranslateInnerServiceSMOImpl.updateMachineTranslateState(tmpMtDto);
             }

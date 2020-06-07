@@ -292,12 +292,17 @@
             </if>
         </set>
         where
-        t.machine_code= #{machineCode}
+        <if test="machineCode !=null and machineCode != ''">
+            t.machine_code= #{machineCode}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
+        </if>
+        <if test="machineTranslateId !=null and machineTranslateId != ''">
+            and t.machine_translate_id= #{machineTranslateId}
         </if>
     </update>
 
