@@ -94,7 +94,7 @@ public class ModifyStaffServiceListener extends AbstractServiceApiPlusListener {
             if (fileRelDtos == null || fileRelDtos.size() == 0) {
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", "-1");
-                businessUnit.put("relTypeCd", "10000");
+                businessUnit.put("relTypeCd", "12000");
                 businessUnit.put("saveWay", "table");
                 businessUnit.put("objId", reqJson.getString("userId"));
                 businessUnit.put("fileRealName", fileDto.getFileId());
