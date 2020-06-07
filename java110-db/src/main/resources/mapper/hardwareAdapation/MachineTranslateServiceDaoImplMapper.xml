@@ -292,8 +292,9 @@
             </if>
         </set>
         where
+        1=1
         <if test="machineCode !=null and machineCode != ''">
-            t.machine_code= #{machineCode}
+            and t.machine_code= #{machineCode}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
