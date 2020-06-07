@@ -3,11 +3,11 @@ package com.java110.api.bmo.machineTranslate.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.machineTranslate.IApplicationKeyMachineTranslateBMO;
 import com.java110.api.listener.machineTranslate.MachineQueryUserInfoListener;
-import com.java110.core.smo.community.ICommunityInnerServiceSMO;
+import com.java110.core.smo.common.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.core.smo.common.IFileRelInnerServiceSMO;
-import com.java110.core.smo.common.IApplicationKeyInnerServiceSMO;
 import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
+import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.ApplicationKeyDto;
@@ -68,7 +68,7 @@ public class ApplicationKeyMachineTranslateBMOImpl implements IApplicationKeyMac
             return null;
         }
         FileDto fileDto = new FileDto();
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
+        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
         fileDto.setCommunityId(communityId);
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
         if (fileDtos == null || fileDtos.size() != 1) {

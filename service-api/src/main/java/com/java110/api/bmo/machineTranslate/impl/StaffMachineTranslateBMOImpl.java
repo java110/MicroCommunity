@@ -68,7 +68,7 @@ public class StaffMachineTranslateBMOImpl implements IStaffMachineTranslateBMO {
             return null;
         }
         FileDto fileDto = new FileDto();
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
+        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
         fileDto.setCommunityId(communityId);
         List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
         if (fileDtos == null || fileDtos.size() != 1) {
