@@ -80,6 +80,8 @@ public class StaffMachineTranslateBMOImpl implements IStaffMachineTranslateBMO {
         userDto = userDtos.get(0);
         MachineUserResultDto machineUserResultDto = new MachineUserResultDto();
         machineUserResultDto.setUserid(userDto.getUserId());
+        machineUserResultDto.setDepartmentId(userDto.getParentOrgId());
+        machineUserResultDto.setDepartmentName(userDto.getParentOrgName());
         machineUserResultDto.setGroupid(communityId);
         machineUserResultDto.setGroup(reqJson.getString("communityName"));
         machineUserResultDto.setName(userDto.getName());
