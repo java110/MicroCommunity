@@ -182,6 +182,7 @@ public class TranslateStaffPhotoToMachineTemplate extends TaskSystemQuartz {
         tmpMachineTranslateDto.setCommunityId(tmpMachineDto.getCommunityId());
         tmpMachineTranslateDto.setbId("-1");
         tmpMachineTranslateDto.setObjBId(tmpOrderDto.getbId());
+        tmpMachineTranslateDto.setMachineCmd("101");//增加更新人脸
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(tmpMachineTranslateDto);
 
     }
