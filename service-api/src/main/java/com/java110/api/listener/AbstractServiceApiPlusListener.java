@@ -288,6 +288,16 @@ public abstract class AbstractServiceApiPlusListener extends AbstractServiceApiD
 
     /**
      * 新增数据方法
+     * {
+     *     HTTP_BUSINESS_TYPE_CD:"",
+     *     HTTP_SEQ:"",
+     *     HTTP_INVOKE_MODEL:""
+     *     datas:{
+     *
+     *         a:1,
+     *         b:2
+     *     }
+     * }
      *
      * @param context 上下文对象
      * @param param   po对象

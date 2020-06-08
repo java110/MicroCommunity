@@ -6,6 +6,7 @@ import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.smo.community.IActivitiesInnerServiceSMO;
 import com.java110.po.activities.ActivitiesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeActivitiesConstant;
@@ -23,6 +24,9 @@ public class DeleteActivitiesListener extends AbstractServiceApiPlusListener {
     @Autowired
     private IActivitiesBMO activitiesBMOImpl;
 
+    @Autowired
+    private IActivitiesInnerServiceSMO activitiesInnerServiceSMOImpl;
+
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -37,6 +41,7 @@ public class DeleteActivitiesListener extends AbstractServiceApiPlusListener {
         ActivitiesPo activitiesPo = BeanConvertUtil.covertBean(reqJson, ActivitiesPo.class);
 
         super.delete(context, activitiesPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_ACTIVITIES);
+
 
     }
 

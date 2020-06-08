@@ -1,5 +1,5 @@
 {
-  "autoMove": true,
+  "autoMove": false,
   "id": "locationId",
   "name": "communityLocation",
   "desc": "小区位置",

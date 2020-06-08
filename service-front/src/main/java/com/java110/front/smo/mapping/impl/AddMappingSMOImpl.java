@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
-
 /**
  * 添加小区服务实现类
  * add by wuxw 2019-06-30
@@ -32,10 +31,9 @@ public class AddMappingSMOImpl extends AbstractComponentSMO implements IAddMappi
 
         //Assert.hasKeyAndValue(paramIn, "xxx", "xxx");
         Assert.hasKeyAndValue(paramIn, "domain", "必填，请填写域");
-Assert.hasKeyAndValue(paramIn, "name", "必填，请填写名称");
-Assert.hasKeyAndValue(paramIn, "key", "必填，请填写键");
-Assert.hasKeyAndValue(paramIn, "value", "必填，请填写值");
-
+        Assert.hasKeyAndValue(paramIn, "name", "必填，请填写名称");
+        Assert.hasKeyAndValue(paramIn, "key", "必填，请填写键");
+        Assert.hasKeyAndValue(paramIn, "value", "必填，请填写值");
 
 
         super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.AGENT_HAS_LIST_MAPPING);

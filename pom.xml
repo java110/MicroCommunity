@@ -163,11 +163,6 @@
                 <artifactId>java110-db</artifactId>
                 <version>${microcommunity.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.java110</groupId>
-                <artifactId>java110-front</artifactId>
-                <version>${microcommunity.version}</version>
-            </dependency>
             <!-- logback 日志组件支持  -->
 
             <dependency>
