@@ -10,6 +10,8 @@ import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
 import com.java110.core.smo.community.IRoomInnerServiceSMO;
+import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.entity.center.AppService;
 import com.java110.entity.order.Orders;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -22,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * @ClassName PayFeeListener
@@ -50,6 +54,8 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
+    @Autowired
+    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
 
     @Override
@@ -91,6 +97,19 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
+
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setObjId((String) paramObj.get("communityId"));
+        smallWeChatDto.setAppId((String) paramObj.get("appId"));
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        if(smallWeChatDtos.size() <= 0){
+            throw new IllegalArgumentException("支付失败,小区未配置小程序信息");
+        }
+        //指定支付小区
+        if("1000".equals(smallWeChatDtos.get(0).getObjType())){
+            paramOut.put("payAppId",smallWeChatDtos.get(0).getAppId());
+            paramOut.put("payMchId",smallWeChatDtos.get(0).getMchId());
+        }
 
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         dataFlowContext.setResponseEntity(responseEntity);

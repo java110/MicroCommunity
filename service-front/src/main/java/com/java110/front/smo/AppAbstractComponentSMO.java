@@ -69,7 +69,10 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
      * @return
      * @throws Exception
      */
-    protected Map<String, String> java110Payment(RestTemplate outRestTemplate,String feeName, String tradeType,String orderNum, double money, String openId) throws Exception {
+    protected Map<String, String> java110Payment(RestTemplate outRestTemplate,
+                                                 String feeName, String tradeType,
+                                                 String orderNum, double money,
+                                                 String openId,String payAppId,String payMchId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -80,12 +83,20 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         Map<String, String> resMap = this.java110UnifieldOrder(outRestTemplate,feeName, orderNum, tradeType, payAmount, openId);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             if(WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
-                resultMap.put("appId", wechatAuthProperties.getAppId());
+                if(payAppId != null){
+                    resultMap.put("appId", payAppId);
+                }else{
+                    resultMap.put("appId", wechatAuthProperties.getAppId());
+                }
+                if(payMchId != null){
+                    resultMap.put("sign", PayUtil.createSign(resultMap, payMchId));
+                }else{
+                    resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
+                }
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
                 resultMap.put("nonceStr", PayUtil.makeUUID(32));
                 resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
                 resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
             }else if(WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)){
                 resultMap.put("appId", wechatAuthProperties.getAppId());
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
