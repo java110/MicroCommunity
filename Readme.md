@@ -24,7 +24,8 @@
 
 方案一、centos7.6一键式自动安装
 
-> wget https://www.zyunshe.com/hcAutoInstall.tar
+> 链接：https://pan.baidu.com/s/1sIPrxnwipF6ey_8k4rncWA
+  提取码：2e47
 
 如果下载不下来，请加群827669685在群文件中【HC系统部署文档】中获取hcAutoInstall.tar 自动部署shell脚本部署
 
