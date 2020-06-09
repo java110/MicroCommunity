@@ -31,6 +31,9 @@ public class ServiceConfiguration {
         exclusions.append("/app/community.listCommunitys,");// 加载小区
         exclusions.append("/app/user.userSendSms,");// 发送短信验证码
         exclusions.append("/app/owner.ownerRegister,");// 业主注册
+        exclusions.append("/app/activities.listActivitiess,");//小区广告
+        exclusions.append("/app/advert.listAdvertPhoto,");//小区广告图片
+        exclusions.append("/app/junkRequirement.listJunkRequirements,");//市场
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");
