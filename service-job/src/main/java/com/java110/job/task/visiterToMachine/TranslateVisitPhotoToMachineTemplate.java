@@ -155,6 +155,8 @@ public class TranslateVisitPhotoToMachineTemplate extends TaskSystemQuartz {
         tmpMachineTranslateDto.setState("10000");
         tmpMachineTranslateDto.setCommunityId(visitDto.getCommunityId());
         tmpMachineTranslateDto.setbId("-1");
+        tmpMachineTranslateDto.setMachineCmd("101");
+        tmpMachineTranslateDto.setObjBId("-1");
         machineTranslateInnerServiceSMOImpl.saveMachineTranslate(tmpMachineTranslateDto);
 
     }

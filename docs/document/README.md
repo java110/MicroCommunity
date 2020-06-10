@@ -1,6 +1,15 @@
 
 ## 介绍
 
-<center><font face="黑体" size=5>HC小区管理系统</font></center>
+HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，
+物业版uni-app和业主版uni-app,最新SQL文件加群获取827669685
 
-<center><font face="黑体" size=3>基于spring cloud 微服务架构的小区管理系统</font></center>
+## 项目结构说明
+
+    > java110-bean      #存放实体bean Vo对象（前台返回对象） Dto对象（数据传输对象） Po对象（数据库持久层对象）
+    > java110-config    #存放系统配置类，公共配置文件如logback.xml 日志配置文件
+    > java110-core      #存放系统核心类，各个微服务接口类，上下文对象，工厂类和事件相关类
+    > java110-db        #存放整套系统的SQL文件mapper
+    > java110-generator #代码生成器
+    > java110-service   #存放服务基础信息，基本存放基类和自研动态SQL解析引擎
+    > java110-util      #存放工具类，如时间工具类，日志工具类 常量类 异常处理类
