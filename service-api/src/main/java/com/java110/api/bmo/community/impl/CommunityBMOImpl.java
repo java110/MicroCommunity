@@ -106,7 +106,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         String auditStatusCd = MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd"));
         auditStatusCd = StringUtils.isEmpty(auditStatusCd) ? StateConstant.AGREE_AUDIT : auditStatusCd;
         businessCommunityMember.put("auditStatusCd", auditStatusCd);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         return business;
     }
@@ -125,7 +125,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", paramInJson.getString("communityMemberId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         return business;
     }
@@ -157,7 +157,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
 
@@ -179,7 +179,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
         //运维团队
@@ -200,7 +200,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
 
