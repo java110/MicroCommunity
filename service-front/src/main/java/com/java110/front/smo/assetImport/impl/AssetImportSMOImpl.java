@@ -864,7 +864,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             }
             String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
             String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
-            String age = StringUtil.isNullOrNone(os[2]) ? CommonUtil.getAgeByCertId(idCard) : os[2].toString();
+            String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
             importOwner = new ImportOwner();
             importOwner.setOwnerNum(os[0].toString());
             importOwner.setOwnerName(os[1].toString());
