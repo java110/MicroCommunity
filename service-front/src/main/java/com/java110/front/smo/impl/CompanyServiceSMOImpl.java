@@ -63,12 +63,12 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
         validateCompanyInfo(pd.getReqData());
 
 
-        JSONObject reqJson = JSONObject.parseObject("{\"businessStore\":{}}");
+        JSONObject reqJson = JSONObject.parseObject("{\""+StorePo.class.getSimpleName()+"\":{}}");
 
         JSONObject paramJson = JSONObject.parseObject(pd.getReqData());
 
         //基本信息
-        JSONObject businessStore = reqJson.getJSONObject("businessStore");
+        JSONObject businessStore = reqJson.getJSONObject(StorePo.class.getSimpleName());
         businessStore.put("userId", pd.getUserId());
         businessStore.put("name", paramJson.getString("name"));
         businessStore.put("address", paramJson.getString("areaAddress") + paramJson.getString("address"));
@@ -116,7 +116,7 @@ public class CompanyServiceSMOImpl extends BaseComponentSMO implements ICompanyS
 
         reqJson.put(StoreCerdentialPo.class.getSimpleName(), businessStoreCerdentials);
 
-        reqJson.put(StorePo.class.getSimpleName(), businessStore);
+        //reqJson.put(StorePo.class.getSimpleName(), businessStore);
 
 
         responseEntity = this.callCenterService(restTemplate, pd, reqJson.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/save.store.info", HttpMethod.POST);
