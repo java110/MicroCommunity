@@ -246,6 +246,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "002");//按月出账
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
         super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
@@ -274,6 +275,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -303,6 +305,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -332,6 +335,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
         businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -362,6 +366,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("billType", "003");//按天出账
 
         businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -391,6 +396,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "004");//按天出账
         businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
