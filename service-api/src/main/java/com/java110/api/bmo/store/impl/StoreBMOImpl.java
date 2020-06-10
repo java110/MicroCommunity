@@ -39,6 +39,7 @@ import java.util.List;
 public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
     @Autowired
     private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
+
     /**
      * 添加商户
      *
@@ -92,13 +93,14 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         JSONObject businessStoreUser = new JSONObject();
         businessStoreUser.put("storeId", paramInJson.getString("storeId"));
         businessStoreUser.put("storeUserId", "-1");
-        businessStoreUser.put("userId", paramInJson.getJSONObject("businessStore").getString("userId"));
+        businessStoreUser.put("userId", paramInJson.getJSONObject(StorePo.class.getSimpleName()).getString("userId"));
         businessStoreUser.put("relCd", StoreUserRelConstant.REL_ADMIN);
         businessStoreUsers.add(businessStoreUser);
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(StoreUserPo.class.getSimpleName(), businessStoreUsers);
 
         return business;
     }
+
     /**
      * 对请求报文处理
      *
@@ -175,7 +177,7 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
         business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 3);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessOrg = new JSONObject();
-        businessOrg.put("orgName", paramInJson.getJSONObject("businessStore").getString("name"));
+        businessOrg.put("orgName", paramInJson.getJSONObject(StorePo.class.getSimpleName()).getString("name"));
         businessOrg.put("orgLevel", "1");
         businessOrg.put("parentOrgId", orgId);
         businessOrg.put("belongCommunityId", "9999");
@@ -246,13 +248,13 @@ public class StoreBMOImpl extends ApiBaseBMO implements IStoreBMO {
 
         JSONObject business = JSONObject.parseObject("{\"datas\":{}}");
         business.put(CommonConstant.HTTP_BUSINESS_TYPE_CD, BusinessTypeConstant.BUSINESS_TYPE_SAVE_ORG_STAFF_REL);
-        business.put(CommonConstant.HTTP_SEQ,  DEFAULT_SEQ + 6);
+        business.put(CommonConstant.HTTP_SEQ, DEFAULT_SEQ + 6);
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONArray businessOrgStaffRels = new JSONArray();
         JSONObject businessOrgStaffRel = new JSONObject();
         businessOrgStaffRel.put("relId", "-1");
         businessOrgStaffRel.put("storeId", paramInJson.getString("storeId"));
-        businessOrgStaffRel.put("staffId", paramInJson.getJSONObject("businessStore").getString("userId"));
+        businessOrgStaffRel.put("staffId", paramInJson.getJSONObject(StorePo.class.getSimpleName()).getString("userId"));
         businessOrgStaffRel.put("orgId", paramInJson.getString("levelThreeOrgId"));
         businessOrgStaffRel.put("relCd", StoreUserRelConstant.REL_ADMIN);
         businessOrgStaffRels.add(businessOrgStaffRel);
