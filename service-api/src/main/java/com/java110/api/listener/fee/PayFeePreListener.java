@@ -99,7 +99,7 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         paramOut.put("receivableAmount", paramObj.getString("receivableAmount"));
 
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setObjId((String) paramObj.get("communityId"));
+        //smallWeChatDto.setObjId((String) paramObj.get("communityId"));
         smallWeChatDto.setAppId((String) paramObj.get("appId"));
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
         if(smallWeChatDtos.size() <= 0){
