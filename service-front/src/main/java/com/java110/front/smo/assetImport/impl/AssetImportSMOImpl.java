@@ -771,7 +771,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
      */
     private void getFee(Workbook workbook, List<ImportFee> importFees) {
         Sheet sheet = null;
-        sheet = ImportExcelUtils.getSheet(workbook, "房屋信息");
+        sheet = ImportExcelUtils.getSheet(workbook, "费用设置");
         List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
         ImportFee importFee = null;
         for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
