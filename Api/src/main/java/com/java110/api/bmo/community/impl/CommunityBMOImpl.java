@@ -270,6 +270,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
@@ -301,6 +304,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
@@ -332,6 +338,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
@@ -363,6 +372,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
@@ -394,6 +406,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
@@ -425,6 +440,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
+        businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         //计算 应收金额
         business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessFeeConfig", businessFeeConfig);
