@@ -15,6 +15,10 @@ public class ImportRoom {
 
     private double builtUpArea;
 
+    private String roomFeeId;
+
+    private String feeEndDate;
+
     private ImportOwner importOwner;
 
     public ImportFloor getFloor() {
@@ -63,5 +67,21 @@ public class ImportRoom {
 
     public void setImportOwner(ImportOwner importOwner) {
         this.importOwner = importOwner;
+    }
+
+    public String getRoomFeeId() {
+        return roomFeeId;
+    }
+
+    public void setRoomFeeId(String roomFeeId) {
+        this.roomFeeId = roomFeeId;
+    }
+
+    public String getFeeEndDate() {
+        return feeEndDate;
+    }
+
+    public void setFeeEndDate(String feeEndDate) {
+        this.feeEndDate = feeEndDate;
     }
 }

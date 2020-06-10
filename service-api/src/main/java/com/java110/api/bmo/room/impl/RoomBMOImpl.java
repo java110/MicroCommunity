@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.room.IRoomBMO;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.smo.community.IRoomInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
 import com.java110.core.smo.fee.IFeeInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
 import com.java110.dto.RoomDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
@@ -247,7 +247,8 @@ public class RoomBMOImpl extends ApiBaseBMO implements IRoomBMO {
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
         businessUnit.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        businessUnit.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        businessUnit.put("endTime", paramInJson.containsKey("feeEndDate") ? paramInJson.getString("feeEndDate")
+                : DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         businessUnit.put("communityId", paramInJson.getString("communityId"));
         businessUnit.put("payerObjId", paramInJson.getString("roomId"));
         businessUnit.put("payerObjType", "3333");
