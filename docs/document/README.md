@@ -1,12 +1,6 @@
 
-### 变更历史
-版本|变更内容|变更时间|变更人员
-:-: | :-: | :-: | :-:
-v0.01|初稿|2018-07-24|wuxw
-v0.01|修改|2020-06-10|wuxw
-
 ## 介绍
 
-<center>HC小区管理系统</center>
+<center><font face="黑体" size=5>HC小区管理系统</font></center>
 
-<center>基于spring cloud 微服务架构的小区管理系统</center>
+<center><font face="黑体" size=3>基于spring cloud 微服务架构的小区管理系统</font></center>
