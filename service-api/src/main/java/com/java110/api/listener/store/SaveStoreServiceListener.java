@@ -110,8 +110,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
         storeBMOImpl.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
         JSONObject paramInObj = new JSONObject();
-        paramInObj.put("userId", paramObj.getJSONObject("businessStore").getString("userId"));
-        paramInObj.put("storeTypeCd", paramObj.getJSONObject("businessStore").getString("storeTypeCd"));
+        paramInObj.put("userId", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("userId"));
+        paramInObj.put("storeTypeCd", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("storeTypeCd"));
         paramInObj.put("userFlag", "admin");
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext, appService, httpEntity);
