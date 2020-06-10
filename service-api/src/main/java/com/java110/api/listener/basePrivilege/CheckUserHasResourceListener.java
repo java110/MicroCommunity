@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.IMenuInnerServiceSMO;
 import com.java110.dto.basePrivilege.BasePrivilegeDto;
 import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -43,9 +43,9 @@ public class CheckUserHasResourceListener extends AbstractServiceApiDataFlowList
         DataFlowContext dataFlowContext = event.getDataFlowContext();
         AppService service = event.getAppService();
         JSONObject data = dataFlowContext.getReqJson();
-        logger.debug("请求信息：{}", JSONObject.toJSONString(dataFlowContext));
-        //Assert.hasKeyAndValue(data, "userId", "请求报文中未包含userId节点");
         Assert.hasKeyAndValue(data, "resource", "请求报文中未包含资源路径");
+        logger.debug("请求信息：{}", data);
+        //Assert.hasKeyAndValue(data, "userId", "请求报文中未包含userId节点");
         ResponseEntity<String> responseEntity = null;
 
         //判断资源路径是否配置权限 ，没有配置权限则都能访问

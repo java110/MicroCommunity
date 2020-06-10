@@ -220,7 +220,7 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
      */
     private void doSaveBusinessStoreAttrs(Business business, JSONArray businessStoreAttrs) {
         JSONObject data = business.getDatas();
-        JSONObject businessStore = data.getJSONObject("businessStore");
+        JSONObject businessStore = data.getJSONObject(StorePo.class.getSimpleName());
         for (int storeAttrIndex = 0; storeAttrIndex < businessStoreAttrs.size(); storeAttrIndex++) {
             JSONObject storeAttr = businessStoreAttrs.getJSONObject(storeAttrIndex);
             Assert.jsonObjectHaveKey(storeAttr, "attrId", "businessStoreAttr 节点下没有包含 attrId 节点");
@@ -281,27 +281,27 @@ public class SaveStoreInfoListener extends AbstractStoreBusinessServiceDataFlowL
     private void flushStoreId(JSONObject data) {
 
         String storeId = GenerateCodeFactory.getStoreId();
-        JSONObject businessStore = data.getJSONObject("businessStore");
+        JSONObject businessStore = data.getJSONObject(StorePo.class.getSimpleName());
         businessStore.put("storeId", storeId);
         //刷商户属性
-        if (data.containsKey("businessStoreAttr")) {
-            JSONArray businessStoreAttrs = data.getJSONArray("businessStoreAttr");
+        if (data.containsKey(StoreAttrPo.class.getSimpleName())) {
+            JSONArray businessStoreAttrs = data.getJSONArray(StoreAttrPo.class.getSimpleName());
             for (int businessStoreAttrIndex = 0; businessStoreAttrIndex < businessStoreAttrs.size(); businessStoreAttrIndex++) {
                 JSONObject businessStoreAttr = businessStoreAttrs.getJSONObject(businessStoreAttrIndex);
                 businessStoreAttr.put("storeId", storeId);
             }
         }
         //刷 是商户照片 的 storeId
-        if (data.containsKey("businessStorePhoto")) {
-            JSONArray businessStorePhotos = data.getJSONArray("businessStorePhoto");
+        if (data.containsKey(StorePhotoPo.class.getSimpleName())) {
+            JSONArray businessStorePhotos = data.getJSONArray(StorePhotoPo.class.getSimpleName());
             for (int businessStorePhotoIndex = 0; businessStorePhotoIndex < businessStorePhotos.size(); businessStorePhotoIndex++) {
                 JSONObject businessStorePhoto = businessStorePhotos.getJSONObject(businessStorePhotoIndex);
                 businessStorePhoto.put("storeId", storeId);
             }
         }
         //刷 商户证件 的storeId
-        if (data.containsKey("businessStoreCerdentials")) {
-            JSONArray businessStoreCerdentialses = data.getJSONArray("businessStoreCerdentials");
+        if (data.containsKey(StoreCerdentialPo.class.getSimpleName())) {
+            JSONArray businessStoreCerdentialses = data.getJSONArray(StoreCerdentialPo.class.getSimpleName());
             for (int businessStoreCerdentialsIndex = 0; businessStoreCerdentialsIndex < businessStoreCerdentialses.size(); businessStoreCerdentialsIndex++) {
                 JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);
                 businessStoreCerdentials.put("storeId", storeId);

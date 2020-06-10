@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.entity.assetImport.ImportFee;
 import com.java110.entity.assetImport.ImportFloor;
 import com.java110.entity.assetImport.ImportOwner;
 import com.java110.entity.assetImport.ImportParkingSpace;
@@ -57,6 +58,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         String[] headers = null;   //表头信息
         List<ImportFloor> floors = new ArrayList<ImportFloor>();
         List<ImportOwner> owners = new ArrayList<ImportOwner>();
+        List<ImportFee> fees = new ArrayList<>();
         List<ImportRoom> rooms = new ArrayList<ImportRoom>();
         List<ImportParkingSpace> parkingSpaces = new ArrayList<ImportParkingSpace>();
         workbook = ImportExcelUtils.createWorkbook(uploadFile);
@@ -64,6 +66,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         getFloors(workbook, floors);
         //获取业主信息
         getOwners(workbook, owners);
+
+
+        getFee(workbook, fees);
 
         //获取房屋信息
         getRooms(workbook, rooms, floors, owners);
@@ -75,7 +80,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         importExcelDataValidate(floors, owners, rooms, parkingSpaces);
 
         // 保存数据
-        return dealExcelData(pd, floors, owners, rooms, parkingSpaces, result);
+        return dealExcelData(pd, floors, owners, rooms, parkingSpaces, fees, result);
     }
 
     /**
@@ -86,7 +91,13 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
      * @param rooms         房屋信息
      * @param parkingSpaces 车位信息
      */
-    private ResponseEntity<String> dealExcelData(IPageData pd, List<ImportFloor> floors, List<ImportOwner> owners, List<ImportRoom> rooms, List<ImportParkingSpace> parkingSpaces, ComponentValidateResult result) {
+    private ResponseEntity<String> dealExcelData(IPageData pd,
+                                                 List<ImportFloor> floors,
+                                                 List<ImportOwner> owners,
+                                                 List<ImportRoom> rooms,
+                                                 List<ImportParkingSpace> parkingSpaces,
+                                                 List<ImportFee> fees,
+                                                 ComponentValidateResult result) {
         ResponseEntity<String> responseEntity = null;
         //保存单元信息 和 楼栋信息
         responseEntity = savedFloorAndUnitInfo(pd, floors, result);
@@ -101,8 +112,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             return responseEntity;
         }
 
+        // 保存费用项
+        responseEntity = savedFeeInfo(pd, fees, result);
+        if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+
         //保存房屋
-        responseEntity = savedRoomInfo(pd, rooms, result);
+        responseEntity = savedRoomInfo(pd, rooms, fees, result);
         if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
@@ -112,6 +129,34 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
         if (responseEntity == null || responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
+        }
+
+        return responseEntity;
+    }
+
+    private ResponseEntity<String> savedFeeInfo(IPageData pd, List<ImportFee> fees, ComponentValidateResult result) {
+        String apiUrl = "";
+        JSONObject paramIn = null;
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
+        ImportOwner owner = null;
+        for (ImportFee fee : fees) {
+            JSONObject savedFeeConfigInfo = getExistsFee(pd, result, fee);
+            if (savedFeeConfigInfo != null) {
+                continue;
+            }
+
+            //paramIn = new JSONObject();
+            //保存 费用项
+
+            apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.saveFeeConfig";
+
+            paramIn = JSONObject.parseObject(JSONObject.toJSONString(fee));
+            paramIn.put("communityId", result.getCommunityId());
+
+            responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                continue;
+            }
         }
 
         return responseEntity;
@@ -225,7 +270,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
      * @param result
      * @return
      */
-    private ResponseEntity<String> savedRoomInfo(IPageData pd, List<ImportRoom> rooms, ComponentValidateResult result) {
+    private ResponseEntity<String> savedRoomInfo(IPageData pd, List<ImportRoom> rooms, List<ImportFee> fees, ComponentValidateResult result) {
         String apiUrl = "";
         JSONObject paramIn = null;
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
@@ -240,7 +285,6 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
 
 
             //保存 房屋
-
             apiUrl = ServiceConstant.SERVICE_API_URL + "/api/room.saveRoom";
 
             paramIn.put("communityId", result.getCommunityId());
@@ -252,6 +296,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("state", "2002");
             paramIn.put("builtUpArea", room.getBuiltUpArea());
             paramIn.put("unitPrice", "1000.00");
+
 
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -273,7 +318,47 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             paramIn.put("roomId", savedRoomInfo.getString("roomId"));
             paramIn.put("state", "2001");
             paramIn.put("storeId", result.getStoreId());
+            if (!StringUtil.isEmpty(room.getRoomFeeId()) && "0".equals(room.getRoomFeeId())) {
+                paramIn.put("feeEndDate", room.getFeeEndDate());
+            }
             responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                continue;
+            }
+            //创建费用
+            if (StringUtil.isEmpty(room.getRoomFeeId()) || "0".equals(room.getRoomFeeId())) {
+                continue;
+            }
+            String[] feeIds = room.getRoomFeeId().split("#");
+
+            for (int feeIndex = 0; feeIndex < feeIds.length; feeIndex++) {
+                String feeId = feeIds[feeIndex];
+                ImportFee tmpFee = null;
+                for (ImportFee fee : fees) {
+                    if (feeId.equals(fee.getId())) {
+                        tmpFee = fee;
+                    }
+                }
+
+                if (tmpFee == null) {
+                    continue;//没有费用项，可能写错了
+                }
+
+                JSONObject ttFee = getExistsFee(pd, result, tmpFee);
+
+                if (ttFee == null) {
+                    continue;//没有费用项，可能写错了
+                }
+
+                apiUrl = ServiceConstant.SERVICE_API_URL + "/api/fee.saveRoomCreateFee";
+                paramIn.put("communityId", result.getCommunityId());
+                paramIn.put("locationTypeCd", "3000");
+                paramIn.put("locationObjId", savedRoomInfo.getString("roomId"));
+                paramIn.put("configId", ttFee.getString("configId"));
+                paramIn.put("storeId", result.getStoreId());
+                paramIn.put("feeEndDate", room.getFeeEndDate().split("#")[feeIndex]);
+                responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(), apiUrl, HttpMethod.POST);
+            }
 
         }
 
@@ -311,6 +396,39 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
         JSONObject savedParkingSpaceInfo = savedParkingSpaceInfoResults.getJSONArray("parkingSpaces").getJSONObject(0);
 
         return savedParkingSpaceInfo;
+    }
+
+    /**
+     * 查询存在的房屋信息
+     * room.queryRooms
+     *
+     * @param pd
+     * @param result
+     * @param fee
+     * @return
+     */
+    private JSONObject getExistsFee(IPageData pd, ComponentValidateResult result, ImportFee fee) {
+        String apiUrl = "";
+        ResponseEntity<String> responseEntity = null;
+        apiUrl = ServiceConstant.SERVICE_API_URL + "/api/feeConfig.listFeeConfigs?page=1&row=1&communityId=" + result.getCommunityId()
+                + "&feeName=" + fee.getFeeName();
+        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
+            return null;
+        }
+
+        JSONObject savedRoomInfoResults = JSONObject.parseObject(responseEntity.getBody());
+
+
+        if (!savedRoomInfoResults.containsKey("feeConfigs") || savedRoomInfoResults.getJSONArray("feeConfigs").size() != 1) {
+            return null;
+        }
+
+
+        JSONObject savedFeeConfigInfo = savedRoomInfoResults.getJSONArray("feeConfigs").getJSONObject(0);
+
+        return savedFeeConfigInfo;
     }
 
 
@@ -631,12 +749,63 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setLayer(Integer.parseInt(os[3].toString()));
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
+
+            if (!StringUtil.isEmpty(os[7].toString())) {
+                importRoom.setRoomFeeId(os[7].toString());
+                importRoom.setFeeEndDate(os[8].toString());
+            }
             if (StringUtil.isNullOrNone(os[6])) {
                 rooms.add(importRoom);
                 continue;
             }
             importRoom.setImportOwner(getImportOwner(owners, os[6].toString()));
             rooms.add(importRoom);
+        }
+    }
+
+    /**
+     * 获取 房屋信息
+     *
+     * @param workbook
+     * @param importFees
+     */
+    private void getFee(Workbook workbook, List<ImportFee> importFees) {
+        Sheet sheet = null;
+        sheet = ImportExcelUtils.getSheet(workbook, "费用设置");
+        List<Object[]> oList = ImportExcelUtils.listFromSheet(sheet);
+        ImportFee importFee = null;
+        for (int osIndex = 0; osIndex < oList.size(); osIndex++) {
+            Object[] os = oList.get(osIndex);
+            if (osIndex == 0) { // 第一行是 头部信息 直接跳过
+                continue;
+            }
+            if (StringUtil.isNullOrNone(os[0])) {
+                continue;
+            }
+            importFee = new ImportFee();
+            importFee.setId(os[0].toString());
+            importFee.setFeeTypeCd("物业费".equals(os[1]) ? "888800010001" : "888800010002");
+            importFee.setFeeName(os[2].toString());
+            importFee.setFeeFlag("周期性费用".equals(os[3]) ? "1003006" : "2006012");
+            importFee.setPaymentCd("预付费".equals(os[4]) ? "1200" : "2100");
+            String billType = "";
+            if ("每年1月1日".equals(os[5])) {
+                billType = "001";
+            } else if ("每月1日".equals(os[5])) {
+                billType = "002";
+            } else if ("每日".equals(os[5])) {
+                billType = "003";
+            } else {
+                billType = "004";
+            }
+            importFee.setBillType(billType);
+            importFee.setPaymentCycle(os[6].toString());
+            importFee.setStartTime(os[7].toString());
+            importFee.setEndTime(os[8].toString());
+            importFee.setComputingFormula(os[9].toString());
+            importFee.setSquarePrice(os[10].toString());
+            importFee.setAdditionalAmount(os[11].toString());
+            importFees.add(importFee);
         }
     }
 
@@ -695,7 +864,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             }
             String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
             String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
-            String age = StringUtil.isNullOrNone(os[2]) ? CommonUtil.getAgeByCertId(idCard) : os[2].toString();
+            String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
             importOwner = new ImportOwner();
             importOwner.setOwnerNum(os[0].toString());
             importOwner.setOwnerName(os[1].toString());

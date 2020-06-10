@@ -9,6 +9,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.po.store.StorePo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
@@ -59,7 +60,7 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         Assert.isJsonObject(paramIn, "添加员工时请求参数有误，不是有效的json格式 " + paramIn);
 
         //校验json 格式中是否包含 name,email,levelCd,tel
-        Assert.jsonObjectHaveKey(paramIn, "businessStore", "请求参数中未包含businessStore 节点，请确认");
+        Assert.jsonObjectHaveKey(paramIn, StorePo.class.getSimpleName(), "请求参数中未包含businessStore 节点，请确认");
         JSONObject paramObj = JSONObject.parseObject(paramIn);
         HttpHeaders header = new HttpHeaders();
         dataFlowContext.getRequestCurrentHeaders().put(CommonConstant.HTTP_USER_ID, "-1");
@@ -109,8 +110,8 @@ public class SaveStoreServiceListener extends AbstractServiceApiListener {
         header.add(CommonConstant.HTTP_SERVICE.toLowerCase(), ServiceCodeConstant.SERVICE_CODE_SAVE_USER_DEFAULT_PRIVILEGE);
         storeBMOImpl.freshHttpHeader(header, dataFlowContext.getRequestCurrentHeaders());
         JSONObject paramInObj = new JSONObject();
-        paramInObj.put("userId", paramObj.getJSONObject("businessStore").getString("userId"));
-        paramInObj.put("storeTypeCd", paramObj.getJSONObject("businessStore").getString("storeTypeCd"));
+        paramInObj.put("userId", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("userId"));
+        paramInObj.put("storeTypeCd", paramObj.getJSONObject(StorePo.class.getSimpleName()).getString("storeTypeCd"));
         paramInObj.put("userFlag", "admin");
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramInObj.toJSONString(), header);
         doRequest(dataFlowContext, appService, httpEntity);

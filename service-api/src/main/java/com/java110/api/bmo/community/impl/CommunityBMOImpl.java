@@ -106,7 +106,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         String auditStatusCd = MappingCache.getValue(MappingConstant.DOMAIN_COMMUNITY_MEMBER_AUDIT, paramInJson.getString("memberTypeCd"));
         auditStatusCd = StringUtils.isEmpty(auditStatusCd) ? StateConstant.AGREE_AUDIT : auditStatusCd;
         businessCommunityMember.put("auditStatusCd", auditStatusCd);
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         return business;
     }
@@ -125,7 +125,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         business.put(CommonConstant.HTTP_INVOKE_MODEL, CommonConstant.HTTP_INVOKE_MODEL_S);
         JSONObject businessCommunityMember = new JSONObject();
         businessCommunityMember.put("communityMemberId", paramInJson.getString("communityMemberId"));
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         return business;
     }
@@ -157,7 +157,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
 
@@ -179,7 +179,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
         //运维团队
@@ -200,7 +200,7 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
 
 
         businessCommunityMember.put("communityMemberId", communityMemberDtoList.get(0).getCommunityMemberId());
-        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put("businessCommunityMember", businessCommunityMember);
+        business.getJSONObject(CommonConstant.HTTP_BUSINESS_DATAS).put(CommunityMemberPo.class.getSimpleName(), businessCommunityMember);
 
         businesses.add(business);
 
@@ -241,10 +241,12 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("endTime", DateUtil.LAST_TIME);
         businessFeeConfig.put("computingFormula", "1001");
         businessFeeConfig.put("squarePrice", "0.00");
+        businessFeeConfig.put("paymentCd", "1200");
         businessFeeConfig.put("additionalAmount", "0.00");
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "002");//按月出账
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
         super.insert(dataFlowContext, payFeeConfigPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FEE_CONFIG);
@@ -272,6 +274,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -300,6 +304,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -328,6 +334,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -356,6 +364,9 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "003");//按天出账
+
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
@@ -384,6 +395,8 @@ public class CommunityBMOImpl extends ApiBaseBMO implements ICommunityBMO {
         businessFeeConfig.put("communityId", paramInJson.getString("communityId"));
         businessFeeConfig.put("configId", paramInJson.getString("configId"));
         businessFeeConfig.put("billType", "004");//按天出账
+        businessFeeConfig.put("paymentCd", "1200");
+        businessFeeConfig.put("paymentCycle", "1");//按月出账
         businessFeeConfig.put("isDefault", "T");
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
 
