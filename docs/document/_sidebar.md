@@ -62,7 +62,6 @@
   * [查询房屋信息](api/room/queryRooms.md)
   * [房屋售卖](api/room/sellRoom.md)
   * [添加业主](api/owner/saveOwner.md)
-  * [修改业主](api/owner/updateOwner.md)
   * [删除业主](api/owner/deleteOwner.md)
   * [编辑业主](api/owner/editOwner.md)
   * [查询业主](api/owner/queryOwners.md)

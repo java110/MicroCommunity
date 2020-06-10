@@ -33,6 +33,7 @@
 |builtUpArea|1|String|30|建筑面积| 如 97.98|
 |roomNum|1|String|12|房间编号|1123|
 |unitId|1|String|30|小区单元ID|-|
+|state|1|String|12|房屋状态|2002 空闲状态|
 |apartment|1|String|4|户型|1010 一室一厅 1020 一室两厅 2010 两室一厅 2020 两室两厅 3020 三室两厅|
 
 ###### 返回协议
