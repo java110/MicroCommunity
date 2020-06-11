@@ -5,7 +5,7 @@
   * [环境搭建](start/installHc.md)
   * [视频教程](start/vedio.md)
   * [功能列表](func/funcation.md)
-  * [常见问题](func/question.md)
+  * [常见问题](start/question.md)
 
 * Api开放接口
 
