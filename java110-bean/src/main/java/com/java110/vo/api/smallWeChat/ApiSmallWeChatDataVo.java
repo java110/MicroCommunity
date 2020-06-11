@@ -9,12 +9,12 @@ public class ApiSmallWeChatDataVo implements Serializable {
     private String createTime;
     private String appId;
     private String name;
-    private String appSecret;
+    //private String appSecret;
     private String statusCd;
     private String weChatId;
     private String bId;
     private String storeId;
-    private String payPassword;
+    //private String payPassword;
     private String remarks;
     private String objId;
     private String objType;
@@ -53,13 +53,7 @@ public class ApiSmallWeChatDataVo implements Serializable {
         this.name = name;
     }
 
-    public String getAppSecret() {
-        return appSecret;
-    }
 
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
 
     public String getStatusCd() {
         return statusCd;
@@ -93,13 +87,6 @@ public class ApiSmallWeChatDataVo implements Serializable {
         this.storeId = storeId;
     }
 
-    public String getPayPassword() {
-        return payPassword;
-    }
-
-    public void setPayPassword(String payPassword) {
-        this.payPassword = payPassword;
-    }
 
     public String getRemarks() {
         return remarks;
