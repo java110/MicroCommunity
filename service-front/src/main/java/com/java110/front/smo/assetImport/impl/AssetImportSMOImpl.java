@@ -789,17 +789,17 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importFee.setFeeFlag("周期性费用".equals(os[3]) ? "1003006" : "2006012");
             importFee.setPaymentCd("预付费".equals(os[4]) ? "1200" : "2100");
             String billType = "";
-            if ("每年1月1日".equals(os[5])) {
+            if ("每年1月1日".equals(os[6])) {
                 billType = "001";
-            } else if ("每月1日".equals(os[5])) {
+            } else if ("每月1日".equals(os[6])) {
                 billType = "002";
-            } else if ("每日".equals(os[5])) {
+            } else if ("每日".equals(os[6])) {
                 billType = "003";
             } else {
                 billType = "004";
             }
             importFee.setBillType(billType);
-            importFee.setPaymentCycle(os[6].toString());
+            importFee.setPaymentCycle(os[5].toString());
             importFee.setStartTime(os[7].toString());
             importFee.setEndTime(os[8].toString());
             importFee.setComputingFormula(os[9].toString());

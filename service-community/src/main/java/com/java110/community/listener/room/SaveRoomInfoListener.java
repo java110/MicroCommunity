@@ -2,6 +2,7 @@ package com.java110.community.listener.room;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.po.room.RoomAttrPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -157,7 +158,7 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
 
         if (businessRoom.getString("roomId").startsWith("-")) {
             //刷新缓存
-            flushRoomId(business.getDatas());
+            flushRoomId(business.getDatas(),businessRoom);
 
             //businessRoom.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
 
@@ -175,14 +176,14 @@ public class SaveRoomInfoListener extends AbstractRoomBusinessServiceDataFlowLis
      *
      * @param data 数据
      */
-    private void flushRoomId(JSONObject data) {
+    private void flushRoomId(JSONObject data,JSONObject businessRoom) {
 
         String roomId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId);
-        JSONObject businessRoom = data.getJSONObject("businessRoom");
+        //JSONObject businessRoom = data.getJSONObject(RoomPo.class.getSimpleName());
         businessRoom.put("roomId", roomId);
         //刷小区属性
-        if (data.containsKey("businessRoomAttr")) {
-            JSONArray businessRoomAttrs = data.getJSONArray("businessRoomAttr");
+        if (data.containsKey(RoomAttrPo.class.getSimpleName())) {
+            JSONArray businessRoomAttrs = data.getJSONArray(RoomAttrPo.class.getSimpleName());
             for (int businessRoomAttrIndex = 0; businessRoomAttrIndex < businessRoomAttrs.size(); businessRoomAttrIndex++) {
                 JSONObject businessRoomAttr = businessRoomAttrs.getJSONObject(businessRoomAttrIndex);
                 businessRoomAttr.put("roomId", roomId);
