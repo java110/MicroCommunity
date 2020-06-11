@@ -127,12 +127,14 @@ public class PayFeePreListener extends AbstractServiceApiDataFlowListener {
         Assert.jsonObjectHaveKey(paramIn, "cycles", "请求报文中未包含cycles节点");
         Assert.jsonObjectHaveKey(paramIn, "receivedAmount", "请求报文中未包含receivedAmount节点");
         Assert.jsonObjectHaveKey(paramIn, "feeId", "请求报文中未包含feeId节点");
+        Assert.jsonObjectHaveKey(paramIn, "appId", "请求报文中未包含appId节点");
 
         JSONObject paramInObj = JSONObject.parseObject(paramIn);
         Assert.hasLength(paramInObj.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(paramInObj.getString("cycles"), "周期不能为空");
         Assert.hasLength(paramInObj.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(paramInObj.getString("feeId"), "费用ID不能为空");
+        Assert.hasLength(paramInObj.getString("appId"), "appId不能为空");
 
     }
 
