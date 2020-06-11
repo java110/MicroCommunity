@@ -2,18 +2,8 @@
 * 入门
 
   * [快速开始](README.md)
-  * [编码规范](start/CodeStandards.md)
+  * [环境搭建](start/installHC.md)
   * [视频](start/vedio.md)
-
-* 环境搭建
-
-  * [开发环境部署](start/dev_install.md)
-  * [生产环境部署](start/prod_install.md)
-  * [前后端分离版本部署](start/frontBack.md)
-  * [前后端分离版本部署（简单才是美贡献）](start/Install_HC_on_CentOS_7.md)
-  
-* 系统功能
-
   * [功能列表](func/funcation.md)
 
 * 开发
