@@ -9,6 +9,7 @@ import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,9 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
         String appId = event.getDataFlowContext().getRequestHeaders().get("app-id");
+        if(StringUtil.isEmpty(appId)){
+            appId = event.getDataFlowContext().getRequestHeaders().get("app_id");
+        }
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
         int count = smallWeChatInnerServiceSMOImpl.querySmallWeChatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
@@ -82,7 +86,7 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
     }
 
     private void freshSecure(List<ApiSmallWeChatDataVo> smallWeChats, String appId) {
-        if (appId.equals(OWNER_APP)) {
+        if (OWNER_APP.equals(appId)) {
             return;
         }
 
