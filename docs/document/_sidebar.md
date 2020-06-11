@@ -2,7 +2,7 @@
 * 入门
 
   * [快速开始](README.md)
-  * [环境搭建](start/installHC.md)
+  * [环境搭建](start/installHc.md)
   * [视频](start/vedio.md)
   * [功能列表](func/funcation.md)
 
