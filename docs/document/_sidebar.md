@@ -7,10 +7,11 @@
   * [功能列表](func/funcation.md)
   * [常见问题](start/question.md)
 
-* Api开放接口
+* 接口能力
 
+  * [接口清单](api/Readme.md)
   * [用户类接口](api/user/index.md)
-  * [游客登记](api/user/saveVisit.md)
+  * [访客登记](api/user/saveVisit.md)
   * [访客登记变更](api/user/updateVisit.md)
   * [访客记录查询](api/user/listVisits.md)
   * [上传业主照片](api/user/uploadOwnerPhoto.md)
