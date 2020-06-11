@@ -113,8 +113,8 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return responseEntity;
         }
-
-        JSONArray smallWeChats = ownerInfo.getJSONArray("smallWeChats");
+        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
         String appId = wechatAuthProperties.getAppId();
         String secret = wechatAuthProperties.getSecret();
         if (smallWeChats.size() > 0) {
