@@ -47,6 +47,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         Assert.jsonObjectHaveKey(paramIn, "receivedAmount", "请求报文中未包含receivedAmount节点");
         Assert.jsonObjectHaveKey(paramIn, "feeId", "请求报文中未包含feeId节点");
         Assert.jsonObjectHaveKey(paramIn, "feeName", "请求报文中未包含feeName节点");
+        Assert.jsonObjectHaveKey(paramIn, "appId", "请求报文中未包含appId节点");
 
     }
 
