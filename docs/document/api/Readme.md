@@ -20,11 +20,8 @@ CenterService缓存|https://hc.demo.winqi.cn/app/flush.center.cache|GET
 查询所有缓存|https://hc.demo.winqi.cn/app/query.console.caches|GET
 查询所有缓存|https://hc.demo.winqi.cn/app/query.console.cache|GET
 保存商户信息|https://hc.demo.winqi.cn/app/save.store.info|POST
-
 用户注册|https://hc.demo.winqi.cn/app/user.service.register|POST
-用户登录|https://hc.demo.winqi.cn/app/user.service.login|
-
-
+用户登录|https://hc.demo.winqi.cn/app/user.service.login|POST
 添加员工|https://hc.demo.winqi.cn/app/user.staff.add|POST
 停用员工|https://hc.demo.winqi.cn/app/user.staff.disable|POST
 启用员工|https://hc.demo.winqi.cn/app/user.staff.enable|POST
@@ -101,8 +98,6 @@ CenterService缓存|https://hc.demo.winqi.cn/app/flush.center.cache|GET
 根据停车位查询费用|https://hc.demo.winqi.cn/app/fee.queryFeeByParkingSpace|POST
 查询首页统计信息|https://hc.demo.winqi.cn/app/index.queryIndexStatistic|GET
 查询欠费费用|https://hc.demo.winqi.cn/app/fee.queryArrearsFee|GET
-DEMO查询|https://hc.demo.winqi.cn/app/demo.queryDemoConfig|GET
-DEMO新增|https://hc.demo.winqi.cn/app/demo.saveDemoConfig|POST
 查询小区|https://hc.demo.winqi.cn/app/community.listCommunitys|POST
 添加小区|https://hc.demo.winqi.cn/app/community.saveCommunity|POST
 更新小区|https://hc.demo.winqi.cn/app/community.updateCommunity|POST
@@ -119,7 +114,6 @@ DEMO新增|https://hc.demo.winqi.cn/app/demo.saveDemoConfig|POST
 添加服务|https://hc.demo.winqi.cn/app/service.saveService|POST
 更新服务|https://hc.demo.winqi.cn/app/service.updateService|POST
 删除服务|https://hc.demo.winqi.cn/app/service.deleteService|POST
-xx.wuxw|https://hc.demo.winqi.cn/app/xx.wuxw|GET
 服务类型查询|https://hc.demo.winqi.cn/app/business.queryBusinessTypeConfig|GET
 添加映射|https://hc.demo.winqi.cn/app/mapping.saveMapping|POST
 更新映射|https://hc.demo.winqi.cn/app/mapping.updateMapping|POST
@@ -170,8 +164,6 @@ LawJava110|https://hc.demo.winqi.cn/app/file.getFiletwo|GET
 编辑组织|https://hc.demo.winqi.cn/app/org.updateOrg|POST
 查询组织|https://hc.demo.winqi.cn/app/org.listOrgs|GET
 查询上级组织|https://hc.demo.winqi.cn/app/org.listParentOrgs|GET
-派单服务|https://hc.demo.winqi.cn/app/130200030001|POST
-派单撤回|https://hc.demo.winqi.cn/app/130200050001|POST
 报修派单|https://hc.demo.winqi.cn/app/ownerRepair.repairDispatchStep|POST
 报修结单|https://hc.demo.winqi.cn/app/ownerRepair.closeRepairDispatch|POST
 保存资源|https://hc.demo.winqi.cn/app/resourceStore.saveResourceStore|POST
