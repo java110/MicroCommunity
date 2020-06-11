@@ -1,8 +1,12 @@
 
 ## 介绍
 
-HC小区管理系统是前后端完全开源并免费商用的小区物业管理系统，包含小区后端项目，小区前段项目，
-物业版uni-app和业主版uni-app,最新SQL文件加群获取827669685
+HC小区物业管理系统是由java110团队于2017年4月份发起的前后端分离、分布式架构开源项目，目前我们的代码开源在github 和gitee上，
+开源项目由HC小区管理系统后端，HC小区管理系统前端，HC小区管理系统业主手机版和HC小区管理系统物业手机版
+
+## 源码下载
+
+[https://gitee.com/java110](https://gitee.com/java110)
 
 ## 在线体验
 
@@ -58,3 +62,9 @@ service-store、service-user、service-front、service-fee、service-common和se
      service-sequence  #序列生成服务，采用 google 雪花算法
      service-store     #商户服务，系统中 物业 代理商 开发者 运营团队 都属于商户
      service-user      #用户服务，用户信息 业主信息 家庭成员
+
+## 联系我们
+
+HC小区管理系统交流群 827669685
+
+作者：928255095
