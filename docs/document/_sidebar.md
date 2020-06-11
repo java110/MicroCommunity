@@ -5,12 +5,7 @@
   * [环境搭建](start/installHc.md)
   * [视频教程](start/vedio.md)
   * [功能列表](func/funcation.md)
-
-* 开发
-
-  * [前段开发](develop/front.md)
-  * [接口开发](develop/api.md)
-  * [硬件对接](develop/machine.md)
+  * [常见问题](func/question.md)
 
 * Api开放接口
 
@@ -164,6 +159,12 @@
   * [车位出售](api/parkingSpace/sellParkingSpace.md)
   * [停车位退款-待补充](api/parkingSpace/exitParkingSpace.md)
   * [查询业主车位- 待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
+
+* 开发
+
+  * [前段开发](develop/front.md)
+  * [接口开发](develop/api.md)
+  * [硬件对接](develop/machine.md)
 
 * 商业授权
 
