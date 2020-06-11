@@ -63,7 +63,7 @@
 
 #### 安装mysql
 
-推荐安装 5.6 版本mysql ，安装过程请自行百度，将 docs\db文件下的 MicroCommunity.sql 文件导入到mysql中，有可能这个sql不是最新的，
+推荐安装 5.6 版本mysql ，安装过程请自行百度，将 docs\db文件下的 TT 和 hc_community 文件导入到mysql中，有可能这个sql不是最新的，
 你也可以加入群827669685，群文件获取最新的sql文件
 
 #### 安装kafka
