@@ -58,6 +58,21 @@ public class BusinessTypeConstant {
     public static final String BUSINESS_TYPE_RECOVER_USER_INFO = "100100040003";
 
     /**
+     * 保存用户属性信息
+     */
+    public final static String BUSINESS_TYPE_SAVE_USER_ATTR_INFO = "100200030001";
+
+    /**
+     * 修改用户属性信息
+     */
+    public final static String BUSINESS_TYPE_UPDATE_USER_ATTR_INFO = "100200040001";
+
+    /**
+     * 删除用户属性信息
+     */
+    public final static String BUSINESS_TYPE_DELETE_USER_ATTR_INFO = "100200050001";
+
+    /**
      * 增加业主
      */
     public static final String BUSINESS_TYPE_SAVE_OWNER_INFO = "110100030001";

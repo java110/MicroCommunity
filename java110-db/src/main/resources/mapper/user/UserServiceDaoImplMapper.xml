@@ -300,6 +300,9 @@
         <if test="attrId != null and attrId != ''">
             and u.attr_id = #{attrId}
         </if>
+        <if test="specCd != null and specCd != ''">
+            and u.spec_cd = #{specCd}
+        </if>
     </select>
 
 

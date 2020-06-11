@@ -1,36 +1,36 @@
 {
-  "autoMove": false,
-  "id": "locationId",
-  "name": "communityLocation",
-  "desc": "小区位置",
-  "shareParam": "communityId",
-  "shareColumn": "community_id",
-  "shareName": "community",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_LOCATION",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_LOCATION",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_LOCATION",
-  "newBusinessTypeCdValue": "570100030001",
-  "updateBusinessTypeCdValue": "570100040001",
-  "deleteBusinessTypeCdValue": "570100050001",
-  "businessTableName": "business_community_location",
-  "tableName": "community_location",
+  "autoMove": true,
+  "id": "attrId",
+  "name": "userAttr",
+  "desc": "用户属性",
+  "shareParam": "userId",
+  "shareColumn": "user_id",
+  "shareName": "user",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_USER_ATTR_INFO",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_USER_ATTR_INFO",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_USER_ATTR_INFO",
+  "newBusinessTypeCdValue": "100200030001",
+  "updateBusinessTypeCdValue": "100200040001",
+  "deleteBusinessTypeCdValue": "100200050001",
+  "businessTableName": "business_user_attr",
+  "tableName": "u_user_attr",
   "param": {
-    "locationId": "location_id",
+    "attrId": "attr_id",
     "bId": "b_id",
-    "locationName": "location_name",
-    "locationType": "location_type",
-    "communityId": "community_id",
+    "userId": "user_id",
+    "specCd": "spec_cd",
+    "value": "value",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "locationName",
-      "msg": "位置名称不能为空"
+      "code": "userId",
+      "msg": "用户ID不能为空"
     },
     {
-      "code": "locationType",
-      "msg": "位置类型不能为空"
+      "code": "specCd",
+      "msg": "用户属性不能为空"
     }
   ]
 }

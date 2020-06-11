@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.store.ISmallWeChatInnerServiceSMO;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeSmallWeChatConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
@@ -25,6 +25,8 @@ import java.util.List;
  */
 @Java110Listener("listSmallWeChatsListener")
 public class ListSmallWeChatsListener extends AbstractServiceApiListener {
+
+    private static String OWNER_APP = "992019111758490006";
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
@@ -61,11 +63,13 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
+        String appId = event.getDataFlowContext().getRequestHeaders().get("app-id");
         SmallWeChatDto smallWeChatDto = BeanConvertUtil.covertBean(reqJson, SmallWeChatDto.class);
         int count = smallWeChatInnerServiceSMOImpl.querySmallWeChatsCount(smallWeChatDto);
         List<ApiSmallWeChatDataVo> smallWeChats = null;
         if (count > 0) {
             smallWeChats = BeanConvertUtil.covertBeanList(smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto), ApiSmallWeChatDataVo.class);
+            freshSecure(smallWeChats, appId);
         } else {
             smallWeChats = new ArrayList<>();
         }
@@ -75,5 +79,16 @@ public class ListSmallWeChatsListener extends AbstractServiceApiListener {
         apiSmallWeChatVo.setSmallWeChats(smallWeChats);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiSmallWeChatVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+    }
+
+    private void freshSecure(List<ApiSmallWeChatDataVo> smallWeChats, String appId) {
+        if (appId.equals(OWNER_APP)) {
+            return;
+        }
+
+        for (ApiSmallWeChatDataVo apiSmallWeChatDataVo : smallWeChats) {
+            apiSmallWeChatDataVo.setAppSecret("");
+            apiSmallWeChatDataVo.setPayPassword("");
+        }
     }
 }

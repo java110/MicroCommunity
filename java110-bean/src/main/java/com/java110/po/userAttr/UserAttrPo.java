@@ -1,15 +1,13 @@
-package com.java110.dto.user;
-
-import com.java110.dto.PageDto;
+package com.java110.po.userAttr;
 
 import java.io.Serializable;
 
-public class UserAttrDto extends PageDto implements Serializable {
+public class UserAttrPo implements Serializable {
+
     private String attrId;
-    private String userId;
     private String specCd;
+    private String userId;
     private String value;
-    private String createTime;
 
     public String getAttrId() {
         return attrId;
@@ -17,14 +15,6 @@ public class UserAttrDto extends PageDto implements Serializable {
 
     public void setAttrId(String attrId) {
         this.attrId = attrId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getSpecCd() {
@@ -35,6 +25,14 @@ public class UserAttrDto extends PageDto implements Serializable {
         this.specCd = specCd;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getValue() {
         return value;
     }
@@ -43,11 +41,5 @@ public class UserAttrDto extends PageDto implements Serializable {
         this.value = value;
     }
 
-    public String getCreateTime() {
-        return createTime;
-    }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
 }

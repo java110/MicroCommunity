@@ -1,6 +1,7 @@
 package com.java110.core.smo.user;
 
 import com.java110.core.feign.FeignConfiguration;
+import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,4 +83,14 @@ public interface IUserInnerServiceSMO {
 
     @RequestMapping(value = "/getUserHasPwd", method = RequestMethod.POST)
     List<UserDto> getUserHasPwd(@RequestBody UserDto userDto);
+
+    /**
+     * 查询用户属性
+     *
+     * @param userAttrDto 用户ID
+     *                支持 多个查询
+     * @return 用户封装信息
+     */
+    @RequestMapping(value = "/getUserAttrs", method = RequestMethod.POST)
+    List<UserAttrDto> getUserAttrs(@RequestBody UserAttrDto userAttrDto);
 }

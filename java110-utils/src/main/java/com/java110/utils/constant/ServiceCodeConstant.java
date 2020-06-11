@@ -653,4 +653,9 @@ public class ServiceCodeConstant {
     public static final String SERVICE_CODE_QUERY_PARKING_SPACE_CAR = "parkingSpace.queryParkingSpaceCars";
 
 
+    /**
+     * 保存或修改用户属性
+     */
+    public static final String SERVICE_CODE_SAVE_UPDATE_USER_ATTR = "user.saveOrUpdateUserAttr";
+
 }
