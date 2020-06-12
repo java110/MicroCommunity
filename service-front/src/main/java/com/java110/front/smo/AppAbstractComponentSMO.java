@@ -86,11 +86,11 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
             if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
 
                 resultMap.put("appId", smallWeChatDto.getAppId());
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
                 resultMap.put("nonceStr", PayUtil.makeUUID(32));
                 resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
                 resultMap.put("signType", "MD5");
+                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
             } else if (WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)) {
                 resultMap.put("appId", smallWeChatDto.getAppId());
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
