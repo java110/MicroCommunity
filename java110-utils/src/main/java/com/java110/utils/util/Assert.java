@@ -231,6 +231,14 @@ public class Assert extends org.springframework.util.Assert {
         }
     }
 
+    public static void isDate(String text, String format, String msg) {
+        try {
+            DateUtil.getDateFromString(text, format);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
 
     /**
      * 判断字符串是否是金额

@@ -13,7 +13,9 @@ import com.java110.entity.component.ComponentValidateResult;
 import com.java110.front.smo.assetImport.IAssetImportSMO;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.CommonUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -49,38 +51,43 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
 
-        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        try {
+            ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
 
-        //InputStream is = uploadFile.getInputStream();
+            //InputStream is = uploadFile.getInputStream();
 
-        Workbook workbook = null;  //工作簿
-        //工作表
-        String[] headers = null;   //表头信息
-        List<ImportFloor> floors = new ArrayList<ImportFloor>();
-        List<ImportOwner> owners = new ArrayList<ImportOwner>();
-        List<ImportFee> fees = new ArrayList<>();
-        List<ImportRoom> rooms = new ArrayList<ImportRoom>();
-        List<ImportParkingSpace> parkingSpaces = new ArrayList<ImportParkingSpace>();
-        workbook = ImportExcelUtils.createWorkbook(uploadFile);
-        //获取楼信息
-        getFloors(workbook, floors);
-        //获取业主信息
-        getOwners(workbook, owners);
+            Workbook workbook = null;  //工作簿
+            //工作表
+            String[] headers = null;   //表头信息
+            List<ImportFloor> floors = new ArrayList<ImportFloor>();
+            List<ImportOwner> owners = new ArrayList<ImportOwner>();
+            List<ImportFee> fees = new ArrayList<>();
+            List<ImportRoom> rooms = new ArrayList<ImportRoom>();
+            List<ImportParkingSpace> parkingSpaces = new ArrayList<ImportParkingSpace>();
+            workbook = ImportExcelUtils.createWorkbook(uploadFile);
+            //获取楼信息
+            getFloors(workbook, floors);
+            //获取业主信息
+            getOwners(workbook, owners);
 
 
-        getFee(workbook, fees);
+            getFee(workbook, fees);
 
-        //获取房屋信息
-        getRooms(workbook, rooms, floors, owners);
+            //获取房屋信息
+            getRooms(workbook, rooms, floors, owners);
 
-        //获取车位信息
-        getParkingSpaces(workbook, parkingSpaces, owners);
+            //获取车位信息
+            getParkingSpaces(workbook, parkingSpaces, owners);
 
-        //数据校验
-        importExcelDataValidate(floors, owners, rooms, parkingSpaces);
+            //数据校验
+            importExcelDataValidate(floors, owners, rooms, fees, parkingSpaces);
 
-        // 保存数据
-        return dealExcelData(pd, floors, owners, rooms, parkingSpaces, fees, result);
+            // 保存数据
+            return dealExcelData(pd, floors, owners, rooms, parkingSpaces, fees, result);
+        } catch (Exception e) {
+            logger.error("导入失败 ", e);
+            return new ResponseEntity<String>("非常抱歉，您填写的模板数据有误：" + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -678,7 +685,8 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
      * @param rooms
      * @param parkingSpaces
      */
-    private void importExcelDataValidate(List<ImportFloor> floors, List<ImportOwner> owners, List<ImportRoom> rooms, List<ImportParkingSpace> parkingSpaces) {
+    private void importExcelDataValidate(List<ImportFloor> floors, List<ImportOwner> owners, List<ImportRoom> rooms, List<ImportFee> fees, List<ImportParkingSpace> parkingSpaces) {
+
     }
 
     /**
@@ -700,6 +708,10 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+            Assert.hasLength(os[0].toString(), "车位信息选项中" + (osIndex + 1) + "行停车场编号为空");
+            Assert.hasLength(os[1].toString(), "车位信息选项中" + (osIndex + 1) + "行车位编码为空");
+            Assert.hasLength(os[2].toString(), "车位信息选项中" + (osIndex + 1) + "行停车场类型为空");
+            Assert.hasLength(os[3].toString(), "车位信息选项中" + (osIndex + 1) + "行面积为空，没有请填写规定值 如10");
             importParkingSpace = new ImportParkingSpace();
             importParkingSpace.setPaNum(os[0].toString());
             importParkingSpace.setPsNum(os[1].toString());
@@ -743,6 +755,15 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+            Assert.hasLength(os[0].toString(), "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
+            Assert.hasLength(os[1].toString(), "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
+            Assert.hasLength(os[2].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
+            Assert.hasLength(os[3].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
+            Assert.hasLength(os[4].toString(), "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
+            if (!StringUtil.isNullOrNone(os[5])) {
+                Assert.hasLength(os[6].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
+                Assert.hasLength(os[7].toString(), "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
+            }
             importRoom = new ImportRoom();
             importRoom.setRoomNum(os[0].toString());
             importRoom.setFloor(getImportFloor(floors, os[1].toString(), os[2].toString()));
@@ -782,6 +803,22 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+            Assert.hasLength(os[0].toString(), "费用设置选项中" + (osIndex + 1) + "行费用编号为空");
+            Assert.hasLength(os[1].toString(), "费用设置选项中" + (osIndex + 1) + "行费用类型为空");
+            Assert.hasLength(os[2].toString(), "费用设置选项中" + (osIndex + 1) + "行收费项目为空");
+            Assert.hasLength(os[3].toString(), "费用设置选项中" + (osIndex + 1) + "行费用标识为空");
+            Assert.hasLength(os[4].toString(), "费用设置选项中" + (osIndex + 1) + "行费用类型为空");
+            Assert.hasLength(os[5].toString(), "费用设置选项中" + (osIndex + 1) + "行缴费周期为空");
+            Assert.isInteger(os[5].toString(), "费用设置选项中" + (osIndex + 1) + "行缴费周期不是正整数");
+            Assert.hasLength(os[6].toString(), "费用设置选项中" + (osIndex + 1) + "行出账类型为空");
+            Assert.isDate(os[7].toString(), DateUtil.DATE_FORMATE_STRING_B, "费用设置选项中" + (osIndex + 1) + "行计费起始时间不是有效时间格式 请输入类似2020-06-01");
+            Assert.isDate(os[8].toString(), DateUtil.DATE_FORMATE_STRING_B, "费用设置选项中" + (osIndex + 1) + "行计费终止时间不是有效时间格式 请输入类似2037-01-01");
+            Assert.hasLength(os[9].toString(), "费用设置选项中" + (osIndex + 1) + "行计算公式为空");
+            if (!"1001".equals(os[9].toString()) && !"2002".equals(os[9].toString())) {
+                throw new IllegalArgumentException("费用设置选项中" + (osIndex + 1) + "行计算公式错误 请填写1001 或者2002");
+            }
+            Assert.hasLength(os[10].toString(), "费用设置选项中" + (osIndex + 1) + "行计费单价为空");
+            Assert.hasLength(os[11].toString(), "费用设置选项中" + (osIndex + 1) + "行固定费用为空");
             importFee = new ImportFee();
             importFee.setId(os[0].toString());
             importFee.setFeeTypeCd("物业费".equals(os[1]) ? "888800010001" : "888800010002");
@@ -862,6 +899,9 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+            Assert.hasLength(os[0].toString(), "业主信息选项中" + (osIndex + 1) + "行业主编号为空");
+            Assert.hasLength(os[1].toString(), "业主信息选项中" + (osIndex + 1) + "行业主名称为空");
+            Assert.hasLength(os[2].toString(), "业主信息选项中" + (osIndex + 1) + "行业主性别为空");
             String tel = StringUtil.isNullOrNone(os[4]) ? "19999999999" : os[4].toString();
             String idCard = StringUtil.isNullOrNone(os[5]) ? "10000000000000000001" : os[5].toString();
             String age = StringUtil.isNullOrNone(os[3]) ? CommonUtil.getAgeByCertId(idCard) : os[3].toString();
@@ -896,6 +936,11 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
+
+            Assert.hasLength(os[0].toString(), "楼栋单元选项中" + (osIndex + 1) + "行楼栋号为空");
+            Assert.hasLength(os[1].toString(), "楼栋单元选项中" + (osIndex + 1) + "行单元编号为空");
+            Assert.hasLength(os[2].toString(), "楼栋单元选项中" + (osIndex + 1) + "行总楼层为空");
+            Assert.hasLength(os[3].toString(), "楼栋单元选项中" + (osIndex + 1) + "行是否有电梯为空");
             importFloor = new ImportFloor();
             importFloor.setFloorNum(os[0].toString());
             importFloor.setUnitNum(os[1].toString());
