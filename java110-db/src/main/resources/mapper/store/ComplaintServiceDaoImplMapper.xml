@@ -6,19 +6,19 @@
 
     <!-- 保存投诉建议信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessComplaintInfo" parameterType="Map">
-           insert into business_complaint(
-operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id
-) values (
-#{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId}
-)
-       </insert>
+        insert into business_complaint(
+        operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room_id,community_id
+        ) values (
+        #{operate},#{complaintId},#{typeCd},#{context},#{complaintName},#{tel},#{state},#{storeId},#{bId},#{roomId},#{communityId}
+        )
+    </insert>
 
 
     <!-- 查询投诉建议信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessComplaintInfo" parameterType="Map" resultType="Map">
         select t.operate,t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd
         typeCd,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.state,t.store_id,t.store_id
-        storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId
+        storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId,t.community_id,t.community_id communityId
         from business_complaint t
         where 1 =1
         <if test="operate !=null and operate != ''">
@@ -51,6 +51,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </select>
 
@@ -58,8 +61,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
     <!-- 保存投诉建议信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveComplaintInfoInstance" parameterType="Map">
         insert into complaint(
-        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id
-        ) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id from
+        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id,t.community_id
+        ) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id,t.community_id
+        from
         business_complaint t where 1=1
         and t.operate= 'ADD'
         <if test="complaintId !=null and complaintId != ''">
@@ -96,8 +100,10 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
     <!-- 查询投诉建议信息 add by wuxw 2018-07-03 -->
     <select id="getComplaintInfo" parameterType="Map" resultType="Map">
         select t.complaint_id,t.complaint_id complaintId,t.type_cd,t.type_cd
-        typeCd,td2.name typeCdName,t.context,t.complaint_name,t.complaint_name complaintName,t.tel,t.status_cd,t.status_cd
-        statusCd,t.state,td.name stateName,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id roomId,t.create_time createTime
+        typeCd,td2.name typeCdName,t.context,t.complaint_name,t.complaint_name
+        complaintName,t.tel,t.status_cd,t.status_cd
+        statusCd,t.state,td.name stateName,t.store_id,t.store_id storeId,t.b_id,t.b_id bId,t.room_id,t.room_id
+        roomId,t.create_time createTime,t.community_id,t.community_id communityId
         from complaint t,t_dict td,t_dict td2
         where 1 =1
         and t.state = td.status_cd
@@ -142,6 +148,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -182,6 +191,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         <if test="complaintId !=null and complaintId != ''">
             and t.complaint_id= #{complaintId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -191,8 +203,14 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
     <!-- 查询投诉建议数量 add by wuxw 2018-07-03 -->
     <select id="queryComplaintsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from complaint t
+        from complaint t,t_dict td,t_dict td2
         where 1 =1
+        and t.state = td.status_cd
+        and td.table_name = 'complaint'
+        and td.table_columns = 'state'
+        and t.type_cd = td2.status_cd
+        and td2.table_name = 'complaint'
+        and td2.table_columns = 'type_cd'
         <if test="complaintId !=null and complaintId != ''">
             and t.complaint_id= #{complaintId}
         </if>
@@ -228,6 +246,9 @@ operate,complaint_id,type_cd,context,complaint_name,tel,state,store_id,b_id,room
         </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
 

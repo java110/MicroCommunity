@@ -20,6 +20,7 @@ public class ComplaintPo implements Serializable {
     private String tel;
     private String context;
     private String state;
+    private String communityId;
 
     public String getComplaintId() {
         return complaintId;
@@ -83,5 +84,13 @@ public class ComplaintPo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
