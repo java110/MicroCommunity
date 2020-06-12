@@ -167,6 +167,6 @@
   * [接口开发](develop/api.md)
   * [硬件对接](develop/machine.md)
 
-* 商业授权
+* 技术支持
 
-  * [授权](license.md)
+  * [技术支持](license.md)
