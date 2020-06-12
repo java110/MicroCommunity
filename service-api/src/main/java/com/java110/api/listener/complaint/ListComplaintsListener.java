@@ -121,6 +121,7 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
 
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(complaintDataVo.getComplaintId());
+            fileRelDto.setRelTypeCd("13000");
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
             photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
