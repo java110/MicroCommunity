@@ -1,11 +1,16 @@
 package com.java110.front.smo.payment.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.PageData;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToPayTempCarInoutSMO;
 import com.java110.core.context.IPageData;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +31,8 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
     @Autowired
     private RestTemplate restTemplate;
 
-
+    @Autowired
+    private WechatAuthProperties wechatAuthProperties;
 
     @Override
     public ResponseEntity<String> toPay(IPageData pd) {
@@ -47,6 +53,16 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
     protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
 
         ResponseEntity responseEntity = null;
+
+        SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
+
+        if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(wechatAuthProperties.getAppId());
+            smallWeChatDto.setAppSecret(wechatAuthProperties.getSecret());
+            smallWeChatDto.setMchId(wechatAuthProperties.getMchId());
+            smallWeChatDto.setPayPassword(wechatAuthProperties.getKey());
+        }
         //查询用户ID
         paramIn.put("userId", pd.getUserId());
         String url = ServiceConstant.SERVICE_API_URL + "/api/fee.payFeePreTempCarInout";
@@ -80,10 +96,35 @@ public class ToPayTempCarInoutSMOImpl extends AppAbstractComponentSMO implements
         String payMchId = orderInfo.getString("payMchId");
 
         //微信下单PayUtil
-        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"), orderId, money, openId,payAppId,payMchId);
+        Map result = super.java110Payment(restTemplate,paramIn.getString("feeName"),paramIn.getString("tradeType"),
+                orderId, money, openId,smallWeChatDto);
         responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
 
         return responseEntity;
+    }
+
+    private SmallWeChatDto getSmallWechat(IPageData pd, JSONObject paramIn) {
+
+        ResponseEntity responseEntity = null;
+
+        pd = PageData.newInstance().builder(pd.getUserId(), "", "", pd.getReqData(),
+                "", "", "", "",
+                pd.getAppId());
+        responseEntity = this.callCenterService(restTemplate, pd, "",
+                ServiceConstant.SERVICE_API_URL + "/api/smallWeChat.listSmallWeChats?appId="
+                        + paramIn.getString("appId") + "&page=1&row=1", HttpMethod.GET);
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return null;
+        }
+        JSONObject smallWechatObj = JSONObject.parseObject(responseEntity.getBody().toString());
+        JSONArray smallWeChats = smallWechatObj.getJSONArray("smallWeChats");
+
+        if (smallWeChats == null || smallWeChats.size() < 1) {
+            return null;
+        }
+
+        return BeanConvertUtil.covertBean(smallWeChats.get(0), SmallWeChatDto.class);
     }
 
 
