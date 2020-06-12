@@ -76,13 +76,13 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         String userId = headers.get("userid");
 
         //根据userId 查询openId
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-
-        Assert.listOnlyOne(userDtos, "未找到相应用户信息，或查询到多条");
-
-        String openId = userDtos.get(0).getOpenId();
+//        UserDto userDto = new UserDto();
+//        userDto.setUserId(userId);
+//        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+//
+//        Assert.listOnlyOne(userDtos, "未找到相应用户信息，或查询到多条");
+//
+//        String openId = userDtos.get(0).getOpenId();
 
         if (!reqJson.containsKey("page")) {
             reqJson.put("page", 1);
@@ -92,11 +92,11 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         }
 
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        if (!StringUtil.isEmpty(openId)) {//这里微信小程序
-            ownerAppUserDto.setOpenId(openId);
-        } else { //这种是业主注册的
+//        if (!StringUtil.isEmpty(openId)) {//这里微信小程序
+//            ownerAppUserDto.setOpenId(openId);
+//        } else { //这种是业主注册的
             ownerAppUserDto.setUserId(userId);
-        }
+//        }
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 
