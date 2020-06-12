@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToNotifySMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.DateUtil;
@@ -86,7 +87,13 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         }
 
         String outTradeNo = map.get("out_trade_no").toString();
-        String openId = map.get("openid").toString();
+        String openId = "";
+        String paySwitch = MappingCache.getValue(AppAbstractComponentSMO.DOMAIN_WECHAT_PAY, AppAbstractComponentSMO.WECHAT_SERVICE_PAY_SWITCH);
+        if (AppAbstractComponentSMO.WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
+            openId =  map.get("sub_openid").toString();
+        }else {
+            openId = map.get("openid").toString();
+        }
 
         responseEntity = getUserInfoByOpenId(restTemplate, openId);
 
