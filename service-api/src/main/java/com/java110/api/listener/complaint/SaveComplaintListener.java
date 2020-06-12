@@ -3,8 +3,13 @@ package com.java110.api.listener.complaint;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.complaint.IComplaintBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.dto.complaint.ComplaintDto;
+import com.java110.dto.file.FileDto;
+import com.java110.po.file.FileRelPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
@@ -13,6 +18,7 @@ import com.java110.utils.constant.ServiceCodeComplaintConstant;
 
 import com.java110.core.annotation.Java110Listener;
 import com.java110.utils.util.BeanConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -26,6 +32,9 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IComplaintBMO complaintBMOImpl;
+
+    @Autowired
+    private IFileInnerServiceSMO fileInnerServiceSMOImpl;
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
@@ -49,6 +58,28 @@ public class SaveComplaintListener extends AbstractServiceApiPlusListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         complaintBMOImpl.addComplaint(reqJson, context);
+
+        if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
+            FileDto fileDto = new FileDto();
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+            fileDto.setFileName(fileDto.getFileId());
+            fileDto.setContext(reqJson.getString("photo"));
+            fileDto.setSuffix("jpeg");
+            fileDto.setCommunityId(reqJson.getString("communityId"));
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+            reqJson.put("ownerPhotoId", fileDto.getFileId());
+            reqJson.put("fileSaveName", fileName);
+
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("fileRelId", "-1");
+            businessUnit.put("relTypeCd", "13000");
+            businessUnit.put("saveWay", "table");
+            businessUnit.put("objId", reqJson.getString("complaintId"));
+            businessUnit.put("fileRealName", fileDto.getFileId());
+            businessUnit.put("fileSaveName", fileName);
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            super.insert(context, fileRelPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_FILE_REL);
+        }
 
         commit(context);
 

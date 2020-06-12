@@ -1,7 +1,10 @@
 package com.java110.vo.api.complaint;
 
+import com.java110.vo.api.junkRequirement.PhotoVo;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ApiComplaintDataVo implements Serializable {
 
@@ -25,6 +28,8 @@ public class ApiComplaintDataVo implements Serializable {
     private String communityId;
     //
     private String auditCode;
+
+    private List<PhotoVo> photos;
 
     private String auditMessage;
 
@@ -209,5 +214,13 @@ public class ApiComplaintDataVo implements Serializable {
 
     public void setCurrentUserTel(String currentUserTel) {
         this.currentUserTel = currentUserTel;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }

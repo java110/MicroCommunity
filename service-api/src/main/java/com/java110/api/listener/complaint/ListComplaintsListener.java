@@ -4,16 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.store.IComplaintInnerServiceSMO;
-import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.dto.complaint.ComplaintDto;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
+import com.java110.core.smo.common.IComplaintUserInnerServiceSMO;
+import com.java110.core.smo.common.IFileRelInnerServiceSMO;
+import com.java110.core.smo.community.IRoomInnerServiceSMO;
+import com.java110.core.smo.store.IComplaintInnerServiceSMO;
+import com.java110.dto.complaint.ComplaintDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.utils.constant.ServiceCodeComplaintConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -37,6 +40,8 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
 
     @Autowired
     private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public String getServiceCode() {
@@ -82,7 +87,7 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
             List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
             complaintDtos = freshCurrentUser(complaintDtos);
             complaints = BeanConvertUtil.covertBeanList(complaintDtos, ApiComplaintDataVo.class);
-
+            refreshPhotos(complaints);
         } else {
             complaints = new ArrayList<>();
         }
@@ -101,12 +106,30 @@ public class ListComplaintsListener extends AbstractServiceApiListener {
 
     private List<ComplaintDto> freshCurrentUser(List<ComplaintDto> complaintDtos) {
         List<ComplaintDto> tmpComplaintDtos = new ArrayList<>();
-        for(ComplaintDto complaintDto : complaintDtos){
+        for (ComplaintDto complaintDto : complaintDtos) {
             complaintDto = complaintUserInnerServiceSMOImpl.getTaskCurrentUser(complaintDto);
             tmpComplaintDtos.add(complaintDto);
         }
 
         return tmpComplaintDtos;
+    }
+
+    private void refreshPhotos(List<ApiComplaintDataVo> complaints) {
+        List<PhotoVo> photoVos = null;
+        PhotoVo photoVo = null;
+        for (ApiComplaintDataVo complaintDataVo : complaints) {
+
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(complaintDataVo.getComplaintId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            photoVos = new ArrayList<>();
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                photoVo = new PhotoVo();
+                photoVo.setUrl("/callComponent/download/getFile/file?fileId=" + tmpFileRelDto.getFileRealName() + "&communityId=" + complaintDataVo.getCommunityId());
+                photoVos.add(photoVo);
+            }
+            complaintDataVo.setPhotos(photoVos);
+        }
     }
 
 }
