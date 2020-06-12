@@ -61,7 +61,7 @@
     <!-- 保存投诉建议信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveComplaintInfoInstance" parameterType="Map">
         insert into complaint(
-        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id,t.community_id
+        complaint_id,type_cd,context,complaint_name,tel,status_cd,state,store_id,b_id,room_id,community_id
         ) select t.complaint_id,t.type_cd,t.context,t.complaint_name,t.tel,'0',t.state,t.store_id,t.b_id,t.room_id,t.community_id
         from
         business_complaint t where 1=1
