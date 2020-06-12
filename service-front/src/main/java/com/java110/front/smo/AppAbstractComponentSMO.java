@@ -1,8 +1,9 @@
 package com.java110.front.smo;
 
-import com.java110.front.properties.WechatAuthProperties;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.front.properties.WechatAuthProperties;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -50,7 +51,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -72,7 +73,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     protected Map<String, String> java110Payment(RestTemplate outRestTemplate,
                                                  String feeName, String tradeType,
                                                  String orderNum, double money,
-                                                 String openId,String payAppId,String payMchId) throws Exception {
+                                                 String openId, SmallWeChatDto smallWeChatDto) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
 //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -80,31 +81,24 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue("HC_ENV"), money);
 //添加或更新支付记录(参数跟进自己业务需求添加)
 
-        Map<String, String> resMap = this.java110UnifieldOrder(outRestTemplate,feeName, orderNum, tradeType, payAmount, openId);
+        Map<String, String> resMap = this.java110UnifieldOrder(outRestTemplate, feeName, orderNum, tradeType, payAmount, openId,smallWeChatDto);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
-            if(WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
-                if(payAppId != null){
-                    resultMap.put("appId", payAppId);
-                }else{
-                    resultMap.put("appId", wechatAuthProperties.getAppId());
-                }
-                if(payMchId != null){
-                    resultMap.put("sign", PayUtil.createSign(resultMap, payMchId));
-                }else{
-                    resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
-                }
+            if (WechatAuthProperties.TRADE_TYPE_JSAPI.equals(tradeType)) {
+
+                resultMap.put("appId", smallWeChatDto.getAppId());
+                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
                 resultMap.put("nonceStr", PayUtil.makeUUID(32));
                 resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
                 resultMap.put("signType", "MD5");
-            }else if(WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)){
-                resultMap.put("appId", wechatAuthProperties.getAppId());
+            } else if (WechatAuthProperties.TRADE_TYPE_APP.equals(tradeType)) {
+                resultMap.put("appId", smallWeChatDto.getAppId());
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
                 resultMap.put("nonceStr", PayUtil.makeUUID(32));
-                resultMap.put("partnerid", wechatAuthProperties.getMchId());
+                resultMap.put("partnerid", smallWeChatDto.getMchId());
                 resultMap.put("prepayid", resMap.get("prepay_id"));
                 //resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, wechatAuthProperties.getKey()));
+                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
             }
             resultMap.put("code", "0");
             resultMap.put("msg", "下单成功");
@@ -120,11 +114,13 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     /**
      * 小程序支付统一下单
      */
-    private Map<String, String> java110UnifieldOrder(RestTemplate outRestTemplate, String feeName, String orderNum, String tradeType, double payAmount, String openid) throws Exception {
+    private Map<String, String> java110UnifieldOrder(RestTemplate outRestTemplate, String feeName, String orderNum,
+                                                     String tradeType, double payAmount, String openid,
+                                                     SmallWeChatDto smallWeChatDto) throws Exception {
 //封装参数
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
-        paramMap.put("appid", wechatAuthProperties.getAppId());
-        paramMap.put("mch_id", wechatAuthProperties.getMchId());
+        paramMap.put("appid", smallWeChatDto.getAppId());
+        paramMap.put("mch_id", smallWeChatDto.getMchId());
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
         paramMap.put("body", "HC智慧家园-" + feeName);
         paramMap.put("out_trade_no", orderNum);
@@ -133,7 +129,7 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
         paramMap.put("notify_url", wechatAuthProperties.getWxNotifyUrl());
         paramMap.put("trade_type", tradeType);
         paramMap.put("openid", openid);
-        paramMap.put("sign", PayUtil.createSign(paramMap, wechatAuthProperties.getKey()));
+        paramMap.put("sign", PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword()));
 //转换为xml
         String xmlData = PayUtil.mapToXml(paramMap);
 
