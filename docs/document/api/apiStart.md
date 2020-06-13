@@ -82,6 +82,8 @@ SIGN:aabdncdhdbd878sbdudn898
 
 ## 接口签名
 
+签名参考以下代码
+
 ```java
 
     /**
@@ -99,7 +101,13 @@ SIGN:aabdncdhdbd878sbdudn898
         return "";
     }
 
-    //get 方式请求 url 为get请求时的地址 SystemConstant.HTTP_TRANSACTION_ID 为 header 中 TRANSACTION-ID SystemConstant.HTTP_REQ_TIME
+```
+
+get 调用方式签名
+
+```
+
+ //get 方式请求 url 为get请求时的地址 SystemConstant.HTTP_TRANSACTION_ID 为 header 中 TRANSACTION-ID SystemConstant.HTTP_REQ_TIME
     //为header 中 REQ-TIME
     String tempGetParam = "";
     if (url.indexOf("?") > 0) {
@@ -110,6 +118,12 @@ SIGN:aabdncdhdbd878sbdudn898
     String sign = generatorSign(httpHeaders.get(SystemConstant.HTTP_TRANSACTION_ID).get(0),
             httpHeaders.get(SystemConstant.HTTP_REQ_TIME).get(0),
             paramIn);
+
+```
+
+post 调用方式签名
+
+```
 
     //post 方式请求 param 为post body内容SystemConstant.HTTP_TRANSACTION_ID 为 header 中 TRANSACTION-ID SystemConstant.HTTP_REQ_TIME
     //为header 中 REQ-TIME
