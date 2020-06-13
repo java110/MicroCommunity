@@ -25,7 +25,7 @@
 接口地址拼接方式为 https://您的IP:您的端口(service-front的端口8012)/app/服务编码  或者为
 https://您的IP:您的端口(service-api的端口8008)/api/服务编码
 
-第一个地址为只有在登录获取token后才能调用，第二个地址不需要过去token可以直接调用，service-front 的作用为校验 调用方是否登录
+第一个地址为只有在登录获取token后才能调用，第二个地址不需要获取token直接调用，service-front 的作用为校验 调用方是否登录
 
 
 #### 调用固定传参介绍
@@ -49,10 +49,10 @@ https://您的IP:您的端口(service-api的端口8008)/api/服务编码
 ``` javascript
 请求头信息：
 Content-Type:application/json
-USER_ID:1234
-APP_ID:8000418002
-TRANSACTION_ID:10029082726
-REQ_TIME:20181113225612
+USER-ID:1234
+APP-ID:8000418002
+TRANSACTION-ID:10029082726
+REQ-TIME:20181113225612
 SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
@@ -79,5 +79,48 @@ SIGN:aabdncdhdbd878sbdudn898
 ```
 
 ![image](../images/api/004.png)
+
+## 接口签名
+
+```java
+
+    /**
+     * 生成签名
+     *
+     * @param transactionId
+     * @return
+     */
+    public static String generatorSign(String transactionId, String requestTime, String param) throws NoAuthorityException {
+
+        if ("ON".equals(MappingCacheFactory.getValue("SIGN_FLAG"))) {
+            String reqInfo = transactionId + requestTime + MappingCacheFactory.getValue("APP_ID") + param + MappingCacheFactory.getValue("SECURITY_CODE");
+            return md5(reqInfo);
+        }
+        return "";
+    }
+
+    //get 方式请求 url 为get请求时的地址 SystemConstant.HTTP_TRANSACTION_ID 为 header 中 TRANSACTION-ID SystemConstant.HTTP_REQ_TIME
+    //为header 中 REQ-TIME
+    String tempGetParam = "";
+    if (url.indexOf("?") > 0) {
+        tempGetParam = url.substring(url.indexOf("?"));
+    }
+    String paramIn = tempGetParam ;
+    // 生成sign
+    String sign = generatorSign(httpHeaders.get(SystemConstant.HTTP_TRANSACTION_ID).get(0),
+            httpHeaders.get(SystemConstant.HTTP_REQ_TIME).get(0),
+            paramIn);
+
+    //post 方式请求 param 为post body内容SystemConstant.HTTP_TRANSACTION_ID 为 header 中 TRANSACTION-ID SystemConstant.HTTP_REQ_TIME
+    //为header 中 REQ-TIME
+    String tempGetParam = "";
+    String paramIn = param;
+    // 生成sign
+    String sign = generatorSign(httpHeaders.get(SystemConstant.HTTP_TRANSACTION_ID).get(0),
+            httpHeaders.get(SystemConstant.HTTP_REQ_TIME).get(0),
+            paramIn);
+
+```
+
 
 
