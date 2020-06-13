@@ -10,7 +10,7 @@ package com.java110.utils.constant;
  **/
 public class WechatConstant {
 
-    public static final String TOKEN = "hc";
+    public static final String TOKEN = "java110";
 
     public static final String MSG_TYPE_TEXT = "text";
     public static final String MSG_TYPE_LOCATION = "location";
