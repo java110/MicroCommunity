@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 
 /**
@@ -38,13 +40,10 @@ public class WechatGatewayController extends BaseController {
     /**
      * 微信登录接口
      *
-     * @param param
      * @param request
      */
-    @RequestMapping(path = "/gateway", method = RequestMethod.POST)
-    public ResponseEntity<String> gateway(@RequestBody String param, HttpServletRequest request) {
-        logger.debug("微信传入信息" + param);
-
+    @RequestMapping(path = "/gateway")
+    public ResponseEntity<String> gateway(HttpServletRequest request) {
 
         String token = WechatConstant.TOKEN;
         String signature = request.getParameter("signature");
@@ -62,12 +61,13 @@ public class WechatGatewayController extends BaseController {
         }
         String signature1 = AuthenticationFactory.SHA1Encode(sourceString).toLowerCase();
         logger.debug("sourceString = " + sourceString + "||||" + "signature1 = " + signature1);
-        if (signature1.equals(signature)) {
-            if (echostr == null) {
-                String postStr = param;//this.readStreamParameter(request.getInputStream());
-                if (postStr == null || postStr.length() == 0) {
-                    responseStr = "未输入任何内容";
-                } else {
+        try {
+            if (signature1.equals(signature)) {
+                if (echostr == null) {
+                    String postStr = this.readStreamParameter(request.getInputStream());
+                    if (postStr == null || postStr.length() == 0) {
+                        responseStr = "未输入任何内容";
+                    } else {
                     /*if (postStr.equals(new String(postStr.getBytes("ISO-8859-1"), "ISO-8859-1"))) {
                         logger.debug(" This type is  iso-8859-1");
                         postStr = new String(postStr.getBytes("ISO-8859-1"), "UTF-8");
@@ -84,9 +84,7 @@ public class WechatGatewayController extends BaseController {
 
                     }
                     postStr = new String(postStr.getBytes("GB2312"), "UTF-8");*/
-                    Document document;
-                    try {
-                        document = DocumentHelper.parseText(postStr);
+                        Document document = DocumentHelper.parseText(postStr);
                         Element root = document.getRootElement();
                         String fromUserName = root.elementText("FromUserName");
                         String toUserName = root.elementText("ToUserName");
@@ -101,18 +99,19 @@ public class WechatGatewayController extends BaseController {
                         } else {
                             responseStr = eventResponseHandler(fromUserName, toUserName, keyword, event, eventKey);
                         }
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        logger.error("处理失败", e);
-                        responseStr = "亲，网络超时，请稍后重试";
+
                     }
+                } else {
+                    responseStr = echostr;
                 }
+                logger.debug(">>>>>>>>>>>>>..responseStr>>>>>>>>>>>>>>>" + responseStr);
             } else {
-                responseStr = echostr;
+                responseStr = "亲，非法访问，签名失败";
             }
-            logger.debug(">>>>>>>>>>>>>..responseStr>>>>>>>>>>>>>>>" + responseStr);
-        } else {
-            responseStr = "亲，非法访问，签名失败";
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            logger.error("处理失败", e);
+            responseStr = "亲，网络超时，请稍后重试";
         }
 
         return new ResponseEntity<String>(responseStr, HttpStatus.OK);
@@ -173,5 +172,30 @@ public class WechatGatewayController extends BaseController {
 
         }
         return WechatFactory.formatText(toUserName, fromUserName, resultStr);
+    }
+
+    public String readStreamParameter(ServletInputStream in) {
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != reader) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        logger.debug("");
+        return buffer.toString();
     }
 }
