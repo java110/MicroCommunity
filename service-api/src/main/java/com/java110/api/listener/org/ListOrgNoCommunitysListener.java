@@ -70,7 +70,7 @@ public class ListOrgNoCommunitysListener extends AbstractServiceApiListener {
         for(OrgCommunityDto tmpOrgCommunityDto : orgCommunityDtos){
             communityIds.add(tmpOrgCommunityDto.getCommunityId());
         }
-        CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);;
+        CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
         if(communityIds.size()>0) {
             communityDto.setNotInCommunityId(communityIds.toArray(new String[communityIds.size()]));
         }
