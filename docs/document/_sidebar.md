@@ -10,6 +10,7 @@
 * 接口能力
 
   * [接口清单](api/Readme.md)
+  * [调用流程](api/apiStart.md)
   * [用户类接口](api/user/index.md)
   * [访客登记](api/user/saveVisit.md)
   * [访客登记变更](api/user/updateVisit.md)
