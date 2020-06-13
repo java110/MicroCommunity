@@ -42,7 +42,7 @@ public class WechatGatewayController extends BaseController {
      * @param request
      */
     @RequestMapping(path = "/gateway", method = RequestMethod.POST)
-    public ResponseEntity<String> auth(@RequestBody String param, HttpServletRequest request) {
+    public ResponseEntity<String> gateway(@RequestBody String param, HttpServletRequest request) {
         logger.debug("微信传入信息" + param);
 
 
