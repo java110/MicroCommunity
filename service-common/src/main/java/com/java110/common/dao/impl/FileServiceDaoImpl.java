@@ -17,7 +17,7 @@ import java.util.Map;
  * 应用服务 与数据库交互
  * Created by wuxw on 2017/4/5.
  */
-@Service("appServiceDaoImpl")
+@Service("fileServiceDaoImpl")
 //@Transactional
 public class FileServiceDaoImpl extends BaseServiceDao implements IFileServiceDao {
 

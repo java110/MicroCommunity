@@ -15,7 +15,6 @@
         <module>java110-core</module>
         <module>java110-service</module>
         <module>java110-db</module>
-        <module>java110-generator</module>
         <module>service-user</module>
         <module>service-log</module>
         <module>service-fee</module>
@@ -31,6 +30,7 @@
         <module>service-common</module>
         <module>service-report</module>
         <module>service-front</module>
+        <module>java110-generator</module>
     </modules>
 
     <parent>
