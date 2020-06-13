@@ -181,7 +181,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.java110.generator.GeneratorServiceApplicationStart</mainClass>
+                    <mainClass>com.java110.code.GeneratorServiceApplicationStart</mainClass>
                 </configuration>
             </plugin>
         </plugins>
