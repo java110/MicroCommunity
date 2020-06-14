@@ -5,6 +5,7 @@ import com.java110.core.base.controller.BaseController;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.StringUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -65,7 +66,7 @@ public class WechatGatewayController extends BaseController {
             if (signature1.equals(signature)) {
                 if (echostr == null) {
                     String postStr = this.readStreamParameter(request.getInputStream());
-                    if (postStr == null || postStr.length() == 0) {
+                    if (StringUtil.isEmpty(postStr)) {
                         responseStr = "未输入任何内容";
                     } else {
                     /*if (postStr.equals(new String(postStr.getBytes("ISO-8859-1"), "ISO-8859-1"))) {
@@ -195,7 +196,7 @@ public class WechatGatewayController extends BaseController {
             }
         }
 
-        logger.debug("");
+        logger.debug("公众号内容:" + buffer.toString());
         return buffer.toString();
     }
 }
