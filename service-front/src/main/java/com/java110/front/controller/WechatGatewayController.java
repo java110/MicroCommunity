@@ -135,7 +135,7 @@ public class WechatGatewayController extends BaseController {
             paramIn.put("msgType", msgType);
             paramIn.put("event", event);
             paramIn.put("eventKey", eventKey);
-            IPageData pd = PageData.newInstance().builder("", "", "", paramIn.toJSONString(),
+            IPageData pd = PageData.newInstance().builder("-1", "", "", paramIn.toJSONString(),
                     "", "", "", "",
                     java110AppId);
             responseEntity = wechatGatewaySMOImpl.gateway(pd);
