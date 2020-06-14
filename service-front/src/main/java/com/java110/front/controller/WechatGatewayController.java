@@ -132,9 +132,10 @@ public class WechatGatewayController extends BaseController {
         String signature = request.getParameter("signature");
         String timestamp = request.getParameter("timestamp");
         String nonce = request.getParameter("nonce");
+        String openId = request.getParameter("openid");
         String responseStr = "";
         logger.debug("token = " + token + "||||" + "signature = " + signature + "|||" + "timestamp = "
-                + timestamp + "|||" + "nonce = " + nonce);
+                + timestamp + "|||" + "nonce = " + nonce + "|||| param = " + param + "|||| openId= " + openId);
         String sourceString = "";
         String[] ss = new String[]{token, timestamp, nonce};
         Arrays.sort(ss);
