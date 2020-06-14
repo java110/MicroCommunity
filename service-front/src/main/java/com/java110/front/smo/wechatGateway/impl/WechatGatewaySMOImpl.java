@@ -24,7 +24,7 @@ import org.thymeleaf.util.StringUtils;
 /**
  * wx登录
  */
-@Service("ownerAppLoginSMOImpl")
+@Service("wechatGatewaySMOImpl")
 public class WechatGatewaySMOImpl extends AppAbstractComponentSMO implements IWechatGatewaySMO {
 
     private final static Logger logger = LoggerFactory.getLogger(WechatGatewaySMOImpl.class);
