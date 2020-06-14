@@ -4,17 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.api.listener.AbstractServiceApiListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.user.UserDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +60,9 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         //super.validatePageInfo(reqJson);
 
-        Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
+        //  Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
 
-        Assert.hasKeyAndValue(headers, "userid", "请求头中未包含用户信息");
+        //   Assert.hasKeyAndValue(headers, "userid", "请求头中未包含用户信息");
     }
 
     @Override
@@ -73,7 +70,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
 
         Map<String, String> headers = event.getDataFlowContext().getRequestHeaders();
 
-        String userId = headers.get("userid");
+        //     String userId = headers.get("userid");
 
         //根据userId 查询openId
 //        UserDto userDto = new UserDto();
@@ -92,11 +89,9 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
         }
 
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-//        if (!StringUtil.isEmpty(openId)) {//这里微信小程序
-//            ownerAppUserDto.setOpenId(openId);
-//        } else { //这种是业主注册的
-            ownerAppUserDto.setUserId(userId);
-//        }
+        if (headers.containsKey("userid")) {//这里微信小程序
+            ownerAppUserDto.setUserId(headers.get("userid"));
+        }
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 
@@ -133,7 +128,7 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
             for (ApiAuditAppUserBindingOwnerDataVo apiAuditAppUserBindingOwnerDataVo : auditAppUserBindingOwners) {
-                if(apiAuditAppUserBindingOwnerDataVo.getCommunityId().equals(tmpCommunityDto.getCommunityId())){
+                if (apiAuditAppUserBindingOwnerDataVo.getCommunityId().equals(tmpCommunityDto.getCommunityId())) {
                     apiAuditAppUserBindingOwnerDataVo.setAreaCode(tmpCommunityDto.getAreaCode());
                     apiAuditAppUserBindingOwnerDataVo.setAreaName(tmpCommunityDto.getAreaName());
                     apiAuditAppUserBindingOwnerDataVo.setParentAreaCode(tmpCommunityDto.getParentAreaCode());
