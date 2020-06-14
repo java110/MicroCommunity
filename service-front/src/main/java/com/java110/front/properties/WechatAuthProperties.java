@@ -29,6 +29,9 @@ public class WechatAuthProperties {
     private String wxPayUnifiedOrder;
     private String wxNotifyUrl;
 
+    private String wechatAppId;//微信公众号ID
+    private String wechatAppSecret;//微信公众号秘钥
+
     public String getSessionHost() {
         return sessionHost;
     }
@@ -91,5 +94,21 @@ public class WechatAuthProperties {
 
     public void setWxNotifyUrl(String wxNotifyUrl) {
         this.wxNotifyUrl = wxNotifyUrl;
+    }
+
+    public String getWechatAppId() {
+        return wechatAppId;
+    }
+
+    public void setWechatAppId(String wechatAppId) {
+        this.wechatAppId = wechatAppId;
+    }
+
+    public String getWechatAppSecret() {
+        return wechatAppSecret;
+    }
+
+    public void setWechatAppSecret(String wechatAppSecret) {
+        this.wechatAppSecret = wechatAppSecret;
     }
 }

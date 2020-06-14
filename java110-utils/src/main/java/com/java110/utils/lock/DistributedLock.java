@@ -22,9 +22,10 @@ public class DistributedLock extends BaseCache {
 
     /**
      * 获取UUID
+     *
      * @return
      */
-    public static String getLockUUID(){
+    public static String getLockUUID() {
         return UUID.randomUUID().toString();
     }
 
@@ -64,13 +65,12 @@ public class DistributedLock extends BaseCache {
      * @param expireTime 超期时间
      * @return 是否获取成功
      */
-    public static boolean tryGetDistributedLock(Jedis redis, String lockKey, String requestId, int expireTime) {
+    private static boolean tryGetDistributedLock(Jedis redis, String lockKey, String requestId, int expireTime) {
         String result = redis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
 
         if (LOCK_SUCCESS.equals(result)) {
             return true;
         }
-
         return false;
 
     }

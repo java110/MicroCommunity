@@ -30,4 +30,7 @@ public class WechatConstant {
     public static final String MSG_REGX_TYPE_ALL = "1";
     public static final String MSG_MENU_ID = "menu";
 
+
+    public static final String GET_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
+
 }
