@@ -33,7 +33,7 @@ public class WechatConstant {
 
     public static final String GET_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
 
-    public static final String APP_GET_ACCESS_TOKEN_URL = "http://app.java110.com/oauth2Controller/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+    public static final String APP_GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 
     public static final String OPEN_AUTH = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URL&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
 
