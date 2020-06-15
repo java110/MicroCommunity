@@ -164,7 +164,10 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
         }
 
-        return ResultVo.redirectPage(openUrl);
+        JSONObject urlObj = new JSONObject();
+        urlObj.put("openUrl", openUrl);
+
+        return ResultVo.createResponseEntity(ResultVo.CODE_MACHINE_OK, ResultVo.MSG_OK, urlObj);
     }
 
     @Override
