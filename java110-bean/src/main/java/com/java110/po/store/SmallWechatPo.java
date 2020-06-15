@@ -22,6 +22,7 @@ public class SmallWechatPo implements Serializable {
     private String objId;
     private String objType;
     private String mchId;
+    private String weChatType;
 
     public String getWeChatId() {
         return weChatId;
@@ -101,5 +102,13 @@ public class SmallWechatPo implements Serializable {
 
     public void setMchId(String mchId) {
         this.mchId = mchId;
+    }
+
+    public String getWeChatType() {
+        return weChatType;
+    }
+
+    public void setWeChatType(String weChatType) {
+        this.weChatType = weChatType;
     }
 }

@@ -26,6 +26,8 @@ public class SaveSmallWeChatListener extends AbstractServiceApiPlusListener {
         Assert.hasKeyAndValue(reqJson, "appId", "请求报文中未包含appId");
         Assert.hasKeyAndValue(reqJson, "appSecret", "请求报文中未包含appSecret");
         Assert.hasKeyAndValue(reqJson, "payPassword", "请求报文中未包含payPassword");
+        Assert.hasKeyAndValue(reqJson, "weChatType", "请求报文中未包含weChatType");
+        Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId(小区id)");
     }
 
     @Override

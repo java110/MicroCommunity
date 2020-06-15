@@ -28,6 +28,7 @@ public class SmallWeChatDto extends PageDto implements Serializable {
     private String objType;
     private String mchId;
     private String objTypeName;
+    private String weChatType;
 
 
     public Date getCreateTime() {
@@ -132,5 +133,13 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public void setObjTypeName(String objTypeName) {
         this.objTypeName = objTypeName;
+    }
+
+    public String getWeChatType() {
+        return weChatType;
+    }
+
+    public void setWeChatType(String weChatType) {
+        this.weChatType = weChatType;
     }
 }
