@@ -327,22 +327,22 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         }
 
         OwnerAppUserDto tmpOwnerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setOpenId(openId);
-        ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+        tmpOwnerAppUserDto.setOpenId(openId);
+        tmpOwnerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
         if (ownerAppUserDto != null) {
-            ownerAppUserDto.setAppUserId(tmpOwnerAppUserDto.getAppUserId());
-            ownerAppUserDto.setCommunityId(tmpOwnerAppUserDto.getCommunityId());
+            tmpOwnerAppUserDto.setAppUserId(ownerAppUserDto.getAppUserId());
+            tmpOwnerAppUserDto.setCommunityId(ownerAppUserDto.getCommunityId());
         } else {
-            ownerAppUserDto.setOldAppUserId(ownerAppUserDtos.get(0).getAppUserId());
-            ownerAppUserDto.setAppUserId("-1");
-            ownerAppUserDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
+            tmpOwnerAppUserDto.setOldAppUserId(ownerAppUserDtos.get(0).getAppUserId());
+            tmpOwnerAppUserDto.setAppUserId("-1");
+            tmpOwnerAppUserDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
         }
         //查询微信信息
         pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
                 "", "", "", "",
                 pd.getAppId());
 
-        super.postForApi(pd, ownerAppUserDto, ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_OPEN_ID,
+        super.postForApi(pd, tmpOwnerAppUserDto, ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_OPEN_ID,
                 OwnerAppUserDto.class);
         return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
     }
