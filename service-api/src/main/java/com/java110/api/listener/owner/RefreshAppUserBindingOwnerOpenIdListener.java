@@ -61,7 +61,7 @@ public class RefreshAppUserBindingOwnerOpenIdListener extends AbstractServiceApi
             ownerAppUserPo.setAppUserId("-1");
             ownerAppUserPo.setAppType(reqJson.getString("appType"));
             ownerAppUserPo.setOpenId(reqJson.getString("openId"));
-            super.insert(context, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_OWNER_APP_USER);
+            super.insert(context, ownerAppUserPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_OWNER_APP_USER);
 
             return;
         }

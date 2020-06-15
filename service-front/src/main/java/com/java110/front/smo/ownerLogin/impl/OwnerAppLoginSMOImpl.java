@@ -68,7 +68,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         String urlCode = CommonCache.getAndRemoveValue(paramIn.getString("urlCode"));
 
         if (StringUtil.isEmpty(urlCode)) {
-            return ResultVo.redirectPage("/#/page/login/login");
+            return ResultVo.redirectPage("/#/pages/login/login");
         }
 
         String url = WechatConstant.APP_GET_ACCESS_TOKEN_URL.replace("APPID", wechatAuthProperties.getWechatAppId())
@@ -79,7 +79,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
 
         logger.debug("调用微信换去token ", paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
-            return ResultVo.redirectPage("/#/page/login/login");
+            return ResultVo.redirectPage("/#/pages/login/login");
 
         }
 
@@ -97,14 +97,14 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage("/#/page/login/login?code=" + code);
+            return ResultVo.redirectPage("/#/pages/login/login?code=" + code);
         }
         JSONObject ownerInfo = JSONObject.parseObject(responseEntity.getBody().toString());
         if (ownerInfo.getInteger("total") < 1) {
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage("/#/page/login/login?code=" + code);
+            return ResultVo.redirectPage("/#/pages/login/login?code=" + code);
         }
 
         // String accessToken = paramObj.getString("access_token");//暂时不用
@@ -262,7 +262,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
             return responseEntity;
         }
 
-        JSONObject curOwnerApp = judgeCurrentOwnerBind(auditAppUserBindingOwners, OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+        JSONObject curOwnerApp = judgeCurrentOwnerBind(auditAppUserBindingOwners, OwnerAppUserDto.APP_TYPE_WECHAT);
 
         //说明 当前的openId 就是最新的
         if (curOwnerApp != null && openId.equals(curOwnerApp.getString("openId"))) {
@@ -272,7 +272,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         JSONObject userOwnerInfo = new JSONObject();
 
         userOwnerInfo.put("openId", openId);
-        userOwnerInfo.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+        userOwnerInfo.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT);
         if (curOwnerApp != null) {
             userOwnerInfo.put("appUserId", curOwnerApp.getString("appUserId"));
             userOwnerInfo.put("communityId", curOwnerApp.getString("communityId"));
