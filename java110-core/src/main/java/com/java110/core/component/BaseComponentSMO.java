@@ -222,32 +222,7 @@ public class BaseComponentSMO extends BaseServiceSMO {
 
     }
 
-    /**
-     * map 参数转 url get 参数 非空值转为get参数 空值忽略
-     *
-     * @param info map数据
-     * @return url get 参数 带？
-     */
-    protected String mapToUrlParam(Map info) {
-        String urlParam = "";
-        if (info == null || info.isEmpty()) {
-            return urlParam;
-        }
 
-        urlParam += "?";
-
-        for (Object key : info.keySet()) {
-            if (StringUtils.isEmpty(info.get(key) + "")) {
-                continue;
-            }
-
-            urlParam += (key + "=" + info.get(key) + "&");
-        }
-
-        urlParam = urlParam.endsWith("&") ? urlParam.substring(0, urlParam.length() - 1) : urlParam;
-
-        return urlParam;
-    }
 
 
     /**

@@ -1,31 +1,33 @@
 package com.java110.front.smo.wechatGateway.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.base.smo.front.AbstractFrontServiceSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.WechatFactory;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.front.properties.WechatAuthProperties;
-import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.wechatGateway.IWechatGatewaySMO;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.util.StringUtils;
 
+import java.util.List;
+
 /**
  * wx登录
  */
 @Service("wechatGatewaySMOImpl")
-public class WechatGatewaySMOImpl extends AppAbstractComponentSMO implements IWechatGatewaySMO {
+public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWechatGatewaySMO {
 
     private final static Logger logger = LoggerFactory.getLogger(WechatGatewaySMOImpl.class);
 
@@ -41,17 +43,10 @@ public class WechatGatewaySMOImpl extends AppAbstractComponentSMO implements IWe
     @Override
     public ResponseEntity<String>
     gateway(IPageData pd) throws Exception {
-        return businessProcess(pd);
-    }
 
-    @Override
-    protected void validate(IPageData pd, JSONObject paramIn) {
+        JSONObject paramIn = JSONObject.parseObject(JSONObject.toJSONString(pd.getReqData()));
         Assert.hasKeyAndValue(paramIn, "fromUserName", "请求报文中未包含fromUserName");
         Assert.hasKeyAndValue(paramIn, "toUserName", "请求报文中未包含toUserName");
-    }
-
-    @Override
-    protected ResponseEntity<String> doBusinessProcess(IPageData pd, JSONObject paramIn) throws Exception {
 
         logger.debug("doLogin入参：" + paramIn.toJSONString());
         String responseStr = "";
@@ -78,6 +73,7 @@ public class WechatGatewaySMOImpl extends AppAbstractComponentSMO implements IWe
         }
         return new ResponseEntity<>(responseStr, HttpStatus.OK);
     }
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;
@@ -168,16 +164,11 @@ public class WechatGatewaySMOImpl extends AppAbstractComponentSMO implements IWe
      * @return
      */
     private boolean judgeBindOwner(IPageData pd, String openId) {
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setOpenId(openId);
+        List<OwnerAppUserDto> ownerAppUserDtos = super.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
 
-        ResponseEntity responseEntity = this.callCenterService(restTemplate, pd, "", ServiceConstant.SERVICE_API_URL + "/api/owner.listAppUserBindingOwners?openId=" + openId, HttpMethod.GET);
-
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            return true;
-        }
-
-        JSONObject ownerInfo = JSONObject.parseObject(responseEntity.getBody().toString());
-
-        if (ownerInfo.getInteger("total") != 1) {
+        if (ownerAppUserDtos == null || ownerAppUserDtos.size() != 1) {
             return false;
         }
         return true;

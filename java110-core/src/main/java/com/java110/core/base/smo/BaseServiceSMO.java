@@ -9,6 +9,7 @@ import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
 import com.java110.core.context.IPageData;
 import com.java110.core.smo.code.IPrimaryKeyInnerServiceSMO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -18,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 /**
  * 所有服务端的基类
@@ -71,4 +74,30 @@ public class BaseServiceSMO extends AppBase {
     }
 
 
+    /**
+     * map 参数转 url get 参数 非空值转为get参数 空值忽略
+     *
+     * @param info map数据
+     * @return url get 参数 带？
+     */
+    protected String mapToUrlParam(Map info) {
+        String urlParam = "";
+        if (info == null || info.isEmpty()) {
+            return urlParam;
+        }
+
+        urlParam += "?";
+
+        for (Object key : info.keySet()) {
+            if (StringUtils.isEmpty(info.get(key) + "")) {
+                continue;
+            }
+
+            urlParam += (key + "=" + info.get(key) + "&");
+        }
+
+        urlParam = urlParam.endsWith("&") ? urlParam.substring(0, urlParam.length() - 1) : urlParam;
+
+        return urlParam;
+    }
 }

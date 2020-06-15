@@ -12,6 +12,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,44 +96,35 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
 
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
 
-        List<ApiAuditAppUserBindingOwnerDataVo> auditAppUserBindingOwners = null;
 
+        List<OwnerAppUserDto> ownerAppUserDtos = null;
         if (count > 0) {
-            auditAppUserBindingOwners = BeanConvertUtil.covertBeanList(ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto), ApiAuditAppUserBindingOwnerDataVo.class);
-            refreshCommunityArea(auditAppUserBindingOwners);
+            ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+            refreshCommunityArea(ownerAppUserDtos);
         } else {
-            auditAppUserBindingOwners = new ArrayList<>();
+            ownerAppUserDtos = new ArrayList<>();
         }
-
-        ApiAuditAppUserBindingOwnerVo apiAuditAppUserBindingOwnerVo = new ApiAuditAppUserBindingOwnerVo();
-
-        apiAuditAppUserBindingOwnerVo.setTotal(count);
-        apiAuditAppUserBindingOwnerVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiAuditAppUserBindingOwnerVo.setAuditAppUserBindingOwners(auditAppUserBindingOwners);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiAuditAppUserBindingOwnerVo), HttpStatus.OK);
-
-        context.setResponseEntity(responseEntity);
+        context.setResponseEntity(ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),count,ownerAppUserDtos));
 
     }
 
     /**
      * 刷入小区地区
      *
-     * @param auditAppUserBindingOwners
+     * @param ownerAppUserDtos
      */
-    private void refreshCommunityArea(List<ApiAuditAppUserBindingOwnerDataVo> auditAppUserBindingOwners) {
+    private void refreshCommunityArea(List<OwnerAppUserDto> ownerAppUserDtos) {
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityIds(getCommunityIds(auditAppUserBindingOwners));
+        communityDto.setCommunityIds(getCommunityIds(ownerAppUserDtos));
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
 
         for (CommunityDto tmpCommunityDto : communityDtos) {
-            for (ApiAuditAppUserBindingOwnerDataVo apiAuditAppUserBindingOwnerDataVo : auditAppUserBindingOwners) {
-                if (apiAuditAppUserBindingOwnerDataVo.getCommunityId().equals(tmpCommunityDto.getCommunityId())) {
-                    apiAuditAppUserBindingOwnerDataVo.setAreaCode(tmpCommunityDto.getAreaCode());
-                    apiAuditAppUserBindingOwnerDataVo.setAreaName(tmpCommunityDto.getAreaName());
-                    apiAuditAppUserBindingOwnerDataVo.setParentAreaCode(tmpCommunityDto.getParentAreaCode());
-                    apiAuditAppUserBindingOwnerDataVo.setParentAreaName(tmpCommunityDto.getParentAreaName());
+            for (OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos) {
+                if (ownerAppUserDto.getCommunityId().equals(tmpCommunityDto.getCommunityId())) {
+                    ownerAppUserDto.setAreaCode(tmpCommunityDto.getAreaCode());
+                    ownerAppUserDto.setAreaName(tmpCommunityDto.getAreaName());
+                    ownerAppUserDto.setParentAreaCode(tmpCommunityDto.getParentAreaCode());
+                    ownerAppUserDto.setParentAreaName(tmpCommunityDto.getParentAreaName());
                 }
             }
         }
@@ -143,13 +135,13 @@ public class ListAppUserBindingOwnersListener extends AbstractServiceApiListener
     /**
      * 获取批量userIdsaveOwner
      *
-     * @param auditAppUserBindingOwners 业主绑定信息
+     * @param ownerAppUserDtos 业主绑定信息
      * @return 批量userIds 信息
      */
-    private String[] getCommunityIds(List<ApiAuditAppUserBindingOwnerDataVo> auditAppUserBindingOwners) {
+    private String[] getCommunityIds(List<OwnerAppUserDto> ownerAppUserDtos) {
         List<String> communityIds = new ArrayList<String>();
-        for (ApiAuditAppUserBindingOwnerDataVo apiAuditAppUserBindingOwnerDataVo : auditAppUserBindingOwners) {
-            communityIds.add(apiAuditAppUserBindingOwnerDataVo.getCommunityId());
+        for (OwnerAppUserDto ownerAppUserDto : ownerAppUserDtos) {
+            communityIds.add(ownerAppUserDto.getCommunityId());
         }
 
         return communityIds.toArray(new String[communityIds.size()]);

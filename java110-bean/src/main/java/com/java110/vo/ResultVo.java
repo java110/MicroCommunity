@@ -19,7 +19,7 @@ public class ResultVo implements Serializable {
 
     public static final int CODE_ERROR = 404;// 未知异常
 
-    public static final int CODE_OK = 200; // 成功
+    public static final int CODE_OK = 0; // 成功
 
     public static final int CODE_MACHINE_OK = 0; // 成功
 
@@ -36,6 +36,9 @@ public class ResultVo implements Serializable {
     public static final String MSG_OK = "成功"; // 成功
 
     public static final String MSG_UNAUTHORIZED = "认证失败"; //认证失败
+
+    public static final int DEFAULT_RECORD = 1;
+    public static final int DEFAULT_TOTAL = 1;
 
     // 分页页数
     private int page;
@@ -154,6 +157,19 @@ public class ResultVo implements Serializable {
         return JSONObject.toJSONString(this);
     }
 
+
+    /**
+     * 创建ResponseEntity对象
+     *
+     * @param data 数据对象
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(Object data) {
+        ResultVo resultVo = new ResultVo(DEFAULT_RECORD, DEFAULT_TOTAL, data);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
     /**
      * 创建ResponseEntity对象
      *
@@ -170,6 +186,7 @@ public class ResultVo implements Serializable {
 
     /**
      * 页面跳转
+     *
      * @param url
      * @return
      */

@@ -1,12 +1,17 @@
 package com.java110.front.smo;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.component.AbstractComponentSMO;
 import com.java110.core.context.IPageData;
 import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceConstant;
+import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -20,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -29,6 +35,9 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     private static final Logger logger = LoggerFactory.getLogger(AppAbstractComponentSMO.class);
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
@@ -40,6 +49,8 @@ public abstract class AppAbstractComponentSMO extends AbstractComponentSMO {
     private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
+
+
 
     /**
      * 调用中心服务

@@ -1,4 +1,4 @@
-package com.java110.front.controller;
+package com.java110.front.controller.wechat;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
