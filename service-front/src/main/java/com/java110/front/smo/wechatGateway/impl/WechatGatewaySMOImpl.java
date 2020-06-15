@@ -44,7 +44,7 @@ public class WechatGatewaySMOImpl extends AbstractFrontServiceSMO implements IWe
     public ResponseEntity<String>
     gateway(IPageData pd) throws Exception {
 
-        JSONObject paramIn = JSONObject.parseObject(JSONObject.toJSONString(pd.getReqData()));
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         Assert.hasKeyAndValue(paramIn, "fromUserName", "请求报文中未包含fromUserName");
         Assert.hasKeyAndValue(paramIn, "toUserName", "请求报文中未包含toUserName");
 
