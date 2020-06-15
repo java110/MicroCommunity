@@ -480,6 +480,9 @@ public class ServiceCodeConstant {
      */
     public static final String UPDATE_APPUSERBINDINGOWNER = "owner.updateAppUserBindingOwner";
     public static final String DELETE_APPUSERBINDINGOWNER = "owner.deleteAppUserBindingOwner";
+    public static final String REFRESH_APP_USER_BINDING_OWNER_TOKEN = "owner.refreshAppUserBindingOwnerToken";
+
+
 
 
     public static final String SERVICE_CODE_APPLICATION_KEY = "owner.applicationKey";

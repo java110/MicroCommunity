@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping(path = "/app")
-public class OwnerAppLoginController extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(OwnerAppLoginController.class);
+public class LoginOwnerController extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(LoginOwnerController.class);
 
     @Autowired
     private IOwnerAppLoginSMO ownerAppLoginSMOImpl;

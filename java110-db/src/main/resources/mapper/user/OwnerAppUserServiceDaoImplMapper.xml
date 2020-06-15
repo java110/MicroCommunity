@@ -7,9 +7,10 @@
     <!-- 保存绑定业主信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerAppUserInfo" parameterType="Map">
         insert into business_owner_app_user(
-        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id
+        id_card,open_id,link,remark,operate,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id,app_type
         ) values (
-        #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{bId},#{memberId},#{userId}
+        #{idCard},#{openId},#{link},#{remark},#{operate},#{appUserName},#{communityName},#{state},#{appUserId},#{communityId},
+        #{appTypeCd},#{bId},#{memberId},#{userId},#{appType}
         )
     </insert>
 
@@ -19,7 +20,8 @@
         select t.id_card,t.id_card idCard,t.open_id,t.open_id
         openId,t.link,t.remark,t.operate,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
-        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,t.user_id,t.user_id userId
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,t.user_id,
+        t.user_id userId,t.app_type,t.app_type appType
         from business_owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
@@ -71,9 +73,11 @@
     <!-- 保存绑定业主信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerAppUserInfoInstance" parameterType="Map">
         insert into owner_app_user(
-        id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id
+        id_card,open_id,link,remark,status_cd,app_user_name,community_name,state,app_user_id,community_id,app_type_cd,b_id,member_id,user_id,
+        app_type
         ) select
-        t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,t.member_id,t.user_id
+        t.id_card,t.open_id,t.link,t.remark,'0',t.app_user_name,t.community_name,t.state,t.app_user_id,t.community_id,t.app_type_cd,t.b_id,
+        t.member_id,t.user_id,t.app_type
         from business_owner_app_user t where 1=1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
@@ -124,7 +128,8 @@
         select t.id_card,t.id_card idCard,t.open_id,t.open_id openId,t.link,t.remark,t.status_cd,t.status_cd
         statusCd,t.app_user_name,t.app_user_name appUserName,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
-        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,td1.name stateName,t.user_id,t.user_id userId
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,
+        td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType
         from owner_app_user t,t_dict td1
         where 1 =1
         and t.state = td1.status_cd
@@ -179,6 +184,9 @@
         <if test="userId !=null and userId != ''">
             and t.user_id = #{userId}
         </if>
+        <if test="appType !=null and appType != ''">
+            and t.app_type = #{appType}
+        </if>
         <if test="userIds !=null">
             and t.user_id in
             <foreach collection="userIds" open="(" close=")"
@@ -186,6 +194,7 @@
                 #{item}
             </foreach>
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -231,6 +240,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             , t.user_id= #{userId}
+        </if>
+        <if test="appType !=null and appType != ''">
+            , t.app_type = #{appType}
         </if>
         where 1=1
         <if test="appUserId !=null and appUserId != ''">
@@ -292,6 +304,9 @@
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
+        </if>
+        <if test="appType !=null and appType != ''">
+            and t.app_type = #{appType}
         </if>
         <if test="userIds !=null">
             and t.user_id in

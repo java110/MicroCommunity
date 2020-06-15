@@ -1,6 +1,7 @@
 package com.java110.vo;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,6 +26,7 @@ public class ResultVo implements Serializable {
     public static final int CODE_MACHINE_ERROR = -1; // 未知异常
 
     public static final int CODE_UNAUTHORIZED = 401; //认证失败
+    public static final int CODE_WECHAT_UNAUTHORIZED = 1401; //认证失败
 
     public static final int ORDER_ERROR = 500; //订单调度异常
 
@@ -154,9 +156,10 @@ public class ResultVo implements Serializable {
 
     /**
      * 创建ResponseEntity对象
+     *
      * @param records 页数
-     * @param total 总记录数
-     * @param data 数据对象
+     * @param total   总记录数
+     * @param data    数据对象
      * @return
      */
     public static ResponseEntity<String> createResponseEntity(int records, int total, Object data) {
@@ -166,12 +169,39 @@ public class ResultVo implements Serializable {
     }
 
     /**
+     * 页面跳转
+     * @param url
+     * @return
+     */
+    public static ResponseEntity<String> redirectPage(String url) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, url);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("", headers, HttpStatus.FOUND);
+        return responseEntity;
+    }
+
+    /**
      * 创建ResponseEntity对象
-     * @param records 页数
-     * @param total 总记录数
+     *
      * @param code 状态嘛
-     * @param msg 返回信息
+     * @param msg  返回信息
      * @param data 数据对象
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(int code, String msg, Object data) {
+        ResultVo resultVo = new ResultVo(code, msg, data);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 创建ResponseEntity对象
+     *
+     * @param records 页数
+     * @param total   总记录数
+     * @param code    状态嘛
+     * @param msg     返回信息
+     * @param data    数据对象
      * @return
      */
     public static ResponseEntity<String> createResponseEntity(int records, int total, int code, String msg, Object data) {

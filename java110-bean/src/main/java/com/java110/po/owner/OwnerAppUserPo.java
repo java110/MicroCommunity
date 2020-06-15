@@ -21,6 +21,7 @@ public class OwnerAppUserPo implements Serializable {
     private String link;
     private String openId;
     private String appTypeCd;
+    private String appType;
     private String state;
     private String remark;
     private String userId;
@@ -119,5 +120,13 @@ public class OwnerAppUserPo implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getAppType() {
+        return appType;
+    }
+
+    public void setAppType(String appType) {
+        this.appType = appType;
     }
 }

@@ -15,6 +15,13 @@ import java.util.Date;
  **/
 public class OwnerAppUserDto extends PageDto implements Serializable {
 
+    public static final String APP_TYPE_APP = "APP";//app绑定业主
+    public static final String APP_TYPE_WECHAT_MINA = "WECHAT_MINA";//小程序绑定业主
+    public static final String APP_TYPE_WECHAT = "WECHAT";//公众号绑定业主
+    public static final String STATE_AUDITING = "10000";// 审核中
+    public static final String STATE_AUDIT_SUCCESS = "12000";//审核成功
+    public static final String STATE_AUDIT_ERROR = "13000";//审核失败
+
     private String idCard;
     private String openId;
     private String link;
@@ -28,6 +35,7 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String appTypeCd;
     private String memberId;
     private String userId;
+    private String appType;
     private String[] userIds;
 
 
@@ -174,5 +182,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setUserIds(String[] userIds) {
         this.userIds = userIds;
+    }
+
+    public String getAppType() {
+        return appType;
+    }
+
+    public void setAppType(String appType) {
+        this.appType = appType;
     }
 }

@@ -36,9 +36,6 @@ public class UpdateAppUserBindingOwnerListener extends AbstractServiceApiPlusLis
 
     @Override
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
-
-
-
         ownerBMOImpl.updateAuditAppUserBindingOwner(reqJson, context);
 
     }
