@@ -118,7 +118,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
         } catch (Exception e) {
             logger.error("创建token失败");
         }
-        return ResultVo.redirectPage(urlCode);
+        return ResultVo.redirectPage("/");
 
     }
 
