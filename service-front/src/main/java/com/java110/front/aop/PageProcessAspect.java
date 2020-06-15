@@ -1,18 +1,25 @@
 package com.java110.front.aop;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.FilterException;
-import com.java110.core.context.IPageData;
 import com.java110.utils.util.StringUtil;
-import com.java110.core.context.PageData;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -59,7 +66,7 @@ public class PageProcessAspect {
         String appId = "";
         String sessionId = request.getSession().getId();
         appId = request.getHeader("APP_ID");
-        if(StringUtil.isEmpty(appId)){
+        if (StringUtil.isEmpty(appId)) {
             appId = request.getHeader("APP-ID");
         }
         logger.debug("请求头信息：" + request.getHeaderNames());
@@ -164,8 +171,8 @@ public class PageProcessAspect {
             Object o = pjp.proceed();
             return o;
         } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
+            logger.error("执行方法异常", e);
+            return new ResponseEntity("内部异常" + e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

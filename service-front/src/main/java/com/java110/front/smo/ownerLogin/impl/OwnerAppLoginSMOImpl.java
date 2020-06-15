@@ -164,8 +164,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
         }
 
-
-        return new ResponseEntity<>("用户未绑定业主", HttpStatus.BAD_REQUEST);
+        return ResultVo.redirectPage(openUrl);
     }
 
     @Override
