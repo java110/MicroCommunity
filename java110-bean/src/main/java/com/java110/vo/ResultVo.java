@@ -176,7 +176,7 @@ public class ResultVo implements Serializable {
     public static ResponseEntity<String> redirectPage(String url) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, url);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("", headers, HttpStatus.FOUND);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>("123123", headers, HttpStatus.BAD_REQUEST);
         return responseEntity;
     }
 
