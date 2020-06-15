@@ -1,4 +1,4 @@
-package com.java110.front.controller;
+package com.java110.front.controller.mina;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.front.smo.wxLogin.IWxLoginSMO;

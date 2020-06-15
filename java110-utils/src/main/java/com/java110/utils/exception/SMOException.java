@@ -30,6 +30,15 @@ public class SMOException extends RuntimeException {
 
     /**
      * 构造方法
+     * @param msg  错误消息
+     */
+    public SMOException(String msg) {
+        super(msg);
+        this.result = new Result(1999, msg);
+    }
+
+    /**
+     * 构造方法
      * @param code 返回码
      * @param msg  错误消息
      */
