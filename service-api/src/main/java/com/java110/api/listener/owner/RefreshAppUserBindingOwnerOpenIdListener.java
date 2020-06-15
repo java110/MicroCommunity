@@ -75,7 +75,7 @@ public class RefreshAppUserBindingOwnerOpenIdListener extends AbstractServiceApi
 
     @Override
     public String getServiceCode() {
-        return ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_TOKEN;
+        return ServiceCodeConstant.REFRESH_APP_USER_BINDING_OWNER_OPEN_ID;
     }
 
     @Override
