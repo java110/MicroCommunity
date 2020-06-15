@@ -8,9 +8,9 @@
     <insert id="saveBusinessSmallWeChatInfo" parameterType="Map">
         insert into
             buiness_small_wechat
-            (operate,appId,name,appSecret,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id)
+            (operate,appId,name,appSecret,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
         values
-            (#{operate},#{appId},#{name},#{appSecret},#{weChatId},#{bId},#{storeId},#{payPassword},#{remarks},#{objId},#{objType},#{mchId})
+            (#{operate},#{appId},#{name},#{appSecret},#{weChatId},#{bId},#{storeId},#{payPassword},#{remarks},#{objId},#{objType},#{mchId},#{weChatType})
        </insert>
 
 
@@ -29,7 +29,8 @@
             t.remarks,
             t.obj_id,t.obj_id objId,
             t.obj_type,t.obj_type objType,
-            t.mch_id,t.mch_id mchId
+            t.mch_id,t.mch_id mchId,
+            t.wechat_type,t.wechat_type weChatType
         from
             buiness_small_wechat t
         where 1 =1
@@ -44,6 +45,9 @@
         </if>
         <if test="name !=null and name != ''">
             and t.name= #{name}
+        </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
         </if>
         <if test="appSecret !=null and appSecret != ''">
             and t.appSecret= #{appSecret}
@@ -71,10 +75,10 @@
     <insert id="saveSmallWeChatInfoInstance" parameterType="Map">
         insert into
             small_wechat
-                (create_time,appId,name,appSecret,status_cd,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id)
+                (create_time,appId,name,appSecret,status_cd,weChat_id,b_id,store_Id,pay_password,remarks,obj_id,obj_type,mch_id,wechat_type)
                 select
                     t.create_time,t.appId,t.name,t.appSecret,'0',
-                    t.weChat_id,t.b_id,t.store_Id,t.pay_password,t.remarks,t.obj_id,t.obj_type,t.mch_id
+                    t.weChat_id,t.b_id,t.store_Id,t.pay_password,t.remarks,t.obj_id,t.obj_type,t.mch_id,t.wechat_type
                 from buiness_small_wechat t where 1=1 and t.operate= 'ADD'
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
@@ -90,6 +94,9 @@
         </if>
         <if test="weChatId !=null and weChatId != ''">
             and t.weChat_id= #{weChatId}
+        </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -123,6 +130,7 @@
             t.obj_id,t.obj_id objId,
             t.obj_type,t.obj_type objType,
             t.mch_id,t.mch_id mchId,
+            t.wechat_type, t.wechat_type weChatType,
             d.name objTypeName
         from small_wechat t left join t_dict d on t.obj_type = d.status_cd and d.table_name = 'small_wechat' and d.table_columns = 'obj_type'
         where 1 =1
@@ -140,6 +148,9 @@
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
+        </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
         </if>
         <if test="weChatId !=null and weChatId != ''">
             and t.weChat_id= #{weChatId}
@@ -226,6 +237,9 @@
         </if>
         <if test="appSecret !=null and appSecret != ''">
             and t.appSecret= #{appSecret}
+        </if>
+        <if test="weChatType !=null and weChatType != ''">
+            and t.wechat_type= #{weChatType}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
