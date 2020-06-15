@@ -133,7 +133,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
      * @throws SMOException
      */
     @Override
-    public ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws SMOException {
+    public String refreshToken(IPageData pd, String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws SMOException {
         //分配urlCode
         String urlCode = UUID.randomUUID().toString();
         CommonCache.setValue(urlCode, redirectUrl, expireTime);
@@ -164,7 +164,7 @@ public class OwnerAppLoginSMOImpl extends AppAbstractComponentSMO implements IOw
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, e.getLocalizedMessage());
         }
 
-        return ResultVo.redirectPage(openUrl);
+        return openUrl;
     }
 
     @Override
