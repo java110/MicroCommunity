@@ -9,7 +9,7 @@ import com.java110.core.base.AppBase;
 import com.java110.core.context.AppContext;
 import com.java110.core.context.IPageData;
 import com.java110.core.smo.code.IPrimaryKeyInnerServiceSMO;
-import org.apache.commons.lang3.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -89,7 +89,7 @@ public class BaseServiceSMO extends AppBase {
         urlParam += "?";
 
         for (Object key : info.keySet()) {
-            if (StringUtils.isEmpty(info.get(key) + "")) {
+            if (StringUtil.isNullOrNone(info.get(key) )) {
                 continue;
             }
 
