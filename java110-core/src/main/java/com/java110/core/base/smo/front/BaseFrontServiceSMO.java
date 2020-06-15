@@ -66,7 +66,13 @@ public class BaseFrontServiceSMO extends BaseServiceSMO {
      * @return
      */
     protected <T> T postForApi(IPageData pd, T param, String serviceCode, Class<T> t) {
-        return postForApi(pd, param, serviceCode, t);
+        List<T> ts = postForApis(pd, param, serviceCode, t);
+
+        if (ts == null || ts.size() < 1) {
+            return null;
+        }
+
+        return ts.get(0);
     }
 
     /**
@@ -81,7 +87,7 @@ public class BaseFrontServiceSMO extends BaseServiceSMO {
      */
     protected <T> List<T> postForApis(IPageData pd, T param, String serviceCode, Class<T> t) {
 
-        String url = URL_API;
+        String url = URL_API + serviceCode;
 
 
         ResponseEntity<String> responseEntity = callCenterService(restTemplate, pd, JSONObject.toJSONString(param), url, HttpMethod.POST);
@@ -122,7 +128,7 @@ public class BaseFrontServiceSMO extends BaseServiceSMO {
      */
     protected <T> List<T> getForApis(IPageData pd, T param, String serviceCode, Class<T> t) {
 
-        String url = URL_API;
+        String url = URL_API + serviceCode;
         if (param != null) {
             url += mapToUrlParam(BeanConvertUtil.beanCovertMap(param));
         }
