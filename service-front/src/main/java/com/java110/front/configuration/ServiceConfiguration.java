@@ -27,6 +27,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/loginWx,");// 登录跳过
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
         exclusions.append("/app/loginOwner,");// 业主APP登录跳过
+        exclusions.append("/app/loginOwnerByKey,");// 根据key登录业主
         exclusions.append("/app/area.listAreas,");// 加载地区
         exclusions.append("/app/community.listCommunitys,");// 加载小区
         exclusions.append("/app/user.userSendSms,");// 发送短信验证码
@@ -37,6 +38,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/wechat/gateway,");//微信公众号对接接口
         exclusions.append("/app/loginOwnerWechatAuth,");//微信公众号对接接口
         exclusions.append("/app/refreshToken");//微信公众号对接接口
+
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/");

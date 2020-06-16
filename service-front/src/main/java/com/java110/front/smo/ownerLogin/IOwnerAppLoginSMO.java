@@ -24,6 +24,15 @@ public interface IOwnerAppLoginSMO {
     ResponseEntity<String> doLogin(IPageData pd) throws SMOException;
 
     /**
+     * 根据key 登录
+     *
+     * @param pd 页面数据封装
+     * @return ResponseEntity 对象数据
+     * @throws SMOException 业务代码层
+     */
+    ResponseEntity<String> doLoginByKey(IPageData pd) throws SMOException;
+
+    /**
      * 获取access_token
      *
      * @param pd
@@ -40,5 +49,6 @@ public interface IOwnerAppLoginSMO {
      * @return
      * @throws SMOException
      */
-    ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws SMOException;
+    ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, String errorUrl,
+                                        HttpServletRequest request, HttpServletResponse response) throws SMOException;
 }

@@ -70,7 +70,8 @@ public class ListUsersListener extends AbstractServiceApiListener {
         List<ApiUserDataVo> users = null;
 
         if (count > 0) {
-            users = BeanConvertUtil.covertBeanList(userInnerServiceSMOImpl.getUsers(userDto), ApiUserDataVo.class);
+            List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+            users = BeanConvertUtil.covertBeanList(userDtos, ApiUserDataVo.class);
         } else {
             users = new ArrayList<>();
         }
@@ -84,6 +85,5 @@ public class ListUsersListener extends AbstractServiceApiListener {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOrgVo), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
-
     }
 }

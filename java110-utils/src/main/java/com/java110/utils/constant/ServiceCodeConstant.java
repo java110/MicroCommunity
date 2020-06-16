@@ -118,7 +118,12 @@ public class ServiceCodeConstant {
 
 
     /**
-     * 查询 组织管理
+     * 查询 用户私密信息
+     */
+    public static final String QUERY_USER_SECRET = "user.queryUserSecret";
+
+    /**
+     * 查询 用户
      */
     public static final String LIST_USERS = "user.listUsers";
 
@@ -248,6 +253,11 @@ public class ServiceCodeConstant {
      * 用户登录服务处理
      */
     public static final String SERVICE_CODE_USER_SERVICE_LOGIN = "user.service.login";
+
+    /**
+     * 用户登录服务处理
+     */
+    public static final String SERVICE_CODE_USER_LOGIN = "user.userLogin";
 
     /**
      * 用户退出登录服务处理

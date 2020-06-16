@@ -7,6 +7,7 @@ import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.front.properties.WechatAuthProperties;
 import com.java110.front.smo.ownerLogin.IOwnerAppLoginSMO;
 import com.java110.utils.cache.CommonCache;
@@ -110,15 +111,63 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
     }
 
     @Override
+    public ResponseEntity<String> doLoginByKey(IPageData pd) throws SMOException {
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        Assert.hasKeyAndValue(paramIn, "key", "请求报文中未包含临时秘钥");
+        logger.debug("doLogin入参：" + paramIn.toJSONString());
+        ResponseEntity<String> responseEntity;
+
+        JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
+
+        UserDto userDto = new UserDto();
+        userDto.setKey(paramIn.getString("key"));
+        userDto = super.postForApi(pd, userDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
+
+
+        //根据用户查询商户信息
+        String userId = userDto.getUserId();
+
+        pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
+                "", "", "", "",
+                pd.getAppId());
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userId);
+        List<OwnerAppUserDto> ownerAppUserDtos = super.getForApis(pd, ownerAppUserDto, ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS, OwnerAppUserDto.class);
+
+
+        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+            responseEntity = new ResponseEntity<>("用户未绑定业主", HttpStatus.BAD_REQUEST);
+            return responseEntity;
+        }
+
+        JSONObject appUser = JSONObject.parseObject(JSONObject.toJSONString(ownerAppUserDtos.get(0)));
+        appUser.put("userId", userId);
+        appUser.put("userName", paramIn.getString("username"));
+        JSONObject paramOut = new JSONObject();
+        paramOut.put("code", 0);
+        paramOut.put("msg", "成功");
+        paramOut.put("owner", appUser);
+        paramOut.put("token", userDto.getToken());
+        paramOut.put("key", userDto.getKey());
+        return new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
+
+    }
+
+    @Override
     public ResponseEntity<String> getPageAccessToken(IPageData pd) throws SMOException {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
         String authCode = paramIn.getString("code");
         String state = paramIn.getString("state");
-        String urlCode = CommonCache.getAndRemoveValue(paramIn.getString("urlCode"));
+        String paramStr = CommonCache.getAndRemoveValue(paramIn.getString("urlCode"));
 
-        if (StringUtil.isEmpty(urlCode)) {
-            return ResultVo.redirectPage("/#/pages/login/login");
+        if (StringUtil.isEmpty(paramStr)) {
+            return ResultVo.redirectPage("/");
         }
+
+        JSONObject param = JSONObject.parseObject(paramStr);
+        String redirectUrl = param.getString("redirectUrl");
+        String errorUrl = param.getString("errorUrl");
+
 
         String url = WechatConstant.APP_GET_ACCESS_TOKEN_URL.replace("APPID", wechatAuthProperties.getWechatAppId())
                 .replace("SECRET", wechatAuthProperties.getWechatAppSecret())
@@ -126,9 +175,9 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
         ResponseEntity<String> paramOut = outRestTemplate.getForEntity(url, String.class);
 
-        logger.debug("调用微信换去token ", paramOut);
+        logger.debug("调用微信换去openId ", paramOut);
         if (paramOut.getStatusCode() != HttpStatus.OK) {
-            return ResultVo.redirectPage("/#/pages/login/login");
+            return ResultVo.redirectPage(errorUrl);
 
         }
 
@@ -149,7 +198,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
             //将openId放到redis 缓存，给前段下发临时票据
             String code = UUID.randomUUID().toString();
             CommonCache.setValue(code, openId, expireTime);
-            return ResultVo.redirectPage("/#/pages/login/login?code=" + code);
+            return ResultVo.redirectPage(errorUrl + "?code=" + code);
         }
 
         // String accessToken = paramObj.getString("access_token");//暂时不用
@@ -163,7 +212,12 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         } catch (Exception e) {
             logger.error("创建token失败");
         }
-        return ResultVo.redirectPage("/");
+        //查询用户key
+        UserDto userDto = new UserDto();
+        userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
+        UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
+        redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
+        return ResultVo.redirectPage(redirectUrl);
 
     }
 
@@ -178,10 +232,15 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
      * @throws SMOException
      */
     @Override
-    public ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws SMOException {
+    public ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl,
+                                               String errorUrl,
+                                               HttpServletRequest request, HttpServletResponse response) throws SMOException {
         //分配urlCode
         String urlCode = UUID.randomUUID().toString();
-        CommonCache.setValue(urlCode, redirectUrl, expireTime);
+        JSONObject param = new JSONObject();
+        param.put("redirectUrl", redirectUrl);
+        param.put("errorUrl", errorUrl);
+        CommonCache.setValue(urlCode, param.toJSONString(), expireTime);
 
         URL url = null;
         String openUrl = "";

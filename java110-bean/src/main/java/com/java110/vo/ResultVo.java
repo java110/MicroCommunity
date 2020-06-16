@@ -214,6 +214,19 @@ public class ResultVo implements Serializable {
     /**
      * 创建ResponseEntity对象
      *
+     * @param code 状态嘛
+     * @param msg  返回信息
+     * @return
+     */
+    public static ResponseEntity<String> createResponseEntity(int code, String msg) {
+        ResultVo resultVo = new ResultVo(code, msg);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        return responseEntity;
+    }
+
+    /**
+     * 创建ResponseEntity对象
+     *
      * @param records 页数
      * @param total   总记录数
      * @param code    状态嘛

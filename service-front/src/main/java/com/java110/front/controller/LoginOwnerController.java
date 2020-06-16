@@ -57,4 +57,31 @@ public class LoginOwnerController extends BaseController {
         return responseEntity;
     }
 
+
+    /**
+     * 微信登录接口
+     *
+     * @param postInfo
+     * @param request
+     */
+    @RequestMapping(path = "/loginOwnerByKey", method = RequestMethod.POST)
+    public ResponseEntity<String> loginOwnerByKey(@RequestBody String postInfo, HttpServletRequest request) {
+        /*IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);*/
+        String appId = request.getHeader("APP_ID");
+        if(StringUtil.isEmpty(appId)){
+            appId = request.getHeader("APP-ID");
+        }
+        IPageData pd = PageData.newInstance().builder("", "", "", postInfo,
+                "login", "", "", "", appId
+        );
+        ResponseEntity<String> responseEntity = ownerAppLoginSMOImpl.doLoginByKey(pd);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        JSONObject outParam = JSONObject.parseObject(responseEntity.getBody());
+        pd.setToken(outParam.getString("token"));
+        request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA, pd);
+        return responseEntity;
+    }
+
 }
