@@ -28,6 +28,7 @@ public class BillOweFeeDto extends PageDto implements Serializable {
     private String communityId;
     private String state;
     private String createTime;
+    private String[] ownerIds;
 
 
     public String getOweId() {
@@ -140,5 +141,13 @@ public class BillOweFeeDto extends PageDto implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String[] getOwnerIds() {
+        return ownerIds;
+    }
+
+    public void setOwnerIds(String[] ownerIds) {
+        this.ownerIds = ownerIds;
     }
 }
