@@ -571,6 +571,31 @@
                 #{item}
             </foreach>
         </if>
+
+        <if test="name !=null and name != ''">
+            and u.name= #{name}
+        </if>
+        <if test="userName !=null and userName != ''">
+            and u.name= #{userName}
+        </if>
+        <if test="email !=null and email != ''">
+            and u.email= #{email}
+        </if>
+        <if test="password !=null and password != ''">
+            and u.password= #{password}
+        </if>
+        <if test="locationCd !=null and locationCd != ''">
+            and u.location_cd= #{locationCd}
+        </if>
+        <if test="age !=null and age != ''">
+            and u.age= #{age}
+        </if>
+        <if test="sex !=null and sex != ''">
+            and u.sex= #{sex}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and u.tel= #{tel}
+        </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

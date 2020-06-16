@@ -67,7 +67,7 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
         UserDto userDto = new UserDto();
         String errorInfo = "";
         if (reqJson.containsKey("userName")) {
-            if (!ValidatorUtil.isMobile(reqJson.getString("userName"))) {//用户临时秘钥登录
+            if (ValidatorUtil.isMobile(reqJson.getString("userName"))) {//用户临时秘钥登录
                 userDto.setTel(reqJson.getString("userName"));
             } else {
                 userDto.setUserName(reqJson.getString("userName"));
