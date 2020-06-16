@@ -99,6 +99,11 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         paramOut.put("owner", appUser);
         paramOut.put("token", userInfo.getString("token"));
 
+        UserDto userDto = new UserDto();
+        userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
+        UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
+        paramOut.put("key", tmpUserDto.getKey());
+
         String appId = pd.getAppId();
 
         if ("992020061452450002".equals(appId)) { //公众号

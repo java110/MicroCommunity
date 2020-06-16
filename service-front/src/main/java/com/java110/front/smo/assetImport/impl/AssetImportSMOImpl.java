@@ -755,14 +755,14 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             if (StringUtil.isNullOrNone(os[0])) {
                 continue;
             }
-            Assert.hasLength(os[0].toString(), "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
-            Assert.hasLength(os[1].toString(), "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
-            Assert.hasLength(os[2].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
-            Assert.hasLength(os[3].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
-            Assert.hasLength(os[4].toString(), "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
-            if (!StringUtil.isNullOrNone(os[5])) {
-                Assert.hasLength(os[6].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
-                Assert.hasLength(os[7].toString(), "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
+            Assert.hasLength(os[1].toString(), "房屋信息选项中" + (osIndex + 1) + "行楼栋编号为空");
+            Assert.hasLength(os[2].toString(), "房屋信息选项中" + (osIndex + 1) + "行单元编号为空");
+            Assert.hasLength(os[3].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋楼层为空");
+            Assert.hasLength(os[4].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋户型为空");
+            Assert.hasLength(os[5].toString(), "房屋信息选项中" + (osIndex + 1) + "行建筑面积为空");
+            if (!StringUtil.isNullOrNone(os[6])) {
+                Assert.hasLength(os[7].toString(), "房屋信息选项中" + (osIndex + 1) + "行房屋费用为空");
+                Assert.hasLength(os[8].toString(), "房屋信息选项中" + (osIndex + 1) + "行费用到期时间为空");
             }
             importRoom = new ImportRoom();
             importRoom.setRoomNum(os[0].toString());
@@ -771,7 +771,7 @@ public class AssetImportSMOImpl extends BaseComponentSMO implements IAssetImport
             importRoom.setSection(os[4].toString());
             importRoom.setBuiltUpArea(Double.parseDouble(os[5].toString()));
 
-            if (!StringUtil.isEmpty(os[7].toString())) {
+            if (!StringUtil.isEmpty(os[6].toString())) {
                 importRoom.setRoomFeeId(os[7].toString());
                 importRoom.setFeeEndDate(os[8].toString());
             }
