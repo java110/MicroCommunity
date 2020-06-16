@@ -113,6 +113,7 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
             String token = AuthenticationFactory.createAndSaveToken(userMap);
             tmpUserDto.setPassword("");
             tmpUserDto.setToken(token);
+            tmpUserDto.setKey(newKey);
             context.setResponseEntity(ResultVo.createResponseEntity(tmpUserDto));
         } catch (Exception e) {
             logger.error("登录异常：", e);
