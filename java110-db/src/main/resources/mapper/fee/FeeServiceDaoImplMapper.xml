@@ -472,6 +472,13 @@
         <if test="ownerId != null and ownerId != ''">
             and t.owner_id = #{ownerId}
         </if>
+        <if test="ownerIds !=null">
+            and t.owner_id in
+            <foreach collection="ownerIds" open="(" close=")"
+                     separator=","  item="item">
+                #{item}
+            </foreach>
+        </if>
         <if test="ownerName != null and ownerName != ''">
             and t.owner_name = #{ownerName}
         </if>
