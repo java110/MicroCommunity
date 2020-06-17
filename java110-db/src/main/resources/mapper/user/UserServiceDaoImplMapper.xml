@@ -551,7 +551,7 @@
             and ua.status_cd = '0'
         </if>
         <if test="key != null and key != ''">
-            and u.user_id = ua.user_id
+            and u.user_id = ub.user_id
             and ub.spec_cd = '100202061602'
             and ub.value = #{key}
             and ub.status_cd = '0'
