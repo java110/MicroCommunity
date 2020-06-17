@@ -68,15 +68,24 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.login", HttpMethod.POST);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+//        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.login", HttpMethod.POST);
+//        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+//            return responseEntity;
+//        }
+
+     //   JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
+        UserDto userDto = new UserDto();
+        userDto.setUserName(loginInfo.getString("userName"));
+        userDto.setPassword(loginInfo.getString("password"));
+        userDto = super.getForApi(pd,userDto,ServiceCodeConstant.SERVICE_CODE_USER_LOGIN,UserDto.class);
+
+        if(userDto == null){
+            responseEntity = new ResponseEntity<>("用户名或密码错误", HttpStatus.BAD_REQUEST);
             return responseEntity;
         }
 
-        JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
-
         //根据用户查询商户信息
-        String userId = userInfo.getString("userId");
+        String userId = userDto.getUserId();
 
         pd = PageData.newInstance().builder(userId, "", "", pd.getReqData(),
                 "", "", "", "",
@@ -97,9 +106,9 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject paramOut = new JSONObject();
         paramOut.put("result", 0);
         paramOut.put("owner", appUser);
-        paramOut.put("token", userInfo.getString("token"));
+        paramOut.put("token", userDto.getToken());
 
-        UserDto userDto = new UserDto();
+        userDto = new UserDto();
         userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
         UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
         paramOut.put("key", tmpUserDto.getKey());
