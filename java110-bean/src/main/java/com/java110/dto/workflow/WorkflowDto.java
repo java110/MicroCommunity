@@ -30,6 +30,7 @@ public class WorkflowDto extends PageDto implements Serializable {
     private String flowId;
     private String flowName;
     private String flowType;
+    private String flowTypeName;
 
 
     private Date createTime;
@@ -108,5 +109,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getFlowTypeName() {
+        return flowTypeName;
+    }
+
+    public void setFlowTypeName(String flowTypeName) {
+        this.flowTypeName = flowTypeName;
     }
 }

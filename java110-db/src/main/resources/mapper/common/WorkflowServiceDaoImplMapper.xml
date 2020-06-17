@@ -91,8 +91,9 @@
     <select id="getWorkflowInfo" parameterType="Map" resultType="Map">
         select t.skip_level,t.skip_level skipLevel,t.describle,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
         bId,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.flow_id,t.flow_id
-        flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType
+        flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType,t.create_time createTime,d.name flowTypeName
         from workflow t
+        left join t_dict d on t.flow_type = d.status_cd and d.table_name = 'workflow' and d.table_columns = 'flow_type'
         where 1 =1
         <if test="skipLevel !=null and skipLevel != ''">
             and t.skip_level= #{skipLevel}
