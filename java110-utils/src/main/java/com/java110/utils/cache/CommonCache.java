@@ -7,6 +7,7 @@ import redis.clients.jedis.Jedis;
  */
 public class CommonCache extends BaseCache {
 
+
     public final static int defaultExpireTime = 5 * 60;
 
     /**

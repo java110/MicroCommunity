@@ -13,6 +13,8 @@ public class WechatConstant {
     //微信域
     public static final String WECHAT_DOMAIN = "WECHAT";
 
+    public static final String KEY_PROPERTY_FEE_TEMPLATE_ID = "PROPERTY_FEE_TEMPLATE_ID";
+
     public static final String TOKEN = "TOKEN";
     public static final String WELCOME = "WELCOME";
     public static final String DEFAULT_WELCOME = "HC小区物业管理系统是由java110团队于2017年4月份发起的前后端分离、分布式架构开源项目，目前我们的代码开源在github 和gitee上，开源项目由HC小区管理系统后端，HC小区管理系统前端，HC小区管理系统业主手机版和HC小区管理系统物业手机版，业务技术交流群：827669685";
