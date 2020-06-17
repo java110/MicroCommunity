@@ -20,9 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @program: MicroCommunity
@@ -105,13 +104,18 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz{
         for( BillOweFeeDto fee : billOweFeeDtos){
             for(OwnerAppUserDto appUserDto :ownerAppUserDtos ){
                 if(fee.getOwnerId().equals(appUserDto.getMemberId())){
+                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(fee.getFeeEndTime());
+                    Calendar now = Calendar.getInstance();
+                    now.setTime(date);
+                    int year = now.get(Calendar.YEAR);
+                    int month = now.get(Calendar.MONTH);
                     Data data = new Data();
                     PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
                     templateMessage.setTemplate_id(templateId);
                     templateMessage.setTouser(appUserDto.getOpenId());
                     data.setFirst(new Content("物业费缴费提醒"));
                     data.setKeyword1(new Content(fee.getPayerObjName()));
-                    data.setKeyword2(new Content(fee.getFeeEndTime()));
+                    data.setKeyword2(new Content(year+"年-"+month+"月"));
                     data.setKeyword3(new Content(fee.getAmountOwed()));
                     data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     templateMessage.setData(data);
