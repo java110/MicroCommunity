@@ -50,5 +50,6 @@ public interface IOwnerAppLoginSMO {
      * @throws SMOException
      */
     ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl, String errorUrl,
+                                        String loginFlag,
                                         HttpServletRequest request, HttpServletResponse response) throws SMOException;
 }

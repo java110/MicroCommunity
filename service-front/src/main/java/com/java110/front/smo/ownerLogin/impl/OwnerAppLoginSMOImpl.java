@@ -48,6 +48,8 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
     private final static int expireTime = 7200;
 
+    private final static int LOGIN_PAGE = 1;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -68,12 +70,6 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         JSONObject loginInfo = JSONObject.parseObject(pd.getReqData());
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("password")));
-//        responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), ServiceConstant.SERVICE_API_URL + "/api/user.service.login", HttpMethod.POST);
-//        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-//            return responseEntity;
-//        }
-
-     //   JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
         UserDto userDto = new UserDto();
         userDto.setUserName(loginInfo.getString("username"));
         userDto.setPassword(loginInfo.getString("password"));
@@ -199,8 +195,17 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
         //获取 openId
         String openId = paramObj.getString("openid");
-        //判断当前openId 是否绑定了业主
 
+        int loginFlag = paramIn.getInteger("loginFlag");
+        //说明是登录页面，下发code 就可以，不需要下发key 之类
+        if(loginFlag == LOGIN_PAGE){
+            //将openId放到redis 缓存，给前段下发临时票据
+            String code = UUID.randomUUID().toString();
+            CommonCache.setValue(code, openId, expireTime);
+            return ResultVo.redirectPage(errorUrl + "?code=" + code);
+        }
+
+        //判断当前openId 是否绑定了业主
         pd = PageData.newInstance().builder("-1", "", "", pd.getReqData(),
                 "", "", "", "",
                 pd.getAppId());
@@ -254,6 +259,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
     @Override
     public ResponseEntity<String> refreshToken(IPageData pd, String redirectUrl,
                                                String errorUrl,
+                                               String loginFlag,
                                                HttpServletRequest request, HttpServletResponse response) throws SMOException {
         //分配urlCode
         String urlCode = UUID.randomUUID().toString();
@@ -280,7 +286,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
                             URLEncoder
                                     .encode(
                                             (newUrl
-                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" + urlCode),
+                                                    + "/app/loginOwnerWechatAuth?appId=992020061452450002&urlCode=" + urlCode+"&loginFlag="+loginFlag),
                                             "UTF-8")).replace("STATE", "1");
 
         } catch (Exception e) {

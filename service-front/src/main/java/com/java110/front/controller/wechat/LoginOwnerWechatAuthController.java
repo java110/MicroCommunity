@@ -56,9 +56,10 @@ public class LoginOwnerWechatAuthController extends BaseController {
     @RequestMapping(path = "/refreshToken")
     public ResponseEntity<String> refreshToken(@RequestParam String redirectUrl,
                                @RequestParam String errorUrl,
+                               @RequestParam String loginFlag,
                                HttpServletRequest request,
                                HttpServletResponse response) {
-        return ownerAppLoginSMOImpl.refreshToken(null, redirectUrl,errorUrl, request, response);
+        return ownerAppLoginSMOImpl.refreshToken(null, redirectUrl,errorUrl,loginFlag, request, response);
 
     }
 
