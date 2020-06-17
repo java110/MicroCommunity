@@ -23,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,13 +57,13 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
 
-        if(!reqJson.containsKey("userName")){
-            Assert.hasKeyAndValue(reqJson,"key","未包含key");
+        if (!reqJson.containsKey("userName")) {
+            Assert.hasKeyAndValue(reqJson, "key", "未包含key");
         }
 
-        if(!reqJson.containsKey("key")){
-            Assert.hasKeyAndValue(reqJson,"userName","未包含userName");
-            Assert.hasKeyAndValue(reqJson,"password","未包含password");
+        if (!reqJson.containsKey("key")) {
+            Assert.hasKeyAndValue(reqJson, "userName", "未包含userName");
+            Assert.hasKeyAndValue(reqJson, "password", "未包含password");
         }
 
     }
@@ -132,6 +130,9 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
     }
 
     private UserAttrDto getCurrentUserAttrDto(List<UserAttrDto> userAttrDtos, String specCd) {
+        if (userAttrDtos == null) {
+            return null;
+        }
         for (UserAttrDto userAttrDto : userAttrDtos) {
             if (specCd.equals(userAttrDto.getSpecCd())) {
                 return userAttrDto;
