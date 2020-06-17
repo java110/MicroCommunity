@@ -1,13 +1,16 @@
 package com.java110.api.listener.workflow;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.api.listener.AbstractServiceApiListener;
+import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.common.IWorkflowInnerServiceSMO;
 import com.java110.dto.workflow.WorkflowDto;
+import com.java110.po.workflow.WorkflowPo;
+import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +18,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 查询小区侦听类
  */
 @Java110Listener("listWorkflowsListener")
-public class ListWorkflowsListener extends AbstractServiceApiListener {
+public class ListWorkflowsListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
@@ -38,12 +40,6 @@ public class ListWorkflowsListener extends AbstractServiceApiListener {
     }
 
 
-    @Override
-    public int getOrder() {
-        return DEFAULT_ORDER;
-    }
-
-
     public IWorkflowInnerServiceSMO getWorkflowInnerServiceSMOImpl() {
         return workflowInnerServiceSMOImpl;
     }
@@ -55,6 +51,8 @@ public class ListWorkflowsListener extends AbstractServiceApiListener {
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中请包含小区ID");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中请包含商户ID");
     }
 
     @Override
@@ -68,15 +66,50 @@ public class ListWorkflowsListener extends AbstractServiceApiListener {
 
         if (count > 0) {
             workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
-        } else {
-            workflowDtos = new ArrayList<>();
+            ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
+            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
         }
 
+        //插入默认的工作信息  投诉流程
+        WorkflowPo workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId(reqJson.getString("communityId"));
+        workflowPo.setFlowId("-1");
+        workflowPo.setFlowName("投诉建议流程");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_COMPLAINT);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(reqJson.getString("storeId"));
+        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
+        workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId(reqJson.getString("communityId"));
+        workflowPo.setFlowId("-2");
+        workflowPo.setFlowName("报修流程");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_REPAIR);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(reqJson.getString("storeId"));
+        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
+        workflowPo = new WorkflowPo();
+        workflowPo.setCommunityId(reqJson.getString("communityId"));
+        workflowPo.setFlowId("-3");
+        workflowPo.setFlowName("采购流程");
+        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
+        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+        workflowPo.setStoreId(reqJson.getString("storeId"));
+        super.insert(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW);
+
+
+        commit(context);
+
+        count = workflowInnerServiceSMOImpl.queryWorkflowsCount(workflowDto);
+
+        workflowDtos = workflowInnerServiceSMOImpl.queryWorkflows(workflowDto);
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workflowDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
+
 
     }
 }

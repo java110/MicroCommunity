@@ -17,6 +17,11 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     //10001 投诉建议 20002 报修 30003 采购
     public static final String FLOW_TYPE_COMPLAINT = "10001";
+    //报修
+    public static final String FLOW_TYPE_REPAIR= "20002";
+    //采购
+    public static final String FLOW_TYPE_PURCHASE= "30003";
+    public static final String DEFAULT_SKIP_LEVEL = "1";
 
     private String skipLevel;
     private String describle;
