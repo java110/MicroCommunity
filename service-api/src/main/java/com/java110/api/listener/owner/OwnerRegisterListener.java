@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -106,9 +108,14 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
-        //判断是否有用户ID
-        Map<String, String> headers = event.getDataFlowContext().getRequestCurrentHeaders();
-
+        String appId = context.getAppId();
+        if ("992020061452450002".equals(appId)) { //公众号
+            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT);
+        } else if ("992019111758490006".equals(appId)) { //小程序
+            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+        } else {//app
+            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_APP);
+        }
 
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
         ownerAppUserDto.setStates(new String[]{"10000", "12000"});
