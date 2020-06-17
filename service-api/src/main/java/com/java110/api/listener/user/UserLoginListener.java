@@ -15,6 +15,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ValidatorUtil;
 import com.java110.vo.ResultVo;
@@ -57,6 +58,15 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
+
+        if(!reqJson.containsKey("userName")){
+            Assert.hasKeyAndValue(reqJson,"key","未包含key");
+        }
+
+        if(!reqJson.containsKey("key")){
+            Assert.hasKeyAndValue(reqJson,"userName","未包含userName");
+            Assert.hasKeyAndValue(reqJson,"password","未包含password");
+        }
 
     }
 

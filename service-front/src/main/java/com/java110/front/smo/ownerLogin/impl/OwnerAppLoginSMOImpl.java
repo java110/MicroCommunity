@@ -75,7 +75,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
 
      //   JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
         UserDto userDto = new UserDto();
-        userDto.setUserName(loginInfo.getString("userName"));
+        userDto.setUserName(loginInfo.getString("username"));
         userDto.setPassword(loginInfo.getString("password"));
         userDto = super.postForApi(pd,userDto,ServiceCodeConstant.SERVICE_CODE_USER_LOGIN,UserDto.class);
 
