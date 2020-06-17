@@ -1,36 +1,41 @@
 {
   "autoMove": true,
-  "id": "attrId",
-  "name": "userAttr",
-  "desc": "用户属性",
-  "shareParam": "userId",
-  "shareColumn": "user_id",
-  "shareName": "user",
-  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_USER_ATTR_INFO",
-  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_USER_ATTR_INFO",
-  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_USER_ATTR_INFO",
-  "newBusinessTypeCdValue": "100200030001",
-  "updateBusinessTypeCdValue": "100200040001",
-  "deleteBusinessTypeCdValue": "100200050001",
-  "businessTableName": "business_user_attr",
-  "tableName": "u_user_attr",
+  "id": "wssId",
+  "name": "workflowStepStaff",
+  "desc": "工作流节点",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "common",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_WORKFLOW_STEP_STAFF",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF",
+  "newBusinessTypeCdValue": "580300030001",
+  "updateBusinessTypeCdValue": "580300040001",
+  "deleteBusinessTypeCdValue": "580300050001",
+  "businessTableName": "business_workflow_step_staff",
+  "tableName": "workflow_step_staff",
   "param": {
-    "attrId": "attr_id",
+    "wssId": "wss_id",
+    "stepId": "step_id",
     "bId": "b_id",
-    "userId": "user_id",
-    "specCd": "spec_cd",
-    "value": "value",
+    "staffId": "staff_id",
+    "staffName": "staff_name",
+    "communityId": "community_id",
     "statusCd": "status_cd",
     "operate": "operate"
   },
   "required": [
     {
-      "code": "userId",
-      "msg": "用户ID不能为空"
+      "code": "staffId",
+      "msg": "员工不能为空"
     },
     {
-      "code": "specCd",
-      "msg": "用户属性不能为空"
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "staffName",
+      "msg": "员工名称不能为空"
     }
   ]
 }

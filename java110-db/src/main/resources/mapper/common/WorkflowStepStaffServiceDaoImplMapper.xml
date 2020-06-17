@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workflowStepStaffServiceDaoImpl">
+
+    <!-- 保存工作流节点信息 add by wuxw 2018-07-03 -->
+    <insert id="saveBusinessWorkflowStepStaffInfo" parameterType="Map">
+        insert into business_workflow_step_staff(
+        wss_id,operate,step_id,staff_name,b_id,community_id,staff_id
+        ) values (
+        #{wssId},#{operate},#{stepId},#{staffName},#{bId},#{communityId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询工作流节点信息（Business） add by wuxw 2018-07-03 -->
+    <select id="getBusinessWorkflowStepStaffInfo" parameterType="Map" resultType="Map">
+        select t.wss_id,t.wss_id wssId,t.operate,t.step_id,t.step_id stepId,t.staff_name,t.staff_name
+        staffName,t.b_id,t.b_id bId,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId
+        from business_workflow_step_staff t
+        where 1 =1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="operate !=null and operate != ''">
+            and t.operate= #{operate}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </select>
+
+
+    <!-- 保存工作流节点信息至 instance表中 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkflowStepStaffInfoInstance" parameterType="Map">
+        insert into workflow_step_staff(
+        wss_id,step_id,staff_name,status_cd,b_id,community_id,staff_id
+        ) select t.wss_id,t.step_id,t.staff_name,'0',t.b_id,t.community_id,t.staff_id from business_workflow_step_staff
+        t where 1=1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        and t.operate= 'ADD'
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+    </insert>
+
+
+    <!-- 查询工作流节点信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkflowStepStaffInfo" parameterType="Map" resultType="Map">
+        select t.wss_id,t.wss_id wssId,t.step_id,t.step_id stepId,t.staff_name,t.staff_name
+        staffName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
+        communityId,t.staff_id,t.staff_id staffId
+        from workflow_step_staff t
+        where 1 =1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改工作流节点信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkflowStepStaffInfoInstance" parameterType="Map">
+        update workflow_step_staff t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            , t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+
+    </update>
+
+    <!-- 查询工作流节点数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkflowStepStaffsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from workflow_step_staff t
+        where 1 =1
+        <if test="wssId !=null and wssId != ''">
+            and t.wss_id= #{wssId}
+        </if>
+        <if test="stepId !=null and stepId != ''">
+            and t.step_id= #{stepId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

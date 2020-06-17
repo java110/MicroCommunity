@@ -1,0 +1,48 @@
+{
+  "autoMove": true,
+  "id": "flowId",
+  "name": "workflow",
+  "desc": "工作流",
+  "shareParam": "communityId",
+  "shareColumn": "community_id",
+  "shareName": "common",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_WORKFLOW",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_WORKFLOW",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_WORKFLOW",
+  "newBusinessTypeCdValue": "580100030001",
+  "updateBusinessTypeCdValue": "580100040001",
+  "deleteBusinessTypeCdValue": "580100050001",
+  "businessTableName": "business_workflow",
+  "tableName": "workflow",
+  "param": {
+    "flowId": "flow_id",
+    "bId": "b_id",
+    "flowName": "flow_name",
+    "describle": "describle",
+    "skipLevel": "skip_level",
+    "communityId": "community_id",
+    "storeId": "store_id",
+    "flowType": "flow_type",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "flowName",
+      "msg": "流程名称不能为空"
+    },
+    {
+      "code": "communityId",
+      "msg": "小区不能为空"
+    },
+    {
+      "code": "flowType",
+      "msg": "流程类型不能为空"
+    },
+    {
+      "code": "storeId",
+      "msg": "商户ID不能为空"
+    }
+  ]
+}
+

@@ -1086,5 +1086,59 @@ public class BusinessTypeConstant {
      */
     public static final String BUSINESS_TYPE_DELETE_LOCATION="570100050001";
 
+    /**
+     *  保存工作流
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_WORKFLOW="580100030001";
+
+
+    /**
+     *  修改工作流
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_WORKFLOW="580100040001";
+
+    /**
+     * 删除工作流
+     */
+    public static final String BUSINESS_TYPE_DELETE_WORKFLOW="580100050001";
+
+    /**
+     *  保存工作流节点
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_WORKFLOW_STEP="580200030001";
+
+
+    /**
+     *  修改工作流节点
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_WORKFLOW_STEP="580200040001";
+
+    /**
+     * 删除工作流节点
+     */
+    public static final String BUSINESS_TYPE_DELETE_WORKFLOW_STEP="580200050001";
+
+    /**
+     *  保存工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF="580300030001";
+
+
+    /**
+     *  修改工作流节点 处理员工
+     *  3保存
+     */
+    public static final String BUSINESS_TYPE_UPDATE_WORKFLOW_STEP_STAFF="580300040001";
+
+    /**
+     * 删除工作流节点 处理员工
+     */
+    public static final String BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF="580300050001";
+
 
 }

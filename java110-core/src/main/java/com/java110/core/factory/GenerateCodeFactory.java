@@ -130,6 +130,8 @@ public class GenerateCodeFactory {
     public static final String CODE_PREFIX_oweId = "72";
     public static final String CODE_PREFIX_billId = "73";
     public static final String CODE_PREFIX_locationId = "74";
+    public static final String CODE_PREFIX_flowId = "75";
+    public static final String CODE_PREFIX_wssId = "76";
 
 
 

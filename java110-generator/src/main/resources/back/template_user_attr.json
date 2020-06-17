@@ -1,0 +1,37 @@
+{
+  "autoMove": true,
+  "id": "attrId",
+  "name": "userAttr",
+  "desc": "用户属性",
+  "shareParam": "userId",
+  "shareColumn": "user_id",
+  "shareName": "user",
+  "newBusinessTypeCd": "BUSINESS_TYPE_SAVE_USER_ATTR_INFO",
+  "updateBusinessTypeCd": "BUSINESS_TYPE_UPDATE_USER_ATTR_INFO",
+  "deleteBusinessTypeCd": "BUSINESS_TYPE_DELETE_USER_ATTR_INFO",
+  "newBusinessTypeCdValue": "100200030001",
+  "updateBusinessTypeCdValue": "100200040001",
+  "deleteBusinessTypeCdValue": "100200050001",
+  "businessTableName": "business_user_attr",
+  "tableName": "u_user_attr",
+  "param": {
+    "attrId": "attr_id",
+    "bId": "b_id",
+    "userId": "user_id",
+    "specCd": "spec_cd",
+    "value": "value",
+    "statusCd": "status_cd",
+    "operate": "operate"
+  },
+  "required": [
+    {
+      "code": "userId",
+      "msg": "用户ID不能为空"
+    },
+    {
+      "code": "specCd",
+      "msg": "用户属性不能为空"
+    }
+  ]
+}
+
