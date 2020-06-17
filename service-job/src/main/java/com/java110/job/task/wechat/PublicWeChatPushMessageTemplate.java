@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -87,15 +88,16 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz{
             return;
         }
 
-        List<String> memberIds = new ArrayList<>(ownerAppUserDtos.size());
+        List<String> memberIdList = new ArrayList<>(ownerAppUserDtos.size());
         for(OwnerAppUserDto appUserDto :ownerAppUserDtos ){
-            memberIds.add(appUserDto.getMemberId());
+            memberIdList.add(appUserDto.getMemberId());
         }
 
+        String[] memberIds = memberIdList.toArray(new String[memberIdList.size()]);
         //查询欠费信息
         BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
         billOweFeeDto.setCommunityId(weChatDto.getObjId());
-        billOweFeeDto.setOwnerIds((String[]) memberIds.toArray());
+        billOweFeeDto.setOwnerIds(memberIds);
         billOweFeeDto.setState("1000");
         List<BillOweFeeDto> billOweFeeDtos = feeInnerServiceSMOImpl.queryBillOweFees(billOweFeeDto);
 
@@ -111,7 +113,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz{
                     data.setKeyword1(new Content(fee.getPayerObjName()));
                     data.setKeyword2(new Content(fee.getFeeEndTime()));
                     data.setKeyword3(new Content(fee.getAmountOwed()));
-                    data.setKeyword3(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
+                    data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
                     templateMessage.setData(data);
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
