@@ -108,14 +108,7 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
     protected void doSoService(ServiceDataFlowEvent event, DataFlowContext context, JSONObject reqJson) {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
-        String appId = context.getAppId();
-        if ("992020061452450002".equals(appId)) { //公众号
-            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT);
-        } else if ("992019111758490006".equals(appId)) { //小程序
-            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
-        } else {//app
-            reqJson.put("appType",OwnerAppUserDto.APP_TYPE_APP);
-        }
+
 
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
         ownerAppUserDto.setStates(new String[]{"10000", "12000"});
@@ -153,6 +146,14 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
 
         String paramIn = dataFlowContext.getReqData();
         JSONObject paramObj = JSONObject.parseObject(paramIn);
+        String appId = context.getAppId();
+        if ("992020061452450002".equals(appId)) { //公众号
+            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT);
+        } else if ("992019111758490006".equals(appId)) { //小程序
+            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+        } else {//app
+            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_APP);
+        }
         paramObj.put("userId", GenerateCodeFactory.getUserId());
         if (reqJson.containsKey("openId")) {
             paramObj.put("openId", reqJson.getString("openId"));
