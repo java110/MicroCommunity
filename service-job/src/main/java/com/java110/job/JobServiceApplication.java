@@ -45,6 +45,12 @@ public class JobServiceApplication {
 
     private static final String LISTENER_PATH = "java110.job.listeners";
 
+    @Bean
+    public RestTemplate outRestTemplate() {
+        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        return restTemplate;
+    }
     /**
      * 实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
      *
