@@ -321,7 +321,7 @@
             and ms.member_id = #{memberId}
         </if>
         <if test="subMemberId != null and subMemberId != ''">
-            and ms.member_id = #{memberId}
+            and ms.member_id = #{subMemberId}
         </if>
         <if test="noAuditEnterCommunity == true">
             and ms.member_type_cd not in ('390001200003','390001200005','390001200000')
@@ -401,7 +401,7 @@
         </if>
 
         <if test="subMemberId != null and subMemberId != ''">
-            and ms.member_id = #{memberId}
+            and ms.member_id = #{subMemberId}
         </if>
 
         <if test="noAuditEnterCommunity == true">
