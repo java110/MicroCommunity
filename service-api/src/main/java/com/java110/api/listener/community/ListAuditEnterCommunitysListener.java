@@ -86,7 +86,7 @@ public class ListAuditEnterCommunitysListener extends AbstractServiceApiPlusList
         List<ApiCommunityDataVo> communitys = null;
         int count = 0;
         if (storeDtos.size() > 0) {
-            CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+            CommunityMemberDto communityMemberDto = BeanConvertUtil.covertBean(reqJson,CommunityMemberDto.class);
             communityMemberDto.setNeedCommunityInfo(true);
             communityMemberDto.setNoAuditEnterCommunity(true);
             communityMemberDto.setMemberId(reqJson.getString("memberId"));
