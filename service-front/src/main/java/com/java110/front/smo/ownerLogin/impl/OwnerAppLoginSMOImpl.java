@@ -231,9 +231,9 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
         UserDto tmpUserDto = super.getForApi(pd, userDto, ServiceCodeConstant.QUERY_USER_SECRET, UserDto.class);
 
-        if(StringUtil.isEmpty(tmpUserDto.getKey())){
-            tmpUserDto = super.postForApi(pd, tmpUserDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
-        }
+//        if(StringUtil.isEmpty(tmpUserDto.getKey())){
+//            tmpUserDto = super.postForApi(pd, tmpUserDto, ServiceCodeConstant.SERVICE_CODE_USER_LOGIN, UserDto.class);
+//        }
         redirectUrl = redirectUrl + (redirectUrl.indexOf("?") > 0 ? "&key=" + tmpUserDto.getKey() : "?key=" + tmpUserDto.getKey());
         return ResultVo.redirectPage(redirectUrl);
 
