@@ -77,7 +77,7 @@ public class OwnerAppLoginSMOImpl extends AbstractFrontServiceSMO implements IOw
         UserDto userDto = new UserDto();
         userDto.setUserName(loginInfo.getString("userName"));
         userDto.setPassword(loginInfo.getString("password"));
-        userDto = super.getForApi(pd,userDto,ServiceCodeConstant.SERVICE_CODE_USER_LOGIN,UserDto.class);
+        userDto = super.postForApi(pd,userDto,ServiceCodeConstant.SERVICE_CODE_USER_LOGIN,UserDto.class);
 
         if(userDto == null){
             responseEntity = new ResponseEntity<>("用户名或密码错误", HttpStatus.BAD_REQUEST);

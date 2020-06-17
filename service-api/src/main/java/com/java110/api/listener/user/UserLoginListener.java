@@ -72,7 +72,7 @@ public class UserLoginListener extends AbstractServiceApiPlusListener {
             } else {
                 userDto.setUserName(reqJson.getString("userName"));
             }
-            userDto.setPassword(AuthenticationFactory.passwdMd5(reqJson.getString("passwd")));
+            userDto.setPassword(AuthenticationFactory.passwdMd5(reqJson.getString("password")));
             errorInfo = "用户名或密码错误";
         } else {
             userDto.setKey(reqJson.getString("key"));
