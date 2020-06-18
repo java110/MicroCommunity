@@ -1,19 +1,19 @@
 
 * 1.入门
 
-  * [1.1快速开始](README.md)
-  * [1.2环境搭建](start/installHc.md)
-  * [1.3视频教程](start/vedio.md)
-  * [1.4功能列表](func/funcation.md)
-  * [1.5常见问题](start/question.md)
+  * [1.1 快速开始](README.md)
+  * [1.2 环境搭建](start/installHc.md)
+  * [1.3 视频教程](start/vedio.md)
+  * [1.4 功能列表](func/funcation.md)
+  * [1.5 常见问题](start/question.md)
 
 * 2.接口能力
 
-  * [2.1接口清单](api/Readme.md)
-  * [2.2调用流程](api/apiStart.md)
-  * [2.3小区商户类接口](api/community/index.md)
-  * [2.4资产类接口](api/capital/index.md)
-  * [2.5用户类接口](api/user/index.md)
+  * [2.1 接口清单](api/Readme.md)
+  * [2.2 调用流程](api/apiStart.md)
+  * [2.3 小区商户类接口](api/community/index.md)
+  * [2.4 资产类接口](api/capital/index.md)
+  * [2.5 用户类接口](api/user/index.md)
   * [投诉建议](api/complaint/saveComplaint.md)
   * [查询投诉建议](api/complaint/listComplaints.md)
   * [删除投诉建议](api/complaint/deleteComplaint.md)
