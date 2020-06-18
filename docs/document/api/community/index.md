@@ -1,229 +1,74 @@
 ## 说明
 
-资产类接口主要包括小区内的资产信息，如果楼栋 单元 房屋等信息
+小区商户类接口 主要包含 小区添加 审核 商户入驻审核等功能接口
 
-## 添加楼栋
-
-未整理
-
-## 修改楼栋
+## 添加小区
 
 未整理
 
-## 添加单元
+## 查询未审核小区
 
-未整理
+## 审核小区
 
-## 修改单元
+## 查询小区
 
-未整理
+## 商户入驻小区
 
-## 添加房屋
+## 商户入驻审核
 
-#### 接口说明
+## 查询小区商户
 
-#### 请求地址及方式
+## 查询组织
 
->https://ip:port/api/room.saveRoom
+###### 接口功能
+> 用户通过web端或APP查询组织信息接口
 
->http post
+###### URL
+> [http://api.java110.com:8008/api/org.listOrgs](http://api.java110.com:8008/api/org.listOrgs)
 
-#### 请求参数说明
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> GET
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(url部分)
 |参数名称|约束|类型|长度|描述|取值说明|
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|unitPrice|1|String|4|房屋单价|-|
-|section|1|String|4|房间数|-|
-|remark|1|String|200|备注|-|
-|userId|1|String|30|用户ID|-|
-|communityId|1|String|30|小区ID|-|
-|layer|1|String|30|房屋楼层|-|
-|builtUpArea|1|String|30|建筑面积| 如 97.98|
-|roomNum|1|String|12|房间编号|1123|
-|unitId|1|String|30|小区单元ID|-|
-|state|1|String|12|房屋状态|2002 空闲状态|
-|apartment|1|String|4|户型|1010 一室一厅 1020 一室两厅 2010 两室一厅 2020 两室两厅 3020 三室两厅|
-
-###### 返回协议
-
-当http返回状态不为200 时请求处理失败 body内容为失败的原因
-
-当http返回状态为200时请求处理成功，body内容为返回内容，
-
-成功
-
-
-###### 举例
-> 地址：[http://api.java110.com:8008/api/room.saveRoom](http://api.java110.com:8008/api/room.saveRoom)
-
-``` javascript
-请求头信息：
-Content-Type:application/json
-USER_ID:1234
-APP_ID:8000418002
-TRANSACTION_ID:10029082726
-REQ_TIME:20181113225612
-SIGN:aabdncdhdbd878sbdudn898
-请求报文：
-
-{
-    "communityId":"小区ID",
-    "unitPrice":"填写具体值",
-    "section":"填写具体值",
-    "remark":"填写具体值",
-    "layer":"填写具体值",
-    "builtUpArea":"填写具体值",
-    "roomNum":"填写具体值",
-    "unitId":"填写具体值",
-    "apartment":"填写具体值"
-}
-
-返回报文：
-成功
-
-```
-
-
-## 修改房屋
-
-#### 接口说明
-
-#### 请求地址及方式
-
->https://ip:port/api/room.updateRoom
-
->http get
-
-#### 请求参数说明
-|参数名称|约束|类型|长度|描述|取值说明|
-| :-: | :-: | :-: | :-: | :-: | :-: |
-|roomId|1|String|30|房间ID|12312313|
-|unitPrice|1|String|4|房屋单价|-|
-|section|1|String|4|房间数|-|
-|remark|1|String|200|备注|-|
-|userId|1|String|30|用户ID|-|
-|communityId|1|String|30|小区ID|-|
-|layer|1|String|30|房屋楼层|-|
-|builtUpArea|1|String|30|建筑面积| 如 97.98|
-|roomNum|1|String|12|房间编号|1123|
-|unitId|1|String|30|小区单元ID|-|
-|apartment|1|String|4|户型|1010 一室一厅 1020 一室两厅 2010 两室一厅 2020 两室两厅 3020 三室两厅|
-
-###### 返回协议
-
-当http返回状态不为200 时请求处理失败 body内容为失败的原因
-
-当http返回状态为200时请求处理成功，body内容为返回内容，
-
-成功
-
-
-###### 举例
-> 地址：[http://api.java110.com:8008/api/room.updateRoom](http://api.java110.com:8008/api/room.updateRoom)
-
-``` javascript
-请求头信息：
-Content-Type:application/json
-USER_ID:1234
-APP_ID:8000418002
-TRANSACTION_ID:10029082726
-REQ_TIME:20181113225612
-SIGN:aabdncdhdbd878sbdudn898
-请求报文：
-
-{
-    "roomId":"12313",
-    "communityId":"小区ID",
-    "unitPrice":"填写具体值",
-    "section":"填写具体值",
-    "remark":"填写具体值",
-    "layer":"填写具体值",
-    "builtUpArea":"填写具体值",
-    "roomNum":"填写具体值",
-    "unitId":"填写具体值",
-    "apartment":"填写具体值"
-}
-
-返回报文：
-成功
-
-```
-
-## 房屋业主关系绑定
-
-
-#### 接口说明
-
-#### 请求地址及方式
-
->https://ip:port/api/room.updateRoom
-
->http get
-
-###### 请求参数
-|参数名称|约束|类型|长度|描述|取值说明|
-| :-: | :-: | :-: | :-: | :-: | :-: |
-|communityId|1|String|30|小区ID|-|
-|ownerId|1|String|30|业主ID|-|
-|roomId|1|String|30|房屋ID|-|
-|state|1|String|4|房屋状态|如房屋出售等，请查看state 表|
+|page|1|int|-|页数|-|
+|row|1|int|-|每页显示的行数|不能超过50条|
 |storeId|1|String|30|商户ID|-|
 
-
 ###### 返回协议
 
 当http返回状态不为200 时请求处理失败 body内容为失败的原因
 
 当http返回状态为200时请求处理成功，body内容为返回内容，
 
-成功
+|父参数名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|-|description|1|String|200|组织描述|-|
+|-|orgId|1|String|30|组织ID|-|
+|-|orgLevel|1|String|10|组织级别|-|
+|-|orgLevelName|1|String|200|级别名称|-|
+|-|orgName|1|String|200|组织名称|-|
+|-|parentOrgId|1|String|30|上级组织ID|-|
+|-|parentOrgName|1|String|30|上级组织名称|-|
 
 
-
-###### 举例
->
-
-``` javascript
-
-请求报文：
-
-返回报文：
-
-
-```
-
-
-## 房屋业主关系解绑
-
-
-#### 接口说明
-
-#### 请求地址及方式
-
->https://ip:port/api/room.exitRoom
-
->http get
-
-###### 请求参数
-|参数名称|约束|类型|长度|描述|取值说明|
-| :-: | :-: | :-: | :-: | :-: | :-: |
-|communityId|1|String|30|组织ID|-|
-|ownerId|1|String|12|小区ID|-|
-|roomId|1|String|10|组织级别|-|
-|storeId|1|String|200|级别名称|-|
-
-
-###### 返回协议
-
-当http返回状态不为200 时请求处理失败 body内容为失败的原因
-
-当http返回状态为200时请求处理成功，body内容为返回内容，
-
-成功
 
 
 
 ###### 举例
-> 地址：[http://api.java110.com:8008/api/room.exitRoom](http://api.java110.com:8008/api/room.exitRoom)
+> 地址：[http://api.java110.com:8008/api/org.listOrgs?storeTypeCd=800900000003&storeId=402019032924930007&userName=wuxw&userId=30518940136629616640&page=1&row=10&class=class](http://api.java110.com:8008/api/org.listOrgs?storeTypeCd=800900000003&storeId=402019032924930007&userName=wuxw&userId=30518940136629616640&page=1&row=10&class=class)
 
 ``` javascript
 请求头信息：
@@ -233,109 +78,535 @@ APP_ID:8000418002
 TRANSACTION_ID:10029082726
 REQ_TIME:20181113225612
 SIGN:aabdncdhdbd878sbdudn898
-请求报文：
-
-{
-	"ownerId": "772019092517890016",
-	"communityId": "7020181217000001",
-	"storeId": "402019032924930007",
-	"userId": "30518940136629616640",
-	"roomId": "752019103088990077"
-}
-
-返回报文：
-
-成功
-
-```
-
-## 查询房屋
-
-#### 接口说明
-
-#### 请求地址及方式
-
->https://ip:port/api/room.queryRooms
-
->http get
-
-###### 请求参数
-|参数名称|约束|类型|长度|描述|取值说明|
-| :-: | :-: | :-: | :-: | :-: | :-: |
-|communityId|1|String|30|小区ID|-|
-|page|1|-|-|分页|-|
-|row|1|-|-|分页|-|
-
-
-###### 返回协议
-
-当http返回状态不为200 时请求处理失败 body内容为失败的原因
-
-当http返回状态为200时请求处理成功，body内容为返回内容
-###### 举例
-> 地址：[http://api.java110.com:8008/api/room.queryRooms?page=1&row=10&communityId=7020181217000001](http://api.java110.com:8008/api/room.queryRooms?page=1&row=10&communityId=7020181217000001)
-
-``` javascript
 请求报文：
 
 无
 
 返回报文：
 {
-	"page": 0,
-	"records": 3,
-	"rooms": [{
-		"apartment": "10102",
-		"apartmentName": "一室两厅",
-		"builtUpArea": "94.56",
-		"floorId": "732019092566800002",
-		"floorNum": "501",
-		"layer": "1",
-		"roomId": "752019092595400003",
-		"roomNum": "1013",
-		"section": "1",
-		"state": "2001",
-		"unitId": "742019092594570007",
-		"unitNum": "1",
-		"unitPrice": "1000.00",
-		"userName": "wuxw"
-	},{
-		"apartment": "1010",
-		"builtUpArea": "94.56",
-		"floorId": "732019100967710004",
-		"floorNum": "1",
-		"layer": "1",
-		"roomId": "752019103084230076",
-		"roomNum": "1013",
-		"section": "1",
-		"state": "2001",
-		"unitId": "742019103065850047",
-		"unitNum": "1",
-		"unitPrice": "1000.00",
-		"userName": "wuxw"
+	"orgs": [{
+		"description": "总公司",
+		"orgId": "123",
+		"orgLevel": "1",
+		"orgLevelName": "公司级",
+		"orgName": "java110工作室",
+		"parentOrgId": "123",
+		"parentOrgName": "java110工作室"
 	}, {
-		"apartment": "1010",
-		"builtUpArea": "94.56",
-		"floorId": "732019100967710004",
-		"floorNum": "1",
-		"layer": "1",
-		"roomId": "752019103088990077",
-		"roomNum": "1014",
-		"section": "1",
-		"state": "2001",
-		"unitId": "742019103065850047",
-		"unitNum": "1",
-		"unitPrice": "1000.00",
-		"userName": "wuxw"
+		"description": "萨基打工撒谎发AFJasgfhASdfaSKl1",
+		"orgId": "842019120765720013",
+		"orgLevel": "2",
+		"orgLevelName": "分公司级",
+		"orgName": "奥利给工作室",
+		"parentOrgId": "123",
+		"parentOrgName": "java110工作室"
+	}, {
+		"description": "阿打发dAD",
+		"orgId": "842019120749040014",
+		"orgLevel": "3",
+		"orgLevelName": "部门级",
+		"orgName": "阿迪敬爱的",
+		"parentOrgId": "842019120765720013",
+		"parentOrgName": "奥利给工作室"
 	}],
+	"page": 0,
+	"records": 1,
 	"rows": 0,
-	"total": 28
+	"total": 3
 }
+
 ```
 
-## 查询绑定业主房屋
+## 添加组织
+
+###### 接口功能
+> 用户通过web端或APP保存组织接口
+
+###### URL
+> [http://api.java110.com:8008/api/org.saveOrg](http://api.java110.com:8008/api/org.saveOrg)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(body部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|storeId|1|String|30|商户ID|-|
+|communityId|1|String|12|小区ID|-|
+|orgLevel|1|String|10|组织级别|-|
+|description|1|String|200|组织描述|-|
+|orgName|1|String|200|组织名称|-|
+|parentOrgId|1|String|30|上级组织ID|-|
+|parentOrg|-|-|-|上级组织对象|包含上诉字段具体格式请看下面举例|
 
 
-## 查询未绑定业主房屋
+###### 返回协议
 
-## 查询业主房屋
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/org.saveOrg](http://api.java110.com:8008/api/org.deleteOrg)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"orgName": "ddadad",
+	"parentOrgId": "123",
+	"description": "eqeqqeqe",
+	"orgLevel": "2",
+	"parentOrg": [{
+		"orgName": "java110工作室",
+		"parentOrgId": "123",
+		"description": "总公司",
+		"orgLevelName": "公司级",
+		"orgLevel": "1",
+		"parentOrgName": "java110工作室",
+		"orgId": "123"
+	}],
+	"communityId": "7020181217000001",
+	"storeId": "402019032924930007"
+}
+
+返回报文：
+
+成功
+
+```
+
+## 编辑组织
+
+###### 接口功能
+> 用户通过web端或APP编辑组织接口
+
+###### URL
+> [http://api.java110.com:8008/api/org.updateOrg](http://api.java110.com:8008/api/org.updateOrg)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(body部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|orgId|1|String|30|组织ID|-|
+|storeId|1|String|30|商户ID|-|
+|communityId|1|String|12|小区ID|-|
+|orgLevel|1|String|10|组织级别|-|
+|description|1|String|200|组织描述|-|
+|parentOrgId|1|String|30|上级组织ID|-|
+|orgName|1|String|200|组织名称|-|
+|parentOrg|1|-|-|上级组织对象|包含上诉字段格式请看下面举例|
+
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/org.updateOrg ](http://api.java110.com:8008/api/org.updateOrg )
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"orgName": "奥利给工作室",
+	"parentOrgId": "123",
+	"description": "2121212",
+	"orgLevel": "2",
+	"parentOrg": [{
+		"orgName": "java110工作室",
+		"parentOrgId": "123",
+		"description": "总公司",
+		"orgLevelName": "公司级",
+		"orgLevel": "1",
+		"parentOrgName": "java110工作室",
+		"orgId": "123"
+	}],
+	"communityId": "7020181217000001",
+	"storeId": "402019032924930007",
+	"orgId": "842019120765720013"
+}
+
+返回报文：
+
+成功
+
+```
+
+## 删除组织
+
+###### 接口功能
+> 用户通过web端或APP编辑组织接口
+
+###### URL
+> [http://api.java110.com:8008/api/org.deleteOrg](http://api.java110.com:8008/api/org.deleteOrg)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(body部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|orgId|1|String|30|组织ID|-|
+|communityId|1|String|12|小区ID|-|
+|orgLevel|1|String|10|组织级别|-|
+|orgLevelName|1|String|200|级别名称|-|
+|description|1|String|200|组织描述|-|
+|parentOrgId|1|String|30|上级组织ID|-|
+|orgName|1|String|200|组织名称|-|
+|parentOrgId|1|String|30|上级组织ID|-|
+
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/org.deleteOrg](http://api.java110.com:8008/api/org.deleteOrg)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"orgName": "阿迪敬爱的",
+	"parentOrgId": "842019120765720013",
+	"description": "阿打发dAD",
+	"orgLevelName": "部门级",
+	"orgLevel": "3",
+	"communityId": "7020181217000001",
+	"storeId": "402019032924930007",
+	"parentOrgName": "奥利给工作室",
+	"orgId": "842019120749040014"
+}
+
+返回报文：
+
+成功
+
+```
+
+## 添加员工
+
+###### 接口功能
+> 用户通过web端或APP添加添加员工信息接口
+
+###### URL
+> [http://api.java110.com:8008/api/user.staff.add](http://api.java110.com:8008/api/user.staff.add)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(body部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|name|1|String|50|名称|-|
+|email|1|String|30|邮箱地址|-|
+|tel|1|String|11|电话|-|
+|orgId|1|String|200|备注|-|
+|address|1|String|300|现居住地址|-|
+|sex|1|String|1|小区ID|0表示男孩 1表示女孩|
+|relCd|1|String|30|关系角色|10000 普通员工， 20000部门经理 查看t_dict表|
+
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/floor.saveFloor](http://api.java110.com:8008/api/floor.saveFloor)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"address": "13131",
+	"storeTypeCd": "800900000003",
+	"sex": "0",
+	"name": "31313",
+	"tel": "1331313",
+	"storeId": "402019032924930007",
+	"orgId": "842019122030120003",
+	"email": "121184950@qq.com",
+	"username": "31313",
+	"relCd": "10000"
+}
+
+
+返回报文：
+
+```
+
+
+## 删除员工
+
+###### 接口功能
+> 用户通过web端或APP添加添加员工信息接口
+
+###### URL
+> [http://api.java110.com:8008/api/user.staff.delete](http://api.java110.com:8008/api/user.staff.delete)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(body部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|storeId|1|String|30|商户ID|-|
+|userId|1|String|30|用户ID|-|
+
+
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/user.staff.delete](http://api.java110.com:8008/api/user.staff.delete)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"address": "13131",
+    "age": 0,
+	"sex": "0",
+	"name": "31313",
+    "orgName": "高速反辐射",
+	"tel": "1331313",
+	"email": "121184950@qq.com",
+	"username": "302019122019140002",
+    "userId": "31313"
+}
+
+
+返回报文：
+
+## 查询员工
+
+###### 接口功能
+> 用户通过web端或APP搜索员工信息接口
+
+###### URL
+> [http://api.java110.com:8008/api/query.staff.infos?rows=10&storeId=402019032924930007&page=1&row=10](http://api.java110.com:8008/api/query.myCommunity.byMember)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> GET
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(url部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|page|-|-|30|页数|-|
+|row|-|-|30|行数|-|
+|storeId|1|String|30|商户ID|-|
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+|父参数名称|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|email|1|String|30|邮箱地址|-|
+|username|1|String|50|名称|-|
+|name|1|String|50|名称|-|
+|tel|1|String|11|电话|-|
+|errorInfo|1|String|-|错误信息|-|
+|userId|1|String|30|用户ID|-|
+|address|1|String|300|现居住地址|-|
+|sex|1|String|1|小区ID|0表示男孩 1表示女孩|
+|age|1|int|-|年龄|-|
+|orgName|1|String|30|组织名称|-|
+
+
+
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/query.staff.infos?rows=10&storeId=402019032924930007&page=1&row=10](http://api.java110.com:8008/api/query.staff.infos?rows=10&storeId=402019032924930007&page=1&row=10)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+无
+
+返回报文：
+ {
+		"page": 0,
+		"records": 1,
+		"rows": 0,
+		"staffs": [{
+			"address": "3131",
+			"age": 0,
+			"email": "121184950@qq.com",
+			"name": "31313",
+			"orgName": "高速反辐射",
+			"sex": "0",
+			"tel": "15178831314",
+			"userId": "302019122019140002",
+			"userName": "31313"
+		}, {
+			"address": "31313",
+			"age": 0,
+			"email": "121184950@qq.com",
+			"name": "3131",
+			"orgName": "高速反辐射",
+			"sex": "0",
+			"tel": "31313",
+			"userId": "302019122023920001",
+			"userName": "3131"
+		}, {
+			"address": "123467",
+			"age": 0,
+			"email": "928255095@qq.com",
+			"name": "gsfa",
+			"orgName": "研发部",
+			"sex": "1",
+			"tel": "18909782345",
+			"userId": "302019101771430001",
+			"userName": "gsfa"
+		}, {
+			"address": "11",
+			"age": 0,
+			"email": "1@qq.cn",
+			"name": "11",
+			"orgName": "研发部",
+			"sex": "0",
+			"tel": "17111111111",
+			"userId": "302019101636810001",
+			"userName": "11"
+		}],
+		"total": 4
+	}
+
+```
+
+
+
+
+
+
