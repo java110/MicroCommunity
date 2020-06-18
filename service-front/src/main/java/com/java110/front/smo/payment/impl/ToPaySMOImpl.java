@@ -83,7 +83,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
         double money = Double.parseDouble(orderInfo.getString("receivableAmount"));
         Map tmpParamIn = new HashMap();
         tmpParamIn.put("userId", pd.getUserId());
-        responseEntity = super.getUserAndAttr(pd, restTemplate, tmpParamIn);
+        responseEntity = super.getOwnerAppUser(pd, restTemplate, tmpParamIn);
         logger.debug("查询用户信息返回报文：" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("未查询用户信息异常" + tmpParamIn);
@@ -96,7 +96,7 @@ public class ToPaySMOImpl extends AppAbstractComponentSMO implements IToPaySMO {
             throw new IllegalArgumentException("未查询微信用户");
         }
 
-        JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
+        JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
 
         String openId = realUserInfo.getString("openId");
 //        String payAppId = orderInfo.getString("payAppId");

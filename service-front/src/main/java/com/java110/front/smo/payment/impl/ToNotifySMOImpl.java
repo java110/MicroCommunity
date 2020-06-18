@@ -6,6 +6,7 @@ import com.java110.front.smo.AppAbstractComponentSMO;
 import com.java110.front.smo.payment.IToNotifySMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
@@ -90,8 +91,8 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         String openId = "";
         String paySwitch = MappingCache.getValue(AppAbstractComponentSMO.DOMAIN_WECHAT_PAY, AppAbstractComponentSMO.WECHAT_SERVICE_PAY_SWITCH);
         if (AppAbstractComponentSMO.WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
-            openId =  map.get("sub_openid").toString();
-        }else {
+            openId = map.get("sub_openid").toString();
+        } else {
             openId = map.get("openid").toString();
         }
 
@@ -103,7 +104,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         }
 
         JSONObject userResult = JSONObject.parseObject(responseEntity.getBody());
-        JSONObject realUserInfo = userResult.getJSONArray("users").getJSONObject(0);
+        JSONObject realUserInfo = userResult.getJSONArray("data").getJSONObject(0);
         String useId = realUserInfo.getString("userId");
 
         //查询用户ID
@@ -128,7 +129,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         //Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
         ResponseEntity<String> responseEntity = null;
         responseEntity = this.callCenterService(restTemplate, "-1", "",
-                ServiceConstant.SERVICE_API_URL + "/api/user.listUsers?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
+                ServiceConstant.SERVICE_API_URL + "/api/" + ServiceCodeConstant.LIST_APPUSERBINDINGOWNERS + "?openId=" + openId + "&page=1&row=1", HttpMethod.GET);
         // 过滤返回报文中的字段，只返回name字段
         //{"address":"","orderTypeCd":"Q","serviceCode":"","responseTime":"20190401194712","sex":"","localtionCd":"","userId":"302019033054910001","levelCd":"00","transactionId":"-1","dataFlowId":"-1","response":{"code":"0000","message":"成功"},"name":"996icu","tel":"18909780341","bId":"-1","businessType":"","email":""}
 
@@ -155,7 +156,7 @@ public class ToNotifySMOImpl implements IToNotifySMO {
         try {
             responseEntity = restTemplate.exchange(url, httpMethod, httpEntity, String.class);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
-            responseEntity = new ResponseEntity<String>( e.getResponseBodyAsString(), e.getStatusCode());
+            responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
         } catch (Exception e) {
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
