@@ -14,6 +14,7 @@
   * [2.3 小区商户类接口](api/community/index.md)
   * [2.4 资产类接口](api/capital/index.md)
   * [2.5 用户类接口](api/user/index.md)
+  * [2.6 费用类接口](api/fee/index.md)
   * [投诉建议](api/complaint/saveComplaint.md)
   * [查询投诉建议](api/complaint/listComplaints.md)
   * [删除投诉建议](api/complaint/deleteComplaint.md)
@@ -26,16 +27,6 @@
   * [查看报修](api/repair/queryRepair.md)
   * [报修结案](api/repair/closeRepairDispatch.md)
   * [报修派单](api/repair/repairDispatchStep.md)
-  * [停车费清单](api/money/getParkingSpacen.md)
-  * [物业费清单](api/money/getPropertyPayFee.md)
-  * [支付确认通知](api/money/payFeeConfirm.md)
-  * [预下单](api/money/payFeePre.md)
-  * [缴费](api/money/payFee.md)
-  * [查询欠费费用](api/money/queryArrearsFee.md)
-  * [查询费用明细](api/money/queryFeeDetail.md)
-  * [根据停车位查询费用](api/money/queryFeeByParkingSpace.md)
-  * [查询费用](api/money/queryFee.md)
-  * [申请访客密码](api/applicationKey/applyVisitorApplicationKey.md)
   * [手机端申请钥匙](api/applicationKey/applyApplicationKey.md)
   * [查询活动](api/activities/listActivitiess.md)
   * [删除通知](api/notice/deleteNotice.md)
@@ -48,8 +39,6 @@
   * [保存车位信息](api/parkingSpace/saveParkingSpace.md)
   * [查询车位](api/parkingSpace/queryParkingSpaces.md)
   * [车位出售](api/parkingSpace/sellParkingSpace.md)
-  * [停车位退款-待补充](api/parkingSpace/exitParkingSpace.md)
-  * [查询业主车位- 待补充](api/parkingSpace/queryParkingSpacesByOwner.md)
 
 * 开发
 

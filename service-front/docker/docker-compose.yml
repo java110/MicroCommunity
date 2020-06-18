@@ -7,7 +7,7 @@ services:
           dockerfile: Dockerfile
        restart: always
        ports:
-       - "8020:8020"
+       - "8012:8012"
        volumes:
        - ../target/service-front.jar:/root/target/service-front.jar
        networks:
