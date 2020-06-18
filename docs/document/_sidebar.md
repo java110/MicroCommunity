@@ -11,6 +11,7 @@
 
   * [接口清单](api/Readme.md)
   * [调用流程](api/apiStart.md)
+  * [资产类接口](api/community/index.md)
   * [用户类接口](api/user/index.md)
   * [访客登记](api/user/saveVisit.md)
   * [访客登记变更](api/user/updateVisit.md)
@@ -39,8 +40,6 @@
   * [保存单元信息](api/unit/saveUnit.md)
   * [修改单元信息](api/unit/updateUnit.md)
   * [删除单元信息](api/unit/deleteUnit.md)
-  * [保存房屋信息](api/room/saveRoom.md)
-  * [修改房屋信息](api/room/updateRoom.md)
   * [删除房屋信息](api/room/deleteRoom.md)
   * [退房](api/room/exitRoom.md)
   * [查询已销售的房屋信息](api/room/queryRoomsWithSell.md)
