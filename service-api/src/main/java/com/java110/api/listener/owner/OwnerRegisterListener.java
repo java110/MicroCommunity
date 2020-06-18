@@ -6,11 +6,12 @@ import com.java110.api.bmo.user.IUserBMO;
 import com.java110.api.listener.AbstractServiceApiPlusListener;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
+import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.core.smo.common.ISmsInnerServiceSMO;
 import com.java110.core.smo.community.ICommunityInnerServiceSMO;
-import com.java110.core.smo.common.IFileInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IUserInnerServiceSMO;
@@ -18,20 +19,17 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName AppUserBindingOwnerListener
@@ -109,63 +107,67 @@ public class OwnerRegisterListener extends AbstractServiceApiPlusListener {
 
         logger.debug("ServiceDataFlowEvent : {}", event);
 
+        try {
+            OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
+            ownerAppUserDto.setStates(new String[]{"10000", "12000"});
 
-        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        ownerAppUserDto.setStates(new String[]{"10000", "12000"});
+            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+            //Assert.listOnlyOne(ownerAppUserDtos, "已经申请过入驻小区");
+            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                throw new IllegalArgumentException("已经申请过绑定业主");
+            }
 
-        //Assert.listOnlyOne(ownerAppUserDtos, "已经申请过入驻小区");
-        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-            throw new IllegalArgumentException("已经申请过绑定业主");
+            //查询小区是否存在
+            CommunityDto communityDto = new CommunityDto();
+            communityDto.setCityCode(reqJson.getString("areaCode"));
+            communityDto.setName(reqJson.getString("communityName"));
+            communityDto.setState("1100");
+            List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+
+            Assert.listOnlyOne(communityDtos, "填写小区信息错误");
+
+            CommunityDto tmpCommunityDto = communityDtos.get(0);
+
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setCommunityId(tmpCommunityDto.getCommunityId());
+            ownerDto.setIdCard(reqJson.getString("idCard"));
+            ownerDto.setName(reqJson.getString("appUserName"));
+            ownerDto.setLink(reqJson.getString("link"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+            Assert.listOnlyOne(ownerDtos, "填写业主信息错误");
+
+            OwnerDto tmpOwnerDto = ownerDtos.get(0);
+
+            DataFlowContext dataFlowContext = event.getDataFlowContext();
+
+            String paramIn = dataFlowContext.getReqData();
+            JSONObject paramObj = JSONObject.parseObject(paramIn);
+            String appId = context.getAppId();
+            if ("992020061452450002".equals(appId)) { //公众号
+                paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT);
+            } else if ("992019111758490006".equals(appId)) { //小程序
+                paramObj.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
+            } else {//app
+                paramObj.put("appType", OwnerAppUserDto.APP_TYPE_APP);
+            }
+            paramObj.put("userId", GenerateCodeFactory.getUserId());
+            if (reqJson.containsKey("openId")) {
+                paramObj.put("openId", reqJson.getString("openId"));
+            } else {
+                paramObj.put("openId", "-1");
+            }
+            //添加小区楼
+            ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto, dataFlowContext);
+            paramObj.put("name", paramObj.getString("appUserName"));
+            paramObj.put("tel", paramObj.getString("link"));
+            userBMOImpl.registerUser(paramObj, dataFlowContext);
+
+        }catch (Exception e){
+            context.setServiceBusiness(null);
+            context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_UNAUTHORIZED,e.getMessage()));
         }
-
-        //查询小区是否存在
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCityCode(reqJson.getString("areaCode"));
-        communityDto.setName(reqJson.getString("communityName"));
-        communityDto.setState("1100");
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-
-        Assert.listOnlyOne(communityDtos, "填写小区信息错误");
-
-        CommunityDto tmpCommunityDto = communityDtos.get(0);
-
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setCommunityId(tmpCommunityDto.getCommunityId());
-        ownerDto.setIdCard(reqJson.getString("idCard"));
-        ownerDto.setName(reqJson.getString("appUserName"));
-        ownerDto.setLink(reqJson.getString("link"));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-
-        Assert.listOnlyOne(ownerDtos, "填写业主信息错误");
-
-        OwnerDto tmpOwnerDto = ownerDtos.get(0);
-
-        DataFlowContext dataFlowContext = event.getDataFlowContext();
-
-        String paramIn = dataFlowContext.getReqData();
-        JSONObject paramObj = JSONObject.parseObject(paramIn);
-        String appId = context.getAppId();
-        if ("992020061452450002".equals(appId)) { //公众号
-            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT);
-        } else if ("992019111758490006".equals(appId)) { //小程序
-            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
-        } else {//app
-            paramObj.put("appType",OwnerAppUserDto.APP_TYPE_APP);
-        }
-        paramObj.put("userId", GenerateCodeFactory.getUserId());
-        if (reqJson.containsKey("openId")) {
-            paramObj.put("openId", reqJson.getString("openId"));
-        } else {
-            paramObj.put("openId", "-1");
-        }
-        //添加小区楼
-        ownerBMOImpl.addOwnerAppUser(paramObj, tmpCommunityDto, tmpOwnerDto, dataFlowContext);
-        paramObj.put("name", paramObj.getString("appUserName"));
-        paramObj.put("tel", paramObj.getString("link"));
-        userBMOImpl.registerUser(paramObj, dataFlowContext);
-
     }
 
 
