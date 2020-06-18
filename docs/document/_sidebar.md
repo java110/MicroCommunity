@@ -1,34 +1,21 @@
 
-* 入门
+* 1.入门
 
-  * [快速开始](README.md)
-  * [环境搭建](start/installHc.md)
-  * [视频教程](start/vedio.md)
-  * [功能列表](func/funcation.md)
-  * [常见问题](start/question.md)
+  * [1.1快速开始](README.md)
+  * [1.2环境搭建](start/installHc.md)
+  * [1.3视频教程](start/vedio.md)
+  * [1.4功能列表](func/funcation.md)
+  * [1.5常见问题](start/question.md)
 
-* 接口能力
+* 2.接口能力
 
-  * [接口清单](api/Readme.md)
-  * [调用流程](api/apiStart.md)
-  * [小区商户类接口](api/community/index.md)
-  * [资产类接口](api/capital/index.md)
-  * [用户类接口](api/user/index.md)
+  * [2.1接口清单](api/Readme.md)
+  * [2.2调用流程](api/apiStart.md)
+  * [2.3小区商户类接口](api/community/index.md)
+  * [2.4资产类接口](api/capital/index.md)
+  * [2.5用户类接口](api/user/index.md)
   * [上传业主照片](api/user/uploadOwnerPhoto.md)
   * [保存商户](api/store/saveStore.md)
-  * [删除用户权限](api/privilege/deleteStaffPrivilege.md)
-  * [查询已入驻的小区](api/community/queryMyCommunity.md)
-  * [查询未入驻的小区](api/community/queryNoEnterCommunity.md)
-  * [查询小区商户](api/community/listStoresByCommunity.md)
-  * [小区审核](api/community/auditCommunity.md)
-  * [更新小区](api/community/updateCommunity.md)
-  * [添加小区](api/community/saveCommunity.md)
-  * [查询小区](api/community/listCommunitys.md)
-  * [审核入驻小区状态](api/community/auditEnterCommunity.md)
-  * [查询未审核入驻小区](api/community/listAuditEnterCommunitys.md)
-  * [小区成员入驻](api/community/communityMemberJoined.md)
-  * [小区成员退出](api/community/communityMemberQuit.md)
-  * [检查用户权限](api/user/checkUserHasPrivilege.md)
   * [查询小区楼信息](api/floor/queryFloors.md)
   * [添加小区楼信息](api/floor/saveFloor.md)
   * [编辑小区楼信息](api/floor/editFloor.md)
