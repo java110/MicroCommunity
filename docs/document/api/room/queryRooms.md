@@ -43,13 +43,6 @@
 > 地址：[http://api.java110.com:8008/api/room.queryRooms?page=1&row=10&communityId=7020181217000001](http://api.java110.com:8008/api/room.queryRooms?page=1&row=10&communityId=7020181217000001)
 
 ``` javascript
-请求头信息：
-Content-Type:application/json
-USER_ID:1234
-APP_ID:8000418002
-TRANSACTION_ID:10029082726
-REQ_TIME:20181113225612
-SIGN:aabdncdhdbd878sbdudn898
 请求报文：
 
 无
@@ -106,3 +99,4 @@ SIGN:aabdncdhdbd878sbdudn898
 	"total": 28
 }
 ```
+
