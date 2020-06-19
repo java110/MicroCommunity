@@ -56,7 +56,7 @@ public class WorkflowStepStaffBMOImpl extends ApiBaseBMO implements IWorkflowSte
     public void deleteWorkflowStepStaff(JSONObject paramInJson, DataFlowContext dataFlowContext) {
 
         WorkflowStepStaffPo workflowStepStaffPo = BeanConvertUtil.covertBean(paramInJson, WorkflowStepStaffPo.class);
-        super.update(dataFlowContext, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF);
+        super.delete(dataFlowContext, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_WORKFLOW_STEP_STAFF);
     }
 
 }

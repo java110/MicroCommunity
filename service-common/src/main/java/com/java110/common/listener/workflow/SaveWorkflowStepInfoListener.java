@@ -149,13 +149,13 @@ public class SaveWorkflowStepInfoListener extends AbstractWorkflowStepBusinessSe
      */
     private void doBusinessWorkflowStep(Business business,JSONObject businessWorkflowStep){
 
-        Assert.jsonObjectHaveKey(businessWorkflowStep,"flowId","businessWorkflowStep 节点下没有包含 flowId 节点");
+        Assert.jsonObjectHaveKey(businessWorkflowStep,"stepId","businessWorkflowStep 节点下没有包含 flowId 节点");
 
-        if(businessWorkflowStep.getString("flowId").startsWith("-")){
+        if(businessWorkflowStep.getString("stepId").startsWith("-")){
             //刷新缓存
             //flushWorkflowStepId(business.getDatas());
 
-            businessWorkflowStep.put("flowId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+            businessWorkflowStep.put("stepId",GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
 
         }
 
