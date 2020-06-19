@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.common.IMachineInnerServiceSMO;
 import com.java110.core.smo.common.IMachineTranslateInnerServiceSMO;
+import com.java110.core.smo.community.ICommunityLocationInnerServiceSMO;
 import com.java110.core.smo.order.IOrderInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerInnerServiceSMO;
 import com.java110.core.smo.user.IOwnerRoomRelInnerServiceSMO;
@@ -58,6 +59,9 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
     private IMachineInnerServiceSMO machineInnerServiceSMOImpl;
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityLocationInnerServiceSMO communityLocationInnerServiceSMOImpl;
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
@@ -146,6 +150,7 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
             locationObjIds.add(roomDto.getUnitId());
             locationObjIds.add(roomDto.getRoomId());
         }
+
         machineDto.setLocationObjIds(locationObjIds.toArray(new String[locationObjIds.size()]));
         List<MachineDto> machineDtos = machineInnerServiceSMOImpl.queryMachines(machineDto);
 

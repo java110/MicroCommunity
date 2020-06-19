@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class FeeDto extends PageDto implements Serializable {
 
+    public static final String STATE_FINISH = "2009001"; // 收费结束
+
     private String amount;
     private String incomeObjId;
     private String feeTypeCd;

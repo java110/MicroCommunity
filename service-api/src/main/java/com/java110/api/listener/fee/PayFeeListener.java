@@ -4,23 +4,26 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.fee.IFeeBMO;
 import com.java110.api.listener.AbstractServiceApiDataFlowListener;
+import com.java110.core.annotation.Java110Listener;
+import com.java110.core.context.DataFlowContext;
+import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.smo.community.IParkingSpaceInnerServiceSMO;
+import com.java110.core.smo.community.IRoomInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
+import com.java110.core.smo.fee.IFeeInnerServiceSMO;
+import com.java110.dto.fee.FeeDto;
+import com.java110.entity.center.AppService;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.util.Assert;
-import com.java110.core.annotation.Java110Listener;
-import com.java110.core.context.DataFlowContext;
-import com.java110.core.smo.fee.IFeeConfigInnerServiceSMO;
-import com.java110.core.smo.fee.IFeeInnerServiceSMO;
-import com.java110.core.smo.community.IRoomInnerServiceSMO;
-import com.java110.entity.center.AppService;
-import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * @ClassName PayFeeListener
@@ -88,6 +91,7 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         dataFlowContext.setResponseEntity(responseEntity);
 
     }
+
     /**
      * 数据校验
      *
@@ -106,6 +110,20 @@ public class PayFeeListener extends AbstractServiceApiDataFlowListener {
         Assert.hasLength(paramInObj.getString("cycles"), "周期不能为空");
         Assert.hasLength(paramInObj.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(paramInObj.getString("feeId"), "费用ID不能为空");
+
+        //判断是否 费用状态为缴费结束
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(paramInObj.getString("feeId"));
+        feeDto.setCommunityId(paramInObj.getString("communityId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(feeDtos, "传入费用ID错误");
+
+        feeDto = feeDtos.get(0);
+
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            throw new IllegalArgumentException("收费已经结束，不能再缴费");
+        }
 
     }
 
