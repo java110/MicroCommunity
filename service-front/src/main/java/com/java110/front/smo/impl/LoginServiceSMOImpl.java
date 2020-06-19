@@ -99,7 +99,7 @@ public class LoginServiceSMOImpl extends BaseComponentSMO implements ILoginServi
             verifyResult = new ResponseEntity<>("成功", HttpStatus.OK);
         }else{
             pd.setToken("");
-            verifyResult = new ResponseEntity<>("验证码错误", HttpStatus.INTERNAL_SERVER_ERROR);
+            verifyResult = new ResponseEntity<>("验证码错误或已失效", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 
