@@ -90,7 +90,7 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
                 List<OwnerDto> ownerDtos = null;
                 //根据bId 查询业主信息
                 //这种情况说明 业主已经删掉了 需要查询状态为 1 的数据
-                if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
+                /*if (BusinessTypeConstant.BUSINESS_TYPE_DELETE_OWNER_INFO.equals(tmpOrderDto.getBusinessTypeCd())) {
                     ownerDto.setStatusCd(StatusConstant.STATUS_CD_INVALID);
                     ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
                     MachineDto machineDto = new MachineDto();
@@ -99,7 +99,7 @@ public class TranslateOwnerPhotoToMachineTemplate extends TaskSystemQuartz {
                     orderInnerServiceSMOImpl.updateBusinessStatusCd(tmpOrderDto);
                     logger.debug("没有数据数据直接刷为C1,当前为删除业主操作" + JSONObject.toJSONString(tmpOrderDto));
                     continue;
-                }
+                }*/
 
                 ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
