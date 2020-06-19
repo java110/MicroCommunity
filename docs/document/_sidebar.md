@@ -16,16 +16,6 @@
   * [2.5 用户类接口](api/user/index.md)
   * [2.6 费用类接口](api/fee/index.md)
   * [2.7 服务类接口](api/service/index.md)
-  * [删除通知](api/notice/deleteNotice.md)
-  * [查询通知](api/notice/notice.md)
-  * [更新通知](api/notice/updateNotice.md)
-  * [添加通知](api/notice/saveNotice.md)
-  * [查询通知](api/notice/listNotices.md)
-  * [删除车位信息](api/parkingSpace/deleteParkingSpace.md)
-  * [编辑车位信息](api/parkingSpace/editParkingSpace.md)
-  * [保存车位信息](api/parkingSpace/saveParkingSpace.md)
-  * [查询车位](api/parkingSpace/queryParkingSpaces.md)
-  * [车位出售](api/parkingSpace/sellParkingSpace.md)
 
 * 开发
 

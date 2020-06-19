@@ -616,3 +616,165 @@ SIGN:aabdncdhdbd878sbdudn898
 }
 
 ```
+
+## 2.7.10 查询通知公告
+
+###### 接口功能
+> 查询公告接口
+
+###### URL
+> [http://api.java110.com:8008/api/notice.listNotices](http://api.java110.com:8008/api/notice.listNotices)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> GET
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数(url部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|page|1|int|-|分页信息，传1|-|
+|row|1|int|-|分页信息传10|每页显示数|
+
+
+###### 返回协议
+
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|noticeTypeCd|1|string|12|公告类型，1000 业主通知，1001员工通知，1002小区通知|-|
+|context|1|string|2000|公告内容|公告内容|
+|startTime|1|String|30|公告开始时间|公告开始时间|
+|title|1|String|100|公告标题|-|
+|communityId|1|String|30|小区ID|-|
+|userId|1|String|30|用户ID|发布公告的用户ID|
+|noticeId|1|String|30|公告ID|-|
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/notice.listNotices?page=1&row=10](http://api.java110.com:8008/api/notice.listNotices?page=1&row=10)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+无
+
+返回报文：
+返回状态码200
+
+{
+	"notices": [{
+		"context": "<p>dadadada</p>",
+		"createTime": "2020-01-20 11:10:13",
+		"endTime": "2020-01-29 11:10:06",
+		"noticeId": "962020012064620007",
+		"noticeTypeCd": "1000",
+		"noticeTypeCdName": "业主通知",
+		"startTime": "2020-01-20 11:09:53",
+		"title": "daadada"
+	},{
+		"context": "<p>sadfafsd</p>",
+		"createTime": "2019-12-28 12:27:12",
+		"endTime": "2019-12-28 06:25:58",
+		"noticeId": "962019122882540023",
+		"noticeTypeCd": "1000",
+		"noticeTypeCdName": "业主通知",
+		"startTime": "2019-12-28 12:26:40",
+		"title": "hdhdf"
+	}],
+	"page": 0,
+	"records": 3,
+	"rows": 0,
+	"total": 26
+}
+
+```
+
+## 2.7.10 添加通知公告
+
+###### 接口功能
+>添加公告接口
+
+###### URL
+> [http://api.java110.com:8008/api/notice.saveNotice](http://api.java110.com:8008/api/notice.saveNotice)
+
+###### 支持格式
+> JSON
+
+###### HTTP请求方式
+> POST
+
+###### 请求参数(header部分)
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-:|
+|app_id|1|String|30|应用ID|Api服务分配                      |
+|transaction_id|1|String|30|请求流水号|不能重复 1000000000+YYYYMMDDhhmmss+6位序列 |
+|sign|1|String|-|签名|请参考签名说明|
+|req_time|1|String|-|请求时间|YYYYMMDDhhmmss|
+
+###### 请求参数
+|参数名称|约束|类型|长度|描述|取值说明|
+| :-: | :-: | :-: | :-: | :-: | :-: |
+|title|1|String|100|通知标题|-|
+|noticeTypeCd|1|String|4|类型|1000 业主通知，1001员工通知，1002小区通知|
+|context|1|String|longtext|通知内容|-|
+|startTime|1|timestamp|-|开始时间|-|
+|endTime|1|timestamp|-|结束时间|-|
+
+
+
+
+
+###### 返回协议
+
+当http返回状态不为200 时请求处理失败 body内容为失败的原因
+
+当http返回状态为200时请求处理成功，body内容为返回内容，
+
+
+###### 举例
+> 地址：[http://api.java110.com:8008/api/notice.saveNotice](http://api.java110.com:8008/api/notice.saveNotice)
+
+``` javascript
+请求头信息：
+Content-Type:application/json
+USER_ID:1234
+APP_ID:8000418002
+TRANSACTION_ID:10029082726
+REQ_TIME:20181113225612
+SIGN:aabdncdhdbd878sbdudn898
+请求报文：
+
+{
+	"noticeTypeCd": "1000",
+	"context": "<p>dadadada</p>",
+	"startTime": "2020-01-20 11:09:53",
+	"endTime": "2020-01-29 11:10:06",
+	"title": "daadada",
+	"communityId": "7020181217000001",
+	"userId": "30518940136629616640"
+}
+
+返回报文：
+
+
+```
