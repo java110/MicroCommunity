@@ -10,8 +10,10 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.smo.common.IWorkflowInnerServiceSMO;
 import com.java110.core.smo.common.IWorkflowStepInnerServiceSMO;
 import com.java110.core.smo.common.IWorkflowStepStaffInnerServiceSMO;
+import com.java110.dto.workflow.WorkflowDto;
 import com.java110.dto.workflow.WorkflowStepDto;
 import com.java110.dto.workflow.WorkflowStepStaffDto;
 import com.java110.po.workflow.WorkflowPo;
@@ -20,9 +22,12 @@ import com.java110.po.workflow.WorkflowStepStaffPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ServiceCodeWorkflowConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +48,9 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
 
     @Autowired
     private IWorkflowStepInnerServiceSMO workflowStepInnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
 
     @Override
     protected void validate(ServiceDataFlowEvent event, JSONObject reqJson) {
@@ -125,11 +133,14 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
         workflowPo.setDescrible(reqJson.getString("describle"));
         super.update(context, workflowPo, BusinessTypeConstant.BUSINESS_TYPE_UPDATE_WORKFLOW);
 
+        WorkflowDto workflowDto = BeanConvertUtil.covertBean(workflowPo, WorkflowDto.class);
+
         //保存 工作流程步骤
         JSONArray steps = reqJson.getJSONArray("steps");
         JSONObject step = null;
         JSONObject subStaff = null;
         WorkflowStepStaffPo workflowStepStaffPo = null;
+        List<WorkflowStepDto> tmpWorkflowStepDtos = new ArrayList<>();
         for (int stepIndex = 0; stepIndex < steps.size(); stepIndex++) {
             step = steps.getJSONObject(stepIndex);
             WorkflowStepPo workflowStepPo = new WorkflowStepPo();
@@ -140,8 +151,9 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
             workflowStepPo.setType(step.getString("type"));
             workflowStepPo.setStoreId(reqJson.getString("storeId"));
             super.insert(context, workflowStepPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP);
-
+            WorkflowStepDto tmpWorkflowStepDto = BeanConvertUtil.covertBean(workflowStepPo, WorkflowStepDto.class);
             //正常流程
+            List<WorkflowStepStaffDto> workflowStepStaffDtos = new ArrayList<>();
             if (WorkflowStepDto.TYPE_NORMAL.equals(step.getString("type"))) {
                 workflowStepStaffPo = new WorkflowStepStaffPo();
                 workflowStepStaffPo.setWssId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_wssId));
@@ -150,6 +162,7 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 workflowStepStaffPo.setStaffName(step.getString("staffName"));
                 workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+                workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
                 continue;
             }
 
@@ -163,12 +176,19 @@ public class UpdateWorkflowListener extends AbstractServiceApiPlusListener {
                 workflowStepStaffPo.setStaffName(subStaff.getString("staffName"));
                 workflowStepStaffPo.setStepId(workflowStepPo.getStepId());
                 super.insert(context, workflowStepStaffPo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_WORKFLOW_STEP_STAFF);
+                workflowStepStaffDtos.add(BeanConvertUtil.covertBean(workflowStepStaffPo, WorkflowStepStaffDto.class));
             }
+
+            tmpWorkflowStepDto.setWorkflowStepStaffs(workflowStepStaffDtos);
+
+            tmpWorkflowStepDtos.add(tmpWorkflowStepDto);
         }
         //提交
         commit(context);
 
-
+        workflowDto.setWorkflowSteps(tmpWorkflowStepDtos);
+        workflowInnerServiceSMOImpl.addFlowDeployment(workflowDto);
+        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, ResultVo.MSG_OK));
     }
 
     private void deleteWorkflowStepAndStaff(DataFlowContext context, JSONObject reqJson, WorkflowStepDto workflowStepDto) {

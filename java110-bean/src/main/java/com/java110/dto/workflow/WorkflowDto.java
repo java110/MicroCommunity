@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -36,6 +37,9 @@ public class WorkflowDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<WorkflowStepDto> workflowSteps;
+
 
 
     public String getSkipLevel() {
@@ -117,5 +121,13 @@ public class WorkflowDto extends PageDto implements Serializable {
 
     public void setFlowTypeName(String flowTypeName) {
         this.flowTypeName = flowTypeName;
+    }
+
+    public List<WorkflowStepDto> getWorkflowSteps() {
+        return workflowSteps;
+    }
+
+    public void setWorkflowSteps(List<WorkflowStepDto> workflowSteps) {
+        this.workflowSteps = workflowSteps;
     }
 }

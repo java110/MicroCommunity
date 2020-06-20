@@ -39,4 +39,11 @@ public interface IWorkflowInnerServiceSMO {
      */
     @RequestMapping(value = "/queryWorkflowsCount", method = RequestMethod.POST)
     int queryWorkflowsCount(@RequestBody WorkflowDto workflowDto);
+
+    /**
+     * @Date：2017/11/24
+     * @Description：创建流程并部署
+     */
+    @RequestMapping(value = "/addFlowDeployment", method = RequestMethod.POST)
+    void addFlowDeployment(@RequestBody WorkflowDto workflowDto);
 }

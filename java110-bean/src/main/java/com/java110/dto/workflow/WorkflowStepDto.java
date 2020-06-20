@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -24,6 +25,8 @@ public class WorkflowStepDto extends PageDto implements Serializable {
     private String storeId;
     private String flowId;
     private String seq;
+
+    private List<WorkflowStepStaffDto> workflowStepStaffs;
 
 
     private Date createTime;
@@ -94,5 +97,13 @@ public class WorkflowStepDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<WorkflowStepStaffDto> getWorkflowStepStaffs() {
+        return workflowStepStaffs;
+    }
+
+    public void setWorkflowStepStaffs(List<WorkflowStepStaffDto> workflowStepStaffs) {
+        this.workflowStepStaffs = workflowStepStaffs;
     }
 }
