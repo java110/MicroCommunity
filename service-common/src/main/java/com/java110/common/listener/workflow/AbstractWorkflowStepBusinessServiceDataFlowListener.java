@@ -57,7 +57,7 @@ public abstract class AbstractWorkflowStepBusinessServiceDataFlowListener extend
     protected void autoSaveDelBusinessWorkflowStep(Business business, JSONObject businessWorkflowStep) {
 //自动插入DEL
         Map info = new HashMap();
-        info.put("flowId", businessWorkflowStep.getString("flowId"));
+        info.put("stepId", businessWorkflowStep.getString("stepId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);
         List<Map> currentWorkflowStepInfos = getWorkflowStepServiceDaoImpl().getWorkflowStepInfo(info);
         if (currentWorkflowStepInfos == null || currentWorkflowStepInfos.size() != 1) {

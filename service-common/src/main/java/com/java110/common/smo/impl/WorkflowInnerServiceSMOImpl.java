@@ -112,9 +112,9 @@ public class WorkflowInnerServiceSMOImpl extends BaseServiceSMO implements IWork
     public void addFlowDeployment(@RequestBody WorkflowDto workflowDto) {
 
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
-
-        RepositoryService repositoryService  = processEngine.getRepositoryService();
-        repositoryService.deleteDeployment("1");
+//
+//        RepositoryService repositoryService  = processEngine.getRepositoryService();
+//        repositoryService.deleteDeployment("1");
 
         // 1. 建立模型
         BpmnModel model = new BpmnModel();
